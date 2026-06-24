@@ -1,4 +1,3 @@
-```tsx
 import React, { useState } from 'react';
 import '../assets/styles/Contact.scss';
 
@@ -205,4 +204,3 @@ function Contact() {
 }
 
 export default Contact;
-```
