@@ -60,19 +60,11 @@ function Contact() {
       // Generate received date and time
       const now = new Date();
 
-
-      const receivedDate = now.toLocaleDateString('en-US', {
+      const receivedAt = now.toLocaleString('en-US', {
         dateStyle: 'long',
-        timeZone: 'Asia/Manila',
-      });
-
-
-      const receivedTime = now.toLocaleTimeString('en-US', {
         timeStyle: 'short',
         timeZone: 'Asia/Manila',
       });
-
-
 
       await emailjs.send(
         'service_6uk51ch',
