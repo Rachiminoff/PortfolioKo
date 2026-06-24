@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 import SendIcon from '@mui/icons-material/Send';
 
 import emailjs from '@emailjs/browser';
+import axios from 'axios';
 
 function Contact() {
   const [name, setName] = useState('');
@@ -83,6 +84,27 @@ function Contact() {
       const timezone =
         Intl.DateTimeFormat().resolvedOptions().timeZone;
 
+      let ip = '';
+      let location = '';
+
+      try {
+        const { data } = await axios.get(
+          'https://ipapi.co/json/'
+        );
+
+        ip = data.ip ?? '';
+
+        location = [
+          data.city,
+          data.region,
+          data.country_name,
+        ]
+          .filter(Boolean)
+          .join(', ');
+      } catch (err) {
+        console.error('Failed to fetch IP/location:', err);
+      }
+
       await emailjs.send(
         'service_6uk51ch',
         'template_45wei9l',
@@ -100,6 +122,9 @@ function Contact() {
           platform,
           language,
           timezone,
+
+          ip,
+          location,
         },
         'GJD7pIhFsXAEGwQpV'
       );
@@ -192,7 +217,7 @@ function Contact() {
               px: 4,
               py: 1.5,
               textTransform: 'none',
-              fontWeight: 600
+              fontWeight: 600,
             }}
           >
             {loading ? 'Sending...' : 'Send Message'}
