@@ -1,3 +1,4 @@
+```tsx
 import React, { useState } from 'react';
 import '../assets/styles/Contact.scss';
 
@@ -26,14 +27,27 @@ function Contact() {
 
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [sendError, setSendError] = useState(false);
 
   const validateEmail = (value: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+  const getBrowserName = () => {
+    const ua = navigator.userAgent;
+
+    if (ua.includes('Edg')) return 'Microsoft Edge';
+    if (ua.includes('Chrome')) return 'Google Chrome';
+    if (ua.includes('Firefox')) return 'Mozilla Firefox';
+    if (ua.includes('Safari')) return 'Safari';
+
+    return 'Unknown';
+  };
 
   const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setSuccess(false);
+    setSendError(false);
 
     const newError = {
       name: !name.trim(),
@@ -49,14 +63,44 @@ function Contact() {
     try {
       setLoading(true);
 
+      const initials = name
+        .trim()
+        .split(' ')
+        .slice(0, 2)
+        .map((word) => word[0]?.toUpperCase())
+        .join('');
+
+      const timestamp = new Date().toLocaleString();
+
+      const inquiryId =
+        '#' + Date.now().toString(36).toUpperCase();
+
+      const browser = getBrowserName();
+
+      const platform = navigator.platform;
+
+      const language = navigator.language;
+
+      const timezone =
+        Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       await emailjs.send(
         'service_6uk51ch',
         'template_45wei9l',
         {
           name,
+          initials,
           email,
           subject,
           message,
+
+          timestamp,
+          id: inquiryId,
+
+          browser,
+          platform,
+          language,
+          timezone,
         },
         'GJD7pIhFsXAEGwQpV'
       );
@@ -69,6 +113,7 @@ function Contact() {
       setMessage('');
     } catch (err) {
       console.error('EmailJS failed:', err);
+      setSendError(true);
     } finally {
       setLoading(false);
     }
@@ -83,7 +128,13 @@ function Contact() {
 
         {success && (
           <Alert severity="success" sx={{ mb: 2 }}>
-            Message sent successfully
+            Message sent successfully.
+          </Alert>
+        )}
+
+        {sendError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            Failed to send message.
           </Alert>
         )}
 
@@ -136,8 +187,16 @@ function Contact() {
             endIcon={<SendIcon />}
             disabled={loading}
             className="send-button"
+            sx={{
+              mt: 3,
+              borderRadius: '999px',
+              px: 4,
+              py: 1.5,
+              textTransform: 'none',
+              fontWeight: 600
+            }}
           >
-            {loading ? 'Sending...' : 'Send'}
+            {loading ? 'Sending...' : 'Send Message'}
           </Button>
         </Box>
       </Paper>
@@ -146,3 +205,4 @@ function Contact() {
 }
 
 export default Contact;
+```
