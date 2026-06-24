@@ -193,9 +193,7 @@ function Contact() {
       <p
         style={{
           maxWidth: 600,
-          margin: '0 auto 2rem',
           opacity: 0.8,
-          textAlign: 'center',
         }}
       >
         Have a project in mind, a question,
