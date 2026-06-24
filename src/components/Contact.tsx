@@ -27,8 +27,11 @@ function Contact() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+
   const validateEmail = (value: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+
 
   const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -42,12 +45,34 @@ function Contact() {
       message: !message.trim(),
     };
 
+
     setError(newError);
+
 
     if (Object.values(newError).some(Boolean)) return;
 
+
+
     try {
       setLoading(true);
+
+
+      // Generate received date and time
+      const now = new Date();
+
+
+      const receivedDate = now.toLocaleDateString('en-US', {
+        dateStyle: 'long',
+        timeZone: 'Asia/Manila',
+      });
+
+
+      const receivedTime = now.toLocaleTimeString('en-US', {
+        timeStyle: 'short',
+        timeZone: 'Asia/Manila',
+      });
+
+
 
       await emailjs.send(
         'service_6uk51ch',
@@ -57,29 +82,50 @@ function Contact() {
           email,
           subject,
           message,
+
+          // Email template variables
+          received_date: receivedDate,
+          received_time: receivedTime,
         },
         'GJD7pIhFsXAEGwQpV'
       );
 
+
       setSuccess(true);
+
 
       setName('');
       setEmail('');
       setSubject('');
       setMessage('');
+
+
     } catch (err) {
+
       console.error('EmailJS failed:', err);
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
+
+
   return (
     <div id="contact" className="contact-container">
+
       <h2>Contact</h2>
 
-      <Paper className="contact-card" elevation={0}>
+
+      <Paper
+        className="contact-card"
+        elevation={0}
+      >
+
         <h3>Send Message</h3>
+
 
         {success && (
           <Alert severity="success" sx={{ mb: 2 }}>
@@ -87,48 +133,67 @@ function Contact() {
           </Alert>
         )}
 
+
+
         <Box
           component="form"
           onSubmit={sendEmail}
           className="contact-form"
         >
+
+
           <div className="form-grid-2">
+
+
             <TextField
               label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               error={error.name}
+              helperText={error.name ? 'Name is required' : ''}
               fullWidth
             />
+
 
             <TextField
               label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               error={error.email}
+              helperText={error.email ? 'Enter a valid email' : ''}
               fullWidth
             />
+
+
           </div>
+
+
 
           <TextField
             label="Subject"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             error={error.subject}
+            helperText={error.subject ? 'Subject is required' : ''}
             fullWidth
             sx={{ mt: 2 }}
           />
+
+
 
           <TextField
             label="Message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             error={error.message}
+            helperText={error.message ? 'Message is required' : ''}
             multiline
             rows={8}
             fullWidth
             sx={{ mt: 2 }}
           />
+
+
 
           <Button
             type="submit"
@@ -136,13 +201,24 @@ function Contact() {
             endIcon={<SendIcon />}
             disabled={loading}
             className="send-button"
+            sx={{ mt: 2 }}
           >
+
             {loading ? 'Sending...' : 'Send'}
+
           </Button>
+
+
+
         </Box>
+
+
       </Paper>
+
+
     </div>
   );
 }
+
 
 export default Contact;
