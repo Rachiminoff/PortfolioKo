@@ -1,15 +1,24 @@
 .contact-container {
   width: 100%;
   min-height: 100vh;
-  padding: 4vh 6vw;
+  padding: 4rem 6vw;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  position: relative;
 }
 
 .contact-container h2 {
-  margin-bottom: 20px;
+  margin-bottom: 0.75rem;
   color: white;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.contact-container p {
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
 }
 
 /* ========================= */
@@ -19,22 +28,53 @@
 .contact-card {
   width: 100%;
   flex: 1;
+
   padding: 32px !important;
-  border: 1px solid #2a2a2a;
-  border-radius: 14px !important;
-  background: transparent !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px !important;
+
+  background: rgba(255, 255, 255, 0.03) !important;
+  backdrop-filter: blur(20px);
+
   color: white;
+
   box-sizing: border-box;
-  transition: 0.2s ease;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
 }
 
 .contact-card:hover {
-  border-color: #444;
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.045) !important;
+  transform: translateY(-2px);
 }
 
 .contact-card h3 {
   margin-bottom: 20px;
+  font-size: 1.2rem;
   font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+/* ========================= */
+/* CHIPS */
+/* ========================= */
+
+.MuiChip-root {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition: all 0.2s ease !important;
+}
+
+.MuiChip-root:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-1px);
 }
 
 /* ========================= */
@@ -50,7 +90,7 @@
 .form-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 16px;
 }
 
 /* ========================= */
@@ -62,13 +102,31 @@
   align-self: flex-start;
 
   background: white !important;
-  color: rgb(39, 40, 34) !important;
+  color: rgb(25, 25, 25) !important;
 
   font-family: 'Courier Prime', monospace !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
   text-transform: none !important;
 
-  padding: 10px 20px !important;
+  padding: 12px 24px !important;
+
+  box-shadow:
+    0 10px 30px rgba(255, 255, 255, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease !important;
+}
+
+.send-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 36px rgba(255, 255, 255, 0.18);
+}
+
+.send-button.Mui-disabled {
+  opacity: 0.5;
 }
 
 /* ========================= */
@@ -84,24 +142,55 @@
   -webkit-text-fill-color: white !important;
 }
 
-.MuiOutlinedInput-notchedOutline {
-  border-color: #444 !important;
+.MuiFormHelperText-root {
+  color: rgba(255, 255, 255, 0.55) !important;
 }
 
-.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #888 !important;
+.MuiOutlinedInput-root {
+  transition: all 0.2s ease;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+.MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 .Mui-focused .MuiOutlinedInput-notchedOutline {
   border-color: white !important;
+  border-width: 2px !important;
 }
 
 .MuiInputLabel-root {
-  color: #aaa !important;
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .MuiInputLabel-root.Mui-focused {
   color: white !important;
+}
+
+/* ========================= */
+/* ALERTS */
+/* ========================= */
+
+.MuiAlert-root {
+  border-radius: 12px !important;
+}
+
+/* ========================= */
+/* SCROLLBAR */
+/* ========================= */
+
+textarea::-webkit-scrollbar {
+  width: 8px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
 }
 
 /* ========================= */
@@ -115,6 +204,7 @@
 
   .contact-card {
     padding: 20px !important;
+    border-radius: 16px !important;
   }
 
   .form-grid-2 {
