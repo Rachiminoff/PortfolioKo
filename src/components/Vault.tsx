@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
 import PDFViewer from "./PDFViewer";
@@ -7,6 +7,7 @@ interface VaultItem {
     id?: number;
     name: string;
     type: string;
+    category?: string; // NEW
     description: string;
     link?: string;
     image?: string;
@@ -30,6 +31,10 @@ function Vault() {
 
     const [expandedDescriptions, setExpandedDescriptions] =
         useState<number[]>([]);
+
+    // NEW
+    const [selectedCategory, setSelectedCategory] =
+        useState<string | null>(null);
 
     useEffect(() => {
 
@@ -102,71 +107,148 @@ function Vault() {
 
     };
 
-    return (
+    // ===========================
+    // Categories
+    // ===========================
 
-        <div
-            className={`vault-container ${
-                activeCard ? "vault-active" : ""
-            }`}
-        >
+    const categories = useMemo(() => {
 
-            {/* HEADER */}
+        return [...new Set(
 
-            <div className="vault-header">
+            vaultItems.map(item =>
+                item.category || "Uncategorized"
+            )
 
-                <h1>Vault Library</h1>
+        )];
 
-                <div className="vault-intro">
+    }, [vaultItems]);
 
-                    <p>
-                        Personal archive of preserved works and completed
-                        creations.
-                    </p>
+    const displayedItems = selectedCategory
+
+        ? vaultItems.filter(item =>
+            (item.category || "Uncategorized")
+                === selectedCategory
+        )
+
+        : [];
+
+{loading ? (
+
+    <div className="vault-loading">
+
+        <div className="vault-loading-grid">
+
+            {[...Array(6)].map((_, index) => (
+
+                <div
+                    key={index}
+                    className="vault-skeleton-card"
+                >
+
+                    <div className="vault-skeleton-image"></div>
+
+                    <div className="vault-skeleton-line short"></div>
+
+                    <div className="vault-skeleton-line"></div>
+
+                    <div className="vault-skeleton-line"></div>
 
                 </div>
 
-            </div>
+            ))}
 
-            {/* LOADING */}
+        </div>
 
-            {loading ? (
+        <p className="vault-loading-text">
 
-                <div className="vault-loading">
+            Accessing archive...
 
-                    <div className="vault-loading-grid">
+        </p>
 
-                        {[...Array(6)].map((_, index) => (
+    </div>
 
-                            <div
-                                key={index}
-                                className="vault-skeleton-card"
-                            >
+) : (
 
-                                <div className="vault-skeleton-image"></div>
+    <>
+        {!selectedCategory ? (
 
-                                <div className="vault-skeleton-line short"></div>
+            <div className="vault-folder-grid">
 
-                                <div className="vault-skeleton-line"></div>
+                {categories.map(category => {
 
-                                <div className="vault-skeleton-line"></div>
+                    const count = vaultItems.filter(
+                        item =>
+                            (item.category || "Uncategorized")
+                            === category
+                    ).length;
+
+                    return (
+
+                        <button
+                            key={category}
+                            className="vault-folder-card"
+                            onClick={() =>
+                                setSelectedCategory(category)
+                            }
+                        >
+
+                            <div className="vault-folder-icon">
+
+                                📁
 
                             </div>
 
-                        ))}
+                            <div className="vault-folder-content">
 
-                    </div>
+                                <h2>
 
-                    <p className="vault-loading-text">
-                        Accessing archive...
-                    </p>
+                                    {category}
+
+                                </h2>
+
+                                <span>
+
+                                    {count} entr{count === 1 ? "y" : "ies"}
+
+                                </span>
+
+                            </div>
+
+                        </button>
+
+                    );
+
+                })}
+
+            </div>
+
+        ) : (
+
+            <>
+                <div className="vault-folder-header">
+
+                    <button
+                        className="vault-back-btn"
+                        onClick={() =>
+                            setSelectedCategory(null)
+                        }
+                    >
+
+                        ← Back
+
+                    </button>
+
+                    <h2>
+
+                        📁 {selectedCategory}
+
+                    </h2>
 
                 </div>
 
-            ) : (
-
                 <div className="vault-grid">
 
-                    {vaultItems.map((item, index) => {
+                    {displayedItems.map((item, index) => {
 
                         const isExpanded =
                             expandedDescriptions.includes(item.id || 0);
@@ -192,12 +274,14 @@ function Vault() {
 
                                 <div className="vault-card-glow"></div>
 
-                                {/* NEW BADGE */}
+                                {/* NEW */}
 
                                 {index === 0 && (
 
                                     <div className="vault-new-badge">
+
                                         NEW ENTRY
+
                                     </div>
 
                                 )}
@@ -220,7 +304,9 @@ function Vault() {
                                         <div className="vault-image-placeholder">
 
                                             <span>
+
                                                 ARCHIVE
+
                                             </span>
 
                                         </div>
@@ -268,19 +354,22 @@ function Vault() {
                                     <div className="vault-meta-row">
 
                                         <span>
+
                                             {item.type}
+
                                         </span>
 
                                         <span>•</span>
 
                                         <span>
+
                                             Private Archive
+
                                         </span>
 
                                         {item.created_at && (
 
                                             <>
-
                                                 <span>•</span>
 
                                                 <span>
@@ -290,14 +379,11 @@ function Vault() {
                                                     ).getFullYear()}
 
                                                 </span>
-
                                             </>
 
                                         )}
 
                                     </div>
-
-                                    {/* DESCRIPTION */}
 
                                     <div className="vault-description-dropdown">
 
@@ -317,7 +403,9 @@ function Vault() {
                                                         : ""
                                                 }`}
                                             >
+
                                                 ▼
+
                                             </span>
 
                                         </button>
@@ -340,8 +428,6 @@ function Vault() {
 
                                     </div>
 
-                                    {/* TAG */}
-
                                     <div className="vault-book-tags">
 
                                         <span>
@@ -351,8 +437,6 @@ function Vault() {
                                         </span>
 
                                     </div>
-
-                                    {/* BUTTON */}
 
                                     {item.link && (
 
@@ -379,17 +463,9 @@ function Vault() {
 
                 </div>
 
-            )}
+            </>
 
-            <PDFViewer
-                url={viewerUrl}
-                onClose={closeViewer}
-            />
+        )}
+    </>
 
-        </div>
-
-    );
-
-}
-
-export default Vault;
+)}

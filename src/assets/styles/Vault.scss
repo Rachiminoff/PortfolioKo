@@ -1101,3 +1101,177 @@
         height: 34px;
     }
 }
+
+/* ==========================================================
+   FOLDER VIEW
+========================================================== */
+
+.vault-folder-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.vault-folder-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+
+    width: 100%;
+    padding: 1.5rem;
+
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 18px;
+
+    background: rgba(255,255,255,.03);
+    backdrop-filter: blur(16px);
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease,
+        box-shadow .25s ease;
+
+    text-align: left;
+
+    &:hover {
+
+        transform: translateY(-4px);
+
+        border-color: rgba(255,255,255,.15);
+
+        background: rgba(255,255,255,.06);
+
+        box-shadow:
+            0 15px 35px rgba(0,0,0,.25);
+
+        .vault-folder-icon {
+
+            transform: scale(1.08);
+
+        }
+
+    }
+}
+
+.vault-folder-icon {
+
+    font-size: 3rem;
+
+    transition: .25s;
+
+    flex-shrink: 0;
+
+}
+
+.vault-folder-content {
+
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+
+        margin: 0;
+
+        font-size: 1.2rem;
+
+        color: #fff;
+
+        font-weight: 600;
+
+    }
+
+    span {
+
+        margin-top: .35rem;
+
+        color: rgba(255,255,255,.65);
+
+        font-size: .9rem;
+
+    }
+
+}
+
+/* ==========================================================
+   INSIDE FOLDER HEADER
+========================================================== */
+
+.vault-folder-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin: 1rem 0 2rem;
+
+    gap: 1rem;
+
+    h2 {
+
+        margin: 0;
+
+        color: white;
+
+        font-size: 1.6rem;
+
+        font-weight: 600;
+
+    }
+
+}
+
+.vault-back-btn {
+
+    border: none;
+
+    border-radius: 999px;
+
+    padding: .75rem 1.2rem;
+
+    background: rgba(255,255,255,.08);
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: .25s;
+
+    font-size: .95rem;
+
+    &:hover {
+
+        background: rgba(255,255,255,.14);
+
+        transform: translateX(-3px);
+
+    }
+
+}
+
+/* ==========================================================
+   MOBILE
+========================================================== */
+
+@media (max-width: 768px) {
+
+    .vault-folder-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .vault-folder-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}
