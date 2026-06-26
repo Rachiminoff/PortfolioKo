@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Add this import
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -7,8 +6,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 
 import profilePic from '../assets/images/profile.jpeg';
 
-// Remove Vault import - it will be a route
-// import Vault from './Vault';
+import Vault from './Vault';
 import PDFViewer from './PDFViewer';
 
 import '../assets/styles/Main.scss';
@@ -48,10 +46,10 @@ function ErrorModal({
    MAIN COMPONENT
 ========================= */
 function Main() {
-    const navigate = useNavigate(); // Add this
     const [clickCount, setClickCount] = useState(0);
     const [showVaultPrompt, setShowVaultPrompt] = useState(false);
     const [vaultInput, setVaultInput] = useState("");
+    const [vaultUnlocked, setVaultUnlocked] = useState(false);
     const [loading, setLoading] = useState(false);
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
     const [vaultLockedUntil, setVaultLockedUntil] = useState<number | null>(null);
@@ -71,6 +69,28 @@ function Main() {
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
 
+    // FORCE VAULT TO BE LOCKED ON MOUNT - FIXES THE BUG
+    useEffect(() => {
+        // Clear any persisted state
+        try {
+            localStorage.removeItem('vaultUnlocked');
+            sessionStorage.removeItem('vaultUnlocked');
+        } catch (e) {
+            // Ignore errors if localStorage is not available
+        }
+        
+        // Force lock the vault
+        setVaultUnlocked(false);
+        setShowVaultPrompt(false);
+        
+        console.log('Vault forcefully locked on mount');
+    }, []);
+
+    // Monitor vault state changes for debugging
+    useEffect(() => {
+        console.log('vaultUnlocked is now:', vaultUnlocked);
+    }, [vaultUnlocked]);
+
     /* =========================
        SECRET CLICK TRIGGER
     ========================= */
@@ -85,7 +105,7 @@ function Main() {
     };
 
     /* =========================
-       VAULT SUBMIT - Navigate to /vault on success
+       VAULT SUBMIT
     ========================= */
     const handleVaultSubmit = async (
         e: React.FormEvent<HTMLFormElement>
@@ -105,14 +125,12 @@ function Main() {
             });
 
             const data = await response.json();
-            console.log('API Response:', data);
+            console.log('API Response:', data); // Debug log
 
             if (data.success) {
-                console.log('Vault unlocked! Navigating to /vault');
-                // Navigate to vault route instead of rendering inline
-                navigate("/vault");
+                console.log('Vault unlocked successfully!');
+                setVaultUnlocked(true);
                 setShowVaultPrompt(false);
-                setVaultInput("");
             } else if (data.locked) {
                 setVaultLockedUntil(data.lockedUntil);
                 setErrorModal({
@@ -280,8 +298,10 @@ function Main() {
                 </div>
             </div>
 
-            {/* REMOVED: Inline Vault rendering */}
-            {/* {vaultUnlocked === true && <Vault />} */}
+            {/* =========================
+                ONLY RENDER VAULT IF UNLOCKED
+            ========================= */}
+            {vaultUnlocked === true && <Vault />}
 
             <PDFViewer
                 url={viewerUrl}

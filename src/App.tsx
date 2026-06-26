@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
 import {
   Main,
   Timeline,
@@ -12,7 +11,6 @@ import {
 } from "./components";
 
 import FadeIn from "./components/FadeIn";
-import Vault from "./components/Vault"; // Import Vault
 import "./index.scss";
 
 function App() {
@@ -30,22 +28,13 @@ function App() {
       <Navigation />
 
       <FadeIn transitionDuration={700}>
-        <Routes>
-          {/* Main route with all sections */}
-          <Route path="/" element={
-            <>
-              <Main />
-              <Expertise />
-              <Terminal />
-              <Timeline />
-              <Project />
-              <Contact />
-              <Footer />
-            </>
-          } />
-          {/* Vault route - only accessible via navigation or password */}
-          <Route path="/vault" element={<Vault />} />
-        </Routes>
+        <Main />
+        <Expertise />
+        <Terminal />
+        <Timeline />
+        <Project />
+        <Contact />
+        <Footer />
       </FadeIn>
     </div>
   );

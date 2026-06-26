@@ -4,6 +4,8 @@ import { supabase } from "../lib/supabase";
 import PDFViewer from "./PDFViewer";
 import EPUBViewer from "./EPUBViewer";
 
+console.log('🔴 VAULT COMPONENT IS RENDERING! Stack trace:', new Error().stack);
+
 interface VaultItem {
     id?: number;
     name: string;
