@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -31,11 +31,9 @@ function ErrorModal({
         <div className="modal-backdrop" onClick={onClose}>
             <div className="modal" onClick={(e) => e.stopPropagation()}>
                 <h2>{title}</h2>
-
                 <p style={{ whiteSpace: "pre-line" }}>
                     {message}
                 </p>
-
                 <button onClick={onClose}>
                     Close
                 </button>
@@ -48,26 +46,28 @@ function ErrorModal({
    MAIN COMPONENT
 ========================= */
 function Main() {
-
     const [clickCount, setClickCount] = useState(0);
-
     const [showVaultPrompt, setShowVaultPrompt] = useState(false);
-
     const [vaultInput, setVaultInput] = useState("");
-
     const [vaultUnlocked, setVaultUnlocked] = useState(false);
-
     const [loading, setLoading] = useState(false);
-
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
-
     const [vaultLockedUntil, setVaultLockedUntil] = useState<number | null>(null);
-
     const [errorModal, setErrorModal] = useState<{
         open: boolean;
         title: string;
         message: string;
     } | null>(null);
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+    // Track mouse position for glow effect
+    useEffect(() => {
+        const handleMouseMove = (e: MouseEvent) => {
+            setMousePosition({ x: e.clientX, y: e.clientY });
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
 
     /* =========================
        SECRET CLICK TRIGGER
@@ -89,7 +89,6 @@ function Main() {
         e: React.FormEvent<HTMLFormElement>
     ) => {
         e.preventDefault();
-
         setLoading(true);
 
         try {
@@ -106,13 +105,9 @@ function Main() {
             const data = await response.json();
 
             if (data.success) {
-
                 setVaultUnlocked(true);
-
             } else if (data.locked) {
-
                 setVaultLockedUntil(data.lockedUntil);
-
                 setErrorModal({
                     open: true,
                     title: "Vault Locked",
@@ -120,35 +115,26 @@ function Main() {
                         data.lockedUntil
                     ).toLocaleString()}`
                 });
-
             } else if (data.remaining !== undefined) {
-
                 setErrorModal({
                     open: true,
                     title: "Incorrect Code",
                     message: `Wrong code.\n${data.remaining} attempt(s) remaining.`
                 });
-
             } else {
-
                 setErrorModal({
                     open: true,
                     title: "Incorrect Code",
                     message: "The code you entered is not valid."
                 });
-
             }
-
         } catch (error) {
-
             console.error(error);
-
             setErrorModal({
                 open: true,
                 title: "Error",
                 message: "Something went wrong. Please try again."
             });
-
         }
 
         setLoading(false);
@@ -172,9 +158,13 @@ function Main() {
     ========================= */
     return (
         <div className="container">
-
-            <div className="about-section">
-
+            <div 
+                className="about-section"
+                style={{
+                    '--mouse-x': `${mousePosition.x}px`,
+                    '--mouse-y': `${mousePosition.y}px`
+                } as React.CSSProperties}
+            >
                 <div className="image-wrapper">
                     <img
                         src={profilePic}
@@ -183,29 +173,26 @@ function Main() {
                 </div>
 
                 <div className="content">
-
                     <div className="social_icons">
-
                         <a
                             href="https://github.com/Rachiminoff"
                             target="_blank"
                             rel="noreferrer"
+                            className="social-link github"
                         >
                             <GitHubIcon />
                         </a>
-
                         <a
                             href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
                             target="_blank"
                             rel="noreferrer"
+                            className="social-link linkedin"
                         >
                             <LinkedInIcon />
                         </a>
-
-                        <button className="icon-btn" onClick={openCVViewer}>
+                        <button className="social-link cv" onClick={openCVViewer}>
                             <DescriptionIcon />
                         </button>
-
                     </div>
 
                     <h1
@@ -219,23 +206,29 @@ function Main() {
                         onClick={handleSecretClick}
                         style={{ cursor: "pointer" }}
                     >
-                        Full-Stack Developer 
+                        Full-Stack Developer
                     </p>
 
                     <div className="mobile_social_icons">
-
-                        <a href="https://github.com/Rachiminoff" target="_blank" rel="noreferrer">
+                        <a
+                            href="https://github.com/Rachiminoff"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="social-link github"
+                        >
                             <GitHubIcon />
                         </a>
-
-                        <a href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/" target="_blank" rel="noreferrer">
+                        <a
+                            href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="social-link linkedin"
+                        >
                             <LinkedInIcon />
                         </a>
-
-                        <button className="icon-btn" onClick={openCVViewer}>
+                        <button className="social-link cv" onClick={openCVViewer}>
                             <DescriptionIcon />
                         </button>
-
                     </div>
 
                     {/* =========================
@@ -248,7 +241,7 @@ function Main() {
                         >
                             <input
                                 type="password"
-                                placeholder="Enter code"
+                                placeholder="Enter secret code"
                                 value={vaultInput}
                                 onChange={(e) =>
                                     setVaultInput(e.target.value)
@@ -256,13 +249,12 @@ function Main() {
                                 autoFocus
                                 className="vault-input"
                             />
-
                             <button
                                 type="submit"
                                 className="vault-button"
                                 disabled={loading}
                             >
-                                {loading ? "Checking..." : "Unlock"}
+                                {loading ? "Checking..." : "Unlock →"}
                             </button>
                         </form>
                     )}
@@ -279,9 +271,7 @@ function Main() {
                             </p>
                         </div>
                     )}
-
                 </div>
-
             </div>
 
             {vaultUnlocked && <Vault />}
@@ -297,7 +287,6 @@ function Main() {
                 message={errorModal?.message || ""}
                 onClose={() => setErrorModal(null)}
             />
-
         </div>
     );
 }
