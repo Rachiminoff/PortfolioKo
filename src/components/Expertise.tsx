@@ -1,122 +1,154 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCode,
-  faGamepad,
-  faMobileAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { Icon } from "@iconify/react";
 
-import {
-  faReact,
-  faHtml5,
-  faCss3Alt,
-  faJs,
-  faPython,
-
-} from "@fortawesome/free-brands-svg-icons";
-
-import Chip from "@mui/material/Chip";
 import "../assets/styles/Expertise.scss";
 
+const techStack = [
+  // Frontend & Mobile
+  {
+    name: "React",
+    icon: "logos:react",
+    color: "#61DAFB",
+  },
+  {
+    name: "TypeScript",
+    icon: "logos:typescript-icon",
+    color: "#3178C6",
+  },
+  {
+    name: "React Native",
+    icon: "logos:react",
+    color: "#61DAFB",
+  },
+  {
+    name: "FlutterFlow",
+    icon: "logos:flutter",
+    color: "#02569B",
+  },
 
-const webDev = [
-  { name: "React", icon: faReact },
-  { name: "HTML", icon: faHtml5 },
-  { name: "CSS", icon: faCss3Alt },
-  { name: "JavaScript", icon: faJs },
-];
+  // Backend & Database
+  {
+    name: "Supabase",
+    icon: "logos:supabase-icon",
+    color: "#3ECF8E",
+  },
+  {
+    name: "SQLite",
+    icon: "logos:sqlite",
+    color: "#003B57",
+  },
+  {
+    name: "MySQL",
+    icon: "logos:mysql",
+    color: "#4479A1",
+  },
+  {
+    name: "PHP",
+    icon: "logos:php",
+    color: "#777BB4",
+  },
 
-const appDev = [
-  { name: "React Native", icon: faReact },
-  { name: "FlutterFlow", icon: faMobileAlt },
-];
+  // Game Development
+  {
+    name: "Godot",
+    icon: "logos:godot-icon",
+    color: "#478CBF",
+  },
+  {
+    name: "GDScript",
+    icon: "logos:godot-icon",
+    color: "#478CBF",
+  },
+  {
+    name: "Blender",
+    icon: "logos:blender",
+    color: "#F5792A",
+  },
 
-const scripting = [
-  { name: "Python", icon: faPython },
-  { name: "Web Scraping", icon: faCode },
-  { name: "HTML Parsing", icon: faCode },
-];
+  // Automation & Scripting
+  {
+    name: "Python",
+    icon: "logos:python",
+    color: "#3776AB",
+  },
+  {
+    name: "Playwright",
+    icon: "logos:playwright",
+    color: "#2EAD33",
+  },
+  {
+    name: "BeautifulSoup",
+    icon: "logos:python",
+    color: "#4B8BBE",
+  },
 
-const gameDev = [
-  { name: "Godot", icon: faGamepad },
-  { name: "Ren'Py", icon: faGamepad },
+  // Tools
+  {
+    name: "Git",
+    icon: "logos:git-icon",
+    color: "#F05032",
+  },
+  {
+    name: "GitHub",
+    icon: "logos:github-icon",
+    color: "#FFFFFF",
+  },
+  {
+    name: "Dart",
+    icon: "logos:dart",
+    color: "#00B4AB",
+  },
+  {
+    name: "Flutter",
+    icon: "logos:flutter",
+    color: "#02569B",
+  },
 ];
 
 function Expertise() {
   return (
-    <div className="container" id="expertise">
-      <div className="skills-container">
-        <h1>Expertise</h1>
+    <div className="expertise-container" id="expertise">
 
-        <div className="skills-grid">
+      <div className="expertise-header">
+        <h1>Tech Stack</h1>
 
-          {/* Product Engineering */}
-          <div className="skill">
-            <FontAwesomeIcon icon={faCode} size="3x" />
-            <h3>Product Engineering</h3>
-              <p>
-                Building responsive web, mobile, and interactive applications with a focus on clean design, maintainable systems, and smooth user experience across devices. I enjoy turning ideas into functional interfaces, integrating APIs, and creating scalable frontend structures that remain consistent and adaptable as projects grow.
-              </p>
+        <p className="expertise-subtitle">
+          Technologies I work with — scroll through the stack
+        </p>
+      </div>
 
-              <p>
-                I especially enjoy the iterative side of development—testing, debugging, refining, and gradually seeing features come together into something polished and reliable. The most rewarding part for me is reaching the point where a project feels complete and ready to be shared with others.
-              </p>
 
-            <div className="flex-chips">
-              <span className="chip-title">Stack:</span>
-              {webDev.map((item, index) => (
-                <Chip
-                  key={index}
-                  className="chip"
-                  label={item.name}
-                  icon={<FontAwesomeIcon icon={item.icon} />}
+      <div className="tech-stack-wrapper">
+        <div className="tech-stack-scroll">
+
+          {[...techStack, ...techStack].map((tech, index) => (
+            <div
+              key={index}
+              className="tech-item"
+              style={
+                {
+                  "--tech-color": tech.color,
+                } as React.CSSProperties
+              }
+            >
+
+              <div className="tech-icon-wrapper">
+                <Icon
+                  icon={tech.icon}
+                  className="tech-icon"
                 />
-              ))}
-              {appDev.map((item, index) => (
-                <Chip
-                  key={`app-${index}`}
-                  className="chip"
-                  label={item.name}
-                  icon={<FontAwesomeIcon icon={item.icon} />}
-                />
-              ))}
-              {gameDev.map((item, index) => (
-                <Chip
-                  key={`game-${index}`}
-                  className="chip"
-                  label={item.name}
-                  icon={<FontAwesomeIcon icon={item.icon} />}
-                />
-              ))}
+              </div>
+
+              <span className="tech-name">
+                {tech.name}
+              </span>
+
             </div>
-          </div>
-
-          {/* Automation & Systems */}
-          <div className="skill">
-            <FontAwesomeIcon icon={faCode} size="3x" />
-            <h3>Automation & Systems</h3>
-                <p>
-                Developing scripts and internal tools that automate repetitive workflows, streamline data processing, and improve overall efficiency. I enjoy building practical automation systems using Python and modern tooling for tasks such as web scraping, data extraction, content processing, and workflow management.
-              </p>
-
-              <p>
-                My focus is on creating lightweight and reliable solutions that reduce manual effort while keeping systems organized, consistent, and easy to maintain across different types of workflows and environments.
-              </p>
-            <div className="flex-chips">
-              <span className="chip-title">Stack:</span>
-              {scripting.map((item, index) => (
-                <Chip
-                  key={index}
-                  className="chip"
-                  label={item.name}
-                  icon={<FontAwesomeIcon icon={item.icon} />}
-                />
-              ))}
-            </div>
-          </div>
+          ))}
 
         </div>
       </div>
+
     </div>
   );
 }
