@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
 import PDFViewer from "./PDFViewer";
@@ -13,6 +13,7 @@ interface VaultItem {
     image?: string;
     status?: string;
     created_at?: string;
+    display_order?: number;
 }
 
 function Vault() {
@@ -75,15 +76,11 @@ function Vault() {
 
         let finalUrl = url;
 
-        const match =
-            url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
 
         if (match) {
 
-            const fileId = match[1];
-
-            finalUrl =
-                `https://drive.google.com/file/d/${fileId}/preview`;
+            finalUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
 
         }
 
@@ -109,21 +106,22 @@ function Vault() {
 
     };
 
-    const categories = useMemo(() => {
+    // ==========================
+    // Folder Categories
+    // ==========================
 
-        return [
-            ...new Set(
-                vaultItems.map(item =>
-                    item.category || "General"
-                )
+    const categories = Array.from(
+        new Set(
+            vaultItems.map(
+                item => item.category ?? "General"
             )
-        ];
-
-    }, [vaultItems]);
+        )
+    );
 
     const displayedItems = selectedCategory
-        ? vaultItems.filter(item =>
-            (item.category || "General") === selectedCategory
+        ? vaultItems.filter(
+            item =>
+                (item.category ?? "General") === selectedCategory
         )
         : [];
 
@@ -151,8 +149,7 @@ function Vault() {
                 </div>
 
             </div>
-
-            {loading ? (
+                        {loading ? (
 
                 <div className="vault-loading">
 
@@ -193,10 +190,10 @@ function Vault() {
 
                     {categories.map(category => {
 
-                        const count =
-                            vaultItems.filter(item =>
-                                (item.category || "General") === category
-                            ).length;
+                        const count = vaultItems.filter(
+                            item =>
+                                (item.category ?? "General") === category
+                        ).length;
 
                         return (
 
@@ -327,12 +324,12 @@ function Vault() {
                                     </div>
 
                                     <div className="vault-book-content">
-                                                                                <span className="vault-id">
+
+                                        <span className="vault-id">
 
                                             ARCHIVE ENTRY #
 
-                                            {String(item.id || 0)
-                                                .padStart(3, "0")}
+                                            {String(item.id || 0).padStart(3, "0")}
 
                                         </span>
 
@@ -361,19 +358,11 @@ function Vault() {
 
                                         <div className="vault-meta-row">
 
-                                            <span>
-
-                                                {item.type}
-
-                                            </span>
+                                            <span>{item.type}</span>
 
                                             <span>•</span>
 
-                                            <span>
-
-                                                Private Archive
-
-                                            </span>
+                                            <span>Private Archive</span>
 
                                             {item.created_at && (
 
@@ -412,7 +401,9 @@ function Vault() {
                                                             : ""
                                                     }`}
                                                 >
+
                                                     ▼
+
                                                 </span>
 
                                             </button>
@@ -442,16 +433,6 @@ function Vault() {
                                                 {item.type}
 
                                             </span>
-
-                                            {item.category && (
-
-                                                <span>
-
-                                                    {item.category}
-
-                                                </span>
-
-                                            )}
 
                                         </div>
 
