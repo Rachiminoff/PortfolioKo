@@ -40,7 +40,7 @@ function Vault() {
     const [selectedCategory, setSelectedCategory] =
         useState<string | null>(null);
 
-    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+    const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
     useEffect(() => {
 
@@ -430,7 +430,7 @@ function Vault() {
 
                                         <div className="vault-meta-row">
 
-                                            <span>{item.type}</span>
+                                            <span className="vault-type-badge">{item.type}</span>
 
                                             <span>•</span>
 
@@ -495,16 +495,6 @@ function Vault() {
                                                 </p>
 
                                             </div>
-
-                                        </div>
-
-                                        <div className="vault-book-tags">
-
-                                            <span>
-
-                                                {item.type}
-
-                                            </span>
 
                                         </div>
 
