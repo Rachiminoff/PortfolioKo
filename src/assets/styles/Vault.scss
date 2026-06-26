@@ -177,7 +177,7 @@
 }
 
 /* ========================================
-   CARD - Shared
+   CARD - Shared (Darker Version)
 ======================================== */
 .vault-book-card {
     position: relative;
@@ -185,10 +185,10 @@
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    background: linear-gradient(160deg, #6c30eb 0%, #5316c9 45%, #36007d 100%);
-    border: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(160deg, #1a0a2e 0%, #2d1b4e 45%, #1a0a2e 100%);
+    border: 1px solid rgba(255,255,255,0.06);
     backdrop-filter: blur(10px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.38), 0 0 40px rgba(120,80,255,0.12);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.6), 0 0 40px rgba(60,30,120,0.15);
     transition: transform 0.32s ease, box-shadow 0.32s ease, border 0.32s ease;
     transform-style: preserve-3d;
 }
@@ -197,7 +197,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.08), transparent 80%);
+    background: linear-gradient(120deg, transparent 20%, rgba(255,255,255,0.04), transparent 80%);
     transform: translateX(-130%);
     transition: transform 0.9s ease;
     pointer-events: none;
@@ -209,8 +209,8 @@
 
 .vault-book-card:hover {
     transform: perspective(1200px) translateY(-6px) rotateX(1.5deg) rotateY(-1.5deg);
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 24px 48px rgba(0,0,0,0.48), 0 0 70px rgba(140,90,255,0.22);
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.7), 0 0 70px rgba(80,40,160,0.2);
 }
 
 /* ========================================
@@ -236,21 +236,23 @@
 }
 
 /* ========================================
-   CARD - List Mode
+   CARD - List Mode (Darker)
 ======================================== */
 .vault-book-card-list {
     flex-direction: row;
     align-items: stretch;
     min-height: 160px;
     padding: 0;
-    background: linear-gradient(160deg, rgba(108,48,235,0.7) 0%, rgba(83,22,201,0.5) 45%, rgba(54,0,125,0.3) 100%);
+    background: linear-gradient(160deg, rgba(26,10,46,0.95) 0%, rgba(45,27,78,0.9) 45%, rgba(26,10,46,0.85) 100%);
     backdrop-filter: blur(20px);
     cursor: default;
     border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
 .vault-book-card-list .vault-card-glow {
     inset: auto -10% -20% -10%;
+    background: radial-gradient(circle, rgba(80,40,160,0.15), transparent 70%);
 }
 
 /* List View - Image Wrapper */
@@ -263,7 +265,7 @@
     justify-content: center;
     overflow: hidden;
     border-radius: 16px 0 0 16px;
-    background: rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.3);
 }
 
 .vault-book-card-list .vault-book-image-wrapper .vault-book-image,
@@ -279,12 +281,12 @@
 }
 
 .vault-book-card-list .vault-book-image-wrapper .vault-image-placeholder {
-    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,255,255,0.06);
+    background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.04);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.1);
     font-size: 0.7rem;
     letter-spacing: 0.1em;
     aspect-ratio: 3 / 4.2;
@@ -315,7 +317,7 @@
 .vault-book-card-list .vault-id {
     font-size: 0.6rem;
     opacity: 0.6;
-    color: rgba(255,255,255,0.5);
+    color: rgba(255,255,255,0.3);
     font-weight: 700;
     letter-spacing: 0.08em;
 }
@@ -341,9 +343,9 @@
     display: inline-flex;
     padding: 0.1rem 0.5rem;
     border-radius: 999px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.5);
     font-size: 0.6rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -357,8 +359,8 @@
     gap: 0.5rem;
     padding: 0.35rem 1rem;
     margin-top: 0.25rem;
-    border: 1px solid rgba(255,255,255,0.1);
-    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
     color: rgba(255,255,255,0.85);
     border-radius: 8px;
     font-size: 0.75rem;
@@ -369,8 +371,8 @@
 }
 
 .vault-book-card-list .vault-list-download-btn:hover {
-    background: rgba(255,255,255,0.12);
-    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.15);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
@@ -382,8 +384,8 @@
 /* List View - Hover state for the whole card */
 .vault-book-card-list:hover {
     transform: perspective(1200px) translateY(-3px) rotateX(0.5deg) rotateY(-0.5deg);
-    border-color: rgba(255,255,255,0.12);
-    box-shadow: 0 16px 36px rgba(0,0,0,0.45), 0 0 50px rgba(140,90,255,0.12);
+    border-color: rgba(255,255,255,0.08);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.6), 0 0 50px rgba(80,40,160,0.1);
 }
 
 /* Grid View - Keep all existing grid content */
@@ -419,7 +421,7 @@
 }
 
 /* ========================================
-   NEW ENTRY BADGE
+   NEW ENTRY BADGE (Darker)
 ======================================== */
 .vault-new-badge {
     position: absolute;
@@ -428,10 +430,10 @@
     z-index: 4;
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
-    background: rgba(255,215,0,0.2);
-    border: 1px solid rgba(255,215,0,0.25);
+    background: rgba(255,215,0,0.1);
+    border: 1px solid rgba(255,215,0,0.15);
     backdrop-filter: blur(10px);
-    color: #ffd700;
+    color: rgba(255,215,0,0.7);
     font-size: 0.6rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -439,25 +441,25 @@
 }
 
 /* ========================================
-   CARD GLOW
+   CARD GLOW (Darker)
 ======================================== */
 .vault-card-glow {
     position: absolute;
     inset: auto -20% -30% -20%;
     height: 200px;
-    background: radial-gradient(circle, rgba(140,90,255,0.2), transparent 70%);
+    background: radial-gradient(circle, rgba(80,40,160,0.12), transparent 70%);
     filter: blur(60px);
     z-index: 0;
-    opacity: 0.6;
+    opacity: 0.4;
     transition: opacity 0.3s ease;
 }
 
 .vault-book-card:hover .vault-card-glow {
-    opacity: 1;
+    opacity: 0.8;
 }
 
 /* ========================================
-   IMAGE
+   IMAGE (Darker adjustments)
 ======================================== */
 .vault-book-image-wrapper {
     position: relative;
@@ -470,14 +472,15 @@
 .vault-book-image {
     object-fit: cover;
     border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.08);
-    filter: brightness(0.98) contrast(1.04) saturate(1.05);
-    box-shadow: 12px 16px 30px rgba(0,0,0,0.45);
+    border: 1px solid rgba(255,255,255,0.05);
+    filter: brightness(0.9) contrast(1.1) saturate(0.95);
+    box-shadow: 12px 16px 30px rgba(0,0,0,0.6);
     transition: transform 0.32s ease, box-shadow 0.32s ease;
 }
 
 .vault-book-card:hover .vault-book-image {
-    box-shadow: 16px 20px 38px rgba(0,0,0,0.52);
+    filter: brightness(0.95) contrast(1.05) saturate(1);
+    box-shadow: 16px 20px 38px rgba(0,0,0,0.7);
 }
 
 .vault-image-placeholder {
@@ -485,15 +488,15 @@
     justify-content: center;
     align-items: center;
     border-radius: 10px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-    border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.3);
+    background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.15);
     font-size: 2.5rem;
     aspect-ratio: 3 / 4.2;
 }
 
 /* ========================================
-   CONTENT (Grid)
+   CONTENT (Grid) - Darker text adjustments
 ======================================== */
 .vault-book-content {
     position: relative;
@@ -514,7 +517,7 @@
 }
 
 .vault-id {
-    color: rgba(255,255,255,0.4);
+    color: rgba(255,255,255,0.3);
     font-size: 0.7rem;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -525,9 +528,9 @@
     display: inline-flex;
     padding: 0.2rem 0.6rem;
     border-radius: 999px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.06);
-    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.5);
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.06em;
@@ -564,22 +567,22 @@
     align-items: center;
     gap: 0.4rem;
     margin-bottom: 0.5rem;
-    color: rgba(255,255,255,0.45);
+    color: rgba(255,255,255,0.35);
     font-size: 0.75rem;
     letter-spacing: 0.04em;
     flex-wrap: wrap;
 }
 
 .vault-book-card:hover .vault-book-description {
-    color: rgba(255,255,255,0.86);
+    color: rgba(255,255,255,0.75);
 }
 
 /* ========================================
-   DESCRIPTION DROPDOWN (Grid only)
+   DESCRIPTION DROPDOWN (Darker)
 ======================================== */
 .vault-description-dropdown {
     margin-top: 0.5rem;
-    border-top: 1px solid rgba(255,255,255,0.06);
+    border-top: 1px solid rgba(255,255,255,0.04);
     padding-top: 0.5rem;
 }
 
@@ -590,7 +593,7 @@
     align-items: center;
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.5);
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -599,7 +602,7 @@
 }
 
 .vault-description-toggle:hover {
-    color: white;
+    color: rgba(255,255,255,0.8);
 }
 
 .vault-arrow {
@@ -629,7 +632,7 @@
 
 .vault-book-description {
     margin-top: 0.5rem;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.55);
     line-height: 1.6;
     font-size: 0.88rem;
     white-space: pre-wrap;
@@ -648,7 +651,7 @@
 }
 
 /* ========================================
-   ACTIONS (Grid only)
+   ACTIONS (Darker)
 ======================================== */
 .vault-actions-container {
     display: flex;
@@ -661,8 +664,8 @@
 .vault-read-btn {
     flex: 1;
     min-width: 80px;
-    border: 1px solid rgba(255,255,255,0.12);
-    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
     color: white;
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
@@ -674,18 +677,18 @@
 }
 
 .vault-read-btn:hover {
-    background: rgba(255,255,255,0.14);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
 }
 
 .vault-download-btn {
     flex: 1;
     min-width: 80px;
-    border: 1px solid rgba(255,255,255,0.06);
-    background: rgba(255,255,255,0.03);
-    color: rgba(255,255,255,0.75);
+    border: 1px solid rgba(255,255,255,0.04);
+    background: rgba(255,255,255,0.02);
+    color: rgba(255,255,255,0.6);
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
     font-weight: 500;
@@ -695,15 +698,15 @@
 }
 
 .vault-download-btn:hover {
-    background: rgba(255,255,255,0.08);
-    color: white;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.85);
     transform: translateY(-1px);
 }
 
 .vault-download-note {
     width: 100%;
     font-size: 0.65rem;
-    color: rgba(255,255,255,0.35);
+    color: rgba(255,255,255,0.25);
     font-style: italic;
     margin-top: 0.15rem;
 }
@@ -1011,14 +1014,14 @@
         min-height: 140px;
         border-radius: 14px;
         padding: 0;
-        background: linear-gradient(160deg, rgba(108,48,235,0.8) 0%, rgba(83,22,201,0.6) 45%, rgba(54,0,125,0.4) 100%);
+        background: linear-gradient(160deg, rgba(26,10,46,0.95) 0%, rgba(45,27,78,0.9) 45%, rgba(26,10,46,0.85) 100%);
     }
 
     .vault-book-card-list .vault-book-image-wrapper {
         flex: 0 0 90px;
         padding: 0.5rem 0 0.5rem 0.5rem;
         border-radius: 14px 0 0 14px;
-        background: rgba(0,0,0,0.1);
+        background: rgba(0,0,0,0.2);
     }
 
     .vault-book-card-list .vault-book-image-wrapper .vault-book-image,
