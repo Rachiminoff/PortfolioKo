@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
 import PDFViewer from "./PDFViewer";
+import EPUBViewer from "./EPUBViewer";
 
 interface VaultItem {
     id?: number;
@@ -26,6 +27,9 @@ function Vault() {
 
     const [viewerUrl, setViewerUrl] =
         useState<string | null>(null);
+
+    const [viewerType, setViewerType] =
+        useState<"pdf" | "epub" | null>(null);
 
     const [activeCard, setActiveCard] =
         useState<number | null>(null);
@@ -70,18 +74,29 @@ function Vault() {
 
     };
 
-    const openViewer = (url?: string) => {
+    const openViewer = (url?: string, type?: string) => {
 
         if (!url) return;
 
         let finalUrl = url;
 
+        // Handle Google Drive links
         const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
 
         if (match) {
 
             finalUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
 
+        }
+
+        // Determine viewer type based on the item type
+        const itemType = type?.toLowerCase() || "";
+        
+        if (itemType.includes("epub")) {
+            setViewerType("epub");
+        } else {
+            // Default to PDF for PDF, DOC, or any other type
+            setViewerType("pdf");
         }
 
         setViewerUrl(finalUrl);
@@ -91,6 +106,7 @@ function Vault() {
     const closeViewer = () => {
 
         setViewerUrl(null);
+        setViewerType(null);
 
     };
 
@@ -340,7 +356,7 @@ function Vault() {
                                                 <button
                                                     className="vault-book-title"
                                                     onClick={() =>
-                                                        openViewer(item.link)
+                                                        openViewer(item.link, item.type)
                                                     }
                                                 >
 
@@ -441,7 +457,7 @@ function Vault() {
                                             <button
                                                 className="vault-read-btn"
                                                 onClick={() =>
-                                                    openViewer(item.link)
+                                                    openViewer(item.link, item.type)
                                                 }
                                             >
 
@@ -465,10 +481,20 @@ function Vault() {
 
             )}
 
-            <PDFViewer
-                url={viewerUrl}
-                onClose={closeViewer}
-            />
+            {/* Conditional Viewer Rendering */}
+            {viewerType === "pdf" && (
+                <PDFViewer
+                    url={viewerUrl}
+                    onClose={closeViewer}
+                />
+            )}
+
+            {viewerType === "epub" && (
+                <EPUBViewer
+                    url={viewerUrl}
+                    onClose={closeViewer}
+                />
+            )}
 
         </div>
 
