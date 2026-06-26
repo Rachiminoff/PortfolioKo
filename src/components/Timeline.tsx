@@ -1,138 +1,568 @@
-import React from "react";
-import '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGraduationCap, faRocket } from '@fortawesome/free-solid-svg-icons';
-import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import 'react-vertical-timeline-component/style.min.css';
-import '../assets/styles/Timeline.scss'
+import React, { useEffect, useState } from "react";
+import "../assets/styles/Vault.scss";
+import { supabase } from "../lib/supabase";
+import PDFViewer from "./PDFViewer";
+import EPUBViewer from "./EPUBViewer";
 
-function Timeline() {
-  return (
-    <div id="history">
-      <div className="items-container">
-        <h1 style={{ 
-          fontSize: '2.5rem', 
-          fontWeight: '700', 
-          marginBottom: '2rem',
-          letterSpacing: '-0.02em',
-          color: 'white'
-        }}>
-          My Timeline
-        </h1>
-        <VerticalTimeline>
-
-          {/* First Python Code */}
-          <VerticalTimelineElement
-            className="vertical-timeline-element--work"
-            contentStyle={{ 
-              background: 'white', 
-              color: 'rgb(39, 40, 34)',
-              borderRadius: '12px'
-            }}
-            contentArrowStyle={{ borderRight: '7px solid white' }}
-            date="First program"
-            dateClassName="custom-date"
-            iconStyle={{ 
-              background: '#3776AB', 
-              color: 'white',
-              boxShadow: '0 0 0 4px rgba(55, 118, 171, 0.3)'
-            }}
-            icon={<FontAwesomeIcon icon={faPython} />}
-          >
-            <h3 className="vertical-timeline-element-title">
-              Wrote my first line of code
-            </h3>
-            <h4 className="vertical-timeline-element-subtitle">
-              Python
-            </h4>
-            <p>
-              <code style={{
-                background: '#f0f0f0',
-                padding: '0.2rem 0.6rem',
-                borderRadius: '4px',
-                fontFamily: 'Courier Prime, monospace',
-                fontSize: '0.9rem'
-              }}>
-                print("hello, world")
-              </code>
-            </p>
-            <p style={{ marginTop: '0.8rem', fontSize: '0.9rem', opacity: 0.8 }}>
-              The beginning of my programming journey
-            </p>
-          </VerticalTimelineElement>
-
-          {/* Computer Science Start */}
-          <VerticalTimelineElement
-            className="vertical-timeline-element--education"
-            contentStyle={{ 
-              background: 'white', 
-              color: 'rgb(39, 40, 34)',
-              borderRadius: '12px'
-            }}
-            contentArrowStyle={{ borderRight: '7px solid white' }}
-            date="2023 - present"
-            dateClassName="custom-date"
-            iconStyle={{ 
-              background: '#5000ca', 
-              color: 'white',
-              boxShadow: '0 0 0 4px rgba(80, 0, 202, 0.3)'
-            }}
-            icon={<FontAwesomeIcon icon={faGraduationCap} />}
-          >
-            <h3 className="vertical-timeline-element-title">
-              Started Computer Science
-            </h3>
-            <h4 className="vertical-timeline-element-subtitle">
-              Cavite State University - Main Campus
-            </h4>
-            <p>
-              Currently pursuing a degree in Computer Science. 
-            </p>
-            <div style={{ 
-              display: 'flex', 
-              gap: '0.5rem', 
-              marginTop: '0.8rem',
-              flexWrap: 'wrap'
-            }}>
-            </div>
-          </VerticalTimelineElement>
-
-          {/* Future Timeline Item */}
-          <VerticalTimelineElement
-            className="vertical-timeline-element--work"
-            contentStyle={{ 
-              background: 'white', 
-              color: 'rgb(39, 40, 34)',
-              borderRadius: '12px',
-              opacity: 0.7
-            }}
-            contentArrowStyle={{ borderRight: '7px solid white' }}
-            date="Future"
-            dateClassName="custom-date"
-            iconStyle={{ 
-              background: '#666', 
-              color: 'white',
-              boxShadow: '0 0 0 4px rgba(102, 102, 102, 0.3)'
-            }}
-            icon={<FontAwesomeIcon icon={faRocket} />}
-          >
-            <h3 className="vertical-timeline-element-title">
-              What's Next?
-            </h3>
-            <h4 className="vertical-timeline-element-subtitle">
-              Future Goals
-            </h4>
-            <p>
-              Exploring new technologies, building impactful projects, and 
-              growing as a developer.
-            </p>
-          </VerticalTimelineElement>
-
-        </VerticalTimeline>
-      </div>
-    </div>
-  );
+interface VaultItem {
+    id?: number;
+    name: string;
+    type: string;
+    category?: string;
+    description: string;
+    link?: string;
+    image?: string;
+    status?: string;
+    created_at?: string;
+    display_order?: number;
 }
 
-export default Timeline;
+function Vault() {
+
+    const [vaultItems, setVaultItems] =
+        useState<VaultItem[]>([]);
+
+    const [loading, setLoading] =
+        useState(true);
+
+    const [viewerUrl, setViewerUrl] =
+        useState<string | null>(null);
+
+    const [viewerType, setViewerType] =
+        useState<"pdf" | "epub" | null>(null);
+
+    const [activeCard, setActiveCard] =
+        useState<number | null>(null);
+
+    const [expandedDescriptions, setExpandedDescriptions] =
+        useState<number[]>([]);
+
+    const [selectedCategory, setSelectedCategory] =
+        useState<string | null>(null);
+
+    const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+
+    useEffect(() => {
+
+        fetchVaultItems();
+
+    }, []);
+
+    const fetchVaultItems = async () => {
+
+        setLoading(true);
+
+        const { data, error } = await supabase
+            .from("vault_items")
+            .select("*")
+            .order("display_order", {
+                ascending: false
+            })
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (error) {
+
+            console.error(error);
+
+        } else {
+
+            setVaultItems(data || []);
+
+        }
+
+        setLoading(false);
+
+    };
+
+    const openViewer = (url?: string, type?: string) => {
+
+        if (!url) return;
+
+        let finalUrl = url;
+
+        // Handle Google Drive links
+        const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+
+        if (match) {
+
+            finalUrl = `https://drive.google.com/file/d/${match[1]}/preview`;
+
+        }
+
+        // Determine viewer type based on the item type
+        const itemType = type?.toLowerCase() || "";
+        
+        if (itemType.includes("epub")) {
+            setViewerType("epub");
+        } else {
+            // Default to PDF for PDF, DOC, or any other type
+            setViewerType("pdf");
+        }
+
+        setViewerUrl(finalUrl);
+
+    };
+
+    const closeViewer = () => {
+
+        setViewerUrl(null);
+        setViewerType(null);
+
+    };
+
+    const toggleDescription = (id?: number) => {
+
+        if (!id) return;
+
+        setExpandedDescriptions(prev =>
+            prev.includes(id)
+                ? prev.filter(item => item !== id)
+                : [...prev, id]
+        );
+
+    };
+
+    const handleDownload = (url?: string, name?: string) => {
+
+        if (!url) return;
+
+        // Create a temporary anchor element
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Extract filename from URL or use the item name
+        let filename = name || 'document';
+        
+        // Try to get filename from URL
+        const urlParts = url.split('/');
+        const lastPart = urlParts[urlParts.length - 1];
+        if (lastPart && lastPart.includes('.')) {
+            filename = lastPart;
+        } else if (!filename.includes('.')) {
+            // Add .epub extension if not present
+            filename = `${filename}.epub`;
+        }
+        
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    };
+
+    // ==========================
+    // Folder Categories
+    // ==========================
+
+    const categories = Array.from(
+        new Set(
+            vaultItems.map(
+                item => item.category ?? "General"
+            )
+        )
+    );
+
+    const displayedItems = selectedCategory
+        ? vaultItems.filter(
+            item =>
+                (item.category ?? "General") === selectedCategory
+        )
+        : [];
+
+    return (
+
+        <div
+            className={`vault-container ${
+                activeCard ? "vault-active" : ""
+            }`}
+        >
+
+            {/* HEADER */}
+
+            <div className="vault-header">
+
+                <div className="vault-header-top">
+                    <h1>Vault Library</h1>
+
+                    <div className="vault-view-controls">
+                        <button
+                            className={`vault-view-btn ${viewMode === "grid" ? "active" : ""}`}
+                            onClick={() => setViewMode("grid")}
+                            aria-label="Grid view"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="3" y="3" width="7" height="7" />
+                                <rect x="14" y="3" width="7" height="7" />
+                                <rect x="3" y="14" width="7" height="7" />
+                                <rect x="14" y="14" width="7" height="7" />
+                            </svg>
+                        </button>
+                        <button
+                            className={`vault-view-btn ${viewMode === "list" ? "active" : ""}`}
+                            onClick={() => setViewMode("list")}
+                            aria-label="List view"
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="8" y1="6" x2="21" y2="6" />
+                                <line x1="8" y1="12" x2="21" y2="12" />
+                                <line x1="8" y1="18" x2="21" y2="18" />
+                                <line x1="3" y1="6" x2="3.01" y2="6" />
+                                <line x1="3" y1="12" x2="3.01" y2="12" />
+                                <line x1="3" y1="18" x2="3.01" y2="18" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div className="vault-intro">
+
+                    <p>
+                        Personal archive of preserved works and completed
+                        creations.
+                    </p>
+
+                </div>
+
+            </div>
+                        {loading ? (
+
+                <div className="vault-loading">
+
+                    <div className="vault-loading-grid">
+
+                        {[...Array(6)].map((_, index) => (
+
+                            <div
+                                key={index}
+                                className="vault-skeleton-card"
+                            >
+
+                                <div className="vault-skeleton-image"></div>
+
+                                <div className="vault-skeleton-line short"></div>
+
+                                <div className="vault-skeleton-line"></div>
+
+                                <div className="vault-skeleton-line"></div>
+
+                            </div>
+
+                        ))}
+
+                    </div>
+
+                    <p className="vault-loading-text">
+
+                        Accessing archive...
+
+                    </p>
+
+                </div>
+
+            ) : !selectedCategory ? (
+
+                <div className="vault-folder-grid">
+
+                    {categories.map(category => {
+
+                        const count = vaultItems.filter(
+                            item =>
+                                (item.category ?? "General") === category
+                        ).length;
+
+                        return (
+
+                            <button
+                                key={category}
+                                className="vault-folder-card"
+                                onClick={() =>
+                                    setSelectedCategory(category)
+                                }
+                            >
+
+                                <div className="vault-folder-icon">
+
+                                    📁
+
+                                </div>
+
+                                <div className="vault-folder-content">
+
+                                    <h2>
+
+                                        {category}
+
+                                    </h2>
+
+                                    <span>
+
+                                        {count} {count === 1 ? "Entry" : "Entries"}
+
+                                    </span>
+
+                                </div>
+
+                            </button>
+
+                        );
+
+                    })}
+
+                </div>
+
+            ) : (
+
+                <>
+
+                    <div className="vault-folder-header">
+
+                        <button
+                            className="vault-back-btn"
+                            onClick={() =>
+                                setSelectedCategory(null)
+                            }
+                        >
+
+                            ← Back
+
+                        </button>
+
+                        <h2>
+
+                            📁 {selectedCategory}
+
+                        </h2>
+
+                        <span className="vault-item-count">
+                            {displayedItems.length} {displayedItems.length === 1 ? "Entry" : "Entries"}
+                        </span>
+
+                    </div>
+
+                    <div className={`vault-grid vault-grid-${viewMode}`}>
+
+                        {displayedItems.map((item, index) => {
+
+                            const isExpanded =
+                                expandedDescriptions.includes(item.id || 0);
+                            
+                            const isEpub = item.type?.toLowerCase().includes("epub");
+
+                            return (
+
+                                <div
+                                    key={item.id}
+                                    className={`
+                                        vault-book-card
+                                        vault-book-card-${viewMode}
+                                        ${index === 0 ? "new-entry" : ""}
+                                        ${item.status || ""}
+                                    `}
+                                    onMouseEnter={() =>
+                                        setActiveCard(item.id || null)
+                                    }
+                                    onMouseLeave={() =>
+                                        setActiveCard(null)
+                                    }
+                                >
+
+                                    <div className="vault-card-glow"></div>
+
+                                    {index === 0 && (
+
+                                        <div className="vault-new-badge">
+
+                                            NEW ENTRY
+
+                                        </div>
+
+                                    )}
+
+                                    <div className="vault-book-image-wrapper">
+                                        {item.image ? (
+                                            <img
+                                                src={item.image}
+                                                alt={item.name}
+                                                className="vault-book-image"
+                                                loading="lazy"
+                                            />
+                                        ) : (
+                                            <div className="vault-image-placeholder">
+                                                <span>ARCHIVE</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="vault-book-content">
+
+                                        <span className="vault-id">
+
+                                            ARCHIVE ENTRY #
+
+                                            {String(item.id || 0).padStart(3, "0")}
+
+                                        </span>
+
+                                        <h2>
+
+                                            {item.link ? (
+
+                                                <button
+                                                    className="vault-book-title"
+                                                    onClick={() =>
+                                                        openViewer(item.link, item.type)
+                                                    }
+                                                >
+
+                                                    {item.name}
+
+                                                </button>
+
+                                            ) : (
+
+                                                item.name
+
+                                            )}
+
+                                        </h2>
+
+                                        <div className="vault-meta-row">
+
+                                            <span className="vault-type-badge">{item.type}</span>
+
+                                            <span>•</span>
+
+                                            <span>Private Archive</span>
+
+                                            {item.created_at && (
+
+                                                <>
+                                                    <span>•</span>
+
+                                                    <span>
+
+                                                        {new Date(
+                                                            item.created_at
+                                                        ).getFullYear()}
+
+                                                    </span>
+
+                                                </>
+
+                                            )}
+
+                                        </div>
+
+                                        <div className="vault-description-dropdown">
+
+                                            <button
+                                                className="vault-description-toggle"
+                                                onClick={() =>
+                                                    toggleDescription(item.id)
+                                                }
+                                            >
+
+                                                Description
+
+                                                <span
+                                                    className={`vault-arrow ${
+                                                        isExpanded
+                                                            ? "expanded"
+                                                            : ""
+                                                    }`}
+                                                >
+
+                                                    ▼
+
+                                                </span>
+
+                                            </button>
+
+                                            <div
+                                                className={`vault-description-content ${
+                                                    isExpanded
+                                                        ? "expanded"
+                                                        : ""
+                                                }`}
+                                            >
+
+                                                <p className="vault-book-description">
+
+                                                    {item.description}
+
+                                                </p>
+
+                                            </div>
+
+                                        </div>
+
+                                        {/* Buttons Container */}
+                                        <div className="vault-actions-container">
+                                            {item.link && (
+                                                <>
+                                                    <button
+                                                        className="vault-read-btn"
+                                                        onClick={() =>
+                                                            openViewer(item.link, item.type)
+                                                        }
+                                                    >
+                                                        {isEpub ? "Open EPUB" : "Open Entry"}
+                                                    </button>
+
+                                                    {isEpub && (
+                                                        <>
+                                                            <button
+                                                                className="vault-download-btn"
+                                                                onClick={() =>
+                                                                    handleDownload(item.link, item.name)
+                                                                }
+                                                            >
+                                                                 Download EPUB
+                                                            </button>
+                                                            <div className="vault-download-note">
+                                                                 Downloading is preferable as the reader is slow to load
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            );
+
+                        })}
+
+                    </div>
+
+                </>
+
+            )}
+
+            {/* Conditional Viewer Rendering */}
+            {viewerType === "pdf" && (
+                <PDFViewer
+                    url={viewerUrl}
+                    onClose={closeViewer}
+                />
+            )}
+
+            {viewerType === "epub" && (
+                <EPUBViewer
+                    url={viewerUrl}
+                    onClose={closeViewer}
+                />
+            )}
+
+        </div>
+
+    );
+
+}
+
+export default Vault;
