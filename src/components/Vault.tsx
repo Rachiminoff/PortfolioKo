@@ -503,10 +503,10 @@ function Vault() {
                                                                     handleDownload(item.link, item.name)
                                                                 }
                                                             >
-                                                                ⬇️ Download EPUB
+                                                                 Download EPUB
                                                             </button>
                                                             <div className="vault-download-note">
-                                                                ⚡ Downloading is preferable as the reader is slow to load
+                                                                 Downloading is preferable as the reader is slow to load
                                                             </div>
                                                         </>
                                                     )}
