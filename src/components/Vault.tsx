@@ -1,4 +1,4 @@
-// Vault.tsx - Complete File
+// Vault.tsx
 import React, { useEffect, useState } from "react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
@@ -215,7 +215,7 @@ function Vault() {
                                 >
                                     <div className="vault-card-glow"></div>
 
-                                    {isNew && viewMode === "grid" && (
+                                    {isNew && (
                                         <div className="vault-new-badge">NEW</div>
                                     )}
 
@@ -239,9 +239,6 @@ function Vault() {
                                             <span className="vault-id">
                                                 #{String(item.id || 0).padStart(3, "0")}
                                             </span>
-                                            {isNew && viewMode === "list" && (
-                                                <span className="vault-new-badge">NEW</span>
-                                            )}
                                             <span className="vault-type-badge">{item.type}</span>
                                         </div>
 
@@ -259,7 +256,7 @@ function Vault() {
                                         </h2>
 
                                         <div className="vault-meta-row">
-                                            <span>Private</span>
+                                            <span>Private Archive</span>
                                             {item.created_at && (
                                                 <>
                                                     <span>•</span>
@@ -274,29 +271,11 @@ function Vault() {
                                             <button
                                                 className="vault-description-toggle"
                                                 onClick={() => toggleDescription(item.id)}
-                                                onMouseEnter={() => {
-                                                    // Auto-expand on hover for list view
-                                                    if (viewMode === "list" && item.id) {
-                                                        setExpandedDescriptions(prev => 
-                                                            prev.includes(item.id!) ? prev : [...prev, item.id!]
-                                                        );
-                                                    }
-                                                }}
-                                                onMouseLeave={() => {
-                                                    // Auto-collapse on hover out for list view
-                                                    if (viewMode === "list" && item.id) {
-                                                        setExpandedDescriptions(prev => 
-                                                            prev.filter(id => id !== item.id)
-                                                        );
-                                                    }
-                                                }}
                                             >
                                                 <span>Description</span>
-                                                {viewMode === "grid" && (
-                                                    <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
-                                                        ▼
-                                                    </span>
-                                                )}
+                                                <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
+                                                    ▼
+                                                </span>
                                             </button>
                                             <div className={`vault-description-content ${isExpanded ? "expanded" : ""}`}>
                                                 <p className="vault-book-description">{item.description}</p>
@@ -310,21 +289,19 @@ function Vault() {
                                                         className="vault-read-btn"
                                                         onClick={() => openViewer(item.link, item.type)}
                                                     >
-                                                        {isEpub ? "📖" : "📄"}
-                                                        {viewMode === "grid" && (isEpub ? " Read" : " Open")}
+                                                        {isEpub ? "📖 Read" : "📄 Open"}
                                                     </button>
                                                     {isEpub && (
                                                         <button
                                                             className="vault-download-btn"
                                                             onClick={() => handleDownload(item.link, item.name)}
                                                         >
-                                                            ⬇
-                                                            {viewMode === "grid" && " Download"}
+                                                            ⬇ Download
                                                         </button>
                                                     )}
                                                 </>
                                             )}
-                                            {isEpub && item.link && viewMode === "grid" && (
+                                            {isEpub && item.link && (
                                                 <div className="vault-download-note">
                                                     Download preferred — reader may be slow
                                                 </div>
