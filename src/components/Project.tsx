@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import uniq00 from '../assets/images/uq0.jpg';
 import uniq01 from '../assets/images/uq1.jpg';
@@ -88,7 +88,7 @@ function ImageSlider({ images, link, title }: ImageSliderProps) {
         };
     }, [isHovering, images.length]);
 
-    const nextSlide = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const nextSlide = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setCurrent((prev) => prev === images.length - 1 ? 0 : prev + 1);
@@ -99,9 +99,9 @@ function ImageSlider({ images, link, title }: ImageSliderProps) {
                 setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
             }, 4000);
         }
-    };
+    }, [images.length]);
 
-    const prevSlide = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const prevSlide = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         e.stopPropagation();
         setCurrent((prev) => prev === 0 ? images.length - 1 : prev - 1);
@@ -111,21 +111,29 @@ function ImageSlider({ images, link, title }: ImageSliderProps) {
                 setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
             }, 4000);
         }
-    };
+    }, [images.length]);
 
     // Keyboard support
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'ArrowLeft') {
-                prevSlide(e as unknown as React.MouseEvent<HTMLButtonElement>);
+                const mockEvent = {
+                    preventDefault: () => {},
+                    stopPropagation: () => {}
+                } as React.MouseEvent<HTMLButtonElement>;
+                prevSlide(mockEvent);
             } else if (e.key === 'ArrowRight') {
-                nextSlide(e as unknown as React.MouseEvent<HTMLButtonElement>);
+                const mockEvent = {
+                    preventDefault: () => {},
+                    stopPropagation: () => {}
+                } as React.MouseEvent<HTMLButtonElement>;
+                nextSlide(mockEvent);
             }
         };
         
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [current]);
+    }, [nextSlide, prevSlide]);
 
     return (
         <div 
