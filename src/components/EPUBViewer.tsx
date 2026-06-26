@@ -1,13 +1,10 @@
+// EPUBViewer.tsx
+
 import React, {
     useEffect,
     useRef,
     useState
 } from "react";
-
-import ePub, {
-    Book,
-    Rendition
-} from "epubjs";
 
 import "../assets/styles/EPUBViewer.scss";
 
@@ -18,7 +15,7 @@ interface EPUBViewerProps {
 }
 
 
-// Simple cache so reopening books is faster
+// Cache already opened EPUB files
 const epubCache = new Map<string, ArrayBuffer>();
 
 
@@ -27,54 +24,87 @@ function EPUBViewer({
     onClose
 }: EPUBViewerProps) {
 
-    const viewerRef = useRef<HTMLDivElement>(null);
 
-    const bookRef = useRef<Book | null>(null);
-    const renditionRef = useRef<Rendition | null>(null);
-
-
-    const [loading,setLoading] = useState(true);
-    const [error,setError] = useState<string | null>(null);
-    const [title,setTitle] = useState("EPUB Viewer");
+    const viewerRef =
+        useRef<HTMLDivElement | null>(null);
 
 
-    useEffect(() => {
+    const bookRef =
+        useRef<any>(null);
+
+
+    const renditionRef =
+        useRef<any>(null);
+
+
+
+    const [loading,setLoading] =
+        useState(true);
+
+
+    const [error,setError] =
+        useState<string | null>(null);
+
+
+    const [title,setTitle] =
+        useState("EPUB Viewer");
+
+
+    const [loadingTime,setLoadingTime] =
+        useState(0);
+
+
+    const [loadingStage,setLoadingStage] =
+        useState(
+            "Preparing EPUB..."
+        );
+
+
+
+
+    useEffect(()=>{
 
         if(!url)
             return;
 
 
-        const originalOverflow =
+        const previousOverflow =
             document.body.style.overflow;
 
 
-        document.body.style.overflow = "hidden";
+        document.body.style.overflow =
+            "hidden";
 
 
-        const handleEsc = (e:KeyboardEvent)=>{
 
-            if(e.key === "Escape"){
-                onClose();
-            }
+        const handleEscape =
+            (e:KeyboardEvent)=>{
 
-        };
+                if(e.key === "Escape"){
+                    onClose();
+                }
+
+            };
+
 
 
         window.addEventListener(
             "keydown",
-            handleEsc
+            handleEscape
         );
+
 
 
         return ()=>{
 
             window.removeEventListener(
                 "keydown",
-                handleEsc
+                handleEscape
             );
 
+
             document.body.style.overflow =
-                originalOverflow || "auto";
+                previousOverflow || "auto";
 
         };
 
@@ -83,10 +113,17 @@ function EPUBViewer({
 
 
 
+
+
     useEffect(()=>{
 
-        if(!url || !viewerRef.current)
+
+        if(
+            !url ||
+            !viewerRef.current
+        )
             return;
+
 
 
         let cancelled = false;
@@ -95,30 +132,98 @@ function EPUBViewer({
 
         const cleanup = ()=>{
 
-            try{
+
+            try {
+
                 renditionRef.current?.destroy();
 
-            }catch{}
+            } catch {}
 
-            try{
+
+            try {
+
                 bookRef.current?.destroy();
 
-            }catch{}
+            } catch {}
+
 
 
             renditionRef.current = null;
+
             bookRef.current = null;
 
         };
 
 
 
-        const loadBook = async()=>{
 
-            try{
+
+
+        const loadEPUB = async()=>{
+
+
+            const start =
+                Date.now();
+
+
+
+            const timer =
+                setInterval(()=>{
+
+
+                    setLoadingTime(
+                        Math.floor(
+                            (
+                                Date.now()
+                                -
+                                start
+                            )
+                            /
+                            1000
+                        )
+                    );
+
+
+                },500);
+
+
+
+
+            try {
+
 
                 setLoading(true);
+
                 setError(null);
+
+
+
+                /*
+                    Lazy load epub.js.
+                    This keeps your main website fast.
+                */
+                setLoadingStage(
+                    "Loading reader..."
+                );
+
+
+                const epubModule =
+                    await import(
+                        "epubjs"
+                    );
+
+
+                const ePub =
+                    epubModule.default ||
+                    epubModule;
+
+
+
+                if(cancelled)
+                    return;
+
+
+
 
 
                 let buffer =
@@ -126,21 +231,31 @@ function EPUBViewer({
 
 
 
-                // Fetch only if not cached
+
                 if(!buffer){
+
+
+                    setLoadingStage(
+                        "Downloading EPUB..."
+                    );
+
+
 
                     const response =
                         await fetch(url);
 
 
+
                     if(!response.ok)
                         throw new Error(
-                            "Failed downloading EPUB"
+                            "Unable to download EPUB"
                         );
+
 
 
                     buffer =
                         await response.arrayBuffer();
+
 
 
                     epubCache.set(
@@ -157,33 +272,54 @@ function EPUBViewer({
 
 
 
+                setLoadingStage(
+                    "Opening book..."
+                );
+
+
+
                 const book =
                     ePub(buffer);
 
 
-                bookRef.current = book;
+
+                bookRef.current =
+                    book;
 
 
 
-                // Get metadata early
-                try{
+
+                try {
+
 
                     const metadata =
                         await book.loaded.metadata;
 
 
+
                     if(metadata.title){
+
                         setTitle(
                             metadata.title
                         );
+
                     }
 
-                }catch{
+
+                } catch {
+
                     console.log(
-                        "Metadata unavailable"
+                        "No metadata found"
                     );
+
                 }
 
+
+
+
+                setLoadingStage(
+                    "Rendering page..."
+                );
 
 
 
@@ -199,6 +335,7 @@ function EPUBViewer({
                     );
 
 
+
                 renditionRef.current =
                     rendition;
 
@@ -212,16 +349,20 @@ function EPUBViewer({
                     return;
 
 
+
                 setLoading(false);
 
 
 
-            }catch(err){
+            }
+            catch(err){
+
 
                 console.error(
-                    "EPUB loading error:",
+                    "EPUB Error:",
                     err
                 );
+
 
 
                 if(!cancelled){
@@ -235,30 +376,51 @@ function EPUBViewer({
                 }
 
             }
+            finally {
+
+
+                clearInterval(
+                    timer
+                );
+
+
+            }
 
         };
 
 
 
-        loadBook();
+
+        loadEPUB();
+
 
 
 
         return ()=>{
 
+
             cancelled = true;
 
             cleanup();
 
+
         };
+
 
 
     },[url]);
 
 
 
+
+
+
+
     if(!url)
         return null;
+
+
+
 
 
 
@@ -269,6 +431,7 @@ function EPUBViewer({
             onClick={onClose}
         >
 
+
             <div
                 className="epub-window"
                 onClick={
@@ -277,9 +440,9 @@ function EPUBViewer({
             >
 
 
-                {/* TOP BAR */}
 
                 <div className="epub-window-topbar">
+
 
 
                     <div className="window-left">
@@ -294,6 +457,7 @@ function EPUBViewer({
                         </div>
 
 
+
                         <div className="window-title">
 
                             📖 {title}
@@ -302,6 +466,7 @@ function EPUBViewer({
 
 
                     </div>
+
 
 
 
@@ -323,9 +488,10 @@ function EPUBViewer({
 
 
 
+
                         <button
-                            aria-label="Close EPUB viewer"
                             className="window-close"
+                            aria-label="Close EPUB viewer"
                             onClick={onClose}
                         >
                             ×
@@ -335,13 +501,14 @@ function EPUBViewer({
                     </div>
 
 
+
                 </div>
 
 
 
 
 
-                {/* READER AREA */}
+
 
                 <div className="epub-frame-wrapper">
 
@@ -353,23 +520,44 @@ function EPUBViewer({
 
 
 
+
+
                     {
                         loading &&
                         <div className="viewer-loading">
 
+
                             <div className="loading-spinner"/>
 
+
+
                             <span>
-                                Loading EPUB...
+
+                                {loadingStage}
+
+                                <br/>
+
+
+                                <small>
+
+                                    {loadingTime}s elapsed
+
+                                </small>
+
+
                             </span>
+
 
                         </div>
                     }
 
 
 
+
+
                     {
                         error &&
+
                         <div className="viewer-error">
 
 
@@ -381,6 +569,7 @@ function EPUBViewer({
                             <p>
                                 {error}
                             </p>
+
 
 
                             <button
@@ -397,7 +586,9 @@ function EPUBViewer({
 
 
                         </div>
+
                     }
+
 
 
                 </div>

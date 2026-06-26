@@ -293,3 +293,63 @@
         }
     }
 }
+
+/* ========================================
+   ACTION BUTTONS & DOWNLOAD
+======================================== */
+
+.vault-actions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.vault-download-btn {
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(46, 204, 113, 0.2);
+    color: white;
+    padding: 0.85rem 1.4rem;
+    font-size: 1rem;
+    font-weight: 650;
+    cursor: pointer;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    transition: background 0.25s ease, transform 0.25s ease, border 0.25s ease, box-shadow 0.25s ease;
+
+    &:hover {
+        background: rgba(46, 204, 113, 0.35);
+        border: 1px solid rgba(46, 204, 113, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(46, 204, 113, 0.15);
+    }
+}
+
+.vault-download-note {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    text-align: center;
+    padding: 0.5rem 0.25rem;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    margin-top: 0.25rem;
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 700px) {
+    .vault-actions-container {
+        gap: 0.5rem;
+    }
+    
+    .vault-download-btn {
+        padding: 0.75rem 1.2rem;
+        font-size: 0.95rem;
+    }
+    
+    .vault-download-note {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.2rem;
+    }
+}

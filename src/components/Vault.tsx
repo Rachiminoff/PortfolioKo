@@ -122,6 +122,34 @@ function Vault() {
 
     };
 
+    const handleDownload = (url?: string, name?: string) => {
+
+        if (!url) return;
+
+        // Create a temporary anchor element
+        const link = document.createElement('a');
+        link.href = url;
+        
+        // Extract filename from URL or use the item name
+        let filename = name || 'document';
+        
+        // Try to get filename from URL
+        const urlParts = url.split('/');
+        const lastPart = urlParts[urlParts.length - 1];
+        if (lastPart && lastPart.includes('.')) {
+            filename = lastPart;
+        } else if (!filename.includes('.')) {
+            // Add .epub extension if not present
+            filename = `${filename}.epub`;
+        }
+        
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+    };
+
     // ==========================
     // Folder Categories
     // ==========================
@@ -282,6 +310,8 @@ function Vault() {
 
                             const isExpanded =
                                 expandedDescriptions.includes(item.id || 0);
+                            
+                            const isEpub = item.type?.toLowerCase().includes("epub");
 
                             return (
 
@@ -452,20 +482,37 @@ function Vault() {
 
                                         </div>
 
-                                        {item.link && (
+                                        {/* Buttons Container */}
+                                        <div className="vault-actions-container">
+                                            {item.link && (
+                                                <>
+                                                    <button
+                                                        className="vault-read-btn"
+                                                        onClick={() =>
+                                                            openViewer(item.link, item.type)
+                                                        }
+                                                    >
+                                                        {isEpub ? "Open EPUB" : "Open Entry"}
+                                                    </button>
 
-                                            <button
-                                                className="vault-read-btn"
-                                                onClick={() =>
-                                                    openViewer(item.link, item.type)
-                                                }
-                                            >
-
-                                                Open Entry
-
-                                            </button>
-
-                                        )}
+                                                    {isEpub && (
+                                                        <>
+                                                            <button
+                                                                className="vault-download-btn"
+                                                                onClick={() =>
+                                                                    handleDownload(item.link, item.name)
+                                                                }
+                                                            >
+                                                                ⬇️ Download EPUB
+                                                            </button>
+                                                            <div className="vault-download-note">
+                                                                ⚡ Downloading is preferable as the reader is slow to load
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
 
                                     </div>
 
