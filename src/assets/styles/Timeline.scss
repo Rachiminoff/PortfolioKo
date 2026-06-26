@@ -1,38 +1,195 @@
-.vertical-timeline span {
+// Timeline.scss - Enhanced aesthetics with same color scheme
+
+.vertical-timeline {
+  // Add subtle spacing and smoothing
+  padding: 0.5rem 0;
+  
+  span {
     color: white;
     font-family: 'Courier Prime', monospace;
-}
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
 
-.vertical-timeline p {
+  p {
     color: rgb(39, 40, 34);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-top: 0.4rem;
+    opacity: 0.9;
+  }
 }
 
-.vertical-timeline-element p {
+// Enhanced timeline elements
+.vertical-timeline-element {
+  // Smooth hover effect on cards
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  }
+
+  // Typography improvements
+  p {
     color: rgb(39, 40, 34);
-}
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
 
-.vertical-timeline-element h3 {
+  h3 {
     color: rgb(39, 40, 34);
-}
+    font-weight: 600;
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.2rem;
+  }
 
-.vertical-timeline-element h4 {
+  h4 {
     color: rgb(39, 40, 34);
-}
+    font-weight: 500;
+    font-size: 0.9rem;
+    opacity: 0.75;
+    margin-top: 0.1rem;
+  }
 
-.vertical-timeline-element span {
+  span {
     color: rgb(39, 40, 34);
-}
+  }
 
-.vertical-timeline-element .vertical-timeline-element-date {
+  // Date styling with better readability
+  .vertical-timeline-element-date {
     color: white;
-}
+    font-family: 'Courier Prime', monospace;
+    font-weight: 400;
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+    opacity: 0.9;
+    
+    // Add subtle text shadow for better contrast on dark backgrounds
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  }
 
-.svg-inline--fa {
-    color: white;
-}
-
-@media screen and (max-width: 1170px) {
-    .vertical-timeline-element .vertical-timeline-element-date {
-        color: rgb(39, 40, 34);
+  // Content card enhancements
+  .vertical-timeline-element-content {
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    padding: 1.8rem 2rem;
+    
+    // Subtle inner glow
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      border-radius: 12px 12px 0 0;
+      opacity: 0.5;
     }
+  }
+
+  // Bounce arrow animation on scroll reveal
+  .vertical-timeline-element-content-arrow {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover .vertical-timeline-element-content-arrow {
+    transform: scale(1.05);
+  }
+}
+
+// Icon enhancements
+.svg-inline--fa {
+  color: white;
+  font-size: 1.5rem;
+  
+  // Subtle pulse animation for icons
+  animation: iconPulse 3s ease-in-out infinite;
+}
+
+// Icon container styling
+.vertical-timeline-element-icon {
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15), 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2), 0 6px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// Animation keyframes
+@keyframes iconPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(0.95);
+  }
+}
+
+// Responsive design improvements
+@media screen and (max-width: 1170px) {
+  .vertical-timeline-element {
+    .vertical-timeline-element-date {
+      color: rgb(39, 40, 34);
+      text-shadow: none;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+    
+    .vertical-timeline-element-content {
+      padding: 1.5rem;
+      border-radius: 10px;
+    }
+  }
+  
+  // Disable hover effects on mobile for better performance
+  .vertical-timeline-element:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+// Small screen optimizations
+@media screen and (max-width: 768px) {
+  .vertical-timeline-element {
+    .vertical-timeline-element-content {
+      padding: 1.2rem 1.5rem;
+    }
+    
+    h3 {
+      font-size: 1rem;
+    }
+    
+    p {
+      font-size: 0.88rem;
+    }
+  }
+  
+  .svg-inline--fa {
+    font-size: 1.2rem;
+  }
+}
+
+// Print-friendly
+@media print {
+  .vertical-timeline-element {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    
+    .vertical-timeline-element-content {
+      box-shadow: none;
+      border: 1px solid #ddd;
+    }
+  }
+  
+  .vertical-timeline-element-icon {
+    box-shadow: 0 0 0 2px #ccc;
+  }
 }

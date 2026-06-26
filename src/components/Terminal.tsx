@@ -24,7 +24,7 @@ function Terminal() {
           <div className="terminal-content">
 
             <div className="line blue">
-              (td@yambao)-[~/about_me]
+              <span className="prompt-symbol">➜</span> (td@yambao)-[~/about_me]
             </div>
 
             <div className="line">
@@ -32,77 +32,95 @@ function Terminal() {
               <span className="white">python about.py</span>
             </div>
 
-            <br />
+            <div className="line-separator"></div>
 
             <div className="line gray">
-              # loading personal profile...
+              <span className="comment-symbol">#</span> loading personal profile...
             </div>
 
             <div className="line">
               <span className="blue">import</span>{" "}
-              <span className="white">creativity</span>,{" "}
-              <span className="white">engineering</span>,{" "}
+              <span className="white">creativity</span>
+              <span className="comma">,</span>{" "}
+              <span className="white">engineering</span>
+              <span className="comma">,</span>{" "}
               <span className="white">growth</span>
             </div>
 
-            <br />
-            <br />
+            <div className="line-separator thin"></div>
 
             <div className="line">
               <span className="purple">class</span>{" "}
-              <span className="yellow-text">AboutMe</span>:
+              <span className="yellow-text">AboutMe</span>
+              <span className="colon">:</span>
             </div>
 
             <div className="indent">
               <span className="purple">def</span>{" "}
-              <span className="yellow-text">__init__</span>(self):
+              <span className="yellow-text">__init__</span>
+              <span className="parens">(</span>
+              <span className="white">self</span>
+              <span className="parens">)</span>
+              <span className="colon">:</span>
             </div>
 
             <div className="indent2">
-              <span className="white">self.identity = </span>
+              <span className="white">self.identity</span>
+              <span className="operator"> = </span>
               <span className="green-text">
-                "developer focused on building meaningful systems"
+                <span className="quote">"</span>developer focused on building meaningful systems<span className="quote">"</span>
               </span>
             </div>
 
             <div className="indent2">
-              <span className="white">self.interests = </span>
+              <span className="white">self.interests</span>
+              <span className="operator"> = </span>
               <span className="green-text">
-                "web apps, automation, UI/UX, scalable products"
+                <span className="quote">"</span>web apps, automation, UI/UX, scalable products<span className="quote">"</span>
               </span>
             </div>
 
             <div className="indent2">
-              <span className="white">self.mindset = </span>
+              <span className="white">self.mindset</span>
+              <span className="operator"> = </span>
               <span className="green-text">
-                "continuous learning through practical creation"
+                <span className="quote">"</span>continuous learning through practical creation<span className="quote">"</span>
               </span>
             </div>
 
-            <br />
+            <div className="line-separator thin"></div>
 
             <div className="indent">
               <span className="purple">def</span>{" "}
-              <span className="yellow-text">philosophy</span>(self):
+              <span className="yellow-text">philosophy</span>
+              <span className="parens">(</span>
+              <span className="white">self</span>
+              <span className="parens">)</span>
+              <span className="colon">:</span>
             </div>
 
             <div className="indent2">
               <span className="purple">return</span>{" "}
               <span className="green-text">
-                "build with purpose, improve with consistency"
+                <span className="quote">"</span>build with purpose, improve with consistency<span className="quote">"</span>
               </span>
             </div>
 
-            <br />
+            <div className="line-separator"></div>
 
             <div className="line">
+              <span className="cyan">└─$ </span>
               <span className="white">
                 result = AboutMe().philosophy()
               </span>
             </div>
 
-            <div className="green-text">
-              &gt;&gt; {`{`}result{`}`}<span className="cursor">█</span>
+            <div className="line">
+              <span className="green-text output-arrow">&gt;&gt;&gt; </span>
+              <span className="green-text output-value">
+                <span className="brace">{`{`}</span>result<span className="brace">{`}`}</span>
+              </span>
+              <span className="cursor">█</span>
             </div>
 
           </div>
@@ -112,17 +130,38 @@ function Terminal() {
       {/* RIGHT SIDE — ABOUT ME */}
       <div className="about-container">
 
-        <h1 className="about-title">About Me</h1>
+        <div className="about-header">
+          <span className="about-badge">✦</span>
+          <h1 className="about-title">About Me</h1>
+        </div>
 
-        <div className="about-line"></div>
+        <div className="about-line">
+          <span className="line-glow"></span>
+        </div>
 
-        <p className="about-text">
-        I enjoy the process of testing and debugging, even when it gets frustrating. There is something satisfying about going through broken logic, tracing issues, and gradually seeing a feature finally work the way it was intended. Ironically, that struggle is often the part I find most engaging in development.
-        </p>
+        <div className="about-text-wrapper">
+          <span className="quote-mark left">"</span>
+          <p className="about-text">
+            I enjoy the process of testing and debugging, even when it gets frustrating. There is something satisfying about going through broken logic, tracing issues, and gradually seeing a feature finally work the way it was intended. Ironically, that struggle is often the part I find most engaging in development.
+          </p>
+          <span className="quote-mark right">"</span>
+        </div>
 
-        <p className="about-text">
-        I feel the most proud when a project is completed and I get to demo it to others. Seeing everything come together into a working system gives a strong sense of closure, especially after all the iterations and fixes along the way.
-        </p>
+        <div className="about-divider"></div>
+
+        <div className="about-text-wrapper">
+          <span className="quote-mark left">"</span>
+          <p className="about-text">
+            I feel the most proud when a project is completed and I get to demo it to others. Seeing everything come together into a working system gives a strong sense of closure, especially after all the iterations and fixes along the way.
+          </p>
+          <span className="quote-mark right">"</span>
+        </div>
+
+        <div className="about-footer">
+          <span className="footer-dot"></span>
+          <span className="footer-dot"></span>
+          <span className="footer-dot"></span>
+        </div>
 
       </div>
     </div>
