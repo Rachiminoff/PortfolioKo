@@ -12,7 +12,7 @@ import {
 } from "./components";
 
 import FadeIn from "./components/FadeIn";
-import Vault from "./Vault"; // Import Vault
+import Vault from "./components/Vault"; // Import Vault
 import "./index.scss";
 
 function App() {
