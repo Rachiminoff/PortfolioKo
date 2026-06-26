@@ -51,9 +51,9 @@ function EPUBViewer({ url, onClose }: EPUBViewerProps) {
                 setLoading(true);
                 setError(null);
 
-                // Dynamically import Epub.js
-                const Epub = await import("epubjs");
-                const Book = Epub.default;
+                // Use require instead of dynamic import
+                const Epub = require("epubjs");
+                const Book = Epub.default || Epub;
 
                 // Create a new book instance
                 const book = new Book(url);
