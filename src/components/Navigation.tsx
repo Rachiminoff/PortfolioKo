@@ -17,8 +17,9 @@ import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
-type Section = "expertise" | "history" | "projects" | "contact" | "vault";
+type Section = "expertise" | "history" | "projects" | "contact";
 
+// REMOVED "vault" from here
 const navItems: [string, Section][] = [
   ["Expertise", "expertise"],
   ["History", "history"],
@@ -49,11 +50,7 @@ function Navigation() {
   }, []);
 
   const scrollToSection = (section: Section) => {
-    if (section === "vault") {
-      navigate("/vault");
-      return;
-    }
-
+    // REMOVED the vault navigation entirely
     const element = document.getElementById(section);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
