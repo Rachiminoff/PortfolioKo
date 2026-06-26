@@ -1,6 +1,6 @@
 // EPUBViewer.tsx
 import React, { useEffect, useState } from "react";
-import "./EPUBViewer.scss";
+import "../assets/styles/EPUBViewer.scss";
 
 interface EPUBViewerProps {
   url: string | null;
