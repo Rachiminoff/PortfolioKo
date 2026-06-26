@@ -71,13 +71,6 @@ function Vault() {
         setViewerType(null);
     };
 
-    const toggleDescription = (id?: number) => {
-        if (!id) return;
-        setExpandedDescriptions(prev =>
-            prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-        );
-    };
-
     const handleDownload = (url?: string, name?: string) => {
         if (!url) return;
         const link = document.createElement('a');
@@ -197,8 +190,6 @@ function Vault() {
 
                     <div className={`vault-grid vault-grid-${viewMode}`}>
                         {displayedItems.map((item, index) => {
-                            const isExpanded = expandedDescriptions.includes(item.id || 0);
-                            const isEpub = item.type?.toLowerCase().includes("epub");
                             const isNew = index === 0;
 
                             return (
@@ -235,13 +226,6 @@ function Vault() {
                                     </div>
 
                                     <div className="vault-book-content">
-                                        <div className="vault-book-header">
-                                            <span className="vault-id">
-                                                #{String(item.id || 0).padStart(3, "0")}
-                                            </span>
-                                            <span className="vault-type-badge">{item.type}</span>
-                                        </div>
-
                                         <h2>
                                             {item.link ? (
                                                 <button
@@ -254,59 +238,6 @@ function Vault() {
                                                 item.name
                                             )}
                                         </h2>
-
-                                        <div className="vault-meta-row">
-                                            <span>Private Archive</span>
-                                            {item.created_at && (
-                                                <>
-                                                    <span>•</span>
-                                                    <span>
-                                                        {new Date(item.created_at).getFullYear()}
-                                                    </span>
-                                                </>
-                                            )}
-                                        </div>
-
-                                        <div className="vault-description-dropdown">
-                                            <button
-                                                className="vault-description-toggle"
-                                                onClick={() => toggleDescription(item.id)}
-                                            >
-                                                <span>Description</span>
-                                                <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
-                                                    ▼
-                                                </span>
-                                            </button>
-                                            <div className={`vault-description-content ${isExpanded ? "expanded" : ""}`}>
-                                                <p className="vault-book-description">{item.description}</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="vault-actions-container">
-                                            {item.link && (
-                                                <>
-                                                    <button
-                                                        className="vault-read-btn"
-                                                        onClick={() => openViewer(item.link, item.type)}
-                                                    >
-                                                        {isEpub ? "📖 Read" : "📄 Open"}
-                                                    </button>
-                                                    {isEpub && (
-                                                        <button
-                                                            className="vault-download-btn"
-                                                            onClick={() => handleDownload(item.link, item.name)}
-                                                        >
-                                                            ⬇ Download
-                                                        </button>
-                                                    )}
-                                                </>
-                                            )}
-                                            {isEpub && item.link && (
-                                                <div className="vault-download-note">
-                                                    Download preferred — reader may be slow
-                                                </div>
-                                            )}
-                                        </div>
                                     </div>
                                 </div>
                             );
