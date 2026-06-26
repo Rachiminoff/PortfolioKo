@@ -26,7 +26,6 @@ function Vault() {
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
     const [viewerType, setViewerType] = useState<"pdf" | "epub" | null>(null);
     const [activeCard, setActiveCard] = useState<number | null>(null);
-    const [expandedDescriptions, setExpandedDescriptions] = useState<number[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
@@ -69,24 +68,6 @@ function Vault() {
     const closeViewer = () => {
         setViewerUrl(null);
         setViewerType(null);
-    };
-
-    const handleDownload = (url?: string, name?: string) => {
-        if (!url) return;
-        const link = document.createElement('a');
-        link.href = url;
-        let filename = name || 'document';
-        const urlParts = url.split('/');
-        const lastPart = urlParts[urlParts.length - 1];
-        if (lastPart && lastPart.includes('.')) {
-            filename = lastPart;
-        } else if (!filename.includes('.')) {
-            filename = `${filename}.epub`;
-        }
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     };
 
     const categories = Array.from(
