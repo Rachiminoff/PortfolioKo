@@ -2,10 +2,6 @@
 import React, { useEffect, useState } from "react";
 import "../assets/styles/EPUBViewer.scss";
 
-// EPUBViewer.tsx
-import React, { useEffect, useRef, useState } from "react";
-import "./EPUBViewer.scss";
-
 interface EPUBViewerProps {
     url: string | null;
     onClose: () => void;
