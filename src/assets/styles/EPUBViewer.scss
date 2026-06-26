@@ -1,62 +1,47 @@
 // EPUBViewer.scss
 
 /* ========================================
-   EPUB VIEWER (mirror of PDF viewer)
+   EPUB VIEWER
 ======================================== */
 
 .epub-viewer {
-  position: fixed;
-  inset: 0;
-
-  background: radial-gradient(
-    circle at top,
-    rgba(120, 80, 120, 0.22),
-    rgba(0, 0, 0, 0.93)
-  );
-
-  backdrop-filter: blur(14px);
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 9999;
-
-  padding: 1rem;
-
-  animation: viewerFade 0.2s ease;
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(
+        circle at top,
+        rgba(120, 80, 120, 0.22),
+        rgba(0, 0, 0, 0.93)
+    );
+    backdrop-filter: blur(14px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 1rem;
+    animation: viewerFade 0.2s ease;
 }
 
 .epub-window {
-  position: relative;
+    position: relative;
+    width: min(1500px, 100%);
+    height: 94%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 16px;
+    background: rgba(24, 24, 24, 0.88);
+    backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.72);
+    animation: windowPop 0.22s ease;
 
-  width: min(1500px, 100%);
-  height: 94%;
-
-  display: flex;
-  flex-direction: column;
-
-  overflow: hidden;
-
-  border-radius: 16px;
-
-  background: rgba(24, 24, 24, 0.88);
-
-  backdrop-filter: blur(18px);
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.72);
-
-  animation: windowPop 0.22s ease;
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    pointer-events: none;
-  }
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        pointer-events: none;
+    }
 }
 
 /* ========================================
@@ -64,148 +49,190 @@
 ======================================== */
 
 .epub-window-topbar {
-  height: 54px;
-
-  background: linear-gradient(to bottom, #363636, #252525);
-
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  padding: 0 1rem;
-
-  flex-shrink: 0;
+    height: 54px;
+    background: linear-gradient(to bottom, #363636, #252525);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    flex-shrink: 0;
 }
 
 .window-left {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
 }
 
 .window-controls {
-  display: flex;
-  gap: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
 
-  span {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-  }
+    span {
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+    }
 
-  .red {
-    background: #ff5f57;
-  }
-  .yellow {
-    background: #febc2e;
-  }
-  .green {
-    background: #28c840;
-  }
+    .red {
+        background: #ff5f57;
+    }
+    .yellow {
+        background: #febc2e;
+    }
+    .green {
+        background: #28c840;
+    }
 }
 
 .window-title {
-  color: rgba(255, 255, 255, 0.88);
-
-  font-size: 0.94rem;
-  font-weight: 500;
-
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-
-  max-width: 320px;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.94rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 320px;
 }
 
 .window-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .window-btn {
-  background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.5rem 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+    font-size: 0.9rem;
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  color: rgba(255, 255, 255, 0.85);
-
-  padding: 0.5rem 0.9rem;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
-
-  font-size: 0.9rem;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.12);
-  }
+    &:hover {
+        background: rgba(255, 255, 255, 0.12);
+    }
 }
 
 .window-close {
-  width: 38px;
-  height: 38px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: 0.2s ease;
 
-  border-radius: 10px;
-
-  border: none;
-
-  background: rgba(255, 255, 255, 0.08);
-
-  color: white;
-
-  font-size: 1.2rem;
-
-  cursor: pointer;
-
-  transition: 0.2s ease;
-
-  &:hover {
-    background: #ff5f57;
-  }
+    &:hover {
+        background: #ff5f57;
+    }
 }
 
 /* ========================================
-   FRAME
+   EPUB RENDITION AREA
 ======================================== */
 
 .epub-frame-wrapper {
-  position: relative;
-
-  flex: 1;
-
-  background: #111111;
-
-  iframe {
-    width: 100%;
-    height: 100%;
-
-    border: none;
-
-    background: white;
-  }
+    position: relative;
+    flex: 1;
+    background: #f5f0e8; /* Warm paper-like background */
+    overflow: hidden;
 }
 
+.epub-rendition {
+    width: 100%;
+    height: 100%;
+    background: #f5f0e8;
+
+    :global(.epub-container) {
+        height: 100% !important;
+    }
+
+    :global(.epub-view) {
+        height: 100% !important;
+        padding: 2rem !important;
+    }
+
+    :global(.epub-view iframe) {
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        background: #f5f0e8 !important;
+    }
+}
+
+/* ========================================
+   LOADING SPINNER
+======================================== */
+
 .viewer-loading {
-  position: absolute;
-  inset: 0;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 1rem;
+    z-index: 5;
+}
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-top: 4px solid #6c30eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
 
-  background: rgba(0, 0, 0, 0.6);
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
-  color: white;
+/* ========================================
+   ERROR STATE
+======================================== */
 
-  font-size: 1rem;
+.viewer-error {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2rem;
+    z-index: 5;
+    text-align: center;
 
-  z-index: 5;
+    .error-icon {
+        font-size: 3rem;
+    }
+
+    p {
+        max-width: 400px;
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+    }
+
+    .window-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
 }
 
 /* ========================================
@@ -213,23 +240,13 @@
 ======================================== */
 
 @keyframes viewerFade {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 @keyframes windowPop {
-  from {
-    transform: scale(0.96);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+    from { transform: scale(0.96); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 /* ========================================
@@ -237,39 +254,42 @@
 ======================================== */
 
 @media screen and (max-width: 700px) {
-  .epub-viewer {
-    padding: 0;
-  }
+    .epub-viewer {
+        padding: 0;
+    }
 
-  .epub-window {
-    width: 100%;
-    height: 100%;
+    .epub-window {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+    }
 
-    border-radius: 0;
-  }
+    .epub-window-topbar {
+        height: 56px;
+        padding: 0 0.8rem;
+    }
 
-  .epub-window-topbar {
-    height: 56px;
+    .window-title {
+        max-width: 140px;
+        font-size: 0.84rem;
+    }
 
-    padding: 0 0.8rem;
-  }
+    .window-actions {
+        gap: 0.4rem;
+    }
 
-  .window-title {
-    max-width: 140px;
+    .window-btn {
+        display: none;
+    }
 
-    font-size: 0.84rem;
-  }
+    .window-close {
+        width: 34px;
+        height: 34px;
+    }
 
-  .window-actions {
-    gap: 0.4rem;
-  }
-
-  .window-btn {
-    display: none;
-  }
-
-  .window-close {
-    width: 34px;
-    height: 34px;
-  }
+    .epub-rendition {
+        :global(.epub-view) {
+            padding: 1rem !important;
+        }
+    }
 }
