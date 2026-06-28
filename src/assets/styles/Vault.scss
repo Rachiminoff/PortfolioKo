@@ -1,4 +1,4 @@
-// Vault.scss
+// Vault.scss (with hover preview removed)
 .vault-container {
     position: relative;
     overflow: hidden;
@@ -1420,80 +1420,6 @@
     }
 }
 
-/* Hover Preview */
-.vault-hover-preview {
-    position: absolute;
-    inset: 0;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(12px);
-    transition: opacity 0.35s ease;
-    border-radius: 20px;
-    pointer-events: none;
-}
-
-.vault-book-card:hover .vault-hover-preview {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.vault-hover-preview-content {
-    text-align: center;
-    padding: 1.5rem;
-    max-width: 85%;
-}
-
-.vault-hover-preview-content h3 {
-    margin: 0 0 0.25rem;
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 700;
-}
-
-.vault-hover-type {
-    display: inline-block;
-    padding: 0.15rem 0.6rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-}
-
-.vault-hover-preview-content p {
-    margin: 0 0 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.85rem;
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.vault-hover-open-btn {
-    padding: 0.4rem 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 8px;
-    color: #fff;
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-.vault-hover-open-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
-}
-
 /* Empty State */
 .vault-empty-state {
     text-align: center;
@@ -1574,7 +1500,6 @@
         margin-left: 0;
     }
 
-    /* New responsive styles */
     .vault-controls-bar {
         flex-direction: column;
         align-items: stretch;
@@ -1779,6 +1704,8 @@
 
     .vault-folder-icon {
         font-size: 2rem;
+        width: 50px;
+        height: 50px;
     }
 
     .vault-folder-content h2 {
@@ -1821,7 +1748,6 @@
         height: 10px;
     }
 
-    /* Mobile new styles */
     .vault-stats {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1839,10 +1765,6 @@
         padding: 0.25rem 0.5rem;
         background: rgba(255, 255, 255, 0.03);
         border-radius: 6px;
-    }
-
-    .vault-hover-preview {
-        display: none;
     }
 
     .vault-favorite-btn {

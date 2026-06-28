@@ -1,4 +1,3 @@
-// Vault.tsx
 import React, { useEffect, useState, useMemo } from "react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
@@ -427,21 +426,6 @@ function Vault() {
                                 )}
                             </>
                         )}
-                    </div>
-                </div>
-
-                {/* Hover Preview */}
-                <div className="vault-hover-preview">
-                    <div className="vault-hover-preview-content">
-                        <h3>{item.name}</h3>
-                        <span className="vault-hover-type">{item.type}</span>
-                        <p>{item.description.slice(0, 120)}...</p>
-                        <button 
-                            className="vault-hover-open-btn"
-                            onClick={() => openViewer(item.link, item.type, item)}
-                        >
-                            Open
-                        </button>
                     </div>
                 </div>
             </div>
