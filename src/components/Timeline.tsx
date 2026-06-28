@@ -49,13 +49,8 @@ function Footer() {
     setZoom(1);
   }, [arts.length]);
 
-  const zoomIn = useCallback(() => {
-    setZoom((prev) => Math.min(prev + 0.2, 5));
-  }, []);
-
-  const zoomOut = useCallback(() => {
-    setZoom((prev) => Math.max(prev - 0.2, 0.4));
-  }, []);
+  const zoomIn = useCallback(() => setZoom((prev) => Math.min(prev + 0.2, 5)), []);
+  const zoomOut = useCallback(() => setZoom((prev) => Math.max(prev - 0.2, 0.4)), []);
 
   const closeModal = useCallback(() => {
     setShowModal(false);
