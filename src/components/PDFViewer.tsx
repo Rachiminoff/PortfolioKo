@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../assets/styles/Vault.scss";
+import "../assets/styles/PDFViewer.scss";
 
 interface PDFViewerProps {
     url: string | null;
