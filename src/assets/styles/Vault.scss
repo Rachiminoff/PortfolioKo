@@ -1,50 +1,62 @@
-// Vault.scss - Redesigned Premium Bookshelf Edition
+// Vault.scss - Refined Premium Bookshelf Edition
 
 /* ========================================
    ROOT VARIABLES
 ======================================== */
 :root {
-  --vault-bg: #0d0820;
-  --vault-card-bg: linear-gradient(160deg, #1a0a2e 0%, #2d1b4e 45%, #1a0a2e 100%);
+  --vault-bg-primary: #0d0820;
+  --vault-bg-secondary: #1a0a2e;
+  --vault-bg-card: linear-gradient(160deg, #1a0a2e 0%, #2d1b4e 45%, #1a0a2e 100%);
   --vault-border: rgba(255, 255, 255, 0.06);
   --vault-border-hover: rgba(255, 255, 255, 0.12);
+  --vault-border-active: rgba(255, 255, 255, 0.15);
   --vault-text: #f4f0ff;
+  --vault-text-primary: #ffffff;
+  --vault-text-secondary: rgba(255, 255, 255, 0.7);
   --vault-text-muted: rgba(255, 255, 255, 0.4);
   --vault-text-dim: rgba(255, 255, 255, 0.25);
-  --vault-shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --vault-shadow-md: 0 12px 32px rgba(0, 0, 0, 0.6);
-  --vault-shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.7);
-  --vault-radius-sm: 8px;
-  --vault-radius-md: 12px;
+  --vault-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --vault-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --vault-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
+  --vault-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.7);
+  --vault-radius-sm: 6px;
+  --vault-radius-md: 10px;
   --vault-radius-lg: 16px;
   --vault-radius-xl: 20px;
   --vault-radius-2xl: 24px;
+  --vault-transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --vault-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --vault-transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ========================================
-   CONTAINER
+   CONTAINER - RESTORED ORIGINAL BACKGROUND
 ======================================== */
 .vault-container {
   position: relative;
   min-height: 100vh;
   padding: 0;
   color: var(--vault-text);
-  background: var(--vault-bg);
+  background: var(--vault-bg-primary);
+  animation: vaultAmbient 18s ease infinite;
+  background-size: 400% 400%;
+  background-image: 
+    radial-gradient(ellipse at 20% 50%, rgba(60, 30, 120, 0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(40, 20, 80, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(80, 40, 160, 0.15) 0%, transparent 40%),
+    linear-gradient(180deg, #0d0820 0%, #150a2a 50%, #0d0820 100%);
 }
 
 /* ========================================
-   GRAIN & TEXTURE
+   GRAIN TEXTURE - RESTORED ORIGINAL
 ======================================== */
 .vault-container::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 300px 300px;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='white'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
   z-index: 0;
 }
 
@@ -53,11 +65,36 @@
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.04;
-  background-image: 
-    radial-gradient(circle at 20% 50%, rgba(120, 60, 200, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(60, 30, 120, 0.06) 0%, transparent 50%);
+  opacity: 0.22;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-size: 120px 120px;
+  animation: dustFloat 35s linear infinite;
   z-index: 0;
+}
+
+/* ========================================
+   ANIMATIONS - RESTORED ORIGINAL
+======================================== */
+@keyframes vaultAmbient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes dustFloat {
+  from { transform: translateY(0); }
+  to { transform: translateY(-120px); }
+}
+
+@keyframes skeletonPulse {
+  0% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.4; }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========================================
@@ -67,8 +104,8 @@
   position: sticky;
   top: 0;
   z-index: 50;
-  padding: 1rem 2rem 0.75rem;
-  background: rgba(13, 8, 32, 0.85);
+  padding: 0.75rem 2rem 0.5rem;
+  background: rgba(13, 8, 32, 0.88);
   backdrop-filter: blur(20px) saturate(1.2);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   transition: var(--vault-transition);
@@ -79,18 +116,17 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.5rem;
+  gap: 1rem;
 }
 
 .vault-header h1 {
   margin: 0;
-  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-size: clamp(1.3rem, 1.8vw, 1.6rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #ffffff;
-  background: linear-gradient(135deg, #fff 60%, rgba(180, 140, 255, 0.6));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
 }
 
 .vault-intro {
@@ -102,20 +138,21 @@
 ======================================== */
 .vault-stats {
   display: flex;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
   flex-wrap: wrap;
 }
 
 .vault-stat-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.75rem;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: var(--vault-radius-sm);
   transition: var(--vault-transition);
+  height: 32px;
 }
 
 .vault-stat-item:hover {
@@ -125,27 +162,25 @@
 }
 
 .vault-stat-icon {
-  font-size: 0.9rem;
-  opacity: 0.6;
+  font-size: 0.8rem;
+  opacity: 0.5;
   line-height: 1;
 }
 
 .vault-stat-value {
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: #fff;
   letter-spacing: -0.01em;
+  line-height: 1;
 }
 
 .vault-stat-label {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--vault-text-muted);
   font-weight: 500;
   letter-spacing: 0.03em;
-}
-
-.vault-stat-divider {
-  display: none;
+  line-height: 1;
 }
 
 /* ========================================
@@ -153,7 +188,7 @@
 ======================================== */
 .vault-controls-bar {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
@@ -167,7 +202,7 @@
 
 .vault-search-icon {
   position: absolute;
-  left: 0.85rem;
+  left: 0.75rem;
   top: 50%;
   transform: translateY(-50%);
   color: var(--vault-text-dim);
@@ -178,7 +213,7 @@
 
 .vault-search-input {
   width: 100%;
-  padding: 0.55rem 2.5rem 0.55rem 2.6rem;
+  padding: 0.5rem 2.5rem 0.5rem 2.5rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--vault-radius-md);
@@ -202,7 +237,7 @@
 
 .vault-search-clear {
   position: absolute;
-  right: 0.75rem;
+  right: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -213,8 +248,8 @@
   padding: 0.25rem;
   transition: var(--vault-transition);
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -227,13 +262,13 @@
 
 .vault-controls-right {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   flex-wrap: wrap;
 }
 
 .vault-sort-select,
 .vault-density-select {
-  padding: 0.45rem 0.85rem;
+  padding: 0.4rem 0.75rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--vault-radius-sm);
@@ -246,8 +281,9 @@
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 0.65rem center;
-  padding-right: 2rem;
+  background-position: right 0.6rem center;
+  padding-right: 1.8rem;
+  height: 34px;
 }
 
 .vault-sort-select:hover,
@@ -267,24 +303,27 @@
 ======================================== */
 .vault-filter-chips {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.35rem;
   margin-bottom: 0;
   flex-wrap: wrap;
 }
 
 .vault-filter-chip {
-  padding: 0.3rem 0.85rem;
+  padding: 0.25rem 0.75rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 999px;
   color: var(--vault-text-muted);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
   cursor: pointer;
   transition: var(--vault-transition);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-family: inherit;
+  height: 28px;
+  display: flex;
+  align-items: center;
 }
 
 .vault-filter-chip:hover {
@@ -314,14 +353,15 @@
   padding: 0.25rem;
   border-radius: var(--vault-radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.04);
+  flex-shrink: 0;
 }
 
 .vault-view-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border: none;
   border-radius: var(--vault-radius-sm);
   background: transparent;
@@ -346,7 +386,7 @@
 .vault-main {
   position: relative;
   z-index: 1;
-  padding: 0 2rem 3rem;
+  padding: 1rem 2rem 3rem;
 }
 
 /* ========================================
@@ -409,6 +449,7 @@
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.25rem;
   padding: 1rem 0;
+  animation: fadeSlideUp 0.3s ease forwards;
 }
 
 .vault-folder-card {
@@ -453,7 +494,7 @@
   gap: 2px;
   width: 100%;
   height: 100%;
-  padding: 4px;
+  padding: 3px;
   background: rgba(0, 0, 0, 0.2);
 }
 
@@ -495,34 +536,30 @@
   font-weight: 500;
 }
 
-.vault-folder-arrow {
-  display: none;
-}
-
 /* ========================================
    CATEGORY PAGE HEADER
 ======================================== */
 .vault-category-header {
   position: relative;
-  padding: 1.5rem 0 1rem;
+  padding: 1.25rem 0 1rem;
   margin-bottom: 1.5rem;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
   border-bottom: 1px solid var(--vault-border);
 }
 
 .vault-category-header-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .vault-category-cover {
-  width: 56px;
-  height: 78px;
+  width: 48px;
+  height: 68px;
   object-fit: cover;
   border-radius: var(--vault-radius-sm);
   border: 1px solid var(--vault-border);
@@ -531,7 +568,7 @@
 
 .vault-category-header h2 {
   margin: 0;
-  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
   font-weight: 700;
   color: #fff;
   letter-spacing: -0.02em;
@@ -546,7 +583,7 @@
 .vault-back-btn {
   border: none;
   border-radius: var(--vault-radius-sm);
-  padding: 0.4rem 1rem;
+  padding: 0.35rem 0.9rem;
   background: rgba(255, 255, 255, 0.04);
   color: var(--vault-text-muted);
   cursor: pointer;
@@ -557,6 +594,7 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  height: 34px;
 }
 
 .vault-back-btn:hover {
@@ -566,12 +604,13 @@
 }
 
 /* ========================================
-   GRID
+   GRID SYSTEM
 ======================================== */
 .vault-grid {
   display: grid;
   gap: 1.5rem;
   align-items: start;
+  animation: fadeSlideUp 0.3s ease forwards;
 }
 
 .vault-grid-grid {
@@ -580,12 +619,12 @@
 
 .vault-grid-list {
   grid-template-columns: 1fr;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 /* ========================================
-   BOOK CARD
+   BOOK CARD - GRID VIEW
 ======================================== */
 .vault-book-card {
   position: relative;
@@ -593,10 +632,11 @@
   display: flex;
   flex-direction: column;
   border-radius: var(--vault-radius-lg);
-  background: var(--vault-card-bg);
+  background: var(--vault-bg-card);
   border: 1px solid var(--vault-border);
   transition: var(--vault-transition);
   transform-style: preserve-3d;
+  height: 100%;
 }
 
 .vault-book-card::before {
@@ -616,12 +656,9 @@
 .vault-book-card:hover {
   transform: translateY(-6px);
   border-color: var(--vault-border-hover);
-  box-shadow: var(--vault-shadow-lg), 0 0 60px rgba(80, 40, 160, 0.08);
+  box-shadow: var(--vault-shadow-xl), 0 0 60px rgba(80, 40, 160, 0.08);
 }
 
-/* ========================================
-   CARD GLOW
-======================================== */
 .vault-card-glow {
   position: absolute;
   inset: auto -20% -30% -20%;
@@ -637,13 +674,7 @@
   opacity: 0.6;
 }
 
-/* ========================================
-   CARD - GRID MODE
-======================================== */
-.vault-book-card-grid {
-  height: 100%;
-}
-
+/* Grid View - Image */
 .vault-book-card-grid .vault-book-image-wrapper {
   padding: 1rem 1rem 0;
   position: relative;
@@ -659,6 +690,7 @@
   box-shadow: var(--vault-shadow-sm);
   transition: var(--vault-transition);
   cursor: pointer;
+  display: block;
 }
 
 .vault-book-card-grid:hover .vault-book-image {
@@ -667,82 +699,40 @@
   border-color: var(--vault-border-hover);
 }
 
+.vault-image-placeholder {
+  width: 100%;
+  aspect-ratio: 3 / 4.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--vault-radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--vault-border);
+  color: var(--vault-text-dim);
+  font-size: 2rem;
+  cursor: pointer;
+  transition: var(--vault-transition);
+}
+
+.vault-image-placeholder:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--vault-border-hover);
+}
+
+/* Grid View - Content */
 .vault-book-card-grid .vault-book-content {
   padding: 0.75rem 1rem 1rem;
   position: relative;
   z-index: 2;
-}
-
-/* ========================================
-   CARD - LIST MODE
-======================================== */
-.vault-book-card-list {
-  flex-direction: row;
-  align-items: stretch;
-  min-height: 140px;
-  padding: 0;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: var(--vault-radius-md);
-}
-
-.vault-book-card-list .vault-card-glow {
-  inset: auto -10% -20% -10%;
-  background: radial-gradient(circle, rgba(80, 40, 160, 0.08), transparent 70%);
-}
-
-.vault-book-card-list .vault-book-image-wrapper {
-  position: relative;
-  padding: 0.5rem 0 0.5rem 0.5rem;
-  flex: 0 0 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: var(--vault-radius-md) 0 0 var(--vault-radius-md);
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.vault-book-card-list .vault-book-image {
-  width: 100%;
-  height: auto;
-  max-width: 90px;
-  max-height: 128px;
-  object-fit: cover;
-  border-radius: var(--vault-radius-sm);
-  box-shadow: var(--vault-shadow-sm);
-  border: 1px solid var(--vault-border);
-  transition: var(--vault-transition);
-  cursor: pointer;
-}
-
-.vault-book-card-list:hover .vault-book-image {
-  transform: scale(1.04);
-  box-shadow: var(--vault-shadow-md);
-}
-
-.vault-book-card-list .vault-book-content {
-  flex: 1;
-  padding: 0.6rem 1rem 0.6rem 0.8rem;
-  text-align: left;
-  justify-content: center;
-  min-width: 0;
-  position: relative;
-  z-index: 2;
-}
-
-/* ========================================
-   BOOK CONTENT
-======================================== */
-.vault-book-content {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.vault-book-content h2 {
+.vault-book-card-grid .vault-book-content h2 {
   margin: 0 0 0.25rem;
-  font-size: clamp(1rem, 1.3vw, 1.3rem);
-  line-height: 1.25;
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  line-height: 1.3;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #fff;
@@ -757,6 +747,7 @@
   padding: 0;
   transition: var(--vault-transition);
   text-align: left;
+  width: 100%;
 }
 
 .vault-book-title:hover {
@@ -799,50 +790,8 @@
   text-transform: uppercase;
 }
 
-/* Hide grid-specific elements in list view */
-.vault-book-card-list .vault-id,
-.vault-book-card-list .vault-description-dropdown,
-.vault-book-card-list .vault-actions-container,
-.vault-book-card-list .vault-book-tags {
-  display: none;
-}
-
-.vault-book-card-list .vault-list-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  width: 100%;
-}
-
-.vault-book-card-list .vault-list-download-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.25rem 0.75rem;
-  margin-top: 0.15rem;
-  border: 1px solid var(--vault-border);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
-  border-radius: var(--vault-radius-sm);
-  font-size: 0.65rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: var(--vault-transition);
-  width: fit-content;
-  font-family: inherit;
-}
-
-.vault-book-card-list .vault-list-download-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: var(--vault-border-hover);
-  color: #fff;
-  transform: translateY(-1px);
-}
-
-/* ========================================
-   DESCRIPTION DROPDOWN
-======================================== */
-.vault-description-dropdown {
+/* Grid View - Description */
+.vault-book-card-grid .vault-description-dropdown {
   margin-top: 0.35rem;
   border-top: 1px solid var(--vault-border);
   padding-top: 0.35rem;
@@ -909,10 +858,8 @@
   transform: translateY(0);
 }
 
-/* ========================================
-   ACTIONS
-======================================== */
-.vault-actions-container {
+/* Grid View - Actions */
+.vault-book-card-grid .vault-actions-container {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
@@ -933,6 +880,10 @@
   border-radius: var(--vault-radius-sm);
   transition: var(--vault-transition);
   font-family: inherit;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .vault-read-btn:hover {
@@ -954,6 +905,10 @@
   border-radius: var(--vault-radius-sm);
   transition: var(--vault-transition);
   font-family: inherit;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .vault-download-btn:hover {
@@ -971,13 +926,203 @@
 }
 
 /* ========================================
-   FAVORITE BUTTON
+   BOOK CARD - LIST VIEW (REBUILT)
+======================================== */
+.vault-book-card-list {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  min-height: 140px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--vault-radius-md);
+  border: 1px solid var(--vault-border);
+  transition: var(--vault-transition);
+  overflow: hidden;
+  position: relative;
+}
+
+.vault-book-card-list:hover {
+  transform: translateY(-3px);
+  border-color: var(--vault-border-hover);
+  box-shadow: var(--vault-shadow-lg);
+}
+
+.vault-book-card-list .vault-card-glow {
+  inset: auto -10% -20% -10%;
+  background: radial-gradient(circle, rgba(80, 40, 160, 0.06), transparent 70%);
+  opacity: 0;
+}
+
+.vault-book-card-list:hover .vault-card-glow {
+  opacity: 0.5;
+}
+
+/* List View - Image */
+.vault-book-card-list .vault-book-image-wrapper {
+  position: relative;
+  flex: 0 0 110px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+.vault-book-card-list .vault-book-image {
+  width: 100%;
+  max-width: 95px;
+  aspect-ratio: 3 / 4.2;
+  object-fit: cover;
+  border-radius: var(--vault-radius-sm);
+  border: 1px solid var(--vault-border);
+  box-shadow: var(--vault-shadow-sm);
+  transition: var(--vault-transition);
+  cursor: pointer;
+  display: block;
+}
+
+.vault-book-card-list:hover .vault-book-image {
+  transform: scale(1.04);
+  box-shadow: var(--vault-shadow-md);
+  border-color: var(--vault-border-hover);
+}
+
+.vault-book-card-list .vault-image-placeholder {
+  width: 95px;
+  aspect-ratio: 3 / 4.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--vault-radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--vault-border);
+  color: var(--vault-text-dim);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: var(--vault-transition);
+}
+
+.vault-book-card-list .vault-image-placeholder:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--vault-border-hover);
+}
+
+/* List View - Content */
+.vault-book-card-list .vault-book-content {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  z-index: 2;
+  position: relative;
+}
+
+.vault-book-card-list .vault-book-content h2 {
+  margin: 0 0 0.2rem;
+  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #fff;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.vault-book-card-list .vault-meta-row {
+  margin-bottom: 0.15rem;
+  font-size: 0.7rem;
+}
+
+/* List View - Description Preview */
+.vault-book-card-list .vault-description-preview {
+  color: var(--vault-text-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  margin: 0.15rem 0 0.3rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 2.6rem;
+}
+
+/* List View - Actions */
+.vault-book-card-list .vault-list-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.vault-book-card-list .vault-list-read-btn {
+  border: 1px solid var(--vault-border);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: var(--vault-radius-sm);
+  transition: var(--vault-transition);
+  font-family: inherit;
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.vault-book-card-list .vault-list-read-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--vault-border-hover);
+  transform: translateY(-1px);
+}
+
+.vault-book-card-list .vault-list-download-btn {
+  border: 1px solid var(--vault-border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--vault-text-muted);
+  padding: 0.3rem 0.8rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--vault-radius-sm);
+  transition: var(--vault-transition);
+  font-family: inherit;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.vault-book-card-list .vault-list-download-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
+}
+
+.vault-book-card-list .vault-list-download-btn svg {
+  flex-shrink: 0;
+}
+
+/* List View - Favorite Button */
+.vault-book-card-list .vault-favorite-btn {
+  position: relative;
+  top: auto;
+  right: auto;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+/* ========================================
+   FAVORITE BUTTON (Shared)
 ======================================== */
 .vault-favorite-btn {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  z-index: 5;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--vault-border);
   border-radius: 50%;
@@ -991,6 +1136,7 @@
   backdrop-filter: blur(8px);
   transition: var(--vault-transition);
   padding: 0;
+  flex-shrink: 0;
 }
 
 .vault-favorite-btn:hover {
@@ -1022,7 +1168,7 @@
   top: 0.5rem;
   left: 0.5rem;
   z-index: 4;
-  padding: 0.2rem 0.6rem;
+  padding: 0.2rem 0.5rem;
   border-radius: 999px;
   background: rgba(255, 215, 0, 0.08);
   border: 1px solid rgba(255, 215, 0, 0.12);
@@ -1067,6 +1213,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  min-width: 0;
 }
 
 .vault-series-cover {
@@ -1075,10 +1222,12 @@
   object-fit: cover;
   border-radius: var(--vault-radius-sm);
   border: 1px solid var(--vault-border);
+  flex-shrink: 0;
 }
 
 .vault-series-icon {
   font-size: 1.2rem;
+  flex-shrink: 0;
 }
 
 .vault-series-header h3 {
@@ -1087,18 +1236,23 @@
   font-weight: 600;
   color: #fff;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .vault-series-count {
   font-size: 0.7rem;
   color: var(--vault-text-muted);
   font-weight: 400;
+  flex-shrink: 0;
 }
 
 .vault-series-arrow {
   transition: var(--vault-transition);
   color: var(--vault-text-dim);
   font-size: 0.7rem;
+  flex-shrink: 0;
 }
 
 .vault-series-arrow.expanded {
@@ -1137,6 +1291,7 @@
   object-fit: cover;
   border-radius: var(--vault-radius-sm);
   border: 1px solid var(--vault-border);
+  flex-shrink: 0;
 }
 
 .vault-continue-info {
@@ -1144,6 +1299,7 @@
   flex-direction: column;
   gap: 0.1rem;
   flex: 1;
+  min-width: 0;
 }
 
 .vault-continue-info h4 {
@@ -1151,6 +1307,9 @@
   font-size: 0.9rem;
   color: #fff;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .vault-continue-type {
@@ -1171,6 +1330,10 @@
   cursor: pointer;
   transition: var(--vault-transition);
   font-family: inherit;
+  flex-shrink: 0;
+  height: 30px;
+  display: flex;
+  align-items: center;
 }
 
 .vault-continue-btn:hover {
@@ -1189,12 +1352,16 @@
     padding: 0.4rem 0.6rem 0.6rem;
   }
   .vault-book-content h2 {
-    font-size: clamp(0.85rem, 1vw, 1rem);
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem) !important;
   }
-  .vault-book-card-grid {
-    .vault-meta-row {
-      font-size: 0.6rem;
-    }
+  .vault-meta-row {
+    font-size: 0.6rem !important;
+  }
+  .vault-book-card-list .vault-book-image-wrapper {
+    flex: 0 0 80px;
+  }
+  .vault-book-card-list .vault-book-image {
+    max-width: 70px;
   }
 }
 
@@ -1210,7 +1377,13 @@
     padding: 1rem 1.5rem 1.5rem;
   }
   .vault-book-content h2 {
-    font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+    font-size: clamp(1.1rem, 1.4vw, 1.4rem) !important;
+  }
+  .vault-book-card-list .vault-book-image-wrapper {
+    flex: 0 0 150px;
+  }
+  .vault-book-card-list .vault-book-image {
+    max-width: 130px;
   }
 }
 
@@ -1247,30 +1420,14 @@
   transition: var(--vault-transition);
   font-size: 0.8rem;
   font-family: inherit;
+  height: 36px;
+  display: flex;
+  align-items: center;
 }
 
 .vault-empty-clear-btn:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-}
-
-/* ========================================
-   ANIMATIONS
-======================================== */
-@keyframes skeletonPulse {
-  0% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-  100% { opacity: 0.4; }
-}
-
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.vault-folder-grid,
-.vault-grid {
-  animation: fadeSlideUp 0.3s ease forwards;
 }
 
 /* ========================================
@@ -1288,7 +1445,7 @@
 
 @media screen and (max-width: 768px) {
   .vault-header {
-    padding: 0.75rem 1rem 0.5rem;
+    padding: 0.5rem 1rem 0.4rem;
   }
   
   .vault-main {
@@ -1307,7 +1464,7 @@
   
   .vault-controls-bar {
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
   
   .vault-controls-right {
@@ -1321,45 +1478,24 @@
   }
   
   .vault-stats {
-    gap: 0.4rem;
+    gap: 0.35rem;
   }
   
   .vault-stat-item {
-    padding: 0.25rem 0.5rem;
+    padding: 0.2rem 0.5rem;
+    height: 28px;
   }
   
   .vault-stat-value {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
   }
   
   .vault-stat-label {
     font-size: 0.55rem;
   }
   
-  .vault-book-card-list {
-    min-height: 110px;
-  }
-  
-  .vault-book-card-list .vault-book-image-wrapper {
-    flex: 0 0 70px;
-    padding: 0.4rem 0 0.4rem 0.4rem;
-  }
-  
-  .vault-book-card-list .vault-book-image {
-    max-width: 70px;
-    max-height: 100px;
-  }
-  
-  .vault-book-card-list .vault-book-content {
-    padding: 0.4rem 0.6rem 0.4rem 0.6rem;
-  }
-  
-  .vault-book-content h2 {
-    font-size: 0.85rem;
-  }
-  
   .vault-category-header {
-    padding: 1rem 0 0.75rem;
+    padding: 0.75rem 0 0.5rem;
     flex-direction: column;
     align-items: flex-start;
   }
@@ -1372,6 +1508,37 @@
   .vault-folder-cover-area {
     aspect-ratio: 16/10;
   }
+  
+  /* List View - Tablet */
+  .vault-book-card-list {
+    min-height: 120px;
+  }
+  
+  .vault-book-card-list .vault-book-image-wrapper {
+    flex: 0 0 80px;
+    padding: 0.5rem;
+  }
+  
+  .vault-book-card-list .vault-book-image {
+    max-width: 70px;
+  }
+  
+  .vault-book-card-list .vault-book-content {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .vault-book-card-list .vault-description-preview {
+    display: none;
+  }
+  
+  .vault-density-large {
+    .vault-book-card-list .vault-book-image-wrapper {
+      flex: 0 0 110px;
+    }
+    .vault-book-card-list .vault-book-image {
+      max-width: 95px;
+    }
+  }
 }
 
 /* ========================================
@@ -1379,42 +1546,43 @@
 ======================================== */
 @media screen and (max-width: 480px) {
   .vault-header {
-    padding: 0.5rem 0.75rem 0.4rem;
+    padding: 0.4rem 0.6rem 0.3rem;
   }
   
   .vault-header h1 {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .vault-main {
-    padding: 0 0.75rem 1.5rem;
+    padding: 0 0.6rem 1.5rem;
   }
   
   .vault-grid-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
   
   .vault-folder-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
   
   .vault-stats {
-    gap: 0.3rem;
+    gap: 0.25rem;
   }
   
   .vault-stat-item {
-    padding: 0.15rem 0.4rem;
-    gap: 0.3rem;
+    padding: 0.15rem 0.35rem;
+    gap: 0.25rem;
+    height: 24px;
   }
   
   .vault-stat-icon {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
   
   .vault-stat-value {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
   
   .vault-stat-label {
@@ -1422,30 +1590,31 @@
   }
   
   .vault-filter-chip {
-    padding: 0.2rem 0.6rem;
-    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.55rem;
+    height: 24px;
   }
   
   .vault-view-btn {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
   }
   
   .vault-view-btn svg {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
   }
   
   .vault-book-card-grid .vault-book-image-wrapper {
-    padding: 0.5rem 0.5rem 0;
+    padding: 0.4rem 0.4rem 0;
   }
   
   .vault-book-card-grid .vault-book-content {
-    padding: 0.4rem 0.5rem 0.6rem;
+    padding: 0.3rem 0.4rem 0.5rem;
   }
   
   .vault-book-content h2 {
-    font-size: 0.75rem;
+    font-size: 0.75rem !important;
   }
   
   .vault-meta-row {
@@ -1459,22 +1628,22 @@
   }
   
   .vault-read-btn {
-    font-size: 0.65rem;
-    padding: 0.3rem 0.5rem;
-    min-width: 50px;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
+    min-width: 40px;
+    height: 28px;
   }
   
   .vault-download-btn {
-    font-size: 0.65rem;
-    padding: 0.3rem 0.5rem;
-    min-width: 50px;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
+    min-width: 40px;
+    height: 28px;
   }
   
   .vault-favorite-btn {
-    width: 24px;
-    height: 24px;
-    top: 0.3rem;
-    right: 0.3rem;
+    width: 22px;
+    height: 22px;
   }
   
   .vault-favorite-btn svg {
@@ -1484,36 +1653,13 @@
   
   .vault-new-badge {
     font-size: 0.4rem;
-    padding: 0.15rem 0.4rem;
+    padding: 0.1rem 0.35rem;
     top: 0.3rem;
     left: 0.3rem;
   }
   
-  .vault-book-card-list .vault-book-image-wrapper {
-    flex: 0 0 55px;
-    padding: 0.3rem 0 0.3rem 0.3rem;
-  }
-  
-  .vault-book-card-list .vault-book-image {
-    max-width: 55px;
-    max-height: 78px;
-  }
-  
-  .vault-book-card-list .vault-book-content {
-    padding: 0.3rem 0.5rem 0.3rem 0.4rem;
-  }
-  
-  .vault-book-card-list .vault-book-content h2 {
-    font-size: 0.75rem;
-  }
-  
-  .vault-book-card-list .vault-list-download-btn {
-    padding: 0.15rem 0.5rem;
-    font-size: 0.55rem;
-  }
-  
   .vault-folder-card {
-    min-height: 140px;
+    min-height: 120px;
   }
   
   .vault-folder-content h2 {
@@ -1525,7 +1671,7 @@
   }
   
   .vault-category-header h2 {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .vault-category-cover {
@@ -1534,25 +1680,25 @@
   }
   
   .vault-continue-reading {
-    padding: 0.5rem 0.75rem;
-    margin-bottom: 1rem;
+    padding: 0.4rem 0.6rem;
+    margin-bottom: 0.75rem;
   }
   
   .vault-continue-cover {
-    width: 36px;
-    height: 50px;
+    width: 32px;
+    height: 45px;
   }
   
   .vault-continue-info h4 {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
   
   .vault-series-header {
-    padding: 0.4rem 0.6rem;
+    padding: 0.3rem 0.5rem;
   }
   
   .vault-series-header h3 {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   
   .vault-series-cover {
@@ -1562,5 +1708,70 @@
   
   .vault-series-icon {
     font-size: 0.9rem;
+  }
+  
+  /* List View - Mobile */
+  .vault-book-card-list {
+    min-height: 90px;
+    border-radius: var(--vault-radius-sm);
+  }
+  
+  .vault-book-card-list .vault-book-image-wrapper {
+    flex: 0 0 60px;
+    padding: 0.3rem;
+  }
+  
+  .vault-book-card-list .vault-book-image {
+    max-width: 50px;
+  }
+  
+  .vault-book-card-list .vault-book-content {
+    padding: 0.3rem 0.5rem 0.3rem 0.4rem;
+  }
+  
+  .vault-book-card-list .vault-book-content h2 {
+    font-size: 0.75rem;
+    margin-bottom: 0.1rem;
+  }
+  
+  .vault-book-card-list .vault-meta-row {
+    font-size: 0.55rem;
+    margin-bottom: 0.1rem;
+  }
+  
+  .vault-book-card-list .vault-description-preview {
+    display: none;
+  }
+  
+  .vault-book-card-list .vault-list-actions {
+    gap: 0.3rem;
+    margin-top: 0.1rem;
+  }
+  
+  .vault-book-card-list .vault-list-read-btn,
+  .vault-book-card-list .vault-list-download-btn {
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+    height: 24px;
+  }
+  
+  .vault-book-card-list .vault-favorite-btn {
+    width: 22px;
+    height: 22px;
+    margin-right: 0.4rem;
+  }
+  
+  .vault-book-card-list .vault-favorite-btn svg {
+    width: 13px;
+    height: 13px;
+  }
+  
+  .vault-density-large {
+    .vault-book-card-list .vault-book-image-wrapper {
+      flex: 0 0 80px;
+    }
+    .vault-book-card-list .vault-book-image {
+      max-width: 70px;
+    }
   }
 }

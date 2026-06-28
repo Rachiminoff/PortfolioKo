@@ -1,4 +1,4 @@
-// Vault.tsx - Redesigned Premium Bookshelf Edition
+// Vault.tsx - Refined with proper list view
 
 import React, { useEffect, useState, useMemo } from "react";
 import "../assets/styles/Vault.scss";
@@ -274,12 +274,117 @@ function Vault() {
         const isExpanded = expandedDescriptions.includes(item.id || 0);
         const isEpub = item.type?.toLowerCase().includes("epub");
 
+        if (viewMode === "list") {
+            return (
+                <div
+                    key={item.id}
+                    className="vault-book-card vault-book-card-list"
+                    onMouseEnter={() => setActiveCard(item.id || null)}
+                    onMouseLeave={() => setActiveCard(null)}
+                >
+                    <div className="vault-card-glow"></div>
+
+                    <div className="vault-book-image-wrapper">
+                        {item.image ? (
+                            <img
+                                src={item.image}
+                                alt={item.name}
+                                className="vault-book-image"
+                                loading="lazy"
+                                onClick={() => openViewer(item.link, item.type, item)}
+                            />
+                        ) : (
+                            <div 
+                                className="vault-image-placeholder"
+                                onClick={() => openViewer(item.link, item.type, item)}
+                            >
+                                📖
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="vault-book-content">
+                        <h2>
+                            {item.link ? (
+                                <button
+                                    className="vault-book-title"
+                                    onClick={() => openViewer(item.link, item.type, item)}
+                                >
+                                    {item.name}
+                                </button>
+                            ) : (
+                                item.name
+                            )}
+                        </h2>
+
+                        <div className="vault-meta-row">
+                            <span className="vault-type-badge">{item.type}</span>
+                            {item.created_at && (
+                                <span>{new Date(item.created_at).getFullYear()}</span>
+                            )}
+                            {item.series && (
+                                <span className="vault-series-badge">{item.series}</span>
+                            )}
+                        </div>
+
+                        {item.description && (
+                            <div className="vault-description-preview">
+                                {item.description}
+                            </div>
+                        )}
+
+                        <div className="vault-list-actions">
+                            {item.link && (
+                                <>
+                                    <button
+                                        className="vault-list-read-btn"
+                                        onClick={() => openViewer(item.link, item.type, item)}
+                                    >
+                                        {isEpub ? "Open EPUB" : "Open"}
+                                    </button>
+                                    {isEpub && (
+                                        <button
+                                            className="vault-list-download-btn"
+                                            onClick={() => handleDownload(item.link, item.name)}
+                                        >
+                                            Download
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    <button
+                        className="vault-favorite-btn"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            toggleFavorite(item);
+                        }}
+                        aria-label="Toggle favorite"
+                    >
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill={item.favorite ? "currentColor" : "none"}
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                    </button>
+                </div>
+            );
+        }
+
+        // Grid view
         return (
             <div
                 key={item.id}
                 className={`
                     vault-book-card
-                    vault-book-card-${viewMode}
+                    vault-book-card-grid
                     ${isNew ? "new-entry" : ""}
                     ${item.status || ""}
                     vault-density-${density}
@@ -326,9 +431,8 @@ function Vault() {
                         <div 
                             className="vault-image-placeholder"
                             onClick={() => openViewer(item.link, item.type, item)}
-                            style={{ cursor: 'pointer' }}
                         >
-                            <span>📖</span>
+                            📖
                         </div>
                     )}
                 </div>
@@ -357,74 +461,45 @@ function Vault() {
                         )}
                     </div>
 
-                    {viewMode === "grid" && (
-                        <>
-                            <div className="vault-description-dropdown">
-                                <button
-                                    className="vault-description-toggle"
-                                    onClick={() => toggleDescription(item.id)}
-                                >
-                                    Description
-                                    <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
-                                        ▼
-                                    </span>
-                                </button>
+                    <div className="vault-description-dropdown">
+                        <button
+                            className="vault-description-toggle"
+                            onClick={() => toggleDescription(item.id)}
+                        >
+                            Description
+                            <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
+                                ▼
+                            </span>
+                        </button>
 
-                                <div className={`vault-description-content ${isExpanded ? "expanded" : ""}`}>
-                                    <p className="vault-book-description">
-                                        {item.description}
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="vault-actions-container">
-                                {item.link && (
-                                    <>
-                                        <button
-                                            className="vault-read-btn"
-                                            onClick={() => openViewer(item.link, item.type, item)}
-                                        >
-                                            {isEpub ? "Open EPUB" : "Open"}
-                                        </button>
-
-                                        {isEpub && (
-                                            <>
-                                                <button
-                                                    className="vault-download-btn"
-                                                    onClick={() => handleDownload(item.link, item.name)}
-                                                >
-                                                    Download
-                                                </button>
-                                            </>
-                                        )}
-                                    </>
-                                )}
-                            </div>
-                        </>
-                    )}
-                </div>
-
-                {viewMode === "list" && (
-                    <div className="vault-list-content">
-                        <div className="vault-meta-row">
-                            <span className="vault-type-badge">{item.type}</span>
-                            {item.created_at && (
-                                <span>{new Date(item.created_at).getFullYear()}</span>
-                            )}
-                            {item.series && (
-                                <span className="vault-series-badge">{item.series}</span>
-                            )}
+                        <div className={`vault-description-content ${isExpanded ? "expanded" : ""}`}>
+                            <p className="vault-book-description">
+                                {item.description}
+                            </p>
                         </div>
-                        {item.link && isEpub && (
-                            <button
-                                className="vault-list-download-btn"
-                                onClick={() => handleDownload(item.link, item.name)}
-                            >
-                                Download EPUB
-                            </button>
+                    </div>
+
+                    <div className="vault-actions-container">
+                        {item.link && (
+                            <>
+                                <button
+                                    className="vault-read-btn"
+                                    onClick={() => openViewer(item.link, item.type, item)}
+                                >
+                                    {isEpub ? "Open EPUB" : "Open"}
+                                </button>
+                                {isEpub && (
+                                    <button
+                                        className="vault-download-btn"
+                                        onClick={() => handleDownload(item.link, item.name)}
+                                    >
+                                        Download
+                                    </button>
+                                )}
+                            </>
                         )}
                     </div>
-                )}
+                </div>
             </div>
         );
     };
@@ -503,7 +578,6 @@ function Vault() {
                     </div>
                 </div>
 
-                {/* Statistics */}
                 <div className="vault-stats">
                     <div className="vault-stat-item">
                         <span className="vault-stat-icon">📚</span>
@@ -527,7 +601,6 @@ function Vault() {
                     </div>
                 </div>
 
-                {/* Controls Bar */}
                 <div className="vault-controls-bar">
                     <div className="vault-search-wrapper">
                         <svg className="vault-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -576,7 +649,6 @@ function Vault() {
                     </div>
                 </div>
 
-                {/* Filter Chips */}
                 <div className="vault-filter-chips">
                     <button
                         className={`vault-filter-chip ${filterChip === "all" ? "active" : ""}`}
@@ -626,7 +698,6 @@ function Vault() {
                     </div>
                 ) : (
                     <>
-                        {/* Continue Reading */}
                         {continueReading && !selectedCategory && !showFavorites && (
                             <div className="vault-continue-reading">
                                 <h3>Continue Reading</h3>
