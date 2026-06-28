@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGraduationCap, faRocket, faCode, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faGraduationCap, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
