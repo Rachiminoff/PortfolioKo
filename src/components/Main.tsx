@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Suspense, lazy, useCallback} from "react";
+import React, { useState, useEffect, useRef, Suspense, lazy, useCallback } from "react";
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -10,203 +10,6 @@ import '../assets/styles/Main.scss';
 // Lazy load heavy components
 const Vault = lazy(() => import('./Vault'));
 const PDFViewer = lazy(() => import('./PDFViewer'));
-
-/* =========================
-   VAULT MODAL
-========================= */
-function VaultModal({
-    open,
-    onUnlock,
-    onClose,
-    loading,
-    error,
-    remainingAttempts,
-    lockedUntil,
-}: {
-    open: boolean;
-    onUnlock: (password: string) => void;
-    onClose: () => void;
-    loading: boolean;
-    error: string | null;
-    remainingAttempts?: number;
-    lockedUntil?: number | null;
-}) {
-    const [password, setPassword] = useState("");
-    const [shake, setShake] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [showPassword, setShowPassword] = useState(false);
-
-    useEffect(() => {
-        if (open) {
-            setTimeout(() => inputRef.current?.focus(), 100);
-            setPassword("");
-            setShake(false);
-        }
-    }, [open]);
-
-    useEffect(() => {
-        const handleEsc = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && open) onClose();
-        };
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, [open, onClose]);
-
-    useEffect(() => {
-        if (error) {
-            setShake(true);
-            setTimeout(() => setShake(false), 500);
-        }
-    }, [error]);
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (password.trim()) {
-            onUnlock(password);
-        }
-    };
-
-    if (!open) return null;
-
-    const isLocked = lockedUntil && lockedUntil > Date.now();
-    const lockTimeRemaining = isLocked 
-        ? Math.ceil((lockedUntil - Date.now()) / 60000) 
-        : 0;
-
-    return (
-        <div 
-            className="vault-modal-backdrop" 
-            onClick={onClose}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="vault-modal-title"
-        >
-            <div 
-                className={`vault-modal ${shake ? 'shake' : ''}`} 
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="vault-modal-header">
-                    <div className="vault-modal-icon">🔐</div>
-                    <h2 id="vault-modal-title">Secret Vault</h2>
-                    <button 
-                        className="vault-modal-close"
-                        onClick={onClose}
-                        aria-label="Close modal"
-                    >
-                        ✕
-                    </button>
-                </div>
-
-                <p className="vault-modal-description">
-                    Enter the secret code to unlock hidden content
-                </p>
-
-                {isLocked ? (
-                    <div className="vault-modal-locked">
-                        <div className="lock-icon">🔒</div>
-                        <p className="lock-title">Vault is locked</p>
-                        <p className="lock-subtitle">
-                            Too many failed attempts. 
-                            Try again in <strong>{lockTimeRemaining} minute{lockTimeRemaining !== 1 ? 's' : ''}</strong>.
-                        </p>
-                        <p className="lock-time">
-                            Unlocks at {new Date(lockedUntil).toLocaleTimeString()}
-                        </p>
-                        <button 
-                            className="vault-modal-button secondary"
-                            onClick={onClose}
-                        >
-                            Close
-                        </button>
-                    </div>
-                ) : (
-                    <>
-                        <form onSubmit={handleSubmit} className="vault-modal-form">
-                            <div className="vault-input-wrapper">
-                                <input
-                                    ref={inputRef}
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="Enter secret code..."
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className={`vault-modal-input ${error ? 'error' : ''}`}
-                                    disabled={loading}
-                                    autoComplete="off"
-                                    aria-label="Secret code"
-                                />
-                                <button
-                                    type="button"
-                                    className="vault-toggle-visibility"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    aria-label={showPassword ? "Hide password" : "Show password"}
-                                    tabIndex={-1}
-                                >
-                                    {showPassword ? "👁️" : "👁️‍🗨️"}
-                                </button>
-                            </div>
-
-                            {error && (
-                                <div className="vault-modal-error" role="alert">
-                                    <span className="error-icon">⚠️</span>
-                                    <span>{error}</span>
-                                    {remainingAttempts !== undefined && remainingAttempts > 0 && (
-                                        <span className="attempts-badge">
-                                            {remainingAttempts} attempt{remainingAttempts !== 1 ? 's' : ''} left
-                                        </span>
-                                    )}
-                                </div>
-                            )}
-
-                            {remainingAttempts !== undefined && remainingAttempts > 0 && !error && (
-                                <div className="vault-modal-attempts">
-                                    <div className="attempts-dots">
-                                        {Array.from({ length: 5 }, (_, i) => (
-                                            <span 
-                                                key={i} 
-                                                className={`attempt-dot ${i < remainingAttempts ? 'active' : 'used'}`}
-                                            />
-                                        ))}
-                                    </div>
-                                    <span className="attempts-text">
-                                        {remainingAttempts} attempt{remainingAttempts !== 1 ? 's' : ''} remaining
-                                    </span>
-                                </div>
-                            )}
-
-                            <div className="vault-modal-actions">
-                                <button
-                                    type="button"
-                                    className="vault-modal-button secondary"
-                                    onClick={onClose}
-                                    disabled={loading}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="vault-modal-button primary"
-                                    disabled={loading || !password.trim()}
-                                >
-                                    {loading ? (
-                                        <>
-                                            <span className="spinner" />
-                                            Unlocking...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Unlock Vault
-                                            <span className="button-arrow">→</span>
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </form>
-                    </>
-                )}
-            </div>
-        </div>
-    );
-}
 
 /* =========================
    IMPROVED PARTICLE SYSTEM
@@ -265,7 +68,6 @@ function ParticleBackground() {
             const time = Date.now() / 1000;
             
             particles.forEach(p => {
-                // Mouse influence
                 const dx = mouseRef.current.x - p.x;
                 const dy = mouseRef.current.y - p.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -276,24 +78,19 @@ function ParticleBackground() {
                     p.vy += dy / distance * force * p.speed;
                 }
                 
-                // Damping
                 p.vx *= 0.9995;
                 p.vy *= 0.9995;
                 
-                // Move
                 p.x += p.vx * p.speed * 1.5;
                 p.y += p.vy * p.speed * 1.5;
                 
-                // Wrap around
                 if (p.x < -10) p.x = canvas.width + 10;
                 if (p.x > canvas.width + 10) p.x = -10;
                 if (p.y < -10) p.y = canvas.height + 10;
                 if (p.y > canvas.height + 10) p.y = -10;
                 
-                // Vary size with time
                 p.radius = p.baseRadius + Math.sin(time * 0.5 + p.phase) * 0.3;
                 
-                // Draw particle with glow
                 const gradient = ctx.createRadialGradient(
                     p.x, p.y, 0,
                     p.x, p.y, p.radius * 2
@@ -307,14 +104,12 @@ function ParticleBackground() {
                 ctx.fillStyle = gradient;
                 ctx.fill();
                 
-                // Core particle
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
                 ctx.fill();
             });
             
-            // Draw connections with improved styling
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -409,9 +204,11 @@ function Main() {
     const [isLoaded, setIsLoaded] = useState(false);
     const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
     const [pdfLoading, setPdfLoading] = useState(false);
+    const [showVaultContent, setShowVaultContent] = useState(false);
     const rippleIdRef = useRef(0);
     const imageRef = useRef<HTMLImageElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const vaultRef = useRef<HTMLDivElement>(null);
 
     // Smooth cursor interpolation
     const targetMouseRef = useRef({ x: 0, y: 0 });
@@ -459,7 +256,32 @@ function Main() {
         
         setVaultUnlocked(false);
         setShowVaultPrompt(false);
+        setShowVaultContent(false);
     }, []);
+
+    // Handle vault unlock animation
+    useEffect(() => {
+        if (vaultUnlocked) {
+            // Small delay then show vault content with animation
+            setTimeout(() => {
+                setShowVaultContent(true);
+                // Scroll to vault after it appears
+                setTimeout(() => {
+                    if (vaultRef.current) {
+                        vaultRef.current.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                }, 500);
+            }, 300);
+        } else {
+            setShowVaultContent(false);
+        }
+    }, [vaultUnlocked]);
+
+    // Check for reduced motion
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* =========================
        SECRET CLICK TRIGGER
@@ -490,6 +312,7 @@ function Main() {
             setVaultError(null);
             setRemainingAttempts(undefined);
             setVaultLockedUntil(null);
+            setVaultInput("");
         }
     }, [clickCount]);
 
@@ -516,6 +339,7 @@ function Main() {
                 setVaultModalOpen(false);
                 setVaultError(null);
                 setRemainingAttempts(undefined);
+                setVaultInput("");
             } else if (data.locked) {
                 setVaultLockedUntil(data.lockedUntil);
                 setVaultError("Too many failed attempts");
@@ -531,7 +355,6 @@ function Main() {
         }
 
         setLoading(false);
-        setVaultInput("");
     };
 
     /* =========================
@@ -701,6 +524,7 @@ function Main() {
                                 </button>
                             </div>
 
+                            {/* Vault prompt - shown after secret click */}
                             {showVaultPrompt && !vaultLockedUntil && (
                                 <form
                                     onSubmit={(e) => {
@@ -764,13 +588,23 @@ function Main() {
                 ))}
             </section>
 
-            <Suspense fallback={null}>
-                {vaultUnlocked === true && (
-                    <div className="vault-reveal">
-                        <Vault />
+            {/* =========================
+                VAULT - ANIMATED INLINE REVEAL
+            ========================= */}
+            <div 
+                ref={vaultRef}
+                className={`vault-reveal-container ${showVaultContent ? 'visible' : ''}`}
+            >
+                <div className="vault-reveal-divider" />
+                <Suspense fallback={
+                    <div className="vault-loading-state">
+                        <div className="vault-loading-spinner" />
+                        <p>Loading archive...</p>
                     </div>
-                )}
-            </Suspense>
+                }>
+                    {vaultUnlocked && <Vault />}
+                </Suspense>
+            </div>
 
             <Suspense fallback={null}>
                 <PDFViewer
@@ -779,19 +613,106 @@ function Main() {
                 />
             </Suspense>
 
-            <VaultModal
-                open={vaultModalOpen}
-                onUnlock={handleVaultSubmit}
-                onClose={() => {
-                    setVaultModalOpen(false);
-                    setVaultError(null);
-                    setRemainingAttempts(undefined);
-                }}
-                loading={loading}
-                error={vaultError}
-                remainingAttempts={remainingAttempts}
-                lockedUntil={vaultLockedUntil}
-            />
+            {/* =========================
+                VAULT MODAL - PASSWORD OVERLAY
+            ========================= */}
+            {vaultModalOpen && (
+                <div className="vault-modal-overlay">
+                    <div className="vault-modal-container">
+                        <div className="vault-modal-header">
+                            <span className="vault-modal-icon">🔐</span>
+                            <h2>Secret Vault</h2>
+                            <button 
+                                className="vault-modal-close"
+                                onClick={() => {
+                                    setVaultModalOpen(false);
+                                    setVaultError(null);
+                                    setRemainingAttempts(undefined);
+                                    setVaultInput("");
+                                }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <p className="vault-modal-description">
+                            Enter the secret code to unlock hidden content
+                        </p>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleVaultSubmit(vaultInput);
+                            }}
+                            className="vault-modal-form"
+                        >
+                            <input
+                                type="password"
+                                placeholder="Enter secret code..."
+                                value={vaultInput}
+                                onChange={(e) => setVaultInput(e.target.value)}
+                                className={`vault-modal-input ${vaultError ? 'error' : ''}`}
+                                disabled={loading}
+                                autoFocus
+                                autoComplete="off"
+                            />
+                            {vaultError && (
+                                <div className="vault-modal-error">
+                                    <span>⚠️</span>
+                                    <span>{vaultError}</span>
+                                    {remainingAttempts !== undefined && remainingAttempts > 0 && (
+                                        <span className="attempts-badge">
+                                            {remainingAttempts} attempt{remainingAttempts !== 1 ? 's' : ''} left
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+                            {remainingAttempts !== undefined && remainingAttempts > 0 && !vaultError && (
+                                <div className="vault-modal-attempts">
+                                    <div className="attempts-dots">
+                                        {Array.from({ length: 5 }, (_, i) => (
+                                            <span 
+                                                key={i} 
+                                                className={`attempt-dot ${i < remainingAttempts ? 'active' : 'used'}`}
+                                            />
+                                        ))}
+                                    </div>
+                                    <span className="attempts-text">
+                                        {remainingAttempts} attempt{remainingAttempts !== 1 ? 's' : ''} remaining
+                                    </span>
+                                </div>
+                            )}
+                            <div className="vault-modal-actions">
+                                <button
+                                    type="button"
+                                    className="vault-modal-button secondary"
+                                    onClick={() => {
+                                        setVaultModalOpen(false);
+                                        setVaultError(null);
+                                        setRemainingAttempts(undefined);
+                                        setVaultInput("");
+                                    }}
+                                    disabled={loading}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="vault-modal-button primary"
+                                    disabled={loading || !vaultInput.trim()}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <span className="spinner" />
+                                            Unlocking...
+                                        </>
+                                    ) : (
+                                        "Unlock Vault →"
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
