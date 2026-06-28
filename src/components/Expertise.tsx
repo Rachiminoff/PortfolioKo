@@ -196,6 +196,15 @@ const techStack: Tech[] = [
     description:
       "Crafting structured prompts, managing context, and iteratively refining instructions to improve the accuracy and consistency of large language model responses."
   },
+  {
+    name: "Vercel",
+    icon: "logos:vercel-icon",
+    color: "#FFFFFF",
+    category: "Tools",
+    proficiency: 85,
+    featured: true,
+    description: "Deploying, hosting, and managing modern web applications with automated CI/CD and preview deployments."
+  },
 ];
 
 const categories = ["All", "Frontend", "Backend", "Game Dev", "Automation", "Tools"];
