@@ -4,9 +4,9 @@
    ROOT VARIABLES
 ======================================== */
 :root {
-  --vault-bg-primary: #0d0820;
-  --vault-bg-secondary: #1a0a2e;
-  --vault-bg-card: linear-gradient(160deg, #1a0a2e 0%, #2d1b4e 45%, #1a0a2e 100%);
+  --vault-bg-primary: #0a0a0f;   
+  --vault-bg-secondary: #12121a;    
+  --vault-bg-card: linear-gradient(160deg, #12121a 0%, #1a1a2e 45%, #12121a 100%);
   --vault-border: rgba(255, 255, 255, 0.06);
   --vault-border-hover: rgba(255, 255, 255, 0.12);
   --vault-border-active: rgba(255, 255, 255, 0.15);
@@ -48,7 +48,7 @@
 }
 
 /* ========================================
-   GRAIN TEXTURE - RESTORED ORIGINAL
+   GRAIN TEXTURE
 ======================================== */
 .vault-container::after {
   content: "";
