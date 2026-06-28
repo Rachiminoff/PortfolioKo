@@ -1,24 +1,24 @@
-// Vault.scss - Refined Premium Bookshelf Edition
+// Vault.scss - Refined Premium Bookshelf Edition (Grayscale)
 
 /* ========================================
    ROOT VARIABLES
 ======================================== */
 :root {
-  --vault-bg-primary: #0a0a0f;   
-  --vault-bg-secondary: #12121a;    
-  --vault-bg-card: linear-gradient(160deg, #12121a 0%, #1a1a2e 45%, #12121a 100%);
+  --vault-bg-primary: #0a0a0a;
+  --vault-bg-secondary: #111111;
+  --vault-bg-card: linear-gradient(160deg, #111111 0%, #1a1a1a 45%, #111111 100%);
   --vault-border: rgba(255, 255, 255, 0.06);
   --vault-border-hover: rgba(255, 255, 255, 0.12);
   --vault-border-active: rgba(255, 255, 255, 0.15);
-  --vault-text: #f4f0ff;
+  --vault-text: #f0f0f0;
   --vault-text-primary: #ffffff;
   --vault-text-secondary: rgba(255, 255, 255, 0.7);
   --vault-text-muted: rgba(255, 255, 255, 0.4);
   --vault-text-dim: rgba(255, 255, 255, 0.25);
-  --vault-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --vault-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
-  --vault-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
-  --vault-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.7);
+  --vault-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --vault-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --vault-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.7);
+  --vault-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.8);
   --vault-radius-sm: 6px;
   --vault-radius-md: 10px;
   --vault-radius-lg: 16px;
@@ -30,7 +30,7 @@
 }
 
 /* ========================================
-   CONTAINER - RESTORED ORIGINAL BACKGROUND
+   CONTAINER - PURE GRAYSCALE
 ======================================== */
 .vault-container {
   position: relative;
@@ -38,13 +38,11 @@
   padding: 0;
   color: var(--vault-text);
   background: var(--vault-bg-primary);
-  animation: vaultAmbient 18s ease infinite;
-  background-size: 400% 400%;
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(60, 30, 120, 0.3) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(40, 20, 80, 0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(80, 40, 160, 0.15) 0%, transparent 40%),
-    linear-gradient(180deg, #0d0820 0%, #150a2a 50%, #0d0820 100%);
+    radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.015) 0%, transparent 40%),
+    linear-gradient(180deg, #0a0a0a 0%, #141414 50%, #0a0a0a 100%);
 }
 
 /* ========================================
@@ -73,14 +71,8 @@
 }
 
 /* ========================================
-   ANIMATIONS - RESTORED ORIGINAL
+   ANIMATIONS
 ======================================== */
-@keyframes vaultAmbient {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
 @keyframes dustFloat {
   from { transform: translateY(0); }
   to { transform: translateY(-120px); }
@@ -105,7 +97,7 @@
   top: 0;
   z-index: 50;
   padding: 0.75rem 2rem 0.5rem;
-  background: rgba(13, 8, 32, 0.88);
+  background: rgba(10, 10, 10, 0.92);
   backdrop-filter: blur(20px) saturate(1.2);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   transition: var(--vault-transition);
@@ -125,7 +117,7 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   color: #ffffff;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
 }
 
@@ -232,7 +224,7 @@
 .vault-search-input:focus {
   background: rgba(255, 255, 255, 0.06);
   border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 30px rgba(80, 40, 160, 0.08);
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.04);
 }
 
 .vault-search-clear {
@@ -294,7 +286,7 @@
 
 .vault-sort-select option,
 .vault-density-select option {
-  background: #1a0a2e;
+  background: #1a1a1a;
   color: #fff;
 }
 
@@ -643,7 +635,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.03), transparent 80%);
+  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.025), transparent 80%);
   transform: translateX(-130%);
   transition: transform 0.8s ease;
   pointer-events: none;
@@ -656,14 +648,14 @@
 .vault-book-card:hover {
   transform: translateY(-6px);
   border-color: var(--vault-border-hover);
-  box-shadow: var(--vault-shadow-xl), 0 0 60px rgba(80, 40, 160, 0.08);
+  box-shadow: var(--vault-shadow-xl);
 }
 
 .vault-card-glow {
   position: absolute;
   inset: auto -20% -30% -20%;
   height: 180px;
-  background: radial-gradient(circle, rgba(80, 40, 160, 0.1), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.04), transparent 70%);
   filter: blur(60px);
   z-index: 0;
   opacity: 0;
@@ -671,7 +663,7 @@
 }
 
 .vault-book-card:hover .vault-card-glow {
-  opacity: 0.6;
+  opacity: 0.5;
 }
 
 /* Grid View - Image */
@@ -950,12 +942,12 @@
 
 .vault-book-card-list .vault-card-glow {
   inset: auto -10% -20% -10%;
-  background: radial-gradient(circle, rgba(80, 40, 160, 0.06), transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent 70%);
   opacity: 0;
 }
 
 .vault-book-card-list:hover .vault-card-glow {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 /* List View - Image */
@@ -1775,4 +1767,3 @@
     }
   }
 }
-
