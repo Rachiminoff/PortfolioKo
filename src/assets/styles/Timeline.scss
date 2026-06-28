@@ -1,9 +1,206 @@
-// Timeline.scss - Enhanced aesthetics with same color scheme
+// Timeline.scss - Premium, modern SaaS aesthetic
 
-.vertical-timeline {
-  // Add subtle spacing and smoothing
-  padding: 0.5rem 0;
+// ========== IMPORTS & VARIABLES ==========
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+$purple: #5000ca;
+$purple-light: rgba(80, 0, 202, 0.08);
+$purple-glow: rgba(80, 0, 202, 0.04);
+$text-primary: rgb(39, 40, 34);
+$text-secondary: rgba(39, 40, 34, 0.5);
+$text-tertiary: rgba(39, 40, 34, 0.3);
+$border-light: rgba(255, 255, 255, 0.25);
+$shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.02);
+$shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.04);
+$shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.06);
+$transition-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+$transition-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// ========== SECTION CONTAINER ==========
+.timeline-section {
+  position: relative;
+  padding: 5rem 0 7rem;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.2);
   
+  // Subtle noise texture
+  .noise-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+// ========== BACKGROUND GLOWS ==========
+.bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.bg-glow-1 {
+  width: 500px;
+  height: 500px;
+  top: -100px;
+  left: -100px;
+  background: radial-gradient(circle, rgba(80, 0, 202, 0.06), transparent 70%);
+}
+
+.bg-glow-2 {
+  width: 400px;
+  height: 400px;
+  bottom: 100px;
+  right: -50px;
+  background: radial-gradient(circle, rgba(55, 118, 171, 0.04), transparent 70%);
+}
+
+.bg-glow-3 {
+  width: 300px;
+  height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(80, 0, 202, 0.03), transparent 70%);
+}
+
+// ========== TIMELINE CONTAINER ==========
+.timeline-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+// ========== SECTION HEADER ==========
+.section-header {
+  text-align: center;
+  margin-bottom: 4.5rem;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.section-header-content {
+  display: inline-block;
+  text-align: left;
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(80, 0, 202, 0.4);
+  background: rgba(80, 0, 202, 0.04);
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.section-title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: $text-primary;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.5rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, $text-primary 0%, $purple 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 420px;
+  margin: 0;
+  line-height: 1.6;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// ========== TIMELINE WRAPPER ==========
+.timeline-wrapper {
+  position: relative;
+}
+
+// ========== PROGRESS BAR ==========
+.timeline-progress-track {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  bottom: 0;
+  width: 2.5px;
+  background: rgba(80, 0, 202, 0.02);
+  border-radius: 2px;
+  z-index: 1;
+  overflow: hidden;
+  
+  @media screen and (max-width: 1170px) {
+    display: none;
+  }
+}
+
+.timeline-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to bottom, 
+    rgba(80, 0, 202, 0.2) 0%,
+    rgba(80, 0, 202, 0.5) 30%,
+    rgba(80, 0, 202, 0.7) 50%,
+    rgba(80, 0, 202, 0.5) 70%,
+    rgba(80, 0, 202, 0.2) 100%
+  );
+  border-radius: 2px;
+  transition: height 0.3s ease;
+  box-shadow: 0 0 30px rgba(80, 0, 202, 0.04);
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(80, 0, 202, 0.3), transparent);
+    border-radius: 50%;
+    filter: blur(12px);
+  }
+}
+
+// ========== TIMELINE LINE OVERRIDE ==========
+.vertical-timeline {
+  padding: 0.5rem 0;
+  position: relative;
+  z-index: 2;
+  
+  &::before {
+    background: linear-gradient(to bottom, 
+      rgba(80, 0, 202, 0.02) 0%,
+      rgba(80, 0, 202, 0.08) 30%,
+      rgba(80, 0, 202, 0.08) 70%,
+      rgba(80, 0, 202, 0.02) 100%
+    ) !important;
+    width: 2.5px !important;
+    box-shadow: 0 0 30px rgba(80, 0, 202, 0.02);
+  }
+
+  // Typography improvements
   span {
     color: white;
     font-family: 'Courier Prime', monospace;
@@ -20,24 +217,93 @@
   }
 }
 
-// Enhanced timeline elements
-.vertical-timeline-element {
-  // Smooth hover effect on cards
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
+// ========== MILESTONE CARDS ==========
+.milestone-card {
+  transition: all 0.6s $transition-smooth;
+  opacity: 0;
+  transform: translateY(40px);
   
+  // Smooth hover effect on cards
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    
+    .vertical-timeline-element-content {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    }
+  }
+  
+  // Initial state for scroll animation
+  .vertical-timeline-element-content {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+    transition: all 0.7s $transition-smooth;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem 1.8rem !important;
+    
+    // Subtle inner glow
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      opacity: 0.3;
+      border-radius: 12px 12px 0 0;
+    }
+  }
+  
+  .vertical-timeline-element-icon {
+    transform: scale(0.5);
+    opacity: 0;
+    transition: all 0.6s $transition-bounce;
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15), 0 4px 15px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2), 0 6px 25px rgba(0, 0, 0, 0.15);
+    }
+  }
+  
+  // ====== VISIBLE STATES ======
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+    
+    .vertical-timeline-element-content.card-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    
+    .vertical-timeline-element-icon.icon-visible {
+      transform: scale(1);
+      opacity: 1;
+    }
+    
+    // Active state - slightly brighter when in viewport
+    &.active {
+      .vertical-timeline-element-content {
+        border-color: rgba(80, 0, 202, 0.15);
+        box-shadow: 0 8px 40px rgba(80, 0, 202, 0.04), 0 2px 8px rgba(80, 0, 202, 0.02), inset 0 1px 0 rgba(255,255,255,0.9);
+        transform: translateY(-2px);
+      }
+    }
+  }
+  
+  // ====== CONNECTOR LINE ======
+  .vertical-timeline-element-content-arrow {
+    transition: transform 0.3s ease;
+    border-right-width: 8px !important;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.01));
+  }
+  
+  &:hover .vertical-timeline-element-content-arrow {
+    transform: scale(1.05);
   }
 
   // Typography improvements
-  p {
-    color: rgb(39, 40, 34);
-    line-height: 1.7;
-    font-size: 0.95rem;
-    margin-top: 0.3rem;
-  }
-
   h3 {
     color: rgb(39, 40, 34);
     font-weight: 600;
@@ -58,6 +324,13 @@
     color: rgb(39, 40, 34);
   }
 
+  p {
+    color: rgb(39, 40, 34);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
+
   // Date styling with better readability
   .vertical-timeline-element-date {
     color: white;
@@ -66,42 +339,268 @@
     font-size: 0.95rem;
     letter-spacing: 0.03em;
     opacity: 0.9;
-    
-    // Add subtle text shadow for better contrast on dark backgrounds
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
-  }
-
-  // Content card enhancements
-  .vertical-timeline-element-content {
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    padding: 1.8rem 2rem;
-    
-    // Subtle inner glow
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      border-radius: 12px 12px 0 0;
-      opacity: 0.5;
-    }
-  }
-
-  // Bounce arrow animation on scroll reveal
-  .vertical-timeline-element-content-arrow {
-    transition: transform 0.3s ease;
-  }
-  
-  &:hover .vertical-timeline-element-content-arrow {
-    transform: scale(1.05);
   }
 }
 
-// Icon enhancements
+// ========== MILESTONE CONTENT ==========
+.milestone-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.milestone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.milestone-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.milestone-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: $text-primary;
+  letter-spacing: -0.01em;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.milestone-year {
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: $text-tertiary;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: rgba(0, 0, 0, 0.02);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.milestone-status {
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 6px;
+  background: rgba(80, 0, 202, 0.04);
+  color: rgba(80, 0, 202, 0.35);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.milestone-status-current {
+  background: rgba(80, 0, 202, 0.06);
+  color: rgba(80, 0, 202, 0.45);
+}
+
+.milestone-status-future {
+  background: rgba(136, 136, 136, 0.04);
+  color: rgba(136, 136, 136, 0.35);
+}
+
+.milestone-subtitle {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: $text-secondary;
+  margin: 0.15rem 0 0.4rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.milestone-description {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: rgba(39, 40, 34, 0.6);
+  margin: 0.25rem 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  max-width: 480px;
+}
+
+// ========== EMPHASIZED MILESTONE ==========
+.milestone-emphasized {
+  .vertical-timeline-element-content {
+    padding: 1.5rem 1.8rem !important;
+    border-color: rgba(80, 0, 202, 0.12) !important;
+  }
+  
+  .milestone-title {
+    font-size: 1.15rem;
+  }
+}
+
+// ========== TERMINAL WINDOW ==========
+.terminal-window {
+  background: #1a1a1a;
+  border-radius: 8px 8px 8px 4px;
+  overflow: hidden;
+  margin: 0.4rem 0 0.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  max-width: 400px;
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.terminal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+
+.terminal-dot-red { background: #ff5f56; }
+.terminal-dot-yellow { background: #ffbd2e; }
+.terminal-dot-green { background: #27c93f; }
+
+.terminal-title {
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  margin-left: 0.75rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.terminal-body {
+  padding: 0.5rem 0.8rem;
+}
+
+.terminal-code {
+  font-family: 'SF Mono', 'Fira Code', 'Courier Prime', monospace;
+  font-size: 0.75rem;
+  color: #d4d4d4;
+  display: block;
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+}
+
+.terminal-prompt {
+  color: #27c93f;
+  margin-right: 0.6rem;
+  user-select: none;
+  font-weight: 400;
+}
+
+.terminal-command {
+  color: #d4d4d4;
+}
+
+.terminal-punctuation {
+  color: #ff7b72;
+}
+
+.terminal-string {
+  color: #ce9178;
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: #27c93f;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+// ========== FUTURE MILESTONE ==========
+.milestone-future {
+  .vertical-timeline-element-content {
+    border: 1.5px dashed rgba(136, 136, 136, 0.15) !important;
+    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.2) 100%) !important;
+    backdrop-filter: blur(16px) saturate(1.2) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+    
+    // Animated dashed border glow
+    &::after {
+      content: '';
+      position: absolute;
+      top: -1.5px;
+      left: -1.5px;
+      right: -1.5px;
+      bottom: -1.5px;
+      border-radius: 12px 12px 12px 4px;
+      background: linear-gradient(135deg, rgba(136,136,136,0.05), transparent 40%, transparent 60%, rgba(136,136,136,0.05));
+      pointer-events: none;
+      animation: shimmer 4s ease-in-out infinite;
+    }
+  }
+  
+  .milestone-title {
+    opacity: 0.5;
+  }
+  
+  .milestone-description {
+    opacity: 0.5;
+  }
+  
+  .milestone-year {
+    opacity: 0.3;
+  }
+  
+  &:hover .vertical-timeline-element-content {
+    border-color: rgba(136, 136, 136, 0.2) !important;
+    background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.3) 100%) !important;
+  }
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+// ========== GLOW EFFECTS ==========
+.milestone-glow {
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(80, 0, 202, 0.02) 0%, transparent 70%);
+  pointer-events: none;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.milestone-card:hover .milestone-glow {
+  opacity: 1;
+}
+
+// ========== ICON ENHANCEMENTS ==========
 .svg-inline--fa {
   color: white;
   font-size: 1.5rem;
@@ -110,7 +609,7 @@
   animation: iconPulse 3s ease-in-out infinite;
 }
 
-// Icon container styling
+// Icon container styling - FIXED CENTERING
 .vertical-timeline-element-icon {
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.15), 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -133,34 +632,80 @@
   }
 }
 
-// Responsive design improvements
+// ========== RESPONSIVE DESIGN ==========
 @media screen and (max-width: 1170px) {
-  .vertical-timeline-element {
-    .vertical-timeline-element-date {
-      color: rgb(39, 40, 34);
-      text-shadow: none;
-      font-size: 0.85rem;
-      opacity: 0.8;
-    }
-    
-    .vertical-timeline-element-content {
-      padding: 1.5rem;
-      border-radius: 10px;
-    }
+  .section-title {
+    font-size: 2.5rem;
+  }
+  
+  .section-subtitle {
+    font-size: 0.95rem;
+  }
+  
+  .vertical-timeline-element-date {
+    color: $text-tertiary !important;
+    text-shadow: none !important;
+    font-size: 0.85rem !important;
+    opacity: 0.8;
+  }
+  
+  .milestone-card .vertical-timeline-element-content {
+    padding: 1.25rem 1.5rem !important;
+    border-radius: 10px !important;
+  }
+  
+  .milestone-description {
+    max-width: 100%;
+  }
+  
+  .timeline-progress-track {
+    display: none;
   }
   
   // Disable hover effects on mobile for better performance
-  .vertical-timeline-element:hover {
+  .milestone-card:hover {
     transform: none;
-    box-shadow: none;
+    
+    .vertical-timeline-element-content {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
   }
 }
 
-// Small screen optimizations
 @media screen and (max-width: 768px) {
-  .vertical-timeline-element {
+  .timeline-section {
+    padding: 3rem 0 4rem;
+  }
+  
+  .timeline-container {
+    padding: 0 1rem;
+  }
+  
+  .section-header {
+    margin-bottom: 3rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .section-subtitle {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .milestone-title {
+    font-size: 1rem;
+  }
+  
+  .milestone-description {
+    font-size: 0.85rem;
+  }
+  
+  .milestone-card {
     .vertical-timeline-element-content {
-      padding: 1.2rem 1.5rem;
+      padding: 1rem 1.25rem !important;
+      border-radius: 10px !important;
     }
     
     h3 {
@@ -172,24 +717,129 @@
     }
   }
   
+  .milestone-header {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+  
+  .milestone-title-group {
+    gap: 0.35rem;
+  }
+  
+  .terminal-window {
+    max-width: 100%;
+  }
+  
+  .vertical-timeline-element-icon {
+    width: 36px !important;
+    height: 36px !important;
+    margin-left: -18px !important;
+    
+    &::before {
+      inset: -4px !important;
+    }
+    
+    &::after {
+      inset: -10px !important;
+    }
+  }
+  
   .svg-inline--fa {
-    font-size: 1.2rem;
+    font-size: 1.2rem !important;
+  }
+  
+  .terminal-code {
+    font-size: 0.7rem;
+  }
+  
+  .terminal-window {
+    margin: 0.4rem 0 0.2rem;
+  }
+  
+  .vertical-timeline {
+    padding: 0;
   }
 }
 
-// Print-friendly
+@media screen and (max-width: 480px) {
+  .section-title {
+    font-size: 1.6rem;
+  }
+  
+  .section-header {
+    margin-bottom: 2rem;
+  }
+  
+  .milestone-card .vertical-timeline-element-content {
+    padding: 0.75rem 1rem !important;
+  }
+  
+  .milestone-header {
+    flex-wrap: wrap;
+  }
+  
+  .milestone-title {
+    font-size: 0.9rem;
+  }
+  
+  .milestone-description {
+    font-size: 0.8rem;
+  }
+  
+  .vertical-timeline-element-icon {
+    width: 32px !important;
+    height: 32px !important;
+    margin-left: -16px !important;
+  }
+  
+  .svg-inline--fa {
+    font-size: 1rem !important;
+  }
+}
+
+// ========== PRINT ==========
 @media print {
-  .vertical-timeline-element {
+  .milestone-card {
+    opacity: 1 !important;
+    transform: none !important;
     break-inside: avoid;
     page-break-inside: avoid;
     
     .vertical-timeline-element-content {
-      box-shadow: none;
-      border: 1px solid #ddd;
+      opacity: 1 !important;
+      transform: none !important;
+      box-shadow: none !important;
+      border: 1px solid #ddd !important;
+      background: white !important;
+    }
+    
+    .vertical-timeline-element-icon {
+      opacity: 1 !important;
+      transform: none !important;
+      box-shadow: 0 0 0 2px #ccc !important;
     }
   }
   
-  .vertical-timeline-element-icon {
-    box-shadow: 0 0 0 2px #ccc;
+  .section-title {
+    -webkit-text-fill-color: $text-primary !important;
+    background: none !important;
+  }
+  
+  .terminal-window {
+    border: 1px solid #ddd !important;
+    background: #f5f5f5 !important;
+    
+    .terminal-header {
+      background: #eee !important;
+      border-bottom: 1px solid #ddd !important;
+    }
+    
+    .terminal-code {
+      color: #333 !important;
+    }
+  }
+  
+  .bg-glow, .noise-overlay, .timeline-progress-track {
+    display: none !important;
   }
 }

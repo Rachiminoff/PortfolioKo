@@ -2,6 +2,14 @@
     padding: 5% 10%;
     max-width: 1200px;
     margin: 0 auto;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* =========================
@@ -9,9 +17,30 @@
 ========================= */
 
 .expertise-header {
-    margin-bottom: 56px;
+    margin-bottom: 40px;
     position: relative;
-    
+
+    &.animate-in {
+        animation: fadeUp 0.6s ease forwards;
+
+        .header-top {
+            animation: fadeUp 0.6s ease 0.1s both;
+        }
+
+        .category-filters {
+            animation: fadeUp 0.6s ease 0.2s both;
+        }
+    }
+
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
     h1 {
         font-size: 2.75rem;
         font-weight: 700;
@@ -21,7 +50,7 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        
+
         &::after {
             content: '';
             display: block;
@@ -43,6 +72,74 @@
     letter-spacing: 0.01em;
 }
 
+/* Expertise Stats */
+.expertise-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 6px;
+
+    .stat-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background: rgba(124, 92, 255, 0.08);
+        border: 1px solid rgba(124, 92, 255, 0.12);
+        border-radius: 100px;
+        color: #b5a0ff;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+
+        svg {
+            font-size: 1.1rem;
+        }
+
+        &:hover {
+            background: rgba(124, 92, 255, 0.14);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(124, 92, 255, 0.15);
+        }
+    }
+}
+
+/* Category Filters */
+.category-filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .category-chip {
+        padding: 8px 18px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 100px;
+        color: #8d8d8d;
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        font-family: inherit;
+
+        &:hover {
+            background: rgba(124, 92, 255, 0.08);
+            border-color: rgba(124, 92, 255, 0.2);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        &.active {
+            background: linear-gradient(135deg, rgba(124, 92, 255, 0.2), rgba(181, 160, 255, 0.1));
+            border-color: rgba(124, 92, 255, 0.3);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(124, 92, 255, 0.15);
+        }
+    }
+}
+
 /* =========================
    TECH STACK - HORIZONTAL SCROLLING
 ========================= */
@@ -55,27 +152,42 @@
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 20px;
     padding: 32px 0;
-    margin-bottom: 64px;
+    margin-bottom: 32px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    &::before,
-    &::after {
+    &::before {
         content: '';
         position: absolute;
         top: 0;
-        width: 100px;
+        left: 0;
+        width: 100%;
         height: 100%;
-        z-index: 2;
+        background: radial-gradient(
+            ellipse at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(124, 92, 255, 0.03),
+            transparent 60%
+        );
         pointer-events: none;
+        z-index: 1;
+        transition: background 0.1s ease;
     }
+}
 
-    &::before {
+.scroll-gradient {
+    position: absolute;
+    top: 0;
+    width: 120px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+
+    &.left {
         left: 0;
         background: linear-gradient(to right, #0d0d0d, transparent);
     }
 
-    &::after {
+    &.right {
         right: 0;
         background: linear-gradient(to left, #0d0d0d, transparent);
     }
@@ -84,10 +196,12 @@
 .tech-stack-scroll {
     display: flex;
     gap: 48px;
-    animation: scrollTech 35s linear infinite;
+    animation: scrollTech 40s linear infinite;
     width: max-content;
     padding: 0 24px;
-    
+    position: relative;
+    z-index: 1;
+
     &:hover {
         animation-play-state: paused;
     }
@@ -109,9 +223,9 @@
     gap: 10px;
     min-width: 88px;
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    cursor: default;
+    cursor: pointer;
     position: relative;
-    
+
     &::before {
         content: '';
         position: absolute;
@@ -121,12 +235,17 @@
         opacity: 0;
         transition: opacity 0.4s ease;
     }
-    
+
     &:hover {
         transform: translateY(-6px);
-        
+
         &::before {
             opacity: 1;
+        }
+
+        .tech-tooltip {
+            opacity: 1;
+            transform: translateY(0);
         }
     }
 }
@@ -143,14 +262,14 @@
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    
+
     &::before {
         content: '';
         position: absolute;
         inset: -1px;
         border-radius: 20px;
         padding: 1.5px;
-        background: linear-gradient(135deg, 
+        background: linear-gradient(135deg,
             rgba(124, 92, 255, 0.3),
             transparent 40%,
             transparent 60%,
@@ -162,7 +281,7 @@
         opacity: 0;
         transition: opacity 0.4s ease;
     }
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -181,13 +300,13 @@
         opacity: 0;
         transition: opacity 0.6s ease;
     }
-    
+
     .tech-item:hover & {
         background: rgba(255, 255, 255, 0.06);
         border-color: rgba(124, 92, 255, 0.2);
         transform: scale(1.08) translateY(-2px);
         box-shadow: 0 8px 32px rgba(124, 92, 255, 0.12);
-        
+
         &::before,
         &::after {
             opacity: 1;
@@ -199,10 +318,66 @@
     font-size: 2.2rem;
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     filter: grayscale(0.2);
-    
+
     .tech-item:hover & {
         transform: scale(1.1);
         filter: grayscale(0);
+    }
+}
+
+/* Featured Badge */
+.featured-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: linear-gradient(135deg, #7c5cff, #b5a0ff);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 12px rgba(124, 92, 255, 0.4);
+    animation: pulseBadge 2s ease-in-out infinite;
+
+    svg {
+        color: white;
+        font-size: 0.7rem;
+    }
+}
+
+@keyframes pulseBadge {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+/* Proficiency Ring */
+.proficiency-ring {
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    width: 28px;
+    height: 28px;
+
+    svg {
+        width: 100%;
+        height: 100%;
+        transform: rotate(-90deg);
+    }
+
+    .ring-progress {
+        transition: stroke-dasharray 1s ease;
+    }
+
+    .proficiency-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.45rem;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.7);
+        letter-spacing: 0.02em;
     }
 }
 
@@ -214,10 +389,116 @@
     letter-spacing: 0.04em;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    
+
     .tech-item:hover & {
         color: #ffffff;
         letter-spacing: 0.06em;
+    }
+}
+
+/* Tooltip */
+.tech-tooltip {
+    position: absolute;
+    bottom: -52px;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: rgba(13, 13, 13, 0.95);
+    border: 1px solid rgba(124, 92, 255, 0.15);
+    border-radius: 10px;
+    padding: 6px 14px;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+    p {
+        font-size: 0.7rem;
+        color: #c2c2c2;
+        margin: 0;
+        letter-spacing: 0.02em;
+        font-weight: 400;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 6px solid rgba(124, 92, 255, 0.15);
+    }
+}
+
+/* =========================
+   FEATURED SKILLS
+========================= */
+
+.featured-skills {
+    margin-bottom: 48px;
+    padding: 20px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 16px;
+
+    .featured-label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        color: #8d8d8d;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+
+        svg {
+            color: #b5a0ff;
+            font-size: 1.1rem;
+        }
+    }
+
+    .featured-tags {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+
+        .skill-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px 8px 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+
+            svg {
+                font-size: 1.1rem;
+            }
+
+            .skill-proficiency {
+                font-size: 0.65rem;
+                color: var(--tag-color, #7c5cff);
+                font-weight: 600;
+                padding: 1px 6px;
+                background: rgba(124, 92, 255, 0.1);
+                border-radius: 100px;
+            }
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.06);
+                border-color: var(--tag-color, rgba(124, 92, 255, 0.2));
+                transform: translateY(-2px);
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+        }
     }
 }
 
@@ -241,7 +522,13 @@
     overflow: hidden;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    
+    opacity: 0;
+    transform: translateY(30px);
+
+    &.animate-in {
+        animation: fadeUp 0.6s ease forwards;
+    }
+
     &::before {
         content: '';
         position: absolute;
@@ -253,7 +540,7 @@
         opacity: 0;
         transition: opacity 0.4s ease;
     }
-    
+
     &::after {
         content: '';
         position: absolute;
@@ -266,17 +553,17 @@
         transition: opacity 0.6s ease;
         pointer-events: none;
     }
-    
+
     &:hover {
         border-color: rgba(124, 92, 255, 0.2);
         background: rgba(255, 255, 255, 0.04);
         transform: translateY(-6px);
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        
+
         &::before {
             opacity: 1;
         }
-        
+
         &::after {
             opacity: 1;
         }
@@ -303,7 +590,7 @@
     height: 48px;
     background: rgba(124, 92, 255, 0.08);
     border-radius: 14px;
-    
+
     .expertise-card:hover & {
         transform: scale(1.1) rotate(-3deg);
         background: rgba(124, 92, 255, 0.12);
@@ -317,7 +604,7 @@
     margin: 0;
     letter-spacing: -0.01em;
     transition: color 0.3s ease;
-    
+
     .expertise-card:hover & {
         color: #b5a0ff;
     }
@@ -327,12 +614,23 @@
     color: #c2c2c2;
     line-height: 1.9;
     font-size: 0.95rem;
-    margin: 0 0 16px 0;
+    margin: 0;
     position: relative;
     z-index: 1;
-    
-    &:last-child {
-        margin-bottom: 0;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 
@@ -352,61 +650,101 @@
         padding-left: 5%;
         padding-right: 5%;
     }
-    
+
     .expertise-grid {
         grid-template-columns: 1fr;
         gap: 24px;
     }
-    
-    .expertise-header h1 {
-        font-size: 2.25rem;
+
+    .expertise-header {
+        .header-top {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        h1 {
+            font-size: 2.25rem;
+        }
     }
-    
+
+    .expertise-stats {
+        .stat-badge {
+            font-size: 0.75rem;
+            padding: 6px 14px;
+        }
+    }
+
     .tech-item {
         min-width: 76px;
     }
-    
+
     .tech-icon-wrapper {
         width: 60px;
         height: 60px;
         border-radius: 16px;
     }
-    
+
     .tech-icon {
         font-size: 1.8rem;
     }
-    
+
     .tech-name {
         font-size: 0.7rem;
     }
-    
+
     .tech-stack-wrapper {
         padding: 24px 0;
         border-radius: 16px;
-        
-        &::before,
-        &::after {
+
+        .scroll-gradient {
             width: 60px;
         }
     }
-    
+
     .tech-stack-scroll {
         gap: 32px;
     }
-    
+
     .expertise-card {
         padding: 28px;
         border-radius: 16px;
+    }
+
+    .featured-skills {
+        .featured-tags .skill-tag {
+            font-size: 0.75rem;
+            padding: 6px 12px 6px 10px;
+        }
+    }
+
+    .proficiency-ring {
+        width: 22px;
+        height: 22px;
+        bottom: -2px;
+        right: -2px;
+
+        .proficiency-text {
+            font-size: 0.35rem;
+        }
+    }
+
+    .featured-badge {
+        width: 18px;
+        height: 18px;
+
+        svg {
+            font-size: 0.55rem;
+        }
     }
 }
 
 @media screen and (max-width: 600px) {
     .expertise-header {
-        margin-bottom: 40px;
-        
+        margin-bottom: 32px;
+
         h1 {
             font-size: 1.8rem;
-            
+
             &::after {
                 width: 48px;
                 height: 3px;
@@ -414,62 +752,124 @@
             }
         }
     }
-    
+
     .expertise-subtitle {
         font-size: 0.95rem;
     }
-    
+
+    .category-filters {
+        gap: 6px;
+
+        .category-chip {
+            font-size: 0.7rem;
+            padding: 6px 14px;
+        }
+    }
+
     .expertise-card {
         padding: 24px;
         border-radius: 14px;
     }
-    
+
     .expertise-card h3 {
         font-size: 1.1rem;
     }
-    
+
     .expertise-card p {
         font-size: 0.9rem;
         line-height: 1.8;
     }
-    
+
     .card-icon {
         font-size: 1.6rem;
         width: 40px;
         height: 40px;
         border-radius: 12px;
     }
-    
+
     .tech-item {
         min-width: 64px;
     }
-    
+
     .tech-icon-wrapper {
         width: 48px;
         height: 48px;
         border-radius: 14px;
     }
-    
+
     .tech-icon {
         font-size: 1.4rem;
     }
-    
+
     .tech-name {
         font-size: 0.6rem;
     }
-    
+
     .tech-stack-wrapper {
         padding: 16px 0;
         border-radius: 14px;
-        
-        &::before,
-        &::after {
+
+        .scroll-gradient {
             width: 40px;
         }
     }
-    
+
     .tech-stack-scroll {
         gap: 24px;
         padding: 0 12px;
+    }
+
+    .featured-skills {
+        padding: 16px;
+        margin-bottom: 32px;
+
+        .featured-tags {
+            gap: 8px;
+
+            .skill-tag {
+                font-size: 0.7rem;
+                padding: 4px 10px 4px 8px;
+
+                svg {
+                    font-size: 0.9rem;
+                }
+
+                .skill-proficiency {
+                    font-size: 0.55rem;
+                    padding: 0 4px;
+                }
+            }
+        }
+    }
+
+    .proficiency-ring {
+        width: 18px;
+        height: 18px;
+        bottom: -1px;
+        right: -1px;
+
+        .proficiency-text {
+            font-size: 0.3rem;
+        }
+    }
+
+    .featured-badge {
+        width: 16px;
+        height: 16px;
+        top: -4px;
+        right: -4px;
+
+        svg {
+            font-size: 0.45rem;
+        }
+    }
+
+    .tech-tooltip {
+        bottom: -44px;
+        padding: 4px 10px;
+        
+        p {
+            font-size: 0.6rem;
+        }
     }
 }

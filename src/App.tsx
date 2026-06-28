@@ -29,10 +29,10 @@ function App() {
 
       <FadeIn transitionDuration={700}>
         <Main />
-        <Expertise />
         <Terminal />
         <Timeline />
         <Project />
+        <Expertise />
         <Contact />
         <Footer />
       </FadeIn>
