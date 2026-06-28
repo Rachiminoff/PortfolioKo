@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Suspense, lazy, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useRef, Suspense, lazy, useCallback} from "react";
 
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
@@ -460,9 +460,6 @@ function Main() {
         setVaultUnlocked(false);
         setShowVaultPrompt(false);
     }, []);
-
-    // Check for reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* =========================
        SECRET CLICK TRIGGER
