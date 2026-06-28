@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import YouTubeIcon from "@mui/icons-material/YouTube";
@@ -17,6 +17,10 @@ function Footer() {
   const [index, setIndex] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
   const [zoom, setZoom] = useState(1);
+
+  // Use ref to track arts length without causing re-renders
+  const artsLengthRef = useRef(0);
+  artsLengthRef.current = arts.length;
 
   const fetchArts = async () => {
     const { data, error } = await supabase
@@ -38,47 +42,76 @@ function Footer() {
     }
   };
 
-  const nextArt = () => {
-    setIndex((prev) => (prev + 1) % arts.length);
+  // Navigation functions using ref for current length
+  const nextArt = useCallback(() => {
+    const len = artsLengthRef.current;
+    if (len === 0) return;
+    setIndex((prev) => (prev + 1) % len);
     setZoom(1);
-  };
-  const prevArt = () => {
-    setIndex((prev) => (prev - 1 + arts.length) % arts.length);
+  }, []);
+
+  const prevArt = useCallback(() => {
+    const len = artsLengthRef.current;
+    if (len === 0) return;
+    setIndex((prev) => (prev - 1 + len) % len);
     setZoom(1);
-  };
-  const zoomIn = () => setZoom((prev) => Math.min(prev + 0.2, 5));
-  const zoomOut = () => setZoom((prev) => Math.max(prev - 0.2, 0.4));
-  const closeModal = () => {
+  }, []);
+
+  const zoomIn = useCallback(() => {
+    setZoom((prev) => Math.min(prev + 0.2, 5));
+  }, []);
+
+  const zoomOut = useCallback(() => {
+    setZoom((prev) => Math.max(prev - 0.2, 0.4));
+  }, []);
+
+  const closeModal = useCallback(() => {
     setShowModal(false);
     setUnlocked(false);
     setPasscode("");
     setZoom(1);
-  };
+  }, []);
 
+  // Keyboard shortcuts - now with stable dependencies
   React.useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (!showModal || !unlocked) return;
-      if (e.key === "ArrowLeft") { e.preventDefault(); prevArt(); }
-      else if (e.key === "ArrowRight") { e.preventDefault(); nextArt(); }
-      else if (e.key === "Escape") closeModal();
-      else if (e.key === "=" || e.key === "+") { e.preventDefault(); zoomIn(); }
-      else if (e.key === "-") { e.preventDefault(); zoomOut(); }
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevArt();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextArt();
+      } else if (e.key === "Escape") {
+        closeModal();
+      } else if (e.key === "=" || e.key === "+") {
+        e.preventDefault();
+        zoomIn();
+      } else if (e.key === "-") {
+        e.preventDefault();
+        zoomOut();
+      }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [showModal, unlocked, arts.length]);
+  }, [showModal, unlocked, nextArt, prevArt, closeModal, zoomIn, zoomOut]);
 
+  // Touch events for mobile
   const [touchStartX, setTouchStartX] = useState(0);
-  const handleTouchStart = (e: React.TouchEvent) => {
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
-  };
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!unlocked) return;
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      diff > 0 ? nextArt() : prevArt();
-    }
-  };
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (!unlocked) return;
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 50) {
+        diff > 0 ? nextArt() : prevArt();
+      }
+    },
+    [unlocked, touchStartX, nextArt, prevArt]
+  );
 
   return (
     <>
@@ -90,35 +123,35 @@ function Footer() {
           <div className="footer-content">
             <h2>Social Links</h2>
             <div className="footer-grid">
-              <a 
-                href="https://github.com/Rachiminoff" 
-                target="_blank" 
-                rel="noreferrer" 
+              <a
+                href="https://github.com/Rachiminoff"
+                target="_blank"
+                rel="noreferrer"
                 className="footer-card"
               >
                 <GitHubIcon />
                 <span>GitHub</span>
               </a>
-              <a 
-                href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/" 
-                target="_blank" 
-                rel="noreferrer" 
+              <a
+                href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
+                target="_blank"
+                rel="noreferrer"
                 className="footer-card"
               >
                 <LinkedInIcon />
                 <span>LinkedIn</span>
               </a>
-              <a 
-                href="https://youtube.com/@blacksheep-1g?si=-X2nDtK2kucyskWx" 
-                target="_blank" 
-                rel="noreferrer" 
+              <a
+                href="https://youtube.com/@blacksheep-1g?si=-X2nDtK2kucyskWx"
+                target="_blank"
+                rel="noreferrer"
                 className="footer-card"
               >
                 <YouTubeIcon />
                 <span>YouTube</span>
               </a>
-              <button 
-                className="footer-card admin-card" 
+              <button
+                className="footer-card admin-card"
                 onClick={() => setShowModal(true)}
               >
                 <LockIcon />
@@ -174,9 +207,15 @@ function Footer() {
                     </div>
                   </div>
                   <div className="viewer-actions">
-                    <button className="viewer-btn" onClick={zoomOut}>−</button>
-                    <div className="zoom-label">{Math.round(zoom * 100)}%</div>
-                    <button className="viewer-btn" onClick={zoomIn}>+</button>
+                    <button className="viewer-btn" onClick={zoomOut}>
+                      −
+                    </button>
+                    <div className="zoom-label">
+                      {Math.round(zoom * 100)}%
+                    </div>
+                    <button className="viewer-btn" onClick={zoomIn}>
+                      +
+                    </button>
                   </div>
                 </div>
 
@@ -186,8 +225,13 @@ function Footer() {
                       {arts.map((art, i) => (
                         <button
                           key={art.id}
-                          className={`art-item ${i === index ? "active" : ""}`}
-                          onClick={() => { setIndex(i); setZoom(1); }}
+                          className={`art-item ${
+                            i === index ? "active" : ""
+                          }`}
+                          onClick={() => {
+                            setIndex(i);
+                            setZoom(1);
+                          }}
                         >
                           <img src={art.image_url} alt={art.title} />
                           <div className="art-meta">
@@ -202,12 +246,18 @@ function Footer() {
                   <div className="art-main">
                     <div className="viewer-toolbar">
                       <div className="viewer-toolbar-left">
-                        <button className="viewer-btn" onClick={prevArt}>‹</button>
-                        <button className="viewer-btn" onClick={nextArt}>›</button>
+                        <button className="viewer-btn" onClick={prevArt}>
+                          ‹
+                        </button>
+                        <button className="viewer-btn" onClick={nextArt}>
+                          ›
+                        </button>
                       </div>
                       <div className="viewer-toolbar-right">
                         <div className="toolbar-page">
-                          {arts.length > 0 ? `${index + 1}/${arts.length}` : "0/0"}
+                          {arts.length > 0
+                            ? `${index + 1}/${arts.length}`
+                            : "0/0"}
                         </div>
                       </div>
                     </div>
