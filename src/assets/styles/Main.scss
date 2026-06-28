@@ -226,6 +226,498 @@
 }
 
 /* =========================
+   VAULT FORM
+========================= */
+.vault-form {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    animation: fadeInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 6px 6px 6px 18px;
+    border-radius: 14px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    max-width: 360px;
+    transition: all 0.3s ease;
+    
+    &:focus-within {
+        border-color: rgba(120, 200, 255, 0.2);
+        box-shadow: 0 0 30px rgba(120, 200, 255, 0.05);
+        background: rgba(0, 0, 0, 0.5);
+    }
+}
+
+.vault-input {
+    flex: 1;
+    padding: 10px 0;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 0.95rem;
+    outline: none;
+    min-width: 140px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.25);
+        font-weight: 300;
+        letter-spacing: 0.02em;
+    }
+}
+
+.vault-button {
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #4a4a5a, #2a2a3a);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+    font-size: 0.9rem;
+    
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, #5a5a6a, #3a3a4a);
+    }
+    
+    &:active:not(:disabled) {
+        transform: translateY(0px);
+    }
+    
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+/* =========================
+   VAULT LOCKED STATE
+========================= */
+.vault-locked {
+    margin-top: 16px;
+    padding: 14px 20px;
+    border-radius: 12px;
+    background: rgba(255, 0, 0, 0.08);
+    border: 1px solid rgba(255, 80, 80, 0.15);
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    animation: fadeInUp 0.3s ease-out;
+    backdrop-filter: blur(10px);
+    max-width: 360px;
+
+    p {
+        margin: 4px 0;
+        font-weight: 300;
+        
+        &:first-child {
+            font-weight: 500;
+        }
+    }
+}
+
+/* =========================
+   IMPROVED VAULT MODAL STYLES
+========================= */
+.vault-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: vaultFadeIn 0.3s ease-out;
+    padding: 20px;
+}
+
+.vault-modal {
+    width: min(440px, 100%);
+    background: rgba(18, 18, 28, 0.95);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+        0 40px 120px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    padding: 32px 28px;
+    animation: vaultPopIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transform-origin: center;
+    
+    &.shake {
+        animation: vaultShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+}
+
+/* Modal Header */
+.vault-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+    
+    .vault-modal-icon {
+        font-size: 2em;
+        line-height: 1;
+        animation: vaultPulse 2s ease-in-out infinite;
+    }
+    
+    h2 {
+        flex: 1;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #fff;
+        letter-spacing: -0.01em;
+        margin: 0;
+        background: linear-gradient(135deg, #fff 60%, rgba(255,255,255,0.6));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .vault-modal-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            transform: rotate(90deg);
+        }
+    }
+}
+
+.vault-modal-description {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    font-weight: 300;
+    margin: 0 0 24px 0;
+    line-height: 1.5;
+    padding-right: 4px;
+}
+
+/* Form */
+.vault-modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.vault-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    
+    .vault-modal-input {
+        width: 100%;
+        padding: 14px 48px 14px 18px;
+        border-radius: 14px;
+        border: 2px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 400;
+        transition: all 0.3s ease;
+        outline: none;
+        letter-spacing: 0.02em;
+        
+        &::placeholder {
+            color: rgba(255, 255, 255, 0.25);
+            font-weight: 300;
+        }
+        
+        &:focus {
+            border-color: rgba(120, 180, 255, 0.3);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 30px rgba(120, 180, 255, 0.05);
+        }
+        
+        &.error {
+            border-color: rgba(255, 80, 80, 0.4);
+            background: rgba(255, 80, 80, 0.06);
+            box-shadow: 0 0 30px rgba(255, 80, 80, 0.05);
+            
+            &:focus {
+                border-color: rgba(255, 80, 80, 0.5);
+            }
+        }
+        
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+    
+    .vault-toggle-visibility {
+        position: absolute;
+        right: 12px;
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        font-size: 1.1rem;
+        padding: 4px;
+        transition: color 0.2s ease;
+        line-height: 1;
+        
+        &:hover {
+            color: rgba(255, 255, 255, 0.6);
+        }
+    }
+}
+
+/* Error Message */
+.vault-modal-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255, 80, 80, 0.08);
+    border: 1px solid rgba(255, 80, 80, 0.12);
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    font-weight: 400;
+    animation: vaultSlideDown 0.3s ease-out;
+    
+    .error-icon {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+    
+    .attempts-badge {
+        margin-left: auto;
+        padding: 2px 10px;
+        border-radius: 20px;
+        background: rgba(255, 80, 80, 0.12);
+        font-size: 0.8rem;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+}
+
+/* Attempts Indicator */
+.vault-modal-attempts {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 4px 0;
+    
+    .attempts-dots {
+        display: flex;
+        gap: 6px;
+        flex: 1;
+        
+        .attempt-dot {
+            height: 4px;
+            flex: 1;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            
+            &.active {
+                background: rgba(120, 200, 255, 0.4);
+            }
+            
+            &.used {
+                background: rgba(255, 255, 255, 0.06);
+            }
+        }
+    }
+    
+    .attempts-text {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.3);
+        font-weight: 300;
+        white-space: nowrap;
+    }
+}
+
+/* Action Buttons */
+.vault-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.vault-modal-button {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+    
+    &.primary {
+        background: linear-gradient(135deg, #4a6cf7, #6a3de8);
+        color: #fff;
+        box-shadow: 0 4px 20px rgba(74, 108, 247, 0.2);
+        
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(74, 108, 247, 0.3);
+        }
+        
+        &:active:not(:disabled) {
+            transform: translateY(0px);
+        }
+        
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .button-arrow {
+            transition: transform 0.3s ease;
+        }
+        
+        &:hover:not(:disabled) .button-arrow {
+            transform: translateX(4px);
+        }
+    }
+    
+    &.secondary {
+        background: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        flex: 0.6;
+        
+        &:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        &:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+    }
+}
+
+/* Locked State */
+.vault-modal-locked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 16px 0;
+    
+    .lock-icon {
+        font-size: 3em;
+        margin-bottom: 8px;
+        animation: vaultPulse 2s ease-in-out infinite;
+    }
+    
+    .lock-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0 0 4px 0;
+    }
+    
+    .lock-subtitle {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+        font-weight: 300;
+        margin: 0 0 4px 0;
+        
+        strong {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+    }
+    
+    .lock-time {
+        color: rgba(255, 255, 255, 0.3);
+        font-size: 0.85rem;
+        font-weight: 300;
+        margin: 0 0 20px 0;
+    }
+}
+
+/* Spinner */
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: vaultSpin 0.6s linear infinite;
+}
+
+/* Animations */
+@keyframes vaultFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes vaultPopIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes vaultShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+    20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+@keyframes vaultSlideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes vaultSpin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes vaultPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* =========================
    ICON BUTTON (Legacy support)
 ========================= */
 .icon-btn {
@@ -365,12 +857,33 @@
         text-align: center;
     }
     
-    .modal {
-        padding: 24px 20px;
+    .vault-modal {
+        padding: 24px 18px;
         
-        h2 {
+        .vault-modal-header h2 {
             font-size: 1.2rem;
         }
+    }
+    
+    .vault-modal-actions {
+        flex-direction: column-reverse;
+        
+        .vault-modal-button {
+            flex: 1;
+            padding: 14px;
+            
+            &.secondary {
+                flex: 1;
+            }
+        }
+    }
+    
+    .vault-modal-description {
+        font-size: 0.85rem;
+    }
+    
+    .vault-modal-attempts .attempts-text {
+        font-size: 0.7rem;
     }
 }
 
@@ -425,7 +938,7 @@
         border-color: rgba(255, 255, 255, 0.04);
     }
     
-    .modal {
+    .vault-modal {
         background: rgba(10, 10, 16, 0.95);
     }
 }
