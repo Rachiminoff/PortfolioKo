@@ -280,9 +280,6 @@ function Main() {
         }
     }, [vaultUnlocked]);
 
-    // Check for reduced motion
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     /* =========================
        SECRET CLICK TRIGGER
     ========================= */
