@@ -1,282 +1,264 @@
-import React, { useEffect, useRef, useState } from "react";
-import '@fortawesome/free-regular-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGraduationCap, faRocket } from '@fortawesome/free-solid-svg-icons';
-import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import 'react-vertical-timeline-component/style.min.css';
-import '../assets/styles/Timeline.scss'
+import React, { useState, useCallback } from "react";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import LockIcon from "@mui/icons-material/Lock";
+import CloseIcon from "@mui/icons-material/Close";
+import { supabase } from "../lib/supabase";
+import logo from "../assets/images/logo.jpg";
+import "../assets/styles/Footer.scss";
 
-function Timeline() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
+type Art = { id: string; image_url: string; title: string };
 
-  useEffect(() => {
-    // Intersection Observer for scroll-triggered animations with viewport awareness
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const element = entry.target as HTMLElement;
-          const index = parseInt(element.dataset.index || '0');
-          
-          if (entry.isIntersecting) {
-            // Set active milestone
-            setActiveIndex(index);
-            
-            // Stagger animations: line fills first, then icon, then card
-            const icon = element.querySelector('.vertical-timeline-element-icon');
-            const card = element.querySelector('.vertical-timeline-element-content');
-            
-            element.classList.add('visible');
-            
-            if (icon) {
-              setTimeout(() => {
-                icon.classList.add('icon-visible');
-              }, 200);
-            }
-            
-            if (card) {
-              setTimeout(() => {
-                card.classList.add('card-visible');
-              }, 400);
-            }
-          } else {
-            // Remove active state when scrolled away
-            if (activeIndex === index) {
-              // Keep visible class but remove active glow
-              element.classList.remove('active');
-            }
-          }
-        });
-      },
-      { 
-        threshold: 0.25, 
-        rootMargin: '0px 0px -30px 0px'
+function Footer() {
+  const [showModal, setShowModal] = useState(false);
+  const [passcode, setPasscode] = useState("");
+  const [arts, setArts] = useState<Art[]>([]);
+  const [index, setIndex] = useState(0);
+  const [unlocked, setUnlocked] = useState(false);
+  const [zoom, setZoom] = useState(1);
+
+  const fetchArts = async () => {
+    const { data, error } = await supabase
+      .from("arts")
+      .select("*")
+      .order("created_at", { ascending: true });
+    if (!error && data) {
+      setArts(data);
+      setIndex(0);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (passcode === "sining") {
+      setUnlocked(true);
+      await fetchArts();
+    } else {
+      alert("Incorrect Passcode");
+    }
+  };
+
+  // Wrap functions in useCallback to prevent unnecessary re-renders
+  const nextArt = useCallback(() => {
+    setIndex((prev) => (prev + 1) % arts.length);
+    setZoom(1);
+  }, [arts.length]);
+
+  const prevArt = useCallback(() => {
+    setIndex((prev) => (prev - 1 + arts.length) % arts.length);
+    setZoom(1);
+  }, [arts.length]);
+
+  const zoomIn = useCallback(() => setZoom((prev) => Math.min(prev + 0.2, 5)), []);
+  const zoomOut = useCallback(() => setZoom((prev) => Math.max(prev - 0.2, 0.4)), []);
+
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+    setUnlocked(false);
+    setPasscode("");
+    setZoom(1);
+  }, []);
+
+  // Keyboard shortcuts - now with proper dependencies
+  React.useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (!showModal || !unlocked) return;
+      if (e.key === "ArrowLeft") { 
+        e.preventDefault(); 
+        prevArt(); 
+      } else if (e.key === "ArrowRight") { 
+        e.preventDefault(); 
+        nextArt(); 
+      } else if (e.key === "Escape") {
+        closeModal();
+      } else if (e.key === "=" || e.key === "+") { 
+        e.preventDefault(); 
+        zoomIn(); 
+      } else if (e.key === "-") { 
+        e.preventDefault(); 
+        zoomOut(); 
       }
-    );
-
-    // Observe all timeline elements
-    const elements = document.querySelectorAll('.vertical-timeline-element');
-    elements.forEach((el, index) => {
-      (el as HTMLElement).dataset.index = String(index);
-      observer.observe(el);
-    });
-
-    // Update progress bar on scroll
-    const handleScroll = () => {
-      if (!progressRef.current) return;
-      
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (scrollTop / docHeight) * 100;
-      
-      progressRef.current.style.height = `${Math.min(progress, 100)}%`;
     };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [showModal, unlocked, nextArt, prevArt, closeModal, zoomIn, zoomOut]);
 
-    window.addEventListener('scroll', handleScroll);
+  // Touch events for mobile
+  const [touchStartX, setTouchStartX] = useState(0);
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  }, []);
 
-    // Cleanup
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [activeIndex]);
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!unlocked) return;
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? nextArt() : prevArt();
+    }
+  }, [unlocked, touchStartX, nextArt, prevArt]);
 
   return (
-    <div id="history" ref={timelineRef} className="timeline-section">
-      {/* Background glow effects */}
-      <div className="bg-glow bg-glow-1"></div>
-      <div className="bg-glow bg-glow-2"></div>
-      <div className="bg-glow bg-glow-3"></div>
-      <div className="noise-overlay"></div>
-
-      <div className="timeline-container">
-        {/* Section Header */}
-        <div className="section-header">
-          <div className="section-header-content">
-            <span className="section-label">Journey</span>
-            <h1 className="section-title">
-              Timeline
-            </h1>
-            <p className="section-subtitle">
-              Key milestones and achievements throughout my development career
-            </p>
+    <>
+      <footer className="footer">
+        <div className="footer-container">
+          <div className="footer-logo">
+            <img src={logo} alt="Logo" />
+          </div>
+          <div className="footer-content">
+            <h2>Social Links</h2>
+            <div className="footer-grid">
+              <a 
+                href="https://github.com/Rachiminoff" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="footer-card"
+              >
+                <GitHubIcon />
+                <span>GitHub</span>
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="footer-card"
+              >
+                <LinkedInIcon />
+                <span>LinkedIn</span>
+              </a>
+              <a 
+                href="https://youtube.com/@blacksheep-1g?si=-X2nDtK2kucyskWx" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="footer-card"
+              >
+                <YouTubeIcon />
+                <span>YouTube</span>
+              </a>
+              <button 
+                className="footer-card admin-card" 
+                onClick={() => setShowModal(true)}
+              >
+                <LockIcon />
+                <span>ADMIN</span>
+              </button>
+            </div>
+            <div className="footer-bottom">
+              <div className="copyright-icon">©</div>
+              <div>
+                <h3>Tanya Denise Yambao</h3>
+                <p>2026. All Rights Reserved.</p>
+              </div>
+            </div>
           </div>
         </div>
+      </footer>
 
-        <div className="timeline-wrapper">
-          {/* Progress fill indicator */}
-          <div className="timeline-progress-track">
-            <div ref={progressRef} className="timeline-progress-fill"></div>
-          </div>
+      {showModal && (
+        <div className="admin-modal-overlay">
+          <div className={`admin-modal ${unlocked ? "" : "locked"}`}>
+            <button className="close-btn" onClick={closeModal}>
+              <CloseIcon />
+            </button>
 
-          <VerticalTimeline lineColor="rgba(80, 0, 202, 0.08)">
-            
-            {/* First Python Code - Milestone 1 */}
-            <VerticalTimelineElement
-              className="vertical-timeline-element--work milestone-card milestone-completed"
-              contentStyle={{ 
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.75) 100%)',
-                backdropFilter: 'blur(24px) saturate(1.6)',
-                WebkitBackdropFilter: 'blur(24px) saturate(1.6)',
-                color: 'rgb(39, 40, 34)',
-                borderRadius: '16px 16px 16px 4px',
-                border: '1px solid rgba(255,255,255,0.25)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.02), 0 1px 4px rgba(0,0,0,0.01), inset 0 1px 0 rgba(255,255,255,0.9)',
-                padding: '1.5rem 1.8rem',
-                position: 'relative',
-              }}
-              contentArrowStyle={{ 
-                borderRight: '7px solid rgba(255,255,255,0.8)',
-                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.02))'
-              }}
-              date="2022"
-              dateClassName="custom-date premium-date"
-              iconStyle={{ 
-                background: 'linear-gradient(135deg, #3776AB 0%, #2a5f8a 100%)',
-                color: 'white',
-                boxShadow: '0 0 0 4px rgba(55,118,171,0.12), 0 0 0 8px rgba(55,118,171,0.04), 0 4px 16px rgba(55,118,171,0.08)',
-              }}
-              icon={<FontAwesomeIcon icon={faPython} />}
-            >
-              <div className="milestone-content">
-                <div className="milestone-header">
-                  <div className="milestone-title-group">
-                    <h3 className="milestone-title">First Line of Code</h3>
-                    <span className="milestone-year">2022</span>
-                  </div>
-                  <span className="milestone-status">Beginning</span>
-                </div>
-                
-                <h4 className="milestone-subtitle">Python</h4>
-                
-                {/* Terminal Window */}
-                <div className="terminal-window">
-                  <div className="terminal-header">
-                    <div className="terminal-controls">
-                      <span className="terminal-dot terminal-dot-red"></span>
-                      <span className="terminal-dot terminal-dot-yellow"></span>
-                      <span className="terminal-dot terminal-dot-green"></span>
+            {!unlocked ? (
+              <>
+                <LockIcon className="modal-lock" />
+                <h2>Admin Access</h2>
+                <p>Enter passcode to continue.</p>
+                <input
+                  type="password"
+                  placeholder="Enter Passcode"
+                  value={passcode}
+                  onChange={(e) => setPasscode(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                  autoFocus
+                />
+                <button className="submit-btn" onClick={handleSubmit}>
+                  Unlock
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="viewer-topbar">
+                  <div className="viewer-left">
+                    <div className="viewer-controls-mac">
+                      <span className="red"></span>
+                      <span className="yellow"></span>
+                      <span className="green"></span>
                     </div>
-                    <span className="terminal-title">python</span>
+                    <div className="viewer-file-title">
+                      {arts[index]?.title || "No artwork"}
+                    </div>
                   </div>
-                  <div className="terminal-body">
-                    <code className="terminal-code">
-                      <span className="terminal-prompt">❯</span>
-                      <span className="terminal-command">print</span>
-                      <span className="terminal-punctuation">(</span>
-                      <span className="terminal-string">"hello, world"</span>
-                      <span className="terminal-punctuation">)</span>
-                      <span className="terminal-cursor"></span>
-                    </code>
+                  <div className="viewer-actions">
+                    <button className="viewer-btn" onClick={zoomOut}>−</button>
+                    <div className="zoom-label">{Math.round(zoom * 100)}%</div>
+                    <button className="viewer-btn" onClick={zoomIn}>+</button>
                   </div>
                 </div>
-                
-                <p className="milestone-description">
-                  The beginning of my programming journey — writing my first Python script and discovering the joy of coding.
-                </p>
-              </div>
-              <div className="milestone-glow"></div>
-            </VerticalTimelineElement>
 
-            {/* Computer Science Start - Milestone 2 */}
-            <VerticalTimelineElement
-              className="vertical-timeline-element--education milestone-card milestone-completed milestone-emphasized"
-              contentStyle={{ 
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%)',
-                backdropFilter: 'blur(24px) saturate(1.6)',
-                WebkitBackdropFilter: 'blur(24px) saturate(1.6)',
-                color: 'rgb(39, 40, 34)',
-                borderRadius: '16px 16px 16px 4px',
-                border: '1px solid rgba(80,0,202,0.12)',
-                boxShadow: '0 4px 32px rgba(80,0,202,0.04), 0 1px 4px rgba(0,0,0,0.01), inset 0 1px 0 rgba(255,255,255,0.9)',
-                padding: '1.5rem 1.8rem',
-                position: 'relative',
-              }}
-              contentArrowStyle={{ 
-                borderRight: '7px solid rgba(255,255,255,0.85)',
-                filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.02))'
-              }}
-              date="2023"
-              dateClassName="custom-date premium-date"
-              iconStyle={{ 
-                background: 'linear-gradient(135deg, #5000ca 0%, #3a0094 100%)',
-                color: 'white',
-                boxShadow: '0 0 0 4px rgba(80,0,202,0.12), 0 0 0 8px rgba(80,0,202,0.04), 0 4px 16px rgba(80,0,202,0.08)',
-                width: '52px',
-                height: '52px',
-              }}
-              icon={<FontAwesomeIcon icon={faGraduationCap} />}
-            >
-              <div className="milestone-content">
-                <div className="milestone-header">
-                  <div className="milestone-title-group">
-                    <h3 className="milestone-title">Started Computer Science</h3>
-                    <span className="milestone-year">2023</span>
+                <div className="art-viewer">
+                  <div className="art-sidebar">
+                    <div className="art-list">
+                      {arts.map((art, i) => (
+                        <button
+                          key={art.id}
+                          className={`art-item ${i === index ? "active" : ""}`}
+                          onClick={() => { setIndex(i); setZoom(1); }}
+                        >
+                          <img src={art.image_url} alt={art.title} />
+                          <div className="art-meta">
+                            <h4>{art.title}</h4>
+                            <p>#{i + 1}</p>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                  <span className="milestone-status milestone-status-current">Current</span>
-                </div>
-                
-                <h4 className="milestone-subtitle">Cavite State University — Main Campus</h4>
-                
-                <p className="milestone-description">
-                  Currently pursuing a Bachelor's degree in Computer Science.
-                </p>
-              </div>
-              <div className="milestone-glow"></div>
-            </VerticalTimelineElement>
 
-            {/* Future - Milestone 3 */}
-            <VerticalTimelineElement
-              className="vertical-timeline-element--work milestone-card milestone-future"
-              contentStyle={{ 
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.35) 100%)',
-                backdropFilter: 'blur(20px) saturate(1.2)',
-                WebkitBackdropFilter: 'blur(20px) saturate(1.2)',
-                color: 'rgb(39, 40, 34)',
-                borderRadius: '16px 16px 16px 4px',
-                border: '1.5px dashed rgba(136,136,136,0.2)',
-                boxShadow: '0 2px 16px rgba(0,0,0,0.01), 0 1px 4px rgba(0,0,0,0.005), inset 0 1px 0 rgba(255,255,255,0.5)',
-                padding: '1.5rem 1.8rem',
-                position: 'relative',
-              }}
-              contentArrowStyle={{ 
-                borderRight: '7px solid rgba(255,255,255,0.4)',
-              }}
-              date="Future"
-              dateClassName="custom-date premium-date"
-              iconStyle={{ 
-                background: 'linear-gradient(135deg, #888 0%, #666 100%)',
-                color: 'white',
-                boxShadow: '0 0 0 4px rgba(136,136,136,0.08), 0 0 0 8px rgba(136,136,136,0.02), 0 4px 16px rgba(136,136,136,0.04)',
-              }}
-              icon={<FontAwesomeIcon icon={faRocket} />}
-            >
-              <div className="milestone-content">
-                <div className="milestone-header">
-                  <div className="milestone-title-group">
-                    <h3 className="milestone-title">What's Next?</h3>
-                    <span className="milestone-year">Future</span>
+                  <div className="art-main">
+                    <div className="viewer-toolbar">
+                      <div className="viewer-toolbar-left">
+                        <button className="viewer-btn" onClick={prevArt}>‹</button>
+                        <button className="viewer-btn" onClick={nextArt}>›</button>
+                      </div>
+                      <div className="viewer-toolbar-right">
+                        <div className="toolbar-page">
+                          {arts.length > 0 ? `${index + 1}/${arts.length}` : "0/0"}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className="viewer-canvas"
+                      onTouchStart={handleTouchStart}
+                      onTouchEnd={handleTouchEnd}
+                    >
+                      <div className="viewer-inner">
+                        {arts.length > 0 && arts[index] ? (
+                          <img
+                            src={arts[index].image_url}
+                            alt={arts[index].title}
+                            className="viewer-image"
+                            draggable={false}
+                            style={{ transform: `scale(${zoom})` }}
+                          />
+                        ) : (
+                          <div style={{ color: "white", padding: "2rem" }}>
+                            No artwork available
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                  <span className="milestone-status milestone-status-future">Upcoming</span>
                 </div>
-                
-                <h4 className="milestone-subtitle">Future Goals &amp; Aspirations</h4>
-                
-                <p className="milestone-description">
-                  Exploring emerging technologies, building impactful open-source projects, and 
-                  continuously growing as a developer. The journey continues...
-                </p>
-              </div>
-              <div className="milestone-glow"></div>
-            </VerticalTimelineElement>
-
-          </VerticalTimeline>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 
-export default Timeline;
+export default Footer;
