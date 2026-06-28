@@ -186,6 +186,16 @@ const techStack: Tech[] = [
     featured: false,
     description: "Cross-platform UI framework"
   },
+  {
+    name: "Prompt Engineering",
+    icon: "mdi:robot-outline",
+    color: "#8B5CF6",
+    category: "Tools",
+    proficiency: 80,
+    featured: true,
+    description:
+      "Crafting structured prompts, managing context, and iteratively refining instructions to improve the accuracy and consistency of large language model responses."
+  },
 ];
 
 const categories = ["All", "Frontend", "Backend", "Game Dev", "Automation", "Tools"];
