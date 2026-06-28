@@ -1,3 +1,5 @@
+// Vault.tsx - Redesigned Premium Bookshelf Edition
+
 import React, { useEffect, useState, useMemo } from "react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
@@ -31,7 +33,7 @@ function Vault() {
     const [activeCard, setActiveCard] = useState<number | null>(null);
     const [expandedDescriptions, setExpandedDescriptions] = useState<number[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+    const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
     const [searchQuery, setSearchQuery] = useState("");
     const [sortOption, setSortOption] = useState<SortOption>("newest");
     const [filterChip, setFilterChip] = useState<FilterChip>("all");
@@ -45,12 +47,10 @@ function Vault() {
     }, []);
 
     useEffect(() => {
-        // Load continue reading from localStorage
         const saved = localStorage.getItem("continueReading");
         if (saved) {
             try {
                 const item = JSON.parse(saved);
-                // Check if item still exists in current items
                 const exists = vaultItems.some(i => i.id === item.id);
                 if (exists) {
                     setContinueReading(item);
@@ -97,7 +97,6 @@ function Vault() {
 
         setViewerUrl(finalUrl);
 
-        // Save continue reading
         if (item) {
             const savedItem = { ...item };
             localStorage.setItem("continueReading", JSON.stringify(savedItem));
@@ -141,7 +140,6 @@ function Vault() {
         if (!item.id) return;
         const newFavorite = !item.favorite;
         
-        // Optimistic update
         setVaultItems(prev =>
             prev.map(i =>
                 i.id === item.id ? { ...i, favorite: newFavorite } : i
@@ -155,7 +153,6 @@ function Vault() {
 
         if (error) {
             console.error("Failed to update favorite:", error);
-            // Revert on error
             setVaultItems(prev =>
                 prev.map(i =>
                     i.id === item.id ? { ...i, favorite: !newFavorite } : i
@@ -176,11 +173,9 @@ function Vault() {
         });
     };
 
-    // Filtering, searching, sorting logic
     const filteredAndSortedItems = useMemo(() => {
         let items = [...vaultItems];
 
-        // Filter by category or favorites
         if (showFavorites) {
             items = items.filter(item => item.favorite);
         } else if (selectedCategory) {
@@ -189,7 +184,6 @@ function Vault() {
             );
         }
 
-        // Search
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase().trim();
             items = items.filter(item =>
@@ -200,7 +194,6 @@ function Vault() {
             );
         }
 
-        // Filter chips
         if (filterChip === "pdf") {
             items = items.filter(item =>
                 !item.type.toLowerCase().includes("epub")
@@ -211,7 +204,6 @@ function Vault() {
             );
         }
 
-        // Sort
         switch (sortOption) {
             case "newest":
                 items.sort((a, b) => {
@@ -241,7 +233,6 @@ function Vault() {
         return items;
     }, [vaultItems, selectedCategory, showFavorites, searchQuery, filterChip, sortOption]);
 
-    // Group by series
     const groupedItems = useMemo(() => {
         const grouped: { [key: string]: VaultItem[] } = {};
         const standalone: VaultItem[] = [];
@@ -264,22 +255,19 @@ function Vault() {
         new Set(vaultItems.map(item => item.category ?? "General"))
     );
 
-    // Statistics
     const stats = useMemo(() => {
         const total = vaultItems.length;
-        const categories = new Set(vaultItems.map(item => item.category ?? "General")).size;
+        const catCount = new Set(vaultItems.map(item => item.category ?? "General")).size;
         const pdfs = vaultItems.filter(item => !item.type.toLowerCase().includes("epub")).length;
         const epubs = vaultItems.filter(item => item.type.toLowerCase().includes("epub")).length;
-        return { total, categories, pdfs, epubs };
+        return { total, categories: catCount, pdfs, epubs };
     }, [vaultItems]);
 
-    // Get first item image for folder
-    const getFolderCover = (category: string) => {
+    const getFolderCovers = (category: string) => {
         const items = vaultItems.filter(item =>
             (item.category ?? "General") === category
         );
-        const firstWithImage = items.find(item => item.image);
-        return firstWithImage?.image || null;
+        return items.filter(item => item.image).slice(0, 6).map(item => item.image);
     };
 
     const renderCard = (item: VaultItem, isNew: boolean = false) => {
@@ -302,10 +290,9 @@ function Vault() {
                 <div className="vault-card-glow"></div>
 
                 {isNew && (
-                    <div className="vault-new-badge">NEW ENTRY</div>
+                    <div className="vault-new-badge">NEW</div>
                 )}
 
-                {/* Favorite Button */}
                 <button
                     className="vault-favorite-btn"
                     onClick={(e) => {
@@ -315,8 +302,6 @@ function Vault() {
                     aria-label="Toggle favorite"
                 >
                     <svg
-                        width="20"
-                        height="20"
                         viewBox="0 0 24 24"
                         fill={item.favorite ? "currentColor" : "none"}
                         stroke="currentColor"
@@ -335,19 +320,20 @@ function Vault() {
                             alt={item.name}
                             className="vault-book-image"
                             loading="lazy"
+                            onClick={() => openViewer(item.link, item.type, item)}
                         />
                     ) : (
-                        <div className="vault-image-placeholder">
-                            <span>ARCHIVE</span>
+                        <div 
+                            className="vault-image-placeholder"
+                            onClick={() => openViewer(item.link, item.type, item)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <span>📖</span>
                         </div>
                     )}
                 </div>
 
                 <div className="vault-book-content">
-                    <span className="vault-id">
-                        ARCHIVE ENTRY #{String(item.id || 0).padStart(3, "0")}
-                    </span>
-
                     <h2>
                         {item.link ? (
                             <button
@@ -363,71 +349,82 @@ function Vault() {
 
                     <div className="vault-meta-row">
                         <span className="vault-type-badge">{item.type}</span>
-                        <span>•</span>
-                        <span>Private Archive</span>
                         {item.created_at && (
-                            <>
-                                <span>•</span>
-                                <span>
-                                    {new Date(item.created_at).getFullYear()}
-                                </span>
-                            </>
+                            <span>{new Date(item.created_at).getFullYear()}</span>
                         )}
                         {item.series && (
-                            <>
-                                <span>•</span>
-                                <span className="vault-series-badge">
-                                    {item.series}
-                                </span>
-                            </>
+                            <span className="vault-series-badge">{item.series}</span>
                         )}
                     </div>
 
-                    <div className="vault-description-dropdown">
-                        <button
-                            className="vault-description-toggle"
-                            onClick={() => toggleDescription(item.id)}
-                        >
-                            Description
-                            <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
-                                ▼
-                            </span>
-                        </button>
-
-                        <div className={`vault-description-content ${isExpanded ? "expanded" : ""}`}>
-                            <p className="vault-book-description">
-                                {item.description}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="vault-actions-container">
-                        {item.link && (
-                            <>
+                    {viewMode === "grid" && (
+                        <>
+                            <div className="vault-description-dropdown">
                                 <button
-                                    className="vault-read-btn"
-                                    onClick={() => openViewer(item.link, item.type, item)}
+                                    className="vault-description-toggle"
+                                    onClick={() => toggleDescription(item.id)}
                                 >
-                                    {isEpub ? "Open EPUB" : "Open Entry"}
+                                    Description
+                                    <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
+                                        ▼
+                                    </span>
                                 </button>
 
-                                {isEpub && (
+                                <div className={`vault-description-content ${isExpanded ? "expanded" : ""}`}>
+                                    <p className="vault-book-description">
+                                        {item.description}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="vault-actions-container">
+                                {item.link && (
                                     <>
                                         <button
-                                            className="vault-download-btn"
-                                            onClick={() => handleDownload(item.link, item.name)}
+                                            className="vault-read-btn"
+                                            onClick={() => openViewer(item.link, item.type, item)}
                                         >
-                                            Download EPUB
+                                            {isEpub ? "Open EPUB" : "Open"}
                                         </button>
-                                        <div className="vault-download-note">
-                                            Downloading is preferable as the reader is slow to load
-                                        </div>
+
+                                        {isEpub && (
+                                            <>
+                                                <button
+                                                    className="vault-download-btn"
+                                                    onClick={() => handleDownload(item.link, item.name)}
+                                                >
+                                                    Download
+                                                </button>
+                                            </>
+                                        )}
                                     </>
                                 )}
-                            </>
+                            </div>
+                        </>
+                    )}
+                </div>
+
+                {viewMode === "list" && (
+                    <div className="vault-list-content">
+                        <div className="vault-meta-row">
+                            <span className="vault-type-badge">{item.type}</span>
+                            {item.created_at && (
+                                <span>{new Date(item.created_at).getFullYear()}</span>
+                            )}
+                            {item.series && (
+                                <span className="vault-series-badge">{item.series}</span>
+                            )}
+                        </div>
+                        {item.link && isEpub && (
+                            <button
+                                className="vault-list-download-btn"
+                                onClick={() => handleDownload(item.link, item.name)}
+                            >
+                                Download EPUB
+                            </button>
                         )}
                     </div>
-                </div>
+                )}
             </div>
         );
     };
@@ -453,7 +450,7 @@ function Vault() {
                         <span className="vault-series-icon">📚</span>
                         <h3>{seriesName}</h3>
                         <span className="vault-series-count">
-                            ({items.length} {items.length === 1 ? "item" : "items"})
+                            ({items.length})
                         </span>
                     </div>
                     <span className={`vault-series-arrow ${isExpanded ? "expanded" : ""}`}>
@@ -482,7 +479,7 @@ function Vault() {
                             onClick={() => setViewMode("grid")}
                             aria-label="Grid view"
                         >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <rect x="3" y="3" width="7" height="7" />
                                 <rect x="14" y="3" width="7" height="7" />
                                 <rect x="3" y="14" width="7" height="7" />
@@ -494,7 +491,7 @@ function Vault() {
                             onClick={() => setViewMode("list")}
                             aria-label="List view"
                         >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <line x1="8" y1="6" x2="21" y2="6" />
                                 <line x1="8" y1="12" x2="21" y2="12" />
                                 <line x1="8" y1="18" x2="21" y2="18" />
@@ -506,28 +503,25 @@ function Vault() {
                     </div>
                 </div>
 
-                <div className="vault-intro">
-                    <p>Personal archive of preserved works and completed creations.</p>
-                </div>
-
                 {/* Statistics */}
                 <div className="vault-stats">
                     <div className="vault-stat-item">
+                        <span className="vault-stat-icon">📚</span>
                         <span className="vault-stat-value">{stats.total}</span>
-                        <span className="vault-stat-label">Total Items</span>
+                        <span className="vault-stat-label">Items</span>
                     </div>
-                    <div className="vault-stat-divider">•</div>
                     <div className="vault-stat-item">
+                        <span className="vault-stat-icon">📁</span>
                         <span className="vault-stat-value">{stats.categories}</span>
-                        <span className="vault-stat-label">Categories</span>
+                        <span className="vault-stat-label">Collections</span>
                     </div>
-                    <div className="vault-stat-divider">•</div>
                     <div className="vault-stat-item">
+                        <span className="vault-stat-icon">📄</span>
                         <span className="vault-stat-value">{stats.pdfs}</span>
                         <span className="vault-stat-label">PDFs</span>
                     </div>
-                    <div className="vault-stat-divider">•</div>
                     <div className="vault-stat-item">
+                        <span className="vault-stat-icon">📖</span>
                         <span className="vault-stat-value">{stats.epubs}</span>
                         <span className="vault-stat-label">EPUBs</span>
                     </div>
@@ -536,14 +530,14 @@ function Vault() {
                 {/* Controls Bar */}
                 <div className="vault-controls-bar">
                     <div className="vault-search-wrapper">
-                        <svg className="vault-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <svg className="vault-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="11" cy="11" r="8" />
                             <line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
                         <input
                             type="text"
                             className="vault-search-input"
-                            placeholder="Search by title, description, category, or type..."
+                            placeholder="Search titles, descriptions, series..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -577,7 +571,7 @@ function Vault() {
                         >
                             <option value="compact">Compact</option>
                             <option value="comfortable">Comfortable</option>
-                            <option value="large">Large Covers</option>
+                            <option value="large">Large</option>
                         </select>
                     </div>
                 </div>
@@ -614,130 +608,163 @@ function Vault() {
                 </div>
             </div>
 
-            {loading ? (
-                <div className="vault-loading">
-                    <div className="vault-loading-grid">
-                        {[...Array(6)].map((_, index) => (
-                            <div key={index} className="vault-skeleton-card">
-                                <div className="vault-skeleton-image"></div>
-                                <div className="vault-skeleton-line short"></div>
-                                <div className="vault-skeleton-line"></div>
-                                <div className="vault-skeleton-line"></div>
-                            </div>
-                        ))}
+            {/* MAIN CONTENT */}
+            <div className="vault-main">
+                {loading ? (
+                    <div className="vault-loading">
+                        <div className="vault-loading-grid">
+                            {[...Array(6)].map((_, index) => (
+                                <div key={index} className="vault-skeleton-card">
+                                    <div className="vault-skeleton-image"></div>
+                                    <div className="vault-skeleton-line short"></div>
+                                    <div className="vault-skeleton-line"></div>
+                                    <div className="vault-skeleton-line"></div>
+                                </div>
+                            ))}
+                        </div>
+                        <p className="vault-loading-text">Loading archive...</p>
                     </div>
-                    <p className="vault-loading-text">Accessing archive...</p>
-                </div>
-            ) : (
-                <>
-                    {/* Continue Reading */}
-                    {continueReading && !selectedCategory && !showFavorites && (
-                        <div className="vault-continue-reading">
-                            <h3>Continue Reading</h3>
-                            <div className="vault-continue-card">
-                                {continueReading.image && (
-                                    <img
-                                        src={continueReading.image}
-                                        alt={continueReading.name}
-                                        className="vault-continue-cover"
-                                    />
-                                )}
-                                <div className="vault-continue-info">
-                                    <h4>{continueReading.name}</h4>
-                                    <span className="vault-continue-type">{continueReading.type}</span>
-                                    <button
-                                        className="vault-continue-btn"
-                                        onClick={() => openViewer(continueReading.link, continueReading.type, continueReading)}
-                                    >
-                                        Open
-                                    </button>
+                ) : (
+                    <>
+                        {/* Continue Reading */}
+                        {continueReading && !selectedCategory && !showFavorites && (
+                            <div className="vault-continue-reading">
+                                <h3>Continue Reading</h3>
+                                <div className="vault-continue-card">
+                                    {continueReading.image && (
+                                        <img
+                                            src={continueReading.image}
+                                            alt={continueReading.name}
+                                            className="vault-continue-cover"
+                                        />
+                                    )}
+                                    <div className="vault-continue-info">
+                                        <h4>{continueReading.name}</h4>
+                                        <span className="vault-continue-type">{continueReading.type}</span>
+                                        <button
+                                            className="vault-continue-btn"
+                                            onClick={() => openViewer(continueReading.link, continueReading.type, continueReading)}
+                                        >
+                                            Open
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    )}
+                        )}
 
-                    {!selectedCategory && !showFavorites ? (
-                        <div className="vault-folder-grid">
-                            {categories.map(category => {
-                                const count = vaultItems.filter(
-                                    item => (item.category ?? "General") === category
-                                ).length;
-                                const cover = getFolderCover(category);
+                        {!selectedCategory && !showFavorites ? (
+                            <div className="vault-folder-grid">
+                                {categories.map(category => {
+                                    const count = vaultItems.filter(
+                                        item => (item.category ?? "General") === category
+                                    ).length;
+                                    const covers = getFolderCovers(category);
 
-                                return (
+                                    return (
+                                        <button
+                                            key={category}
+                                            className="vault-folder-card"
+                                            onClick={() => {
+                                                setSelectedCategory(category);
+                                                setShowFavorites(false);
+                                            }}
+                                        >
+                                            <div className="vault-folder-cover-area">
+                                                {covers.length > 0 ? (
+                                                    <div className="vault-folder-cover-collage">
+                                                        {covers.slice(0, 6).map((cover, idx) => (
+                                                            <img
+                                                                key={idx}
+                                                                src={cover}
+                                                                alt=""
+                                                                loading="lazy"
+                                                            />
+                                                        ))}
+                                                        {covers.length < 6 && Array.from({ length: 6 - covers.length }).map((_, idx) => (
+                                                            <div key={`empty-${idx}`} style={{ background: 'rgba(255,255,255,0.02)' }} />
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <span className="vault-folder-cover-icon">📁</span>
+                                                )}
+                                            </div>
+                                            <div className="vault-folder-content">
+                                                <h2>{category}</h2>
+                                                <span>{count} {count === 1 ? "Entry" : "Entries"}</span>
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <>
+                                <div className="vault-category-header">
+                                    <div className="vault-category-header-left">
+                                        {selectedCategory && (() => {
+                                            const firstItem = vaultItems.find(
+                                                item => (item.category ?? "General") === selectedCategory && item.image
+                                            );
+                                            return firstItem?.image ? (
+                                                <img
+                                                    src={firstItem.image}
+                                                    alt={selectedCategory}
+                                                    className="vault-category-cover"
+                                                />
+                                            ) : null;
+                                        })()}
+                                        <h2>
+                                            {showFavorites ? "⭐ Favorites" : selectedCategory}
+                                        </h2>
+                                        <span className="vault-item-count">
+                                            {filteredAndSortedItems.length} {filteredAndSortedItems.length === 1 ? "Entry" : "Entries"}
+                                        </span>
+                                    </div>
                                     <button
-                                        key={category}
-                                        className="vault-folder-card"
+                                        className="vault-back-btn"
                                         onClick={() => {
-                                            setSelectedCategory(category);
+                                            setSelectedCategory(null);
                                             setShowFavorites(false);
                                         }}
                                     >
-                                        <div className="vault-folder-icon">
-                                            {cover ? (
-                                                <img
-                                                    src={cover}
-                                                    alt={category}
-                                                    className="vault-folder-cover"
-                                                />
-                                            ) : (
-                                                "📁"
-                                            )}
-                                        </div>
-                                        <div className="vault-folder-content">
-                                            <h2>{category}</h2>
-                                            <span>
-                                                {count} {count === 1 ? "Entry" : "Entries"}
-                                            </span>
-                                        </div>
-                                        <div className="vault-folder-arrow">→</div>
+                                        ← Back
                                     </button>
-                                );
-                            })}
-                        </div>
-                    ) : (
-                        <>
-                            <div className="vault-folder-header">
-                                <button
-                                    className="vault-back-btn"
-                                    onClick={() => {
-                                        setSelectedCategory(null);
-                                        setShowFavorites(false);
-                                    }}
-                                >
-                                    ← Back
-                                </button>
-                                <h2>
-                                    {showFavorites ? "⭐ Favorites" : `📁 ${selectedCategory}`}
-                                </h2>
-                                <span className="vault-item-count">
-                                    {filteredAndSortedItems.length} {filteredAndSortedItems.length === 1 ? "Entry" : "Entries"}
-                                </span>
-                            </div>
-
-                            {/* Render items grouped by series */}
-                            {Object.entries(groupedItems.grouped).map(([seriesName, items]) =>
-                                renderSeriesGroup(seriesName, items)
-                            )}
-
-                            {/* Standalone items */}
-                            {groupedItems.standalone.length > 0 && (
-                                <div className={`vault-grid vault-grid-${viewMode}`}>
-                                    {groupedItems.standalone.map((item, index) =>
-                                        renderCard(item, index === 0 && !selectedCategory)
-                                    )}
                                 </div>
-                            )}
 
-                            {filteredAndSortedItems.length === 0 && (
-                                <div className="vault-empty-state">
-                                    <p>No items found matching your criteria.</p>
-                                </div>
-                            )}
-                        </>
-                    )}
-                </>
-            )}
+                                {Object.entries(groupedItems.grouped).map(([seriesName, items]) =>
+                                    renderSeriesGroup(seriesName, items)
+                                )}
+
+                                {groupedItems.standalone.length > 0 && (
+                                    <div className={`vault-grid vault-grid-${viewMode}`}>
+                                        {groupedItems.standalone.map((item, index) =>
+                                            renderCard(item, index === 0 && !selectedCategory)
+                                        )}
+                                    </div>
+                                )}
+
+                                {filteredAndSortedItems.length === 0 && (
+                                    <div className="vault-empty-state">
+                                        <div className="vault-empty-icon">🔍</div>
+                                        <p>No entries found matching your criteria.</p>
+                                        {(searchQuery || filterChip !== "all" || showFavorites) && (
+                                            <button
+                                                className="vault-empty-clear-btn"
+                                                onClick={() => {
+                                                    setSearchQuery("");
+                                                    setFilterChip("all");
+                                                    setShowFavorites(false);
+                                                }}
+                                            >
+                                                Clear Filters
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </>
+                )}
+            </div>
 
             {viewerType === "pdf" && (
                 <PDFViewer url={viewerUrl} onClose={closeViewer} />
