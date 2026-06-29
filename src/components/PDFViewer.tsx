@@ -12,9 +12,6 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
     useEffect(() => {
         if (!url) return;
 
-        const originalOverflow = document.body.style.overflow;
-        document.body.style.overflow = "hidden";
-
         const handleEsc = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
                 onClose();
@@ -25,7 +22,6 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
 
         return () => {
             window.removeEventListener("keydown", handleEsc);
-            document.body.style.overflow = originalOverflow || "auto";
         };
     }, [url, onClose]);
 
@@ -51,7 +47,7 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
                         </div>
 
                         <div className="window-title">
-                            Document Viewer
+                             Document Viewer
                         </div>
                     </div>
 
