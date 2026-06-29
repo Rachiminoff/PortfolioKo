@@ -11,7 +11,7 @@
     justify-content: center;
     align-items: flex-start;
     z-index: 9999;
-    padding: 1.5rem 1rem;
+    padding: 2vh 2vw;
     overflow-y: auto;
     overflow-x: hidden;
     animation: viewerFade 0.2s ease;
@@ -19,8 +19,8 @@
 
 .pdf-window {
     position: relative;
-    width: min(1500px, 100%);
-    max-width: 1500px;
+    width: min(1700px, 95vw);
+    height: min(1100px, 95vh);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -31,7 +31,7 @@
     box-shadow: 0 25px 60px rgba(0,0,0,0.72);
     animation: windowPop 0.22s ease;
     flex-shrink: 0;
-    margin: auto 0;
+    margin: auto;
 }
 
 .pdf-window::before {
@@ -40,6 +40,7 @@
     inset: 0;
     border: 1px solid rgba(255,255,255,0.04);
     pointer-events: none;
+    border-radius: 16px;
 }
 
 .pdf-window-topbar {
@@ -57,11 +58,13 @@
     display: flex;
     align-items: center;
     gap: 0.8rem;
+    min-width: 0;
 }
 
 .window-controls {
     display: flex;
     gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .window-controls span {
@@ -96,6 +99,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .window-btn {
@@ -107,6 +111,7 @@
     cursor: pointer;
     transition: 0.2s ease;
     font-size: 0.8rem;
+    white-space: nowrap;
 }
 
 .window-btn:hover {
@@ -123,6 +128,7 @@
     font-size: 1.1rem;
     cursor: pointer;
     transition: 0.2s ease;
+    flex-shrink: 0;
 }
 
 .window-close:hover {
@@ -132,8 +138,8 @@
 .pdf-frame-wrapper {
     position: relative;
     flex: 1;
+    min-height: 0;
     background: #111111;
-    min-height: 300px;
 }
 
 .pdf-frame-wrapper iframe {
@@ -141,6 +147,7 @@
     height: 100%;
     border: none;
     background: white;
+    display: block;
 }
 
 .viewer-loading {
@@ -178,5 +185,80 @@
     to {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+======================================== */
+
+@media (max-height: 700px) {
+    .pdf-viewer {
+        padding: 1vh 2vw;
+    }
+    
+    .pdf-window {
+        height: min(1100px, 98vh);
+    }
+}
+
+@media (max-width: 768px) {
+    .pdf-viewer {
+        padding: 1vh 1vw;
+    }
+    
+    .pdf-window {
+        width: min(1700px, 98vw);
+        height: min(1100px, 98vh);
+        border-radius: 12px;
+    }
+    
+    .window-title {
+        max-width: 120px;
+        font-size: 0.75rem;
+    }
+    
+    .window-btn {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .window-close {
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pdf-viewer {
+        padding: 0.5vh 0.5vw;
+    }
+    
+    .pdf-window {
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+    
+    .pdf-window::before {
+        border-radius: 0;
+    }
+    
+    .window-title {
+        max-width: 80px;
+        font-size: 0.7rem;
+    }
+    
+    .window-btn {
+        font-size: 0.65rem;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .window-close {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
     }
 }
