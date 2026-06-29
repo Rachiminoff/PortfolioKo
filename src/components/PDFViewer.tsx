@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import "../assets/styles/PDFViewer.scss";
 
 interface PDFViewerProps {
@@ -8,6 +9,12 @@ interface PDFViewerProps {
 
 function PDFViewer({ url, onClose }: PDFViewerProps) {
     const [viewerLoading, setViewerLoading] = useState(true);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
 
     useEffect(() => {
         if (!url) return;
@@ -26,12 +33,14 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
     }, [url, onClose]);
 
     useEffect(() => {
-        setViewerLoading(true);
+        if (url) {
+            setViewerLoading(true);
+        }
     }, [url]);
 
-    if (!url) return null;
+    if (!url || !mounted) return null;
 
-    return (
+    const viewerContent = (
         <div className="pdf-viewer" onClick={onClose}>
             <div
                 className="pdf-window"
@@ -47,7 +56,7 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
                         </div>
 
                         <div className="window-title">
-                             Document Viewer
+                            Document Viewer
                         </div>
                     </div>
 
@@ -78,13 +87,15 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
 
                     <iframe
                         src={url}
-                        title="Vault Viewer"
+                        title="Document Viewer"
                         onLoad={() => setViewerLoading(false)}
                     />
                 </div>
             </div>
         </div>
     );
+
+    return createPortal(viewerContent, document.body);
 }
 
 export default PDFViewer;

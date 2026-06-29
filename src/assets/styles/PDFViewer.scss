@@ -1,17 +1,20 @@
 /* ========================================
-   PDF VIEWER
+   PDF VIEWER - Fullscreen Overlay
 ======================================== */
 
 .pdf-viewer {
     position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at top, rgba(120,80,120,0.22), rgba(0,0,0,0.93));
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at top, rgba(120, 80, 120, 0.22), rgba(0, 0, 0, 0.93));
     backdrop-filter: blur(14px);
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    z-index: 9999;
-    padding: 2vh 2vw;
+    align-items: center;
+    z-index: 99999;
+    padding: 2.5vh 2.5vw;
     overflow-y: auto;
     overflow-x: hidden;
     animation: viewerFade 0.2s ease;
@@ -21,14 +24,16 @@
     position: relative;
     width: min(1700px, 95vw);
     height: min(1100px, 95vh);
+    max-width: 95vw;
+    max-height: 95vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     border-radius: 16px;
-    background: rgba(24,24,24,0.88);
+    background: rgba(24, 24, 24, 0.88);
     backdrop-filter: blur(18px);
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.72);
     animation: windowPop 0.22s ease;
     flex-shrink: 0;
     margin: auto;
@@ -38,15 +43,16 @@
     content: "";
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(255,255,255,0.04);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     pointer-events: none;
     border-radius: 16px;
 }
 
 .pdf-window-topbar {
     height: 50px;
+    min-height: 50px;
     background: linear-gradient(to bottom, #363636, #252525);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -86,7 +92,7 @@
 }
 
 .window-title {
-    color: rgba(255,255,255,0.88);
+    color: rgba(255, 255, 255, 0.88);
     font-size: 0.85rem;
     font-weight: 500;
     white-space: nowrap;
@@ -103,9 +109,9 @@
 }
 
 .window-btn {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.85);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
     padding: 0.4rem 0.8rem;
     border-radius: 6px;
     cursor: pointer;
@@ -115,7 +121,7 @@
 }
 
 .window-btn:hover {
-    background: rgba(255,255,255,0.12);
+    background: rgba(255, 255, 255, 0.12);
 }
 
 .window-close {
@@ -123,7 +129,7 @@
     height: 34px;
     border-radius: 8px;
     border: none;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
     color: white;
     font-size: 1.1rem;
     cursor: pointer;
@@ -156,7 +162,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
     font-size: 1rem;
     z-index: 5;
@@ -170,7 +176,6 @@
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
@@ -181,7 +186,6 @@
         transform: scale(0.96);
         opacity: 0;
     }
-
     to {
         transform: scale(1);
         opacity: 1;
@@ -194,11 +198,14 @@
 
 @media (max-height: 700px) {
     .pdf-viewer {
-        padding: 1vh 2vw;
+        padding: 1vh 2.5vw;
+        align-items: flex-start;
     }
     
     .pdf-window {
         height: min(1100px, 98vh);
+        max-height: 98vh;
+        margin: auto 0;
     }
 }
 
@@ -210,6 +217,12 @@
     .pdf-window {
         width: min(1700px, 98vw);
         height: min(1100px, 98vh);
+        max-width: 98vw;
+        max-height: 98vh;
+        border-radius: 12px;
+    }
+    
+    .pdf-window::before {
         border-radius: 12px;
     }
     
@@ -232,12 +245,15 @@
 
 @media (max-width: 480px) {
     .pdf-viewer {
-        padding: 0.5vh 0.5vw;
+        padding: 0;
+        align-items: center;
     }
     
     .pdf-window {
         width: 100vw;
         height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
         border-radius: 0;
         margin: 0;
     }
