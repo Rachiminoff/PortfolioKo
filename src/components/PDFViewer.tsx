@@ -13,7 +13,6 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
         if (!url) return;
 
         const originalOverflow = document.body.style.overflow;
-
         document.body.style.overflow = "hidden";
 
         const handleEsc = (e: KeyboardEvent) => {
@@ -52,7 +51,7 @@ function PDFViewer({ url, onClose }: PDFViewerProps) {
                         </div>
 
                         <div className="window-title">
-                             Document Viewer
+                            Document Viewer
                         </div>
                     </div>
 

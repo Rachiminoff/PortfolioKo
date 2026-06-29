@@ -5,59 +5,81 @@
 .pdf-viewer {
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle at top, rgba(120,80,120,0.22), rgba(0,0,0,0.93));
+    background: radial-gradient(circle at top, rgba(120, 80, 120, 0.22), rgba(0, 0, 0, 0.93));
     backdrop-filter: blur(14px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    padding: 1rem;
+    padding: clamp(8px, 2vh, 16px);
     animation: viewerFade 0.2s ease;
+
+    @media (max-width: 900px) {
+        padding: 0;
+    }
 }
 
 .pdf-window {
     position: relative;
     width: min(1500px, 100%);
-    height: 94%;
+    height: 100%;
+    max-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 16px;
-    background: rgba(24,24,24,0.88);
+    border-radius: clamp(12px, 2vw, 16px);
+    background: rgba(24, 24, 24, 0.88);
     backdrop-filter: blur(18px);
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.72);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.72);
     animation: windowPop 0.22s ease;
+
+    @media (max-width: 900px) {
+        border-radius: 0;
+        border: none;
+        max-height: 100vh;
+        height: 100vh;
+        box-shadow: none;
+    }
 }
 
 .pdf-window::before {
     content: "";
     position: absolute;
     inset: 0;
-    border: 1px solid rgba(255,255,255,0.04);
+    border: 1px solid rgba(255, 255, 255, 0.04);
     pointer-events: none;
+
+    @media (max-width: 900px) {
+        display: none;
+    }
 }
 
 .pdf-window-topbar {
-    height: 50px;
+    height: clamp(42px, 5vh, 50px);
+    min-height: 42px;
     background: linear-gradient(to bottom, #363636, #252525);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 clamp(0.75rem, 2vw, 1rem);
     flex-shrink: 0;
+    gap: 0.5rem;
 }
 
 .window-left {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: clamp(0.5rem, 1.5vw, 0.8rem);
+    min-width: 0;
+    flex-shrink: 1;
 }
 
 .window-controls {
     display: flex;
     gap: 0.5rem;
+    flex-shrink: 0;
 }
 
 .window-controls span {
@@ -79,63 +101,92 @@
 }
 
 .window-title {
-    color: rgba(255,255,255,0.88);
-    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: clamp(0.75rem, 1.2vw, 0.85rem);
     font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 280px;
+    max-width: clamp(120px, 20vw, 280px);
+    flex-shrink: 1;
+
+    @media (max-width: 768px) {
+        max-width: 80px;
+    }
+
+    @media (max-width: 500px) {
+        display: none;
+    }
 }
 
 .window-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: clamp(0.3rem, 1vw, 0.5rem);
+    flex-shrink: 0;
 }
 
 .window-btn {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.85);
-    padding: 0.4rem 0.8rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.4rem clamp(0.6rem, 1.2vw, 0.8rem);
     border-radius: 6px;
     cursor: pointer;
     transition: 0.2s ease;
-    font-size: 0.8rem;
-}
+    font-size: clamp(0.7rem, 1vw, 0.8rem);
+    white-space: nowrap;
+    flex-shrink: 0;
 
-.window-btn:hover {
-    background: rgba(255,255,255,0.12);
+    &:hover {
+        background: rgba(255, 255, 255, 0.12);
+    }
+
+    @media (max-width: 500px) {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.7rem;
+    }
 }
 
 .window-close {
-    width: 34px;
-    height: 34px;
+    width: clamp(30px, 4vh, 34px);
+    height: clamp(30px, 4vh, 34px);
+    min-width: 30px;
+    min-height: 30px;
     border-radius: 8px;
     border: none;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
     color: white;
-    font-size: 1.1rem;
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
     cursor: pointer;
     transition: 0.2s ease;
-}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 
-.window-close:hover {
-    background: #ff5f57;
+    &:hover {
+        background: #ff5f57;
+    }
 }
 
 .pdf-frame-wrapper {
     position: relative;
     flex: 1;
+    min-height: 0;
     background: #111111;
+    display: flex;
+    flex-direction: column;
 }
 
 .pdf-frame-wrapper iframe {
     width: 100%;
     height: 100%;
+    flex: 1;
+    min-height: 0;
     border: none;
     background: white;
+    display: block;
 }
 
 .viewer-loading {
@@ -144,10 +195,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     color: white;
-    font-size: 1rem;
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
     z-index: 5;
+    pointer-events: none;
 }
 
 /* ========================================
@@ -158,7 +210,6 @@
     from {
         opacity: 0;
     }
-
     to {
         opacity: 1;
     }
@@ -169,7 +220,6 @@
         transform: scale(0.96);
         opacity: 0;
     }
-
     to {
         transform: scale(1);
         opacity: 1;
