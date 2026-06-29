@@ -1,6 +1,4 @@
-// Vault.tsx - Refined with proper list view
-
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
 import PDFViewer from "./PDFViewer";
@@ -42,10 +40,12 @@ function Vault() {
     const [expandedSeries, setExpandedSeries] = useState<Set<string>>(new Set());
     const [continueReading, setContinueReading] = useState<VaultItem | null>(null);
 
+    // Fetch vault items
     useEffect(() => {
         fetchVaultItems();
     }, []);
 
+    // Load continue reading from localStorage
     useEffect(() => {
         const saved = localStorage.getItem("continueReading");
         if (saved) {
@@ -63,6 +63,16 @@ function Vault() {
         }
     }, [vaultItems]);
 
+    // Lock body scroll when viewer is open
+    useEffect(() => {
+        if (viewerUrl) {
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = '';
+            };
+        }
+    }, [viewerUrl]);
+
     const fetchVaultItems = async () => {
         setLoading(true);
         const { data, error } = await supabase
@@ -79,7 +89,7 @@ function Vault() {
         setLoading(false);
     };
 
-    const openViewer = (url?: string, type?: string, item?: VaultItem) => {
+    const openViewer = useCallback((url?: string, type?: string, item?: VaultItem) => {
         if (!url) return;
 
         let finalUrl = url;
@@ -102,12 +112,12 @@ function Vault() {
             localStorage.setItem("continueReading", JSON.stringify(savedItem));
             setContinueReading(savedItem);
         }
-    };
+    }, []);
 
-    const closeViewer = () => {
+    const closeViewer = useCallback(() => {
         setViewerUrl(null);
         setViewerType(null);
-    };
+    }, []);
 
     const toggleDescription = (id?: number) => {
         if (!id) return;
@@ -837,11 +847,12 @@ function Vault() {
                 )}
             </div>
 
-            {viewerType === "pdf" && (
+            {/* VIEWER OVERLAY - Rendered at root level with portal-like behavior */}
+            {viewerUrl && viewerType === "pdf" && (
                 <PDFViewer url={viewerUrl} onClose={closeViewer} />
             )}
 
-            {viewerType === "epub" && (
+            {viewerUrl && viewerType === "epub" && (
                 <EPUBViewer url={viewerUrl} onClose={closeViewer} />
             )}
         </div>
