@@ -1,4 +1,4 @@
-import React, { useState, useRef, MouseEvent } from "react";
+import React, { useState, useRef, MouseEvent, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useInView } from "react-intersection-observer";
 
@@ -213,6 +213,7 @@ function Expertise() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [selectedTech, setSelectedTech] = useState<Tech | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+  const [isHovering, setIsHovering] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -240,13 +241,30 @@ function Expertise() {
     setSelectedTech(selectedTech === tech ? null : tech);
   };
 
+  const handleScrollHintClick = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+
+  // Helper to convert hex to rgb for shadow effects
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : { r: 124, g: 92, b: 255 };
+  };
+
   return (
     <div className={`expertise-container ${inView ? 'visible' : ''}`} id="expertise" ref={ref}>
       {/* Header */}
       <div className={`expertise-header ${inView ? 'animate-in' : ''}`}>
         <div className="header-top">
           <div>
-            <h1>Tech Stack</h1>
+            <span className="header-tag">✦ Technology Stack</span>
+            <h1>Expertise &amp; Tools</h1>
             <p className="expertise-subtitle">
               Technologies I work with — scroll through the stack
             </p>
@@ -264,12 +282,14 @@ function Expertise() {
         </div>
 
         {/* Category Filters */}
-        <div className="category-filters">
+        <div className="category-filters" role="tablist">
           {categories.map(cat => (
             <button
               key={cat}
               className={`category-chip ${activeCategory === cat ? 'active' : ''}`}
               onClick={() => setActiveCategory(cat)}
+              aria-pressed={activeCategory === cat}
+              role="tab"
             >
               {cat}
             </button>
@@ -282,64 +302,90 @@ function Expertise() {
         className="tech-stack-wrapper"
         ref={wrapperRef}
         onMouseMove={handleMouseMove}
-        style={{ '--mouse-x': `${mousePosition.x}%`, '--mouse-y': `${mousePosition.y}%` } as React.CSSProperties}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        style={{ 
+          '--mouse-x': `${mousePosition.x}%`, 
+          '--mouse-y': `${mousePosition.y}%`,
+        } as React.CSSProperties}
       >
         <div className="tech-stack-scroll" ref={scrollRef}>
-          {[...filteredTech, ...filteredTech].map((tech, index) => (
-            <div
-              key={index}
-              className="tech-item"
-              style={
-                {
-                  "--tech-color": tech.color,
-                } as React.CSSProperties
-              }
-              onClick={() => handleTechClick(tech)}
-            >
-              <div className="tech-icon-wrapper">
-                <Icon icon={tech.icon} className="tech-icon" />
-                {tech.featured && (
-                  <div className="featured-badge">
-                    <Icon icon="mdi:sparkle" />
+          {[...filteredTech, ...filteredTech].map((tech, index) => {
+            const rgb = hexToRgb(tech.color);
+            return (
+              <div
+                key={`${tech.name}-${index}`}
+                className="tech-item"
+                style={
+                  {
+                    "--tech-color": tech.color,
+                    "--tech-color-rgb": `${rgb.r}, ${rgb.g}, ${rgb.b}`,
+                  } as React.CSSProperties
+                }
+                onClick={() => handleTechClick(tech)}
+                role="button"
+                tabIndex={0}
+                aria-label={`${tech.name} - ${tech.proficiency}% proficiency`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleTechClick(tech);
+                  }
+                }}
+              >
+                <div className="tech-icon-wrapper">
+                  <Icon icon={tech.icon} className="tech-icon" />
+                  {tech.featured && (
+                    <div className="featured-badge" aria-label="Featured technology">
+                      <Icon icon="mdi:sparkle" />
+                    </div>
+                  )}
+                  <div className="proficiency-ring">
+                    <svg viewBox="0 0 36 36" aria-hidden="true">
+                      <path
+                        d="M18 2.0845
+                          a 15.9155 15.9155 0 0 1 0 31.831
+                          a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.05)"
+                        strokeWidth="2"
+                      />
+                      <path
+                        d="M18 2.0845
+                          a 15.9155 15.9155 0 0 1 0 31.831
+                          a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none"
+                        stroke={tech.color}
+                        strokeWidth="2"
+                        strokeDasharray={`${tech.proficiency}, 100`}
+                        strokeLinecap="round"
+                        className="ring-progress"
+                      />
+                    </svg>
+                    <span className="proficiency-text">{tech.proficiency}%</span>
+                  </div>
+                </div>
+                <span className="tech-name">{tech.name}</span>
+                {selectedTech === tech && (
+                  <div className="tech-tooltip" role="tooltip">
+                    <p>{tech.description}</p>
                   </div>
                 )}
-                <div className="proficiency-ring">
-                  <svg viewBox="0 0 36 36">
-                    <path
-                      d="M18 2.0845
-                        a 15.9155 15.9155 0 0 1 0 31.831
-                        a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M18 2.0845
-                        a 15.9155 15.9155 0 0 1 0 31.831
-                        a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none"
-                      stroke={tech.color}
-                      strokeWidth="2"
-                      strokeDasharray={`${tech.proficiency}, 100`}
-                      strokeLinecap="round"
-                      className="ring-progress"
-                    />
-                  </svg>
-                  <span className="proficiency-text">{tech.proficiency}%</span>
-                </div>
               </div>
-              <span className="tech-name">{tech.name}</span>
-              {selectedTech === tech && (
-                <div className="tech-tooltip">
-                  <p>{tech.description}</p>
-                </div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        <div className="scroll-gradient left" />
-        <div className="scroll-gradient right" />
+        <div className="scroll-gradient left" aria-hidden="true" />
+        <div className="scroll-gradient right" aria-hidden="true" />
+        
+        <button 
+          className="scroll-hint"
+          onClick={handleScrollHintClick}
+          aria-label="Scroll through tech stack"
+        >
+          ← Scroll to explore →
+        </button>
       </div>
 
       {/* Featured Skills */}
