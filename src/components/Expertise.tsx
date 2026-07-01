@@ -1,4 +1,4 @@
-import React, { useState, useRef, MouseEvent, useEffect } from "react";
+import React, { useState, useRef, MouseEvent } from "react";
 import { Icon } from "@iconify/react";
 import { useInView } from "react-intersection-observer";
 
@@ -213,7 +213,6 @@ function Expertise() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [selectedTech, setSelectedTech] = useState<Tech | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-  const [isHovering, setIsHovering] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -288,8 +287,9 @@ function Expertise() {
               key={cat}
               className={`category-chip ${activeCategory === cat ? 'active' : ''}`}
               onClick={() => setActiveCategory(cat)}
-              aria-pressed={activeCategory === cat}
               role="tab"
+              aria-selected={activeCategory === cat}
+              tabIndex={activeCategory === cat ? 0 : -1}
             >
               {cat}
             </button>
@@ -302,8 +302,6 @@ function Expertise() {
         className="tech-stack-wrapper"
         ref={wrapperRef}
         onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
         style={{ 
           '--mouse-x': `${mousePosition.x}%`, 
           '--mouse-y': `${mousePosition.y}%`,
