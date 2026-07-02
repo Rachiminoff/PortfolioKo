@@ -1,0 +1,553 @@
+// ==========================================
+// Variables
+// ==========================================
+$navbar-bg: rgba(10, 10, 15, 0.85);
+$navbar-border: rgba(255, 255, 255, 0.08);
+$navbar-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+$navbar-shadow-scrolled: 0 12px 48px rgba(0, 0, 0, 0.4);
+
+$text-primary: rgba(255, 255, 255, 0.9);
+$text-secondary: rgba(255, 255, 255, 0.6);
+$text-hover: #ffffff;
+
+$button-bg-hover: rgba(255, 255, 255, 0.06);
+$button-bg-active: rgba(255, 255, 255, 0.1);
+$button-border-active: rgba(255, 255, 255, 0.15);
+
+$transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+$border-radius-pill: 100px;
+$border-radius-drawer: 16px;
+
+// ==========================================
+// Container
+// ==========================================
+.navigation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  padding: 20px 16px 0;
+
+  @media (max-width: 600px) {
+    padding: 12px 12px 0;
+  }
+}
+
+// ==========================================
+// Navbar
+// ==========================================
+.navbar {
+  position: relative !important;
+  max-width: 720px;
+  width: 100%;
+  border-radius: $border-radius-pill;
+  background: $navbar-bg !important;
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border: 1px solid $navbar-border;
+  box-shadow: $navbar-shadow;
+  transition: all $transition-smooth;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: $border-radius-pill;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 50%, rgba(255, 255, 255, 0.05));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  &.scrolled {
+    background: rgba(10, 10, 15, 0.92) !important;
+    box-shadow: $navbar-shadow-scrolled;
+    border-color: rgba(255, 255, 255, 0.12);
+
+    &::before {
+      opacity: 0.5;
+    }
+  }
+
+  // ==========================================
+  // Toolbar
+  // ==========================================
+  .navbar-toolbar {
+    min-height: 56px;
+    padding: 4px 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+
+    @media (min-width: 601px) {
+      min-height: 60px;
+      padding: 4px 12px;
+    }
+
+    @media (max-width: 600px) {
+      min-height: 48px;
+      padding: 2px 4px;
+      justify-content: flex-start;
+    }
+  }
+
+  // ==========================================
+  // Mobile Menu Button
+  // ==========================================
+  .mobile-menu-button {
+    display: flex !important;
+    padding: 8px;
+    color: $text-primary;
+    transition: all $transition-smooth;
+    border-radius: 8px;
+
+    &:hover {
+      background: $button-bg-hover;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.4);
+      outline-offset: 2px;
+    }
+
+    @media (min-width: 601px) {
+      display: none !important;
+    }
+  }
+
+  // ==========================================
+  // Desktop Navigation Items
+  // ==========================================
+  .nav-items-desktop {
+    display: none;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    @media (min-width: 601px) {
+      display: flex;
+    }
+  }
+
+  // ==========================================
+  // Navigation Button
+  // ==========================================
+  .nav-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: $border-radius-pill;
+    color: $text-secondary;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    transition: all $transition-smooth;
+    background: transparent;
+    border: 1px solid transparent;
+    min-height: 40px;
+    white-space: nowrap;
+
+    // Icon styling
+    .nav-button-icon {
+      font-size: 1.2rem;
+      opacity: 0.7;
+      transition: all $transition-smooth;
+    }
+
+    .nav-button-label {
+      position: relative;
+      transition: all $transition-smooth;
+    }
+
+    // Hover state
+    &:hover {
+      color: $text-hover;
+      background: $button-bg-hover;
+      transform: translateY(-1px);
+
+      .nav-button-icon {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      &::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+    }
+
+    // Active state
+    &.active {
+      color: $text-hover;
+      background: $button-bg-active;
+      border-color: $button-border-active;
+
+      .nav-button-icon {
+        opacity: 1;
+      }
+
+      &::before {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20px;
+        height: 2px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.9));
+        transition: all $transition-smooth;
+      }
+    }
+
+    // Focus state for accessibility
+    &:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.5);
+      outline-offset: 2px;
+    }
+
+    // Hover indicator line
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      width: 16px;
+      height: 2px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      transition: all $transition-smooth;
+      opacity: 0;
+    }
+  }
+}
+
+// ==========================================
+// Mobile Drawer
+// ==========================================
+.mobile-drawer {
+  .drawer-paper {
+    width: 280px;
+    background: rgba(10, 10, 15, 0.95) !important;
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    border-right: 1px solid $navbar-border;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
+    border-radius: 0 $border-radius-drawer $border-radius-drawer 0;
+    overflow: hidden;
+  }
+
+  // ==========================================
+  // Drawer Content
+  // ==========================================
+  .navigation-drawer {
+    padding: 8px 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    // ==========================================
+    // Drawer Header
+    // ==========================================
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 24px 16px;
+      color: $text-primary;
+
+      .drawer-icon {
+        font-size: 1.5rem;
+        opacity: 0.8;
+      }
+
+      .drawer-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        background: linear-gradient(135deg, #fff 60%, rgba(255, 255, 255, 0.6));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    // ==========================================
+    // Drawer Divider
+    // ==========================================
+    .drawer-divider {
+      background: $navbar-border;
+      margin: 0 16px 8px;
+      opacity: 0.6;
+    }
+
+    // ==========================================
+    // Drawer List
+    // ==========================================
+    .drawer-list {
+      padding: 4px 8px;
+      flex: 1;
+
+      .drawer-list-item {
+        padding: 2px 0;
+        border-radius: 8px;
+        overflow: hidden;
+
+        // ==========================================
+        // Drawer Button
+        // ==========================================
+        .drawer-button {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 12px 16px;
+          border-radius: 8px;
+          color: $text-secondary;
+          transition: all $transition-smooth;
+          position: relative;
+
+          .drawer-item-icon {
+            font-size: 1.3rem;
+            opacity: 0.7;
+            transition: all $transition-smooth;
+            width: 24px;
+            text-align: center;
+          }
+
+          .drawer-item-text {
+            font-size: 0.95rem;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            color: inherit;
+            transition: all $transition-smooth;
+
+            .MuiTypography-root {
+              font-weight: 500;
+            }
+          }
+
+          .drawer-item-indicator {
+            position: absolute;
+            right: 16px;
+            width: 4px;
+            height: 20px;
+            border-radius: 2px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8));
+            opacity: 0;
+            transition: all $transition-smooth;
+          }
+
+          // Hover state
+          &:hover {
+            color: $text-hover;
+            background: $button-bg-hover;
+            transform: translateX(4px);
+
+            .drawer-item-icon {
+              opacity: 1;
+              transform: scale(1.1);
+            }
+          }
+
+          // Active state
+          &.active {
+            color: $text-hover;
+            background: $button-bg-active;
+
+            .drawer-item-icon {
+              opacity: 1;
+            }
+
+            .drawer-item-text {
+              font-weight: 600;
+            }
+
+            .drawer-item-indicator {
+              opacity: 1;
+            }
+          }
+
+          // Focus state
+          &:focus-visible {
+            outline: 2px solid rgba(255, 255, 255, 0.4);
+            outline-offset: -4px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// ==========================================
+// Scrollbar Styling (Optional)
+// ==========================================
+.navigation-drawer {
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+}
+
+// ==========================================
+// Animation Keyframes
+// ==========================================
+@keyframes fadeInDrawer {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.navigation-drawer .drawer-list-item {
+  animation: fadeInDrawer 0.3s ease-out forwards;
+  opacity: 0;
+
+  @for $i from 1 through 10 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.04}s;
+    }
+  }
+}
+
+// ==========================================
+// Responsive Adjustments
+// ==========================================
+
+// Mobile - Full width navbar
+@media (max-width: 600px) {
+  .navigation-container {
+    padding: 8px 0 0;
+  }
+
+  .navbar {
+    max-width: 100%;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    box-shadow: $navbar-shadow-scrolled;
+
+    &::before {
+      border-radius: 0;
+    }
+
+    &.scrolled {
+      border-radius: 0;
+    }
+  }
+
+  .navbar-toolbar {
+    padding: 4px 12px !important;
+  }
+
+  .mobile-drawer .drawer-paper {
+    width: 280px;
+    border-radius: 0 $border-radius-drawer $border-radius-drawer 0;
+  }
+}
+
+// Tablet
+@media (min-width: 601px) and (max-width: 768px) {
+  .navbar {
+    max-width: 620px;
+
+    .nav-button {
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      gap: 6px;
+      min-height: 36px;
+
+      .nav-button-icon {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+// Small phones
+@media (max-width: 400px) {
+  .navigation-container {
+    padding: 4px 0 0;
+  }
+
+  .navbar {
+    .navbar-toolbar {
+      min-height: 44px;
+      padding: 2px 8px !important;
+    }
+  }
+
+  .mobile-drawer .drawer-paper {
+    width: 260px;
+  }
+
+  .navigation-drawer {
+    .drawer-header {
+      padding: 16px 20px 12px;
+
+      .drawer-icon {
+        font-size: 1.2rem;
+      }
+
+      .drawer-title {
+        font-size: 0.95rem;
+      }
+    }
+
+    .drawer-list .drawer-list-item .drawer-button {
+      padding: 10px 14px;
+      font-size: 0.85rem;
+
+      .drawer-item-icon {
+        font-size: 1.1rem;
+      }
+
+      .drawer-item-text {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+// ==========================================
+// Reduced Motion Preferences
+// ==========================================
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

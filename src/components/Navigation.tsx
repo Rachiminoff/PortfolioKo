@@ -11,38 +11,56 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
-import ListIcon from "@mui/icons-material/List";
 import Toolbar from "@mui/material/Toolbar";
-import { useNavigate } from "react-router-dom";
-
-const drawerWidth = 240;
+import { useNavigate, useLocation } from "react-router-dom";
+import { Icon } from "@iconify/react";
+import "../assets/styles/Navigation.scss";
 
 type Section = "expertise" | "history" | "projects" | "contact" | "vault" | "certificates";
 
-const navItems: [string, Section][] = [
-  ["History", "history"],
-  ["Projects", "projects"],
-  ["Expertise", "expertise"],
-  ["Certificates", "certificates"],
-  ["Contact", "contact"]
+const navItems: [string, Section, string][] = [
+  ["History", "history", "mdi:history"],
+  ["Projects", "projects", "mdi:rocket-launch"],
+  ["Expertise", "expertise", "mdi:lightning-bolt"],
+  ["Certificates", "certificates", "mdi:trophy"],
+  ["Contact", "contact", "mdi:email-outline"]
 ];
 
 function Navigation() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const [activeSection, setActiveSection] = useState<Section>("expertise");
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
   };
 
+  // Handle scroll events for navbar styling
   useEffect(() => {
     const handleScroll = () => {
       const navbar = document.getElementById("navigation");
       if (navbar) {
         setScrolled(window.scrollY > navbar.clientHeight);
       }
+
+      // Detect active section based on scroll position
+      const sections = navItems.map(([, section]) => section);
+      let currentSection: Section = "expertise";
+      
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 100) {
+            currentSection = section;
+          }
+        }
+      }
+      
+      setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -58,27 +76,31 @@ function Navigation() {
     const element = document.getElementById(section);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
+      setActiveSection(section);
+      // Close mobile drawer if open
+      if (mobileOpen) {
+        handleDrawerToggle();
+      }
     }
   };
 
   const drawer = (
-    <Box
-      className="navigation-bar-responsive"
-      onClick={handleDrawerToggle}
-      sx={{ textAlign: "center" }}
-    >
-      <p className="mobile-menu-top">
-        <ListIcon /> Menu
-      </p>
-      <Divider />
-      <List>
-        {navItems.map(([label, section]) => (
-          <ListItem key={label} disablePadding>
+    <Box className="navigation-drawer" onClick={handleDrawerToggle}>
+      <Box className="drawer-header">
+        <Icon icon="mdi:compass" className="drawer-icon" />
+        <span className="drawer-title">Navigation</span>
+      </Box>
+      <Divider className="drawer-divider" />
+      <List className="drawer-list">
+        {navItems.map(([label, section, icon]) => (
+          <ListItem key={label} disablePadding className="drawer-list-item">
             <ListItemButton
-              sx={{ textAlign: "center" }}
+              className={`drawer-button ${activeSection === section ? "active" : ""}`}
               onClick={() => scrollToSection(section)}
             >
-              <ListItemText primary={label} />
+              <Icon icon={icon} className="drawer-item-icon" />
+              <ListItemText primary={label} className="drawer-item-text" />
+              {activeSection === section && <span className="drawer-item-indicator" />}
             </ListItemButton>
           </ListItem>
         ))}
@@ -87,53 +109,52 @@ function Navigation() {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box className="navigation-container">
       <CssBaseline />
 
       <AppBar
         component="nav"
         id="navigation"
-        className={`navbar-fixed-top${scrolled ? " scrolled" : ""}`}
+        className={`navbar ${scrolled ? "scrolled" : ""}`}
+        elevation={scrolled ? 2 : 0}
       >
-        <Toolbar className="navigation-bar">
-
+        <Toolbar className="navbar-toolbar">
           <IconButton
             color="inherit"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            className="mobile-menu-button"
+            aria-label="Toggle navigation menu"
           >
             <MenuIcon />
           </IconButton>
 
-          <Box sx={{ display: { xs: "none", sm: "block" } }}>
-            {navItems.map(([label, section]) => (
+          <Box className="nav-items-desktop">
+            {navItems.map(([label, section, icon]) => (
               <Button
                 key={label}
                 onClick={() => scrollToSection(section)}
-                sx={{ color: "#fff" }}
+                className={`nav-button ${activeSection === section ? "active" : ""}`}
+                aria-current={activeSection === section ? "page" : undefined}
               >
-                {label}
+                <Icon icon={icon} className="nav-button-icon" />
+                <span className="nav-button-label">{label}</span>
               </Button>
             ))}
           </Box>
-
         </Toolbar>
       </AppBar>
 
-      <nav>
+      <nav className="mobile-nav">
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{ keepMounted: true }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
+          classes={{
+            paper: "drawer-paper"
           }}
+          className="mobile-drawer"
         >
           {drawer}
         </Drawer>
