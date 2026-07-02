@@ -17,13 +17,14 @@ import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
-type Section = "expertise" | "history" | "projects" | "contact" | "vault";
+type Section = "expertise" | "history" | "projects" | "contact" | "vault" | "certificates";
 
 const navItems: [string, Section][] = [
-  ["Expertise", "expertise"],
   ["History", "history"],
   ["Projects", "projects"],
-  ["Contact", "contact"],
+  ["Expertise", "expertise"],
+  ["Certificates", "certificates"],
+  ["Contact", "contact"]
 ];
 
 function Navigation() {

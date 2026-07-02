@@ -12,6 +12,7 @@ import {
 
 import FadeIn from "./components/FadeIn";
 import "./index.scss";
+import Certificates from "./components/Certificates";
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
         <Timeline />
         <Project />
         <Expertise />
+        <Certificates/>
         <Contact />
         <Footer />
       </FadeIn>
