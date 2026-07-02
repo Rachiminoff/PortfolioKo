@@ -445,14 +445,14 @@ function Main() {
     };
 
     /* =========================
-       INSIGHTS SUBMIT 
+       INSIGHTS SUBMIT - Uses /api/insights/unlock with BLOG_PASSWORD
     ========================= */
     const handleInsightsSubmit = async (password: string) => {
         setInsightsLoading(true);
         setInsightsError(null);
 
         try {
-            const response = await fetch("/api/insights.unlock", {
+            const response = await fetch("/api/insights/unlock", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
