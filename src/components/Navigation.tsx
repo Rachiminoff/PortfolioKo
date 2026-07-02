@@ -16,9 +16,10 @@ import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "../assets/styles/Navigation.scss";
 
-type Section = "expertise" | "history" | "projects" | "contact" | "vault" | "certificates";
+type Section = "main" | "expertise" | "history" | "projects" | "contact" | "vault" | "certificates";
 
 const navItems: [string, Section, string][] = [
+  ["Main", "main", "mdi:account-circle"],
   ["History", "history", "mdi:history"],
   ["Projects", "projects", "mdi:rocket-launch"],
   ["Expertise", "expertise", "mdi:lightning-bolt"],

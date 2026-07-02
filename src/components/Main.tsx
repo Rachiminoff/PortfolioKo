@@ -407,6 +407,7 @@ function Main() {
             />
             
             <section 
+                id="main"
                 className="about-section"
                 style={{
                     '--mouse-x': `${mousePosition.x}px`,

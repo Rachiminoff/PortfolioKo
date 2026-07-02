@@ -6,7 +6,6 @@ import {
   Terminal,
   Project,
   Navigation,
-  Insights,
   Contact,
   Footer
 } from "./components";
@@ -31,7 +30,6 @@ function App() {
 
       <FadeIn transitionDuration={700}>
         <Main />
-        <Insights />  
         <Terminal />
         <Timeline />
         <Project />
