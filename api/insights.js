@@ -61,7 +61,6 @@ export default async function handler(req, res) {
             });
         }
 
-        // CORRECT PASSWORD - Use BLOG_PASSWORD env var
         if (password === process.env.BLOG_PASSWORD) {
             await supabase
                 .from("blog_attempts")
