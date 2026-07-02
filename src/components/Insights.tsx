@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
@@ -43,6 +43,9 @@ type CategoryFilter = "all" | "development" | "tutorials" | "case-studies" | "th
 // Get password from environment
 const BLOG_PASSWORD = process.env.REACT_APP_BLOG_PASSWORD || "blog123";
 
+// Number of articles to load per batch
+const ARTICLES_PER_BATCH = 5;
+
 interface InsightsProps {
   onClose?: () => void;
 }
@@ -70,6 +73,11 @@ function Insights({ onClose }: InsightsProps) {
   const [passwordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Progressive loading state
+  const [visibleCount, setVisibleCount] = useState(ARTICLES_PER_BATCH);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   // Check if already unlocked
   useEffect(() => {
@@ -101,6 +109,11 @@ function Insights({ onClose }: InsightsProps) {
       fetchPosts();
     }
   }, [isUnlocked]);
+
+  // Reset visible count when filters/search change
+  useEffect(() => {
+    setVisibleCount(ARTICLES_PER_BATCH);
+  }, [searchQuery, selectedCategory, sortOption]);
 
   // Scroll to top when article opens
   useEffect(() => {
@@ -191,9 +204,46 @@ function Insights({ onClose }: InsightsProps) {
     return posts.find(post => post.featured) || null;
   }, [posts]);
 
-  const regularPosts = useMemo(() => {
+  // Get regular posts (non-featured) from filtered results
+  const allRegularPosts = useMemo(() => {
     return filteredAndSortedPosts.filter(post => !post.featured);
   }, [filteredAndSortedPosts]);
+
+  // Get visible subset of regular posts
+  const visiblePosts = useMemo(() => {
+    return allRegularPosts.slice(0, visibleCount);
+  }, [allRegularPosts, visibleCount]);
+
+  // Check if there are more posts to load
+  const hasMorePosts = useMemo(() => {
+    return visibleCount < allRegularPosts.length;
+  }, [visibleCount, allRegularPosts.length]);
+
+  // Handle loading more posts
+  const handleLoadMore = () => {
+    if (isLoadingMore) return;
+    
+    setIsLoadingMore(true);
+    
+    // Calculate new count
+    const newCount = Math.min(visibleCount + ARTICLES_PER_BATCH, allRegularPosts.length);
+    
+    // Update visible count
+    setVisibleCount(newCount);
+    
+    // After state update, scroll to reveal new content
+    setTimeout(() => {
+      if (gridRef.current) {
+        const gridRect = gridRef.current.getBoundingClientRect();
+        const scrollTarget = gridRect.top + window.scrollY - 100;
+        window.scrollTo({
+          top: scrollTarget,
+          behavior: 'smooth'
+        });
+      }
+      setIsLoadingMore(false);
+    }, 300);
+  };
 
   const categories = [
     { id: "all", label: "All" },
@@ -233,7 +283,6 @@ function Insights({ onClose }: InsightsProps) {
     
     // Generate TOC and fetch navigation
     const headingRegex = /^(#{1,6})\s+(.+)$/gm;
-    // Use Array.from to handle the iterable properly
     const matches = Array.from(post.content.matchAll(headingRegex));
     const tocItems = matches.map((match: RegExpMatchArray) => ({
       id: match[2].toLowerCase().replace(/[^a-z0-9]/g, "-"),
@@ -242,7 +291,7 @@ function Insights({ onClose }: InsightsProps) {
     }));
     setToc(tocItems);
 
-    // Get navigation posts
+    // Get navigation posts from filtered results
     const currentIndex = filteredAndSortedPosts.findIndex(p => p.id === post.id);
     if (currentIndex > 0) {
       setPrevPost(filteredAndSortedPosts[currentIndex - 1]);
@@ -769,7 +818,7 @@ function Insights({ onClose }: InsightsProps) {
               </div>
             )}
 
-            {/* Featured Article */}
+            {/* Featured Article - Separate from regular posts */}
             {featuredPost && !searchQuery && selectedCategory === "all" && (
               <div className="insights-featured">
                 <div 
@@ -802,11 +851,16 @@ function Insights({ onClose }: InsightsProps) {
             )}
 
             {/* Article Grid */}
-            <div className="insights-article-grid">
-              {regularPosts.map((post) => (
+            <div ref={gridRef} className="insights-article-grid">
+              {visiblePosts.map((post, index) => (
                 <div 
                   key={post.id}
-                  className="insights-article-card"
+                  className={`insights-article-card insights-article-card-${index}`}
+                  style={{
+                    animationDelay: `${index * 0.05}s`,
+                    opacity: 0,
+                    animation: `fadeSlideUp 0.4s ease ${index * 0.05}s forwards`
+                  }}
                   onClick={() => handleCardClick(post)}
                 >
                   <div className="insights-article-image-wrapper">
@@ -841,8 +895,43 @@ function Insights({ onClose }: InsightsProps) {
               ))}
             </div>
 
+            {/* Load More Button */}
+            {allRegularPosts.length > 0 && (
+              <div className="insights-load-more-wrapper">
+                {hasMorePosts ? (
+                  <button
+                    className="insights-load-more-btn"
+                    onClick={handleLoadMore}
+                    disabled={isLoadingMore}
+                  >
+                    {isLoadingMore ? (
+                      <>
+                        <span className="insights-load-more-spinner"></span>
+                        Loading...
+                      </>
+                    ) : (
+                      <>
+                        View More Articles
+                        <svg className="insights-load-more-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </>
+                    )}
+                  </button>
+                ) : (
+                  visibleCount >= ARTICLES_PER_BATCH && (
+                    <div className="insights-load-more-end">
+                      <span className="insights-load-more-end-line"></span>
+                      <span className="insights-load-more-end-text">You've reached the end</span>
+                      <span className="insights-load-more-end-line"></span>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
+
             {/* Empty State */}
-            {regularPosts.length === 0 && !loading && (
+            {allRegularPosts.length === 0 && !loading && (
               <div className="insights-empty-state">
                 <div className="insights-empty-icon">🔍</div>
                 <p>No articles found matching your criteria.</p>
