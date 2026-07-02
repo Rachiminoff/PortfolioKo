@@ -195,7 +195,7 @@ function Contact() {
       className="contact-container"
     >
       <div className="contact-header">
-        <h2 className="contact-title">Let's Work Together</h2>
+        <h2>Let's Work Together</h2>
         
         <div className="contact-divider" />
         
@@ -372,6 +372,7 @@ function Contact() {
             fullWidth
             className="form-field"
             variant="outlined"
+            sx={{ mt: 2 }}
           />
 
           <TextField
@@ -398,6 +399,10 @@ function Contact() {
             fullWidth
             className="form-field"
             variant="outlined"
+            sx={{ mt: 2 }}
+            inputProps={{
+              maxLength: 1000,
+            }}
           />
 
           <div className="form-actions">
