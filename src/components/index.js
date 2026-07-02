@@ -6,3 +6,4 @@ export { default as Project } from "./Project";
 export { default as Contact } from "./Contact";
 export { default as Footer } from "./Footer";
 export { default as Terminal } from "./Terminal";
+export { default as Insights } from "./Insights";

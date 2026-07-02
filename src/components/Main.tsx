@@ -9,6 +9,7 @@ import '../assets/styles/Main.scss';
 
 // Lazy load heavy components
 const Vault = lazy(() => import('./Vault'));
+const Insights = lazy(() => import('./Insights'));
 const PDFViewer = lazy(() => import('./PDFViewer'));
 
 /* =========================
@@ -205,10 +206,21 @@ function Main() {
     const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
     const [pdfLoading, setPdfLoading] = useState(false);
     const [showVaultContent, setShowVaultContent] = useState(false);
+    
+    // Insights state
+    const [insightsUnlocked, setInsightsUnlocked] = useState(false);
+    const [showInsightsContent, setShowInsightsContent] = useState(false);
+    const [insightsModalOpen, setInsightsModalOpen] = useState(false);
+    const [insightsPassword, setInsightsPassword] = useState("");
+    const [insightsError, setInsightsError] = useState<string | null>(null);
+    const [insightsLoading, setInsightsLoading] = useState(false);
+    const [showInsightsPassword, setShowInsightsPassword] = useState(false);
+    
     const rippleIdRef = useRef(0);
     const imageRef = useRef<HTMLImageElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const vaultRef = useRef<HTMLDivElement>(null);
+    const insightsRef = useRef<HTMLDivElement>(null);
 
     // Smooth cursor interpolation
     const targetMouseRef = useRef({ x: 0, y: 0 });
@@ -262,10 +274,8 @@ function Main() {
     // Handle vault unlock animation
     useEffect(() => {
         if (vaultUnlocked) {
-            // Small delay then show vault content with animation
             setTimeout(() => {
                 setShowVaultContent(true);
-                // Scroll to vault after it appears
                 setTimeout(() => {
                     if (vaultRef.current) {
                         vaultRef.current.scrollIntoView({ 
@@ -279,6 +289,25 @@ function Main() {
             setShowVaultContent(false);
         }
     }, [vaultUnlocked]);
+
+    // Handle insights unlock animation
+    useEffect(() => {
+        if (insightsUnlocked) {
+            setTimeout(() => {
+                setShowInsightsContent(true);
+                setTimeout(() => {
+                    if (insightsRef.current) {
+                        insightsRef.current.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                }, 500);
+            }, 300);
+        } else {
+            setShowInsightsContent(false);
+        }
+    }, [insightsUnlocked]);
 
     /* =========================
        SECRET CLICK TRIGGER
@@ -352,6 +381,32 @@ function Main() {
         }
 
         setLoading(false);
+    };
+
+    /* =========================
+       INSIGHTS SUBMIT
+    ========================= */
+    const handleInsightsSubmit = async (password: string) => {
+        setInsightsLoading(true);
+        setInsightsError(null);
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        const correctPassword = process.env.REACT_APP_BLOG_PASSWORD || "blog123";
+        
+        if (password === correctPassword) {
+            localStorage.setItem("blogUnlocked", "true");
+            setInsightsUnlocked(true);
+            setInsightsModalOpen(false);
+            setInsightsError(null);
+            setInsightsPassword("");
+            setInsightsLoading(false);
+        } else {
+            setInsightsError("Invalid password. Please try again.");
+            setInsightsLoading(false);
+            setInsightsPassword("");
+        }
     };
 
     /* =========================
@@ -487,6 +542,15 @@ function Main() {
                                 Full-Stack Developer
                             </p>
 
+                            {/* Insights Trigger Button */}
+                            <button
+                                className="insights-trigger-btn"
+                                onClick={() => setInsightsModalOpen(true)}
+                            >
+                                <span className="insights-trigger-icon">📝</span>
+                                Insights
+                            </button>
+
                             <div className="mobile_social_icons">
                                 <a
                                     href="https://github.com/Rachiminoff"
@@ -603,6 +667,24 @@ function Main() {
                 </Suspense>
             </div>
 
+            {/* =========================
+                INSIGHTS - ANIMATED INLINE REVEAL
+            ========================= */}
+            <div 
+                ref={insightsRef}
+                className={`insights-reveal-container ${showInsightsContent ? 'visible' : ''}`}
+            >
+                <div className="insights-reveal-divider" />
+                <Suspense fallback={
+                    <div className="insights-loading-state">
+                        <div className="insights-loading-spinner" />
+                        <p>Loading articles...</p>
+                    </div>
+                }>
+                    {insightsUnlocked && <Insights />}
+                </Suspense>
+            </div>
+
             <Suspense fallback={null}>
                 <PDFViewer
                     url={viewerUrl}
@@ -703,6 +785,98 @@ function Main() {
                                         </>
                                     ) : (
                                         "Unlock Vault →"
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* =========================
+                INSIGHTS MODAL - PASSWORD OVERLAY
+            ========================= */}
+            {insightsModalOpen && (
+                <div className="insights-modal-overlay">
+                    <div className="insights-modal-container">
+                        <div className="insights-modal-header">
+                            <span className="insights-modal-icon">📝</span>
+                            <h2>Insights</h2>
+                            <button 
+                                className="insights-modal-close"
+                                onClick={() => {
+                                    setInsightsModalOpen(false);
+                                    setInsightsError(null);
+                                    setInsightsPassword("");
+                                }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <p className="insights-modal-description">
+                            Enter your password to access articles and technical content
+                        </p>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleInsightsSubmit(insightsPassword);
+                            }}
+                            className="insights-modal-form"
+                        >
+                            <div className="insights-password-wrapper">
+                                <input
+                                    type={showInsightsPassword ? "text" : "password"}
+                                    placeholder="Enter password..."
+                                    value={insightsPassword}
+                                    onChange={(e) => {
+                                        setInsightsPassword(e.target.value);
+                                        setInsightsError(null);
+                                    }}
+                                    className={`insights-modal-input ${insightsError ? 'error' : ''}`}
+                                    disabled={insightsLoading}
+                                    autoFocus
+                                    autoComplete="off"
+                                />
+                                <button
+                                    type="button"
+                                    className="insights-password-toggle"
+                                    onClick={() => setShowInsightsPassword(!showInsightsPassword)}
+                                    aria-label={showInsightsPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showInsightsPassword ? "👁️" : "👁️‍🗨️"}
+                                </button>
+                            </div>
+                            {insightsError && (
+                                <div className="insights-modal-error">
+                                    <span>⚠️</span>
+                                    <span>{insightsError}</span>
+                                </div>
+                            )}
+                            <div className="insights-modal-actions">
+                                <button
+                                    type="button"
+                                    className="insights-modal-button secondary"
+                                    onClick={() => {
+                                        setInsightsModalOpen(false);
+                                        setInsightsError(null);
+                                        setInsightsPassword("");
+                                    }}
+                                    disabled={insightsLoading}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="insights-modal-button primary"
+                                    disabled={insightsLoading || !insightsPassword.trim()}
+                                >
+                                    {insightsLoading ? (
+                                        <>
+                                            <span className="spinner" />
+                                            Unlocking...
+                                        </>
+                                    ) : (
+                                        "Unlock Insights →"
                                     )}
                                 </button>
                             </div>
