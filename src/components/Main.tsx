@@ -404,7 +404,7 @@ function Main() {
     }, [insightsClickCount]);
 
     /* =========================
-       VAULT SUBMIT
+       VAULT SUBMIT - Uses secure API
     ========================= */
     const handleVaultSubmit = async (password: string) => {
         setLoading(true);
@@ -445,29 +445,44 @@ function Main() {
     };
 
     /* =========================
-       INSIGHTS SUBMIT
+       INSIGHTS SUBMIT - Uses secure API
     ========================= */
     const handleInsightsSubmit = async (password: string) => {
         setInsightsLoading(true);
         setInsightsError(null);
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        const correctPassword = process.env.REACT_APP_BLOG_PASSWORD || "blog123";
-        
-        if (password === correctPassword) {
-            localStorage.setItem("blogUnlocked", "true");
-            setInsightsUnlocked(true);
-            setInsightsModalOpen(false);
-            setInsightsError(null);
-            setInsightsPassword("");
-            setInsightsLoading(false);
-        } else {
-            setInsightsError("Invalid password. Please try again.");
-            setInsightsLoading(false);
-            setInsightsPassword("");
+        try {
+            // Using the same secure API endpoint
+            const response = await fetch("/api/unlock", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ password }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                localStorage.setItem("blogUnlocked", "true");
+                setInsightsUnlocked(true);
+                setInsightsModalOpen(false);
+                setInsightsError(null);
+                setInsightsPassword("");
+            } else if (data.locked) {
+                const lockTime = new Date(data.lockedUntil).toLocaleString();
+                setInsightsError(`Too many attempts. Locked until ${lockTime}`);
+            } else if (data.remaining !== undefined) {
+                setInsightsError(`Invalid password. ${data.remaining} attempt${data.remaining > 1 ? 's' : ''} remaining`);
+            } else {
+                setInsightsError("Invalid password. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error unlocking insights:", error);
+            setInsightsError("Something went wrong. Please try again.");
         }
+
+        setInsightsLoading(false);
     };
 
     /* =========================
