@@ -248,7 +248,68 @@ function Insights({ onClose }: InsightsProps) {
   }
 
   // Password Screen
- 
+  if (!isUnlocked) {
+    return (
+      <div className="insights-container insights-locked">
+        <div className="insights-lock-screen">
+          <div className="insights-lock-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+          </div>
+          <h1>Insights</h1>
+          <p className="insights-lock-subtitle">Enter your password to access articles</p>
+          <form onSubmit={handleUnlock} className="insights-lock-form">
+            <div className="insights-password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError(false);
+                }}
+                placeholder="Enter password"
+                className={`insights-password-input ${passwordError ? "error" : ""}`}
+                disabled={isLoading}
+                autoFocus
+              />
+              <button
+                type="button"
+                className="insights-password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </button>
+            </div>
+            {passwordError && (
+              <div className="insights-password-error">
+                <span className="error-icon">✕</span>
+                Invalid password. Please try again.
+              </div>
+            )}
+            <button
+              type="submit"
+              className="insights-unlock-btn"
+              disabled={isLoading || !password}
+            >
+              {isLoading ? (
+                <span className="insights-loader">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </span>
+              ) : (
+                "Unlock"
+              )}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   // Main Content
   return (
     <div className="insights-container">
