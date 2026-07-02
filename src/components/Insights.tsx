@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import "../assets/styles/Insights.scss";
 
@@ -21,20 +22,20 @@ interface BlogPost {
 }
 
 type SortOption = "newest" | "oldest" | "az" | "za" | "custom";
-type CategoryFilter = "all" | "development" | "tutorials" | "case-studies" | "thoughts" | "career" | "react" | "supabase" | "typescript";
+type CategoryFilter = "all" | "development" | "tutorials" | "case-studies" | "thoughts" | "movies" | "programming" | "games" | "books";
 
 interface InsightsProps {
   onClose?: () => void;
 }
 
 function Insights({ onClose }: InsightsProps) {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("all");
   const [sortOption, setSortOption] = useState<SortOption>("newest");
   const [continueReading, setContinueReading] = useState<BlogPost | null>(null);
-  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
   // Load continue reading from localStorage
   useEffect(() => {
@@ -156,62 +157,17 @@ function Insights({ onClose }: InsightsProps) {
   };
 
   const handleCardClick = (post: BlogPost) => {
-    setSelectedPost(post);
+    // Save to continue reading
+    localStorage.setItem("blogContinueReading", JSON.stringify(post));
+    // Navigate to article page
+    navigate(`/insights/${post.slug}`);
   };
 
-  const handleBack = () => {
-    setSelectedPost(null);
+  const handleContinueReading = (post: BlogPost) => {
+    navigate(`/insights/${post.slug}`);
   };
 
-  // Article Detail View
-  if (selectedPost) {
-    return (
-      <div className="insights-container">
-        <div className="insights-article-detail">
-          <button className="insights-back-btn" onClick={handleBack}>
-            ← Back to Insights
-          </button>
-          
-          <div className="insights-article-hero">
-            <img 
-              src={selectedPost.cover_image || selectedPost.thumbnail} 
-              alt={selectedPost.title}
-              className="insights-article-hero-image"
-            />
-            <div className="insights-article-hero-content">
-              <div className="insights-article-hero-badges">
-                <span className="insights-article-category-badge">{selectedPost.category}</span>
-                {selectedPost.tags && selectedPost.tags.map(tag => (
-                  <span key={tag} className="insights-article-tag-badge">{tag}</span>
-                ))}
-              </div>
-              <h1>{selectedPost.title}</h1>
-              <div className="insights-article-hero-meta">
-                <span>{formatDate(selectedPost.created_at)}</span>
-                <span>·</span>
-                <span>{selectedPost.reading_time}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="insights-article-body">
-            {selectedPost.excerpt && (
-              <div className="insights-article-excerpt">
-                {selectedPost.excerpt}
-              </div>
-            )}
-            <div className="insights-article-content">
-              {selectedPost.content.split('\n').map((paragraph, index) => (
-                <p key={index}>{paragraph}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Main Content (no password screen anymore)
+  // Main Content
   return (
     <div className="insights-container">
       {/* Header */}
@@ -325,7 +281,7 @@ function Insights({ onClose }: InsightsProps) {
                     <span className="insights-continue-type">{continueReading.category}</span>
                     <button
                       className="insights-continue-btn"
-                      onClick={() => handleCardClick(continueReading)}
+                      onClick={() => handleContinueReading(continueReading)}
                     >
                       Continue
                     </button>
