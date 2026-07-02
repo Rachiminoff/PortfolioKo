@@ -452,7 +452,7 @@ function Main() {
         setInsightsError(null);
 
         try {
-            const response = await fetch("/api/insights/unlock", {
+            const response = await fetch("/api/insights", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
