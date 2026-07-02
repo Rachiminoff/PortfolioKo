@@ -32,7 +32,6 @@ function Navigation() {
   const [activeSection, setActiveSection] = useState<Section>("expertise");
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
