@@ -404,7 +404,7 @@ function Main() {
     }, [insightsClickCount]);
 
     /* =========================
-       VAULT SUBMIT - Uses secure API
+       VAULT SUBMIT - Uses /api/unlock
     ========================= */
     const handleVaultSubmit = async (password: string) => {
         setLoading(true);
@@ -445,15 +445,14 @@ function Main() {
     };
 
     /* =========================
-       INSIGHTS SUBMIT - Uses secure API
+       INSIGHTS SUBMIT - Uses /api/insights/unlock with BLOG_PASSWORD
     ========================= */
     const handleInsightsSubmit = async (password: string) => {
         setInsightsLoading(true);
         setInsightsError(null);
 
         try {
-            // Using the same secure API endpoint
-            const response = await fetch("/api/unlock", {
+            const response = await fetch("/api/unlock.insight", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

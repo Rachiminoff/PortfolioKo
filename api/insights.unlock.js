@@ -31,7 +31,7 @@ export default async function handler(req, res) {
             });
         }
 
-        // Use a different table for blog attempts
+        // Use a different table for blog attempts (or reuse vault_attempts with a type field)
         const {
             data: existing,
             error: fetchError,
