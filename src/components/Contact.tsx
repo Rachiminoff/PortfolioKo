@@ -9,8 +9,14 @@ import Paper from '@mui/material/Paper';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Fade from '@mui/material/Fade';
 
 import SendIcon from '@mui/icons-material/Send';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import ScheduleIcon from '@mui/icons-material/Schedule';
 
 import emailjs from '@emailjs/browser';
 import axios from 'axios';
@@ -63,7 +69,7 @@ function Contact() {
     const timer = setTimeout(() => {
       setSuccess(false);
       setSendError(false);
-    }, 5000);
+    }, 6000);
 
     return () => clearTimeout(timer);
   }, [success, sendError]);
@@ -188,82 +194,110 @@ function Contact() {
       id="contact"
       className="contact-container"
     >
-      <h2>Let's Work Together</h2>
-
-      <p
-        style={{
-          maxWidth: 600,
-          opacity: 0.8,
-        }}
-      >
-        Have a project in mind, a question,
-        or just want to say hello? I'd love
-        to hear from you.
-      </p>
+      <div className="contact-header">
+        <h2 className="contact-title">Let's Work Together</h2>
+        
+        <div className="contact-divider" />
+        
+        <p className="contact-subtitle">
+          Have a project in mind, a question, or just want to say hello? 
+          <br />
+          I'd love to hear from you.
+        </p>
+      </div>
 
       <Paper
         className="contact-card"
         elevation={0}
       >
-        <h3>Send Message</h3>
+        <div className="contact-card-header">
+          <Typography variant="h4" className="card-title">
+            Send a Message
+          </Typography>
+          <Typography variant="body2" className="card-subtitle">
+            I'll get back to you as soon as possible
+          </Typography>
+        </div>
 
-        {success && (
-          <Alert
-            severity="success"
-            sx={{ mb: 2 }}
+        <Divider className="card-divider" />
+
+        <Fade in={success} timeout={400}>
+          <Box>
+            {success && (
+              <Alert
+                icon={<CheckCircleIcon />}
+                severity="success"
+                className="alert-success"
+                sx={{ mb: 3 }}
+              >
+                <div className="alert-content">
+                  <strong>Message sent successfully!</strong>
+                  <br />
+                  <span className="alert-reference">
+                    Reference ID: <strong>{referenceId}</strong>
+                  </span>
+                </div>
+              </Alert>
+            )}
+          </Box>
+        </Fade>
+
+        <Fade in={sendError} timeout={400}>
+          <Box>
+            {sendError && (
+              <Alert
+                icon={<ErrorIcon />}
+                severity="error"
+                className="alert-error"
+                sx={{ mb: 3 }}
+              >
+                <div className="alert-content">
+                  <strong>Failed to send message.</strong>
+                  <br />
+                  <span>Please try again or contact me directly.</span>
+                </div>
+              </Alert>
+            )}
+          </Box>
+        </Fade>
+
+        <Box className="chips-container">
+          <Typography variant="caption" className="chips-label">
+            Quick subject suggestions
+          </Typography>
+          
+          <Stack
+            direction="row"
+            spacing={1}
+            flexWrap="wrap"
+            useFlexGap
+            className="chips-stack"
           >
-            Message sent successfully.
-            <br />
-            Reference ID:{' '}
-            <strong>{referenceId}</strong>
-          </Alert>
-        )}
+            <Chip
+              label="Project Inquiry"
+              onClick={() => setSubject('Project Inquiry')}
+              className={`chip-item ${subject === 'Project Inquiry' ? 'chip-selected' : ''}`}
+            />
 
-        {sendError && (
-          <Alert
-            severity="error"
-            sx={{ mb: 2 }}
-          >
-            Failed to send message.
-            Please try again.
-          </Alert>
-        )}
+            <Chip
+              label="Collaboration"
+              onClick={() => setSubject('Collaboration')}
+              className={`chip-item ${subject === 'Collaboration' ? 'chip-selected' : ''}`}
+            />
 
-        <Stack
-          direction="row"
-          spacing={1}
-          flexWrap="wrap"
-          useFlexGap
-          sx={{ mb: 2 }}
-        >
-          <Chip
-            label="Project Inquiry"
-            onClick={() =>
-              setSubject('Project Inquiry')
-            }
-          />
+            <Chip
+              label="General Question"
+              onClick={() => setSubject('General Question')}
+              className={`chip-item ${subject === 'General Question' ? 'chip-selected' : ''}`}
+            />
 
-          <Chip
-            label="Collaboration"
-            onClick={() =>
-              setSubject('Collaboration')
-            }
-          />
-
-          <Chip
-            label="General Question"
-            onClick={() =>
-              setSubject('General Question')
-            }
-          />
-
-          <Chip
-            label="Bug Report"
-            onClick={() =>
-              setSubject('Bug Report')
-            }
-          />
-        </Stack>
+            <Chip
+              label="Bug Report"
+              onClick={() => setSubject('Bug Report')}
+              className={`chip-item ${subject === 'Bug Report' ? 'chip-selected' : ''}`}
+            />
+          </Stack>
+        </Box>
 
         <Box
           component="form"
@@ -272,7 +306,7 @@ function Contact() {
         >
           <div className="form-grid-2">
             <TextField
-              label="Name"
+              label="Your Name"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
@@ -285,16 +319,14 @@ function Contact() {
                 }
               }}
               error={error.name}
-              helperText={
-                error.name
-                  ? 'Name is required'
-                  : ''
-              }
+              helperText={error.name ? 'Name is required' : ''}
               fullWidth
+              className="form-field"
+              variant="outlined"
             />
 
             <TextField
-              label="Email"
+              label="Email Address"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -307,19 +339,18 @@ function Contact() {
                 }
               }}
               onBlur={() => {
-                setError((prev) => ({
-                  ...prev,
-                  email:
-                    !validateEmail(email),
-                }));
+                if (email.trim()) {
+                  setError((prev) => ({
+                    ...prev,
+                    email: !validateEmail(email),
+                  }));
+                }
               }}
               error={error.email}
-              helperText={
-                error.email
-                  ? 'Enter a valid email address'
-                  : ''
-              }
+              helperText={error.email ? 'Please enter a valid email' : ''}
               fullWidth
+              className="form-field"
+              variant="outlined"
             />
           </div>
 
@@ -337,13 +368,10 @@ function Contact() {
               }
             }}
             error={error.subject}
-            helperText={
-              error.subject
-                ? 'Subject is required'
-                : ''
-            }
+            helperText={error.subject ? 'Subject is required' : ''}
             fullWidth
-            sx={{ mt: 2 }}
+            className="form-field"
+            variant="outlined"
           />
 
           <TextField
@@ -361,49 +389,43 @@ function Contact() {
             }}
             error={error.message}
             helperText={
-              error.message
-                ? 'Message is required'
-                : `${message.length}/1000`
+              error.message 
+                ? 'Message is required' 
+                : `${message.length}/1000 characters`
             }
             multiline
             rows={8}
             fullWidth
-            sx={{ mt: 2 }}
-            inputProps={{
-              maxLength: 1000,
-            }}
+            className="form-field"
+            variant="outlined"
           />
 
-          <Button
-            type="submit"
-            variant="contained"
-            disabled={
-              !isFormValid || loading
-            }
-            className="send-button"
-            endIcon={
-              loading ? (
-                <CircularProgress
-                  size={18}
-                  color="inherit"
-                />
-              ) : (
-                <SendIcon />
-              )
-            }
-            sx={{
-              mt: 3,
-              borderRadius: '999px',
-              px: 4,
-              py: 1.5,
-              textTransform: 'none',
-              fontWeight: 600,
-            }}
-          >
-            {loading
-              ? 'Sending...'
-              : 'Send Message'}
-          </Button>
+          <div className="form-actions">
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={!isFormValid || loading}
+              className="send-button"
+              endIcon={
+                loading ? (
+                  <CircularProgress
+                    size={20}
+                    color="inherit"
+                    className="button-spinner"
+                  />
+                ) : (
+                  <SendIcon className="send-icon" />
+                )
+              }
+            >
+              {loading ? 'Sending...' : 'Send Message'}
+            </Button>
+
+            <div className="trust-indicator">
+              <ScheduleIcon className="trust-icon" />
+              <span>Typically replies within 24–48 hours</span>
+            </div>
+          </div>
         </Box>
       </Paper>
     </div>

@@ -1,3 +1,7 @@
+// ============================================================
+// CONTACT SECTION
+// ============================================================
+
 .contact-container {
   width: 100%;
   min-height: 100vh;
@@ -21,9 +25,34 @@
   line-height: 1.7;
 }
 
-/* ========================= */
-/* CONTACT CARD */
-/* ========================= */
+// ============================================================
+// HEADER
+// ============================================================
+
+.contact-header {
+  margin-bottom: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+}
+
+.contact-divider {
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.3), transparent);
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.contact-subtitle {
+  max-width: 600px;
+}
+
+// ============================================================
+// CONTACT CARD
+// ============================================================
 
 .contact-card {
   width: 100%;
@@ -45,6 +74,19 @@
     transform 0.25s ease,
     border-color 0.25s ease,
     background 0.25s ease;
+
+  // Wide screen optimization
+  @media (min-width: 1200px) {
+    padding: 48px 56px !important;
+    border-radius: 24px !important;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  @media (min-width: 1600px) {
+    padding: 56px 64px !important;
+    max-width: 1000px;
+  }
 }
 
 .contact-card:hover {
@@ -60,9 +102,122 @@
   letter-spacing: -0.02em;
 }
 
-/* ========================= */
-/* CHIPS */
-/* ========================= */
+// ============================================================
+// CARD HEADER
+// ============================================================
+
+.contact-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-title {
+  color: white !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.02em !important;
+
+  @media (min-width: 1200px) {
+    font-size: 1.75rem !important;
+  }
+}
+
+.card-subtitle {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.9rem !important;
+
+  @media (min-width: 1200px) {
+    font-size: 1rem !important;
+  }
+}
+
+.card-divider {
+  margin: 0 0 1.75rem 0 !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+// ============================================================
+// ALERTS
+// ============================================================
+
+.MuiAlert-root {
+  border-radius: 12px !important;
+}
+
+.alert-success,
+.alert-error {
+  border-radius: 16px !important;
+  padding: 16px 20px !important;
+  
+  .MuiAlert-icon {
+    font-size: 1.5rem !important;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 20px 24px !important;
+    border-radius: 18px !important;
+  }
+}
+
+.alert-success {
+  background: rgba(46, 213, 115, 0.08) !important;
+  border: 1px solid rgba(46, 213, 115, 0.15) !important;
+  color: #b0f0c0 !important;
+  
+  .MuiAlert-icon {
+    color: #2ed573 !important;
+  }
+}
+
+.alert-error {
+  background: rgba(255, 71, 87, 0.08) !important;
+  border: 1px solid rgba(255, 71, 87, 0.15) !important;
+  color: #ffb3b3 !important;
+  
+  .MuiAlert-icon {
+    color: #ff4757 !important;
+  }
+}
+
+.alert-content {
+  line-height: 1.6;
+  
+  strong {
+    font-weight: 600;
+  }
+}
+
+.alert-reference {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+// ============================================================
+// CHIPS
+// ============================================================
+
+.chips-container {
+  margin-bottom: 2rem;
+}
+
+.chips-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 0.7rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+
+  @media (min-width: 1200px) {
+    font-size: 0.75rem !important;
+  }
+}
+
+.chips-stack {
+  gap: 8px !important;
+}
 
 .MuiChip-root {
   background: rgba(255, 255, 255, 0.05) !important;
@@ -77,9 +232,52 @@
   transform: translateY(-1px);
 }
 
-/* ========================= */
-/* FORM */
-/* ========================= */
+.chip-item {
+  background: rgba(255, 255, 255, 0.04) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: 999px !important;
+  padding: 0 16px !important;
+  height: 34px !important;
+  
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  &:active {
+    transform: scale(0.96);
+  }
+  
+  .MuiChip-label {
+    padding: 0 !important;
+  }
+
+  @media (min-width: 1200px) {
+    height: 38px !important;
+    padding: 0 20px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+.chip-selected {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.05);
+}
+
+// ============================================================
+// FORM
+// ============================================================
 
 .contact-form {
   display: flex;
@@ -91,47 +289,15 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+
+  @media (min-width: 1200px) {
+    gap: 24px;
+  }
 }
 
-/* ========================= */
-/* BUTTON */
-/* ========================= */
-
-.send-button {
-  margin-top: 18px !important;
-  align-self: flex-start;
-
-  background: white !important;
-  color: rgb(25, 25, 25) !important;
-
-  font-family: 'Courier Prime', monospace !important;
-  font-weight: 700 !important;
-  text-transform: none !important;
-
-  padding: 12px 24px !important;
-
-  box-shadow:
-    0 10px 30px rgba(255, 255, 255, 0.12);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease !important;
-}
-
-.send-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 14px 36px rgba(255, 255, 255, 0.18);
-}
-
-.send-button.Mui-disabled {
-  opacity: 0.5;
-}
-
-/* ========================= */
-/* MUI INPUTS */
-/* ========================= */
+// ============================================================
+// TEXT FIELDS
+// ============================================================
 
 .MuiInputBase-root {
   color: white !important;
@@ -172,17 +338,254 @@
   color: white !important;
 }
 
-/* ========================= */
-/* ALERTS */
-/* ========================= */
+// Enhanced form fields
+.form-field {
+  .MuiOutlinedInput-root {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.04);
+      
+      .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+    }
+    
+    &.Mui-focused {
+      background: rgba(255, 255, 255, 0.05);
+      
+      .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(255, 255, 255, 0.5) !important;
+        border-width: 2px !important;
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.05);
+      }
+    }
+    
+    &.Mui-error {
+      .MuiOutlinedInput-notchedOutline {
+        border-color: #ff4757 !important;
+      }
+      
+      &:hover .MuiOutlinedInput-notchedOutline {
+        border-color: #ff6b7a !important;
+      }
+      
+      &.Mui-focused .MuiOutlinedInput-notchedOutline {
+        border-color: #ff4757 !important;
+        box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
+      }
+    }
+    
+    .MuiOutlinedInput-notchedOutline {
+      border-color: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
 
-.MuiAlert-root {
-  border-radius: 12px !important;
+    @media (min-width: 1200px) {
+      border-radius: 14px;
+    }
+  }
+  
+  .MuiInputBase-input {
+    color: white !important;
+    padding: 14px 16px !important;
+    font-size: 0.95rem !important;
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+      opacity: 1;
+    }
+
+    @media (min-width: 1200px) {
+      padding: 16px 20px !important;
+      font-size: 1rem !important;
+    }
+  }
+  
+  .MuiInputLabel-root {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-size: 0.9rem !important;
+    transform: translate(14px, 14px) scale(1) !important;
+    
+    &.Mui-focused {
+      color: rgba(255, 255, 255, 0.7) !important;
+      transform: translate(14px, -9px) scale(0.75) !important;
+    }
+    
+    &.Mui-error {
+      color: #ff4757 !important;
+    }
+
+    @media (min-width: 1200px) {
+      font-size: 0.95rem !important;
+      transform: translate(16px, 16px) scale(1) !important;
+      
+      &.Mui-focused {
+        transform: translate(16px, -9px) scale(0.75) !important;
+      }
+    }
+  }
+  
+  .MuiFormHelperText-root {
+    color: rgba(255, 255, 255, 0.4) !important;
+    font-size: 0.75rem !important;
+    margin: 4px 0 0 14px !important;
+    
+    &.Mui-error {
+      color: #ff4757 !important;
+    }
+
+    @media (min-width: 1200px) {
+      font-size: 0.8rem !important;
+      margin: 6px 0 0 16px !important;
+    }
+  }
+  
+  // Remove autofill background
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.02) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
 }
 
-/* ========================= */
-/* SCROLLBAR */
-/* ========================= */
+// ============================================================
+// FORM ACTIONS
+// ============================================================
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 1.5rem;
+
+  @media (min-width: 1200px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+}
+
+// ============================================================
+// SEND BUTTON
+// ============================================================
+
+.send-button {
+  margin-top: 18px !important;
+  align-self: flex-start;
+
+  background: white !important;
+  color: rgb(25, 25, 25) !important;
+
+  font-family: 'Courier Prime', monospace !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+
+  padding: 12px 24px !important;
+
+  box-shadow:
+    0 10px 30px rgba(255, 255, 255, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease !important;
+
+  @media (min-width: 1200px) {
+    margin-top: 0 !important;
+    padding: 14px 36px !important;
+    min-width: 200px;
+    font-size: 1.05rem !important;
+    border-radius: 999px !important;
+    
+    box-shadow: 
+      0 4px 20px rgba(255, 255, 255, 0.1),
+      0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    
+    .send-icon {
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    &:hover:not(:disabled) {
+      transform: translateY(-3px) !important;
+      box-shadow: 
+        0 8px 30px rgba(255, 255, 255, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.08) !important;
+      
+      .send-icon {
+        transform: translateX(4px) rotate(-12deg);
+      }
+    }
+    
+    &:active:not(:disabled) {
+      transform: scale(0.97) translateY(-1px) !important;
+    }
+  }
+}
+
+.send-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 14px 36px rgba(255, 255, 255, 0.18);
+}
+
+.send-button.Mui-disabled {
+  opacity: 0.5;
+}
+
+.send-icon {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.button-spinner {
+  color: inherit !important;
+  
+  .MuiCircularProgress-svg {
+    animation-duration: 0.8s;
+  }
+}
+
+// ============================================================
+// TRUST INDICATOR
+// ============================================================
+
+.trust-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  padding: 4px 0;
+  animation: fadeInUp 0.6s ease 0.4s both;
+
+  @media (min-width: 1200px) {
+    font-size: 0.85rem;
+    gap: 10px;
+  }
+}
+
+.trust-icon {
+  font-size: 1rem !important;
+  opacity: 0.5;
+
+  @media (min-width: 1200px) {
+    font-size: 1.1rem !important;
+  }
+}
+
+// ============================================================
+// SCROLLBAR
+// ============================================================
 
 textarea::-webkit-scrollbar {
   width: 8px;
@@ -193,9 +596,24 @@ textarea::-webkit-scrollbar-thumb {
   border-radius: 999px;
 }
 
-/* ========================= */
-/* MOBILE */
-/* ========================= */
+// ============================================================
+// ANIMATIONS
+// ============================================================
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================================
+// RESPONSIVE - MOBILE
+// ============================================================
 
 @media (max-width: 768px) {
   .contact-container {
@@ -213,5 +631,74 @@ textarea::-webkit-scrollbar-thumb {
 
   .send-button {
     width: 100%;
+  }
+
+  .form-actions {
+    width: 100%;
+    align-items: stretch;
+  }
+  
+  .trust-indicator {
+    justify-content: center;
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    padding: 2rem 16px 1.5rem;
+  }
+  
+  .contact-card {
+    padding: 16px !important;
+    border-radius: 14px !important;
+  }
+  
+  .card-title {
+    font-size: 1.15rem !important;
+  }
+  
+  .card-subtitle {
+    font-size: 0.8rem !important;
+  }
+  
+  .chips-stack {
+    gap: 6px !important;
+  }
+  
+  .chip-item {
+    height: 28px !important;
+    font-size: 0.7rem !important;
+    padding: 0 12px !important;
+  }
+  
+  .form-field {
+    .MuiInputBase-input {
+      padding: 10px 12px !important;
+      font-size: 0.85rem !important;
+    }
+    
+    .MuiInputLabel-root {
+      transform: translate(12px, 10px) scale(1) !important;
+      
+      &.Mui-focused {
+        transform: translate(12px, -9px) scale(0.7) !important;
+      }
+    }
+    
+    .MuiOutlinedInput-root {
+      border-radius: 10px;
+    }
+  }
+  
+  .send-button {
+    font-size: 0.9rem !important;
+    padding: 12px 20px !important;
+  }
+  
+  .alert-success,
+  .alert-error {
+    padding: 12px 16px !important;
+    font-size: 0.85rem !important;
   }
 }
