@@ -1,635 +1,487 @@
-import React, { useState, useEffect, useRef, Suspense, lazy, useCallback } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
+import "./ArticlePage.scss";
 
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import DescriptionIcon from '@mui/icons-material/Description';
-
-import profilePic from '../assets/images/profile.jpeg';
-import '../assets/styles/Main.scss';
-
-// Lazy load heavy components
-const Vault = lazy(() => import('./Vault'));
-const Insights = lazy(() => import('./Insights'));
-const PDFViewer = lazy(() => import('./PDFViewer'));
-
-/* =========================
-   IMPROVED PARTICLE SYSTEM
-========================= */
-function ParticleBackground() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const particlesRef = useRef<Array<{
-        x: number;
-        y: number;
-        vx: number;
-        vy: number;
-        radius: number;
-        baseRadius: number;
-        opacity: number;
-        speed: number;
-        phase: number;
-    }>>([]);
-    const mouseRef = useRef({ x: -1000, y: -1000 });
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        let animationId: number;
-
-        const resize = () => {
-            const rect = canvas.parentElement?.getBoundingClientRect();
-            if (rect) {
-                canvas.width = rect.width;
-                canvas.height = rect.height;
-            }
-        };
-
-        const initParticles = () => {
-            const count = 55;
-            particlesRef.current = Array.from({ length: count }, () => ({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                vx: (Math.random() - 0.5) * 0.15,
-                vy: (Math.random() - 0.5) * 0.15,
-                radius: Math.random() * 2.5 + 0.5,
-                baseRadius: Math.random() * 2.5 + 0.5,
-                opacity: Math.random() * 0.4 + 0.1,
-                speed: Math.random() * 0.25 + 0.05,
-                phase: Math.random() * Math.PI * 2
-            }));
-        };
-
-        const animate = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            const particles = particlesRef.current;
-            const time = Date.now() / 1000;
-            
-            particles.forEach(p => {
-                const dx = mouseRef.current.x - p.x;
-                const dy = mouseRef.current.y - p.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 250) {
-                    const force = (250 - distance) / 250 * 0.015;
-                    p.vx += dx / distance * force * p.speed;
-                    p.vy += dy / distance * force * p.speed;
-                }
-                
-                p.vx *= 0.9995;
-                p.vy *= 0.9995;
-                
-                p.x += p.vx * p.speed * 1.5;
-                p.y += p.vy * p.speed * 1.5;
-                
-                if (p.x < -10) p.x = canvas.width + 10;
-                if (p.x > canvas.width + 10) p.x = -10;
-                if (p.y < -10) p.y = canvas.height + 10;
-                if (p.y > canvas.height + 10) p.y = -10;
-                
-                p.radius = p.baseRadius + Math.sin(time * 0.5 + p.phase) * 0.3;
-                
-                const gradient = ctx.createRadialGradient(
-                    p.x, p.y, 0,
-                    p.x, p.y, p.radius * 2
-                );
-                const alpha = p.opacity * (0.8 + 0.2 * Math.sin(time * 0.3 + p.phase));
-                gradient.addColorStop(0, `rgba(255, 255, 255, ${alpha})`);
-                gradient.addColorStop(1, `rgba(255, 255, 255, 0)`);
-                
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius * 2, 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
-                ctx.fill();
-                
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
-                ctx.fill();
-            });
-            
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 180) {
-                        const opacity = 0.035 * (1 - distance/180) * 
-                            (particles[i].opacity + particles[j].opacity);
-                        const width = 0.5 * (1 - distance/180);
-                        
-                        ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-                        ctx.lineWidth = width;
-                        ctx.stroke();
-                    }
-                }
-            }
-            
-            animationId = requestAnimationFrame(animate);
-        };
-        
-        const handleMouseMove = (e: MouseEvent) => {
-            const rect = canvas.getBoundingClientRect();
-            mouseRef.current.x = e.clientX - rect.left;
-            mouseRef.current.y = e.clientY - rect.top;
-        };
-        
-        resize();
-        initParticles();
-        animate();
-
-        window.addEventListener('resize', () => {
-            resize();
-            initParticles();
-        });
-        window.addEventListener('mousemove', handleMouseMove);
-        
-        return () => {
-            cancelAnimationFrame(animationId);
-            window.removeEventListener('resize', resize);
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
-
-    return <canvas 
-        ref={canvasRef} 
-        className="particle-canvas"
-        style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            pointerEvents: 'none',
-            zIndex: 0,
-            width: '100%',
-            height: '100%'
-        }}
-    />;
+interface BlogPost {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  thumbnail: string;
+  cover_image: string;
+  category: string;
+  tags: string[];
+  reading_time: string;
+  published: boolean;
+  featured: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
 }
 
-/* =========================
-   FLOATING AMBIENT SHAPES
-========================= */
-function AmbientShapes() {
-    return (
-        <div className="ambient-shapes" aria-hidden="true">
-            <div className="shape shape-1" />
-            <div className="shape shape-2" />
-            <div className="shape shape-3" />
-            <div className="shape shape-4" />
-        </div>
-    );
+interface TocItem {
+  id: string;
+  text: string;
+  level: number;
 }
 
-/* =========================
-   MAIN COMPONENT
-========================= */
-function Main() {
-    // Vault state (triggered by clicking name/title)
-    const [vaultClickCount, setVaultClickCount] = useState(0);
-    const [vaultUnlocked, setVaultUnlocked] = useState(false);
-    const [showVaultContent, setShowVaultContent] = useState(false);
-    const vaultRef = useRef<HTMLDivElement>(null);
+interface CodeComponentProps {
+  inline?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  [key: string]: any;
+}
 
-    // Insights state (triggered by clicking profile picture)
-    const [insightsClickCount, setInsightsClickCount] = useState(0);
-    const [insightsUnlocked, setInsightsUnlocked] = useState(false);
-    const [showInsightsContent, setShowInsightsContent] = useState(false);
-    const insightsRef = useRef<HTMLDivElement>(null);
+function ArticlePage() {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [toc, setToc] = useState<TocItem[]>([]);
+  const [prevPost, setPrevPost] = useState<BlogPost | null>(null);
+  const [nextPost, setNextPost] = useState<BlogPost | null>(null);
+  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [isVisible, setIsVisible] = useState(false);
 
-    // Shared state
-    const [viewerUrl, setViewerUrl] = useState<string | null>(null);
-    const [pdfLoading, setPdfLoading] = useState(false);
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number; type: 'vault' | 'insights' }>>([]);
+  useEffect(() => {
+    if (slug) {
+      fetchPost(slug);
+      // Trigger entrance animation
+      setTimeout(() => setIsVisible(true), 100);
+      // Scroll to top on mount
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [slug]);
+
+  const fetchPost = async (slug: string) => {
+    setLoading(true);
     
-    const rippleIdRef = useRef(0);
-    const imageRef = useRef<HTMLImageElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
+    // Fetch the main post
+    const { data: postData, error: postError } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("slug", slug)
+      .eq("published", true)
+      .single();
 
-    // Smooth cursor interpolation
-    const targetMouseRef = useRef({ x: 0, y: 0 });
-    const currentMouseRef = useRef({ x: 0, y: 0 });
+    if (postError || !postData) {
+      console.error("Error fetching post:", postError);
+      setLoading(false);
+      return;
+    }
 
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            targetMouseRef.current = { x: e.clientX, y: e.clientY };
-        };
-        
-        const interpolate = () => {
-            currentMouseRef.current.x += (targetMouseRef.current.x - currentMouseRef.current.x) * 0.08;
-            currentMouseRef.current.y += (targetMouseRef.current.y - currentMouseRef.current.y) * 0.08;
-            
-            setMousePosition({
-                x: currentMouseRef.current.x,
-                y: currentMouseRef.current.y
-            });
-            
-            requestAnimationFrame(interpolate);
-        };
-        
-        window.addEventListener('mousemove', handleMouseMove);
-        interpolate();
-        
-        return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-        };
-    }, []);
+    setPost(postData);
 
-    // Entrance animation
-    useEffect(() => {
-        const timer = setTimeout(() => setIsLoaded(true), 50);
-        return () => clearTimeout(timer);
-    }, []);
+    // Generate TOC from content
+    const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+    const matches = [...postData.content.matchAll(headingRegex)];
+    const tocItems = matches.map((match: RegExpMatchArray) => ({
+      id: match[2].toLowerCase().replace(/[^a-z0-9]/g, "-"),
+      text: match[2],
+      level: match[1].length
+    }));
+    setToc(tocItems);
 
-    // Force vault locked on mount
-    useEffect(() => {
-        try {
-            localStorage.removeItem('vaultUnlocked');
-            sessionStorage.removeItem('vaultUnlocked');
-        } catch (e) {
-            // Ignore
-        }
-        
-        setVaultUnlocked(false);
-        setShowVaultContent(false);
-        setInsightsUnlocked(false);
-        setShowInsightsContent(false);
-    }, []);
+    // Fetch all published posts for navigation
+    const { data: allPosts, error: allError } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("published", true)
+      .order("display_order", { ascending: false })
+      .order("created_at", { ascending: false });
 
-    // Handle vault unlock animation
-    useEffect(() => {
-        if (vaultUnlocked) {
-            setTimeout(() => {
-                setShowVaultContent(true);
-                setTimeout(() => {
-                    if (vaultRef.current) {
-                        vaultRef.current.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }
-                }, 500);
-            }, 300);
-        } else {
-            setShowVaultContent(false);
-        }
-    }, [vaultUnlocked]);
+    if (!allError && allPosts) {
+      const currentIndex = allPosts.findIndex((p: BlogPost) => p.id === postData.id);
+      
+      if (currentIndex > 0) {
+        setPrevPost(allPosts[currentIndex - 1]);
+      }
+      
+      if (currentIndex < allPosts.length - 1) {
+        setNextPost(allPosts[currentIndex + 1]);
+      }
 
-    // Handle insights unlock animation
-    useEffect(() => {
-        if (insightsUnlocked) {
-            setTimeout(() => {
-                setShowInsightsContent(true);
-                setTimeout(() => {
-                    if (insightsRef.current) {
-                        insightsRef.current.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }
-                }, 500);
-            }, 300);
-        } else {
-            setShowInsightsContent(false);
-        }
-    }, [insightsUnlocked]);
+      // Fetch related posts (same category, different id)
+      const related = allPosts
+        .filter((p: BlogPost) => p.id !== postData.id && p.category === postData.category)
+        .slice(0, 3);
+      setRelatedPosts(related);
+    }
 
-    /* =========================
-       VAULT TRIGGER - Click name 5 times
-    ========================= */
-    const handleVaultClick = useCallback((e: React.MouseEvent) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const newCount = vaultClickCount + 1;
-        setVaultClickCount(newCount);
+    setLoading(false);
+  };
 
-        // Ripple effect
-        const newRipple = {
-            id: rippleIdRef.current++,
-            x: x,
-            y: y,
-            type: 'vault' as const
-        };
-        setRipples(prev => [...prev, newRipple]);
-        
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: post?.title,
+        text: post?.excerpt,
+        url: window.location.href
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      // Show a subtle notification
+      const notification = document.createElement('div');
+      notification.className = 'article-copy-notification';
+      notification.textContent = 'Link copied to clipboard!';
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.classList.add('visible');
         setTimeout(() => {
-            setRipples(prev => prev.filter(r => r.id !== newRipple.id));
-        }, 800);
+          notification.classList.remove('visible');
+          setTimeout(() => notification.remove(), 300);
+        }, 2000);
+      }, 10);
+    }
+  };
 
-        if (newCount >= 5) {
-            // Unlock vault - the Vault component will handle its own password
-            setVaultUnlocked(true);
-            setVaultClickCount(0);
-            
-            // Add a subtle haptic feedback feel with a class
-            const element = e.currentTarget;
-            element.classList.add('vault-triggered');
-            setTimeout(() => {
-                element.classList.remove('vault-triggered');
-            }, 1000);
-        }
-    }, [vaultClickCount]);
-
-    /* =========================
-       INSIGHTS TRIGGER - Click profile picture 5 times
-    ========================= */
-    const handleInsightsClick = useCallback((e: React.MouseEvent) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const newCount = insightsClickCount + 1;
-        setInsightsClickCount(newCount);
-
-        // Ripple effect with different color
-        const newRipple = {
-            id: rippleIdRef.current++,
-            x: x,
-            y: y,
-            type: 'insights' as const
-        };
-        setRipples(prev => [...prev, newRipple]);
-        
-        setTimeout(() => {
-            setRipples(prev => prev.filter(r => r.id !== newRipple.id));
-        }, 800);
-
-        if (newCount >= 5) {
-            // Unlock insights - the Insights component will handle its own password
-            setInsightsUnlocked(true);
-            setInsightsClickCount(0);
-            
-            // Add a subtle haptic feedback feel with a class
-            const element = e.currentTarget;
-            element.classList.add('insights-triggered');
-            setTimeout(() => {
-                element.classList.remove('insights-triggered');
-            }, 1000);
-        }
-    }, [insightsClickCount]);
-
-    /* =========================
-       CV VIEWER
-    ========================= */
-    const openCVViewer = useCallback(() => {
-        setPdfLoading(true);
-        setTimeout(() => {
-            setViewerUrl("/YambaoResume.pdf");
-            setPdfLoading(false);
-        }, 300);
-    }, []);
-
-    const closeViewer = useCallback(() => {
-        setViewerUrl(null);
-        setPdfLoading(false);
-    }, []);
-
-    /* =========================
-       PROFILE IMAGE TILT
-    ========================= */
-    const getImageTilt = useCallback(() => {
-        if (typeof window === 'undefined') return { x: 0, y: 0 };
-        
-        const x = ((mousePosition.x / window.innerWidth) - 0.5) * 6;
-        const y = ((mousePosition.y / window.innerHeight) - 0.5) * -6;
-        return { x, y };
-    }, [mousePosition]);
-
-    const tilt = getImageTilt();
-
-    /* =========================
-       UI
-    ========================= */
+  if (loading) {
     return (
-        <div 
-            ref={containerRef}
-            className={`container ${isLoaded ? 'loaded' : ''}`}
-        >
-            {/* Background layers */}
-            <div className="bg-gradient" />
-            <ParticleBackground />
-            <AmbientShapes />
-            <div className="noise-overlay" />
-            
-            {/* Cursor glow */}
-            <div 
-                className="cursor-glow"
-                style={{
-                    left: mousePosition.x,
-                    top: mousePosition.y,
-                }}
-            />
-            
-            <section 
-                className="about-section"
-                style={{
-                    '--mouse-x': `${mousePosition.x}px`,
-                    '--mouse-y': `${mousePosition.y}px`
-                } as React.CSSProperties}
-            >
-                <div className="hero-glass">
-                    <div className="hero-content">
-                        <div 
-                            className="image-wrapper"
-                            style={{
-                                transform: `rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`
-                            }}
-                            onClick={handleInsightsClick}
-                            title="Click 5 times for Insights"
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    e.preventDefault();
-                                    handleInsightsClick(e as any);
-                                }
-                            }}
-                        >
-                            <div className="profile-halo" />
-                            <img
-                                ref={imageRef}
-                                src={profilePic}
-                                alt="Tanya Denise Yambao"
-                                loading="eager"
-                                className="profile-image"
-                            />
-                            {insightsClickCount > 0 && insightsClickCount < 5 && (
-                                <div className="click-counter insights-counter">
-                                    {5 - insightsClickCount}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="text-content">
-                            <div className="social_icons">
-                                <a
-                                    href="https://github.com/Rachiminoff"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="social-link github"
-                                    aria-label="GitHub Profile"
-                                    title="GitHub"
-                                >
-                                    <GitHubIcon />
-                                    <span className="tooltip">GitHub</span>
-                                </a>
-                                <a
-                                    href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="social-link linkedin"
-                                    aria-label="LinkedIn Profile"
-                                    title="LinkedIn"
-                                >
-                                    <LinkedInIcon />
-                                    <span className="tooltip">LinkedIn</span>
-                                </a>
-                                <button 
-                                    className="social-link cv" 
-                                    onClick={openCVViewer}
-                                    aria-label="View Resume"
-                                    title="Resume"
-                                    disabled={pdfLoading}
-                                    tabIndex={0}
-                                >
-                                    <DescriptionIcon />
-                                    <span className="tooltip">Resume</span>
-                                    {pdfLoading && <span className="button-loader" />}
-                                </button>
-                            </div>
-
-                            <h1
-                                onClick={handleVaultClick}
-                                className="name-title"
-                                style={{ cursor: "pointer" }}
-                                title="Click 5 times for Vault"
-                                role="button"
-                                tabIndex={0}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault();
-                                        handleVaultClick(e as any);
-                                    }
-                                }}
-                            >
-                                Tanya Denise Yambao
-                                {vaultClickCount > 0 && vaultClickCount < 5 && (
-                                    <span className="click-counter vault-counter">
-                                        {5 - vaultClickCount}
-                                    </span>
-                                )}
-                            </h1>
-
-                            <p
-                                className="subtitle"
-                            >
-                                Full-Stack Developer
-                            </p>
-
-                            <div className="mobile_social_icons">
-                                <a
-                                    href="https://github.com/Rachiminoff"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="social-link github"
-                                    aria-label="GitHub Profile"
-                                    title="GitHub"
-                                >
-                                    <GitHubIcon />
-                                </a>
-                                <a
-                                    href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="social-link linkedin"
-                                    aria-label="LinkedIn Profile"
-                                    title="LinkedIn"
-                                >
-                                    <LinkedInIcon />
-                                </a>
-                                <button 
-                                    className="social-link cv" 
-                                    onClick={openCVViewer}
-                                    aria-label="View Resume"
-                                    title="Resume"
-                                    disabled={pdfLoading}
-                                    tabIndex={0}
-                                >
-                                    <DescriptionIcon />
-                                    {pdfLoading && <span className="button-loader" />}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Click ripples */}
-                {ripples.map(ripple => (
-                    <div
-                        key={ripple.id}
-                        className={`click-ripple ${ripple.type}`}
-                        style={{
-                            left: ripple.x,
-                            top: ripple.y,
-                        }}
-                    />
-                ))}
-            </section>
-
-            {/* =========================
-                VAULT - ANIMATED INLINE REVEAL
-            ========================= */}
-            <div 
-                ref={vaultRef}
-                className={`vault-reveal-container ${showVaultContent ? 'visible' : ''}`}
-            >
-                <div className="vault-reveal-divider" />
-                <Suspense fallback={
-                    <div className="vault-loading-state">
-                        <div className="vault-loading-spinner" />
-                        <p>Loading archive...</p>
-                    </div>
-                }>
-                    {vaultUnlocked && <Vault />}
-                </Suspense>
-            </div>
-
-            {/* =========================
-                INSIGHTS - ANIMATED INLINE REVEAL
-            ========================= */}
-            <div 
-                ref={insightsRef}
-                className={`insights-reveal-container ${showInsightsContent ? 'visible' : ''}`}
-            >
-                <div className="insights-reveal-divider" />
-                <Suspense fallback={
-                    <div className="insights-loading-state">
-                        <div className="insights-loading-spinner" />
-                        <p>Loading articles...</p>
-                    </div>
-                }>
-                    {insightsUnlocked && <Insights />}
-                </Suspense>
-            </div>
-
-            <Suspense fallback={null}>
-                <PDFViewer
-                    url={viewerUrl}
-                    onClose={closeViewer}
-                />
-            </Suspense>
+      <div className="article-page">
+        <div className="article-loading">
+          <div className="article-skeleton-hero"></div>
+          <div className="article-skeleton-content">
+            <div className="article-skeleton-line"></div>
+            <div className="article-skeleton-line short"></div>
+            <div className="article-skeleton-line"></div>
+            <div className="article-skeleton-line"></div>
+            <div className="article-skeleton-line"></div>
+            <div className="article-skeleton-line short"></div>
+          </div>
         </div>
+      </div>
     );
+  }
+
+  if (!post) {
+    return (
+      <div className="article-page">
+        <div className="article-not-found">
+          <div className="article-not-found-icon">📖</div>
+          <h1>Article Not Found</h1>
+          <p>The article you're looking for doesn't exist or has been removed.</p>
+          <button onClick={() => navigate("/insights")} className="article-back-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Back to Insights
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`article-page ${isVisible ? 'visible' : ''}`}>
+      {/* Hero Section */}
+      <div className="article-hero">
+        <div className="article-hero-image-wrapper">
+          <img 
+            src={post.cover_image || post.thumbnail} 
+            alt={post.title}
+            className="article-hero-image"
+          />
+          <div className="article-hero-overlay"></div>
+          <div className="article-hero-content">
+            <div className="article-hero-badges">
+              <span className="article-category-badge">{post.category}</span>
+              {post.tags && post.tags.slice(0, 3).map(tag => (
+                <span key={tag} className="article-tag-badge">{tag}</span>
+              ))}
+            </div>
+            <h1 className="article-hero-title">{post.title}</h1>
+            <div className="article-hero-meta">
+              <div className="article-hero-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12 6 12 12 16 14" />
+                </svg>
+                <span>{post.reading_time}</span>
+              </div>
+              <div className="article-hero-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                  <line x1="16" y1="2" x2="16" y2="6" />
+                  <line x1="8" y1="2" x2="8" y2="6" />
+                  <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span>{formatDate(post.created_at)}</span>
+              </div>
+              {post.updated_at && post.updated_at !== post.created_at && (
+                <div className="article-hero-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                  <span>Updated {formatDate(post.updated_at)}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="article-container">
+        {/* TOC Sidebar */}
+        {toc.length > 0 && (
+          <aside className="article-toc">
+            <div className="article-toc-inner">
+              <h3>Table of Contents</h3>
+              <nav>
+                {toc.map((item, index) => (
+                  <a
+                    key={index}
+                    href={`#${item.id}`}
+                    className={`article-toc-item level-${item.level}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const element = document.getElementById(item.id);
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }}
+                  >
+                    <span className="article-toc-dot"></span>
+                    {item.text}
+                  </a>
+                ))}
+              </nav>
+            </div>
+          </aside>
+        )}
+
+        {/* Main Content */}
+        <article className="article-content-wrapper">
+          <div className="article-content-inner">
+            {post.excerpt && (
+              <div className="article-excerpt">
+                {post.excerpt}
+              </div>
+            )}
+            
+            <div className="article-body">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight, rehypeSlug]}
+                components={{
+                  h1: ({ children, ...props }: any) => (
+                    <h1 className="article-heading-1" {...props}>{children}</h1>
+                  ),
+                  h2: ({ children, ...props }: any) => (
+                    <h2 className="article-heading-2" {...props}>{children}</h2>
+                  ),
+                  h3: ({ children, ...props }: any) => (
+                    <h3 className="article-heading-3" {...props}>{children}</h3>
+                  ),
+                  h4: ({ children, ...props }: any) => (
+                    <h4 className="article-heading-4" {...props}>{children}</h4>
+                  ),
+                  h5: ({ children, ...props }: any) => (
+                    <h5 className="article-heading-5" {...props}>{children}</h5>
+                  ),
+                  h6: ({ children, ...props }: any) => (
+                    <h6 className="article-heading-6" {...props}>{children}</h6>
+                  ),
+                  p: ({ children, ...props }: any) => (
+                    <p className="article-paragraph" {...props}>{children}</p>
+                  ),
+                  ul: ({ children, ...props }: any) => (
+                    <ul className="article-list article-list-ul" {...props}>{children}</ul>
+                  ),
+                  ol: ({ children, ...props }: any) => (
+                    <ol className="article-list article-list-ol" {...props}>{children}</ol>
+                  ),
+                  li: ({ children, ...props }: any) => (
+                    <li className="article-list-item" {...props}>{children}</li>
+                  ),
+                  blockquote: ({ children, ...props }: any) => (
+                    <blockquote className="article-blockquote" {...props}>{children}</blockquote>
+                  ),
+                  code: ({ inline, className, children, ...props }: CodeComponentProps) => {
+                    const match = /language-(\w+)/.exec(className || "");
+                    return !inline ? (
+                      <div className="article-code-block-wrapper">
+                        <div className="article-code-header">
+                          <span className="article-code-language">{match ? match[1] : 'code'}</span>
+                          <button 
+                            className="article-code-copy"
+                            onClick={() => {
+                              const code = String(children).replace(/\n$/, '');
+                              navigator.clipboard.writeText(code);
+                            }}
+                          >
+                            Copy
+                          </button>
+                        </div>
+                        <pre className={className}>
+                          <code className={className} {...props}>
+                            {children}
+                          </code>
+                        </pre>
+                      </div>
+                    ) : (
+                      <code className="article-inline-code" {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                  img: ({ src, alt, ...props }: any) => (
+                    <div className="article-image-wrapper">
+                      <img src={src} alt={alt} className="article-image" {...props} />
+                      {alt && <span className="article-image-caption">{alt}</span>}
+                    </div>
+                  ),
+                  table: ({ children, ...props }: any) => (
+                    <div className="article-table-wrapper">
+                      <table className="article-table" {...props}>{children}</table>
+                    </div>
+                  ),
+                  thead: ({ children, ...props }: any) => (
+                    <thead {...props}>{children}</thead>
+                  ),
+                  tbody: ({ children, ...props }: any) => (
+                    <tbody {...props}>{children}</tbody>
+                  ),
+                  tr: ({ children, ...props }: any) => (
+                    <tr {...props}>{children}</tr>
+                  ),
+                  th: ({ children, ...props }: any) => (
+                    <th {...props}>{children}</th>
+                  ),
+                  td: ({ children, ...props }: any) => (
+                    <td {...props}>{children}</td>
+                  ),
+                  a: ({ href, children, ...props }: any) => (
+                    <a href={href} className="article-link" target="_blank" rel="noopener noreferrer" {...props}>
+                      {children}
+                    </a>
+                  ),
+                  hr: (props: any) => (
+                    <hr className="article-hr" {...props} />
+                  ),
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
+            </div>
+
+            {/* Tags Footer */}
+            {post.tags && post.tags.length > 0 && (
+              <div className="article-tags-footer">
+                <span className="article-tags-label">Tags</span>
+                <div className="article-tags-list">
+                  {post.tags.map(tag => (
+                    <span key={tag} className="article-tag-pill">{tag}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Navigation */}
+            <div className="article-navigation">
+              <button 
+                className="article-back-btn"
+                onClick={() => navigate("/insights")}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                Back to Insights
+              </button>
+              
+              <div className="article-actions">
+                <button 
+                  className="article-share-btn"
+                  onClick={handleShare}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="18" cy="5" r="3" />
+                    <circle cx="6" cy="12" r="3" />
+                    <circle cx="18" cy="19" r="3" />
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                  </svg>
+                  Share
+                </button>
+              </div>
+            </div>
+
+            {/* Prev/Next */}
+            {(prevPost || nextPost) && (
+              <div className="article-prev-next">
+                {prevPost && (
+                  <div 
+                    className="article-prev"
+                    onClick={() => navigate(`/insights/${prevPost.slug}`)}
+                  >
+                    <span className="article-nav-label">Previous Article</span>
+                    <h4>{prevPost.title}</h4>
+                    <span className="article-nav-arrow">←</span>
+                  </div>
+                )}
+                {nextPost && (
+                  <div 
+                    className="article-next"
+                    onClick={() => navigate(`/insights/${nextPost.slug}`)}
+                  >
+                    <span className="article-nav-label">Next Article</span>
+                    <h4>{nextPost.title}</h4>
+                    <span className="article-nav-arrow">→</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Related Articles */}
+            {relatedPosts.length > 0 && (
+              <div className="article-related">
+                <h3 className="article-related-title">Related Articles</h3>
+                <div className="article-related-grid">
+                  {relatedPosts.map(related => (
+                    <div 
+                      key={related.id}
+                      className="article-related-card"
+                      onClick={() => navigate(`/insights/${related.slug}`)}
+                    >
+                      <img 
+                        src={related.thumbnail} 
+                        alt={related.title}
+                        className="article-related-image"
+                      />
+                      <div className="article-related-content">
+                        <h4>{related.title}</h4>
+                        <div className="article-related-meta">
+                          <span>{formatDate(related.created_at)}</span>
+                          <span>·</span>
+                          <span>{related.reading_time}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </article>
+      </div>
+    </div>
+  );
 }
 
-export default Main;
+export default ArticlePage;
