@@ -1,24 +1,28 @@
 // ==========================================
 // Variables
 // ==========================================
-$navbar-bg: rgba(10, 10, 15, 0.85);
-$navbar-border: rgba(255, 255, 255, 0.08);
-$navbar-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-$navbar-shadow-scrolled: 0 12px 48px rgba(0, 0, 0, 0.4);
+$navbar-height: 64px;
+$navbar-height-mobile: 56px;
+$navbar-bg: rgba(10, 10, 15, 0.75);
+$navbar-bg-scrolled: rgba(10, 10, 15, 0.88);
+$navbar-border: rgba(255, 255, 255, 0.06);
+$navbar-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+$navbar-shadow-scrolled: 0 8px 40px rgba(0, 0, 0, 0.25);
 
 $text-primary: rgba(255, 255, 255, 0.9);
 $text-secondary: rgba(255, 255, 255, 0.6);
 $text-hover: #ffffff;
+$accent-color: #6c63ff;
 
 $button-bg-hover: rgba(255, 255, 255, 0.06);
-$button-bg-active: rgba(255, 255, 255, 0.1);
-$button-border-active: rgba(255, 255, 255, 0.15);
+$button-bg-active: rgba(108, 99, 255, 0.15);
 
 $transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-$transition-bounce: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+$transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+$transition-drawer: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
 $border-radius-pill: 100px;
-$border-radius-drawer: 16px;
+$border-radius-drawer: 0;
 
 // ==========================================
 // Container
@@ -29,102 +33,85 @@ $border-radius-drawer: 16px;
   left: 0;
   right: 0;
   z-index: 1100;
-  display: flex;
-  justify-content: center;
-  padding: 20px 16px 0;
-
-  @media (max-width: 600px) {
-    padding: 12px 12px 0;
-  }
 }
 
 // ==========================================
 // Navbar
 // ==========================================
 .navbar {
-  position: relative !important;
-  max-width: 720px;
-  width: 100%;
-  border-radius: $border-radius-pill;
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $navbar-height;
   background: $navbar-bg !important;
   backdrop-filter: blur(20px) saturate(1.4);
   -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border: 1px solid $navbar-border;
-  box-shadow: $navbar-shadow;
+  border-bottom: 1px solid transparent;
   transition: all $transition-smooth;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: $border-radius-pill;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 50%, rgba(255, 255, 255, 0.05));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
+  box-shadow: none;
 
   &.scrolled {
-    background: rgba(10, 10, 15, 0.92) !important;
+    background: $navbar-bg-scrolled !important;
+    border-bottom: 1px solid $navbar-border;
     box-shadow: $navbar-shadow-scrolled;
-    border-color: rgba(255, 255, 255, 0.12);
-
-    &::before {
-      opacity: 0.5;
-    }
   }
 
   // ==========================================
   // Toolbar
   // ==========================================
   .navbar-toolbar {
-    min-height: 56px;
-    padding: 4px 8px;
+    height: $navbar-height;
+    min-height: $navbar-height;
+    padding: 0 20px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 4px;
-
-    @media (min-width: 601px) {
-      min-height: 60px;
-      padding: 4px 12px;
-    }
 
     @media (max-width: 600px) {
-      min-height: 48px;
-      padding: 2px 4px;
-      justify-content: flex-start;
+      height: $navbar-height-mobile;
+      min-height: $navbar-height-mobile;
+      padding: 0 16px;
     }
   }
 
   // ==========================================
-  // Mobile Menu Button
+  // Brand/Logo
   // ==========================================
-  .mobile-menu-button {
-    display: flex !important;
-    padding: 8px;
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: $text-primary;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
     transition: all $transition-smooth;
-    border-radius: 8px;
+
+    .navbar-brand-icon {
+      font-size: 1.4rem;
+      color: $accent-color;
+      transition: all $transition-smooth;
+    }
+
+    .navbar-brand-name {
+      background: linear-gradient(135deg, #fff 60%, rgba(255, 255, 255, 0.6));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+
+      @media (max-width: 600px) {
+        font-size: 1rem;
+      }
+    }
 
     &:hover {
-      background: $button-bg-hover;
-      transform: scale(1.05);
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
-
-    &:focus-visible {
-      outline: 2px solid rgba(255, 255, 255, 0.4);
-      outline-offset: 2px;
-    }
-
-    @media (min-width: 601px) {
-      display: none !important;
+      opacity: 0.8;
+      
+      .navbar-brand-icon {
+        transform: rotate(45deg) scale(1.1);
+      }
     }
   }
 
@@ -135,8 +122,6 @@ $border-radius-drawer: 16px;
     display: none;
     gap: 4px;
     align-items: center;
-    justify-content: center;
-    width: 100%;
 
     @media (min-width: 601px) {
       display: flex;
@@ -162,11 +147,9 @@ $border-radius-drawer: 16px;
     background: transparent;
     border: 1px solid transparent;
     min-height: 40px;
-    white-space: nowrap;
 
-    // Icon styling
     .nav-button-icon {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       opacity: 0.7;
       transition: all $transition-smooth;
     }
@@ -176,7 +159,6 @@ $border-radius-drawer: 16px;
       transition: all $transition-smooth;
     }
 
-    // Hover state
     &:hover {
       color: $text-hover;
       background: $button-bg-hover;
@@ -186,21 +168,16 @@ $border-radius-drawer: 16px;
         opacity: 1;
         transform: scale(1.1);
       }
-
-      &::after {
-        opacity: 1;
-        transform: scaleX(1);
-      }
     }
 
-    // Active state
     &.active {
       color: $text-hover;
       background: $button-bg-active;
-      border-color: $button-border-active;
+      border-color: rgba(108, 99, 255, 0.2);
 
       .nav-button-icon {
         opacity: 1;
+        color: $accent-color;
       }
 
       &::before {
@@ -212,32 +189,117 @@ $border-radius-drawer: 16px;
         width: 20px;
         height: 2px;
         border-radius: 2px;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.9));
+        background: $accent-color;
         transition: all $transition-smooth;
       }
     }
 
-    // Focus state for accessibility
     &:focus-visible {
-      outline: 2px solid rgba(255, 255, 255, 0.5);
+      outline: 2px solid $accent-color;
       outline-offset: 2px;
     }
+  }
 
-    // Hover indicator line
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 50%;
-      transform: translateX(-50%) scaleX(0);
-      width: 16px;
+  // ==========================================
+  // Mobile Hamburger Button
+  // ==========================================
+  .mobile-menu-button {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    gap: 5px;
+    transition: all $transition-smooth;
+
+    @media (min-width: 601px) {
+      display: none !important;
+    }
+
+    .hamburger-line {
+      display: block;
+      width: 24px;
       height: 2px;
+      background: $text-primary;
       border-radius: 2px;
-      background: rgba(255, 255, 255, 0.3);
       transition: all $transition-smooth;
-      opacity: 0;
+      transform-origin: center;
+      position: relative;
+
+      &:nth-child(1) {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.2s ease;
+      }
+
+      &:nth-child(2) {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                    opacity 0.2s ease;
+      }
+
+      &:nth-child(3) {
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+    }
+
+    // Open state - Animate to X
+    &.open {
+      .hamburger-line {
+        &:nth-child(1) {
+          transform: translateY(7px) rotate(45deg);
+          background: $accent-color;
+        }
+
+        &:nth-child(2) {
+          opacity: 0;
+          transform: scaleX(0);
+        }
+
+        &:nth-child(3) {
+          transform: translateY(-7px) rotate(-45deg);
+          background: $accent-color;
+        }
+      }
+    }
+
+    &:hover {
+      transform: scale(1.05);
+      
+      .hamburger-line {
+        background: $text-hover;
+      }
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $accent-color;
+      outline-offset: 2px;
     }
   }
+}
+
+// ==========================================
+// Drawer Overlay
+// ==========================================
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 1199;
+  animation: fadeIn 0.3s ease-out;
 }
 
 // ==========================================
@@ -245,24 +307,29 @@ $border-radius-drawer: 16px;
 // ==========================================
 .mobile-drawer {
   .drawer-paper {
-    width: 280px;
+    width: 320px;
+    max-width: 85vw;
     background: rgba(10, 10, 15, 0.95) !important;
     backdrop-filter: blur(24px) saturate(1.6);
     -webkit-backdrop-filter: blur(24px) saturate(1.6);
-    border-right: 1px solid $navbar-border;
-    box-shadow: 0 0 60px rgba(0, 0, 0, 0.5);
-    border-radius: 0 $border-radius-drawer $border-radius-drawer 0;
+    border-left: 1px solid $navbar-border;
+    box-shadow: -8px 0 60px rgba(0, 0, 0, 0.5);
     overflow: hidden;
+    animation: slideInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+
+    @media (max-width: 400px) {
+      width: 280px;
+    }
   }
 
   // ==========================================
   // Drawer Content
   // ==========================================
   .navigation-drawer {
-    padding: 8px 0;
-    height: 100%;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    padding: 0;
 
     // ==========================================
     // Drawer Header
@@ -270,23 +337,54 @@ $border-radius-drawer: 16px;
     .drawer-header {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
       padding: 20px 24px 16px;
-      color: $text-primary;
+      flex-shrink: 0;
 
-      .drawer-icon {
-        font-size: 1.5rem;
-        opacity: 0.8;
+      .drawer-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: $text-primary;
+
+        .drawer-brand-icon {
+          font-size: 1.5rem;
+          color: $accent-color;
+        }
+
+        .drawer-brand-name {
+          font-size: 1.1rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #fff 60%, rgba(255, 255, 255, 0.6));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
       }
 
-      .drawer-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-        letter-spacing: 0.02em;
-        background: linear-gradient(135deg, #fff 60%, rgba(255, 255, 255, 0.6));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+      .drawer-close-button {
+        color: $text-secondary;
+        padding: 8px;
+        transition: all $transition-smooth;
+
+        &:hover {
+          color: $text-hover;
+          background: $button-bg-hover;
+          transform: rotate(90deg);
+        }
+
+        &:active {
+          transform: rotate(90deg) scale(0.9);
+        }
+
+        &:focus-visible {
+          outline: 2px solid $accent-color;
+          outline-offset: 2px;
+        }
+
+        .MuiSvgIcon-root {
+          font-size: 1.5rem;
+        }
       }
     }
 
@@ -295,21 +393,30 @@ $border-radius-drawer: 16px;
     // ==========================================
     .drawer-divider {
       background: $navbar-border;
-      margin: 0 16px 8px;
-      opacity: 0.6;
+      margin: 0 24px 8px;
+      opacity: 0.5;
+      flex-shrink: 0;
     }
 
     // ==========================================
     // Drawer List
     // ==========================================
     .drawer-list {
-      padding: 4px 8px;
+      padding: 8px 12px;
       flex: 1;
+      overflow-y: auto;
 
       .drawer-list-item {
-        padding: 2px 0;
-        border-radius: 8px;
-        overflow: hidden;
+        padding: 4px 0;
+        animation: slideInItem 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        opacity: 0;
+        transform: translateX(20px);
+
+        @for $i from 1 through 10 {
+          &:nth-child(#{$i}) {
+            animation-delay: #{$i * 0.06}s;
+          }
+        }
 
         // ==========================================
         // Drawer Button
@@ -317,23 +424,26 @@ $border-radius-drawer: 16px;
         .drawer-button {
           display: flex;
           align-items: center;
-          gap: 14px;
-          padding: 12px 16px;
-          border-radius: 8px;
+          gap: 16px;
+          padding: 14px 20px;
+          border-radius: 12px;
           color: $text-secondary;
           transition: all $transition-smooth;
           position: relative;
+          width: 100%;
+          min-height: 56px;
 
           .drawer-item-icon {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             opacity: 0.7;
             transition: all $transition-smooth;
-            width: 24px;
+            width: 28px;
             text-align: center;
+            flex-shrink: 0;
           }
 
           .drawer-item-text {
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             font-weight: 500;
             letter-spacing: 0.01em;
             color: inherit;
@@ -348,11 +458,12 @@ $border-radius-drawer: 16px;
             position: absolute;
             right: 16px;
             width: 4px;
-            height: 20px;
+            height: 24px;
             border-radius: 2px;
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.8));
+            background: $accent-color;
             opacity: 0;
             transition: all $transition-smooth;
+            box-shadow: 0 0 20px rgba(108, 99, 255, 0.3);
           }
 
           // Hover state
@@ -364,6 +475,7 @@ $border-radius-drawer: 16px;
             .drawer-item-icon {
               opacity: 1;
               transform: scale(1.1);
+              color: $accent-color;
             }
           }
 
@@ -371,9 +483,11 @@ $border-radius-drawer: 16px;
           &.active {
             color: $text-hover;
             background: $button-bg-active;
+            border: 1px solid rgba(108, 99, 255, 0.15);
 
             .drawer-item-icon {
               opacity: 1;
+              color: $accent-color;
             }
 
             .drawer-item-text {
@@ -383,44 +497,75 @@ $border-radius-drawer: 16px;
             .drawer-item-indicator {
               opacity: 1;
             }
+
+            &::before {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 3px;
+              height: 32px;
+              border-radius: 0 4px 4px 0;
+              background: $accent-color;
+              box-shadow: 0 0 20px rgba(108, 99, 255, 0.3);
+            }
           }
 
           // Focus state
           &:focus-visible {
-            outline: 2px solid rgba(255, 255, 255, 0.4);
+            outline: 2px solid $accent-color;
             outline-offset: -4px;
           }
         }
+      }
+    }
+
+    // ==========================================
+    // Drawer Footer
+    // ==========================================
+    .drawer-footer {
+      padding: 20px 24px;
+      border-top: 1px solid $navbar-border;
+      flex-shrink: 0;
+
+      .drawer-footer-text {
+        font-size: 0.8rem;
+        color: $text-secondary;
+        opacity: 0.5;
+        letter-spacing: 0.03em;
       }
     }
   }
 }
 
 // ==========================================
-// Scrollbar Styling (Optional)
+// Animations
 // ==========================================
-.navigation-drawer {
-  &::-webkit-scrollbar {
-    width: 4px;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
+  to {
+    opacity: 1;
   }
 }
 
-// ==========================================
-// Animation Keyframes
-// ==========================================
-@keyframes fadeInDrawer {
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInItem {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(20px);
   }
   to {
     opacity: 1;
@@ -428,59 +573,13 @@ $border-radius-drawer: 16px;
   }
 }
 
-.navigation-drawer .drawer-list-item {
-  animation: fadeInDrawer 0.3s ease-out forwards;
-  opacity: 0;
-
-  @for $i from 1 through 10 {
-    &:nth-child(#{$i}) {
-      animation-delay: #{$i * 0.04}s;
-    }
-  }
-}
-
 // ==========================================
 // Responsive Adjustments
 // ==========================================
 
-// Mobile - Full width navbar
-@media (max-width: 600px) {
-  .navigation-container {
-    padding: 8px 0 0;
-  }
-
-  .navbar {
-    max-width: 100%;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    box-shadow: $navbar-shadow-scrolled;
-
-    &::before {
-      border-radius: 0;
-    }
-
-    &.scrolled {
-      border-radius: 0;
-    }
-  }
-
-  .navbar-toolbar {
-    padding: 4px 12px !important;
-  }
-
-  .mobile-drawer .drawer-paper {
-    width: 280px;
-    border-radius: 0 $border-radius-drawer $border-radius-drawer 0;
-  }
-}
-
 // Tablet
-@media (min-width: 601px) and (max-width: 768px) {
+@media (min-width: 601px) and (max-width: 1024px) {
   .navbar {
-    max-width: 620px;
-
     .nav-button {
       padding: 6px 14px;
       font-size: 0.8rem;
@@ -496,44 +595,51 @@ $border-radius-drawer: 16px;
 
 // Small phones
 @media (max-width: 400px) {
-  .navigation-container {
-    padding: 4px 0 0;
-  }
-
   .navbar {
     .navbar-toolbar {
-      min-height: 44px;
-      padding: 2px 8px !important;
+      padding: 0 12px;
+    }
+
+    .navbar-brand {
+      .navbar-brand-name {
+        font-size: 0.9rem;
+      }
+
+      .navbar-brand-icon {
+        font-size: 1.2rem;
+      }
     }
   }
 
   .mobile-drawer .drawer-paper {
-    width: 260px;
+    width: 280px;
   }
 
   .navigation-drawer {
     .drawer-header {
       padding: 16px 20px 12px;
 
-      .drawer-icon {
-        font-size: 1.2rem;
-      }
+      .drawer-brand {
+        .drawer-brand-icon {
+          font-size: 1.3rem;
+        }
 
-      .drawer-title {
-        font-size: 0.95rem;
+        .drawer-brand-name {
+          font-size: 1rem;
+        }
       }
     }
 
     .drawer-list .drawer-list-item .drawer-button {
-      padding: 10px 14px;
-      font-size: 0.85rem;
+      padding: 12px 16px;
+      min-height: 48px;
 
       .drawer-item-icon {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
       }
 
       .drawer-item-text {
-        font-size: 0.85rem;
+        font-size: 0.95rem;
       }
     }
   }
@@ -549,5 +655,19 @@ $border-radius-drawer: 16px;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .drawer-overlay {
+    animation: none;
+  }
+
+  .mobile-drawer .drawer-paper {
+    animation: none;
+  }
+
+  .navigation-drawer .drawer-list .drawer-list-item {
+    animation: none;
+    opacity: 1;
+    transform: none;
   }
 }

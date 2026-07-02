@@ -406,46 +406,6 @@ function Expertise() {
           ))}
         </div>
       </div>
-
-      {/* Expertise Grid */}
-      <div className="expertise-grid">
-        {[
-          {
-            icon: "mdi:brain",
-            title: "Problem Solving",
-            description: "Translating complex requirements into elegant, efficient solutions with clean architecture."
-          },
-          {
-            icon: "mdi:rocket",
-            title: "Rapid Prototyping",
-            description: "Quickly iterating from concept to MVP using modern frameworks and low-code solutions."
-          },
-          {
-            icon: "mdi:shield-check",
-            title: "Quality Assurance",
-            description: "Writing testable code with end-to-end testing and comprehensive error handling."
-          },
-          {
-            icon: "mdi:sync",
-            title: "Continuous Learning",
-            description: "Staying current with emerging technologies and best practices in the ecosystem."
-          }
-        ].map((item, idx) => (
-          <div
-            key={idx}
-            className={`expertise-card ${inView ? 'animate-in' : ''}`}
-            style={{ animationDelay: `${idx * 100}ms` } as React.CSSProperties}
-          >
-            <div className="expertise-card-header">
-              <div className="card-icon">
-                <Icon icon={item.icon} />
-              </div>
-              <h3>{item.title}</h3>
-            </div>
-            <p>{item.description}</p>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

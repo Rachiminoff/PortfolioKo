@@ -10,7 +10,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
 import Toolbar from "@mui/material/Toolbar";
 import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
@@ -37,12 +37,16 @@ function Navigation() {
     setMobileOpen((prev) => !prev);
   };
 
+  const handleDrawerClose = () => {
+    setMobileOpen(false);
+  };
+
   // Handle scroll events for navbar styling
   useEffect(() => {
     const handleScroll = () => {
       const navbar = document.getElementById("navigation");
       if (navbar) {
-        setScrolled(window.scrollY > navbar.clientHeight);
+        setScrolled(window.scrollY > 20);
       }
 
       // Detect active section based on scroll position
@@ -66,9 +70,22 @@ function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Prevent body scroll when drawer is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileOpen]);
+
   const scrollToSection = (section: Section) => {
     if (section === "vault") {
       navigate("/vault");
+      handleDrawerClose();
       return;
     }
 
@@ -76,18 +93,24 @@ function Navigation() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
       setActiveSection(section);
-      // Close mobile drawer if open
-      if (mobileOpen) {
-        handleDrawerToggle();
-      }
+      handleDrawerClose();
     }
   };
 
   const drawer = (
-    <Box className="navigation-drawer" onClick={handleDrawerToggle}>
+    <Box className="navigation-drawer" role="navigation" aria-label="Mobile navigation">
       <Box className="drawer-header">
-        <Icon icon="mdi:compass" className="drawer-icon" />
-        <span className="drawer-title">Navigation</span>
+        <Box className="drawer-brand">
+          <Icon icon="mdi:compass" className="drawer-brand-icon" />
+          <span className="drawer-brand-name"> TDY.dev </span>
+        </Box>
+        <IconButton
+          className="drawer-close-button"
+          onClick={handleDrawerClose}
+          aria-label="Close navigation menu"
+        >
+          <CloseIcon />
+        </IconButton>
       </Box>
       <Divider className="drawer-divider" />
       <List className="drawer-list">
@@ -96,6 +119,7 @@ function Navigation() {
             <ListItemButton
               className={`drawer-button ${activeSection === section ? "active" : ""}`}
               onClick={() => scrollToSection(section)}
+              aria-current={activeSection === section ? "page" : undefined}
             >
               <Icon icon={icon} className="drawer-item-icon" />
               <ListItemText primary={label} className="drawer-item-text" />
@@ -104,6 +128,9 @@ function Navigation() {
           </ListItem>
         ))}
       </List>
+      <Box className="drawer-footer">
+        <span className="drawer-footer-text">© 2026 TDY</span>
+      </Box>
     </Box>
   );
 
@@ -115,19 +142,16 @@ function Navigation() {
         component="nav"
         id="navigation"
         className={`navbar ${scrolled ? "scrolled" : ""}`}
-        elevation={scrolled ? 2 : 0}
+        elevation={0}
       >
         <Toolbar className="navbar-toolbar">
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className="mobile-menu-button"
-            aria-label="Toggle navigation menu"
-          >
-            <MenuIcon />
-          </IconButton>
+          {/* Brand/Logo */}
+          <Box className="navbar-brand">
+            <Icon icon="mdi:compass" className="navbar-brand-icon" />
+            <span className="navbar-brand-name">TDY.dev</span>
+          </Box>
 
+          {/* Desktop Navigation */}
           <Box className="nav-items-desktop">
             {navItems.map(([label, section, icon]) => (
               <Button
@@ -141,23 +165,49 @@ function Navigation() {
               </Button>
             ))}
           </Box>
+
+          {/* Mobile Hamburger */}
+          <IconButton
+            className={`mobile-menu-button ${mobileOpen ? "open" : ""}`}
+            onClick={handleDrawerToggle}
+            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation-drawer"
+          >
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+            <span className="hamburger-line"></span>
+          </IconButton>
         </Toolbar>
       </AppBar>
 
-      <nav className="mobile-nav">
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
-          classes={{
-            paper: "drawer-paper"
-          }}
-          className="mobile-drawer"
-        >
-          {drawer}
-        </Drawer>
-      </nav>
+      {/* Mobile Drawer */}
+      <Drawer
+        variant="temporary"
+        open={mobileOpen}
+        onClose={handleDrawerClose}
+        ModalProps={{
+          keepMounted: true,
+          disableScrollLock: true, // Fixed: Changed from disableScroll to disableScrollLock
+        }}
+        classes={{
+          paper: "drawer-paper"
+        }}
+        className="mobile-drawer"
+        id="mobile-navigation-drawer"
+        anchor="right"
+      >
+        {drawer}
+      </Drawer>
+
+      {/* Overlay for drawer */}
+      {mobileOpen && (
+        <Box
+          className="drawer-overlay"
+          onClick={handleDrawerClose}
+          aria-hidden="true"
+        />
+      )}
     </Box>
   );
 }
