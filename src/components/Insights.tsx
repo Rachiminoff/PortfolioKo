@@ -23,9 +23,6 @@ interface BlogPost {
 type SortOption = "newest" | "oldest" | "az" | "za" | "custom";
 type CategoryFilter = "all" | "development" | "tutorials" | "case-studies" | "thoughts" | "career" | "react" | "supabase" | "typescript";
 
-// Get password from environment
-const BLOG_PASSWORD = process.env.REACT_APP_BLOG_PASSWORD || "blog123";
-
 interface InsightsProps {
   onClose?: () => void;
 }
@@ -36,19 +33,8 @@ function Insights({ onClose }: InsightsProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("all");
   const [sortOption, setSortOption] = useState<SortOption>("newest");
-  const [isUnlocked, setIsUnlocked] = useState(false);
-  const [password, setPassword] = useState("");
-  const [passwordError, setPasswordError] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [continueReading, setContinueReading] = useState<BlogPost | null>(null);
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-
-  // Check if already unlocked
-  useEffect(() => {
-    const unlocked = localStorage.getItem("blogUnlocked") === "true";
-    setIsUnlocked(unlocked);
-  }, []);
 
   // Load continue reading from localStorage
   useEffect(() => {
@@ -68,12 +54,10 @@ function Insights({ onClose }: InsightsProps) {
     }
   }, [posts]);
 
-  // Fetch posts when unlocked
+  // Fetch posts when component mounts
   useEffect(() => {
-    if (isUnlocked) {
-      fetchPosts();
-    }
-  }, [isUnlocked]);
+    fetchPosts();
+  }, []);
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -90,26 +74,6 @@ function Insights({ onClose }: InsightsProps) {
       setPosts(data || []);
     }
     setLoading(false);
-  };
-
-  const handleUnlock = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPasswordError(false);
-    setIsLoading(true);
-
-    // Simulate loading for premium feel
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    if (password === BLOG_PASSWORD) {
-      localStorage.setItem("blogUnlocked", "true");
-      setIsUnlocked(true);
-      setPassword("");
-      setIsLoading(false);
-    } else {
-      setPasswordError(true);
-      setIsLoading(false);
-      setPassword("");
-    }
   };
 
   const filteredAndSortedPosts = useMemo(() => {
@@ -247,70 +211,7 @@ function Insights({ onClose }: InsightsProps) {
     );
   }
 
-  // Password Screen
-  if (!isUnlocked) {
-    return (
-      <div className="insights-container insights-locked">
-        <div className="insights-lock-screen">
-          <div className="insights-lock-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0110 0v4" />
-            </svg>
-          </div>
-          <h1>Insights</h1>
-          <p className="insights-lock-subtitle">Enter your password to access articles</p>
-          <form onSubmit={handleUnlock} className="insights-lock-form">
-            <div className="insights-password-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setPasswordError(false);
-                }}
-                placeholder="Enter password"
-                className={`insights-password-input ${passwordError ? "error" : ""}`}
-                disabled={isLoading}
-                autoFocus
-              />
-              <button
-                type="button"
-                className="insights-password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-              >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
-              </button>
-            </div>
-            {passwordError && (
-              <div className="insights-password-error">
-                <span className="error-icon">✕</span>
-                Invalid password. Please try again.
-              </div>
-            )}
-            <button
-              type="submit"
-              className="insights-unlock-btn"
-              disabled={isLoading || !password}
-            >
-              {isLoading ? (
-                <span className="insights-loader">
-                  <span></span>
-                  <span></span>
-                  <span></span>
-                </span>
-              ) : (
-                "Unlock"
-              )}
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
-  // Main Content
+  // Main Content (no password screen anymore)
   return (
     <div className="insights-container">
       {/* Header */}

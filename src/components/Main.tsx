@@ -9,6 +9,7 @@ import '../assets/styles/Main.scss';
 
 // Lazy load heavy components
 const Vault = lazy(() => import('./Vault'));
+const Insights = lazy(() => import('./Insights'));
 const PDFViewer = lazy(() => import('./PDFViewer'));
 
 /* =========================
@@ -190,25 +191,48 @@ function AmbientShapes() {
    MAIN COMPONENT
 ========================= */
 function Main() {
-    const [clickCount, setClickCount] = useState(0);
+    // Vault state (triggered by clicking name/role)
+    const [vaultClickCount, setVaultClickCount] = useState(0);
+    const [vaultUnlocked, setVaultUnlocked] = useState(false);
+    const [showVaultContent, setShowVaultContent] = useState(false);
+    const vaultRef = useRef<HTMLDivElement>(null);
+
+    // Insights state (triggered by clicking profile picture)
+    const [insightsClickCount, setInsightsClickCount] = useState(0);
+    const [insightsUnlocked, setInsightsUnlocked] = useState(false);
+    const [showInsightsContent, setShowInsightsContent] = useState(false);
+    const insightsRef = useRef<HTMLDivElement>(null);
+
+    // Vault Modal state
     const [showVaultPrompt, setShowVaultPrompt] = useState(false);
     const [vaultInput, setVaultInput] = useState("");
-    const [vaultUnlocked, setVaultUnlocked] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [viewerUrl, setViewerUrl] = useState<string | null>(null);
     const [vaultLockedUntil, setVaultLockedUntil] = useState<number | null>(null);
     const [vaultModalOpen, setVaultModalOpen] = useState(false);
     const [vaultError, setVaultError] = useState<string | null>(null);
     const [remainingAttempts, setRemainingAttempts] = useState<number | undefined>(undefined);
+
+    // Insights Modal state
+    const [insightsModalOpen, setInsightsModalOpen] = useState(false);
+    const [insightsPassword, setInsightsPassword] = useState("");
+    const [insightsError, setInsightsError] = useState<string | null>(null);
+    const [insightsLoading, setInsightsLoading] = useState(false);
+    const [showInsightsPassword, setShowInsightsPassword] = useState(false);
+
+    // Shared state
+    const [viewerUrl, setViewerUrl] = useState<string | null>(null);
+    const [pdfLoading, setPdfLoading] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isLoaded, setIsLoaded] = useState(false);
     const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
-    const [pdfLoading, setPdfLoading] = useState(false);
-    const [showVaultContent, setShowVaultContent] = useState(false);
     const rippleIdRef = useRef(0);
+    
     const imageRef = useRef<HTMLImageElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const vaultRef = useRef<HTMLDivElement>(null);
+
+    // Timers for resetting click counters
+    const vaultTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const insightsTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     // Smooth cursor interpolation
     const targetMouseRef = useRef({ x: 0, y: 0 });
@@ -257,15 +281,15 @@ function Main() {
         setVaultUnlocked(false);
         setShowVaultPrompt(false);
         setShowVaultContent(false);
+        setInsightsUnlocked(false);
+        setShowInsightsContent(false);
     }, []);
 
     // Handle vault unlock animation
     useEffect(() => {
         if (vaultUnlocked) {
-            // Small delay then show vault content with animation
             setTimeout(() => {
                 setShowVaultContent(true);
-                // Scroll to vault after it appears
                 setTimeout(() => {
                     if (vaultRef.current) {
                         vaultRef.current.scrollIntoView({ 
@@ -280,16 +304,41 @@ function Main() {
         }
     }, [vaultUnlocked]);
 
+    // Handle insights unlock animation
+    useEffect(() => {
+        if (insightsUnlocked) {
+            setTimeout(() => {
+                setShowInsightsContent(true);
+                setTimeout(() => {
+                    if (insightsRef.current) {
+                        insightsRef.current.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start' 
+                        });
+                    }
+                }, 500);
+            }, 300);
+        } else {
+            setShowInsightsContent(false);
+        }
+    }, [insightsUnlocked]);
+
     /* =========================
-       SECRET CLICK TRIGGER
+       VAULT TRIGGER - Click name/role 5 times
     ========================= */
-    const handleSecretClick = useCallback((e: React.MouseEvent) => {
+    const handleVaultClick = useCallback((e: React.MouseEvent) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        const newCount = clickCount + 1;
-        setClickCount(newCount);
+        // Clear existing timer
+        if (vaultTimerRef.current) {
+            clearTimeout(vaultTimerRef.current);
+            vaultTimerRef.current = null;
+        }
+
+        const newCount = vaultClickCount + 1;
+        setVaultClickCount(newCount);
 
         // Ripple effect
         const newRipple = {
@@ -305,13 +354,54 @@ function Main() {
 
         if (newCount >= 5) {
             setVaultModalOpen(true);
-            setClickCount(0);
+            setVaultClickCount(0);
             setVaultError(null);
             setRemainingAttempts(undefined);
             setVaultLockedUntil(null);
             setVaultInput("");
+            if (vaultTimerRef.current) {
+                clearTimeout(vaultTimerRef.current);
+                vaultTimerRef.current = null;
+            }
+        } else {
+            // Reset counter after 2 seconds of inactivity
+            vaultTimerRef.current = setTimeout(() => {
+                setVaultClickCount(0);
+                vaultTimerRef.current = null;
+            }, 2000);
         }
-    }, [clickCount]);
+    }, [vaultClickCount]);
+
+    /* =========================
+       INSIGHTS TRIGGER - Click profile picture 5 times
+    ========================= */
+    const handleInsightsClick = useCallback((e: React.MouseEvent) => {
+        // Clear existing timer
+        if (insightsTimerRef.current) {
+            clearTimeout(insightsTimerRef.current);
+            insightsTimerRef.current = null;
+        }
+
+        const newCount = insightsClickCount + 1;
+        setInsightsClickCount(newCount);
+
+        if (newCount >= 5) {
+            setInsightsModalOpen(true);
+            setInsightsClickCount(0);
+            setInsightsError(null);
+            setInsightsPassword("");
+            if (insightsTimerRef.current) {
+                clearTimeout(insightsTimerRef.current);
+                insightsTimerRef.current = null;
+            }
+        } else {
+            // Reset counter after 2 seconds of inactivity
+            insightsTimerRef.current = setTimeout(() => {
+                setInsightsClickCount(0);
+                insightsTimerRef.current = null;
+            }, 2000);
+        }
+    }, [insightsClickCount]);
 
     /* =========================
        VAULT SUBMIT
@@ -352,6 +442,32 @@ function Main() {
         }
 
         setLoading(false);
+    };
+
+    /* =========================
+       INSIGHTS SUBMIT
+    ========================= */
+    const handleInsightsSubmit = async (password: string) => {
+        setInsightsLoading(true);
+        setInsightsError(null);
+
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        const correctPassword = process.env.REACT_APP_BLOG_PASSWORD || "blog123";
+        
+        if (password === correctPassword) {
+            localStorage.setItem("blogUnlocked", "true");
+            setInsightsUnlocked(true);
+            setInsightsModalOpen(false);
+            setInsightsError(null);
+            setInsightsPassword("");
+            setInsightsLoading(false);
+        } else {
+            setInsightsError("Invalid password. Please try again.");
+            setInsightsLoading(false);
+            setInsightsPassword("");
+        }
     };
 
     /* =========================
@@ -429,6 +545,7 @@ function Main() {
                                 alt="Tanya Denise Yambao"
                                 loading="eager"
                                 className="profile-image"
+                                onClick={handleInsightsClick}
                             />
                         </div>
 
@@ -471,19 +588,15 @@ function Main() {
                             </div>
 
                             <h1
-                                onClick={handleSecretClick}
+                                onClick={handleVaultClick}
                                 className="name-title"
-                                style={{ cursor: "pointer" }}
-                                title="Click 5 times for a secret"
                             >
                                 Tanya Denise Yambao
                             </h1>
 
                             <p
-                                onClick={handleSecretClick}
+                                onClick={handleVaultClick}
                                 className="subtitle"
-                                style={{ cursor: "pointer" }}
-                                title="Click 5 times for a secret"
                             >
                                 Full-Stack Developer
                             </p>
@@ -604,6 +717,24 @@ function Main() {
                 </Suspense>
             </div>
 
+            {/* =========================
+                INSIGHTS - ANIMATED INLINE REVEAL
+            ========================= */}
+            <div 
+                ref={insightsRef}
+                className={`insights-reveal-container ${showInsightsContent ? 'visible' : ''}`}
+            >
+                <div className="insights-reveal-divider" />
+                <Suspense fallback={
+                    <div className="insights-loading-state">
+                        <div className="insights-loading-spinner" />
+                        <p>Loading articles...</p>
+                    </div>
+                }>
+                    {insightsUnlocked && <Insights />}
+                </Suspense>
+            </div>
+
             <Suspense fallback={null}>
                 <PDFViewer
                     url={viewerUrl}
@@ -704,6 +835,98 @@ function Main() {
                                         </>
                                     ) : (
                                         "Unlock Vault →"
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* =========================
+                INSIGHTS MODAL - PASSWORD OVERLAY
+            ========================= */}
+            {insightsModalOpen && (
+                <div className="insights-modal-overlay">
+                    <div className="insights-modal-container">
+                        <div className="insights-modal-header">
+                            <span className="insights-modal-icon">📝</span>
+                            <h2>Insights</h2>
+                            <button 
+                                className="insights-modal-close"
+                                onClick={() => {
+                                    setInsightsModalOpen(false);
+                                    setInsightsError(null);
+                                    setInsightsPassword("");
+                                }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <p className="insights-modal-description">
+                            Enter your password to access articles and technical content
+                        </p>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleInsightsSubmit(insightsPassword);
+                            }}
+                            className="insights-modal-form"
+                        >
+                            <div className="insights-password-wrapper">
+                                <input
+                                    type={showInsightsPassword ? "text" : "password"}
+                                    placeholder="Enter password..."
+                                    value={insightsPassword}
+                                    onChange={(e) => {
+                                        setInsightsPassword(e.target.value);
+                                        setInsightsError(null);
+                                    }}
+                                    className={`insights-modal-input ${insightsError ? 'error' : ''}`}
+                                    disabled={insightsLoading}
+                                    autoFocus
+                                    autoComplete="off"
+                                />
+                                <button
+                                    type="button"
+                                    className="insights-password-toggle"
+                                    onClick={() => setShowInsightsPassword(!showInsightsPassword)}
+                                    aria-label={showInsightsPassword ? "Hide password" : "Show password"}
+                                >
+                                    {showInsightsPassword ? "👁️" : "👁️‍🗨️"}
+                                </button>
+                            </div>
+                            {insightsError && (
+                                <div className="insights-modal-error">
+                                    <span>⚠️</span>
+                                    <span>{insightsError}</span>
+                                </div>
+                            )}
+                            <div className="insights-modal-actions">
+                                <button
+                                    type="button"
+                                    className="insights-modal-button secondary"
+                                    onClick={() => {
+                                        setInsightsModalOpen(false);
+                                        setInsightsError(null);
+                                        setInsightsPassword("");
+                                    }}
+                                    disabled={insightsLoading}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="insights-modal-button primary"
+                                    disabled={insightsLoading || !insightsPassword.trim()}
+                                >
+                                    {insightsLoading ? (
+                                        <>
+                                            <span className="spinner" />
+                                            Unlocking...
+                                        </>
+                                    ) : (
+                                        "Unlock Insights →"
                                     )}
                                 </button>
                             </div>
