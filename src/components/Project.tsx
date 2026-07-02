@@ -1,36 +1,12 @@
+// Project.tsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
-
-import uniq00 from '../assets/images/uq0.jpg';
-import uniq01 from '../assets/images/uq1.jpg';
-import uniq02 from '../assets/images/uq2.jpg';
-import uniq03 from '../assets/images/uq3.jpg';
-
-import wais00 from '../assets/images/ww0.jpg';
-import wais01 from '../assets/images/ww1.jpg';
-import wais02 from '../assets/images/ww2.jpg';
-import wais03 from '../assets/images/ww3.jpg';
-
+import { Icon } from "@iconify/react";
+import { projectsData, Project as ProjectType } from "../types/projects.data";
 import '../assets/styles/Project.scss';
 
-// Memoized icon components for better performance
-const ItchIcon = React.memo(() => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M6.5 8 C5 8 4 9.5 4 11v2 c0 2 1.2 3 2.6 3 c1 1 2.2 1 3-.5l.4-.7h4l.4.7 c.8 1.5 2 1.5 3 .5 C19 16 20 15 20 13v-2 c0-1.5-1-3-2.5-3 H6.5z"/>
-        <rect x="9" y="9" width="6" height="2" rx="0.5" />
-        <circle cx="9" cy="13" r="1.1" />
-        <circle cx="15" cy="13" r="1.1" />
-        <circle cx="17" cy="11.5" r="0.6" />
-        <circle cx="18" cy="12.8" r="0.6" />
-        <circle cx="17" cy="14.1" r="0.6" />
-        <circle cx="16" cy="12.8" r="0.6" />
-    </svg>
-));
-
-const GitHubIcon = React.memo(() => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 .5C5.7.5.8 5.6.8 12c0 5.1 3.3 9.5 7.9 11 .6.1.8-.3.8-.6v-2.2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.8 2.1 2.8 2.1.6 0 1.1-.2 1.4-.4.1-.8.4-1.4.8-1.7-2.5-.3-5.1-1.3-5.1-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.3.9-.2 1.9-.3 2.9-.3s2 .1 2.9.3c2.3-1.6 3.3-1.3 3.3-1.3.6 1.6.2 2.8.1 3.1.8.9 1.2 2 1.2 3.3 0 4.5-2.6 5.5-5.1 5.8.4.4.9 1.2.9 2.4v3.6c0 .3.2.7.8.6 4.6-1.5 7.9-5.9 7.9-11C23.2 5.6 18.3.5 12 .5z"/>
-    </svg>
-));
+// Using Iconify instead of React Icons
+const ItchIcon = React.memo(() => <Icon icon="simple-icons:itchdotio" width={18} height={18} />);
+const GitHubIcon = React.memo(() => <Icon icon="mdi:github" width={18} height={18} />);
 
 const ExpandIcon = React.memo(({ expanded }: { expanded: boolean }) => (
     <svg
@@ -75,7 +51,7 @@ function ImageSlider({ images, link, title }: ImageSliderProps) {
         const startTimer = () => {
             timerRef.current = setInterval(() => {
                 setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
-                setImageLoaded(false); // Reset loading state for new image
+                setImageLoaded(false);
             }, 4000);
         };
         
@@ -209,112 +185,11 @@ function ImageSlider({ images, link, title }: ImageSliderProps) {
 }
 
 /* =========================
-   PROJECT DATA
-========================= */
-
-const projects = [
-    {
-        id: 1,
-        title: "UniQuest",
-        subtitle: "Gamified productivity platform designed for university students.",
-        role: "Lead Developer",
-        roleClass: "lead" as const,
-        featured: true,
-        link: "https://github.com/Skabeez/UniQuest",
-        images: [uniq00, uniq01, uniq02, uniq03],
-
-        description:
-            "UniQuest reimagines student productivity through RPG-inspired progression mechanics. It combines task management, missions, achievements, and campus utilities into a unified platform while keeping user data synchronized in real time across multiple devices.",
-
-        features: [
-            "Gamified task and mission system",
-            "Real-time cloud synchronization",
-            "Cross-platform mobile application",
-            "Integrated campus utilities"
-        ],
-
-        tech: ["FlutterFlow", "Dart", "Supabase"]
-    },
-
-    {
-        id: 2,
-        title: "Webnovel Extractor",
-        subtitle: "Automation toolkit for extracting and processing web novels.",
-        role: "Sole Developer",
-        roleClass: "lead" as const,
-        featured: false,
-        link: "https://github.com/Rachiminoff/Webnovel-Extractor",
-        video: "https://www.youtube.com/embed/Zclw7GV7w7I",
-
-        description:
-            "An automation pipeline built to reliably extract web novel chapters from websites with inconsistent layouts. The tool scrapes dynamic content, repairs malformed HTML, removes unnecessary formatting, and generates clean, readable text suitable for EPUB creation or offline reading.",
-
-        features: [
-            "Dynamic website scraping",
-            "Malformed HTML recovery",
-            "Automated content processing",
-            "Clean EPUB-ready output"
-        ],
-
-        tech: ["Python", "Playwright", "BeautifulSoup"]
-    },
-
-    {
-        id: 3,
-        title: "FREE FREE FREE",
-        subtitle: "Psychological desktop simulation set inside a fictional 2005 operating system.",
-        role: "Co-Developer",
-        roleClass: "co" as const,
-        featured: true,
-        link: "https://github.com/Rachiminoff/FREEFREEFREE",
-        itchLink: "https://daeowob.itch.io/free-free-free",
-        video: "https://www.youtube.com/embed/CAeP5QStOrE?si=M8axOWtdfKER_7OF",
-
-        description:
-            "A narrative-driven psychological horror game that blurs the boundary between the player's desktop and the game world. Players investigate a mysterious GTA IV leak that unleashes a self-aware quarantine program, transforming the operating system itself into part of the storytelling experience.",
-
-        features: [
-            "Immersive desktop simulation",
-            "Narrative-driven gameplay",
-            "Hybrid 2D and 3D environments",
-            "Dynamic AI-driven encounters",
-            "Atmospheric interactive systems"
-        ],
-
-        tech: ["Godot", "GDScript", "Blender"]
-    },
-
-    {
-        id: 4,
-        title: "Wais Wallet",
-        subtitle: "Collaborative finance and expense management platform.",
-        role: "Co-Developer",
-        roleClass: "co" as const,
-        featured: false,
-        link: "https://github.com/Rachiminoff/Wais_Wallet",
-        liveDemo: "https://wais-wallet.vercel.app",
-        images: [wais00, wais01, wais02, wais03],
-
-        description:
-            "A modern finance management platform focused on usability, responsive design, and maintainable frontend architecture. Built around reusable React components, it streamlines expense tracking and wallet management while delivering a consistent experience across devices.",
-
-        features: [
-            "Responsive user interface",
-            "Reusable component architecture",
-            "Modern frontend engineering",
-            "Intuitive financial workflows"
-        ],
-
-        tech: ["TypeScript", "React", "Frontend"]
-    }
-];
-
-/* =========================
    PROJECT CARD COMPONENT
 ========================= */
 
 type ProjectCardProps = {
-    project: typeof projects[0];
+    project: ProjectType;
     isExpanded: boolean;
     onToggle: () => void;
     index: number;
@@ -429,7 +304,8 @@ function ProjectCard({ project, isExpanded, onToggle, index }: ProjectCardProps)
                     opacity: isExpanded ? 1 : 0
                 }}
             >
-                <div className="project-details" ref={detailsRef}>
+                {/* Scrollable content container */}
+                <div className="project-details-scroll" ref={detailsRef}>
                     <div className="project-details-inner">
                         <div className="project-media">
                             {project.images ? (
@@ -497,6 +373,7 @@ function ProjectCard({ project, isExpanded, onToggle, index }: ProjectCardProps)
                                         className="demo-link"
                                         aria-label={`View ${project.title} live demo`}
                                     >
+                                        <Icon icon="mdi:open-in-new" width={14} height={14} />
                                         <span>Live Demo</span>
                                     </a>
                                 )}
@@ -517,16 +394,17 @@ function ProjectCard({ project, isExpanded, onToggle, index }: ProjectCardProps)
                         </div>
                     </div>
                 </div>
+
+                {/* Scroll hint overlay - positioned absolutely relative to the wrapper */}
+                {showScrollHint && (
+                    <div className="scroll-hint-overlay">
+                        <span>Scroll for more</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M7 13l5 5 5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                    </div>
+                )}
             </div>
-            
-            {showScrollHint && (
-                <div className="scroll-hint">
-                    <span>Scroll for more</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M7 13l5 5 5-5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                </div>
-            )}
         </div>
     );
 }
@@ -535,7 +413,7 @@ function ProjectCard({ project, isExpanded, onToggle, index }: ProjectCardProps)
    MAIN COMPONENT
 ========================= */
 
-function Project() {
+function Projects() {
     const [expandedId, setExpandedId] = useState<number | null>(null);
     const [mounted, setMounted] = useState(false);
 
@@ -553,7 +431,7 @@ function Project() {
         <div className="projects-container" id="projects">
             <div className="projects-header">
                 <h1>Recent Projects</h1>
-                <p className="projects-subtitle">Click or press Enter on any project to learn more</p>
+                <p className="projects-subtitle">Click on any project to learn more</p>
                 <div className="header-decoration">
                     <div className="decoration-line"></div>
                     <span className="decoration-dot"></span>
@@ -562,7 +440,7 @@ function Project() {
             </div>
 
             <div className="projects-list">
-                {projects.map((project, index) => (
+                {projectsData.map((project, index) => (
                     <ProjectCard
                         key={project.id}
                         project={project}
@@ -576,4 +454,4 @@ function Project() {
     );
 }
 
-export default Project;
+export default Projects;
