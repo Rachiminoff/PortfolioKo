@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   isUnlocked: boolean;
-  isLoading?: boolean; // Add this as optional
+  isLoading?: boolean;
   redirectTo?: string;
 }
 

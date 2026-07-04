@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVault } from '../hooks/useVault';
 
@@ -6,22 +6,17 @@ const Vault = lazy(() => import('../components/Vault'));
 
 const VaultPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked, isLoading, verifyServerSession } = useVault();
+  const { isUnlocked, isLoading } = useVault();
+  const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
-    // Re-check unlock status when the page loads
-    const checkAccess = async () => {
-      const isUnlockedNow = await verifyServerSession();
-      console.log('VaultPage - isUnlocked:', isUnlockedNow);
-      
-      if (!isUnlockedNow) {
-        console.log('VaultPage - redirecting to home');
-        navigate('/', { replace: true });
-      }
-    };
-    
-    checkAccess();
-  }, [verifyServerSession, navigate]);
+    // Only redirect once when loading is complete and not unlocked
+    if (!isLoading && !isUnlocked && !hasRedirected) {
+      console.log('VaultPage - Not unlocked, redirecting to home');
+      setHasRedirected(true);
+      navigate('/', { replace: true });
+    }
+  }, [isLoading, isUnlocked, navigate, hasRedirected]);
 
   if (isLoading) {
     return (

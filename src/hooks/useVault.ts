@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export const useVault = () => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const hasCheckedRef = useRef(false);
 
   const verifyServerSession = useCallback(async () => {
     try {
@@ -14,7 +15,7 @@ export const useVault = () => {
         },
       });
       const data = await response.json();
-      console.log('Server session valid:', data.valid);
+      console.log('Vault session valid:', data.valid);
       setIsUnlocked(data.valid);
       return data.valid;
     } catch (error) {
@@ -27,21 +28,16 @@ export const useVault = () => {
   }, []);
 
   useEffect(() => {
-    verifyServerSession();
+    // Only check once on mount
+    if (!hasCheckedRef.current) {
+      hasCheckedRef.current = true;
+      verifyServerSession();
+    }
   }, [verifyServerSession]);
 
   const unlockVault = useCallback(() => {
     setIsUnlocked(true);
   }, []);
 
-  const lockVault = useCallback(async () => {
-    try {
-      await fetch("/api/vault/logout", { method: "POST" });
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-    setIsUnlocked(false);
-  }, []);
-
-  return { isUnlocked, isLoading, unlockVault, lockVault, verifyServerSession };
+  return { isUnlocked, isLoading, unlockVault, verifyServerSession };
 };

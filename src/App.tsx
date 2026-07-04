@@ -36,18 +36,7 @@ function AppContent() {
 
   const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
-  // Show global loading while checking unlock status
-  if (vaultLoading || insightsLoading) {
-    return (
-      <div className="main-container dark-mode">
-        <div className="app-loading">
-          <div className="loading-spinner" />
-          <p>Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
+  // Don't block the entire app with loading - let ProtectedRoute handle it
   console.log('App - Current path:', location.pathname);
   console.log('App - Vault unlocked:', isVaultUnlocked);
   console.log('App - Insights unlocked:', isInsightsUnlocked);
