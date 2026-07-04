@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import {
   Timeline,
   Expertise,
@@ -22,6 +22,7 @@ const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 
 function AppContent() {
+  const location = useLocation();
   const { isUnlocked: isVaultUnlocked } = useVault();
   const { isUnlocked: isInsightsUnlocked } = useInsights();
 
@@ -32,6 +33,9 @@ function AppContent() {
       behavior: "smooth"
     });
   }, []);
+
+  // Check if we're on vault or insights page
+  const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
   return (
     <div className="main-container dark-mode">
@@ -59,22 +63,18 @@ function AppContent() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         
-        {/* These sections appear on all pages except when on /vault or /insights */}
-        <Routes>
-          <Route path="/" element={
-            <>
-              <Terminal />
-              <Timeline />
-              <Project />
-              <Expertise />
-              <Certificates />
-              <Contact />
-              <Footer />
-            </>
-          } />
-          <Route path="/vault" element={null} />
-          <Route path="/insights" element={null} />
-        </Routes>
+        {/* Only show these sections on the home page */}
+        {!isSpecialPage && (
+          <>
+            <Terminal />
+            <Timeline />
+            <Project />
+            <Expertise />
+            <Certificates />
+            <Contact />
+            <Footer />
+          </>
+        )}
       </FadeIn>
     </div>
   );
