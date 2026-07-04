@@ -13,10 +13,13 @@ export const useVault = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include', // Important: Send cookies
       });
+      
       const data = await response.json();
-      setIsUnlocked(data.valid);
-      return data.valid;
+      console.log('Vault session valid:', data.valid);
+      setIsUnlocked(data.valid === true);
+      return data.valid === true;
     } catch (error) {
       console.error("Session verification failed:", error);
       setIsUnlocked(false);
@@ -26,7 +29,6 @@ export const useVault = () => {
     }
   }, []);
 
-  // Check on mount
   useEffect(() => {
     if (!hasCheckedRef.current) {
       hasCheckedRef.current = true;
@@ -34,29 +36,16 @@ export const useVault = () => {
     }
   }, [verifyServerSession]);
 
-  // Re-check when the route changes to /vault
-  useEffect(() => {
-    const handleRouteChange = () => {
-      if (window.location.pathname === '/vault' && !isUnlocked) {
-        verifyServerSession();
-      }
-    };
-
-    // Check on popstate (back/forward navigation)
-    window.addEventListener('popstate', handleRouteChange);
-    
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, [isUnlocked, verifyServerSession]);
-
   const unlockVault = useCallback(() => {
     setIsUnlocked(true);
   }, []);
 
   const lockVault = useCallback(async () => {
     try {
-      await fetch("/api/vault/logout", { method: "POST" });
+      await fetch("/api/vault/logout", { 
+        method: "POST",
+        credentials: 'include',
+      });
     } catch (error) {
       console.error("Logout error:", error);
     }

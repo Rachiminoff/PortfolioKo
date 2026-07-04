@@ -12,7 +12,6 @@ export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    // Handle preflight
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
@@ -34,6 +33,7 @@ export default async function handler(req, res) {
             });
         }
 
+        // IP is only used for rate limiting
         const ip =
             req.headers["x-forwarded-for"]
                 ?.toString()
@@ -59,7 +59,6 @@ export default async function handler(req, res) {
             });
         }
 
-        // CHECK IF LOCKED
         if (
             existing?.locked_until &&
             new Date(existing.locked_until) > new Date()
@@ -71,7 +70,6 @@ export default async function handler(req, res) {
             });
         }
 
-        // CORRECT PASSWORD
         if (password === process.env.VAULT_PASSWORD) {
             // Clear attempts
             if (existing) {
@@ -81,11 +79,11 @@ export default async function handler(req, res) {
                     .eq("ip", ip);
             }
 
-            // Generate session token
+            // Generate unique session token
             const crypto = await import('crypto');
             const sessionToken = crypto.randomBytes(32).toString('hex');
             
-            // Store session in database
+            // Store session with token (NOT IP-based)
             const { error: sessionError } = await supabase
                 .from("vault_sessions")
                 .insert({
@@ -112,7 +110,7 @@ export default async function handler(req, res) {
             });
         }
 
-        // FAILED ATTEMPT
+        // Failed attempt handling (IP-based rate limiting)
         const attempts = (existing?.attempts || 0) + 1;
 
         if (attempts >= 4) {
@@ -120,7 +118,7 @@ export default async function handler(req, res) {
                 Date.now() + (3 * 60 * 60 * 1000)
             );
 
-            const { error: lockError } = await supabase
+            await supabase
                 .from("vault_attempts")
                 .upsert({
                     ip,
@@ -130,14 +128,6 @@ export default async function handler(req, res) {
                     onConflict: 'ip'
                 });
 
-            if (lockError) {
-                console.error("Lock error:", lockError);
-                return res.status(500).json({
-                    success: false,
-                    error: "Failed to save lock",
-                });
-            }
-
             return res.status(429).json({
                 success: false,
                 locked: true,
@@ -145,7 +135,7 @@ export default async function handler(req, res) {
             });
         }
 
-        const { error: saveError } = await supabase
+        await supabase
             .from("vault_attempts")
             .upsert({
                 ip,
@@ -153,14 +143,6 @@ export default async function handler(req, res) {
             }, {
                 onConflict: 'ip'
             });
-
-        if (saveError) {
-            console.error("Save error:", saveError);
-            return res.status(500).json({
-                success: false,
-                error: "Failed to save attempt",
-            });
-        }
 
         return res.status(401).json({
             success: false,

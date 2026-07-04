@@ -6,13 +6,11 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
-    // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    // Handle preflight
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
@@ -59,7 +57,6 @@ export default async function handler(req, res) {
             });
         }
 
-        // CHECK IF LOCKED
         if (
             existing?.locked_until &&
             new Date(existing.locked_until) > new Date()
@@ -72,7 +69,6 @@ export default async function handler(req, res) {
         }
 
         if (password === process.env.BLOG_PASSWORD) {
-            // Clear attempts
             if (existing) {
                 await supabase
                     .from("blog_attempts")
@@ -80,11 +76,9 @@ export default async function handler(req, res) {
                     .eq("ip", ip);
             }
 
-            // Generate session token
             const crypto = await import('crypto');
             const sessionToken = crypto.randomBytes(32).toString('hex');
             
-            // Store session in database
             const { error: sessionError } = await supabase
                 .from("blog_sessions")
                 .insert({
@@ -101,7 +95,6 @@ export default async function handler(req, res) {
                 });
             }
 
-            // Set HTTP-only cookie
             res.setHeader('Set-Cookie', [
                 `blog_session=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${24 * 60 * 60}`
             ]);
@@ -111,7 +104,6 @@ export default async function handler(req, res) {
             });
         }
 
-        // FAILED ATTEMPT
         const attempts = (existing?.attempts || 0) + 1;
 
         if (attempts >= 4) {
@@ -167,7 +159,7 @@ export default async function handler(req, res) {
         });
 
     } catch (error) {
-        console.error("Insights Unlock API Error:", error);
+        console.error("Insights unlock API Error:", error);
         return res.status(500).json({
             success: false,
             error: "Internal server error",

@@ -6,13 +6,11 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
-    // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cookie');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    // Handle preflight
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
@@ -25,20 +23,18 @@ export default async function handler(req, res) {
             });
         }
 
-        // Get session token from cookie
+        // Get token from cookie
         const cookies = req.headers.cookie || '';
         const sessionToken = cookies
             .split(';')
             .find(c => c.trim().startsWith('vault_session='))
             ?.split('=')[1];
 
-        console.log('Vault Verify - Session token found:', !!sessionToken);
-
         if (!sessionToken) {
             return res.status(200).json({ valid: false });
         }
 
-        // Check if session exists in database
+        // Look up session by token
         const { data: session, error } = await supabase
             .from("vault_sessions")
             .select("*")
@@ -51,15 +47,11 @@ export default async function handler(req, res) {
         }
 
         if (!session) {
-            console.log('Vault Verify - No session found for token:', sessionToken);
             return res.status(200).json({ valid: false });
         }
 
-        console.log('Vault Verify - Session found:', session);
-
-        // Check if session is expired
+        // Check if expired
         if (new Date(session.expires_at) < new Date()) {
-            console.log('Vault Verify - Session expired');
             await supabase
                 .from("vault_sessions")
                 .delete()
@@ -67,13 +59,9 @@ export default async function handler(req, res) {
             return res.status(200).json({ valid: false });
         }
 
-        console.log('Vault Verify - Session valid');
         return res.status(200).json({ valid: true });
     } catch (error) {
-        console.error("Vault session verification error:", error);
-        return res.status(500).json({
-            valid: false,
-            error: "Internal server error",
-        });
+        console.error("Session verification error:", error);
+        return res.status(200).json({ valid: false });
     }
 }

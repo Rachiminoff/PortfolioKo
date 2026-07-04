@@ -13,10 +13,13 @@ export const useInsights = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: 'include', // Important: Send cookies
       });
+      
       const data = await response.json();
-      setIsUnlocked(data.valid);
-      return data.valid;
+      console.log('Insights session valid:', data.valid);
+      setIsUnlocked(data.valid === true);
+      return data.valid === true;
     } catch (error) {
       console.error("Session verification failed:", error);
       setIsUnlocked(false);
@@ -26,7 +29,6 @@ export const useInsights = () => {
     }
   }, []);
 
-  // Check on mount
   useEffect(() => {
     if (!hasCheckedRef.current) {
       hasCheckedRef.current = true;
@@ -34,28 +36,16 @@ export const useInsights = () => {
     }
   }, [verifyServerSession]);
 
-  // Re-check when the route changes to /insights
-  useEffect(() => {
-    const handleRouteChange = () => {
-      if (window.location.pathname === '/insights' && !isUnlocked) {
-        verifyServerSession();
-      }
-    };
-
-    window.addEventListener('popstate', handleRouteChange);
-    
-    return () => {
-      window.removeEventListener('popstate', handleRouteChange);
-    };
-  }, [isUnlocked, verifyServerSession]);
-
   const unlockInsights = useCallback(() => {
     setIsUnlocked(true);
   }, []);
 
   const lockInsights = useCallback(async () => {
     try {
-      await fetch("/api/insights/logout", { method: "POST" });
+      await fetch("/api/insights/logout", { 
+        method: "POST",
+        credentials: 'include',
+      });
     } catch (error) {
       console.error("Logout error:", error);
     }
