@@ -36,11 +36,7 @@ function AppContent() {
 
   const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
-  // Don't block the entire app with loading - let ProtectedRoute handle it
-  console.log('App - Current path:', location.pathname);
-  console.log('App - Vault unlocked:', isVaultUnlocked);
-  console.log('App - Insights unlocked:', isInsightsUnlocked);
-
+  // Don't block the entire app - let ProtectedRoute handle loading
   return (
     <div className="main-container dark-mode">
       <Navigation />

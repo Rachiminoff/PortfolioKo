@@ -15,7 +15,6 @@ export const useInsights = () => {
         },
       });
       const data = await response.json();
-      console.log('Insights session valid:', data.valid);
       setIsUnlocked(data.valid);
       return data.valid;
     } catch (error) {
@@ -27,17 +26,41 @@ export const useInsights = () => {
     }
   }, []);
 
+  // Check on mount
   useEffect(() => {
-    // Only check once on mount
     if (!hasCheckedRef.current) {
       hasCheckedRef.current = true;
       verifyServerSession();
     }
   }, [verifyServerSession]);
 
+  // Re-check when the route changes to /insights
+  useEffect(() => {
+    const handleRouteChange = () => {
+      if (window.location.pathname === '/insights' && !isUnlocked) {
+        verifyServerSession();
+      }
+    };
+
+    window.addEventListener('popstate', handleRouteChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handleRouteChange);
+    };
+  }, [isUnlocked, verifyServerSession]);
+
   const unlockInsights = useCallback(() => {
     setIsUnlocked(true);
   }, []);
 
-  return { isUnlocked, isLoading, unlockInsights, verifyServerSession };
+  const lockInsights = useCallback(async () => {
+    try {
+      await fetch("/api/insights/logout", { method: "POST" });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+    setIsUnlocked(false);
+  }, []);
+
+  return { isUnlocked, isLoading, unlockInsights, lockInsights, verifyServerSession };
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy, useCallback } from "react";
-// Remove: import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -191,7 +191,7 @@ function AmbientShapes() {
    MAIN COMPONENT
 ========================= */
 function Main() {
-    // Remove: const navigate = useNavigate();
+    const navigate = useNavigate();
     const { unlockVault } = useVault();
     const { unlockInsights } = useInsights();
     
@@ -341,7 +341,7 @@ function Main() {
     }, [insightsClickCount]);
 
     /* =========================
-       VAULT SUBMIT - Uses /api/unlock
+       VAULT SUBMIT
     ========================= */
     const handleVaultSubmit = async (password: string) => {
         setLoading(true);
@@ -357,17 +357,14 @@ function Main() {
             });
 
             const data = await response.json();
-            console.log('Vault API response:', data);
 
             if (data.success) {
-                console.log('✅ Vault unlocked successfully!');
                 unlockVault();
                 setVaultModalOpen(false);
                 setVaultError(null);
                 setRemainingAttempts(undefined);
                 setVaultInput("");
-                console.log('Navigating to /vault...');
-                window.location.href = '/vault';
+                navigate('/vault');
             } else if (data.locked) {
                 setVaultError("Too many failed attempts");
             } else if (data.remaining !== undefined) {
@@ -385,7 +382,7 @@ function Main() {
     };
 
     /* =========================
-       INSIGHTS SUBMIT - Uses /api/insights/unlock
+       INSIGHTS SUBMIT
     ========================= */
     const handleInsightsSubmit = async (password: string) => {
         setInsightsLoading(true);
@@ -401,16 +398,13 @@ function Main() {
             });
 
             const data = await response.json();
-            console.log('Insights API response:', data);
 
             if (data.success) {
-                console.log('✅ Insights unlocked successfully!');
                 unlockInsights();
                 setInsightsModalOpen(false);
                 setInsightsError(null);
                 setInsightsPassword("");
-                console.log('Navigating to /insights...');
-                window.location.href = '/insights';
+                navigate('/insights');
             } else if (data.locked) {
                 const lockTime = new Date(data.lockedUntil).toLocaleString();
                 setInsightsError(`Too many attempts. Locked until ${lockTime}`);
@@ -420,7 +414,7 @@ function Main() {
                 setInsightsError("Invalid password. Please try again.");
             }
         } catch (error) {
-            console.error("Error unlocking insights:", error);
+            console.error("Insights unlock error:", error);
             setInsightsError("Something went wrong. Please try again.");
         }
 
@@ -615,14 +609,12 @@ function Main() {
                 />
             </Suspense>
 
-            {/* =========================
-                VAULT MODAL - PASSWORD OVERLAY
-            ========================= */}
+            {/* VAULT MODAL */}
             {vaultModalOpen && (
                 <div className="vault-modal-overlay">
                     <div className="vault-modal-container">
                         <div className="vault-modal-header">
-                            <span className="vault-modal-icon">🔐</span>
+                            <span className="vault-modal-icon">?</span>
                             <h2>Secret Vault</h2>
                             <button 
                                 className="vault-modal-close"
@@ -633,7 +625,7 @@ function Main() {
                                     setVaultInput("");
                                 }}
                             >
-                                ✕
+                                X
                             </button>
                         </div>
                         <p className="vault-modal-description">
@@ -658,7 +650,7 @@ function Main() {
                             />
                             {vaultError && (
                                 <div className="vault-modal-error">
-                                    <span>⚠️</span>
+                                    <span>!</span>
                                     <span>{vaultError}</span>
                                     {remainingAttempts !== undefined && remainingAttempts > 0 && (
                                         <span className="attempts-badge">
@@ -707,7 +699,7 @@ function Main() {
                                             Unlocking...
                                         </>
                                     ) : (
-                                        "Unlock Vault →"
+                                        "Unlock Vault ->"
                                     )}
                                 </button>
                             </div>
@@ -716,14 +708,12 @@ function Main() {
                 </div>
             )}
 
-            {/* =========================
-                INSIGHTS MODAL - PASSWORD OVERLAY
-            ========================= */}
+            {/* INSIGHTS MODAL */}
             {insightsModalOpen && (
                 <div className="insights-modal-overlay">
                     <div className="insights-modal-container">
                         <div className="insights-modal-header">
-                            <span className="insights-modal-icon">📝</span>
+                            <span className="insights-modal-icon">?</span>
                             <h2>Insights</h2>
                             <button 
                                 className="insights-modal-close"
@@ -733,7 +723,7 @@ function Main() {
                                     setInsightsPassword("");
                                 }}
                             >
-                                ✕
+                                X
                             </button>
                         </div>
                         <p className="insights-modal-description">
@@ -766,12 +756,12 @@ function Main() {
                                     onClick={() => setShowInsightsPassword(!showInsightsPassword)}
                                     aria-label={showInsightsPassword ? "Hide password" : "Show password"}
                                 >
-                                    {showInsightsPassword ? "👁️" : "👁️‍🗨️"}
+                                    {showInsightsPassword ? "?" : "?"}
                                 </button>
                             </div>
                             {insightsError && (
                                 <div className="insights-modal-error">
-                                    <span>⚠️</span>
+                                    <span>!</span>
                                     <span>{insightsError}</span>
                                 </div>
                             )}
@@ -799,7 +789,7 @@ function Main() {
                                             Unlocking...
                                         </>
                                     ) : (
-                                        "Unlock Insights →"
+                                        "Unlock Insights ->"
                                     )}
                                 </button>
                             </div>

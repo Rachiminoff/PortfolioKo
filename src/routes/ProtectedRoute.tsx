@@ -25,11 +25,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!isUnlocked) {
-    console.log('ProtectedRoute - Not unlocked, redirecting to:', redirectTo);
     return <Navigate to={redirectTo} replace />;
   }
 
-  console.log('ProtectedRoute - Access granted');
   return <>{children}</>;
 };
 
