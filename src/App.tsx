@@ -21,7 +21,7 @@ const MainPage = lazy(() => import('./pages/MainPage'));
 const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 
-// Boot Sequence Component - Premium system initialization
+// Boot Sequence Component
 function BootSequence({ onComplete }: { onComplete: () => void }) {
   const [currentStatusIndex, setCurrentStatusIndex] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -31,7 +31,6 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
   const animationFrameRef = useRef<number | undefined>(undefined);
   const startTimeRef = useRef<number | undefined>(undefined);
 
-  // Status messages that cycle during boot
   const statusMessages = [
     "Initializing portfolio...",
     "Loading interface...",
@@ -46,12 +45,10 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
     "Finalizing experience..."
   ];
 
-  // Check for reduced motion preference
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     if (prefersReducedMotion) {
-      // Simple fade for reduced motion
       const timer = setTimeout(() => {
         setIsVisible(false);
         setTimeout(() => {
@@ -62,23 +59,18 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
       return () => clearTimeout(timer);
     }
 
-    // Normal boot sequence: 1.5-2 seconds
-    const totalDuration = 1800; // 1.8 seconds
+    const totalDuration = 1800;
     const statusDuration = totalDuration / statusMessages.length;
-    const readyDelay = 200; // Pause on "Ready."
+    const readyDelay = 200;
 
     let statusInterval: NodeJS.Timeout;
     let statusIndex = 0;
 
-    // Start the boot sequence
     startTimeRef.current = Date.now();
 
-    // Animate progress bar smoothly
     const animateProgress = () => {
       const elapsed = Date.now() - (startTimeRef.current || 0);
       const rawProgress = Math.min(elapsed / totalDuration, 1);
-      
-      // Cubic ease-out for smooth, premium feel
       const eased = 1 - Math.pow(1 - rawProgress, 3);
       setProgress(eased * 100);
 
@@ -87,32 +79,26 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
       }
     };
 
-    // Cycle through status messages
     statusInterval = setInterval(() => {
       if (statusIndex < statusMessages.length - 1) {
         statusIndex++;
         setCurrentStatusIndex(statusIndex);
       } else {
-        // Last message - show "Ready." then complete
         clearInterval(statusInterval);
         setShowReady(true);
         
-        // Pause briefly on "Ready."
         setTimeout(() => {
-          // Begin exit sequence
           setIsVisible(false);
           setTimeout(() => {
             setShouldRender(false);
             onComplete();
-          }, 600); // Wait for fade out
+          }, 600);
         }, readyDelay);
       }
     }, statusDuration);
 
-    // Start progress animation
     animateProgress();
 
-    // Cleanup
     return () => {
       if (statusInterval) clearInterval(statusInterval);
       if (animationFrameRef.current !== undefined) {
@@ -123,19 +109,15 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
 
   if (!shouldRender) return null;
 
-  // Get current status text
   const currentStatus = showReady ? "Ready." : statusMessages[currentStatusIndex];
   const isReady = showReady;
 
   return (
     <div className={`boot-screen ${!isVisible ? 'boot-fade-out' : ''}`}>
-      {/* Ambient background with subtle gradient movement */}
       <div className="boot-background">
         <div className="boot-ambient-glow" />
         <div className="boot-grid-overlay" />
       </div>
-
-      {/* Floating particles */}
       <div className="boot-particles">
         {[...Array(12)].map((_, i) => (
           <div 
@@ -152,17 +134,12 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
           />
         ))}
       </div>
-
-      {/* Main content */}
       <div className="boot-content">
-        {/* Status text with fade transitions */}
         <div className="boot-status-wrapper" key={currentStatus}>
           <div className={`boot-status ${isReady ? 'boot-status-ready' : ''}`}>
             {currentStatus}
           </div>
         </div>
-
-        {/* Loading bar */}
         <div className="boot-progress-wrapper">
           <div 
             className="boot-progress-bar"
@@ -172,8 +149,6 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
             }}
           />
         </div>
-
-        {/* Subtle system indicator */}
         <div className="boot-system-indicator">
           <span className="boot-dot" />
           <span className="boot-dot" />
@@ -189,6 +164,7 @@ function AppContent() {
   const { isUnlocked: isVaultUnlocked, isLoading: vaultLoading } = useVault();
   const { isUnlocked: isInsightsUnlocked, isLoading: insightsLoading } = useInsights();
   const [hasBooted, setHasBooted] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     window.scrollTo({
@@ -198,61 +174,83 @@ function AppContent() {
     });
   }, [location.pathname]);
 
+  // Wait for both boot sequence AND authentication to complete
+  useEffect(() => {
+    if (hasBooted && !vaultLoading && !insightsLoading) {
+      // Small delay to ensure state updates are flushed
+      const timer = setTimeout(() => {
+        setIsReady(true);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [hasBooted, vaultLoading, insightsLoading]);
+
   const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
-  return (
-    <>
-      {/* Boot sequence - only plays once on initial load */}
-      {!hasBooted && (
-        <BootSequence onComplete={() => setHasBooted(true)} />
-      )}
-      
-      <div className={`main-container dark-mode ${hasBooted ? 'app-revealed' : 'app-hidden'}`}>
-        <Navigation />
-        
-        <FadeIn transitionDuration={700}>
-          <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route 
-              path="/vault" 
-              element={
-                <ProtectedRoute 
-                  isUnlocked={isVaultUnlocked} 
-                  isLoading={vaultLoading}
-                >
-                  <VaultPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/insights" 
-              element={
-                <ProtectedRoute 
-                  isUnlocked={isInsightsUnlocked} 
-                  isLoading={insightsLoading}
-                >
-                  <InsightsPage />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-          
-          {/* Only show these sections on the home page */}
-          {!isSpecialPage && (
-            <>
-              <Terminal />
-              <Timeline />
-              <Project />
-              <Expertise />
-              <Certificates />
-              <Contact />
-              <Footer />
-            </>
-          )}
-        </FadeIn>
+  console.log('App - Current path:', location.pathname);
+  console.log('App - Vault unlocked:', isVaultUnlocked);
+  console.log('App - Insights unlocked:', isInsightsUnlocked);
+  console.log('App - Vault loading:', vaultLoading);
+  console.log('App - Insights loading:', insightsLoading);
+  console.log('App - Has booted:', hasBooted);
+  console.log('App - Is ready:', isReady);
+
+  // Show loading state while booting or authenticating
+  if (!isReady) {
+    return (
+      <div className="app-loading">
+        <div className="loading-spinner" />
+        <p>Loading...</p>
       </div>
-    </>
+    );
+  }
+
+  return (
+    <div className="main-container dark-mode">
+      <Navigation />
+      
+      <FadeIn transitionDuration={700}>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route 
+            path="/vault" 
+            element={
+              <ProtectedRoute 
+                isUnlocked={isVaultUnlocked} 
+                isLoading={false}
+              >
+                <VaultPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/insights" 
+            element={
+              <ProtectedRoute 
+                isUnlocked={isInsightsUnlocked} 
+                isLoading={false}
+              >
+                <InsightsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        
+        {/* Only show these sections on the home page */}
+        {!isSpecialPage && (
+          <>
+            <Terminal />
+            <Timeline />
+            <Project />
+            <Expertise />
+            <Certificates />
+            <Contact />
+            <Footer />
+          </>
+        )}
+      </FadeIn>
+    </div>
   );
 }
 
