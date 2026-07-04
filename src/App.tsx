@@ -47,9 +47,11 @@ function AppContent() {
           <Route 
             path="/vault" 
             element={
-              <ProtectedRoute isUnlocked={isVaultUnlocked}>
-                <VaultPage />
-              </ProtectedRoute>
+              <div>
+                <h1>Vault Route Hit</h1>
+                <p>Is unlocked: {String(isVaultUnlocked)}</p>
+                <button onClick={() => navigate('/')}>Go Home</button>
+              </div>
             } 
           />
           <Route 
