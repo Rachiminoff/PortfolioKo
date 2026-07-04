@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+// Remove: import { useNavigate } from "react-router-dom";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -191,7 +191,7 @@ function AmbientShapes() {
    MAIN COMPONENT
 ========================= */
 function Main() {
-    const navigate = useNavigate();
+    // Remove: const navigate = useNavigate();
     const { unlockVault } = useVault();
     const { unlockInsights } = useInsights();
     
