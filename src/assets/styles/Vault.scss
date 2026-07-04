@@ -1767,3 +1767,31 @@
     }
   }
 }
+
+/* ========================================
+   PAGE ENTRANCE ANIMATION
+======================================== */
+.vault-container {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.vault-container.vault-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   STICKY HEADER OPTIMIZATION
+======================================== */
+.vault-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 0.75rem 2rem 0.5rem;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(20px) saturate(1.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: var(--vault-transition);
+}

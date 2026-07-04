@@ -163,7 +163,6 @@ function AppContent() {
   const location = useLocation();
   const { isUnlocked: isVaultUnlocked, isLoading: vaultLoading } = useVault();
   const { isUnlocked: isInsightsUnlocked, isLoading: insightsLoading } = useInsights();
-  const [hasBooted, setHasBooted] = useState(false);
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -174,16 +173,16 @@ function AppContent() {
     });
   }, [location.pathname]);
 
-  // Wait for both boot sequence AND authentication to complete
+  // Wait for authentication to complete
   useEffect(() => {
-    if (hasBooted && !vaultLoading && !insightsLoading) {
+    if (!vaultLoading && !insightsLoading) {
       // Small delay to ensure state updates are flushed
       const timer = setTimeout(() => {
         setIsReady(true);
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [hasBooted, vaultLoading, insightsLoading]);
+  }, [vaultLoading, insightsLoading]);
 
   const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
@@ -192,10 +191,9 @@ function AppContent() {
   console.log('App - Insights unlocked:', isInsightsUnlocked);
   console.log('App - Vault loading:', vaultLoading);
   console.log('App - Insights loading:', insightsLoading);
-  console.log('App - Has booted:', hasBooted);
   console.log('App - Is ready:', isReady);
 
-  // Show loading state while booting or authenticating
+  // Show loading state while authenticating
   if (!isReady) {
     return (
       <div className="app-loading">

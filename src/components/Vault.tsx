@@ -39,6 +39,15 @@ function Vault() {
     const [density, setDensity] = useState<DensityOption>("comfortable");
     const [expandedSeries, setExpandedSeries] = useState<Set<string>>(new Set());
     const [continueReading, setContinueReading] = useState<VaultItem | null>(null);
+    const [isPageVisible, setIsPageVisible] = useState(false);
+
+    // Page entrance animation
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsPageVisible(true);
+        }, 50);
+        return () => clearTimeout(timer);
+    }, []);
 
     // Fetch vault items
     useEffect(() => {
@@ -552,11 +561,11 @@ function Vault() {
     };
 
     return (
-        <div className={`vault-container ${activeCard ? "vault-active" : ""}`}>
+        <div className={`vault-container ${activeCard ? "vault-active" : ""} ${isPageVisible ? "vault-visible" : ""}`}>
             {/* HEADER */}
             <div className="vault-header">
                 <div className="vault-header-top">
-                    <h1>Vault Library</h1>
+                    <h1>📚 Vault Library</h1>
 
                     <div className="vault-view-controls">
                         <button
@@ -847,7 +856,7 @@ function Vault() {
                 )}
             </div>
 
-            {/* VIEWER OVERLAY - Rendered at root level with portal-like behavior */}
+            {/* VIEWER OVERLAY */}
             {viewerUrl && viewerType === "pdf" && (
                 <PDFViewer url={viewerUrl} onClose={closeViewer} />
             )}
