@@ -195,7 +195,6 @@ function Main() {
     const [vaultClickCount, setVaultClickCount] = useState(0);
     const [vaultInput, setVaultInput] = useState("");
     const [loading, setLoading] = useState(false);
-    const [vaultLockedUntil, setVaultLockedUntil] = useState<number | null>(null);
     const [vaultModalOpen, setVaultModalOpen] = useState(false);
     const [vaultError, setVaultError] = useState<string | null>(null);
     const [remainingAttempts, setRemainingAttempts] = useState<number | undefined>(undefined);
@@ -292,7 +291,6 @@ function Main() {
             setVaultClickCount(0);
             setVaultError(null);
             setRemainingAttempts(undefined);
-            setVaultLockedUntil(null);
             setVaultInput("");
             if (vaultTimerRef.current) {
                 clearTimeout(vaultTimerRef.current);
@@ -366,7 +364,6 @@ function Main() {
                 // Navigate to vault page
                 navigate('/vault');
             } else if (data.locked) {
-                setVaultLockedUntil(data.lockedUntil);
                 setVaultError("Too many failed attempts");
             } else if (data.remaining !== undefined) {
                 setRemainingAttempts(data.remaining);
@@ -401,7 +398,7 @@ function Main() {
             const data = await response.json();
 
             if (data.success) {
-                sessionStorage.setItem("insightsUnlocked", "true");
+                localStorage.setItem("blogUnlocked", "true");
                 setInsightsModalOpen(false);
                 setInsightsError(null);
                 setInsightsPassword("");

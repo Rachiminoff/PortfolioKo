@@ -6,12 +6,10 @@ const Insights = lazy(() => import('../components/Insights'));
 
 const InsightsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked, unlockInsights } = useInsights();
+  const { isUnlocked } = useInsights();
 
   React.useEffect(() => {
-    // Check if unlocked via URL param or localStorage
     if (!isUnlocked) {
-      // If not unlocked, redirect to home
       navigate('/', { replace: true });
     }
   }, [isUnlocked, navigate]);
