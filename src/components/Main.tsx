@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense, lazy, useCallback } from "react";
-
+import { useNavigate } from "react-router-dom";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -7,9 +7,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
 
-// Lazy load heavy components
-const Vault = lazy(() => import('./Vault'));
-const Insights = lazy(() => import('./Insights'));
+// Lazy load components
 const PDFViewer = lazy(() => import('./PDFViewer'));
 
 /* =========================
@@ -191,20 +189,10 @@ function AmbientShapes() {
    MAIN COMPONENT
 ========================= */
 function Main() {
-    // Vault state (triggered by clicking name/role)
+    const navigate = useNavigate();
+    
+    // Vault state
     const [vaultClickCount, setVaultClickCount] = useState(0);
-    const [vaultUnlocked, setVaultUnlocked] = useState(false);
-    const [showVaultContent, setShowVaultContent] = useState(false);
-    const vaultRef = useRef<HTMLDivElement>(null);
-
-    // Insights state (triggered by clicking profile picture)
-    const [insightsClickCount, setInsightsClickCount] = useState(0);
-    const [insightsUnlocked, setInsightsUnlocked] = useState(false);
-    const [showInsightsContent, setShowInsightsContent] = useState(false);
-    const insightsRef = useRef<HTMLDivElement>(null);
-
-    // Vault Modal state
-    const [showVaultPrompt, setShowVaultPrompt] = useState(false);
     const [vaultInput, setVaultInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [vaultLockedUntil, setVaultLockedUntil] = useState<number | null>(null);
@@ -212,7 +200,8 @@ function Main() {
     const [vaultError, setVaultError] = useState<string | null>(null);
     const [remainingAttempts, setRemainingAttempts] = useState<number | undefined>(undefined);
 
-    // Insights Modal state
+    // Insights state
+    const [insightsClickCount, setInsightsClickCount] = useState(0);
     const [insightsModalOpen, setInsightsModalOpen] = useState(false);
     const [insightsPassword, setInsightsPassword] = useState("");
     const [insightsError, setInsightsError] = useState<string | null>(null);
@@ -268,60 +257,6 @@ function Main() {
         const timer = setTimeout(() => setIsLoaded(true), 50);
         return () => clearTimeout(timer);
     }, []);
-
-    // Force vault locked on mount
-    useEffect(() => {
-        try {
-            localStorage.removeItem('vaultUnlocked');
-            sessionStorage.removeItem('vaultUnlocked');
-        } catch (e) {
-            // Ignore
-        }
-        
-        setVaultUnlocked(false);
-        setShowVaultPrompt(false);
-        setShowVaultContent(false);
-        setInsightsUnlocked(false);
-        setShowInsightsContent(false);
-    }, []);
-
-    // Handle vault unlock animation
-    useEffect(() => {
-        if (vaultUnlocked) {
-            setTimeout(() => {
-                setShowVaultContent(true);
-                setTimeout(() => {
-                    if (vaultRef.current) {
-                        vaultRef.current.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }
-                }, 500);
-            }, 300);
-        } else {
-            setShowVaultContent(false);
-        }
-    }, [vaultUnlocked]);
-
-    // Handle insights unlock animation
-    useEffect(() => {
-        if (insightsUnlocked) {
-            setTimeout(() => {
-                setShowInsightsContent(true);
-                setTimeout(() => {
-                    if (insightsRef.current) {
-                        insightsRef.current.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'start' 
-                        });
-                    }
-                }, 500);
-            }, 300);
-        } else {
-            setShowInsightsContent(false);
-        }
-    }, [insightsUnlocked]);
 
     /* =========================
        VAULT TRIGGER - Click name/role 5 times
@@ -422,11 +357,14 @@ function Main() {
             const data = await response.json();
 
             if (data.success) {
-                setVaultUnlocked(true);
+                // Store unlocked state in sessionStorage
+                sessionStorage.setItem('vaultUnlocked', 'true');
                 setVaultModalOpen(false);
                 setVaultError(null);
                 setRemainingAttempts(undefined);
                 setVaultInput("");
+                // Navigate to vault page
+                navigate('/vault');
             } else if (data.locked) {
                 setVaultLockedUntil(data.lockedUntil);
                 setVaultError("Too many failed attempts");
@@ -445,7 +383,7 @@ function Main() {
     };
 
     /* =========================
-       INSIGHTS SUBMIT - Uses /api/insights/unlock with BLOG_PASSWORD
+       INSIGHTS SUBMIT - Uses /api/insights/unlock
     ========================= */
     const handleInsightsSubmit = async (password: string) => {
         setInsightsLoading(true);
@@ -463,11 +401,12 @@ function Main() {
             const data = await response.json();
 
             if (data.success) {
-                localStorage.setItem("blogUnlocked", "true");
-                setInsightsUnlocked(true);
+                sessionStorage.setItem("insightsUnlocked", "true");
                 setInsightsModalOpen(false);
                 setInsightsError(null);
                 setInsightsPassword("");
+                // Navigate to insights page
+                navigate('/insights');
             } else if (data.locked) {
                 const lockTime = new Date(data.lockedUntil).toLocaleString();
                 setInsightsError(`Too many attempts. Locked until ${lockTime}`);
@@ -648,54 +587,6 @@ function Main() {
                                     {pdfLoading && <span className="button-loader" />}
                                 </button>
                             </div>
-
-                            {/* Vault prompt - shown after secret click */}
-                            {showVaultPrompt && !vaultLockedUntil && (
-                                <form
-                                    onSubmit={(e) => {
-                                        e.preventDefault();
-                                        handleVaultSubmit(vaultInput);
-                                    }}
-                                    className="vault-form"
-                                    role="search"
-                                >
-                                    <input
-                                        type="password"
-                                        placeholder="Enter secret code"
-                                        value={vaultInput}
-                                        onChange={(e) =>
-                                            setVaultInput(e.target.value)
-                                        }
-                                        autoFocus
-                                        className="vault-input"
-                                        aria-label="Secret code input"
-                                        autoComplete="off"
-                                    />
-                                    <button
-                                        type="submit"
-                                        className="vault-button"
-                                        disabled={loading}
-                                    >
-                                        {loading ? "Checking..." : "Unlock →"}
-                                    </button>
-                                </form>
-                            )}
-
-                            {loading && (
-                                <div className="vault-loading" role="status" aria-label="Loading">
-                                    <div className="skeleton-shimmer" />
-                                </div>
-                            )}
-
-                            {showVaultPrompt && vaultLockedUntil && (
-                                <div className="vault-locked" role="alert">
-                                    <p>🔒 Vault is locked... Who are you?</p>
-                                    <p>
-                                        Unlocks at:{" "}
-                                        {new Date(vaultLockedUntil).toLocaleString()}
-                                    </p>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
@@ -712,42 +603,6 @@ function Main() {
                     />
                 ))}
             </section>
-
-            {/* =========================
-                VAULT - ANIMATED INLINE REVEAL
-            ========================= */}
-            <div 
-                ref={vaultRef}
-                className={`vault-reveal-container ${showVaultContent ? 'visible' : ''}`}
-            >
-                <div className="vault-reveal-divider" />
-                <Suspense fallback={
-                    <div className="vault-loading-state">
-                        <div className="vault-loading-spinner" />
-                        <p>Loading archive...</p>
-                    </div>
-                }>
-                    {vaultUnlocked && <Vault />}
-                </Suspense>
-            </div>
-
-            {/* =========================
-                INSIGHTS - ANIMATED INLINE REVEAL
-            ========================= */}
-            <div 
-                ref={insightsRef}
-                className={`insights-reveal-container ${showInsightsContent ? 'visible' : ''}`}
-            >
-                <div className="insights-reveal-divider" />
-                <Suspense fallback={
-                    <div className="insights-loading-state">
-                        <div className="insights-loading-spinner" />
-                        <p>Loading articles...</p>
-                    </div>
-                }>
-                    {insightsUnlocked && <Insights />}
-                </Suspense>
-            </div>
 
             <Suspense fallback={null}>
                 <PDFViewer

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import {
-  Main,
   Timeline,
   Expertise,
   Terminal,
@@ -9,14 +9,23 @@ import {
   Contact,
   Footer
 } from "./components";
-
 import FadeIn from "./components/FadeIn";
-import "./index.scss";
 import Certificates from "./components/Certificates";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import { useVault } from "./hooks/useVault";
+import { useInsights } from "./hooks/useInsights";
+import "./index.scss";
 
-function App() {
+// Lazy load pages
+const MainPage = lazy(() => import('./pages/MainPage'));
+const VaultPage = lazy(() => import('./pages/VaultPage'));
+const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 
-  useEffect(() => {
+function AppContent() {
+  const { isUnlocked: isVaultUnlocked } = useVault();
+  const { isUnlocked: isInsightsUnlocked } = useInsights();
+
+  React.useEffect(() => {
     window.scrollTo({
       top: 0,
       left: 0,
@@ -27,18 +36,60 @@ function App() {
   return (
     <div className="main-container dark-mode">
       <Navigation />
-
+      
       <FadeIn transitionDuration={700}>
-        <Main />
-        <Terminal />
-        <Timeline />
-        <Project />
-        <Expertise />
-        <Certificates/>
-        <Contact />
-        <Footer />
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route 
+            path="/vault" 
+            element={
+              <ProtectedRoute isUnlocked={isVaultUnlocked}>
+                <VaultPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/insights" 
+            element={
+              <ProtectedRoute isUnlocked={isInsightsUnlocked}>
+                <InsightsPage />
+              </ProtectedRoute>
+            } 
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+        
+        {/* These sections appear on all pages except when on /vault or /insights */}
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Terminal />
+              <Timeline />
+              <Project />
+              <Expertise />
+              <Certificates />
+              <Contact />
+              <Footer />
+            </>
+          } />
+          <Route path="/vault" element={null} />
+          <Route path="/insights" element={null} />
+        </Routes>
       </FadeIn>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Suspense fallback={
+      <div className="app-loading">
+        <div className="loading-spinner" />
+        <p>Loading...</p>
+      </div>
+    }>
+      <AppContent />
+    </Suspense>
   );
 }
 
