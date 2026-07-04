@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef, Suspense, lazy, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import GitHubIcon from '@mui/icons-material/GitHub';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
-import DescriptionIcon from '@mui/icons-material/Description';
+import { Icon } from "@iconify/react";
 
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
@@ -202,6 +200,7 @@ function Main() {
     const [vaultModalOpen, setVaultModalOpen] = useState(false);
     const [vaultError, setVaultError] = useState<string | null>(null);
     const [remainingAttempts, setRemainingAttempts] = useState<number | undefined>(undefined);
+    const [showVaultPassword, setShowVaultPassword] = useState(false);
 
     // Insights state
     const [insightsClickCount, setInsightsClickCount] = useState(0);
@@ -353,6 +352,7 @@ function Main() {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: 'include',
                 body: JSON.stringify({ password }),
             });
 
@@ -364,7 +364,6 @@ function Main() {
                 setVaultError(null);
                 setRemainingAttempts(undefined);
                 setVaultInput("");
-                // Small delay to ensure session is committed
                 await new Promise(resolve => setTimeout(resolve, 100));
                 navigate('/vault', { replace: true });
             } else if (data.locked) {
@@ -396,6 +395,7 @@ function Main() {
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: 'include',
                 body: JSON.stringify({ password }),
             });
 
@@ -406,7 +406,6 @@ function Main() {
                 setInsightsModalOpen(false);
                 setInsightsError(null);
                 setInsightsPassword("");
-                // Small delay to ensure session is committed
                 await new Promise(resolve => setTimeout(resolve, 100));
                 navigate('/insights', { replace: true });
             } else if (data.locked) {
@@ -430,10 +429,12 @@ function Main() {
     ========================= */
     const openCVViewer = useCallback(() => {
         setPdfLoading(true);
+        // Set the URL immediately to start loading
+        setViewerUrl("/YambaoResume.pdf");
+        // Hide loading after a short delay or when the PDF loads
         setTimeout(() => {
-            setViewerUrl("/YambaoResume.pdf");
             setPdfLoading(false);
-        }, 300);
+        }, 500);
     }, []);
 
     const closeViewer = useCallback(() => {
@@ -514,7 +515,7 @@ function Main() {
                                     aria-label="GitHub Profile"
                                     title="GitHub"
                                 >
-                                    <GitHubIcon />
+                                    <Icon icon="mdi:github" />
                                     <span className="tooltip">GitHub</span>
                                 </a>
                                 <a
@@ -525,7 +526,7 @@ function Main() {
                                     aria-label="LinkedIn Profile"
                                     title="LinkedIn"
                                 >
-                                    <LinkedInIcon />
+                                    <Icon icon="mdi:linkedin" />
                                     <span className="tooltip">LinkedIn</span>
                                 </a>
                                 <button 
@@ -536,7 +537,7 @@ function Main() {
                                     disabled={pdfLoading}
                                     tabIndex={0}
                                 >
-                                    <DescriptionIcon />
+                                    <Icon icon="mdi:file-document" />
                                     <span className="tooltip">Resume</span>
                                     {pdfLoading && <span className="button-loader" />}
                                 </button>
@@ -565,7 +566,7 @@ function Main() {
                                     aria-label="GitHub Profile"
                                     title="GitHub"
                                 >
-                                    <GitHubIcon />
+                                    <Icon icon="mdi:github" />
                                 </a>
                                 <a
                                     href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
@@ -575,7 +576,7 @@ function Main() {
                                     aria-label="LinkedIn Profile"
                                     title="LinkedIn"
                                 >
-                                    <LinkedInIcon />
+                                    <Icon icon="mdi:linkedin" />
                                 </a>
                                 <button 
                                     className="social-link cv" 
@@ -585,7 +586,7 @@ function Main() {
                                     disabled={pdfLoading}
                                     tabIndex={0}
                                 >
-                                    <DescriptionIcon />
+                                    <Icon icon="mdi:file-document" />
                                     {pdfLoading && <span className="button-loader" />}
                                 </button>
                             </div>
@@ -618,7 +619,9 @@ function Main() {
                 <div className="vault-modal-overlay">
                     <div className="vault-modal-container">
                         <div className="vault-modal-header">
-                            <span className="vault-modal-icon">?</span>
+                            <span className="vault-modal-icon">
+                                <Icon icon="mdi:lock" />
+                            </span>
                             <h2>Secret Vault</h2>
                             <button 
                                 className="vault-modal-close"
@@ -629,7 +632,7 @@ function Main() {
                                     setVaultInput("");
                                 }}
                             >
-                                X
+                                <Icon icon="mdi:close" />
                             </button>
                         </div>
                         <p className="vault-modal-description">
@@ -642,19 +645,31 @@ function Main() {
                             }}
                             className="vault-modal-form"
                         >
-                            <input
-                                type="password"
-                                placeholder="Enter secret code..."
-                                value={vaultInput}
-                                onChange={(e) => setVaultInput(e.target.value)}
-                                className={`vault-modal-input ${vaultError ? 'error' : ''}`}
-                                disabled={loading}
-                                autoFocus
-                                autoComplete="off"
-                            />
+                            <div className="vault-password-wrapper">
+                                <input
+                                    type={showVaultPassword ? "text" : "password"}
+                                    placeholder="Enter secret code..."
+                                    value={vaultInput}
+                                    onChange={(e) => setVaultInput(e.target.value)}
+                                    className={`vault-modal-input ${vaultError ? 'error' : ''}`}
+                                    disabled={loading}
+                                    autoFocus
+                                    autoComplete="off"
+                                />
+                                <button
+                                    type="button"
+                                    className="vault-password-toggle"
+                                    onClick={() => setShowVaultPassword(!showVaultPassword)}
+                                    aria-label={showVaultPassword ? "Hide password" : "Show password"}
+                                >
+                                    <Icon icon={showVaultPassword ? "mdi:eye" : "mdi:eye-off"} />
+                                </button>
+                            </div>
                             {vaultError && (
                                 <div className="vault-modal-error">
-                                    <span>!</span>
+                                    <span className="error-icon">
+                                        <Icon icon="mdi:alert" />
+                                    </span>
                                     <span>{vaultError}</span>
                                     {remainingAttempts !== undefined && remainingAttempts > 0 && (
                                         <span className="attempts-badge">
@@ -703,7 +718,9 @@ function Main() {
                                             Unlocking...
                                         </>
                                     ) : (
-                                        "Unlock Vault ->"
+                                        <>
+                                            Unlock Vault <Icon icon="mdi:arrow-right" />
+                                        </>
                                     )}
                                 </button>
                             </div>
@@ -717,7 +734,9 @@ function Main() {
                 <div className="insights-modal-overlay">
                     <div className="insights-modal-container">
                         <div className="insights-modal-header">
-                            <span className="insights-modal-icon">?</span>
+                            <span className="insights-modal-icon">
+                                <Icon icon="mdi:notebook" />
+                            </span>
                             <h2>Insights</h2>
                             <button 
                                 className="insights-modal-close"
@@ -727,7 +746,7 @@ function Main() {
                                     setInsightsPassword("");
                                 }}
                             >
-                                X
+                                <Icon icon="mdi:close" />
                             </button>
                         </div>
                         <p className="insights-modal-description">
@@ -760,12 +779,14 @@ function Main() {
                                     onClick={() => setShowInsightsPassword(!showInsightsPassword)}
                                     aria-label={showInsightsPassword ? "Hide password" : "Show password"}
                                 >
-                                    {showInsightsPassword ? "?" : "?"}
+                                    <Icon icon={showInsightsPassword ? "mdi:eye" : "mdi:eye-off"} />
                                 </button>
                             </div>
                             {insightsError && (
                                 <div className="insights-modal-error">
-                                    <span>!</span>
+                                    <span className="error-icon">
+                                        <Icon icon="mdi:alert" />
+                                    </span>
                                     <span>{insightsError}</span>
                                 </div>
                             )}
@@ -793,7 +814,9 @@ function Main() {
                                             Unlocking...
                                         </>
                                     ) : (
-                                        "Unlock Insights ->"
+                                        <>
+                                            Unlock Insights <Icon icon="mdi:arrow-right" />
+                                        </>
                                     )}
                                 </button>
                             </div>
