@@ -32,6 +32,8 @@ export default async function handler(req, res) {
             || req.socket?.remoteAddress
             || "unknown";
 
+        console.log('Insights Unlock - IP:', ip);
+
         const { password } = req.body;
 
         if (!password) {
@@ -71,6 +73,8 @@ export default async function handler(req, res) {
         }
 
         if (password === process.env.BLOG_PASSWORD) {
+            console.log('Insights Unlock - Password correct!');
+            
             // Clear attempts
             if (existing) {
                 await supabase
@@ -79,11 +83,12 @@ export default async function handler(req, res) {
                     .eq("ip", ip);
             }
 
-            // Create or update session
+            // Create session
+            console.log('Insights Unlock - Creating session for IP:', ip);
             const { error: sessionError } = await supabase
                 .from("blog_sessions")
                 .upsert({
-                    ip,
+                    ip: ip,
                     created_at: new Date().toISOString(),
                 }, {
                     onConflict: 'ip'
@@ -91,7 +96,8 @@ export default async function handler(req, res) {
 
             if (sessionError) {
                 console.error("Session creation error:", sessionError);
-                // Still return success even if session creation fails
+            } else {
+                console.log('Insights Unlock - Session created successfully');
             }
 
             return res.status(200).json({

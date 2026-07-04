@@ -32,6 +32,9 @@ export default async function handler(req, res) {
             || req.socket?.remoteAddress
             || "unknown";
 
+        console.log('Unlock - IP:', ip);
+        console.log('Unlock - Password received:', req.body.password ? 'Yes' : 'No');
+
         const { password } = req.body;
 
         if (!password) {
@@ -58,11 +61,14 @@ export default async function handler(req, res) {
             });
         }
 
+        console.log('Unlock - Existing attempts:', existing);
+
         // CHECK IF LOCKED
         if (
             existing?.locked_until &&
             new Date(existing.locked_until) > new Date()
         ) {
+            console.log('Unlock - IP is locked until:', existing.locked_until);
             return res.status(429).json({
                 success: false,
                 locked: true,
@@ -71,20 +77,27 @@ export default async function handler(req, res) {
         }
 
         // CORRECT PASSWORD
-        if (password === process.env.VAULT_PASSWORD) {
+        const correctPassword = process.env.VAULT_PASSWORD;
+        console.log('Unlock - Correct password:', correctPassword ? 'Set' : 'Not set');
+        
+        if (password === correctPassword) {
+            console.log('Unlock - Password correct!');
+            
             // Clear attempts
             if (existing) {
+                console.log('Unlock - Clearing attempts');
                 await supabase
                     .from("vault_attempts")
                     .delete()
                     .eq("ip", ip);
             }
 
-            // Create or update session
-            const { error: sessionError } = await supabase
+            // Create session
+            console.log('Unlock - Creating session for IP:', ip);
+            const { data: sessionData, error: sessionError } = await supabase
                 .from("vault_sessions")
                 .upsert({
-                    ip,
+                    ip: ip,
                     created_at: new Date().toISOString(),
                 }, {
                     onConflict: 'ip'
@@ -92,7 +105,8 @@ export default async function handler(req, res) {
 
             if (sessionError) {
                 console.error("Session creation error:", sessionError);
-                // Still return success even if session creation fails
+            } else {
+                console.log('Unlock - Session created successfully:', sessionData);
             }
 
             return res.status(200).json({
@@ -100,14 +114,18 @@ export default async function handler(req, res) {
             });
         }
 
+        console.log('Unlock - Password incorrect');
         // FAILED ATTEMPT
         const attempts = (existing?.attempts || 0) + 1;
+        console.log('Unlock - Attempt count:', attempts);
 
         // LOCK AFTER 4 FAILURES
         if (attempts >= 4) {
             const lockedUntil = new Date(
                 Date.now() + (3 * 60 * 60 * 1000) // 3 hours
             );
+
+            console.log('Unlock - Locking IP until:', lockedUntil.toISOString());
 
             const { error: lockError } = await supabase
                 .from("vault_attempts")
@@ -135,6 +153,7 @@ export default async function handler(req, res) {
         }
 
         // SAVE FAILED ATTEMPT
+        console.log('Unlock - Saving failed attempt');
         const { error: saveError } = await supabase
             .from("vault_attempts")
             .upsert({
