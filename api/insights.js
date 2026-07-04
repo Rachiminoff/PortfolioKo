@@ -16,7 +16,7 @@ export default async function handler(req, res) {
 
         const ip =
             req.headers["x-forwarded-for"]
-                ?.toString()
+                ??.toString()
                 .split(",")[0]
                 .trim()
             || req.socket?.remoteAddress
@@ -61,10 +61,19 @@ export default async function handler(req, res) {
         }
 
         if (password === process.env.BLOG_PASSWORD) {
+            // Clear attempts
             await supabase
                 .from("blog_attempts")
                 .delete()
                 .eq("ip", ip);
+
+            // Create a session
+            await supabase
+                .from("blog_sessions")
+                .upsert({
+                    ip,
+                    created_at: new Date().toISOString(),
+                });
 
             return res.status(200).json({
                 success: true,

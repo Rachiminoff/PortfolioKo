@@ -62,7 +62,7 @@ function AppContent() {
           <Route 
             path="/vault" 
             element={
-              <ProtectedRoute isUnlocked={isVaultUnlocked}>
+              <ProtectedRoute isUnlocked={isVaultUnlocked} isLoading={vaultLoading}>
                 <VaultPage />
               </ProtectedRoute>
             } 
@@ -70,7 +70,7 @@ function AppContent() {
           <Route 
             path="/insights" 
             element={
-              <ProtectedRoute isUnlocked={isInsightsUnlocked}>
+              <ProtectedRoute isUnlocked={isInsightsUnlocked} isLoading={insightsLoading}>
                 <InsightsPage />
               </ProtectedRoute>
             } 

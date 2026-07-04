@@ -6,21 +6,17 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
-
     try {
-
         if (req.method !== "POST") {
-
             return res.status(405).json({
                 success: false,
                 error: "Method not allowed",
             });
-
         }
 
         const ip =
             req.headers["x-forwarded-for"]
-                ?.toString()
+                ??.toString()
                 .split(",")[0]
                 .trim()
             || req.socket?.remoteAddress
@@ -29,12 +25,10 @@ export default async function handler(req, res) {
         const { password } = req.body;
 
         if (!password) {
-
             return res.status(400).json({
                 success: false,
                 error: "Password required",
             });
-
         }
 
         const {
@@ -47,57 +41,53 @@ export default async function handler(req, res) {
             .maybeSingle();
 
         if (fetchError) {
-
             console.error(fetchError);
-
             return res.status(500).json({
                 success: false,
                 error: "Database lookup failed",
             });
-
         }
 
         // CHECK IF LOCKED
-
         if (
             existing?.locked_until &&
             new Date(existing.locked_until) > new Date()
         ) {
-
             return res.status(429).json({
                 success: false,
                 locked: true,
                 lockedUntil: existing.locked_until,
             });
-
         }
 
         // CORRECT PASSWORD
-
         if (password === process.env.VAULT_PASSWORD) {
-
+            // Clear attempts
             await supabase
                 .from("vault_attempts")
                 .delete()
                 .eq("ip", ip);
 
+            // Create a session
+            await supabase
+                .from("vault_sessions")
+                .upsert({
+                    ip,
+                    created_at: new Date().toISOString(),
+                });
+
             return res.status(200).json({
                 success: true,
             });
-
         }
 
         // FAILED ATTEMPT
-
-        const attempts =
-            (existing?.attempts || 0) + 1;
+        const attempts = (existing?.attempts || 0) + 1;
 
         // LOCK AFTER 4 FAILURES
-
         if (attempts >= 4) {
-
             const lockedUntil = new Date(
-                Date.now() + (3 * 60 * 60 * 1000)
+                Date.now() + (3 * 60 * 60 * 1000) // 3 hours
             );
 
             const { error: lockError } =
@@ -106,32 +96,25 @@ export default async function handler(req, res) {
                     .upsert({
                         ip,
                         attempts,
-                        locked_until:
-                            lockedUntil.toISOString(),
+                        locked_until: lockedUntil.toISOString(),
                     });
 
             if (lockError) {
-
                 console.error(lockError);
-
                 return res.status(500).json({
                     success: false,
                     error: "Failed to save lock",
                 });
-
             }
 
             return res.status(429).json({
                 success: false,
                 locked: true,
-                lockedUntil:
-                    lockedUntil.toISOString(),
+                lockedUntil: lockedUntil.toISOString(),
             });
-
         }
 
         // SAVE FAILED ATTEMPT
-
         const { error: saveError } =
             await supabase
                 .from("vault_attempts")
@@ -141,14 +124,11 @@ export default async function handler(req, res) {
                 });
 
         if (saveError) {
-
             console.error(saveError);
-
             return res.status(500).json({
                 success: false,
                 error: "Failed to save attempt",
             });
-
         }
 
         return res.status(401).json({
@@ -157,14 +137,10 @@ export default async function handler(req, res) {
         });
 
     } catch (error) {
-
         console.error("Unlock API Error:", error);
-
         return res.status(500).json({
             success: false,
             error: "Internal server error",
         });
-
     }
-
 }

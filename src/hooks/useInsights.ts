@@ -4,29 +4,44 @@ export const useInsights = () => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const checkUnlockStatus = useCallback(() => {
-    const unlocked = localStorage.getItem("blogUnlocked") === "true";
-    console.log('useInsights - checking localStorage:', unlocked);
-    setIsUnlocked(unlocked);
-    return unlocked;
+  const verifyServerSession = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch("/api/insights/verify", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      console.log('Server session valid:', data.valid);
+      setIsUnlocked(data.valid);
+      return data.valid;
+    } catch (error) {
+      console.error("Session verification failed:", error);
+      setIsUnlocked(false);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    checkUnlockStatus();
-    setIsLoading(false);
-  }, [checkUnlockStatus]);
+    verifyServerSession();
+  }, [verifyServerSession]);
 
   const unlockInsights = useCallback(() => {
-    console.log('useInsights - unlocking insights');
-    localStorage.setItem("blogUnlocked", "true");
     setIsUnlocked(true);
   }, []);
 
-  const lockInsights = useCallback(() => {
-    console.log('useInsights - locking insights');
-    localStorage.removeItem("blogUnlocked");
+  const lockInsights = useCallback(async () => {
+    try {
+      await fetch("/api/insights/logout", { method: "POST" });
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
     setIsUnlocked(false);
   }, []);
 
-  return { isUnlocked, isLoading, unlockInsights, lockInsights, checkUnlockStatus };
+  return { isUnlocked, isLoading, unlockInsights, lockInsights, verifyServerSession };
 };
