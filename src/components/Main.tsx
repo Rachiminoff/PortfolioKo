@@ -429,9 +429,7 @@ function Main() {
     ========================= */
     const openCVViewer = useCallback(() => {
         setPdfLoading(true);
-        // Set the URL immediately to start loading
         setViewerUrl("/YambaoResume.pdf");
-        // Hide loading after a short delay or when the PDF loads
         setTimeout(() => {
             setPdfLoading(false);
         }, 500);
