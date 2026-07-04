@@ -6,18 +6,31 @@ const Vault = lazy(() => import('../components/Vault'));
 
 const VaultPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked, checkUnlockStatus } = useVault();
+  const { isUnlocked, isLoading, verifyServerSession } = useVault();
 
   useEffect(() => {
     // Re-check unlock status when the page loads
-    const isUnlockedNow = checkUnlockStatus();
-    console.log('VaultPage - isUnlocked:', isUnlockedNow);
+    const checkAccess = async () => {
+      const isUnlockedNow = await verifyServerSession();
+      console.log('VaultPage - isUnlocked:', isUnlockedNow);
+      
+      if (!isUnlockedNow) {
+        console.log('VaultPage - redirecting to home');
+        navigate('/', { replace: true });
+      }
+    };
     
-    if (!isUnlockedNow) {
-      console.log('VaultPage - redirecting to home');
-      navigate('/', { replace: true });
-    }
-  }, [checkUnlockStatus, navigate]);
+    checkAccess();
+  }, [verifyServerSession, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="vault-loading-state">
+        <div className="vault-loading-spinner" />
+        <p>Verifying access...</p>
+      </div>
+    );
+  }
 
   if (!isUnlocked) {
     return null;

@@ -6,18 +6,31 @@ const Insights = lazy(() => import('../components/Insights'));
 
 const InsightsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked, checkUnlockStatus } = useInsights();
+  const { isUnlocked, isLoading, verifyServerSession } = useInsights();
 
   useEffect(() => {
     // Re-check unlock status when the page loads
-    const isUnlockedNow = checkUnlockStatus();
-    console.log('InsightsPage - isUnlocked:', isUnlockedNow);
+    const checkAccess = async () => {
+      const isUnlockedNow = await verifyServerSession();
+      console.log('InsightsPage - isUnlocked:', isUnlockedNow);
+      
+      if (!isUnlockedNow) {
+        console.log('InsightsPage - redirecting to home');
+        navigate('/', { replace: true });
+      }
+    };
     
-    if (!isUnlockedNow) {
-      console.log('InsightsPage - redirecting to home');
-      navigate('/', { replace: true });
-    }
-  }, [checkUnlockStatus, navigate]);
+    checkAccess();
+  }, [verifyServerSession, navigate]);
+
+  if (isLoading) {
+    return (
+      <div className="insights-loading-state">
+        <div className="insights-loading-spinner" />
+        <p>Verifying access...</p>
+      </div>
+    );
+  }
 
   if (!isUnlocked) {
     return null;
