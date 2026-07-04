@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import {
   Timeline,
   Expertise,
@@ -20,32 +20,6 @@ import "./index.scss";
 const MainPage = lazy(() => import('./pages/MainPage'));
 const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
-
-// Debug component to test routing
-function DebugRoute({ isUnlocked }: { isUnlocked: boolean }) {
-  const navigate = useNavigate();
-  
-  return (
-    <div style={{ padding: '2rem', color: 'white' }}>
-      <h1>🔍 Vault Route Debug</h1>
-      <p>Is unlocked: {String(isUnlocked)}</p>
-      <p>Session storage vaultUnlocked: {sessionStorage.getItem('vaultUnlocked')}</p>
-      <button 
-        onClick={() => navigate('/')}
-        style={{
-          padding: '0.5rem 1rem',
-          background: 'rgba(255,255,255,0.1)',
-          border: '1px solid rgba(255,255,255,0.2)',
-          color: 'white',
-          borderRadius: '4px',
-          cursor: 'pointer'
-        }}
-      >
-        Go Home
-      </button>
-    </div>
-  );
-}
 
 function AppContent() {
   const location = useLocation();
