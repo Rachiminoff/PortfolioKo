@@ -364,7 +364,9 @@ function Main() {
                 setVaultError(null);
                 setRemainingAttempts(undefined);
                 setVaultInput("");
-                navigate('/vault');
+                // Small delay to ensure session is committed
+                await new Promise(resolve => setTimeout(resolve, 100));
+                navigate('/vault', { replace: true });
             } else if (data.locked) {
                 setVaultError("Too many failed attempts");
             } else if (data.remaining !== undefined) {
@@ -404,7 +406,9 @@ function Main() {
                 setInsightsModalOpen(false);
                 setInsightsError(null);
                 setInsightsPassword("");
-                navigate('/insights');
+                // Small delay to ensure session is committed
+                await new Promise(resolve => setTimeout(resolve, 100));
+                navigate('/insights', { replace: true });
             } else if (data.locked) {
                 const lockTime = new Date(data.lockedUntil).toLocaleString();
                 setInsightsError(`Too many attempts. Locked until ${lockTime}`);

@@ -32,8 +32,6 @@ export default async function handler(req, res) {
             || req.socket?.remoteAddress
             || "unknown";
 
-        console.log('Insights Unlock - IP:', ip);
-
         const { password } = req.body;
 
         if (!password) {
@@ -73,8 +71,6 @@ export default async function handler(req, res) {
         }
 
         if (password === process.env.BLOG_PASSWORD) {
-            console.log('Insights Unlock - Password correct!');
-            
             // Clear attempts
             if (existing) {
                 await supabase
@@ -84,7 +80,6 @@ export default async function handler(req, res) {
             }
 
             // Create session
-            console.log('Insights Unlock - Creating session for IP:', ip);
             const { error: sessionError } = await supabase
                 .from("blog_sessions")
                 .upsert({
@@ -96,8 +91,29 @@ export default async function handler(req, res) {
 
             if (sessionError) {
                 console.error("Session creation error:", sessionError);
+                return res.status(500).json({
+                    success: false,
+                    error: "Failed to create session",
+                });
+            }
+
+            // Verify the session was actually created
+            const { data: verified, error: verifyError } = await supabase
+                .from("blog_sessions")
+                .select("*")
+                .eq("ip", ip)
+                .maybeSingle();
+
+            if (verifyError) {
+                console.error("Session verification error:", verifyError);
+            } else if (verified) {
+                console.log("Session verified in database:", verified);
             } else {
-                console.log('Insights Unlock - Session created successfully');
+                console.error("Session not found after creation!");
+                return res.status(500).json({
+                    success: false,
+                    error: "Session creation failed",
+                });
             }
 
             return res.status(200).json({
