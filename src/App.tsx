@@ -36,7 +36,7 @@ function AppContent() {
 
   const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
-  // Show loading while checking unlock status
+  // Show global loading while checking unlock status
   if (vaultLoading || insightsLoading) {
     return (
       <div className="main-container dark-mode">
@@ -62,7 +62,10 @@ function AppContent() {
           <Route 
             path="/vault" 
             element={
-              <ProtectedRoute isUnlocked={isVaultUnlocked} isLoading={vaultLoading}>
+              <ProtectedRoute 
+                isUnlocked={isVaultUnlocked} 
+                isLoading={vaultLoading}
+              >
                 <VaultPage />
               </ProtectedRoute>
             } 
@@ -70,7 +73,10 @@ function AppContent() {
           <Route 
             path="/insights" 
             element={
-              <ProtectedRoute isUnlocked={isInsightsUnlocked} isLoading={insightsLoading}>
+              <ProtectedRoute 
+                isUnlocked={isInsightsUnlocked} 
+                isLoading={insightsLoading}
+              >
                 <InsightsPage />
               </ProtectedRoute>
             } 

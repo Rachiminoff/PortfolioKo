@@ -4,14 +4,26 @@ import { Navigate } from 'react-router-dom';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   isUnlocked: boolean;
+  isLoading?: boolean; // Add this as optional
   redirectTo?: string;
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
   isUnlocked,
+  isLoading = false,
   redirectTo = '/',
 }) => {
+  // Show loading state while verifying
+  if (isLoading) {
+    return (
+      <div className="app-loading">
+        <div className="loading-spinner" />
+        <p>Verifying access...</p>
+      </div>
+    );
+  }
+
   if (!isUnlocked) {
     console.log('ProtectedRoute - Not unlocked, redirecting to:', redirectTo);
     return <Navigate to={redirectTo} replace />;
