@@ -6,6 +6,16 @@ const supabase = createClient(
 );
 
 export default async function handler(req, res) {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+
     try {
         if (req.method !== "POST") {
             return res.status(405).json({
@@ -16,7 +26,7 @@ export default async function handler(req, res) {
 
         const ip =
             req.headers["x-forwarded-for"]
-                ??.toString()
+                ?.toString()
                 .split(",")[0]
                 .trim()
             || req.socket?.remoteAddress
@@ -41,7 +51,7 @@ export default async function handler(req, res) {
             .maybeSingle();
 
         if (fetchError) {
-            console.error(fetchError);
+            console.error("Fetch error:", fetchError);
             return res.status(500).json({
                 success: false,
                 error: "Database lookup failed",
@@ -62,18 +72,27 @@ export default async function handler(req, res) {
 
         if (password === process.env.BLOG_PASSWORD) {
             // Clear attempts
-            await supabase
-                .from("blog_attempts")
-                .delete()
-                .eq("ip", ip);
+            if (existing) {
+                await supabase
+                    .from("blog_attempts")
+                    .delete()
+                    .eq("ip", ip);
+            }
 
-            // Create a session
-            await supabase
+            // Create or update session
+            const { error: sessionError } = await supabase
                 .from("blog_sessions")
                 .upsert({
                     ip,
                     created_at: new Date().toISOString(),
+                }, {
+                    onConflict: 'ip'
                 });
+
+            if (sessionError) {
+                console.error("Session creation error:", sessionError);
+                // Still return success even if session creation fails
+            }
 
             return res.status(200).json({
                 success: true,
@@ -95,10 +114,12 @@ export default async function handler(req, res) {
                     ip,
                     attempts,
                     locked_until: lockedUntil.toISOString(),
+                }, {
+                    onConflict: 'ip'
                 });
 
             if (lockError) {
-                console.error(lockError);
+                console.error("Lock error:", lockError);
                 return res.status(500).json({
                     success: false,
                     error: "Failed to save lock",
@@ -118,10 +139,12 @@ export default async function handler(req, res) {
             .upsert({
                 ip,
                 attempts,
+            }, {
+                onConflict: 'ip'
             });
 
         if (saveError) {
-            console.error(saveError);
+            console.error("Save error:", saveError);
             return res.status(500).json({
                 success: false,
                 error: "Failed to save attempt",
