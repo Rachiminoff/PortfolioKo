@@ -256,19 +256,10 @@ function AppContent() {
 
 function App() {
   const [showBoot, setShowBoot] = useState(true);
-  const [appReady, setAppReady] = useState(false);
 
   const handleBootComplete = () => {
     setShowBoot(false);
-    // The AppContent will handle the rest
   };
-
-  // Once boot is complete, we render the app
-  useEffect(() => {
-    if (!showBoot) {
-      setAppReady(true);
-    }
-  }, [showBoot]);
 
   return (
     <Suspense fallback={
