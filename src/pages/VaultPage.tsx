@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVault } from '../hooks/useVault';
 
@@ -6,24 +6,34 @@ const Vault = lazy(() => import('../components/Vault'));
 
 const VaultPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked } = useVault();
+  const { isUnlocked, checkUnlockStatus } = useVault();
 
-  React.useEffect(() => {
-    if (!isUnlocked) {
+  useEffect(() => {
+    // Re-check unlock status when the page loads
+    const isUnlockedNow = checkUnlockStatus();
+    console.log('VaultPage - isUnlocked:', isUnlockedNow);
+    
+    if (!isUnlockedNow) {
+      console.log('VaultPage - redirecting to home');
       navigate('/', { replace: true });
     }
-  }, [isUnlocked, navigate]);
+  }, [checkUnlockStatus, navigate]);
 
   if (!isUnlocked) {
     return null;
   }
+
+  console.log('VaultPage - rendering vault');
 
   return (
     <div className="vault-page">
       <div className="vault-page-header">
         <button 
           className="vault-back-button"
-          onClick={() => navigate('/')}
+          onClick={() => {
+            console.log('VaultPage - going back to home');
+            navigate('/');
+          }}
           aria-label="Back to home"
         >
           ← Back to Home

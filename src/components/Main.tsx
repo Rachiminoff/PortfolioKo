@@ -6,6 +6,8 @@ import DescriptionIcon from '@mui/icons-material/Description';
 
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
+import { useVault } from "../hooks/useVault";
+import { useInsights } from "../hooks/useInsights";
 
 // Lazy load components
 const PDFViewer = lazy(() => import('./PDFViewer'));
@@ -190,6 +192,8 @@ function AmbientShapes() {
 ========================= */
 function Main() {
     const navigate = useNavigate();
+    const { unlockVault } = useVault();
+    const { unlockInsights } = useInsights();
     
     // Vault state
     const [vaultClickCount, setVaultClickCount] = useState(0);
@@ -353,16 +357,17 @@ function Main() {
             });
 
             const data = await response.json();
+            console.log('Vault API response:', data);
 
             if (data.success) {
-                // Store unlocked state in sessionStorage
-                sessionStorage.setItem('vaultUnlocked', 'true');
+                console.log('✅ Vault unlocked successfully!');
+                unlockVault();
                 setVaultModalOpen(false);
                 setVaultError(null);
                 setRemainingAttempts(undefined);
                 setVaultInput("");
-                // Navigate to vault page
-                navigate('/vault');
+                console.log('Navigating to /vault...');
+                window.location.href = '/vault';
             } else if (data.locked) {
                 setVaultError("Too many failed attempts");
             } else if (data.remaining !== undefined) {
@@ -372,7 +377,7 @@ function Main() {
                 setVaultError("The code you entered is not valid.");
             }
         } catch (error) {
-            console.error(error);
+            console.error('Vault unlock error:', error);
             setVaultError("Something went wrong. Please try again.");
         }
 
@@ -396,14 +401,16 @@ function Main() {
             });
 
             const data = await response.json();
+            console.log('Insights API response:', data);
 
             if (data.success) {
-                localStorage.setItem("blogUnlocked", "true");
+                console.log('✅ Insights unlocked successfully!');
+                unlockInsights();
                 setInsightsModalOpen(false);
                 setInsightsError(null);
                 setInsightsPassword("");
-                // Navigate to insights page
-                navigate('/insights');
+                console.log('Navigating to /insights...');
+                window.location.href = '/insights';
             } else if (data.locked) {
                 const lockTime = new Date(data.lockedUntil).toLocaleString();
                 setInsightsError(`Too many attempts. Locked until ${lockTime}`);

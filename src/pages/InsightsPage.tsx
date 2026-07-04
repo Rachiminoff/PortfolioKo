@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInsights } from '../hooks/useInsights';
 
@@ -6,24 +6,34 @@ const Insights = lazy(() => import('../components/Insights'));
 
 const InsightsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked } = useInsights();
+  const { isUnlocked, checkUnlockStatus } = useInsights();
 
-  React.useEffect(() => {
-    if (!isUnlocked) {
+  useEffect(() => {
+    // Re-check unlock status when the page loads
+    const isUnlockedNow = checkUnlockStatus();
+    console.log('InsightsPage - isUnlocked:', isUnlockedNow);
+    
+    if (!isUnlockedNow) {
+      console.log('InsightsPage - redirecting to home');
       navigate('/', { replace: true });
     }
-  }, [isUnlocked, navigate]);
+  }, [checkUnlockStatus, navigate]);
 
   if (!isUnlocked) {
     return null;
   }
+
+  console.log('InsightsPage - rendering insights');
 
   return (
     <div className="insights-page">
       <div className="insights-page-header">
         <button 
           className="insights-back-button"
-          onClick={() => navigate('/')}
+          onClick={() => {
+            console.log('InsightsPage - going back to home');
+            navigate('/');
+          }}
           aria-label="Back to home"
         >
           ← Back to Home

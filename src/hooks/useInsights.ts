@@ -1,22 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export const useInsights = () => {
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const checkUnlockStatus = useCallback(() => {
     const unlocked = localStorage.getItem("blogUnlocked") === "true";
+    console.log('useInsights - checking localStorage:', unlocked);
     setIsUnlocked(unlocked);
+    return unlocked;
   }, []);
 
-  const unlockInsights = () => {
+  useEffect(() => {
+    checkUnlockStatus();
+    setIsLoading(false);
+  }, [checkUnlockStatus]);
+
+  const unlockInsights = useCallback(() => {
+    console.log('useInsights - unlocking insights');
     localStorage.setItem("blogUnlocked", "true");
     setIsUnlocked(true);
-  };
+  }, []);
 
-  const lockInsights = () => {
+  const lockInsights = useCallback(() => {
+    console.log('useInsights - locking insights');
     localStorage.removeItem("blogUnlocked");
     setIsUnlocked(false);
-  };
+  }, []);
 
-  return { isUnlocked, unlockInsights, lockInsights };
+  return { isUnlocked, isLoading, unlockInsights, lockInsights, checkUnlockStatus };
 };

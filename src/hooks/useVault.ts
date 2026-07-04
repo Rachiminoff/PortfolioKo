@@ -1,22 +1,32 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export const useVault = () => {
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const checkUnlockStatus = useCallback(() => {
     const unlocked = sessionStorage.getItem('vaultUnlocked') === 'true';
+    console.log('useVault - checking sessionStorage:', unlocked);
     setIsUnlocked(unlocked);
+    return unlocked;
   }, []);
 
-  const unlockVault = () => {
+  useEffect(() => {
+    checkUnlockStatus();
+    setIsLoading(false);
+  }, [checkUnlockStatus]);
+
+  const unlockVault = useCallback(() => {
+    console.log('useVault - unlocking vault');
     sessionStorage.setItem('vaultUnlocked', 'true');
     setIsUnlocked(true);
-  };
+  }, []);
 
-  const lockVault = () => {
+  const lockVault = useCallback(() => {
+    console.log('useVault - locking vault');
     sessionStorage.removeItem('vaultUnlocked');
     setIsUnlocked(false);
-  };
+  }, []);
 
-  return { isUnlocked, unlockVault, lockVault };
+  return { isUnlocked, isLoading, unlockVault, lockVault, checkUnlockStatus };
 };

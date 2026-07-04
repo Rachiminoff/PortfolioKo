@@ -23,8 +23,8 @@ const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 
 function AppContent() {
   const location = useLocation();
-  const { isUnlocked: isVaultUnlocked } = useVault();
-  const { isUnlocked: isInsightsUnlocked } = useInsights();
+  const { isUnlocked: isVaultUnlocked, isLoading: vaultLoading } = useVault();
+  const { isUnlocked: isInsightsUnlocked, isLoading: insightsLoading } = useInsights();
 
   React.useEffect(() => {
     window.scrollTo({
@@ -32,14 +32,25 @@ function AppContent() {
       left: 0,
       behavior: "smooth"
     });
-  }, []);
+  }, [location.pathname]);
 
-  // Check if we're on vault or insights page
   const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
-  console.log('Current path:', location.pathname);
-  console.log('Vault unlocked:', isVaultUnlocked);
-  console.log('Insights unlocked:', isInsightsUnlocked);
+  // Show loading while checking unlock status
+  if (vaultLoading || insightsLoading) {
+    return (
+      <div className="main-container dark-mode">
+        <div className="app-loading">
+          <div className="loading-spinner" />
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  console.log('App - Current path:', location.pathname);
+  console.log('App - Vault unlocked:', isVaultUnlocked);
+  console.log('App - Insights unlocked:', isInsightsUnlocked);
 
   return (
     <div className="main-container dark-mode">
