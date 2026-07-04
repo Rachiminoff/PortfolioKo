@@ -7,9 +7,10 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
     // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
@@ -24,14 +25,6 @@ export default async function handler(req, res) {
             });
         }
 
-        const ip =
-            req.headers["x-forwarded-for"]
-                ?.toString()
-                .split(",")[0]
-                .trim()
-            || req.socket?.remoteAddress
-            || "unknown";
-
         const { password } = req.body;
 
         if (!password) {
@@ -40,6 +33,14 @@ export default async function handler(req, res) {
                 error: "Password required",
             });
         }
+
+        const ip =
+            req.headers["x-forwarded-for"]
+                ?.toString()
+                .split(",")[0]
+                .trim()
+            || req.socket?.remoteAddress
+            || "unknown";
 
         const {
             data: existing,
@@ -79,14 +80,17 @@ export default async function handler(req, res) {
                     .eq("ip", ip);
             }
 
-            // Create session
+            // Generate session token
+            const crypto = await import('crypto');
+            const sessionToken = crypto.randomBytes(32).toString('hex');
+            
+            // Store session in database
             const { error: sessionError } = await supabase
                 .from("blog_sessions")
-                .upsert({
-                    ip: ip,
+                .insert({
+                    session_token: sessionToken,
                     created_at: new Date().toISOString(),
-                }, {
-                    onConflict: 'ip'
+                    expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
                 });
 
             if (sessionError) {
@@ -97,24 +101,10 @@ export default async function handler(req, res) {
                 });
             }
 
-            // Verify the session was actually created
-            const { data: verified, error: verifyError } = await supabase
-                .from("blog_sessions")
-                .select("*")
-                .eq("ip", ip)
-                .maybeSingle();
-
-            if (verifyError) {
-                console.error("Session verification error:", verifyError);
-            } else if (verified) {
-                console.log("Session verified in database:", verified);
-            } else {
-                console.error("Session not found after creation!");
-                return res.status(500).json({
-                    success: false,
-                    error: "Session creation failed",
-                });
-            }
+            // Set HTTP-only cookie
+            res.setHeader('Set-Cookie', [
+                `blog_session=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${24 * 60 * 60}`
+            ]);
 
             return res.status(200).json({
                 success: true,
@@ -124,10 +114,9 @@ export default async function handler(req, res) {
         // FAILED ATTEMPT
         const attempts = (existing?.attempts || 0) + 1;
 
-        // LOCK AFTER 4 FAILURES
         if (attempts >= 4) {
             const lockedUntil = new Date(
-                Date.now() + (3 * 60 * 60 * 1000) // 3 hours
+                Date.now() + (3 * 60 * 60 * 1000)
             );
 
             const { error: lockError } = await supabase
@@ -155,7 +144,6 @@ export default async function handler(req, res) {
             });
         }
 
-        // SAVE FAILED ATTEMPT
         const { error: saveError } = await supabase
             .from("blog_attempts")
             .upsert({
