@@ -13,13 +13,22 @@ export const useVault = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include', // Important: Send cookies
+        credentials: 'include',
       });
+      
+      if (!response.ok) {
+        console.log('Vault verify response not OK:', response.status);
+        setIsUnlocked(false);
+        return false;
+      }
       
       const data = await response.json();
       console.log('Vault session valid:', data.valid);
-      setIsUnlocked(data.valid === true);
-      return data.valid === true;
+      
+      // Update state based on the response
+      const isValid = data.valid === true;
+      setIsUnlocked(isValid);
+      return isValid;
     } catch (error) {
       console.error("Session verification failed:", error);
       setIsUnlocked(false);
@@ -37,6 +46,7 @@ export const useVault = () => {
   }, [verifyServerSession]);
 
   const unlockVault = useCallback(() => {
+    console.log('unlockVault called - setting isUnlocked to true');
     setIsUnlocked(true);
   }, []);
 

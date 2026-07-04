@@ -10,11 +10,18 @@ const VaultPage: React.FC = () => {
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
+    console.log('VaultPage - State:', { isLoading, isUnlocked, hasRedirected });
+    
     // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
       console.log('VaultPage - Not unlocked, redirecting to home');
       setHasRedirected(true);
       navigate('/', { replace: true });
+    }
+    
+    // If unlocked, make sure we don't redirect
+    if (isUnlocked && hasRedirected) {
+      setHasRedirected(false);
     }
   }, [isLoading, isUnlocked, navigate, hasRedirected]);
 
@@ -28,10 +35,11 @@ const VaultPage: React.FC = () => {
   }
 
   if (!isUnlocked) {
+    console.log('VaultPage - Not unlocked, returning null');
     return null;
   }
 
-  console.log('VaultPage - rendering vault');
+  console.log('VaultPage - Rendering vault');
 
   return (
     <div className="vault-page">
@@ -39,7 +47,7 @@ const VaultPage: React.FC = () => {
         <button 
           className="vault-back-button"
           onClick={() => {
-            console.log('VaultPage - going back to home');
+            console.log('VaultPage - Going back to home');
             navigate('/');
           }}
           aria-label="Back to home"

@@ -13,13 +13,21 @@ export const useInsights = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: 'include', // Important: Send cookies
+        credentials: 'include',
       });
+      
+      if (!response.ok) {
+        console.log('Insights verify response not OK:', response.status);
+        setIsUnlocked(false);
+        return false;
+      }
       
       const data = await response.json();
       console.log('Insights session valid:', data.valid);
-      setIsUnlocked(data.valid === true);
-      return data.valid === true;
+      
+      const isValid = data.valid === true;
+      setIsUnlocked(isValid);
+      return isValid;
     } catch (error) {
       console.error("Session verification failed:", error);
       setIsUnlocked(false);
@@ -37,6 +45,7 @@ export const useInsights = () => {
   }, [verifyServerSession]);
 
   const unlockInsights = useCallback(() => {
+    console.log('unlockInsights called - setting isUnlocked to true');
     setIsUnlocked(true);
   }, []);
 
