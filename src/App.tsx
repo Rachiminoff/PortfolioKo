@@ -206,7 +206,7 @@ function AppContent() {
   }
 
   return (
-    <div className="main-container dark-mode">
+    <>
       <Navigation />
       
       <FadeIn transitionDuration={700}>
@@ -250,11 +250,26 @@ function AppContent() {
           </>
         )}
       </FadeIn>
-    </div>
+    </>
   );
 }
 
 function App() {
+  const [showBoot, setShowBoot] = useState(true);
+  const [appReady, setAppReady] = useState(false);
+
+  const handleBootComplete = () => {
+    setShowBoot(false);
+    // The AppContent will handle the rest
+  };
+
+  // Once boot is complete, we render the app
+  useEffect(() => {
+    if (!showBoot) {
+      setAppReady(true);
+    }
+  }, [showBoot]);
+
   return (
     <Suspense fallback={
       <div className="app-loading">
@@ -262,7 +277,13 @@ function App() {
         <p>Loading...</p>
       </div>
     }>
-      <AppContent />
+      {showBoot ? (
+        <BootSequence onComplete={handleBootComplete} />
+      ) : (
+        <div className="main-container dark-mode">
+          <AppContent />
+        </div>
+      )}
     </Suspense>
   );
 }

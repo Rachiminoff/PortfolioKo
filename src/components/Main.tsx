@@ -648,7 +648,10 @@ function Main() {
                                     type={showVaultPassword ? "text" : "password"}
                                     placeholder="Enter secret code..."
                                     value={vaultInput}
-                                    onChange={(e) => setVaultInput(e.target.value)}
+                                    onChange={(e) => {
+                                        console.log('Vault input changed:', e.target.value);
+                                        setVaultInput(e.target.value);
+                                    }}
                                     className={`vault-modal-input ${vaultError ? 'error' : ''}`}
                                     disabled={loading}
                                     autoFocus
@@ -657,7 +660,10 @@ function Main() {
                                 <button
                                     type="button"
                                     className="vault-password-toggle"
-                                    onClick={() => setShowVaultPassword(!showVaultPassword)}
+                                    onClick={() => {
+                                        console.log('Vault toggle clicked, current state:', showVaultPassword);
+                                        setShowVaultPassword(!showVaultPassword);
+                                    }}
                                     aria-label={showVaultPassword ? "Hide password" : "Show password"}
                                 >
                                     <Icon icon={showVaultPassword ? "mdi:eye" : "mdi:eye-off"} />
@@ -763,6 +769,7 @@ function Main() {
                                     placeholder="Enter password..."
                                     value={insightsPassword}
                                     onChange={(e) => {
+                                        console.log('Insights input changed:', e.target.value);
                                         setInsightsPassword(e.target.value);
                                         setInsightsError(null);
                                     }}
@@ -774,7 +781,10 @@ function Main() {
                                 <button
                                     type="button"
                                     className="insights-password-toggle"
-                                    onClick={() => setShowInsightsPassword(!showInsightsPassword)}
+                                    onClick={() => {
+                                        console.log('Insights toggle clicked, current state:', showInsightsPassword);
+                                        setShowInsightsPassword(!showInsightsPassword);
+                                    }}
                                     aria-label={showInsightsPassword ? "Hide password" : "Show password"}
                                 >
                                     <Icon icon={showInsightsPassword ? "mdi:eye" : "mdi:eye-off"} />
