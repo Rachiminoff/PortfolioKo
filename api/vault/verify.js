@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     try {
         if (req.method !== "GET") {
             return res.status(405).json({
-                success: false,
+                valid: false,
                 error: "Method not allowed",
             });
         }
@@ -31,6 +31,8 @@ export default async function handler(req, res) {
             .split(';')
             .find(c => c.trim().startsWith('vault_session='))
             ?.split('=')[1];
+
+        console.log('Vault Verify - Session token found:', !!sessionToken);
 
         if (!sessionToken) {
             return res.status(200).json({ valid: false });
@@ -45,18 +47,19 @@ export default async function handler(req, res) {
 
         if (error) {
             console.error("Session lookup error:", error);
-            return res.status(500).json({
-                valid: false,
-                error: "Session verification failed",
-            });
-        }
-
-        if (!session) {
             return res.status(200).json({ valid: false });
         }
 
+        if (!session) {
+            console.log('Vault Verify - No session found for token:', sessionToken);
+            return res.status(200).json({ valid: false });
+        }
+
+        console.log('Vault Verify - Session found:', session);
+
         // Check if session is expired
         if (new Date(session.expires_at) < new Date()) {
+            console.log('Vault Verify - Session expired');
             await supabase
                 .from("vault_sessions")
                 .delete()
@@ -64,9 +67,10 @@ export default async function handler(req, res) {
             return res.status(200).json({ valid: false });
         }
 
+        console.log('Vault Verify - Session valid');
         return res.status(200).json({ valid: true });
     } catch (error) {
-        console.error("Session verification error:", error);
+        console.error("Vault session verification error:", error);
         return res.status(500).json({
             valid: false,
             error: "Internal server error",
