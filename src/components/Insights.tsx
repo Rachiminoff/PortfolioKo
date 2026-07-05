@@ -286,12 +286,6 @@ function Insights({ onClose }: InsightsProps) {
     ...availableCategories.map(cat => ({ id: cat, label: cat }))
   ];
 
-  // Build year filter chips from available years
-  const yearChips = [
-    { id: "all", label: "All Years" },
-    ...availableYears.map(year => ({ id: year, label: year }))
-  ];
-
   const stats = useMemo(() => {
     return {
       total: posts.length,
