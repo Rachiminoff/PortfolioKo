@@ -128,17 +128,19 @@ function Insights({ onClose }: InsightsProps) {
   // Extract unique categories and years from posts
   useEffect(() => {
     if (posts.length > 0) {
-      // Extract unique categories
-      const categories = [...new Set(posts.map(post => post.category).filter(Boolean))];
+      // Extract unique categories - using Array.from instead of spread operator
+      const categorySet = new Set(posts.map(post => post.category).filter(Boolean));
+      const categories = Array.from(categorySet);
       setAvailableCategories(categories.sort());
       
       // Extract unique years from created_at
-      const years = [...new Set(posts.map(post => {
+      const yearSet = new Set(posts.map(post => {
         if (post.created_at) {
           return new Date(post.created_at).getFullYear().toString();
         }
         return null;
-      }).filter(Boolean))] as string[];
+      }).filter(Boolean));
+      const years = Array.from(yearSet) as string[];
       setAvailableYears(years.sort().reverse());
     }
   }, [posts]);
