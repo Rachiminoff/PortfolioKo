@@ -695,40 +695,36 @@ function Insights({ onClose }: InsightsProps) {
     );
   }
 
-  // Main Blog Index View (with refined header)
+  // Main Blog Index View (with refined editorial design)
   return (
     <div className="insights-container">
-      {/* REFINED HEADER - Personal Journal Style */}
-      <div className="insights-header">
-        <div className="insights-header-content">
-          <div className="insights-header-left">
-            <div className="insights-journal-header">
-              <span className="insights-journal-decoration">✦</span>
-              <h1 className="insights-journal-title">
-                My little corner of the internet.
-              </h1>
-            </div>
-            <p className="insights-subtitle">
-              A place for thoughts on software, projects, books, and things I'm learning along the way.
+      {/* EDITORIAL HERO SECTION */}
+      <section className="insights-hero">
+        <div className="insights-hero-content">
+          <div className="insights-hero-header">
+            <p className="insights-hero-eyebrow">— Journal</p>
+            <h1 className="insights-hero-title">
+              My little corner of the internet.
+            </h1>
+            <p className="insights-hero-subtitle">
+              A collection of thoughts on software, projects, books, 
+              and the things I'm learning along the way.
             </p>
           </div>
-        </div>
-
-        {/* Stats */}
-        <div className="insights-stats">
-          <div className="insights-stat-item">
-            <span className="insights-stat-icon">📝</span>
-            <span className="insights-stat-value">{stats.total}</span>
-            <span className="insights-stat-label">Articles</span>
-          </div>
-          <div className="insights-stat-item">
-            <span className="insights-stat-icon">📁</span>
-            <span className="insights-stat-value">{stats.categories}</span>
-            <span className="insights-stat-label">Categories</span>
+          <div className="insights-hero-metadata">
+            <span className="insights-hero-metadata-item">
+              {stats.total} {stats.total === 1 ? 'writing' : 'writings'}
+            </span>
+            <span className="insights-hero-metadata-divider">·</span>
+            <span className="insights-hero-metadata-item">
+              {stats.categories} {stats.categories === 1 ? 'topic' : 'topics'}
+            </span>
           </div>
         </div>
+      </section>
 
-        {/* Controls */}
+      {/* CONTROLS SECTION */}
+      <div className="insights-controls-section">
         <div className="insights-controls-bar">
           <div className="insights-search-wrapper">
             <svg className="insights-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -781,7 +777,7 @@ function Insights({ onClose }: InsightsProps) {
         </div>
       </div>
 
-      {/* Main Content - Rest unchanged */}
+      {/* MAIN CONTENT */}
       <div className="insights-main">
         {loading ? (
           <div className="insights-loading">
@@ -828,6 +824,11 @@ function Insights({ onClose }: InsightsProps) {
             {/* Featured Article */}
             {featuredPost && !searchQuery && selectedCategory === "all" && (
               <div className="insights-featured">
+                <div className="insights-featured-label">
+                  <span className="insights-featured-label-line"></span>
+                  <span className="insights-featured-label-text">Editor's Pick</span>
+                  <span className="insights-featured-label-line"></span>
+                </div>
                 <div 
                   className="insights-featured-card"
                   onClick={() => handleCardClick(featuredPost)}
