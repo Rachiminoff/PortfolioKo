@@ -2,6 +2,8 @@ import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useInsights } from '../hooks/useInsights';
 
+import "./styles/InsightsPage.scss";
+
 const Insights = lazy(() => import('../components/Insights'));
 
 const InsightsPage: React.FC = () => {
