@@ -1,8 +1,8 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVault } from '../hooks/useVault';
-import { Icon } from '@iconify/react';
-import './styles/VaultPage.scss';
+
+import "./styles/VaultPage.scss";
 
 const Vault = lazy(() => import('../components/Vault'));
 
@@ -21,7 +21,6 @@ const VaultPage: React.FC = () => {
       navigate('/', { replace: true });
     }
     
-    // If unlocked, make sure we don't redirect
     if (isUnlocked && hasRedirected) {
       setHasRedirected(false);
     }
@@ -54,9 +53,9 @@ const VaultPage: React.FC = () => {
           }}
           aria-label="Back to home"
         >
-          <Icon icon="mdi:arrow-left" />
-          Back to Home
+          ← Back to Home
         </button>
+        <h1>Vault</h1>
       </div>
       <Suspense fallback={
         <div className="vault-loading-state">

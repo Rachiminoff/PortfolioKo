@@ -1,84 +1,152 @@
-/* ========================================
-   FULLSCREEN LAYOUT
-======================================== */
+/* ==========================================
+   Vault Page
+   ========================================== */
 
-.fullscreen-layout {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 100;
-  background: #0a0a0a;
+.vault-page {
+  min-height: 100vh;
+  background: var(--background, #0b0b0b);
+  color: var(--text-primary, #fff);
+}
+
+.vault-page-header {
+  width: min(1440px, calc(100% - 4rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 1rem;
+
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* ==========================================
+   Back Button
+   ========================================== */
+
+.vault-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+
+  padding: 0.9rem 1.4rem;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+
+  color: rgba(255, 255, 255, 0.9);
+
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.2);
+    outline-offset: 4px;
+  }
+}
+
+/* ==========================================
+   Page Title
+   ========================================== */
+
+.vault-page-header h1 {
   margin: 0;
-  padding: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #ffffff;
 }
 
-.fullscreen-layout > * {
-  min-height: 100%;
-  width: 100%;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
+/* ==========================================
+   Loading
+   ========================================== */
 
-/* Ensure fullscreen pages occupy full width */
-.fullscreen-layout .insights-container,
-.fullscreen-layout .vault-container {
-  width: 100%;
-  max-width: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-}
+.vault-loading-state {
+  min-height: 100vh;
 
-/* Remove any inherited constraints */
-.fullscreen-layout .insights-hero,
-.fullscreen-layout .insights-controls-section,
-.fullscreen-layout .insights-main,
-.fullscreen-layout .vault-header,
-.fullscreen-layout .vault-main {
-  padding-left: 2rem !important;
-  padding-right: 2rem !important;
-  max-width: none !important;
-  width: 100% !important;
-}
-
-@media screen and (max-width: 768px) {
-  .fullscreen-layout .insights-hero,
-  .fullscreen-layout .insights-controls-section,
-  .fullscreen-layout .insights-main,
-  .fullscreen-layout .vault-header,
-  .fullscreen-layout .vault-main {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .fullscreen-layout .insights-hero,
-  .fullscreen-layout .insights-controls-section,
-  .fullscreen-layout .insights-main,
-  .fullscreen-layout .vault-header,
-  .fullscreen-layout .vault-main {
-    padding-left: 0.75rem !important;
-    padding-right: 0.75rem !important;
-  }
-}
-
-/* Default Layout */
-.default-layout {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+
+  gap: 1rem;
+
+  p {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.95rem;
+    letter-spacing: 0.03em;
+  }
 }
 
-.default-layout-main {
-  flex: 1;
-  position: relative;
-  z-index: 1;
+.vault-loading-spinner {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.85);
+
+  animation: vault-spin 0.8s linear infinite;
+}
+
+@keyframes vault-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+
+@media (max-width: 768px) {
+  .vault-page-header {
+    width: calc(100% - 2rem);
+    padding: 1.5rem 0 0.5rem;
+    gap: 1rem;
+  }
+
+  .vault-back-button {
+    padding: 0.8rem 1.1rem;
+    font-size: 0.9rem;
+  }
+
+  .vault-page-header h1 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .vault-page-header {
+    width: calc(100% - 1.5rem);
+    padding: 1rem 0 0.5rem;
+    gap: 0.75rem;
+  }
+
+  .vault-back-button {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .vault-page-header h1 {
+    font-size: 1.1rem;
+  }
 }
