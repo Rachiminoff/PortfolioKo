@@ -2,7 +2,6 @@ import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useVault } from '../hooks/useVault';
 import { Icon } from '@iconify/react';
-import arrowLeftIcon from '@iconify/icons-mdi/arrow-left';
 import './styles/VaultPage.scss';
 
 const Vault = lazy(() => import('../components/Vault'));
@@ -55,7 +54,7 @@ const VaultPage: React.FC = () => {
           }}
           aria-label="Back to home"
         >
-          <Icon icon={arrowLeftIcon} />
+          <Icon icon="mdi:arrow-left" />
           Back to Home
         </button>
       </div>
