@@ -218,38 +218,43 @@ function AppContent() {
     );
   }
 
+  // Check if current route is fullscreen
+  const isFullscreenRoute = location.pathname === '/vault' || location.pathname === '/insights';
+
   return (
-    <Routes>
-      <Route 
-        path="/" 
-        element={
-          <DefaultLayoutWithSections>
-            <MainPage />
-          </DefaultLayoutWithSections>
-        } 
-      />
-      <Route 
-        path="/vault" 
-        element={
-          <FullscreenLayout>
-            <ProtectedRoute isUnlocked={isVaultUnlocked} isLoading={false}>
-              <VaultPage />
-            </ProtectedRoute>
-          </FullscreenLayout>
-        } 
-      />
-      <Route 
-        path="/insights" 
-        element={
-          <FullscreenLayout>
-            <ProtectedRoute isUnlocked={isInsightsUnlocked} isLoading={false}>
-              <InsightsPage />
-            </ProtectedRoute>
-          </FullscreenLayout>
-        } 
-      />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <div className={isFullscreenRoute ? '' : 'main-container dark-mode'}>
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            <DefaultLayoutWithSections>
+              <MainPage />
+            </DefaultLayoutWithSections>
+          } 
+        />
+        <Route 
+          path="/vault" 
+          element={
+            <FullscreenLayout>
+              <ProtectedRoute isUnlocked={isVaultUnlocked} isLoading={false}>
+                <VaultPage />
+              </ProtectedRoute>
+            </FullscreenLayout>
+          } 
+        />
+        <Route 
+          path="/insights" 
+          element={
+            <FullscreenLayout>
+              <ProtectedRoute isUnlocked={isInsightsUnlocked} isLoading={false}>
+                <InsightsPage />
+              </ProtectedRoute>
+            </FullscreenLayout>
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
   );
 }
 
@@ -270,9 +275,7 @@ function App() {
       {showBoot ? (
         <BootSequence onComplete={handleBootComplete} />
       ) : (
-        <div className="main-container dark-mode">
-          <AppContent />
-        </div>
+        <AppContent />
       )}
     </Suspense>
   );
