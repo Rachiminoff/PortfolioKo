@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useVault } from '../hooks/useVault';
 import { Icon } from '@iconify/react';
 import arrowLeftIcon from '@iconify/icons-mdi/arrow-left';
-import '../assets/styles/VaultPage.scss';
+import './styles/VaultPage.scss';
 
 const Vault = lazy(() => import('../components/Vault'));
 
