@@ -812,15 +812,21 @@ function Insights({ onClose }: InsightsProps) {
         </div>
 
         {/* Year Filters - Dynamic from Supabase */}
-        {availableYears.length > 1 && (
+        {availableYears.length > 0 && (
           <div className="insights-filter-chips insights-year-chips">
-            {yearChips.map(year => (
+            <button
+              className={`insights-filter-chip insights-year-chip ${selectedYear === "all" ? "active" : ""}`}
+              onClick={() => setSelectedYear("all")}
+            >
+              All Years
+            </button>
+            {availableYears.map(year => (
               <button
-                key={year.id}
-                className={`insights-filter-chip insights-year-chip ${selectedYear === year.id ? "active" : ""}`}
-                onClick={() => setSelectedYear(year.id)}
+                key={year}
+                className={`insights-filter-chip insights-year-chip ${selectedYear === year ? "active" : ""}`}
+                onClick={() => setSelectedYear(year)}
               >
-                {year.label}
+                {year}
               </button>
             ))}
           </div>
