@@ -2731,3 +2731,36 @@
     font-size: 0.5rem;
   }
 }
+
+/* ========================================
+   YEAR CHIPS
+======================================== */
+
+.insights-year-chips {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.insights-year-chip {
+  font-weight: 400 !important;
+  text-transform: none !important;
+  letter-spacing: 0.02em !important;
+  font-size: 0.6rem !important;
+  padding: 0.2rem 0.6rem !important;
+  height: 26px !important;
+}
+
+.insights-year-chip.active {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+@media (max-width: 480px) {
+  .insights-year-chip {
+    font-size: 0.55rem !important;
+    height: 24px !important;
+    padding: 0.15rem 0.5rem !important;
+  }
+}

@@ -38,7 +38,6 @@ interface CodeComponentProps {
 }
 
 type SortOption = "newest" | "oldest" | "az" | "za" | "custom";
-type CategoryFilter = "all" | "development" | "tutorials" | "case-studies" | "thoughts" | "career" | "react" | "supabase" | "typescript";
 
 // Get password from environment
 const BLOG_PASSWORD = process.env.REACT_APP_BLOG_PASSWORD || "blog123";
@@ -55,9 +54,12 @@ function Insights({ onClose }: InsightsProps) {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedYear, setSelectedYear] = useState<string>("all");
   const [sortOption, setSortOption] = useState<SortOption>("newest");
   const [continueReading, setContinueReading] = useState<BlogPost | null>(null);
+  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+  const [availableYears, setAvailableYears] = useState<string[]>([]);
   
   // Article reader state
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
@@ -113,7 +115,7 @@ function Insights({ onClose }: InsightsProps) {
   // Reset visible count when filters/search change
   useEffect(() => {
     setVisibleCount(ARTICLES_PER_BATCH);
-  }, [searchQuery, selectedCategory, sortOption]);
+  }, [searchQuery, selectedCategory, selectedYear, sortOption]);
 
   // Scroll to top when article opens
   useEffect(() => {
@@ -122,6 +124,24 @@ function Insights({ onClose }: InsightsProps) {
       setTimeout(() => setIsVisible(true), 100);
     }
   }, [selectedPost]);
+
+  // Extract unique categories and years from posts
+  useEffect(() => {
+    if (posts.length > 0) {
+      // Extract unique categories
+      const categories = [...new Set(posts.map(post => post.category).filter(Boolean))];
+      setAvailableCategories(categories.sort());
+      
+      // Extract unique years from created_at
+      const years = [...new Set(posts.map(post => {
+        if (post.created_at) {
+          return new Date(post.created_at).getFullYear().toString();
+        }
+        return null;
+      }).filter(Boolean))] as string[];
+      setAvailableYears(years.sort().reverse());
+    }
+  }, [posts]);
 
   const fetchPosts = async () => {
     setLoading(true);
@@ -162,13 +182,25 @@ function Insights({ onClose }: InsightsProps) {
   const filteredAndSortedPosts = useMemo(() => {
     let items = [...posts];
 
+    // Category filter
     if (selectedCategory !== "all") {
       items = items.filter(item => 
-        item.category.toLowerCase().replace(/ /g, "-") === selectedCategory ||
-        item.tags.some(tag => tag.toLowerCase().replace(/ /g, "-") === selectedCategory)
+        item.category === selectedCategory ||
+        item.tags.some(tag => tag === selectedCategory)
       );
     }
 
+    // Year filter
+    if (selectedYear !== "all") {
+      items = items.filter(item => {
+        if (item.created_at) {
+          return new Date(item.created_at).getFullYear().toString() === selectedYear;
+        }
+        return false;
+      });
+    }
+
+    // Search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       items = items.filter(item =>
@@ -179,6 +211,7 @@ function Insights({ onClose }: InsightsProps) {
       );
     }
 
+    // Sorting
     switch (sortOption) {
       case "newest":
         items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -198,7 +231,7 @@ function Insights({ onClose }: InsightsProps) {
     }
 
     return items;
-  }, [posts, selectedCategory, searchQuery, sortOption]);
+  }, [posts, selectedCategory, selectedYear, searchQuery, sortOption]);
 
   const featuredPost = useMemo(() => {
     return posts.find(post => post.featured) || null;
@@ -245,24 +278,24 @@ function Insights({ onClose }: InsightsProps) {
     }, 300);
   };
 
-  const categories = [
+  // Build category filter chips from available categories
+  const categoryChips = [
     { id: "all", label: "All" },
-    { id: "development", label: "Development" },
-    { id: "tutorials", label: "Tutorials" },
-    { id: "case-studies", label: "Case Studies" },
-    { id: "thoughts", label: "Thoughts" },
-    { id: "career", label: "Career" },
-    { id: "react", label: "React" },
-    { id: "supabase", label: "Supabase" },
-    { id: "typescript", label: "TypeScript" }
+    ...availableCategories.map(cat => ({ id: cat, label: cat }))
+  ];
+
+  // Build year filter chips from available years
+  const yearChips = [
+    { id: "all", label: "All Years" },
+    ...availableYears.map(year => ({ id: year, label: year }))
   ];
 
   const stats = useMemo(() => {
     return {
       total: posts.length,
-      categories: new Set(posts.map(p => p.category)).size
+      categories: availableCategories.length
     };
-  }, [posts]);
+  }, [posts, availableCategories]);
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
@@ -695,7 +728,7 @@ function Insights({ onClose }: InsightsProps) {
     );
   }
 
-  // Main Blog Index View (with refined editorial design)
+  // Main Blog Index View
   return (
     <div className="insights-container">
       {/* EDITORIAL HERO SECTION */}
@@ -763,18 +796,33 @@ function Insights({ onClose }: InsightsProps) {
           </div>
         </div>
 
-        {/* Category Filters */}
+        {/* Category Filters - Dynamic from Supabase */}
         <div className="insights-filter-chips">
-          {categories.map(category => (
+          {categoryChips.map(category => (
             <button
               key={category.id}
               className={`insights-filter-chip ${selectedCategory === category.id ? "active" : ""}`}
-              onClick={() => setSelectedCategory(category.id as CategoryFilter)}
+              onClick={() => setSelectedCategory(category.id)}
             >
               {category.label}
             </button>
           ))}
         </div>
+
+        {/* Year Filters - Dynamic from Supabase */}
+        {availableYears.length > 1 && (
+          <div className="insights-filter-chips insights-year-chips">
+            {yearChips.map(year => (
+              <button
+                key={year.id}
+                className={`insights-filter-chip insights-year-chip ${selectedYear === year.id ? "active" : ""}`}
+                onClick={() => setSelectedYear(year.id)}
+              >
+                {year.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* MAIN CONTENT */}
@@ -822,7 +870,7 @@ function Insights({ onClose }: InsightsProps) {
             )}
 
             {/* Featured Article */}
-            {featuredPost && !searchQuery && selectedCategory === "all" && (
+            {featuredPost && !searchQuery && selectedCategory === "all" && selectedYear === "all" && (
               <div className="insights-featured">
                 <div className="insights-featured-label">
                   <span className="insights-featured-label-line"></span>
@@ -943,12 +991,13 @@ function Insights({ onClose }: InsightsProps) {
               <div className="insights-empty-state">
                 <div className="insights-empty-icon">🔍</div>
                 <p>No articles found matching your criteria.</p>
-                {(searchQuery || selectedCategory !== "all") && (
+                {(searchQuery || selectedCategory !== "all" || selectedYear !== "all") && (
                   <button
                     className="insights-empty-clear-btn"
                     onClick={() => {
                       setSearchQuery("");
                       setSelectedCategory("all");
+                      setSelectedYear("all");
                     }}
                   >
                     Clear Filters
