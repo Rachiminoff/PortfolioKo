@@ -5,7 +5,6 @@ import {
   Expertise,
   Terminal,
   Project,
-  Navigation,
   Contact,
   Footer
 } from "./components";
@@ -14,6 +13,7 @@ import Certificates from "./components/Certificates";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import { useVault } from "./hooks/useVault";
 import { useInsights } from "./hooks/useInsights";
+import { DefaultLayout, FullscreenLayout } from "./layouts";
 import "./index.scss";
 
 // Lazy load pages
@@ -159,6 +159,24 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
   );
 }
 
+// Wrapper for pages that need the default layout with extra sections
+function DefaultLayoutWithSections({ children }: { children: React.ReactNode }) {
+  return (
+    <DefaultLayout>
+      <FadeIn transitionDuration={700}>
+        {children}
+        <Terminal />
+        <Timeline />
+        <Project />
+        <Expertise />
+        <Certificates />
+        <Contact />
+        <Footer />
+      </FadeIn>
+    </DefaultLayout>
+  );
+}
+
 function AppContent() {
   const location = useLocation();
   const { isUnlocked: isVaultUnlocked, isLoading: vaultLoading } = useVault();
@@ -176,15 +194,12 @@ function AppContent() {
   // Wait for authentication to complete
   useEffect(() => {
     if (!vaultLoading && !insightsLoading) {
-      // Small delay to ensure state updates are flushed
       const timer = setTimeout(() => {
         setIsReady(true);
       }, 100);
       return () => clearTimeout(timer);
     }
   }, [vaultLoading, insightsLoading]);
-
-  const isSpecialPage = location.pathname === '/vault' || location.pathname === '/insights';
 
   console.log('App - Current path:', location.pathname);
   console.log('App - Vault unlocked:', isVaultUnlocked);
@@ -204,51 +219,37 @@ function AppContent() {
   }
 
   return (
-    <>
-      <Navigation />
-      
-      <FadeIn transitionDuration={700}>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route 
-            path="/vault" 
-            element={
-              <ProtectedRoute 
-                isUnlocked={isVaultUnlocked} 
-                isLoading={false}
-              >
-                <VaultPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route 
-            path="/insights" 
-            element={
-              <ProtectedRoute 
-                isUnlocked={isInsightsUnlocked} 
-                isLoading={false}
-              >
-                <InsightsPage />
-              </ProtectedRoute>
-            } 
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-        
-        {/* Only show these sections on the home page */}
-        {!isSpecialPage && (
-          <>
-            <Terminal />
-            <Timeline />
-            <Project />
-            <Expertise />
-            <Certificates />
-            <Contact />
-            <Footer />
-          </>
-        )}
-      </FadeIn>
-    </>
+    <Routes>
+      <Route 
+        path="/" 
+        element={
+          <DefaultLayoutWithSections>
+            <MainPage />
+          </DefaultLayoutWithSections>
+        } 
+      />
+      <Route 
+        path="/vault" 
+        element={
+          <FullscreenLayout>
+            <ProtectedRoute isUnlocked={isVaultUnlocked} isLoading={false}>
+              <VaultPage />
+            </ProtectedRoute>
+          </FullscreenLayout>
+        } 
+      />
+      <Route 
+        path="/insights" 
+        element={
+          <FullscreenLayout>
+            <ProtectedRoute isUnlocked={isInsightsUnlocked} isLoading={false}>
+              <InsightsPage />
+            </ProtectedRoute>
+          </FullscreenLayout>
+        } 
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
 

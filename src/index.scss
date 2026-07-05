@@ -742,3 +742,110 @@ p, a, h1, h2, h3, h4, h5, label, button {
     padding: 1rem;
   }
 }
+
+/* ========================================
+   LAYOUTS
+======================================== */
+
+/* Default Layout */
+.default-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.default-layout-main {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* Fullscreen Layout */
+.fullscreen-layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+  background: #0a0a0a;
+}
+
+/* Ensure fullscreen pages take full viewport */
+.fullscreen-layout > * {
+  min-height: 100%;
+  width: 100%;
+}
+
+/* Remove any default padding/margins from fullscreen pages */
+.fullscreen-layout .vault-container,
+.fullscreen-layout .insights-container {
+  padding: 0;
+  margin: 0;
+  min-height: 100vh;
+  width: 100%;
+  max-width: none;
+  border-radius: 0;
+}
+
+/* Ensure fullscreen pages have no max-width restrictions */
+.fullscreen-layout .vault-header,
+.fullscreen-layout .insights-header {
+  max-width: none;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.fullscreen-layout .vault-main,
+.fullscreen-layout .insights-main {
+  max-width: none;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* Override any container max-width */
+.fullscreen-layout .vault-container,
+.fullscreen-layout .insights-container {
+  max-width: none !important;
+}
+
+/* Remove any inherited margins */
+.fullscreen-layout .vault-container::before,
+.fullscreen-layout .vault-container::after,
+.fullscreen-layout .insights-container::before,
+.fullscreen-layout .insights-container::after {
+  display: none;
+}
+
+/* Responsive adjustments for fullscreen */
+@media screen and (max-width: 768px) {
+  .fullscreen-layout .vault-header,
+  .fullscreen-layout .insights-header {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .fullscreen-layout .vault-main,
+  .fullscreen-layout .insights-main {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .fullscreen-layout .vault-header,
+  .fullscreen-layout .insights-header {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+  }
+  
+  .fullscreen-layout .vault-main,
+  .fullscreen-layout .insights-main {
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+  }
+}

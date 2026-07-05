@@ -12,7 +12,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import CloseIcon from "@mui/icons-material/Close";
 import Toolbar from "@mui/material/Toolbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "../assets/styles/Navigation.scss";
 
@@ -33,6 +33,10 @@ function Navigation() {
   const [activeSection, setActiveSection] = useState<Section>("expertise");
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if we're on a fullscreen route
+  const isFullscreenRoute = location.pathname === '/vault' || location.pathname === '/insights';
 
   const handleDrawerToggle = () => {
     setMobileOpen((prev) => !prev);
@@ -50,26 +54,28 @@ function Navigation() {
         setScrolled(window.scrollY > 20);
       }
 
-      // Detect active section based on scroll position
-      const sections = navItems.map(([, section]) => section);
-      let currentSection: Section = "expertise";
-      
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100) {
-            currentSection = section;
+      // Only detect active section if not on fullscreen route
+      if (!isFullscreenRoute) {
+        const sections = navItems.map(([, section]) => section);
+        let currentSection: Section = "expertise";
+        
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            if (rect.top <= 100) {
+              currentSection = section;
+            }
           }
         }
+        
+        setActiveSection(currentSection);
       }
-      
-      setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isFullscreenRoute]);
 
   // Prevent body scroll when drawer is open
   useEffect(() => {
@@ -135,6 +141,11 @@ function Navigation() {
     </Box>
   );
 
+  // Don't render navigation on fullscreen routes
+  if (isFullscreenRoute) {
+    return null;
+  }
+
   return (
     <Box className="navigation-container">
       <CssBaseline />
@@ -189,7 +200,7 @@ function Navigation() {
         onClose={handleDrawerClose}
         ModalProps={{
           keepMounted: true,
-          disableScrollLock: true, // Fixed: Changed from disableScroll to disableScrollLock
+          disableScrollLock: true,
         }}
         classes={{
           paper: "drawer-paper"
