@@ -1,8 +1,9 @@
-import React, { Suspense, lazy, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useVault } from '../hooks/useVault';
+import React, { Suspense, lazy, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useVault } from "../hooks/useVault";
+import "./styles/VaultPage.scss";
 
-const Vault = lazy(() => import('../components/Vault'));
+const Vault = lazy(() => import("../components/Vault"));
 
 const VaultPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,16 +11,11 @@ const VaultPage: React.FC = () => {
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
-    console.log('VaultPage - State:', { isLoading, isUnlocked, hasRedirected });
-    
-    // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
-      console.log('VaultPage - Not unlocked, redirecting to home');
       setHasRedirected(true);
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
-    
-    // If unlocked, make sure we don't redirect
+
     if (isUnlocked && hasRedirected) {
       setHasRedirected(false);
     }
@@ -35,33 +31,41 @@ const VaultPage: React.FC = () => {
   }
 
   if (!isUnlocked) {
-    console.log('VaultPage - Not unlocked, returning null');
     return null;
   }
 
-  console.log('VaultPage - Rendering vault');
-
   return (
     <div className="vault-page">
-      <div className="vault-page-header">
-        <button 
+      <header className="vault-page-header">
+        <button
           className="vault-back-button"
-          onClick={() => {
-            console.log('VaultPage - Going back to home');
-            navigate('/');
-          }}
+          onClick={() => navigate("/")}
           aria-label="Back to home"
         >
-          ← Back to Home
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+
+          <span>Back to Home</span>
         </button>
-        <h1>Secret Vault</h1>
-      </div>
-      <Suspense fallback={
-        <div className="vault-loading-state">
-          <div className="vault-loading-spinner" />
-          <p>Loading archive...</p>
-        </div>
-      }>
+      </header>
+
+      <Suspense
+        fallback={
+          <div className="vault-loading-state">
+            <div className="vault-loading-spinner" />
+            <p>Loading archive...</p>
+          </div>
+        }
+      >
         <Vault />
       </Suspense>
     </div>
