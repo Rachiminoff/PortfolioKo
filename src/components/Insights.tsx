@@ -336,7 +336,7 @@ function Insights({ onClose }: InsightsProps) {
     }
   };
 
-  // Password Screen
+  // Password Screen (unchanged)
   if (!isUnlocked) {
     return (
       <div className="insights-container insights-locked">
@@ -399,7 +399,7 @@ function Insights({ onClose }: InsightsProps) {
     );
   }
 
-  // Article Reader View
+  // Article Reader View (unchanged)
   if (selectedPost) {
     return (
       <div className={`insights-container insights-reader ${isVisible ? 'visible' : ''}`}>
@@ -695,16 +695,23 @@ function Insights({ onClose }: InsightsProps) {
     );
   }
 
-  // Main Blog Index View
+  // Main Blog Index View (with refined header)
   return (
     <div className="insights-container">
-      {/* Header */}
+      {/* REFINED HEADER - Personal Journal Style */}
       <div className="insights-header">
         <div className="insights-header-content">
-          <h1>Insights</h1>
-          <p className="insights-subtitle">
-            Technical articles, development logs, tutorials, experiments, and lessons learned.
-          </p>
+          <div className="insights-header-left">
+            <div className="insights-journal-header">
+              <span className="insights-journal-decoration">✦</span>
+              <h1 className="insights-journal-title">
+                My little corner of the internet.
+              </h1>
+            </div>
+            <p className="insights-subtitle">
+              A place for thoughts on software, projects, books, and things I'm learning along the way.
+            </p>
+          </div>
         </div>
 
         {/* Stats */}
@@ -774,7 +781,7 @@ function Insights({ onClose }: InsightsProps) {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content - Rest unchanged */}
       <div className="insights-main">
         {loading ? (
           <div className="insights-loading">
@@ -818,7 +825,7 @@ function Insights({ onClose }: InsightsProps) {
               </div>
             )}
 
-            {/* Featured Article - Separate from regular posts */}
+            {/* Featured Article */}
             {featuredPost && !searchQuery && selectedCategory === "all" && (
               <div className="insights-featured">
                 <div 
