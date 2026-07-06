@@ -1,4 +1,4 @@
-// WishArchivePage.tsx - Updated with Iconify icons instead of emojis
+// WishArchivePage.tsx - Fixed version
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -135,7 +135,7 @@ const StickyNav: React.FC<{
       setIsSticky(rect.top <= 0);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -158,37 +158,44 @@ const StickyNav: React.FC<{
   );
 };
 
-// Section Observer Hook
+// Section Observer Hook - Fixed
 const useSectionObserver = (sectionIds: string[]) => {
-  const [activeSection, setActiveSection] = useState(sectionIds[0]);
+  const [activeSection, setActiveSection] = useState(sectionIds[0] || '');
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
-    const sectionElements = sectionIds.map(id => document.getElementById(id));
+    
+    // Wait for elements to be in the DOM
+    const timeoutId = setTimeout(() => {
+      sectionIds.forEach((id, index) => {
+        const element = document.getElementById(id);
+        if (!element) return;
+        
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                setActiveSection(sectionIds[index]);
+              }
+            });
+          },
+          { threshold: 0.3, rootMargin: '-50px 0px -50px 0px' }
+        );
+        observer.observe(element);
+        observers.push(observer);
+      });
+    }, 100);
 
-    sectionElements.forEach((element, index) => {
-      if (!element) return;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setActiveSection(sectionIds[index]);
-            }
-          });
-        },
-        { threshold: 0.3, rootMargin: '-50px 0px -50px 0px' }
-      );
-      observer.observe(element);
-      observers.push(observer);
-    });
-
-    return () => observers.forEach(observer => observer.disconnect());
+    return () => {
+      clearTimeout(timeoutId);
+      observers.forEach(observer => observer.disconnect());
+    };
   }, [sectionIds]);
 
   return activeSection;
 };
 
-// Collapsible Section Component
+// Collapsible Section Component - Fixed
 const CollapsibleSection: React.FC<{
   id: string;
   title: string;
@@ -202,6 +209,7 @@ const CollapsibleSection: React.FC<{
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -221,6 +229,33 @@ const CollapsibleSection: React.FC<{
     }
   }, [isOpen, children]);
 
+  // Observe section for reveal animation
+  useEffect(() => {
+    const element = sectionRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            element.classList.add('section-visible');
+            // Stagger child cards
+            const cards = element.querySelectorAll('.stagger-card');
+            cards.forEach((card, index) => {
+              setTimeout(() => {
+                card.classList.add('visible');
+              }, 100 + index * 75);
+            });
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   const toggle = () => {
     setIsOpen(!isOpen);
   };
@@ -228,6 +263,7 @@ const CollapsibleSection: React.FC<{
   return (
     <div 
       id={id}
+      ref={sectionRef}
       className={`collapsible-section ${className} ${isOpen ? 'open' : ''} section-reveal`}
     >
       <button
