@@ -77,6 +77,10 @@ interface Stats {
   avgGap: number;
   doubleDays: number;
   
+  // 50/50 stats
+  fiftyFiftyWins: number;
+  guaranteedChars: number;
+  
   // Yearly stats for charts
   yearlyStats: Array<{ year: number; total: number; wins: number; losses: number; rate: number }>;
   versionStats: Array<{ version: string; total: number }>;
@@ -1014,6 +1018,8 @@ const WishArchivePage: React.FC = () => {
       shortestGap,
       avgGap,
       doubleDays,
+      fiftyFiftyWins,
+      guaranteedChars,
       yearlyStats,
       versionStats,
       outcomeDistribution: { won: wins, lost: losses },
