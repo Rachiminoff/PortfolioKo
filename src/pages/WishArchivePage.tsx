@@ -1,3 +1,4 @@
+// WishArchivePage.tsx
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
@@ -116,15 +117,122 @@ const getElementIcon = (element: string): string => {
   return icons[element] || 'mdi:circle';
 };
 
+// Sticky Navigation Component
+const StickyNav: React.FC<{
+  sections: Array<{ id: string; label: string; icon: string }>;
+  activeSection: string;
+  onSelect: (id: string) => void;
+}> = ({ sections, activeSection, onSelect }) => {
+  const [isSticky, setIsSticky] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const nav = navRef.current;
+      if (!nav) return;
+      const rect = nav.getBoundingClientRect();
+      setIsSticky(rect.top <= 0);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <div ref={navRef} className={`sticky-nav ${isSticky ? 'is-sticky' : ''}`}>
+      <div className="sticky-nav-inner">
+        {sections.map((section) => (
+          <button
+            key={section.id}
+            className={`sticky-nav-item ${activeSection === section.id ? 'active' : ''}`}
+            onClick={() => onSelect(section.id)}
+            aria-label={`Scroll to ${section.label}`}
+          >
+            <Icon icon={section.icon} />
+            <span>{section.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// Section Observer Hook
+const useSectionObserver = (sectionIds: string[]) => {
+  const [activeSection, setActiveSection] = useState(sectionIds[0]);
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    const sectionElements = sectionIds.map(id => document.getElementById(id));
+
+    sectionElements.forEach((element, index) => {
+      if (!element) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              setActiveSection(sectionIds[index]);
+            }
+          });
+        },
+        { threshold: 0.3, rootMargin: '-50px 0px -50px 0px' }
+      );
+      observer.observe(element);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach(observer => observer.disconnect());
+  }, [sectionIds]);
+
+  return activeSection;
+};
+
+// Section Reveal Animation Hook
+const useSectionReveal = () => {
+  const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    
+    Object.values(refs.current).forEach((element) => {
+      if (!element) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('section-visible');
+              // Stagger child cards
+              const cards = entry.target.querySelectorAll('.stagger-card');
+              cards.forEach((card, index) => {
+                setTimeout(() => {
+                  card.classList.add('visible');
+                }, 100 + index * 75);
+              });
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(element);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach(observer => observer.disconnect());
+  }, []);
+
+  return refs;
+};
+
 // Collapsible Section Component
 const CollapsibleSection: React.FC<{
+  id: string;
   title: string;
   subtitle?: string;
   icon?: string;
   defaultOpen?: boolean;
   children: React.ReactNode;
   className?: string;
-}> = ({ title, subtitle, icon, defaultOpen = true, children, className = '' }) => {
+}> = ({ id, title, subtitle, icon, defaultOpen = true, children, className = '' }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -138,7 +246,6 @@ const CollapsibleSection: React.FC<{
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Set default open state based on device
   useEffect(() => {
     setIsOpen(isMobile ? false : defaultOpen);
   }, [isMobile, defaultOpen]);
@@ -154,12 +261,20 @@ const CollapsibleSection: React.FC<{
   };
 
   return (
-    <div className={`collapsible-section ${className} ${isOpen ? 'open' : ''}`}>
+    <div 
+      id={id}
+      className={`collapsible-section ${className} ${isOpen ? 'open' : ''} section-reveal`}
+      ref={(el) => {
+        if (el) {
+          // Will be handled by useSectionReveal
+        }
+      }}
+    >
       <button
         className="collapsible-section-header"
         onClick={toggle}
         aria-expanded={isOpen}
-        aria-controls={`section-${title.replace(/\s+/g, '-').toLowerCase()}`}
+        aria-controls={`section-${id}`}
       >
         <div className="collapsible-section-header-left">
           {icon && <Icon icon={icon} className="collapsible-section-icon" />}
@@ -189,13 +304,14 @@ const CollapsibleSection: React.FC<{
   );
 };
 
-// Premium Component: Animated Counter
-const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string; prefix?: string }> = ({ 
+// Animated Counter
+const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string; prefix?: string; className?: string }> = ({ 
   target, 
   duration = 1500, 
   label,
   suffix = '',
-  prefix = ''
+  prefix = '',
+  className = ''
 }) => {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -233,14 +349,14 @@ const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: str
   }, [target, duration, hasAnimated]);
 
   return (
-    <div ref={ref} className="animated-counter">
+    <div ref={ref} className={`animated-counter ${className}`}>
       <span className="animated-counter-value">{prefix}{count}{suffix}</span>
       {label && <span className="animated-counter-label">{label}</span>}
     </div>
   );
 };
 
-// Premium Component: Donut Chart
+// Donut Chart
 const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<string, string> }> = ({ 
   data, 
   colors 
@@ -293,7 +409,6 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
       startAngle += sliceAngle;
     });
 
-    // Center hole
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius * 0.45, 0, 2 * Math.PI);
     ctx.fillStyle = '#0a0a0a';
@@ -327,7 +442,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
   );
 };
 
-// Premium Component: Bar Chart
+// Bar Chart
 const BarChart: React.FC<{ 
   data: Array<{ label: string; value: number; color?: string }>;
   height?: number;
@@ -363,7 +478,7 @@ const BarChart: React.FC<{
         const percentage = (item.value / maxValue) * 100;
         const delay = index * 0.05;
         return (
-          <div key={index} className="bar-chart-item">
+          <div key={index} className="bar-chart-item stagger-card">
             <div 
               className="bar-chart-bar-wrapper"
               style={{ height: '100%' }}
@@ -388,14 +503,23 @@ const BarChart: React.FC<{
   );
 };
 
-// Premium Component: Heat Map
+// Heat Map
 const HeatMap: React.FC<{ 
   characters: WishCharacter[];
   year: number;
   onCellHover?: (date: string | null) => void;
 }> = ({ characters, year, onCellHover }) => {
   const [hoveredDate, setHoveredDate] = useState<string | null>(null);
+  const [hoveredCharacters, setHoveredCharacters] = useState<WishCharacter[]>([]);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const [isAnimating, setIsAnimating] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => setIsAnimating(false), 300);
+    return () => clearTimeout(timer);
+  }, [year]);
 
   const getDaysInYear = (year: number) => {
     const date = new Date(year, 0, 1);
@@ -450,8 +574,13 @@ const HeatMap: React.FC<{
     weeks.push(currentWeek);
   }
 
+  const monthLabels: { [key: number]: string } = {
+    0: 'Jan', 1: 'Feb', 2: 'Mar', 3: 'Apr', 4: 'May', 5: 'Jun',
+    6: 'Jul', 7: 'Aug', 8: 'Sep', 9: 'Oct', 10: 'Nov', 11: 'Dec'
+  };
+
   return (
-    <div className="heatmap-container">
+    <div className={`heatmap-container ${isAnimating ? 'heatmap-animating' : ''}`}>
       <div className="heatmap-grid" ref={gridRef}>
         {weeks.map((week, weekIndex) => (
           <div key={weekIndex} className="heatmap-week">
@@ -470,23 +599,68 @@ const HeatMap: React.FC<{
                     backgroundColor: isCurrentMonth ? getIntensityColor(intensity) : 'transparent',
                     opacity: isCurrentMonth ? 1 : 0.2,
                     transform: isHovered ? 'scale(1.3)' : 'scale(1)',
-                    zIndex: isHovered ? 2 : 1
+                    zIndex: isHovered ? 2 : 1,
+                    transition: 'transform 0.2s ease, background-color 0.3s ease'
                   }}
-                  onMouseEnter={() => {
+                  onMouseEnter={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setTooltipPosition({
+                      x: rect.left + rect.width / 2,
+                      y: rect.top - 10
+                    });
                     setHoveredDate(dateStr);
+                    setHoveredCharacters(chars);
                     if (onCellHover) onCellHover(dateStr);
                   }}
                   onMouseLeave={() => {
                     setHoveredDate(null);
+                    setHoveredCharacters([]);
                     if (onCellHover) onCellHover(null);
                   }}
-                  title={chars.length > 0 ? `${formatDate(dateStr)}: ${chars.map(c => c.name).join(', ')}` : ''}
                 />
               );
             })}
           </div>
         ))}
       </div>
+      
+      {hoveredDate && hoveredCharacters.length > 0 && (
+        <div 
+          className="heatmap-tooltip"
+          style={{
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+            transform: 'translateX(-50%) translateY(-100%)'
+          }}
+        >
+          <div className="heatmap-tooltip-content">
+            <span className="heatmap-tooltip-date">{formatDate(hoveredDate)}</span>
+            {hoveredCharacters.map(c => (
+              <div key={c.id} className="heatmap-tooltip-item">
+                {c.artwork && (
+                  <img 
+                    src={c.artwork} 
+                    alt={c.name}
+                    className="heatmap-tooltip-portrait"
+                  />
+                )}
+                <span className="heatmap-tooltip-name">{c.name}</span>
+                <span 
+                  className="heatmap-tooltip-element"
+                  style={{ color: getElementColor(c.element) }}
+                >
+                  <Icon icon={getElementIcon(c.element)} />
+                </span>
+                <span className={`heatmap-tooltip-outcome ${c.outcome}`}>
+                  {c.outcome === 'won' ? '✓' : '✗'}
+                </span>
+                <span className="heatmap-tooltip-version">v{c.version}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="heatmap-legend">
         <span className="heatmap-legend-label">Less</span>
         <div className="heatmap-legend-cells">
@@ -497,22 +671,6 @@ const HeatMap: React.FC<{
         </div>
         <span className="heatmap-legend-label">More</span>
       </div>
-      {hoveredDate && (
-        <div className="heatmap-tooltip">
-          <div className="heatmap-tooltip-content">
-            <span className="heatmap-tooltip-date">{formatDate(hoveredDate)}</span>
-            {getCharactersForDate(new Date(hoveredDate)).map(c => (
-              <div key={c.id} className="heatmap-tooltip-item">
-                <span className="heatmap-tooltip-name">{c.name}</span>
-                <span className={`heatmap-tooltip-outcome ${c.outcome}`}>
-                  {c.outcome === 'won' ? '✓' : '✗'}
-                </span>
-                <span className="heatmap-tooltip-version">v{c.version}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
@@ -550,7 +708,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
   return (
     <div 
       ref={entryRef}
-      className="wish-timeline-entry-premium"
+      className="wish-timeline-entry-premium stagger-card"
       style={{ animationDelay: `${index * 0.05}s` }}
       onClick={onClick}
     >
@@ -560,6 +718,13 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
       <div className="wish-timeline-entry-content">
         <div className="wish-timeline-entry-header">
           <div className="wish-timeline-entry-name">
+            {character.artwork && (
+              <img 
+                src={character.artwork} 
+                alt={character.name}
+                className="wish-timeline-entry-portrait"
+              />
+            )}
             <h4>{character.name}</h4>
             <span className="wish-timeline-entry-version">v{character.version}</span>
           </div>
@@ -611,7 +776,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
   return (
     <div 
       ref={cardRef}
-      className="wish-card premium-card"
+      className="wish-card premium-card stagger-card"
       onClick={onClick}
       style={{ '--card-accent': elementColor } as React.CSSProperties}
     >
@@ -652,6 +817,26 @@ const WishArchivePage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'name' | 'version'>('date');
   const [selectedCharacter, setSelectedCharacter] = useState<WishCharacter | null>(null);
   const [heatmapYear, setHeatmapYear] = useState<number>(new Date().getFullYear());
+
+  const sections = [
+    { id: 'section-overview', label: 'Overview', icon: 'mdi:home' },
+    { id: 'section-analytics', label: 'Analytics', icon: 'mdi:chart-bar' },
+    { id: 'section-heatmap', label: 'Heat Map', icon: 'mdi:fire' },
+    { id: 'section-funfacts', label: 'Fun Facts', icon: 'mdi:star' },
+    { id: 'section-achievements', label: 'Achievements', icon: 'mdi:trophy' },
+    { id: 'section-archive', label: 'Archive', icon: 'mdi:format-list-bulleted' },
+  ];
+
+  const activeSection = useSectionObserver(sections.map(s => s.id));
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     fetchCharacters();
@@ -1177,8 +1362,8 @@ const WishArchivePage: React.FC = () => {
         </button>
       </div>
 
-      {/* Hero Section - Made more prominent */}
-      <section className="wish-hero">
+      {/* Hero Section */}
+      <section id="section-overview" className="wish-hero section-reveal">
         <div className="wish-hero-content">
           <div className="wish-hero-badge">✦ Collection</div>
           <h1 className="wish-hero-title">Wish Archive</h1>
@@ -1188,97 +1373,146 @@ const WishArchivePage: React.FC = () => {
         </div>
 
         <div className="wish-hero-stats">
-          <div className="wish-hero-stat">
+          <div className="wish-hero-stat stagger-card">
             <AnimatedCounter target={stats.total} label="Characters" />
           </div>
-          <div className="wish-hero-stat">
+          <div className="wish-hero-stat stagger-card">
             <AnimatedCounter target={Math.round(stats.winRate)} suffix="%" label="Win Rate" />
           </div>
-          <div className="wish-hero-stat">
+          <div className="wish-hero-stat stagger-card">
             <AnimatedCounter target={stats.wins} label="Wins" />
           </div>
-          <div className="wish-hero-stat">
+          <div className="wish-hero-stat stagger-card">
             <AnimatedCounter target={stats.activeYears} label="Active Years" />
           </div>
         </div>
+
+        {/* Quick Highlights */}
+        <div className="wish-hero-highlights">
+          <div className="wish-hero-highlight">
+            <Icon icon="mdi:calendar-range" />
+            <span>{stats.first?.year || 2022} — {stats.latest?.year || new Date().getFullYear()}</span>
+          </div>
+          {stats.latest && (
+            <div className="wish-hero-highlight">
+              <Icon icon="mdi:star" />
+              <span>Latest: {stats.latest.name}</span>
+            </div>
+          )}
+          <div className="wish-hero-highlight">
+            <Icon icon="mdi:percent" />
+            <span>{Math.round(stats.winRate)}% Win Rate</span>
+          </div>
+        </div>
       </section>
+
+      {/* Sticky Navigation */}
+      <StickyNav 
+        sections={sections} 
+        activeSection={activeSection} 
+        onSelect={scrollToSection} 
+      />
 
       {/* Collapsible Analytics Sections */}
       <div className="wish-analytics-container">
         {/* Statistics Dashboard */}
         <CollapsibleSection 
+          id="section-analytics"
           title="📊 Collection Statistics" 
           subtitle="Overview of your entire collection"
           icon="mdi:chart-bar"
           defaultOpen={true}
         >
           <div className="wish-stats-dashboard">
-            <div className="wish-stats-dashboard-grid">
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">🎯</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
-                  <span className="wish-stat-premium-label">Longest Win Streak</span>
+            {/* Stats Grid - Grouped by category */}
+            <div className="wish-stats-group">
+              <h4 className="wish-stats-group-title">Luck</h4>
+              <div className="wish-stats-dashboard-grid">
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">🎯</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
+                    <span className="wish-stat-premium-label">Longest Win Streak</span>
+                  </div>
+                </div>
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">💫</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
+                    <span className="wish-stat-premium-label">50/50 Wins</span>
+                  </div>
+                </div>
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">📊</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{Math.round(stats.winRate)}%</span>
+                    <span className="wish-stat-premium-label">Overall Win Rate</span>
+                  </div>
                 </div>
               </div>
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">💫</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
-                  <span className="wish-stat-premium-label">50/50 Wins</span>
+            </div>
+
+            <div className="wish-stats-group">
+              <h4 className="wish-stats-group-title">Collection</h4>
+              <div className="wish-stats-dashboard-grid">
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">🔮</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
+                    <span className="wish-stat-premium-label">Most Collected Element</span>
+                  </div>
+                </div>
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">📊</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
+                    <span className="wish-stat-premium-label">Elements Collected</span>
+                  </div>
+                </div>
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">🎮</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
+                    <span className="wish-stat-premium-label">Versions Played</span>
+                  </div>
                 </div>
               </div>
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">📅</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
-                  <span className="wish-stat-premium-label">Busiest Year</span>
+            </div>
+
+            <div className="wish-stats-group">
+              <h4 className="wish-stats-group-title">Journey</h4>
+              <div className="wish-stats-dashboard-grid">
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">⏱️</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
+                    <span className="wish-stat-premium-label">Avg Between Pulls</span>
+                  </div>
                 </div>
-              </div>
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">🔮</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
-                  <span className="wish-stat-premium-label">Most Collected Element</span>
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">📅</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
+                    <span className="wish-stat-premium-label">Busiest Year</span>
+                  </div>
                 </div>
-              </div>
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">📊</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
-                  <span className="wish-stat-premium-label">Elements Collected</span>
-                </div>
-              </div>
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">🎮</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
-                  <span className="wish-stat-premium-label">Versions Played</span>
-                </div>
-              </div>
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">⏱️</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
-                  <span className="wish-stat-premium-label">Avg Between Pulls</span>
-                </div>
-              </div>
-              <div className="wish-stat-premium">
-                <div className="wish-stat-premium-icon">📈</div>
-                <div className="wish-stat-premium-content">
-                  <span className="wish-stat-premium-value">{stats.doubleDays}</span>
-                  <span className="wish-stat-premium-label">Double Pull Days</span>
+                <div className="wish-stat-premium stagger-card">
+                  <div className="wish-stat-premium-icon">📈</div>
+                  <div className="wish-stat-premium-content">
+                    <span className="wish-stat-premium-value">{stats.doubleDays}</span>
+                    <span className="wish-stat-premium-label">Double Pull Days</span>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Charts Row */}
             <div className="wish-charts-row">
-              <div className="wish-chart-card">
+              <div className="wish-chart-card stagger-card">
                 <h3 className="wish-chart-title">Element Distribution</h3>
                 <DonutChart data={stats.byElement} />
               </div>
-              <div className="wish-chart-card">
+              <div className="wish-chart-card stagger-card">
                 <h3 className="wish-chart-title">Outcome Distribution</h3>
                 <DonutChart 
                   data={{ 
@@ -1291,7 +1525,7 @@ const WishArchivePage: React.FC = () => {
                   }}
                 />
               </div>
-              <div className="wish-chart-card">
+              <div className="wish-chart-card stagger-card">
                 <h3 className="wish-chart-title">Collection Progress</h3>
                 <div className="wish-progress-ring">
                   <svg viewBox="0 0 120 120">
@@ -1328,7 +1562,7 @@ const WishArchivePage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <div className="wish-chart-card">
+              <div className="wish-chart-card stagger-card">
                 <h3 className="wish-chart-title">Characters by Year</h3>
                 <BarChart 
                   data={stats.yearlyStats.map(stat => ({
@@ -1345,6 +1579,7 @@ const WishArchivePage: React.FC = () => {
 
         {/* Yearly Performance */}
         <CollapsibleSection 
+          id="section-yearly"
           title="📊 Yearly Performance" 
           subtitle="Breakdown by year with trends and streaks"
           icon="mdi:calendar-month"
@@ -1359,7 +1594,7 @@ const WishArchivePage: React.FC = () => {
               const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
 
               return (
-                <div key={stat.year} className="wish-yearly-card">
+                <div key={stat.year} className="wish-yearly-card stagger-card">
                   <div className="wish-yearly-header">
                     <h3>{stat.year}</h3>
                     <span className={`wish-yearly-trend ${trend}`}>
@@ -1404,8 +1639,9 @@ const WishArchivePage: React.FC = () => {
 
         {/* Heat Map */}
         <CollapsibleSection 
+          id="section-heatmap"
           title="🔥 Acquisition Heat Map" 
-          subtitle="View every day a limited character was obtained"
+          subtitle="Visualize every day you obtained a limited character throughout your journey"
           icon="mdi:fire"
           defaultOpen={true}
         >
@@ -1433,14 +1669,28 @@ const WishArchivePage: React.FC = () => {
 
         {/* Fun Facts */}
         <CollapsibleSection 
+          id="section-funfacts"
           title="✦ Fun Facts" 
           subtitle="Interesting insights about your collection"
           icon="mdi:star"
           defaultOpen={false}
         >
+          {/* Featured Fun Fact */}
+          {stats.funFacts.length > 0 && (
+            <div className="wish-fun-fact-featured stagger-card">
+              <div className="wish-fun-fact-featured-icon">
+                <Icon icon="mdi:sparkle" />
+              </div>
+              <div className="wish-fun-fact-featured-content">
+                <span className="wish-fun-fact-featured-label">DID YOU KNOW?</span>
+                <p>{stats.funFacts[0]}</p>
+              </div>
+            </div>
+          )}
+          
           <div className="wish-fun-facts-grid">
-            {stats.funFacts.map((fact, index) => (
-              <div key={index} className="wish-fun-fact-premium">
+            {stats.funFacts.slice(1).map((fact, index) => (
+              <div key={index} className="wish-fun-fact-premium stagger-card">
                 <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
                 <span>{fact}</span>
               </div>
@@ -1451,22 +1701,33 @@ const WishArchivePage: React.FC = () => {
         {/* Achievements */}
         {stats.achievements.filter(a => a.unlocked).length > 0 && (
           <CollapsibleSection 
+            id="section-achievements"
             title="🏆 Achievements" 
             subtitle={`${stats.achievements.filter(a => a.unlocked).length} achievements unlocked`}
             icon="mdi:trophy"
             defaultOpen={false}
           >
             <div className="wish-achievements-grid">
-              {stats.achievements.filter(a => a.unlocked).map((achievement, index) => (
-                <div key={index} className="wish-achievement-premium">
+              {stats.achievements.map((achievement, index) => (
+                <div 
+                  key={index} 
+                  className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
+                >
                   <div className="wish-achievement-premium-icon">
                     <Icon icon={achievement.icon} />
+                    {!achievement.unlocked && (
+                      <div className="wish-achievement-lock">
+                        <Icon icon="mdi:lock" />
+                      </div>
+                    )}
                   </div>
                   <div className="wish-achievement-premium-content">
                     <h4>{achievement.title}</h4>
                     <p>{achievement.description}</p>
                   </div>
-                  <div className="wish-achievement-premium-badge">✓</div>
+                  <div className="wish-achievement-premium-badge">
+                    {achievement.unlocked ? '✓' : '?'}
+                  </div>
                 </div>
               ))}
             </div>
@@ -1474,8 +1735,8 @@ const WishArchivePage: React.FC = () => {
         )}
       </div>
 
-      {/* Archive Controls */}
-      <div className="wish-controls">
+      {/* Archive Controls - Sticky */}
+      <div id="section-archive" className="wish-controls">
         <div className="wish-controls-top">
           <div className="wish-view-controls">
             <button 
@@ -1574,7 +1835,7 @@ const WishArchivePage: React.FC = () => {
         {filteredCharacters.length === 0 ? (
           <div className="wish-empty">
             <Icon icon="mdi:emoticon-sad-outline" />
-            <p>No characters found matching your filters.</p>
+            <p>No characters match your current filters.</p>
             <button className="wish-empty-clear" onClick={() => {
               setSelectedYear('all');
               setSelectedElement('all');
@@ -1591,6 +1852,13 @@ const WishArchivePage: React.FC = () => {
                 <div className="wish-timeline-year-divider">
                   <h2 className="wish-timeline-year-label">{year}</h2>
                   <div className="wish-timeline-year-line" />
+                  <div className="wish-timeline-year-stats">
+                    <span>{characters.length} Characters</span>
+                    <span>•</span>
+                    <span>
+                      {Math.round((characters.filter(c => c.outcome === 'won').length / characters.length) * 100)}% Win Rate
+                    </span>
+                  </div>
                 </div>
                 <div className="wish-timeline-entries">
                   {characters.map((character, index) => (
