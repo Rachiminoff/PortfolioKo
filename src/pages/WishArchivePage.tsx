@@ -1,4 +1,4 @@
-// WishArchivePage.tsx - Fixed with robust collapsible sections
+// WishArchivePage.tsx - Fixed ESLint errors
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -197,23 +197,21 @@ const CollapsibleSection: React.FC<{
   className?: string;
 }> = ({ id, title, subtitle, icon, defaultOpen = true, children, className = '' }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [setIsMobile] = useState(window.innerWidth < 768);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [setIsVisible] = useState(false);
 
-  // Handle resize and mobile detection
+  // Handle mobile detection
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (mobile) {
+      const isMobile = window.innerWidth < 768;
+      if (isMobile) {
         setIsOpen(false);
       } else if (defaultOpen) {
         setIsOpen(true);
       }
     };
+    handleResize(); // Run on mount
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [defaultOpen]);
@@ -235,7 +233,6 @@ const CollapsibleSection: React.FC<{
                 card.classList.add('visible');
               }, 100 + index * 75);
             });
-            setIsVisible(true);
           }
         });
       },
