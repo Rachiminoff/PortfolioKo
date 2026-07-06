@@ -240,6 +240,69 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
   );
 };
 
+// Premium Timeline Entry Component
+interface TimelineEntryProps {
+  character: WishCharacter;
+  index: number;
+  onClick: () => void;
+}
+
+const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick }) => {
+  const elementColor = getElementColor(character.element);
+  const entryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (entryRef.current) {
+      observer.observe(entryRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div 
+      ref={entryRef}
+      className="wish-timeline-entry-premium"
+      style={{ animationDelay: `${index * 0.05}s` }}
+      onClick={onClick}
+    >
+      <div className="wish-timeline-entry-connector">
+        <div className="wish-timeline-entry-dot" style={{ backgroundColor: elementColor }} />
+        {index < 0 && <div className="wish-timeline-entry-line" style={{ borderColor: `${elementColor}33` }} />}
+      </div>
+      <div className="wish-timeline-entry-content">
+        <div className="wish-timeline-entry-header">
+          <div className="wish-timeline-entry-name">
+            <h4>{character.name}</h4>
+            <span className="wish-timeline-entry-version">v{character.version}</span>
+          </div>
+          <div className={`wish-timeline-entry-outcome ${character.outcome}`}>
+            {character.outcome === 'won' ? '✓ Won' : '✗ Lost'}
+          </div>
+        </div>
+        <div className="wish-timeline-entry-meta">
+          <span className="wish-timeline-entry-date">{formatDate(character.date_obtained)}</span>
+          <span className="wish-timeline-entry-element" style={{ color: elementColor }}>
+            <Icon icon={getElementIcon(character.element)} />
+            {character.element}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Components
 interface CharacterCardProps {
   character: WishCharacter;
@@ -1014,62 +1077,14 @@ const WishArchivePage: React.FC = () => {
                   <div className="wish-timeline-year-line" />
                 </div>
                 <div className="wish-timeline-entries">
-                  {characters.map((character, index) => {
-                    const elementColor = getElementColor(character.element);
-                    const entryRef = useRef<HTMLDivElement>(null);
-
-                    useEffect(() => {
-                      const observer = new IntersectionObserver(
-                        (entries) => {
-                          entries.forEach((entry) => {
-                            if (entry.isIntersecting) {
-                              entry.target.classList.add('visible');
-                            }
-                          });
-                        },
-                        { threshold: 0.1 }
-                      );
-
-                      if (entryRef.current) {
-                        observer.observe(entryRef.current);
-                      }
-
-                      return () => observer.disconnect();
-                    }, []);
-
-                    return (
-                      <div 
-                        key={character.id}
-                        ref={entryRef}
-                        className="wish-timeline-entry-premium"
-                        style={{ animationDelay: `${index * 0.05}s` }}
-                        onClick={() => setSelectedCharacter(character)}
-                      >
-                        <div className="wish-timeline-entry-connector">
-                          <div className="wish-timeline-entry-dot" style={{ backgroundColor: elementColor }} />
-                          {index < characters.length - 1 && <div className="wish-timeline-entry-line" style={{ borderColor: `${elementColor}33` }} />}
-                        </div>
-                        <div className="wish-timeline-entry-content">
-                          <div className="wish-timeline-entry-header">
-                            <div className="wish-timeline-entry-name">
-                              <h4>{character.name}</h4>
-                              <span className="wish-timeline-entry-version">v{character.version}</span>
-                            </div>
-                            <div className={`wish-timeline-entry-outcome ${character.outcome}`}>
-                              {character.outcome === 'won' ? '✓ Won' : '✗ Lost'}
-                            </div>
-                          </div>
-                          <div className="wish-timeline-entry-meta">
-                            <span className="wish-timeline-entry-date">{formatDate(character.date_obtained)}</span>
-                            <span className="wish-timeline-entry-element" style={{ color: elementColor }}>
-                              <Icon icon={getElementIcon(character.element)} />
-                              {character.element}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {characters.map((character, index) => (
+                    <TimelineEntry 
+                      key={character.id}
+                      character={character}
+                      index={index}
+                      onClick={() => setSelectedCharacter(character)}
+                    />
+                  ))}
                 </div>
               </div>
             ))}
