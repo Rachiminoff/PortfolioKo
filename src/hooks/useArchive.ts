@@ -19,43 +19,40 @@ export function useArchive() {
     lockedUntil: undefined,
   });
 
-  // Check authentication status on mount
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
   const checkAuthStatus = useCallback(async () => {
     try {
-      const response = await fetch('/api/archive/status', {
+      const response = await fetch('/api/vault/verify', {
         credentials: 'include',
       });
+      
       const data = await response.json();
       
-      setState({
-        isUnlocked: data.unlocked || false,
+      setState(prev => ({
+        ...prev,
+        isUnlocked: data.valid || false,
         isLoading: false,
-        error: null,
-        remainingAttempts: data.remainingAttempts,
-        isLocked: data.locked || false,
-        lockedUntil: data.lockedUntil,
-      });
+      }));
     } catch (error) {
       setState(prev => ({
         ...prev,
         isLoading: false,
-        error: 'Failed to check authentication status',
       }));
     }
   }, []);
+
+  // Check authentication status on mount
+  useEffect(() => {
+    checkAuthStatus();
+  }, [checkAuthStatus]); // ✅ Added dependency
 
   const unlockArchive = useCallback(async (password: string) => {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      const response = await fetch('/api/archive/unlock', {
-        method: 'POST',
+      const response = await fetch("/api/unlock", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         credentials: 'include',
         body: JSON.stringify({ password }),
@@ -110,7 +107,7 @@ export function useArchive() {
 
   const logout = useCallback(async () => {
     try {
-      await fetch('/api/archive/logout', {
+      await fetch('/api/logout', {
         method: 'POST',
         credentials: 'include',
       });

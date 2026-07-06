@@ -353,7 +353,7 @@ const ArchivePage: React.FC = () => {
   // Check auth status on mount
   useEffect(() => {
     checkAuthStatus();
-  }, []);
+  }, [checkAuthStatus]); // ✅ Fixed: Added dependency
 
   const handleUnlock = async (password: string) => {
     const result = await unlockArchive(password);
