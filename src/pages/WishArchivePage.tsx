@@ -197,11 +197,11 @@ const CollapsibleSection: React.FC<{
   className?: string;
 }> = ({ id, title, subtitle, icon, defaultOpen = true, children, className = '' }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [setIsMobile] = useState(window.innerWidth < 768);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [setIsVisible] = useState(false);
 
   // Handle resize and mobile detection
   useEffect(() => {
