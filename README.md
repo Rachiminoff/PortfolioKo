@@ -1,4 +1,4 @@
-# Tanya Denise Yambao Portfolio
+# My Portfolio
 
 A modern portfolio website showcasing my projects, technical expertise, professional experience, and certifications as a Full-Stack Developer.
 
