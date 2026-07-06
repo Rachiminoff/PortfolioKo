@@ -36,6 +36,37 @@ interface Achievement {
   unlocked: boolean;
 }
 
+interface Stats {
+  total: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  byYear: Record<number, YearData>;
+  byElement: Record<string, number>;
+  first: WishCharacter | null;
+  latest: WishCharacter | null;
+  currentStreak: number;
+  longestWinStreak: number;
+  longestLoseStreak: number;
+  luckiestYear: YearStat | null;
+  unluckiestYear: YearStat | null;
+  mostCollectedElement: string;
+  leastCollectedElement: string;
+  byVersion: Record<string, number>;
+  busiestVersion: string;
+  busiestYear: number;
+  activeYears: number;
+  avgGap: number;
+  longestGap: number;
+  shortestGap: number;
+  doubleDays: number;
+  fiftyFiftyWins: number;
+  guaranteedChars: number;
+  collectionPercentage: number;
+  funFacts: string[];
+  achievements: Achievement[];
+}
+
 // Helper functions
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -265,8 +296,8 @@ const WishArchivePage: React.FC = () => {
     return Object.entries(groups).sort((a, b) => Number(b[0]) - Number(a[0]));
   }, [filteredCharacters]);
 
-  // Enhanced Statistics
-  const stats = useMemo(() => {
+  // Enhanced Statistics - explicitly typed return
+  const stats: Stats = useMemo(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
@@ -404,19 +435,28 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // Luckiest/Unluckiest year - explicitly typed
-    let luckiestYear: YearStat | null = null;
-    let unluckiestYear: YearStat | null = null;
+    // Luckiest/Unluckiest year - explicitly typed with proper null handling
+    const luckiestYear: YearStat | null = (() => {
+      let best: YearStat | null = null;
+      Object.entries(byYear).forEach(([year, data]) => {
+        const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
+        if (!best || rate > best.rate) {
+          best = { year: Number(year), rate };
+        }
+      });
+      return best;
+    })();
 
-    Object.entries(byYear).forEach(([year, data]) => {
-      const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
-      if (!luckiestYear || rate > luckiestYear.rate) {
-        luckiestYear = { year: Number(year), rate };
-      }
-      if (!unluckiestYear || rate < unluckiestYear.rate) {
-        unluckiestYear = { year: Number(year), rate };
-      }
-    });
+    const unluckiestYear: YearStat | null = (() => {
+      let worst: YearStat | null = null;
+      Object.entries(byYear).forEach(([year, data]) => {
+        const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
+        if (!worst || rate < worst.rate) {
+          worst = { year: Number(year), rate };
+        }
+      });
+      return worst;
+    })();
 
     // Collection progress (assuming ~80 total limited characters as of now)
     const totalLimitedChars = 80;
@@ -709,11 +749,11 @@ const WishArchivePage: React.FC = () => {
             <span className="wish-stat-label">Current Streak</span>
           </div>
           <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.luckiestYear ? `${stats.luckiestYear.year} (${Math.round(stats.luckiestYear.rate)}%)` : '-'}</span>
+            <span className="wish-stat-value">{stats.luckiestYear !== null ? `${stats.luckiestYear.year} (${Math.round(stats.luckiestYear.rate)}%)` : '-'}</span>
             <span className="wish-stat-label">Luckiest Year</span>
           </div>
           <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.unluckiestYear ? `${stats.unluckiestYear.year} (${Math.round(stats.unluckiestYear.rate)}%)` : '-'}</span>
+            <span className="wish-stat-value">{stats.unluckiestYear !== null ? `${stats.unluckiestYear.year} (${Math.round(stats.unluckiestYear.rate)}%)` : '-'}</span>
             <span className="wish-stat-label">Unluckiest Year</span>
           </div>
           <div className="wish-stat-card-small">
