@@ -1,4 +1,4 @@
-// WishArchivePage.tsx - Fixed ESLint errors
+// WishArchivePage.tsx - Tab-based navigation with no collapsible sections
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -118,230 +118,26 @@ const getElementIcon = (element: string): string => {
   return icons[element] || 'mdi:circle';
 };
 
-// Sticky Navigation Component - Simplified, uses CSS sticky
-const StickyNav: React.FC<{
-  sections: Array<{ id: string; label: string; icon: string }>;
-  activeSection: string;
+// Tab Navigation Component
+const TabNav: React.FC<{
+  tabs: Array<{ id: string; label: string; icon: string }>;
+  activeTab: string;
   onSelect: (id: string) => void;
-}> = ({ sections, activeSection, onSelect }) => {
+}> = ({ tabs, activeTab, onSelect }) => {
   return (
-    <div className="sticky-nav">
-      <div className="sticky-nav-inner">
-        {sections.map((section) => (
+    <div className="tab-nav">
+      <div className="tab-nav-inner">
+        {tabs.map((tab) => (
           <button
-            key={section.id}
-            className={`sticky-nav-item ${activeSection === section.id ? 'active' : ''}`}
-            onClick={() => onSelect(section.id)}
-            aria-label={`Scroll to ${section.label}`}
+            key={tab.id}
+            className={`tab-nav-item ${activeTab === tab.id ? 'active' : ''}`}
+            onClick={() => onSelect(tab.id)}
+            aria-label={`Switch to ${tab.label}`}
           >
-            <Icon icon={section.icon} />
-            <span>{section.label}</span>
+            <Icon icon={tab.icon} />
+            <span>{tab.label}</span>
           </button>
         ))}
-      </div>
-    </div>
-  );
-};
-
-// Section Observer Hook - Fixed to ignore collapsed sections
-const useSectionObserver = (sectionIds: string[]) => {
-  const [activeSection, setActiveSection] = useState(sectionIds[0] || '');
-
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-
-    sectionIds.forEach((id, index) => {
-      const element = document.getElementById(id);
-      if (!element) return;
-
-      // Check if the section is visible (not collapsed)
-      const isVisible = (el: HTMLElement) => {
-        const style = window.getComputedStyle(el);
-        const isDisplayNone = style.display === 'none';
-        const isHidden = style.visibility === 'hidden';
-        const hasZeroHeight = el.offsetHeight === 0;
-        return !isDisplayNone && !isHidden && !hasZeroHeight;
-      };
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            // Only update if the section is actually visible
-            if (entry.isIntersecting && isVisible(element)) {
-              setActiveSection(sectionIds[index]);
-            }
-          });
-        },
-        { threshold: 0.3, rootMargin: '-50px 0px -50px 0px' }
-      );
-      observer.observe(element);
-      observers.push(observer);
-    });
-
-    return () => {
-      observers.forEach(observer => observer.disconnect());
-    };
-  }, [sectionIds]);
-
-  return activeSection;
-};
-
-// Collapsible Section Component - Fixed with CSS Grid animation
-const CollapsibleSection: React.FC<{
-  id: string;
-  title: string;
-  subtitle?: string;
-  icon?: string;
-  defaultOpen?: boolean;
-  children: React.ReactNode;
-  className?: string;
-}> = ({ id, title, subtitle, icon, defaultOpen = true, children, className = '' }) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  // Handle mobile detection
-  useEffect(() => {
-    const handleResize = () => {
-      const isMobile = window.innerWidth < 768;
-      if (isMobile) {
-        setIsOpen(false);
-      } else if (defaultOpen) {
-        setIsOpen(true);
-      }
-    };
-    handleResize(); // Run on mount
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [defaultOpen]);
-
-  // Observe section for reveal animation
-  useEffect(() => {
-    const element = sectionRef.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            element.classList.add('section-visible');
-            // Stagger child cards
-            const cards = element.querySelectorAll('.stagger-card');
-            cards.forEach((card, index) => {
-              setTimeout(() => {
-                card.classList.add('visible');
-              }, 100 + index * 75);
-            });
-          }
-        });
-      },
-      { threshold: 0.05 }
-    );
-
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
-
-  // Calculate content height whenever content changes or open state changes
-  const updateHeight = useCallback(() => {
-    const content = contentRef.current;
-    if (!content) return;
-
-    if (isOpen) {
-      // Force reflow to get accurate height
-      content.style.maxHeight = 'none';
-      content.style.opacity = '1';
-      const height = content.scrollHeight;
-      // Add a small buffer to prevent clipping
-      setContentHeight(height + 2);
-    } else {
-      setContentHeight(0);
-    }
-  }, [isOpen]);
-
-  // Update height when content changes or open state toggles
-  useEffect(() => {
-    // Use requestAnimationFrame to ensure layout is complete
-    requestAnimationFrame(() => {
-      updateHeight();
-    });
-  }, [isOpen, children, updateHeight]);
-
-  // Recalculate height when window resizes (images might load, charts render)
-  useEffect(() => {
-    const handleResize = () => {
-      if (isOpen) {
-        requestAnimationFrame(() => {
-          updateHeight();
-        });
-      }
-    };
-
-    // Use ResizeObserver to detect content size changes
-    const content = contentRef.current;
-    let resizeObserver: ResizeObserver | null = null;
-
-    if (content && isOpen) {
-      resizeObserver = new ResizeObserver(() => {
-        requestAnimationFrame(() => {
-          updateHeight();
-        });
-      });
-      resizeObserver.observe(content);
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      if (resizeObserver) {
-        resizeObserver.disconnect();
-      }
-    };
-  }, [isOpen, updateHeight]);
-
-  const toggle = () => {
-    setIsOpen(!isOpen);
-  };
-
-  return (
-    <div
-      id={id}
-      ref={sectionRef}
-      className={`collapsible-section ${className} ${isOpen ? 'open' : ''} section-reveal`}
-    >
-      <button
-        className="collapsible-section-header"
-        onClick={toggle}
-        aria-expanded={isOpen}
-        aria-controls={`section-${id}-content`}
-      >
-        <div className="collapsible-section-header-left">
-          {icon && <Icon icon={icon} className="collapsible-section-icon" />}
-          <div className="collapsible-section-titles">
-            <span className="collapsible-section-title">{title}</span>
-            {subtitle && <span className="collapsible-section-subtitle">{subtitle}</span>}
-          </div>
-        </div>
-        <Icon
-          icon={isOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
-          className={`collapsible-section-chevron ${isOpen ? 'open' : ''}`}
-        />
-      </button>
-      <div
-        id={`section-${id}-content`}
-        className="collapsible-section-content"
-        ref={contentRef}
-        style={{
-          maxHeight: contentHeight !== undefined ? `${contentHeight}px` : isOpen ? 'none' : '0px',
-          opacity: isOpen ? 1 : 0,
-          overflow: isOpen ? 'visible' : 'hidden',
-          transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease'
-        }}
-      >
-        <div className="collapsible-section-inner">
-          {children}
-        </div>
       </div>
     </div>
   );
@@ -405,7 +201,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
   colors
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [hasAnimated, setHasAnimated] = useState(false);
+  const [hasDrawn, setHasDrawn] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   const drawChart = useCallback(() => {
@@ -456,14 +252,15 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
     ctx.arc(centerX, centerY, radius * 0.45, 0, 2 * Math.PI);
     ctx.fillStyle = '#0a0a0a';
     ctx.fill();
+
+    setHasDrawn(true);
   }, [data, colors]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated) {
-            setHasAnimated(true);
+          if (entry.isIntersecting && !hasDrawn) {
             drawChart();
           }
         });
@@ -476,19 +273,19 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
     }
 
     return () => observer.disconnect();
-  }, [hasAnimated, drawChart]);
+  }, [hasDrawn, drawChart]);
 
   // Redraw on resize
   useEffect(() => {
     const handleResize = () => {
-      if (hasAnimated) {
+      if (hasDrawn) {
         drawChart();
       }
     };
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [hasAnimated, drawChart]);
+  }, [hasDrawn, drawChart]);
 
   return (
     <div ref={ref} className="donut-chart">
@@ -539,11 +336,12 @@ const BarChart: React.FC<{
               style={{ height: '100%' }}
             >
               <div
-                className={`bar-chart-bar ${hasAnimated ? 'animated' : ''}`}
+                className="bar-chart-bar"
                 style={{
                   height: hasAnimated ? `${percentage}%` : '0%',
                   backgroundColor: item.color || '#8B5CF6',
-                  transitionDelay: `${delay}s`
+                  transitionDelay: `${delay}s`,
+                  transition: 'height 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
               />
             </div>
@@ -859,6 +657,7 @@ const WishArchivePage: React.FC = () => {
   const navigate = useNavigate();
   const [characters, setCharacters] = useState<WishCharacter[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('overview');
   const [viewMode, setViewMode] = useState<'timeline' | 'gallery'>('timeline');
   const [selectedYear, setSelectedYear] = useState<string>('all');
   const [selectedElement, setSelectedElement] = useState<string>('all');
@@ -868,25 +667,14 @@ const WishArchivePage: React.FC = () => {
   const [selectedCharacter, setSelectedCharacter] = useState<WishCharacter | null>(null);
   const [heatmapYear, setHeatmapYear] = useState<number>(new Date().getFullYear());
 
-  const sections = [
-    { id: 'section-overview', label: 'Overview', icon: 'mdi:home' },
-    { id: 'section-analytics', label: 'Analytics', icon: 'mdi:chart-bar' },
-    { id: 'section-heatmap', label: 'Heat Map', icon: 'mdi:fire' },
-    { id: 'section-funfacts', label: 'Fun Facts', icon: 'mdi:star' },
-    { id: 'section-achievements', label: 'Achievements', icon: 'mdi:trophy' },
-    { id: 'section-archive', label: 'Archive', icon: 'mdi:format-list-bulleted' },
+  const tabs = [
+    { id: 'overview', label: 'Overview', icon: 'mdi:home' },
+    { id: 'analytics', label: 'Analytics', icon: 'mdi:chart-bar' },
+    { id: 'heatmap', label: 'Heat Map', icon: 'mdi:fire' },
+    { id: 'funfacts', label: 'Fun Facts', icon: 'mdi:star' },
+    { id: 'achievements', label: 'Achievements', icon: 'mdi:trophy' },
+    { id: 'archive', label: 'Archive', icon: 'mdi:format-list-bulleted' },
   ];
-
-  const activeSection = useSectionObserver(sections.map(s => s.id));
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = 80;
-      const top = element.getBoundingClientRect().top + window.pageYOffset - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
-    }
-  };
 
   useEffect(() => {
     fetchCharacters();
@@ -1382,429 +1170,364 @@ const WishArchivePage: React.FC = () => {
     );
   }
 
-  return (
-    <div className="wish-archive-page">
-      {/* Premium Background */}
-      <div className="wish-bg">
-        <div className="wish-bg-gradient" />
-        <div className="wish-bg-particles">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="wish-bg-particle"
-              style={{
-                '--delay': `${i * 0.3}s`,
-                '--x': `${10 + Math.random() * 80}%`,
-                '--y': `${10 + Math.random() * 80}%`,
-                '--size': `${1 + Math.random() * 3}px`,
-                '--duration': `${20 + Math.random() * 30}s`
-              } as React.CSSProperties}
+  // Render Overview Tab
+  const renderOverview = () => (
+    <section className="wish-overview-tab section-reveal">
+      {/* Hero Stats */}
+      <div className="wish-hero-stats">
+        <div className="wish-hero-stat stagger-card">
+          <AnimatedCounter target={stats.total} label="Characters" />
+        </div>
+        <div className="wish-hero-stat stagger-card">
+          <AnimatedCounter target={Math.round(stats.winRate)} suffix="%" label="Win Rate" />
+        </div>
+        <div className="wish-hero-stat stagger-card">
+          <AnimatedCounter target={stats.wins} label="Wins" />
+        </div>
+        <div className="wish-hero-stat stagger-card">
+          <AnimatedCounter target={stats.activeYears} label="Active Years" />
+        </div>
+      </div>
+
+      {/* Quick Highlights */}
+      <div className="wish-hero-highlights">
+        <div className="wish-hero-highlight">
+          <Icon icon="mdi:calendar-range" />
+          <span>{stats.first?.year || 2022} — {stats.latest?.year || new Date().getFullYear()}</span>
+        </div>
+        {stats.latest && (
+          <div className="wish-hero-highlight">
+            <Icon icon="mdi:star" />
+            <span>Latest: {stats.latest.name}</span>
+          </div>
+        )}
+        <div className="wish-hero-highlight">
+          <Icon icon="mdi:percent" />
+          <span>{Math.round(stats.winRate)}% Win Rate</span>
+        </div>
+        <div className="wish-hero-highlight">
+          <Icon icon="mdi:chart-pie" />
+          <span>{stats.elementDiversity} Elements</span>
+        </div>
+      </div>
+    </section>
+  );
+
+  // Render Analytics Tab
+  const renderAnalytics = () => (
+    <section className="wish-analytics-tab section-reveal">
+      <div className="wish-stats-dashboard">
+        {/* Stats Grid - Grouped by category */}
+        <div className="wish-stats-group">
+          <h4 className="wish-stats-group-title">Luck</h4>
+          <div className="wish-stats-dashboard-grid">
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:target" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
+                <span className="wish-stat-premium-label">Longest Win Streak</span>
+              </div>
+            </div>
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:star-circle" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
+                <span className="wish-stat-premium-label">50/50 Wins</span>
+              </div>
+            </div>
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:chart-arc" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{Math.round(stats.winRate)}%</span>
+                <span className="wish-stat-premium-label">Overall Win Rate</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="wish-stats-group">
+          <h4 className="wish-stats-group-title">Collection</h4>
+          <div className="wish-stats-dashboard-grid">
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:crystal-ball" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
+                <span className="wish-stat-premium-label">Most Collected Element</span>
+              </div>
+            </div>
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:chart-pie" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
+                <span className="wish-stat-premium-label">Elements Collected</span>
+              </div>
+            </div>
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:gamepad-variant" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
+                <span className="wish-stat-premium-label">Versions Played</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="wish-stats-group">
+          <h4 className="wish-stats-group-title">Journey</h4>
+          <div className="wish-stats-dashboard-grid">
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:clock-outline" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
+                <span className="wish-stat-premium-label">Avg Between Pulls</span>
+              </div>
+            </div>
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:calendar" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
+                <span className="wish-stat-premium-label">Busiest Year</span>
+              </div>
+            </div>
+            <div className="wish-stat-premium stagger-card">
+              <div className="wish-stat-premium-icon">
+                <Icon icon="mdi:chart-line" />
+              </div>
+              <div className="wish-stat-premium-content">
+                <span className="wish-stat-premium-value">{stats.doubleDays}</span>
+                <span className="wish-stat-premium-label">Double Pull Days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Charts Row */}
+        <div className="wish-charts-row">
+          <div className="wish-chart-card stagger-card">
+            <h3 className="wish-chart-title">Element Distribution</h3>
+            <DonutChart data={stats.byElement} />
+          </div>
+          <div className="wish-chart-card stagger-card">
+            <h3 className="wish-chart-title">Outcome Distribution</h3>
+            <DonutChart
+              data={{
+                Won: stats.wins,
+                Lost: stats.losses
+              }}
+              colors={{
+                Won: '#7eb870',
+                Lost: '#e06040'
+              }}
             />
+          </div>
+          <div className="wish-chart-card stagger-card">
+            <h3 className="wish-chart-title">Collection Progress</h3>
+            <div className="wish-progress-ring">
+              <svg viewBox="0 0 120 120">
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="50"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.04)"
+                  strokeWidth="6"
+                />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="50"
+                  fill="none"
+                  stroke="url(#progressGradient)"
+                  strokeWidth="6"
+                  strokeDasharray={`${stats.collectionPercentage * 3.14} 314`}
+                  strokeLinecap="round"
+                  transform="rotate(-90 60 60)"
+                />
+                <defs>
+                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#7ae0db" />
+                    <stop offset="50%" stopColor="#8B5CF6" />
+                    <stop offset="100%" stopColor="#f9b55d" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div className="wish-progress-ring-content">
+                <span className="wish-progress-ring-value">{Math.round(stats.collectionPercentage)}%</span>
+                <span className="wish-progress-ring-label">Collected</span>
+              </div>
+            </div>
+          </div>
+          <div className="wish-chart-card stagger-card">
+            <h3 className="wish-chart-title">Characters by Year</h3>
+            <BarChart
+              data={stats.yearlyStats.map(stat => ({
+                label: stat.year.toString(),
+                value: stat.total,
+                color: `hsl(${200 + stat.year * 10}, 60%, 50%)`
+              }))}
+              height={150}
+            />
+          </div>
+        </div>
+
+        {/* Yearly Performance */}
+        <div className="wish-yearly-grid" style={{ marginTop: '3rem' }}>
+          {stats.yearlyStats.map(stat => {
+            const yearData = stats.byYear[stat.year];
+            const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' :
+              stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
+            const isBest = stat.rate === Math.max(...stats.yearlyStats.map(s => s.rate));
+            const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
+
+            return (
+              <div key={stat.year} className="wish-yearly-card stagger-card">
+                <div className="wish-yearly-header">
+                  <h3>{stat.year}</h3>
+                  <span className={`wish-yearly-trend ${trend}`}>
+                    {trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—'}
+                    {isBest && ' (Best)'}
+                    {isWorst && ' (Worst)'}
+                  </span>
+                </div>
+                <div className="wish-yearly-stats">
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{stat.total}</span>
+                    <span className="wish-yearly-stat-label">Characters</span>
+                  </div>
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{stat.wins}</span>
+                    <span className="wish-yearly-stat-label">Wins</span>
+                  </div>
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{stat.losses}</span>
+                    <span className="wish-yearly-stat-label">Losses</span>
+                  </div>
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{Math.round(stat.rate)}%</span>
+                    <span className="wish-yearly-stat-label">Win Rate</span>
+                  </div>
+                </div>
+                {yearData && (
+                  <div className="wish-yearly-details">
+                    <span>Avg {Math.round(yearData.avgGap)} days between pulls</span>
+                    <span>Best streak: {yearData.bestStreak}</span>
+                    <span className="wish-yearly-characters">
+                      {yearData.characters.slice(0, 3).join(', ')}
+                      {yearData.characters.length > 3 && ` +${yearData.characters.length - 3} more`}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+
+  // Render Heatmap Tab
+  const renderHeatmap = () => (
+    <section className="wish-heatmap-tab section-reveal">
+      <div className="wish-heatmap-controls">
+        <div className="wish-heatmap-year-selector">
+          {years.filter(y => y !== 'all').map(year => (
+            <button
+              key={year}
+              className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
+              onClick={() => setHeatmapYear(Number(year))}
+            >
+              {year}
+            </button>
           ))}
         </div>
       </div>
-
-      {/* Header */}
-      <div className="wish-archive-header">
-        <button className="wish-back-button" onClick={() => navigate('/')}>
-          <Icon icon="mdi:arrow-left" />
-          Back to Home
-        </button>
-      </div>
-
-      {/* Hero Section */}
-      <section id="section-overview" className="wish-hero section-reveal">
-        <div className="wish-hero-content">
-          <div className="wish-hero-badge">✦ Collection</div>
-          <h1 className="wish-hero-title">Wish Archive</h1>
-          <p className="wish-hero-subtitle">
-            A personal archive of every limited 5★ character I've obtained in Genshin Impact since 2022.
-          </p>
-        </div>
-
-        <div className="wish-hero-stats">
-          <div className="wish-hero-stat stagger-card">
-            <AnimatedCounter target={stats.total} label="Characters" />
-          </div>
-          <div className="wish-hero-stat stagger-card">
-            <AnimatedCounter target={Math.round(stats.winRate)} suffix="%" label="Win Rate" />
-          </div>
-          <div className="wish-hero-stat stagger-card">
-            <AnimatedCounter target={stats.wins} label="Wins" />
-          </div>
-          <div className="wish-hero-stat stagger-card">
-            <AnimatedCounter target={stats.activeYears} label="Active Years" />
-          </div>
-        </div>
-
-        {/* Quick Highlights */}
-        <div className="wish-hero-highlights">
-          <div className="wish-hero-highlight">
-            <Icon icon="mdi:calendar-range" />
-            <span>{stats.first?.year || 2022} — {stats.latest?.year || new Date().getFullYear()}</span>
-          </div>
-          {stats.latest && (
-            <div className="wish-hero-highlight">
-              <Icon icon="mdi:star" />
-              <span>Latest: {stats.latest.name}</span>
-            </div>
-          )}
-          <div className="wish-hero-highlight">
-            <Icon icon="mdi:percent" />
-            <span>{Math.round(stats.winRate)}% Win Rate</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Sticky Navigation */}
-      <StickyNav
-        sections={sections}
-        activeSection={activeSection}
-        onSelect={scrollToSection}
+      <HeatMap
+        characters={characters}
+        year={heatmapYear}
+        onCellHover={(date) => {
+          // Optional: update a tooltip or info display
+        }}
       />
+    </section>
+  );
 
-      {/* Collapsible Analytics Sections */}
-      <div className="wish-analytics-container">
-        {/* Statistics Dashboard */}
-        <CollapsibleSection
-          id="section-analytics"
-          title="Collection Statistics"
-          subtitle="Overview of your entire collection"
-          icon="mdi:chart-bar"
-          defaultOpen={true}
-        >
-          <div className="wish-stats-dashboard">
-            {/* Stats Grid - Grouped by category */}
-            <div className="wish-stats-group">
-              <h4 className="wish-stats-group-title">Luck</h4>
-              <div className="wish-stats-dashboard-grid">
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:target" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
-                    <span className="wish-stat-premium-label">Longest Win Streak</span>
-                  </div>
-                </div>
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:star-circle" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
-                    <span className="wish-stat-premium-label">50/50 Wins</span>
-                  </div>
-                </div>
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:chart-arc" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{Math.round(stats.winRate)}%</span>
-                    <span className="wish-stat-premium-label">Overall Win Rate</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="wish-stats-group">
-              <h4 className="wish-stats-group-title">Collection</h4>
-              <div className="wish-stats-dashboard-grid">
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:crystal-ball" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
-                    <span className="wish-stat-premium-label">Most Collected Element</span>
-                  </div>
-                </div>
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:chart-pie" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
-                    <span className="wish-stat-premium-label">Elements Collected</span>
-                  </div>
-                </div>
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:gamepad-variant" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
-                    <span className="wish-stat-premium-label">Versions Played</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="wish-stats-group">
-              <h4 className="wish-stats-group-title">Journey</h4>
-              <div className="wish-stats-dashboard-grid">
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:clock-outline" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
-                    <span className="wish-stat-premium-label">Avg Between Pulls</span>
-                  </div>
-                </div>
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:calendar" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
-                    <span className="wish-stat-premium-label">Busiest Year</span>
-                  </div>
-                </div>
-                <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">
-                    <Icon icon="mdi:chart-line" />
-                  </div>
-                  <div className="wish-stat-premium-content">
-                    <span className="wish-stat-premium-value">{stats.doubleDays}</span>
-                    <span className="wish-stat-premium-label">Double Pull Days</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Charts Row */}
-            <div className="wish-charts-row">
-              <div className="wish-chart-card stagger-card">
-                <h3 className="wish-chart-title">Element Distribution</h3>
-                <DonutChart data={stats.byElement} />
-              </div>
-              <div className="wish-chart-card stagger-card">
-                <h3 className="wish-chart-title">Outcome Distribution</h3>
-                <DonutChart
-                  data={{
-                    Won: stats.wins,
-                    Lost: stats.losses
-                  }}
-                  colors={{
-                    Won: '#7eb870',
-                    Lost: '#e06040'
-                  }}
-                />
-              </div>
-              <div className="wish-chart-card stagger-card">
-                <h3 className="wish-chart-title">Collection Progress</h3>
-                <div className="wish-progress-ring">
-                  <svg viewBox="0 0 120 120">
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r="50"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.04)"
-                      strokeWidth="6"
-                    />
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r="50"
-                      fill="none"
-                      stroke="url(#progressGradient)"
-                      strokeWidth="6"
-                      strokeDasharray={`${stats.collectionPercentage * 3.14} 314`}
-                      strokeLinecap="round"
-                      transform="rotate(-90 60 60)"
-                    />
-                    <defs>
-                      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#7ae0db" />
-                        <stop offset="50%" stopColor="#8B5CF6" />
-                        <stop offset="100%" stopColor="#f9b55d" />
-                      </linearGradient>
-                    </defs>
-                  </svg>
-                  <div className="wish-progress-ring-content">
-                    <span className="wish-progress-ring-value">{Math.round(stats.collectionPercentage)}%</span>
-                    <span className="wish-progress-ring-label">Collected</span>
-                  </div>
-                </div>
-              </div>
-              <div className="wish-chart-card stagger-card">
-                <h3 className="wish-chart-title">Characters by Year</h3>
-                <BarChart
-                  data={stats.yearlyStats.map(stat => ({
-                    label: stat.year.toString(),
-                    value: stat.total,
-                    color: `hsl(${200 + stat.year * 10}, 60%, 50%)`
-                  }))}
-                  height={150}
-                />
-              </div>
-            </div>
+  // Render Fun Facts Tab
+  const renderFunFacts = () => (
+    <section className="wish-funfacts-tab section-reveal">
+      {stats.funFacts.length > 0 && (
+        <div className="wish-fun-fact-featured stagger-card">
+          <div className="wish-fun-fact-featured-icon">
+            <Icon icon="mdi:sparkle" />
           </div>
-        </CollapsibleSection>
-
-        {/* Yearly Performance */}
-        <CollapsibleSection
-          id="section-yearly"
-          title="Yearly Performance"
-          subtitle="Breakdown by year with trends and streaks"
-          icon="mdi:calendar-month"
-          defaultOpen={false}
-        >
-          <div className="wish-yearly-grid">
-            {stats.yearlyStats.map(stat => {
-              const yearData = stats.byYear[stat.year];
-              const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' :
-                stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
-              const isBest = stat.rate === Math.max(...stats.yearlyStats.map(s => s.rate));
-              const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
-
-              return (
-                <div key={stat.year} className="wish-yearly-card stagger-card">
-                  <div className="wish-yearly-header">
-                    <h3>{stat.year}</h3>
-                    <span className={`wish-yearly-trend ${trend}`}>
-                      {trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—'}
-                      {isBest && ' (Best)'}
-                      {isWorst && ' (Worst)'}
-                    </span>
-                  </div>
-                  <div className="wish-yearly-stats">
-                    <div className="wish-yearly-stat">
-                      <span className="wish-yearly-stat-value">{stat.total}</span>
-                      <span className="wish-yearly-stat-label">Characters</span>
-                    </div>
-                    <div className="wish-yearly-stat">
-                      <span className="wish-yearly-stat-value">{stat.wins}</span>
-                      <span className="wish-yearly-stat-label">Wins</span>
-                    </div>
-                    <div className="wish-yearly-stat">
-                      <span className="wish-yearly-stat-value">{stat.losses}</span>
-                      <span className="wish-yearly-stat-label">Losses</span>
-                    </div>
-                    <div className="wish-yearly-stat">
-                      <span className="wish-yearly-stat-value">{Math.round(stat.rate)}%</span>
-                      <span className="wish-yearly-stat-label">Win Rate</span>
-                    </div>
-                  </div>
-                  {yearData && (
-                    <div className="wish-yearly-details">
-                      <span>Avg {Math.round(yearData.avgGap)} days between pulls</span>
-                      <span>Best streak: {yearData.bestStreak}</span>
-                      <span className="wish-yearly-characters">
-                        {yearData.characters.slice(0, 3).join(', ')}
-                        {yearData.characters.length > 3 && ` +${yearData.characters.length - 3} more`}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+          <div className="wish-fun-fact-featured-content">
+            <span className="wish-fun-fact-featured-label">Did You Know?</span>
+            <p>{stats.funFacts[0]}</p>
           </div>
-        </CollapsibleSection>
+        </div>
+      )}
 
-        {/* Heat Map */}
-        <CollapsibleSection
-          id="section-heatmap"
-          title="Acquisition Heat Map"
-          subtitle="Visualize every day you obtained a limited character throughout your journey"
-          icon="mdi:fire"
-          defaultOpen={true}
-        >
-          <div className="wish-heatmap-controls">
-            <div className="wish-heatmap-year-selector">
-              {years.filter(y => y !== 'all').map(year => (
-                <button
-                  key={year}
-                  className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
-                  onClick={() => setHeatmapYear(Number(year))}
-                >
-                  {year}
-                </button>
-              ))}
-            </div>
+      <div className="wish-fun-facts-grid">
+        {stats.funFacts.slice(1).map((fact, index) => (
+          <div key={index} className="wish-fun-fact-premium stagger-card">
+            <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
+            <span>{fact}</span>
           </div>
-          <HeatMap
-            characters={characters}
-            year={heatmapYear}
-            onCellHover={(date) => {
-              // Optional: update a tooltip or info display
-            }}
-          />
-        </CollapsibleSection>
-
-        {/* Fun Facts */}
-        <CollapsibleSection
-          id="section-funfacts"
-          title="Fun Facts"
-          subtitle="Interesting insights about your collection"
-          icon="mdi:star"
-          defaultOpen={false}
-        >
-          {/* Featured Fun Fact */}
-          {stats.funFacts.length > 0 && (
-            <div className="wish-fun-fact-featured stagger-card">
-              <div className="wish-fun-fact-featured-icon">
-                <Icon icon="mdi:sparkle" />
-              </div>
-              <div className="wish-fun-fact-featured-content">
-                <span className="wish-fun-fact-featured-label">Did You Know?</span>
-                <p>{stats.funFacts[0]}</p>
-              </div>
-            </div>
-          )}
-
-          <div className="wish-fun-facts-grid">
-            {stats.funFacts.slice(1).map((fact, index) => (
-              <div key={index} className="wish-fun-fact-premium stagger-card">
-                <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
-                <span>{fact}</span>
-              </div>
-            ))}
-          </div>
-        </CollapsibleSection>
-
-        {/* Achievements */}
-        {stats.achievements.filter(a => a.unlocked).length > 0 && (
-          <CollapsibleSection
-            id="section-achievements"
-            title="Achievements"
-            subtitle={`${stats.achievements.filter(a => a.unlocked).length} achievements unlocked`}
-            icon="mdi:trophy"
-            defaultOpen={false}
-          >
-            <div className="wish-achievements-grid">
-              {stats.achievements.map((achievement, index) => (
-                <div
-                  key={index}
-                  className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
-                >
-                  <div className="wish-achievement-premium-icon">
-                    <Icon icon={achievement.icon} />
-                    {!achievement.unlocked && (
-                      <div className="wish-achievement-lock">
-                        <Icon icon="mdi:lock" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="wish-achievement-premium-content">
-                    <h4>{achievement.title}</h4>
-                    <p>{achievement.description}</p>
-                  </div>
-                  <div className="wish-achievement-premium-badge">
-                    {achievement.unlocked ? '✓' : '?'}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CollapsibleSection>
-        )}
+        ))}
       </div>
+    </section>
+  );
 
-      {/* Archive Controls - Sticky */}
-      <div id="section-archive" className="wish-controls">
+  // Render Achievements Tab
+  const renderAchievements = () => (
+    <section className="wish-achievements-tab section-reveal">
+      <div className="wish-achievements-grid">
+        {stats.achievements.map((achievement, index) => (
+          <div
+            key={index}
+            className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
+          >
+            <div className="wish-achievement-premium-icon">
+              <Icon icon={achievement.icon} />
+              {!achievement.unlocked && (
+                <div className="wish-achievement-lock">
+                  <Icon icon="mdi:lock" />
+                </div>
+              )}
+            </div>
+            <div className="wish-achievement-premium-content">
+              <h4>{achievement.title}</h4>
+              <p>{achievement.description}</p>
+            </div>
+            <div className="wish-achievement-premium-badge">
+              {achievement.unlocked ? '✓' : '?'}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+
+  // Render Archive Tab
+  const renderArchive = () => (
+    <section className="wish-archive-tab section-reveal">
+      {/* Archive Controls */}
+      <div className="wish-controls">
         <div className="wish-controls-top">
           <div className="wish-view-controls">
             <button
@@ -1952,6 +1675,66 @@ const WishArchivePage: React.FC = () => {
             ))}
           </div>
         )}
+      </div>
+    </section>
+  );
+
+  return (
+    <div className="wish-archive-page">
+      {/* Premium Background */}
+      <div className="wish-bg">
+        <div className="wish-bg-gradient" />
+        <div className="wish-bg-particles">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="wish-bg-particle"
+              style={{
+                '--delay': `${i * 0.3}s`,
+                '--x': `${10 + Math.random() * 80}%`,
+                '--y': `${10 + Math.random() * 80}%`,
+                '--size': `${1 + Math.random() * 3}px`,
+                '--duration': `${20 + Math.random() * 30}s`
+              } as React.CSSProperties}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Header */}
+      <div className="wish-archive-header">
+        <button className="wish-back-button" onClick={() => navigate('/')}>
+          <Icon icon="mdi:arrow-left" />
+          Back to Home
+        </button>
+      </div>
+
+      {/* Hero Section */}
+      <section className="wish-hero section-reveal">
+        <div className="wish-hero-content">
+          <div className="wish-hero-badge">✦ Collection</div>
+          <h1 className="wish-hero-title">Wish Archive</h1>
+          <p className="wish-hero-subtitle">
+            A personal archive of every limited 5★ character I've obtained in Genshin Impact since 2022.
+          </p>
+        </div>
+      </section>
+
+      {/* Tab Navigation */}
+      <TabNav
+        tabs={tabs}
+        activeTab={activeTab}
+        onSelect={setActiveTab}
+      />
+
+      {/* Tab Content */}
+      <div className="wish-tab-content">
+        {activeTab === 'overview' && renderOverview()}
+        {activeTab === 'analytics' && renderAnalytics()}
+        {activeTab === 'heatmap' && renderHeatmap()}
+        {activeTab === 'funfacts' && renderFunFacts()}
+        {activeTab === 'achievements' && renderAchievements()}
+        {activeTab === 'archive' && renderArchive()}
       </div>
 
       {/* Character Modal */}
