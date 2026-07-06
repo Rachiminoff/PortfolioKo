@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useInsights } from '../hooks/useInsights';
+import { useArchive } from '../hooks/useArchive';
 
 import "./styles/InsightsPage.scss";
 
@@ -8,7 +8,7 @@ const Insights = lazy(() => import('../components/Insights'));
 
 const InsightsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked, isLoading } = useInsights();
+  const { isUnlocked, isLoading } = useArchive();
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ const InsightsPage: React.FC = () => {
     
     // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
-      console.log('InsightsPage - Not unlocked, redirecting to home');
+      console.log('InsightsPage - Not unlocked, redirecting to archive');
       setHasRedirected(true);
-      navigate('/', { replace: true });
+      navigate('/archive', { replace: true });
     }
     
     if (isUnlocked && hasRedirected) {
@@ -48,12 +48,12 @@ const InsightsPage: React.FC = () => {
         <button 
           className="insights-back-button"
           onClick={() => {
-            console.log('InsightsPage - Going back to home');
-            navigate('/');
+            console.log('InsightsPage - Going back to archive');
+            navigate('/archive');
           }}
-          aria-label="Back to home"
+          aria-label="Back to archive"
         >
-          ← Back to Home
+          ← Back to Archive
         </button>
         <h1>Insights</h1>
       </div>

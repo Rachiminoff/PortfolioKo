@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useVault } from '../hooks/useArchive';
+import { useArchive } from '../hooks/useArchive';  // ✅ Fixed import
 
 import "./styles/VaultPage.scss";
 
@@ -8,7 +8,7 @@ const Vault = lazy(() => import('../components/Vault'));
 
 const VaultPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked, isLoading } = useVault();
+  const { isUnlocked, isLoading } = useArchive();  // ✅ Use useArchive
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ const VaultPage: React.FC = () => {
     
     // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
-      console.log('VaultPage - Not unlocked, redirecting to home');
+      console.log('VaultPage - Not unlocked, redirecting to archive');
       setHasRedirected(true);
-      navigate('/', { replace: true });
+      navigate('/archive', { replace: true });  // ✅ Redirect to archive
     }
     
     if (isUnlocked && hasRedirected) {
@@ -48,12 +48,12 @@ const VaultPage: React.FC = () => {
         <button 
           className="vault-back-button"
           onClick={() => {
-            console.log('VaultPage - Going back to home');
-            navigate('/');
+            console.log('VaultPage - Going back to archive');
+            navigate('/archive');  // ✅ Navigate to archive
           }}
-          aria-label="Back to home"
+          aria-label="Back to archive"  // ✅ Updated label
         >
-          ← Back to Home
+          ← Back to Archive  // ✅ Updated text
         </button>
         <h1>Vault</h1>
       </div>
