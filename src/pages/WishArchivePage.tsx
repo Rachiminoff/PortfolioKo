@@ -1,4 +1,4 @@
-// WishArchivePage.tsx - Fixed version
+// WishArchivePage.tsx - Fixed with robust collapsible sections
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -118,29 +118,14 @@ const getElementIcon = (element: string): string => {
   return icons[element] || 'mdi:circle';
 };
 
-// Sticky Navigation Component
+// Sticky Navigation Component - Simplified, uses CSS sticky
 const StickyNav: React.FC<{
   sections: Array<{ id: string; label: string; icon: string }>;
   activeSection: string;
   onSelect: (id: string) => void;
 }> = ({ sections, activeSection, onSelect }) => {
-  const [isSticky, setIsSticky] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const nav = navRef.current;
-      if (!nav) return;
-      const rect = nav.getBoundingClientRect();
-      setIsSticky(rect.top <= 0);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   return (
-    <div ref={navRef} className={`sticky-nav ${isSticky ? 'is-sticky' : ''}`}>
+    <div className="sticky-nav">
       <div className="sticky-nav-inner">
         {sections.map((section) => (
           <button
@@ -158,36 +143,42 @@ const StickyNav: React.FC<{
   );
 };
 
-// Section Observer Hook - Fixed
+// Section Observer Hook - Fixed to ignore collapsed sections
 const useSectionObserver = (sectionIds: string[]) => {
   const [activeSection, setActiveSection] = useState(sectionIds[0] || '');
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
-    
-    // Wait for elements to be in the DOM
-    const timeoutId = setTimeout(() => {
-      sectionIds.forEach((id, index) => {
-        const element = document.getElementById(id);
-        if (!element) return;
-        
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                setActiveSection(sectionIds[index]);
-              }
-            });
-          },
-          { threshold: 0.3, rootMargin: '-50px 0px -50px 0px' }
-        );
-        observer.observe(element);
-        observers.push(observer);
-      });
-    }, 100);
+
+    sectionIds.forEach((id, index) => {
+      const element = document.getElementById(id);
+      if (!element) return;
+
+      // Check if the section is visible (not collapsed)
+      const isVisible = (el: HTMLElement) => {
+        const style = window.getComputedStyle(el);
+        const isDisplayNone = style.display === 'none';
+        const isHidden = style.visibility === 'hidden';
+        const hasZeroHeight = el.offsetHeight === 0;
+        return !isDisplayNone && !isHidden && !hasZeroHeight;
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            // Only update if the section is actually visible
+            if (entry.isIntersecting && isVisible(element)) {
+              setActiveSection(sectionIds[index]);
+            }
+          });
+        },
+        { threshold: 0.3, rootMargin: '-50px 0px -50px 0px' }
+      );
+      observer.observe(element);
+      observers.push(observer);
+    });
 
     return () => {
-      clearTimeout(timeoutId);
       observers.forEach(observer => observer.disconnect());
     };
   }, [sectionIds]);
@@ -195,7 +186,7 @@ const useSectionObserver = (sectionIds: string[]) => {
   return activeSection;
 };
 
-// Collapsible Section Component - Fixed
+// Collapsible Section Component - Fixed with CSS Grid animation
 const CollapsibleSection: React.FC<{
   id: string;
   title: string;
@@ -210,24 +201,22 @@ const CollapsibleSection: React.FC<{
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
+  // Handle resize and mobile detection
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setIsOpen(false);
+      } else if (defaultOpen) {
+        setIsOpen(true);
+      }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    setIsOpen(isMobile ? false : defaultOpen);
-  }, [isMobile, defaultOpen]);
-
-  useEffect(() => {
-    if (contentRef.current) {
-      setContentHeight(isOpen ? contentRef.current.scrollHeight : 0);
-    }
-  }, [isOpen, children]);
+  }, [defaultOpen]);
 
   // Observe section for reveal animation
   useEffect(() => {
@@ -246,22 +235,80 @@ const CollapsibleSection: React.FC<{
                 card.classList.add('visible');
               }, 100 + index * 75);
             });
+            setIsVisible(true);
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.05 }
     );
 
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
 
+  // Calculate content height whenever content changes or open state changes
+  const updateHeight = useCallback(() => {
+    const content = contentRef.current;
+    if (!content) return;
+
+    if (isOpen) {
+      // Force reflow to get accurate height
+      content.style.maxHeight = 'none';
+      content.style.opacity = '1';
+      const height = content.scrollHeight;
+      // Add a small buffer to prevent clipping
+      setContentHeight(height + 2);
+    } else {
+      setContentHeight(0);
+    }
+  }, [isOpen]);
+
+  // Update height when content changes or open state toggles
+  useEffect(() => {
+    // Use requestAnimationFrame to ensure layout is complete
+    requestAnimationFrame(() => {
+      updateHeight();
+    });
+  }, [isOpen, children, updateHeight]);
+
+  // Recalculate height when window resizes (images might load, charts render)
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        requestAnimationFrame(() => {
+          updateHeight();
+        });
+      }
+    };
+
+    // Use ResizeObserver to detect content size changes
+    const content = contentRef.current;
+    let resizeObserver: ResizeObserver | null = null;
+
+    if (content && isOpen) {
+      resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(() => {
+          updateHeight();
+        });
+      });
+      resizeObserver.observe(content);
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+    };
+  }, [isOpen, updateHeight]);
+
   const toggle = () => {
     setIsOpen(!isOpen);
   };
 
   return (
-    <div 
+    <div
       id={id}
       ref={sectionRef}
       className={`collapsible-section ${className} ${isOpen ? 'open' : ''} section-reveal`}
@@ -270,7 +317,7 @@ const CollapsibleSection: React.FC<{
         className="collapsible-section-header"
         onClick={toggle}
         aria-expanded={isOpen}
-        aria-controls={`section-${id}`}
+        aria-controls={`section-${id}-content`}
       >
         <div className="collapsible-section-header-left">
           {icon && <Icon icon={icon} className="collapsible-section-icon" />}
@@ -279,17 +326,20 @@ const CollapsibleSection: React.FC<{
             {subtitle && <span className="collapsible-section-subtitle">{subtitle}</span>}
           </div>
         </div>
-        <Icon 
-          icon={isOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'} 
+        <Icon
+          icon={isOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'}
           className={`collapsible-section-chevron ${isOpen ? 'open' : ''}`}
         />
       </button>
       <div
+        id={`section-${id}-content`}
         className="collapsible-section-content"
         ref={contentRef}
         style={{
-          maxHeight: isOpen ? contentHeight : 0,
+          maxHeight: contentHeight !== undefined ? `${contentHeight}px` : isOpen ? 'none' : '0px',
           opacity: isOpen ? 1 : 0,
+          overflow: isOpen ? 'visible' : 'hidden',
+          transition: 'max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease'
         }}
       >
         <div className="collapsible-section-inner">
@@ -301,9 +351,9 @@ const CollapsibleSection: React.FC<{
 };
 
 // Animated Counter
-const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string; prefix?: string; className?: string }> = ({ 
-  target, 
-  duration = 1500, 
+const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string; prefix?: string; className?: string }> = ({
+  target,
+  duration = 1500,
   label,
   suffix = '',
   prefix = '',
@@ -353,9 +403,9 @@ const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: str
 };
 
 // Donut Chart
-const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<string, string> }> = ({ 
-  data, 
-  colors 
+const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<string, string> }> = ({
+  data,
+  colors
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -431,6 +481,18 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
     return () => observer.disconnect();
   }, [hasAnimated, drawChart]);
 
+  // Redraw on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (hasAnimated) {
+        drawChart();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [hasAnimated, drawChart]);
+
   return (
     <div ref={ref} className="donut-chart">
       <canvas ref={canvasRef} />
@@ -439,7 +501,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
 };
 
 // Bar Chart
-const BarChart: React.FC<{ 
+const BarChart: React.FC<{
   data: Array<{ label: string; value: number; color?: string }>;
   height?: number;
   showValues?: boolean;
@@ -475,11 +537,11 @@ const BarChart: React.FC<{
         const delay = index * 0.05;
         return (
           <div key={index} className="bar-chart-item stagger-card">
-            <div 
+            <div
               className="bar-chart-bar-wrapper"
               style={{ height: '100%' }}
             >
-              <div 
+              <div
                 className={`bar-chart-bar ${hasAnimated ? 'animated' : ''}`}
                 style={{
                   height: hasAnimated ? `${percentage}%` : '0%',
@@ -500,7 +562,7 @@ const BarChart: React.FC<{
 };
 
 // Heat Map
-const HeatMap: React.FC<{ 
+const HeatMap: React.FC<{
   characters: WishCharacter[];
   year: number;
   onCellHover?: (date: string | null) => void;
@@ -614,9 +676,9 @@ const HeatMap: React.FC<{
           </div>
         ))}
       </div>
-      
+
       {hoveredDate && hoveredCharacters.length > 0 && (
-        <div 
+        <div
           className="heatmap-tooltip"
           style={{
             left: tooltipPosition.x,
@@ -629,14 +691,14 @@ const HeatMap: React.FC<{
             {hoveredCharacters.map(c => (
               <div key={c.id} className="heatmap-tooltip-item">
                 {c.artwork && (
-                  <img 
-                    src={c.artwork} 
+                  <img
+                    src={c.artwork}
                     alt={c.name}
                     className="heatmap-tooltip-portrait"
                   />
                 )}
                 <span className="heatmap-tooltip-name">{c.name}</span>
-                <span 
+                <span
                   className="heatmap-tooltip-element"
                   style={{ color: getElementColor(c.element) }}
                 >
@@ -697,7 +759,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
   }, []);
 
   return (
-    <div 
+    <div
       ref={entryRef}
       className="wish-timeline-entry-premium stagger-card"
       style={{ animationDelay: `${index * 0.05}s` }}
@@ -710,8 +772,8 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
         <div className="wish-timeline-entry-header">
           <div className="wish-timeline-entry-name">
             {character.artwork && (
-              <img 
-                src={character.artwork} 
+              <img
+                src={character.artwork}
                 alt={character.name}
                 className="wish-timeline-entry-portrait"
               />
@@ -765,15 +827,15 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
   }, []);
 
   return (
-    <div 
+    <div
       ref={cardRef}
       className="wish-card premium-card stagger-card"
       onClick={onClick}
       style={{ '--card-accent': elementColor } as React.CSSProperties}
     >
       <div className="wish-card-image-wrapper">
-        <img 
-          src={character.artwork || '/images/characters/placeholder.webp'} 
+        <img
+          src={character.artwork || '/images/characters/placeholder.webp'}
           alt={character.name}
           className="wish-card-image"
           loading="lazy"
@@ -877,7 +939,7 @@ const WishArchivePage: React.FC = () => {
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(c => 
+      filtered = filtered.filter(c =>
         c.name.toLowerCase().includes(query) ||
         c.element.toLowerCase().includes(query) ||
         c.version.includes(query)
@@ -915,16 +977,16 @@ const WishArchivePage: React.FC = () => {
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
-    
+
     const byYear: Record<number, YearData> = {};
     characters.forEach(c => {
       if (!byYear[c.year]) {
-        byYear[c.year] = { 
-          total: 0, 
-          wins: 0, 
-          losses: 0, 
-          rate: 0, 
-          avgGap: 0, 
+        byYear[c.year] = {
+          total: 0,
+          wins: 0,
+          losses: 0,
+          rate: 0,
+          avgGap: 0,
           bestStreak: 0,
           characters: []
         };
@@ -938,7 +1000,7 @@ const WishArchivePage: React.FC = () => {
     Object.keys(byYear).forEach(year => {
       const y = byYear[Number(year)];
       y.rate = y.total > 0 ? (y.wins / y.total) * 100 : 0;
-      
+
       let streak = 0;
       let bestStreak = 0;
       const yearChars = characters.filter(c => c.year === Number(year)).sort(
@@ -957,7 +1019,7 @@ const WishArchivePage: React.FC = () => {
       const dates = yearChars.map(c => new Date(c.date_obtained));
       let gaps: number[] = [];
       for (let i = 1; i < dates.length; i++) {
-        gaps.push(Math.floor((dates[i].getTime() - dates[i-1].getTime()) / (1000 * 60 * 60 * 24)));
+        gaps.push(Math.floor((dates[i].getTime() - dates[i - 1].getTime()) / (1000 * 60 * 60 * 24)));
       }
       y.avgGap = gaps.length > 0 ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0;
     });
@@ -1005,7 +1067,7 @@ const WishArchivePage: React.FC = () => {
     const latestVersion = versions.length > 0 ? versions[versions.length - 1] : '';
     const versionsParticipated = versions.length;
 
-    const sortedByDate = [...characters].sort((a, b) => 
+    const sortedByDate = [...characters].sort((a, b) =>
       new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
     );
     const first = sortedByDate[0] || null;
@@ -1090,13 +1152,13 @@ const WishArchivePage: React.FC = () => {
 
     let luckiestYear: YearStat | null = null;
     let unluckiestYear: YearStat | null = null;
-    
+
     if (yearlyStats.length > 0) {
       let bestRate = -1;
       let worstRate = 101;
       let bestYear = 0;
       let worstYear = 0;
-      
+
       yearlyStats.forEach(stat => {
         if (stat.rate > bestRate) {
           bestRate = stat.rate;
@@ -1107,7 +1169,7 @@ const WishArchivePage: React.FC = () => {
           worstYear = stat.year;
         }
       });
-      
+
       if (bestRate >= 0) {
         luckiestYear = { year: bestYear, rate: bestRate };
       }
@@ -1259,8 +1321,8 @@ const WishArchivePage: React.FC = () => {
           </button>
           <div className="wish-modal-content">
             <div className="wish-modal-image-wrapper">
-              <img 
-                src={character.artwork || '/images/characters/placeholder.webp'} 
+              <img
+                src={character.artwork || '/images/characters/placeholder.webp'}
                 alt={character.name}
                 className="wish-modal-image"
               />
@@ -1330,7 +1392,7 @@ const WishArchivePage: React.FC = () => {
         <div className="wish-bg-gradient" />
         <div className="wish-bg-particles">
           {[...Array(30)].map((_, i) => (
-            <div 
+            <div
               key={i}
               className="wish-bg-particle"
               style={{
@@ -1398,18 +1460,18 @@ const WishArchivePage: React.FC = () => {
       </section>
 
       {/* Sticky Navigation */}
-      <StickyNav 
-        sections={sections} 
-        activeSection={activeSection} 
-        onSelect={scrollToSection} 
+      <StickyNav
+        sections={sections}
+        activeSection={activeSection}
+        onSelect={scrollToSection}
       />
 
       {/* Collapsible Analytics Sections */}
       <div className="wish-analytics-container">
         {/* Statistics Dashboard */}
-        <CollapsibleSection 
+        <CollapsibleSection
           id="section-analytics"
-          title="Collection Statistics" 
+          title="Collection Statistics"
           subtitle="Overview of your entire collection"
           icon="mdi:chart-bar"
           defaultOpen={true}
@@ -1523,14 +1585,14 @@ const WishArchivePage: React.FC = () => {
               </div>
               <div className="wish-chart-card stagger-card">
                 <h3 className="wish-chart-title">Outcome Distribution</h3>
-                <DonutChart 
-                  data={{ 
-                    Won: stats.wins, 
-                    Lost: stats.losses 
-                  }} 
-                  colors={{ 
-                    Won: '#7eb870', 
-                    Lost: '#e06040' 
+                <DonutChart
+                  data={{
+                    Won: stats.wins,
+                    Lost: stats.losses
+                  }}
+                  colors={{
+                    Won: '#7eb870',
+                    Lost: '#e06040'
                   }}
                 />
               </div>
@@ -1573,7 +1635,7 @@ const WishArchivePage: React.FC = () => {
               </div>
               <div className="wish-chart-card stagger-card">
                 <h3 className="wish-chart-title">Characters by Year</h3>
-                <BarChart 
+                <BarChart
                   data={stats.yearlyStats.map(stat => ({
                     label: stat.year.toString(),
                     value: stat.total,
@@ -1587,9 +1649,9 @@ const WishArchivePage: React.FC = () => {
         </CollapsibleSection>
 
         {/* Yearly Performance */}
-        <CollapsibleSection 
+        <CollapsibleSection
           id="section-yearly"
-          title="Yearly Performance" 
+          title="Yearly Performance"
           subtitle="Breakdown by year with trends and streaks"
           icon="mdi:calendar-month"
           defaultOpen={false}
@@ -1597,8 +1659,8 @@ const WishArchivePage: React.FC = () => {
           <div className="wish-yearly-grid">
             {stats.yearlyStats.map(stat => {
               const yearData = stats.byYear[stat.year];
-              const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' : 
-                           stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
+              const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' :
+                stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
               const isBest = stat.rate === Math.max(...stats.yearlyStats.map(s => s.rate));
               const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
 
@@ -1647,9 +1709,9 @@ const WishArchivePage: React.FC = () => {
         </CollapsibleSection>
 
         {/* Heat Map */}
-        <CollapsibleSection 
+        <CollapsibleSection
           id="section-heatmap"
-          title="Acquisition Heat Map" 
+          title="Acquisition Heat Map"
           subtitle="Visualize every day you obtained a limited character throughout your journey"
           icon="mdi:fire"
           defaultOpen={true}
@@ -1667,8 +1729,8 @@ const WishArchivePage: React.FC = () => {
               ))}
             </div>
           </div>
-          <HeatMap 
-            characters={characters} 
+          <HeatMap
+            characters={characters}
             year={heatmapYear}
             onCellHover={(date) => {
               // Optional: update a tooltip or info display
@@ -1677,9 +1739,9 @@ const WishArchivePage: React.FC = () => {
         </CollapsibleSection>
 
         {/* Fun Facts */}
-        <CollapsibleSection 
+        <CollapsibleSection
           id="section-funfacts"
-          title="Fun Facts" 
+          title="Fun Facts"
           subtitle="Interesting insights about your collection"
           icon="mdi:star"
           defaultOpen={false}
@@ -1696,7 +1758,7 @@ const WishArchivePage: React.FC = () => {
               </div>
             </div>
           )}
-          
+
           <div className="wish-fun-facts-grid">
             {stats.funFacts.slice(1).map((fact, index) => (
               <div key={index} className="wish-fun-fact-premium stagger-card">
@@ -1709,17 +1771,17 @@ const WishArchivePage: React.FC = () => {
 
         {/* Achievements */}
         {stats.achievements.filter(a => a.unlocked).length > 0 && (
-          <CollapsibleSection 
+          <CollapsibleSection
             id="section-achievements"
-            title="Achievements" 
+            title="Achievements"
             subtitle={`${stats.achievements.filter(a => a.unlocked).length} achievements unlocked`}
             icon="mdi:trophy"
             defaultOpen={false}
           >
             <div className="wish-achievements-grid">
               {stats.achievements.map((achievement, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
                 >
                   <div className="wish-achievement-premium-icon">
@@ -1748,14 +1810,14 @@ const WishArchivePage: React.FC = () => {
       <div id="section-archive" className="wish-controls">
         <div className="wish-controls-top">
           <div className="wish-view-controls">
-            <button 
+            <button
               className={`wish-view-btn ${viewMode === 'timeline' ? 'active' : ''}`}
               onClick={() => setViewMode('timeline')}
             >
               <Icon icon="mdi:format-list-bulleted" />
               Timeline
             </button>
-            <button 
+            <button
               className={`wish-view-btn ${viewMode === 'gallery' ? 'active' : ''}`}
               onClick={() => setViewMode('gallery')}
             >
@@ -1802,7 +1864,7 @@ const WishArchivePage: React.FC = () => {
                 key={element}
                 className={`wish-chip ${selectedElement === element ? 'active' : ''}`}
                 onClick={() => setSelectedElement(element)}
-                style={element !== 'all' ? { 
+                style={element !== 'all' ? {
                   borderColor: selectedElement === element ? getElementColor(element) : 'rgba(255,255,255,0.06)'
                 } : {}}
               >
@@ -1826,7 +1888,7 @@ const WishArchivePage: React.FC = () => {
 
           <div className="wish-sort">
             <span className="wish-filter-label">Sort by</span>
-            <select 
+            <select
               className="wish-sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as 'date' | 'name' | 'version')}
@@ -1871,7 +1933,7 @@ const WishArchivePage: React.FC = () => {
                 </div>
                 <div className="wish-timeline-entries">
                   {characters.map((character, index) => (
-                    <TimelineEntry 
+                    <TimelineEntry
                       key={character.id}
                       character={character}
                       index={index}
@@ -1885,7 +1947,7 @@ const WishArchivePage: React.FC = () => {
         ) : (
           <div className="wish-gallery">
             {filteredCharacters.map((character) => (
-              <CharacterCard 
+              <CharacterCard
                 key={character.id}
                 character={character}
                 onClick={() => setSelectedCharacter(character)}
@@ -1897,7 +1959,7 @@ const WishArchivePage: React.FC = () => {
 
       {/* Character Modal */}
       {selectedCharacter && (
-        <CharacterModal 
+        <CharacterModal
           character={selectedCharacter}
           onClose={() => setSelectedCharacter(null)}
         />
