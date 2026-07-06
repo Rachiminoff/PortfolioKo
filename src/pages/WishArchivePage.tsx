@@ -1,4 +1,5 @@
-// WishArchivePage.tsx
+// WishArchivePage.tsx - Updated with Iconify icons instead of emojis
+
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
@@ -187,42 +188,6 @@ const useSectionObserver = (sectionIds: string[]) => {
   return activeSection;
 };
 
-// Section Reveal Animation Hook
-const useSectionReveal = () => {
-  const refs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
-  useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    
-    Object.values(refs.current).forEach((element) => {
-      if (!element) return;
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('section-visible');
-              // Stagger child cards
-              const cards = entry.target.querySelectorAll('.stagger-card');
-              cards.forEach((card, index) => {
-                setTimeout(() => {
-                  card.classList.add('visible');
-                }, 100 + index * 75);
-              });
-            }
-          });
-        },
-        { threshold: 0.1 }
-      );
-      observer.observe(element);
-      observers.push(observer);
-    });
-
-    return () => observers.forEach(observer => observer.disconnect());
-  }, []);
-
-  return refs;
-};
-
 // Collapsible Section Component
 const CollapsibleSection: React.FC<{
   id: string;
@@ -264,11 +229,6 @@ const CollapsibleSection: React.FC<{
     <div 
       id={id}
       className={`collapsible-section ${className} ${isOpen ? 'open' : ''} section-reveal`}
-      ref={(el) => {
-        if (el) {
-          // Will be handled by useSectionReveal
-        }
-      }}
     >
       <button
         className="collapsible-section-header"
@@ -573,11 +533,6 @@ const HeatMap: React.FC<{
   if (currentWeek.length > 0) {
     weeks.push(currentWeek);
   }
-
-  const monthLabels: { [key: number]: string } = {
-    0: 'Jan', 1: 'Feb', 2: 'Mar', 3: 'Apr', 4: 'May', 5: 'Jun',
-    6: 'Jul', 7: 'Aug', 8: 'Sep', 9: 'Oct', 10: 'Nov', 11: 'Dec'
-  };
 
   return (
     <div className={`heatmap-container ${isAnimating ? 'heatmap-animating' : ''}`}>
@@ -1418,7 +1373,7 @@ const WishArchivePage: React.FC = () => {
         {/* Statistics Dashboard */}
         <CollapsibleSection 
           id="section-analytics"
-          title="📊 Collection Statistics" 
+          title="Collection Statistics" 
           subtitle="Overview of your entire collection"
           icon="mdi:chart-bar"
           defaultOpen={true}
@@ -1429,21 +1384,27 @@ const WishArchivePage: React.FC = () => {
               <h4 className="wish-stats-group-title">Luck</h4>
               <div className="wish-stats-dashboard-grid">
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">🎯</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:target" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
                     <span className="wish-stat-premium-label">Longest Win Streak</span>
                   </div>
                 </div>
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">💫</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:star-circle" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
                     <span className="wish-stat-premium-label">50/50 Wins</span>
                   </div>
                 </div>
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">📊</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:chart-arc" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{Math.round(stats.winRate)}%</span>
                     <span className="wish-stat-premium-label">Overall Win Rate</span>
@@ -1456,21 +1417,27 @@ const WishArchivePage: React.FC = () => {
               <h4 className="wish-stats-group-title">Collection</h4>
               <div className="wish-stats-dashboard-grid">
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">🔮</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:crystal-ball" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
                     <span className="wish-stat-premium-label">Most Collected Element</span>
                   </div>
                 </div>
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">📊</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:chart-pie" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
                     <span className="wish-stat-premium-label">Elements Collected</span>
                   </div>
                 </div>
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">🎮</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:gamepad-variant" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
                     <span className="wish-stat-premium-label">Versions Played</span>
@@ -1483,21 +1450,27 @@ const WishArchivePage: React.FC = () => {
               <h4 className="wish-stats-group-title">Journey</h4>
               <div className="wish-stats-dashboard-grid">
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">⏱️</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:clock-outline" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
                     <span className="wish-stat-premium-label">Avg Between Pulls</span>
                   </div>
                 </div>
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">📅</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:calendar" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
                     <span className="wish-stat-premium-label">Busiest Year</span>
                   </div>
                 </div>
                 <div className="wish-stat-premium stagger-card">
-                  <div className="wish-stat-premium-icon">📈</div>
+                  <div className="wish-stat-premium-icon">
+                    <Icon icon="mdi:chart-line" />
+                  </div>
                   <div className="wish-stat-premium-content">
                     <span className="wish-stat-premium-value">{stats.doubleDays}</span>
                     <span className="wish-stat-premium-label">Double Pull Days</span>
@@ -1580,7 +1553,7 @@ const WishArchivePage: React.FC = () => {
         {/* Yearly Performance */}
         <CollapsibleSection 
           id="section-yearly"
-          title="📊 Yearly Performance" 
+          title="Yearly Performance" 
           subtitle="Breakdown by year with trends and streaks"
           icon="mdi:calendar-month"
           defaultOpen={false}
@@ -1640,7 +1613,7 @@ const WishArchivePage: React.FC = () => {
         {/* Heat Map */}
         <CollapsibleSection 
           id="section-heatmap"
-          title="🔥 Acquisition Heat Map" 
+          title="Acquisition Heat Map" 
           subtitle="Visualize every day you obtained a limited character throughout your journey"
           icon="mdi:fire"
           defaultOpen={true}
@@ -1670,7 +1643,7 @@ const WishArchivePage: React.FC = () => {
         {/* Fun Facts */}
         <CollapsibleSection 
           id="section-funfacts"
-          title="✦ Fun Facts" 
+          title="Fun Facts" 
           subtitle="Interesting insights about your collection"
           icon="mdi:star"
           defaultOpen={false}
@@ -1682,7 +1655,7 @@ const WishArchivePage: React.FC = () => {
                 <Icon icon="mdi:sparkle" />
               </div>
               <div className="wish-fun-fact-featured-content">
-                <span className="wish-fun-fact-featured-label">DID YOU KNOW?</span>
+                <span className="wish-fun-fact-featured-label">Did You Know?</span>
                 <p>{stats.funFacts[0]}</p>
               </div>
             </div>
@@ -1702,7 +1675,7 @@ const WishArchivePage: React.FC = () => {
         {stats.achievements.filter(a => a.unlocked).length > 0 && (
           <CollapsibleSection 
             id="section-achievements"
-            title="🏆 Achievements" 
+            title="Achievements" 
             subtitle={`${stats.achievements.filter(a => a.unlocked).length} achievements unlocked`}
             icon="mdi:trophy"
             defaultOpen={false}
