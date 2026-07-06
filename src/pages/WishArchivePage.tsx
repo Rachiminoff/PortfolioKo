@@ -18,6 +18,27 @@ interface WishCharacter {
   created_at: string;
 }
 
+interface YearStats {
+  total: number;
+  wins: number;
+  losses: number;
+}
+
+interface Stats {
+  total: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  byYear: Record<number, YearStats>;
+  byElement: Record<string, number>;
+  first: WishCharacter | null;
+  latest: WishCharacter | null;
+  currentStreak: number;
+  longestStreak: number;
+  luckiestYear: { year: number; rate: number } | null;
+  unluckiestYear: { year: number; rate: number } | null;
+}
+
 // Helper functions
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -249,14 +270,14 @@ const WishArchivePage: React.FC = () => {
   }, [filteredCharacters]);
 
   // Statistics
-  const stats = useMemo(() => {
+  const stats = useMemo<Stats>(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
     
     // Collection by year
-    const byYear: Record<number, { total: number; wins: number; losses: number }> = {};
+    const byYear: Record<number, YearStats> = {};
     characters.forEach(c => {
       if (!byYear[c.year]) {
         byYear[c.year] = { total: 0, wins: 0, losses: 0 };
@@ -500,7 +521,7 @@ const WishArchivePage: React.FC = () => {
           <span className="wish-stat-label">Losses</span>
         </div>
         <div className="wish-stat-card">
-          <span className="wish-stat-value">{stats.luckiestYear?.year || '-'}</span>
+          <span className="wish-stat-value">{stats.luckiestYear ? stats.luckiestYear.year : '-'}</span>
           <span className="wish-stat-label">Luckiest Year</span>
         </div>
         <div className="wish-stat-card">
