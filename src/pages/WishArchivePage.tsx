@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { supabase } from '../lib/supabase';
+import FullscreenLayout from '../layouts/FullscreenLayout';
 import './styles/WishArchivePage.scss';
 
 interface WishCharacter {
@@ -1161,12 +1162,14 @@ const WishArchivePage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="wish-archive-page">
-        <div className="wish-loading-state">
-          <div className="wish-loading-spinner" />
-          <p>Loading your journey...</p>
+      <FullscreenLayout>
+        <div className="wish-archive-page">
+          <div className="wish-loading-state">
+            <div className="wish-loading-spinner" />
+            <p>Loading your journey...</p>
+          </div>
         </div>
-      </div>
+      </FullscreenLayout>
     );
   }
 
@@ -1680,71 +1683,73 @@ const WishArchivePage: React.FC = () => {
   );
 
   return (
-    <div className="wish-archive-page">
-      {/* Premium Background */}
-      <div className="wish-bg">
-        <div className="wish-bg-gradient" />
-        <div className="wish-bg-particles">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="wish-bg-particle"
-              style={{
-                '--delay': `${i * 0.3}s`,
-                '--x': `${10 + Math.random() * 80}%`,
-                '--y': `${10 + Math.random() * 80}%`,
-                '--size': `${1 + Math.random() * 3}px`,
-                '--duration': `${20 + Math.random() * 30}s`
-              } as React.CSSProperties}
-            />
-          ))}
+    <FullscreenLayout>
+      <div className="wish-archive-page">
+        {/* Premium Background */}
+        <div className="wish-bg">
+          <div className="wish-bg-gradient" />
+          <div className="wish-bg-particles">
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                className="wish-bg-particle"
+                style={{
+                  '--delay': `${i * 0.3}s`,
+                  '--x': `${10 + Math.random() * 80}%`,
+                  '--y': `${10 + Math.random() * 80}%`,
+                  '--size': `${1 + Math.random() * 3}px`,
+                  '--duration': `${20 + Math.random() * 30}s`
+                } as React.CSSProperties}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Header */}
-      <div className="wish-archive-header">
-        <button className="wish-back-button" onClick={() => navigate('/')}>
-          <Icon icon="mdi:arrow-left" />
-          Back to Home
-        </button>
-      </div>
-
-      {/* Hero Section */}
-      <section className="wish-hero section-reveal">
-        <div className="wish-hero-content">
-          <div className="wish-hero-badge">✦ Collection</div>
-          <h1 className="wish-hero-title">Wish Archive</h1>
-          <p className="wish-hero-subtitle">
-            A personal archive of every limited 5★ character I've obtained in Genshin Impact since 2022.
-          </p>
+        {/* Header */}
+        <div className="wish-archive-header">
+          <button className="wish-back-button" onClick={() => navigate('/')}>
+            <Icon icon="mdi:arrow-left" />
+            Back to Home
+          </button>
         </div>
-      </section>
 
-      {/* Tab Navigation */}
-      <TabNav
-        tabs={tabs}
-        activeTab={activeTab}
-        onSelect={setActiveTab}
-      />
+        {/* Hero Section */}
+        <section className="wish-hero section-reveal">
+          <div className="wish-hero-content">
+            <div className="wish-hero-badge">✦ Collection</div>
+            <h1 className="wish-hero-title">Wish Archive</h1>
+            <p className="wish-hero-subtitle">
+              A personal archive of every limited 5★ character I've obtained in Genshin Impact since 2022.
+            </p>
+          </div>
+        </section>
 
-      {/* Tab Content */}
-      <div className="wish-tab-content">
-        {activeTab === 'overview' && renderOverview()}
-        {activeTab === 'analytics' && renderAnalytics()}
-        {activeTab === 'heatmap' && renderHeatmap()}
-        {activeTab === 'funfacts' && renderFunFacts()}
-        {activeTab === 'achievements' && renderAchievements()}
-        {activeTab === 'archive' && renderArchive()}
-      </div>
-
-      {/* Character Modal */}
-      {selectedCharacter && (
-        <CharacterModal
-          character={selectedCharacter}
-          onClose={() => setSelectedCharacter(null)}
+        {/* Tab Navigation */}
+        <TabNav
+          tabs={tabs}
+          activeTab={activeTab}
+          onSelect={setActiveTab}
         />
-      )}
-    </div>
+
+        {/* Tab Content */}
+        <div className="wish-tab-content">
+          {activeTab === 'overview' && renderOverview()}
+          {activeTab === 'analytics' && renderAnalytics()}
+          {activeTab === 'heatmap' && renderHeatmap()}
+          {activeTab === 'funfacts' && renderFunFacts()}
+          {activeTab === 'achievements' && renderAchievements()}
+          {activeTab === 'archive' && renderArchive()}
+        </div>
+
+        {/* Character Modal */}
+        {selectedCharacter && (
+          <CharacterModal
+            character={selectedCharacter}
+            onClose={() => setSelectedCharacter(null)}
+          />
+        )}
+      </div>
+    </FullscreenLayout>
   );
 };
 
