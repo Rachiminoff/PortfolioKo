@@ -36,37 +36,6 @@ interface Achievement {
   unlocked: boolean;
 }
 
-interface Stats {
-  total: number;
-  wins: number;
-  losses: number;
-  winRate: number;
-  byYear: Record<number, YearData>;
-  byElement: Record<string, number>;
-  first: WishCharacter | null;
-  latest: WishCharacter | null;
-  currentStreak: number;
-  longestWinStreak: number;
-  longestLoseStreak: number;
-  luckiestYear: YearStat | null;
-  unluckiestYear: YearStat | null;
-  mostCollectedElement: string;
-  leastCollectedElement: string;
-  byVersion: Record<string, number>;
-  busiestVersion: string;
-  busiestYear: number;
-  activeYears: number;
-  avgGap: number;
-  longestGap: number;
-  shortestGap: number;
-  doubleDays: number;
-  fiftyFiftyWins: number;
-  guaranteedChars: number;
-  collectionPercentage: number;
-  funFacts: string[];
-  achievements: Achievement[];
-}
-
 // Helper functions
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -297,7 +266,7 @@ const WishArchivePage: React.FC = () => {
   }, [filteredCharacters]);
 
   // Enhanced Statistics
-  const stats: Stats = useMemo(() => {
+  const stats = useMemo(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
@@ -455,10 +424,10 @@ const WishArchivePage: React.FC = () => {
 
     // Fun facts generation
     const funFacts: string[] = [];
-    if (luckiestYear !== null) {
+    if (luckiestYear) {
       funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
     }
-    if (unluckiestYear !== null) {
+    if (unluckiestYear) {
       funFacts.push(`${unluckiestYear.year} was your unluckiest year with a ${unluckiestYear.rate.toFixed(1)}% win rate.`);
     }
     if (mostCollectedElement) {
