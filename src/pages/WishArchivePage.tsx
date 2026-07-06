@@ -18,6 +18,48 @@ interface WishCharacter {
   created_at: string;
 }
 
+interface YearData {
+  total: number;
+  wins: number;
+  losses: number;
+}
+
+interface YearStat {
+  year: number;
+  rate: number;
+}
+
+interface Stats {
+  total: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  byYear: Record<number, YearData>;
+  byElement: Record<string, number>;
+  first: WishCharacter | null;
+  latest: WishCharacter | null;
+  currentStreak: number;
+  longestWinStreak: number;
+  longestLoseStreak: number;
+  luckiestYear: YearStat | null;
+  unluckiestYear: YearStat | null;
+  mostCollectedElement: string;
+  leastCollectedElement: string;
+  byVersion: Record<string, number>;
+  busiestVersion: string;
+  busiestYear: number;
+  activeYears: number;
+  avgGap: number;
+  longestGap: number;
+  shortestGap: number;
+  doubleDays: number;
+  fiftyFiftyWins: number;
+  guaranteedChars: number;
+  collectionPercentage: number;
+  funFacts: string[];
+  achievements: Array<{ icon: string; title: string; description: string; unlocked: boolean }>;
+}
+
 // Helper functions
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -248,14 +290,14 @@ const WishArchivePage: React.FC = () => {
   }, [filteredCharacters]);
 
   // Enhanced Statistics
-  const stats = useMemo(() => {
+  const stats = useMemo<Stats>(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
     
     // Collection by year
-    const byYear: Record<number, { total: number; wins: number; losses: number }> = {};
+    const byYear: Record<number, YearData> = {};
     characters.forEach(c => {
       if (!byYear[c.year]) {
         byYear[c.year] = { total: 0, wins: 0, losses: 0 };
@@ -348,21 +390,15 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // 50/50 wins (first character in each year is a 50/50, subsequent are guaranteed)
+    // 50/50 wins (simplified logic)
     let fiftyFiftyWins = 0;
     let guaranteedChars = 0;
-    let currentYearWon = false;
-    const sortedByYear = [...characters].sort((a, b) => 
-      new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
-    );
     
-    sortedByYear.forEach((c, index) => {
+    sortedForStreak.forEach((c, index) => {
       if (index === 0) {
-        // First character is always a 50/50
         if (c.outcome === 'won') fiftyFiftyWins++;
         else guaranteedChars++;
       } else {
-        // Check if same character - simplified logic
         if (c.outcome === 'won') {
           fiftyFiftyWins++;
         } else {
@@ -393,8 +429,8 @@ const WishArchivePage: React.FC = () => {
     });
 
     // Luckiest/Unluckiest year
-    let luckiestYear: { year: number; rate: number } | null = null;
-    let unluckiestYear: { year: number; rate: number } | null = null;
+    let luckiestYear: YearStat | null = null;
+    let unluckiestYear: YearStat | null = null;
 
     Object.entries(byYear).forEach(([year, data]) => {
       const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
@@ -428,15 +464,13 @@ const WishArchivePage: React.FC = () => {
       funFacts.push(`Your longest winning streak lasted ${longestWinStreak} banner${longestWinStreak > 1 ? 's' : ''}.`);
     }
     if (first && latest) {
-      const firstDate = new Date(first.date_obtained);
-      const latestDate = new Date(latest.date_obtained);
       const versionSpan = `from Version ${first.version} to ${latest.version}`;
       funFacts.push(`Your collection spans ${versionSpan}.`);
     }
     funFacts.push(`You have collected characters across ${activeYears} major game version${activeYears > 1 ? 's' : ''}.`);
 
     // Achievements
-    const achievements: { icon: string; title: string; description: string; unlocked: boolean }[] = [
+    const achievements: Array<{ icon: string; title: string; description: string; unlocked: boolean }> = [
       {
         icon: 'mdi:compass',
         title: 'First Steps',
@@ -460,42 +494,6 @@ const WishArchivePage: React.FC = () => {
         title: 'Veteran Traveler',
         description: `Active since ${first ? `Version ${first.version}` : 'the beginning'}.`,
         unlocked: activeYears >= 3
-      },
-      {
-        icon: 'mdi:snowflake',
-        title: 'Cryo Enthusiast',
-        description: `${mostCollectedElement} is your most collected element.`,
-        unlocked: mostCollectedElement === 'Cryo'
-      },
-      {
-        icon: 'mdi:fire',
-        title: 'Pyro Collector',
-        description: `${mostCollectedElement} is your most collected element.`,
-        unlocked: mostCollectedElement === 'Pyro'
-      },
-      {
-        icon: 'mdi:lightning-bolt',
-        title: 'Electro Collector',
-        description: `${mostCollectedElement} is your most collected element.`,
-        unlocked: mostCollectedElement === 'Electro'
-      },
-      {
-        icon: 'mdi:water',
-        title: 'Hydro Collector',
-        description: `${mostCollectedElement} is your most collected element.`,
-        unlocked: mostCollectedElement === 'Hydro'
-      },
-      {
-        icon: 'mdi:leaf',
-        title: 'Dendro Collector',
-        description: `${mostCollectedElement} is your most collected element.`,
-        unlocked: mostCollectedElement === 'Dendro'
-      },
-      {
-        icon: 'mdi:hexagon',
-        title: 'Geo Collector',
-        description: `${mostCollectedElement} is your most collected element.`,
-        unlocked: mostCollectedElement === 'Geo'
       }
     ];
 
@@ -527,7 +525,7 @@ const WishArchivePage: React.FC = () => {
       guaranteedChars,
       collectionPercentage,
       funFacts,
-      achievements: achievements.filter(a => a.unlocked)
+      achievements
     };
   }, [characters]);
 
