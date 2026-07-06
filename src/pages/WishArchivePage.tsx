@@ -404,7 +404,7 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // Luckiest/Unluckiest year
+    // Luckiest/Unluckiest year - explicitly typed
     let luckiestYear: YearStat | null = null;
     let unluckiestYear: YearStat | null = null;
 
@@ -424,10 +424,10 @@ const WishArchivePage: React.FC = () => {
 
     // Fun facts generation
     const funFacts: string[] = [];
-    if (luckiestYear) {
+    if (luckiestYear !== null) {
       funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
     }
-    if (unluckiestYear) {
+    if (unluckiestYear !== null) {
       funFacts.push(`${unluckiestYear.year} was your unluckiest year with a ${unluckiestYear.rate.toFixed(1)}% win rate.`);
     }
     if (mostCollectedElement) {
