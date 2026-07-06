@@ -103,6 +103,143 @@ const getElementIcon = (element: string): string => {
   return icons[element] || 'mdi:circle';
 };
 
+// Premium Component: Animated Counter
+const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string }> = ({ 
+  target, 
+  duration = 1500, 
+  label,
+  suffix = ''
+}) => {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            let start = 0;
+            const increment = target / (duration / 16);
+            const timer = setInterval(() => {
+              start += increment;
+              if (start >= target) {
+                setCount(target);
+                clearInterval(timer);
+              } else {
+                setCount(Math.ceil(start));
+              }
+            }, 16);
+            return () => clearInterval(timer);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [target, duration, hasAnimated]);
+
+  return (
+    <div ref={ref} className="animated-counter">
+      <span className="animated-counter-value">{count}{suffix}</span>
+      {label && <span className="animated-counter-label">{label}</span>}
+    </div>
+  );
+};
+
+// Premium Component: Donut Chart
+const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<string, string> }> = ({ 
+  data, 
+  colors 
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            drawChart();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
+
+  const drawChart = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const rect = canvas.parentElement?.getBoundingClientRect();
+    const size = Math.min(rect?.width || 200, 200);
+    canvas.width = size;
+    canvas.height = size;
+
+    const total = Object.values(data).reduce((a, b) => a + b, 0);
+    if (total === 0) return;
+
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const radius = size / 2 - 20;
+    let startAngle = -Math.PI / 2;
+
+    const elementColors: Record<string, string> = {
+      Anemo: '#7ae0db',
+      Geo: '#f9b55d',
+      Electro: '#bb7ae0',
+      Dendro: '#7eb870',
+      Hydro: '#4a90d9',
+      Pyro: '#e06040',
+      Cryo: '#7fc4e0'
+    };
+
+    const entries = Object.entries(data);
+    entries.forEach(([key, value]) => {
+      const sliceAngle = (value / total) * 2 * Math.PI;
+      const color = colors?.[key] || elementColors[key] || '#ffffff';
+
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+
+      startAngle += sliceAngle;
+    });
+
+    // Center hole
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius * 0.45, 0, 2 * Math.PI);
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fill();
+  };
+
+  return (
+    <div ref={ref} className="donut-chart">
+      <canvas ref={canvasRef} />
+    </div>
+  );
+};
+
 // Components
 interface CharacterCardProps {
   character: WishCharacter;
@@ -111,41 +248,7 @@ interface CharacterCardProps {
 
 const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => {
   const elementColor = getElementColor(character.element);
-
-  return (
-    <div className="wish-card" onClick={onClick}>
-      <div className="wish-card-image-wrapper">
-        <img 
-          src={character.artwork || '/images/characters/placeholder.webp'} 
-          alt={character.name}
-          className="wish-card-image"
-          loading="lazy"
-        />
-        <div className="wish-card-element" style={{ backgroundColor: elementColor }}>
-          <Icon icon={getElementIcon(character.element)} />
-        </div>
-        <div className={`wish-card-outcome ${character.outcome}`}>
-          {character.outcome === 'won' ? '✓ Won' : '✗ Lost'}
-        </div>
-      </div>
-      <div className="wish-card-content">
-        <h3>{character.name}</h3>
-        <p className="wish-card-version">v{character.version}</p>
-        <p className="wish-card-date">{formatDate(character.date_obtained)}</p>
-      </div>
-    </div>
-  );
-};
-
-interface TimelineEntryProps {
-  character: WishCharacter;
-  index: number;
-  onClick: () => void;
-}
-
-const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick }) => {
-  const elementColor = getElementColor(character.element);
-  const entryRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -159,8 +262,8 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
       { threshold: 0.1 }
     );
 
-    if (entryRef.current) {
-      observer.observe(entryRef.current);
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
     }
 
     return () => observer.disconnect();
@@ -168,31 +271,30 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
 
   return (
     <div 
-      className="wish-timeline-entry" 
-      ref={entryRef}
-      style={{ animationDelay: `${index * 0.05}s` }}
+      ref={cardRef}
+      className="wish-card premium-card"
       onClick={onClick}
+      style={{ '--card-accent': elementColor } as React.CSSProperties}
     >
-      <div className="wish-timeline-dot" style={{ backgroundColor: elementColor }}>
-        <Icon icon={getElementIcon(character.element)} />
+      <div className="wish-card-image-wrapper">
+        <img 
+          src={character.artwork || '/images/characters/placeholder.webp'} 
+          alt={character.name}
+          className="wish-card-image"
+          loading="lazy"
+        />
+        <div className="wish-card-glow" style={{ background: `radial-gradient(circle, ${elementColor}44, transparent 70%)` }} />
+        <div className="wish-card-element" style={{ backgroundColor: elementColor }}>
+          <Icon icon={getElementIcon(character.element)} />
+        </div>
+        <div className={`wish-card-outcome ${character.outcome}`}>
+          {character.outcome === 'won' ? '✓ Won' : '✗ Lost'}
+        </div>
+        <div className="wish-card-version-badge">v{character.version}</div>
       </div>
-      <div className="wish-timeline-content">
-        <div className="wish-timeline-header">
-          <div className="wish-timeline-name">
-            <h4>{character.name}</h4>
-            <span className="wish-timeline-version">v{character.version}</span>
-          </div>
-          <div className={`wish-timeline-outcome ${character.outcome}`}>
-            {character.outcome === 'won' ? '✓ Won' : '✗ Lost'}
-          </div>
-        </div>
-        <div className="wish-timeline-meta">
-          <span className="wish-timeline-date">{formatDate(character.date_obtained)}</span>
-          <span className="wish-timeline-element" style={{ color: elementColor }}>
-            <Icon icon={getElementIcon(character.element)} />
-            {character.element}
-          </span>
-        </div>
+      <div className="wish-card-content">
+        <h3>{character.name}</h3>
+        <p className="wish-card-date">{formatDate(character.date_obtained)}</p>
       </div>
     </div>
   );
@@ -211,7 +313,7 @@ const WishArchivePage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'name' | 'version'>('date');
   const [selectedCharacter, setSelectedCharacter] = useState<WishCharacter | null>(null);
 
-  // Fetch characters from Supabase
+  // Fetch characters
   useEffect(() => {
     fetchCharacters();
   }, []);
@@ -231,7 +333,7 @@ const WishArchivePage: React.FC = () => {
     setLoading(false);
   };
 
-  // Get unique years, elements, versions
+  // Get unique years, elements
   const years = useMemo(() => {
     const yearSet = new Set(characters.map(c => c.year));
     return ['all', ...Array.from(yearSet).sort((a, b) => b - a).map(String)];
@@ -296,14 +398,13 @@ const WishArchivePage: React.FC = () => {
     return Object.entries(groups).sort((a, b) => Number(b[0]) - Number(a[0]));
   }, [filteredCharacters]);
 
-  // Enhanced Statistics - explicitly typed return
+  // Statistics
   const stats: Stats = useMemo(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
     
-    // Collection by year
     const byYear: Record<number, YearData> = {};
     characters.forEach(c => {
       if (!byYear[c.year]) {
@@ -314,20 +415,17 @@ const WishArchivePage: React.FC = () => {
       else byYear[c.year].losses++;
     });
 
-    // Element distribution
     const byElement: Record<string, number> = {};
     characters.forEach(c => {
       if (!byElement[c.element]) byElement[c.element] = 0;
       byElement[c.element]++;
     });
 
-    // Most and least collected element
     let mostCollectedElement = '';
     let leastCollectedElement = '';
     let maxCount = 0;
     let minCount = Infinity;
-    const elementEntries = Object.entries(byElement);
-    elementEntries.forEach(([element, count]) => {
+    Object.entries(byElement).forEach(([element, count]) => {
       if (count > maxCount) {
         maxCount = count;
         mostCollectedElement = element;
@@ -338,32 +436,27 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // Characters by version
     const byVersion: Record<string, number> = {};
     characters.forEach(c => {
       if (!byVersion[c.version]) byVersion[c.version] = 0;
       byVersion[c.version]++;
     });
 
-    // Busiest version
     let busiestVersion = '';
     let maxVersionCount = 0;
-    const versionEntries = Object.entries(byVersion);
-    versionEntries.forEach(([version, count]) => {
+    Object.entries(byVersion).forEach(([version, count]) => {
       if (count > maxVersionCount) {
         maxVersionCount = count;
         busiestVersion = version;
       }
     });
 
-    // First and latest
     const sortedByDate = [...characters].sort((a, b) => 
       new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
     );
     const first = sortedByDate[0] || null;
     const latest = sortedByDate[sortedByDate.length - 1] || null;
 
-    // Gaps between characters
     const gaps: number[] = [];
     for (let i = 1; i < sortedByDate.length; i++) {
       const prev = new Date(sortedByDate[i - 1].date_obtained);
@@ -374,7 +467,6 @@ const WishArchivePage: React.FC = () => {
     const longestGap = gaps.length > 0 ? Math.max(...gaps) : 0;
     const shortestGap = gaps.length > 0 ? Math.min(...gaps) : 0;
 
-    // Win/loss streaks
     let currentStreak = 0;
     let longestWinStreak = 0;
     let longestLoseStreak = 0;
@@ -399,24 +491,18 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // 50/50 wins (simplified logic)
     let fiftyFiftyWins = 0;
     let guaranteedChars = 0;
-    
     sortedForStreak.forEach((c, index) => {
       if (index === 0) {
         if (c.outcome === 'won') fiftyFiftyWins++;
         else guaranteedChars++;
       } else {
-        if (c.outcome === 'won') {
-          fiftyFiftyWins++;
-        } else {
-          guaranteedChars++;
-        }
+        if (c.outcome === 'won') fiftyFiftyWins++;
+        else guaranteedChars++;
       }
     });
 
-    // Double character days
     const dateCounts: Record<string, number> = {};
     characters.forEach(c => {
       if (!dateCounts[c.date_obtained]) dateCounts[c.date_obtained] = 0;
@@ -424,28 +510,23 @@ const WishArchivePage: React.FC = () => {
     });
     const doubleDays = Object.values(dateCounts).filter(count => count >= 2).length;
 
-    // Active years
     const activeYears = Object.keys(byYear).length;
 
-    // Busiest year
     let busiestYear = 0;
     let maxYearCount = 0;
-    const yearEntries = Object.entries(byYear);
-    yearEntries.forEach(([year, data]) => {
+    Object.entries(byYear).forEach(([year, data]) => {
       if (data.total > maxYearCount) {
         maxYearCount = data.total;
         busiestYear = Number(year);
       }
     });
 
-    // Calculate year stats for luckiest/unluckiest years
     const yearStats: Array<{year: number; rate: number}> = [];
     Object.entries(byYear).forEach(([year, data]) => {
       const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
       yearStats.push({ year: Number(year), rate });
     });
 
-    // Find luckiest and unluckiest years
     let luckiestYear: YearStat | null = null;
     let unluckiestYear: YearStat | null = null;
     
@@ -466,21 +547,17 @@ const WishArchivePage: React.FC = () => {
         }
       });
       
-      // Only set luckiest if we found a valid rate
       if (bestRate >= 0) {
         luckiestYear = { year: bestYear, rate: bestRate };
       }
-      // Only set unluckiest if we found a valid rate
       if (worstRate <= 100) {
         unluckiestYear = { year: worstYear, rate: worstRate };
       }
     }
 
-    // Collection progress (assuming ~80 total limited characters as of now)
     const totalLimitedChars = 80;
     const collectionPercentage = (total / totalLimitedChars) * 100;
 
-    // Fun facts generation
     const funFacts: string[] = [];
     if (luckiestYear !== null) {
       funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
@@ -498,12 +575,10 @@ const WishArchivePage: React.FC = () => {
       funFacts.push(`Your longest winning streak lasted ${longestWinStreak} banner${longestWinStreak > 1 ? 's' : ''}.`);
     }
     if (first && latest) {
-      const versionSpan = `from Version ${first.version} to ${latest.version}`;
-      funFacts.push(`Your collection spans ${versionSpan}.`);
+      funFacts.push(`Your collection spans from Version ${first.version} to ${latest.version}.`);
     }
     funFacts.push(`You have collected characters across ${activeYears} major game version${activeYears > 1 ? 's' : ''}.`);
 
-    // Achievements
     const achievements: Achievement[] = [
       {
         icon: 'mdi:compass',
@@ -528,6 +603,12 @@ const WishArchivePage: React.FC = () => {
         title: 'Veteran Traveler',
         description: `Active since ${first ? `Version ${first.version}` : 'the beginning'}.`,
         unlocked: activeYears >= 3
+      },
+      {
+        icon: 'mdi:snowflake',
+        title: 'Cryo Enthusiast',
+        description: `${mostCollectedElement} is your most collected element.`,
+        unlocked: mostCollectedElement === 'Cryo'
       }
     ];
 
@@ -562,52 +643,6 @@ const WishArchivePage: React.FC = () => {
       achievements
     };
   }, [characters]);
-
-  // Animated counter
-  const useAnimatedCounter = (target: number, duration: number = 1500) => {
-    const [count, setCount] = useState(0);
-    const [hasAnimated, setHasAnimated] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !hasAnimated) {
-              setHasAnimated(true);
-              let start = 0;
-              const increment = target / (duration / 16);
-              const timer = setInterval(() => {
-                start += increment;
-                if (start >= target) {
-                  setCount(target);
-                  clearInterval(timer);
-                } else {
-                  setCount(Math.ceil(start));
-                }
-              }, 16);
-              return () => clearInterval(timer);
-            }
-          });
-        },
-        { threshold: 0.3 }
-      );
-
-      if (ref.current) {
-        observer.observe(ref.current);
-      }
-
-      return () => observer.disconnect();
-    }, [target, duration, hasAnimated]);
-
-    return { count, ref };
-  };
-
-  const winRateCount = useAnimatedCounter(Math.round(stats.winRate));
-  const totalCount = useAnimatedCounter(stats.total);
-  const winCount = useAnimatedCounter(stats.wins);
-  const lossCount = useAnimatedCounter(stats.losses);
-  const collectionPercentCount = useAnimatedCounter(Math.round(stats.collectionPercentage));
 
   // Character detail modal
   const CharacterModal = ({ character, onClose }: { character: WishCharacter; onClose: () => void }) => {
@@ -686,7 +721,7 @@ const WishArchivePage: React.FC = () => {
       <div className="wish-archive-page">
         <div className="wish-loading-state">
           <div className="wish-loading-spinner" />
-          <p>Loading wish archive...</p>
+          <p>Loading your journey...</p>
         </div>
       </div>
     );
@@ -694,139 +729,145 @@ const WishArchivePage: React.FC = () => {
 
   return (
     <div className="wish-archive-page">
-      {/* Back Button */}
+      {/* Premium Background */}
+      <div className="wish-bg">
+        <div className="wish-bg-gradient" />
+        <div className="wish-bg-particles">
+          {[...Array(30)].map((_, i) => (
+            <div 
+              key={i}
+              className="wish-bg-particle"
+              style={{
+                '--delay': `${i * 0.3}s`,
+                '--x': `${10 + Math.random() * 80}%`,
+                '--y': `${10 + Math.random() * 80}%`,
+                '--size': `${1 + Math.random() * 3}px`,
+                '--duration': `${20 + Math.random() * 30}s`
+              } as React.CSSProperties}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Header */}
       <div className="wish-archive-header">
         <button className="wish-back-button" onClick={() => navigate('/')}>
           <Icon icon="mdi:arrow-left" />
           Back to Home
         </button>
-        <h1 className="wish-archive-title">Wish Archive</h1>
       </div>
 
       {/* Hero Section */}
       <section className="wish-hero">
         <div className="wish-hero-content">
-          <p className="wish-hero-eyebrow">✦ Collection</p>
+          <div className="wish-hero-badge">✦ Collection</div>
           <h1 className="wish-hero-title">Wish Archive</h1>
           <p className="wish-hero-subtitle">
             A personal archive of every limited 5★ character I've obtained in Genshin Impact since 2022.
           </p>
         </div>
-      </section>
 
-      {/* Overview Statistics */}
-      <section className="wish-stats">
-        <div className="wish-stat-card" ref={totalCount.ref}>
-          <span className="wish-stat-value">{totalCount.count}</span>
-          <span className="wish-stat-label">Characters</span>
-        </div>
-        <div className="wish-stat-card" ref={winRateCount.ref}>
-          <span className="wish-stat-value">{winRateCount.count}%</span>
-          <span className="wish-stat-label">Win Rate</span>
-        </div>
-        <div className="wish-stat-card" ref={winCount.ref}>
-          <span className="wish-stat-value">{winCount.count}</span>
-          <span className="wish-stat-label">Wins</span>
-        </div>
-        <div className="wish-stat-card" ref={lossCount.ref}>
-          <span className="wish-stat-value">{lossCount.count}</span>
-          <span className="wish-stat-label">Losses</span>
-        </div>
-        <div className="wish-stat-card">
-          <span className="wish-stat-value">{stats.activeYears}</span>
-          <span className="wish-stat-label">Active Years</span>
-        </div>
-        <div className="wish-stat-card" ref={collectionPercentCount.ref}>
-          <span className="wish-stat-value">{collectionPercentCount.count}%</span>
-          <span className="wish-stat-label">Collection</span>
-        </div>
-        <div className="wish-stat-card">
-          <span className="wish-stat-value">{stats.first?.name || '-'}</span>
-          <span className="wish-stat-label">First Character</span>
-        </div>
-        <div className="wish-stat-card">
-          <span className="wish-stat-value">{stats.latest?.name || '-'}</span>
-          <span className="wish-stat-label">Latest Character</span>
-        </div>
-      </section>
-
-      {/* Luck & Streaks Section */}
-      <section className="wish-section">
-        <h2 className="wish-section-title">Luck & Streaks</h2>
-        <div className="wish-stats-grid">
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.longestWinStreak}</span>
-            <span className="wish-stat-label">Longest Win Streak</span>
+        <div className="wish-hero-stats">
+          <div className="wish-hero-stat">
+            <AnimatedCounter target={stats.total} label="Characters" />
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.longestLoseStreak}</span>
-            <span className="wish-stat-label">Longest Lose Streak</span>
+          <div className="wish-hero-stat">
+            <AnimatedCounter target={Math.round(stats.winRate)} suffix="%" label="Win Rate" />
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.currentStreak}</span>
-            <span className="wish-stat-label">Current Streak</span>
+          <div className="wish-hero-stat">
+            <AnimatedCounter target={stats.wins} label="Wins" />
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.luckiestYear !== null ? `${stats.luckiestYear.year} (${Math.round(stats.luckiestYear.rate)}%)` : '-'}</span>
-            <span className="wish-stat-label">Luckiest Year</span>
-          </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.unluckiestYear !== null ? `${stats.unluckiestYear.year} (${Math.round(stats.unluckiestYear.rate)}%)` : '-'}</span>
-            <span className="wish-stat-label">Unluckiest Year</span>
-          </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.fiftyFiftyWins}</span>
-            <span className="wish-stat-label">50/50 Wins</span>
-          </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.guaranteedChars}</span>
-            <span className="wish-stat-label">Guaranteed Characters</span>
-          </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.busiestYear || '-'}</span>
-            <span className="wish-stat-label">Busiest Year</span>
+          <div className="wish-hero-stat">
+            <AnimatedCounter target={stats.activeYears} label="Active Years" />
           </div>
         </div>
       </section>
 
-      {/* Collection Insights */}
-      <section className="wish-section">
-        <h2 className="wish-section-title">Collection Insights</h2>
-        <div className="wish-stats-grid">
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.mostCollectedElement || '-'}</span>
-            <span className="wish-stat-label">Most Collected Element</span>
+      {/* Statistics Dashboard */}
+      <section className="wish-stats-dashboard">
+        <div className="wish-stats-dashboard-grid">
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">🎯</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
+              <span className="wish-stat-premium-label">Longest Win Streak</span>
+            </div>
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.leastCollectedElement || '-'}</span>
-            <span className="wish-stat-label">Least Collected Element</span>
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">💫</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
+              <span className="wish-stat-premium-label">50/50 Wins</span>
+            </div>
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.busiestVersion || '-'}</span>
-            <span className="wish-stat-label">Busiest Version</span>
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">📅</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
+              <span className="wish-stat-premium-label">Busiest Year</span>
+            </div>
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.doubleDays}</span>
-            <span className="wish-stat-label">Double Character Days</span>
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">🔮</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
+              <span className="wish-stat-premium-label">Most Collected Element</span>
+            </div>
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{Math.round(stats.avgGap)} days</span>
-            <span className="wish-stat-label">Avg Days Between Pulls</span>
+        </div>
+
+        <div className="wish-charts-row">
+          <div className="wish-chart-card">
+            <h3 className="wish-chart-title">Element Distribution</h3>
+            <DonutChart data={stats.byElement} />
           </div>
-          <div className="wish-stat-card-small">
-            <span className="wish-stat-value">{stats.longestGap} days</span>
-            <span className="wish-stat-label">Longest Gap</span>
+          <div className="wish-chart-card">
+            <h3 className="wish-chart-title">Collection Progress</h3>
+            <div className="wish-progress-ring">
+              <svg viewBox="0 0 120 120">
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="50"
+                  fill="none"
+                  stroke="rgba(255,255,255,0.04)"
+                  strokeWidth="6"
+                />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r="50"
+                  fill="none"
+                  stroke="url(#progressGradient)"
+                  strokeWidth="6"
+                  strokeDasharray={`${stats.collectionPercentage * 3.14} 314`}
+                  strokeLinecap="round"
+                  transform="rotate(-90 60 60)"
+                />
+                <defs>
+                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#7ae0db" />
+                    <stop offset="50%" stopColor="#8B5CF6" />
+                    <stop offset="100%" stopColor="#f9b55d" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div className="wish-progress-ring-content">
+                <span className="wish-progress-ring-value">{Math.round(stats.collectionPercentage)}%</span>
+                <span className="wish-progress-ring-label">Collected</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Fun Facts */}
       <section className="wish-section">
-        <h2 className="wish-section-title">Fun Facts</h2>
-        <div className="wish-fun-facts">
+        <h2 className="wish-section-title">✦ Fun Facts</h2>
+        <div className="wish-fun-facts-grid">
           {stats.funFacts.map((fact, index) => (
-            <div key={index} className="wish-fun-fact">
-              <Icon icon="mdi:star" className="wish-fun-fact-icon" />
+            <div key={index} className="wish-fun-fact-premium">
+              <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
               <span>{fact}</span>
             </div>
           ))}
@@ -836,17 +877,18 @@ const WishArchivePage: React.FC = () => {
       {/* Achievements */}
       {stats.achievements.filter(a => a.unlocked).length > 0 && (
         <section className="wish-section">
-          <h2 className="wish-section-title">Achievements</h2>
-          <div className="wish-achievements">
+          <h2 className="wish-section-title">🏆 Achievements</h2>
+          <div className="wish-achievements-grid">
             {stats.achievements.filter(a => a.unlocked).map((achievement, index) => (
-              <div key={index} className="wish-achievement">
-                <div className="wish-achievement-icon">
+              <div key={index} className="wish-achievement-premium">
+                <div className="wish-achievement-premium-icon">
                   <Icon icon={achievement.icon} />
                 </div>
-                <div className="wish-achievement-content">
+                <div className="wish-achievement-premium-content">
                   <h4>{achievement.title}</h4>
                   <p>{achievement.description}</p>
                 </div>
+                <div className="wish-achievement-premium-badge">✓</div>
               </div>
             ))}
           </div>
@@ -967,16 +1009,67 @@ const WishArchivePage: React.FC = () => {
           <div className="wish-timeline">
             {groupedByYear.map(([year, characters]) => (
               <div key={year} className="wish-timeline-year">
-                <h2 className="wish-timeline-year-label">{year}</h2>
+                <div className="wish-timeline-year-divider">
+                  <h2 className="wish-timeline-year-label">{year}</h2>
+                  <div className="wish-timeline-year-line" />
+                </div>
                 <div className="wish-timeline-entries">
-                  {characters.map((character, index) => (
-                    <TimelineEntry 
-                      key={character.id}
-                      character={character}
-                      index={index}
-                      onClick={() => setSelectedCharacter(character)}
-                    />
-                  ))}
+                  {characters.map((character, index) => {
+                    const elementColor = getElementColor(character.element);
+                    const entryRef = useRef<HTMLDivElement>(null);
+
+                    useEffect(() => {
+                      const observer = new IntersectionObserver(
+                        (entries) => {
+                          entries.forEach((entry) => {
+                            if (entry.isIntersecting) {
+                              entry.target.classList.add('visible');
+                            }
+                          });
+                        },
+                        { threshold: 0.1 }
+                      );
+
+                      if (entryRef.current) {
+                        observer.observe(entryRef.current);
+                      }
+
+                      return () => observer.disconnect();
+                    }, []);
+
+                    return (
+                      <div 
+                        key={character.id}
+                        ref={entryRef}
+                        className="wish-timeline-entry-premium"
+                        style={{ animationDelay: `${index * 0.05}s` }}
+                        onClick={() => setSelectedCharacter(character)}
+                      >
+                        <div className="wish-timeline-entry-connector">
+                          <div className="wish-timeline-entry-dot" style={{ backgroundColor: elementColor }} />
+                          {index < characters.length - 1 && <div className="wish-timeline-entry-line" style={{ borderColor: `${elementColor}33` }} />}
+                        </div>
+                        <div className="wish-timeline-entry-content">
+                          <div className="wish-timeline-entry-header">
+                            <div className="wish-timeline-entry-name">
+                              <h4>{character.name}</h4>
+                              <span className="wish-timeline-entry-version">v{character.version}</span>
+                            </div>
+                            <div className={`wish-timeline-entry-outcome ${character.outcome}`}>
+                              {character.outcome === 'won' ? '✓ Won' : '✗ Lost'}
+                            </div>
+                          </div>
+                          <div className="wish-timeline-entry-meta">
+                            <span className="wish-timeline-entry-date">{formatDate(character.date_obtained)}</span>
+                            <span className="wish-timeline-entry-element" style={{ color: elementColor }}>
+                              <Icon icon={getElementIcon(character.element)} />
+                              {character.element}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
