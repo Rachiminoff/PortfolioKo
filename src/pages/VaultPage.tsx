@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useVault } from '../hooks/useVault';
+import { useVault } from '../hooks/useArchive';
 
 import "./styles/VaultPage.scss";
 

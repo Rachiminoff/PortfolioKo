@@ -11,14 +11,14 @@ import {
 import FadeIn from "./components/FadeIn";
 import Certificates from "./components/Certificates";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import { useVault } from "./hooks/useVault";
-import { useInsights } from "./hooks/useInsights";
+import { useArchive } from "./hooks/useArchive";
 import { DefaultLayout, FullscreenLayout } from "./layouts";
 
 import "./index.scss";
 
 // Lazy load pages
 const MainPage = lazy(() => import('./pages/MainPage'));
+const ArchivePage = lazy(() => import('./pages/ArchivePage'));
 const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
@@ -41,7 +41,7 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
     "Connecting components...",
     "Rendering timeline...",
     "Loading terminal...",
-    "Decrypting vault...",
+    "Decrypting archive...",
     "Unlocking insights...",
     "Synchronizing animations...",
     "Finalizing experience..."
@@ -181,8 +181,7 @@ function DefaultLayoutWithSections({ children }: { children: React.ReactNode }) 
 
 function AppContent() {
   const location = useLocation();
-  const { isUnlocked: isVaultUnlocked, isLoading: vaultLoading } = useVault();
-  const { isUnlocked: isInsightsUnlocked, isLoading: insightsLoading } = useInsights();
+  const { isUnlocked: isArchiveUnlocked, isLoading: archiveLoading } = useArchive();
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -195,19 +194,17 @@ function AppContent() {
 
   // Wait for authentication to complete
   useEffect(() => {
-    if (!vaultLoading && !insightsLoading) {
+    if (!archiveLoading) {
       const timer = setTimeout(() => {
         setIsReady(true);
       }, 100);
       return () => clearTimeout(timer);
     }
-  }, [vaultLoading, insightsLoading]);
+  }, [archiveLoading]);
 
   console.log('App - Current path:', location.pathname);
-  console.log('App - Vault unlocked:', isVaultUnlocked);
-  console.log('App - Insights unlocked:', isInsightsUnlocked);
-  console.log('App - Vault loading:', vaultLoading);
-  console.log('App - Insights loading:', insightsLoading);
+  console.log('App - Archive unlocked:', isArchiveUnlocked);
+  console.log('App - Archive loading:', archiveLoading);
   console.log('App - Is ready:', isReady);
 
   // Show loading state while authenticating
@@ -221,7 +218,8 @@ function AppContent() {
   }
 
   // Check if current route is fullscreen
-  const isFullscreenRoute = location.pathname === '/vault' || 
+  const isFullscreenRoute = location.pathname === '/archive' ||
+                            location.pathname === '/vault' || 
                             location.pathname === '/insights' || 
                             location.pathname === '/wish-archive';
 
@@ -237,10 +235,18 @@ function AppContent() {
           } 
         />
         <Route 
+          path="/archive" 
+          element={
+            <FullscreenLayout>
+              <ArchivePage />
+            </FullscreenLayout>
+          } 
+        />
+        <Route 
           path="/vault" 
           element={
             <FullscreenLayout>
-              <ProtectedRoute isUnlocked={isVaultUnlocked} isLoading={false}>
+              <ProtectedRoute isUnlocked={isArchiveUnlocked} isLoading={archiveLoading} redirectTo="/archive">
                 <VaultPage />
               </ProtectedRoute>
             </FullscreenLayout>
@@ -250,7 +256,7 @@ function AppContent() {
           path="/insights" 
           element={
             <FullscreenLayout>
-              <ProtectedRoute isUnlocked={isInsightsUnlocked} isLoading={false}>
+              <ProtectedRoute isUnlocked={isArchiveUnlocked} isLoading={archiveLoading} redirectTo="/archive">
                 <InsightsPage />
               </ProtectedRoute>
             </FullscreenLayout>

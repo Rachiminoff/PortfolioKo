@@ -4,8 +4,6 @@ import { Icon } from "@iconify/react";
 
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
-import { useVault } from "../hooks/useVault";
-import { useInsights } from "../hooks/useInsights";
 
 // Lazy load components
 const PDFViewer = lazy(() => import('./PDFViewer'));
@@ -190,40 +188,23 @@ function AmbientShapes() {
 ========================= */
 function Main() {
     const navigate = useNavigate();
-    const { unlockVault } = useVault();
-    const { unlockInsights } = useInsights();
     
-    // Vault state
-    const [vaultClickCount, setVaultClickCount] = useState(0);
-    const [vaultInput, setVaultInput] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [vaultModalOpen, setVaultModalOpen] = useState(false);
-    const [vaultError, setVaultError] = useState<string | null>(null);
-    const [remainingAttempts, setRemainingAttempts] = useState<number | undefined>(undefined);
-    const [showVaultPassword, setShowVaultPassword] = useState(false);
-
-    // Insights state
-    const [insightsClickCount, setInsightsClickCount] = useState(0);
-    const [insightsModalOpen, setInsightsModalOpen] = useState(false);
-    const [insightsPassword, setInsightsPassword] = useState("");
-    const [insightsError, setInsightsError] = useState<string | null>(null);
-    const [insightsLoading, setInsightsLoading] = useState(false);
-    const [showInsightsPassword, setShowInsightsPassword] = useState(false);
-
+    // State for secret click trigger
+    const [clickCount, setClickCount] = useState(0);
+    const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
+    const rippleIdRef = useRef(0);
+    
     // Shared state
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
     const [pdfLoading, setPdfLoading] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isLoaded, setIsLoaded] = useState(false);
-    const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
-    const rippleIdRef = useRef(0);
     
     const imageRef = useRef<HTMLImageElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Timers for resetting click counters
-    const vaultTimerRef = useRef<NodeJS.Timeout | null>(null);
-    const insightsTimerRef = useRef<NodeJS.Timeout | null>(null);
+    // Timer for resetting click counter
+    const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     // Smooth cursor interpolation
     const targetMouseRef = useRef({ x: 0, y: 0 });
@@ -261,21 +242,22 @@ function Main() {
     }, []);
 
     /* =========================
-       VAULT TRIGGER - Click name/role 5 times
+       SECRET TRIGGER - Click name/role 5 times
+       Navigates to /archive instead of opening modal
     ========================= */
-    const handleVaultClick = useCallback((e: React.MouseEvent) => {
+    const handleSecretClick = useCallback((e: React.MouseEvent) => {
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
         // Clear existing timer
-        if (vaultTimerRef.current) {
-            clearTimeout(vaultTimerRef.current);
-            vaultTimerRef.current = null;
+        if (clickTimerRef.current) {
+            clearTimeout(clickTimerRef.current);
+            clickTimerRef.current = null;
         }
 
-        const newCount = vaultClickCount + 1;
-        setVaultClickCount(newCount);
+        const newCount = clickCount + 1;
+        setClickCount(newCount);
 
         // Ripple effect
         const newRipple = {
@@ -290,139 +272,22 @@ function Main() {
         }, 800);
 
         if (newCount >= 5) {
-            setVaultModalOpen(true);
-            setVaultClickCount(0);
-            setVaultError(null);
-            setRemainingAttempts(undefined);
-            setVaultInput("");
-            if (vaultTimerRef.current) {
-                clearTimeout(vaultTimerRef.current);
-                vaultTimerRef.current = null;
+            // Reset counter and navigate to archive
+            setClickCount(0);
+            if (clickTimerRef.current) {
+                clearTimeout(clickTimerRef.current);
+                clickTimerRef.current = null;
             }
+            // Navigate to archive page
+            navigate('/archive');
         } else {
             // Reset counter after 2 seconds of inactivity
-            vaultTimerRef.current = setTimeout(() => {
-                setVaultClickCount(0);
-                vaultTimerRef.current = null;
+            clickTimerRef.current = setTimeout(() => {
+                setClickCount(0);
+                clickTimerRef.current = null;
             }, 2000);
         }
-    }, [vaultClickCount]);
-
-    /* =========================
-       INSIGHTS TRIGGER - Click profile picture 5 times
-    ========================= */
-    const handleInsightsClick = useCallback((e: React.MouseEvent) => {
-        // Clear existing timer
-        if (insightsTimerRef.current) {
-            clearTimeout(insightsTimerRef.current);
-            insightsTimerRef.current = null;
-        }
-
-        const newCount = insightsClickCount + 1;
-        setInsightsClickCount(newCount);
-
-        if (newCount >= 5) {
-            setInsightsModalOpen(true);
-            setInsightsClickCount(0);
-            setInsightsError(null);
-            setInsightsPassword("");
-            if (insightsTimerRef.current) {
-                clearTimeout(insightsTimerRef.current);
-                insightsTimerRef.current = null;
-            }
-        } else {
-            // Reset counter after 2 seconds of inactivity
-            insightsTimerRef.current = setTimeout(() => {
-                setInsightsClickCount(0);
-                insightsTimerRef.current = null;
-            }, 2000);
-        }
-    }, [insightsClickCount]);
-
-    /* =========================
-       VAULT SUBMIT
-    ========================= */
-    const handleVaultSubmit = async (password: string) => {
-        setLoading(true);
-        setVaultError(null);
-
-        try {
-            const response = await fetch("/api/unlock", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: 'include',
-                body: JSON.stringify({ password }),
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                unlockVault();
-                setVaultModalOpen(false);
-                setVaultError(null);
-                setRemainingAttempts(undefined);
-                setVaultInput("");
-                await new Promise(resolve => setTimeout(resolve, 100));
-                navigate('/vault', { replace: true });
-            } else if (data.locked) {
-                setVaultError("Too many failed attempts");
-            } else if (data.remaining !== undefined) {
-                setRemainingAttempts(data.remaining);
-                setVaultError("Wrong code");
-            } else {
-                setVaultError("The code you entered is not valid.");
-            }
-        } catch (error) {
-            console.error('Vault unlock error:', error);
-            setVaultError("Something went wrong. Please try again.");
-        }
-
-        setLoading(false);
-    };
-
-    /* =========================
-       INSIGHTS SUBMIT
-    ========================= */
-    const handleInsightsSubmit = async (password: string) => {
-        setInsightsLoading(true);
-        setInsightsError(null);
-
-        try {
-            const response = await fetch("/api/insights", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: 'include',
-                body: JSON.stringify({ password }),
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                unlockInsights();
-                setInsightsModalOpen(false);
-                setInsightsError(null);
-                setInsightsPassword("");
-                await new Promise(resolve => setTimeout(resolve, 100));
-                navigate('/insights', { replace: true });
-            } else if (data.locked) {
-                const lockTime = new Date(data.lockedUntil).toLocaleString();
-                setInsightsError(`Too many attempts. Locked until ${lockTime}`);
-            } else if (data.remaining !== undefined) {
-                setInsightsError(`Invalid password. ${data.remaining} attempt${data.remaining > 1 ? 's' : ''} remaining`);
-            } else {
-                setInsightsError("Invalid password. Please try again.");
-            }
-        } catch (error) {
-            console.error("Insights unlock error:", error);
-            setInsightsError("Something went wrong. Please try again.");
-        }
-
-        setInsightsLoading(false);
-    };
+    }, [clickCount, navigate]);
 
     /* =========================
        CV VIEWER
@@ -499,7 +364,6 @@ function Main() {
                                 alt="Tanya Denise Yambao"
                                 loading="eager"
                                 className="profile-image"
-                                onClick={handleInsightsClick}
                             />
                         </div>
 
@@ -542,14 +406,14 @@ function Main() {
                             </div>
 
                             <h1
-                                onClick={handleVaultClick}
+                                onClick={handleSecretClick}
                                 className="name-title"
                             >
                                 Tanya Denise Yambao
                             </h1>
 
                             <p
-                                onClick={handleVaultClick}
+                                onClick={handleSecretClick}
                                 className="subtitle"
                             >
                                 Full-Stack Developer
@@ -611,227 +475,6 @@ function Main() {
                     onClose={closeViewer}
                 />
             </Suspense>
-
-            {/* VAULT MODAL */}
-            {vaultModalOpen && (
-                <div className="vault-modal-overlay">
-                    <div className="vault-modal-container">
-                        <div className="vault-modal-header">
-                            <span className="vault-modal-icon">
-                                <Icon icon="mdi:lock" />
-                            </span>
-                            <h2>Secret Vault</h2>
-                            <button 
-                                className="vault-modal-close"
-                                onClick={() => {
-                                    setVaultModalOpen(false);
-                                    setVaultError(null);
-                                    setRemainingAttempts(undefined);
-                                    setVaultInput("");
-                                }}
-                            >
-                                <Icon icon="mdi:close" />
-                            </button>
-                        </div>
-                        <p className="vault-modal-description">
-                            Enter the secret code to unlock hidden content
-                        </p>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                handleVaultSubmit(vaultInput);
-                            }}
-                            className="vault-modal-form"
-                        >
-                            <div className="vault-password-wrapper">
-                                <input
-                                    type={showVaultPassword ? "text" : "password"}
-                                    placeholder="Enter secret code..."
-                                    value={vaultInput}
-                                    onChange={(e) => {
-                                        console.log('Vault input changed:', e.target.value);
-                                        setVaultInput(e.target.value);
-                                    }}
-                                    className={`vault-modal-input ${vaultError ? 'error' : ''}`}
-                                    disabled={loading}
-                                    autoFocus
-                                    autoComplete="off"
-                                />
-                                <button
-                                    type="button"
-                                    className="vault-password-toggle"
-                                    onClick={() => {
-                                        console.log('Vault toggle clicked, current state:', showVaultPassword);
-                                        setShowVaultPassword(!showVaultPassword);
-                                    }}
-                                    aria-label={showVaultPassword ? "Hide password" : "Show password"}
-                                >
-                                    <Icon icon={showVaultPassword ? "mdi:eye" : "mdi:eye-off"} />
-                                </button>
-                            </div>
-                            {vaultError && (
-                                <div className="vault-modal-error">
-                                    <span className="error-icon">
-                                        <Icon icon="mdi:alert" />
-                                    </span>
-                                    <span>{vaultError}</span>
-                                    {remainingAttempts !== undefined && remainingAttempts > 0 && (
-                                        <span className="attempts-badge">
-                                            {remainingAttempts} attempt{remainingAttempts !== 1 ? 's' : ''} left
-                                        </span>
-                                    )}
-                                </div>
-                            )}
-                            {remainingAttempts !== undefined && remainingAttempts > 0 && !vaultError && (
-                                <div className="vault-modal-attempts">
-                                    <div className="attempts-dots">
-                                        {Array.from({ length: 5 }, (_, i) => (
-                                            <span 
-                                                key={i} 
-                                                className={`attempt-dot ${i < remainingAttempts ? 'active' : 'used'}`}
-                                            />
-                                        ))}
-                                    </div>
-                                    <span className="attempts-text">
-                                        {remainingAttempts} attempt{remainingAttempts !== 1 ? 's' : ''} remaining
-                                    </span>
-                                </div>
-                            )}
-                            <div className="vault-modal-actions">
-                                <button
-                                    type="button"
-                                    className="vault-modal-button secondary"
-                                    onClick={() => {
-                                        setVaultModalOpen(false);
-                                        setVaultError(null);
-                                        setRemainingAttempts(undefined);
-                                        setVaultInput("");
-                                    }}
-                                    disabled={loading}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="vault-modal-button primary"
-                                    disabled={loading || !vaultInput.trim()}
-                                >
-                                    {loading ? (
-                                        <>
-                                            <span className="spinner" />
-                                            Unlocking...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Unlock Vault <Icon icon="mdi:arrow-right" />
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {/* INSIGHTS MODAL */}
-            {insightsModalOpen && (
-                <div className="insights-modal-overlay">
-                    <div className="insights-modal-container">
-                        <div className="insights-modal-header">
-                            <span className="insights-modal-icon">
-                                <Icon icon="mdi:notebook" />
-                            </span>
-                            <h2>Insights</h2>
-                            <button 
-                                className="insights-modal-close"
-                                onClick={() => {
-                                    setInsightsModalOpen(false);
-                                    setInsightsError(null);
-                                    setInsightsPassword("");
-                                }}
-                            >
-                                <Icon icon="mdi:close" />
-                            </button>
-                        </div>
-                        <p className="insights-modal-description">
-                            Enter your password to access articles and technical content
-                        </p>
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                handleInsightsSubmit(insightsPassword);
-                            }}
-                            className="insights-modal-form"
-                        >
-                            <div className="insights-password-wrapper">
-                                <input
-                                    type={showInsightsPassword ? "text" : "password"}
-                                    placeholder="Enter password..."
-                                    value={insightsPassword}
-                                    onChange={(e) => {
-                                        console.log('Insights input changed:', e.target.value);
-                                        setInsightsPassword(e.target.value);
-                                        setInsightsError(null);
-                                    }}
-                                    className={`insights-modal-input ${insightsError ? 'error' : ''}`}
-                                    disabled={insightsLoading}
-                                    autoFocus
-                                    autoComplete="off"
-                                />
-                                <button
-                                    type="button"
-                                    className="insights-password-toggle"
-                                    onClick={() => {
-                                        console.log('Insights toggle clicked, current state:', showInsightsPassword);
-                                        setShowInsightsPassword(!showInsightsPassword);
-                                    }}
-                                    aria-label={showInsightsPassword ? "Hide password" : "Show password"}
-                                >
-                                    <Icon icon={showInsightsPassword ? "mdi:eye" : "mdi:eye-off"} />
-                                </button>
-                            </div>
-                            {insightsError && (
-                                <div className="insights-modal-error">
-                                    <span className="error-icon">
-                                        <Icon icon="mdi:alert" />
-                                    </span>
-                                    <span>{insightsError}</span>
-                                </div>
-                            )}
-                            <div className="insights-modal-actions">
-                                <button
-                                    type="button"
-                                    className="insights-modal-button secondary"
-                                    onClick={() => {
-                                        setInsightsModalOpen(false);
-                                        setInsightsError(null);
-                                        setInsightsPassword("");
-                                    }}
-                                    disabled={insightsLoading}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="submit"
-                                    className="insights-modal-button primary"
-                                    disabled={insightsLoading || !insightsPassword.trim()}
-                                >
-                                    {insightsLoading ? (
-                                        <>
-                                            <span className="spinner" />
-                                            Unlocking...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Unlock Insights <Icon icon="mdi:arrow-right" />
-                                        </>
-                                    )}
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
