@@ -14,12 +14,14 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import { useVault } from "./hooks/useVault";
 import { useInsights } from "./hooks/useInsights";
 import { DefaultLayout, FullscreenLayout } from "./layouts";
+
 import "./index.scss";
 
 // Lazy load pages
 const MainPage = lazy(() => import('./pages/MainPage'));
 const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
+const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
 
 // Boot Sequence Component
 function BootSequence({ onComplete }: { onComplete: () => void }) {
@@ -219,7 +221,9 @@ function AppContent() {
   }
 
   // Check if current route is fullscreen
-  const isFullscreenRoute = location.pathname === '/vault' || location.pathname === '/insights';
+  const isFullscreenRoute = location.pathname === '/vault' || 
+                            location.pathname === '/insights' || 
+                            location.pathname === '/wish-archive';
 
   return (
     <div className={isFullscreenRoute ? '' : 'main-container dark-mode'}>
@@ -249,6 +253,14 @@ function AppContent() {
               <ProtectedRoute isUnlocked={isInsightsUnlocked} isLoading={false}>
                 <InsightsPage />
               </ProtectedRoute>
+            </FullscreenLayout>
+          } 
+        />
+        <Route 
+          path="/wish-archive" 
+          element={
+            <FullscreenLayout>
+              <WishArchivePage />
             </FullscreenLayout>
           } 
         />

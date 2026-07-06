@@ -1795,3 +1795,72 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   transition: var(--vault-transition);
 }
+
+/* ==========================================
+   Vault Header Left
+========================================= */
+
+.vault-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* ==========================================
+   Wish Archive Button
+========================================= */
+
+.vault-wish-archive-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.vault-wish-archive-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  transform: translateY(-1px);
+}
+
+.vault-wish-archive-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 768px) {
+  .vault-wish-archive-btn span {
+    display: none;
+  }
+  
+  .vault-wish-archive-btn {
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .vault-header-left {
+    gap: 0.5rem;
+  }
+  
+  .vault-wish-archive-btn {
+    padding: 0.3rem 0.5rem;
+  }
+  
+  .vault-wish-archive-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+}

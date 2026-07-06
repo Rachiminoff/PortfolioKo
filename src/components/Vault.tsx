@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { Icon } from "@iconify/react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
 import PDFViewer from "./PDFViewer";
@@ -24,6 +26,7 @@ type FilterChip = "all" | "pdf" | "epub";
 type DensityOption = "compact" | "comfortable" | "large";
 
 function Vault() {
+    const navigate = useNavigate();
     const [vaultItems, setVaultItems] = useState<VaultItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
@@ -565,7 +568,18 @@ function Vault() {
             {/* HEADER */}
             <div className="vault-header">
                 <div className="vault-header-top">
-                    <h1>📚 Vault Library</h1>
+                    <div className="vault-header-left">
+                        <h1>📚 Vault Library</h1>
+                        <button 
+                            className="vault-wish-archive-btn"
+                            onClick={() => navigate('/wish-archive')}
+                            aria-label="Go to Wish Archive"
+                            title="Wish Archive"
+                        >
+                            <Icon icon="mdi:star-four-points" />
+                            <span>Wish Archive</span>
+                        </button>
+                    </div>
 
                     <div className="vault-view-controls">
                         <button
