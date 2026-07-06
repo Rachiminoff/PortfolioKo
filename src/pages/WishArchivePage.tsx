@@ -18,27 +18,6 @@ interface WishCharacter {
   created_at: string;
 }
 
-interface YearStats {
-  total: number;
-  wins: number;
-  losses: number;
-}
-
-interface Stats {
-  total: number;
-  wins: number;
-  losses: number;
-  winRate: number;
-  byYear: Record<number, YearStats>;
-  byElement: Record<string, number>;
-  first: WishCharacter | null;
-  latest: WishCharacter | null;
-  currentStreak: number;
-  longestStreak: number;
-  luckiestYear: { year: number; rate: number } | null;
-  unluckiestYear: { year: number; rate: number } | null;
-}
-
 // Helper functions
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -203,7 +182,7 @@ const WishArchivePage: React.FC = () => {
     setLoading(false);
   };
 
-  // Get unique years, elements
+  // Get unique years, elements, versions
   const years = useMemo(() => {
     const yearSet = new Set(characters.map(c => c.year));
     return ['all', ...Array.from(yearSet).sort((a, b) => b - a).map(String)];
@@ -241,7 +220,6 @@ const WishArchivePage: React.FC = () => {
       );
     }
 
-    // Sort
     switch (sortBy) {
       case 'date':
         filtered.sort((a, b) => new Date(b.date_obtained).getTime() - new Date(a.date_obtained).getTime());
@@ -269,15 +247,15 @@ const WishArchivePage: React.FC = () => {
     return Object.entries(groups).sort((a, b) => Number(b[0]) - Number(a[0]));
   }, [filteredCharacters]);
 
-  // Statistics
-  const stats = useMemo<Stats>(() => {
+  // Enhanced Statistics
+  const stats = useMemo(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
     
     // Collection by year
-    const byYear: Record<number, YearStats> = {};
+    const byYear: Record<number, { total: number; wins: number; losses: number }> = {};
     characters.forEach(c => {
       if (!byYear[c.year]) {
         byYear[c.year] = { total: 0, wins: 0, losses: 0 };
@@ -294,6 +272,39 @@ const WishArchivePage: React.FC = () => {
       byElement[c.element]++;
     });
 
+    // Most and least collected element
+    let mostCollectedElement = '';
+    let leastCollectedElement = '';
+    let maxCount = 0;
+    let minCount = Infinity;
+    Object.entries(byElement).forEach(([element, count]) => {
+      if (count > maxCount) {
+        maxCount = count;
+        mostCollectedElement = element;
+      }
+      if (count < minCount) {
+        minCount = count;
+        leastCollectedElement = element;
+      }
+    });
+
+    // Characters by version
+    const byVersion: Record<string, number> = {};
+    characters.forEach(c => {
+      if (!byVersion[c.version]) byVersion[c.version] = 0;
+      byVersion[c.version]++;
+    });
+
+    // Busiest version
+    let busiestVersion = '';
+    let maxVersionCount = 0;
+    Object.entries(byVersion).forEach(([version, count]) => {
+      if (count > maxVersionCount) {
+        maxVersionCount = count;
+        busiestVersion = version;
+      }
+    });
+
     // First and latest
     const sortedByDate = [...characters].sort((a, b) => 
       new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
@@ -301,9 +312,21 @@ const WishArchivePage: React.FC = () => {
     const first = sortedByDate[0] || null;
     const latest = sortedByDate[sortedByDate.length - 1] || null;
 
-    // Win/loss streak
+    // Gaps between characters
+    const gaps: number[] = [];
+    for (let i = 1; i < sortedByDate.length; i++) {
+      const prev = new Date(sortedByDate[i - 1].date_obtained);
+      const curr = new Date(sortedByDate[i].date_obtained);
+      gaps.push(Math.floor((curr.getTime() - prev.getTime()) / (1000 * 60 * 60 * 24)));
+    }
+    const avgGap = gaps.length > 0 ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0;
+    const longestGap = gaps.length > 0 ? Math.max(...gaps) : 0;
+    const shortestGap = gaps.length > 0 ? Math.min(...gaps) : 0;
+
+    // Win/loss streaks
     let currentStreak = 0;
-    let longestStreak = 0;
+    let longestWinStreak = 0;
+    let longestLoseStreak = 0;
     let currentStreakType: 'won' | 'lost' | null = null;
 
     const sortedForStreak = [...characters].sort(
@@ -317,8 +340,55 @@ const WishArchivePage: React.FC = () => {
         currentStreakType = c.outcome;
         currentStreak = 1;
       }
-      if (currentStreak > longestStreak) {
-        longestStreak = currentStreak;
+      if (c.outcome === 'won' && currentStreak > longestWinStreak) {
+        longestWinStreak = currentStreak;
+      }
+      if (c.outcome === 'lost' && currentStreak > longestLoseStreak) {
+        longestLoseStreak = currentStreak;
+      }
+    });
+
+    // 50/50 wins (first character in each year is a 50/50, subsequent are guaranteed)
+    let fiftyFiftyWins = 0;
+    let guaranteedChars = 0;
+    let currentYearWon = false;
+    const sortedByYear = [...characters].sort((a, b) => 
+      new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
+    );
+    
+    sortedByYear.forEach((c, index) => {
+      if (index === 0) {
+        // First character is always a 50/50
+        if (c.outcome === 'won') fiftyFiftyWins++;
+        else guaranteedChars++;
+      } else {
+        // Check if same character - simplified logic
+        if (c.outcome === 'won') {
+          fiftyFiftyWins++;
+        } else {
+          guaranteedChars++;
+        }
+      }
+    });
+
+    // Double character days
+    const dateCounts: Record<string, number> = {};
+    characters.forEach(c => {
+      if (!dateCounts[c.date_obtained]) dateCounts[c.date_obtained] = 0;
+      dateCounts[c.date_obtained]++;
+    });
+    const doubleDays = Object.values(dateCounts).filter(count => count >= 2).length;
+
+    // Active years
+    const activeYears = Object.keys(byYear).length;
+
+    // Busiest year
+    let busiestYear = 0;
+    let maxYearCount = 0;
+    Object.entries(byYear).forEach(([year, data]) => {
+      if (data.total > maxYearCount) {
+        maxYearCount = data.total;
+        busiestYear = Number(year);
       }
     });
 
@@ -336,6 +406,99 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
+    // Collection progress (assuming ~80 total limited characters as of now)
+    const totalLimitedChars = 80;
+    const collectionPercentage = (total / totalLimitedChars) * 100;
+
+    // Fun facts generation
+    const funFacts: string[] = [];
+    if (luckiestYear) {
+      funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
+    }
+    if (unluckiestYear) {
+      funFacts.push(`${unluckiestYear.year} was your unluckiest year with a ${unluckiestYear.rate.toFixed(1)}% win rate.`);
+    }
+    if (mostCollectedElement) {
+      funFacts.push(`${mostCollectedElement} is your most collected element.`);
+    }
+    if (doubleDays > 0) {
+      funFacts.push(`You obtained two or more limited characters on ${doubleDays} separate day${doubleDays > 1 ? 's' : ''}.`);
+    }
+    if (longestWinStreak > 0) {
+      funFacts.push(`Your longest winning streak lasted ${longestWinStreak} banner${longestWinStreak > 1 ? 's' : ''}.`);
+    }
+    if (first && latest) {
+      const firstDate = new Date(first.date_obtained);
+      const latestDate = new Date(latest.date_obtained);
+      const versionSpan = `from Version ${first.version} to ${latest.version}`;
+      funFacts.push(`Your collection spans ${versionSpan}.`);
+    }
+    funFacts.push(`You have collected characters across ${activeYears} major game version${activeYears > 1 ? 's' : ''}.`);
+
+    // Achievements
+    const achievements: { icon: string; title: string; description: string; unlocked: boolean }[] = [
+      {
+        icon: 'mdi:compass',
+        title: 'First Steps',
+        description: `Obtained your first limited 5★ character${first ? ` (${first.name})` : ''}.`,
+        unlocked: total >= 1
+      },
+      {
+        icon: 'mdi:star-four-points',
+        title: 'Lucky Streak',
+        description: `Won ${Math.min(longestWinStreak, 5)} consecutive 50/50s.`,
+        unlocked: longestWinStreak >= 5
+      },
+      {
+        icon: 'mdi:collection',
+        title: 'Collector',
+        description: `Reached ${total} limited characters.`,
+        unlocked: total >= 25
+      },
+      {
+        icon: 'mdi:clock',
+        title: 'Veteran Traveler',
+        description: `Active since ${first ? `Version ${first.version}` : 'the beginning'}.`,
+        unlocked: activeYears >= 3
+      },
+      {
+        icon: 'mdi:snowflake',
+        title: 'Cryo Enthusiast',
+        description: `${mostCollectedElement} is your most collected element.`,
+        unlocked: mostCollectedElement === 'Cryo'
+      },
+      {
+        icon: 'mdi:fire',
+        title: 'Pyro Collector',
+        description: `${mostCollectedElement} is your most collected element.`,
+        unlocked: mostCollectedElement === 'Pyro'
+      },
+      {
+        icon: 'mdi:lightning-bolt',
+        title: 'Electro Collector',
+        description: `${mostCollectedElement} is your most collected element.`,
+        unlocked: mostCollectedElement === 'Electro'
+      },
+      {
+        icon: 'mdi:water',
+        title: 'Hydro Collector',
+        description: `${mostCollectedElement} is your most collected element.`,
+        unlocked: mostCollectedElement === 'Hydro'
+      },
+      {
+        icon: 'mdi:leaf',
+        title: 'Dendro Collector',
+        description: `${mostCollectedElement} is your most collected element.`,
+        unlocked: mostCollectedElement === 'Dendro'
+      },
+      {
+        icon: 'mdi:hexagon',
+        title: 'Geo Collector',
+        description: `${mostCollectedElement} is your most collected element.`,
+        unlocked: mostCollectedElement === 'Geo'
+      }
+    ];
+
     return {
       total,
       wins,
@@ -346,9 +509,25 @@ const WishArchivePage: React.FC = () => {
       first,
       latest,
       currentStreak,
-      longestStreak,
+      longestWinStreak,
+      longestLoseStreak,
       luckiestYear,
-      unluckiestYear
+      unluckiestYear,
+      mostCollectedElement,
+      leastCollectedElement,
+      byVersion,
+      busiestVersion,
+      busiestYear,
+      activeYears,
+      avgGap,
+      longestGap,
+      shortestGap,
+      doubleDays,
+      fiftyFiftyWins,
+      guaranteedChars,
+      collectionPercentage,
+      funFacts,
+      achievements: achievements.filter(a => a.unlocked)
     };
   }, [characters]);
 
@@ -396,6 +575,7 @@ const WishArchivePage: React.FC = () => {
   const totalCount = useAnimatedCounter(stats.total);
   const winCount = useAnimatedCounter(stats.wins);
   const lossCount = useAnimatedCounter(stats.losses);
+  const collectionPercentCount = useAnimatedCounter(Math.round(stats.collectionPercentage));
 
   // Character detail modal
   const CharacterModal = ({ character, onClose }: { character: WishCharacter; onClose: () => void }) => {
@@ -502,15 +682,15 @@ const WishArchivePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Statistics Summary */}
+      {/* Overview Statistics */}
       <section className="wish-stats">
+        <div className="wish-stat-card" ref={totalCount.ref}>
+          <span className="wish-stat-value">{totalCount.count}</span>
+          <span className="wish-stat-label">Characters</span>
+        </div>
         <div className="wish-stat-card" ref={winRateCount.ref}>
           <span className="wish-stat-value">{winRateCount.count}%</span>
           <span className="wish-stat-label">Win Rate</span>
-        </div>
-        <div className="wish-stat-card" ref={totalCount.ref}>
-          <span className="wish-stat-value">{totalCount.count}</span>
-          <span className="wish-stat-label">Characters Collected</span>
         </div>
         <div className="wish-stat-card" ref={winCount.ref}>
           <span className="wish-stat-value">{winCount.count}</span>
@@ -521,8 +701,12 @@ const WishArchivePage: React.FC = () => {
           <span className="wish-stat-label">Losses</span>
         </div>
         <div className="wish-stat-card">
-          <span className="wish-stat-value">{stats.luckiestYear ? stats.luckiestYear.year : '-'}</span>
-          <span className="wish-stat-label">Luckiest Year</span>
+          <span className="wish-stat-value">{stats.activeYears}</span>
+          <span className="wish-stat-label">Active Years</span>
+        </div>
+        <div className="wish-stat-card" ref={collectionPercentCount.ref}>
+          <span className="wish-stat-value">{collectionPercentCount.count}%</span>
+          <span className="wish-stat-label">Collection</span>
         </div>
         <div className="wish-stat-card">
           <span className="wish-stat-value">{stats.first?.name || '-'}</span>
@@ -532,11 +716,110 @@ const WishArchivePage: React.FC = () => {
           <span className="wish-stat-value">{stats.latest?.name || '-'}</span>
           <span className="wish-stat-label">Latest Character</span>
         </div>
-        <div className="wish-stat-card">
-          <span className="wish-stat-value">{stats.longestStreak}</span>
-          <span className="wish-stat-label">Longest Streak</span>
+      </section>
+
+      {/* Luck & Streaks Section */}
+      <section className="wish-section">
+        <h2 className="wish-section-title">Luck & Streaks</h2>
+        <div className="wish-stats-grid">
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.longestWinStreak}</span>
+            <span className="wish-stat-label">Longest Win Streak</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.longestLoseStreak}</span>
+            <span className="wish-stat-label">Longest Lose Streak</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.currentStreak}</span>
+            <span className="wish-stat-label">Current Streak</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.luckiestYear ? `${stats.luckiestYear.year} (${Math.round(stats.luckiestYear.rate)}%)` : '-'}</span>
+            <span className="wish-stat-label">Luckiest Year</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.unluckiestYear ? `${stats.unluckiestYear.year} (${Math.round(stats.unluckiestYear.rate)}%)` : '-'}</span>
+            <span className="wish-stat-label">Unluckiest Year</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.fiftyFiftyWins}</span>
+            <span className="wish-stat-label">50/50 Wins</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.guaranteedChars}</span>
+            <span className="wish-stat-label">Guaranteed Characters</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.busiestYear || '-'}</span>
+            <span className="wish-stat-label">Busiest Year</span>
+          </div>
         </div>
       </section>
+
+      {/* Collection Insights */}
+      <section className="wish-section">
+        <h2 className="wish-section-title">Collection Insights</h2>
+        <div className="wish-stats-grid">
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.mostCollectedElement || '-'}</span>
+            <span className="wish-stat-label">Most Collected Element</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.leastCollectedElement || '-'}</span>
+            <span className="wish-stat-label">Least Collected Element</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.busiestVersion || '-'}</span>
+            <span className="wish-stat-label">Busiest Version</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.doubleDays}</span>
+            <span className="wish-stat-label">Double Character Days</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{Math.round(stats.avgGap)} days</span>
+            <span className="wish-stat-label">Avg Days Between Pulls</span>
+          </div>
+          <div className="wish-stat-card-small">
+            <span className="wish-stat-value">{stats.longestGap} days</span>
+            <span className="wish-stat-label">Longest Gap</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Fun Facts */}
+      <section className="wish-section">
+        <h2 className="wish-section-title">Fun Facts</h2>
+        <div className="wish-fun-facts">
+          {stats.funFacts.map((fact, index) => (
+            <div key={index} className="wish-fun-fact">
+              <Icon icon="mdi:star" className="wish-fun-fact-icon" />
+              <span>{fact}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Achievements */}
+      {stats.achievements.length > 0 && (
+        <section className="wish-section">
+          <h2 className="wish-section-title">Achievements</h2>
+          <div className="wish-achievements">
+            {stats.achievements.map((achievement, index) => (
+              <div key={index} className="wish-achievement">
+                <div className="wish-achievement-icon">
+                  <Icon icon={achievement.icon} />
+                </div>
+                <div className="wish-achievement-content">
+                  <h4>{achievement.title}</h4>
+                  <p>{achievement.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Controls */}
       <div className="wish-controls">

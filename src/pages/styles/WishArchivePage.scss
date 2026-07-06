@@ -998,3 +998,196 @@
     padding: 1.25rem;
   }
 }
+
+/* ==========================================
+   Enhanced Statistics Sections
+========================================= */
+
+.wish-section {
+  padding: 1.5rem 0 0.5rem;
+}
+
+.wish-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 0 1rem;
+  letter-spacing: -0.01em;
+}
+
+.wish-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.wish-stat-card-small {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.wish-stat-card-small:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.wish-stat-card-small .wish-stat-value {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.wish-stat-card-small .wish-stat-label {
+  display: block;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.15rem;
+}
+
+/* ==========================================
+   Fun Facts
+========================================= */
+
+.wish-fun-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.wish-fun-fact {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+
+.wish-fun-fact-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: rgba(255, 215, 0, 0.3);
+  margin-top: 0.15rem;
+}
+
+/* ==========================================
+   Achievements
+========================================= */
+
+.wish-achievements {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 0.75rem;
+}
+
+.wish-achievement {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 215, 0, 0.06);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.wish-achievement:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 215, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.wish-achievement-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.06);
+  color: rgba(255, 215, 0, 0.5);
+  font-size: 1.1rem;
+}
+
+.wish-achievement-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.wish-achievement-content h4 {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.wish-achievement-content p {
+  margin: 0.1rem 0 0;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   Responsive
+========================================= */
+
+@media (max-width: 768px) {
+  .wish-stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .wish-stat-card-small {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .wish-stat-card-small .wish-stat-value {
+    font-size: 1.1rem;
+  }
+
+  .wish-fun-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .wish-achievements {
+    grid-template-columns: 1fr;
+  }
+
+  .wish-section {
+    padding: 1rem 0 0.25rem;
+  }
+
+  .wish-section-title {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wish-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .wish-stat-card-small .wish-stat-value {
+    font-size: 0.95rem;
+  }
+
+  .wish-stat-card-small .wish-stat-label {
+    font-size: 0.55rem;
+  }
+}
