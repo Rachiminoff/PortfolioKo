@@ -22,6 +22,10 @@ interface YearData {
   total: number;
   wins: number;
   losses: number;
+  rate: number;
+  avgGap: number;
+  bestStreak: number;
+  characters: string[];
 }
 
 interface YearStat {
@@ -37,12 +41,28 @@ interface Achievement {
 }
 
 interface Stats {
+  // Overall
   total: number;
   wins: number;
   losses: number;
   winRate: number;
+  collectionPercentage: number;
+  activeYears: number;
+  avgCharsPerYear: number;
+  avgWinsPerYear: number;
+  avgLossesPerYear: number;
+  
+  // Collection
   byYear: Record<number, YearData>;
   byElement: Record<string, number>;
+  mostCollectedElement: string;
+  leastCollectedElement: string;
+  elementDiversity: number;
+  versionsParticipated: number;
+  earliestVersion: string;
+  latestVersion: string;
+  
+  // Journey
   first: WishCharacter | null;
   latest: WishCharacter | null;
   currentStreak: number;
@@ -50,19 +70,18 @@ interface Stats {
   longestLoseStreak: number;
   luckiestYear: YearStat | null;
   unluckiestYear: YearStat | null;
-  mostCollectedElement: string;
-  leastCollectedElement: string;
-  byVersion: Record<string, number>;
-  busiestVersion: string;
   busiestYear: number;
-  activeYears: number;
-  avgGap: number;
+  busiestVersion: string;
   longestGap: number;
   shortestGap: number;
+  avgGap: number;
   doubleDays: number;
-  fiftyFiftyWins: number;
-  guaranteedChars: number;
-  collectionPercentage: number;
+  
+  // Yearly stats for charts
+  yearlyStats: Array<{ year: number; total: number; wins: number; losses: number; rate: number }>;
+  versionStats: Array<{ version: string; total: number }>;
+  outcomeDistribution: { won: number; lost: number };
+  
   funFacts: string[];
   achievements: Achievement[];
 }
@@ -104,11 +123,12 @@ const getElementIcon = (element: string): string => {
 };
 
 // Premium Component: Animated Counter
-const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string }> = ({ 
+const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string; prefix?: string }> = ({ 
   target, 
   duration = 1500, 
   label,
-  suffix = ''
+  suffix = '',
+  prefix = ''
 }) => {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -147,7 +167,7 @@ const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: str
 
   return (
     <div ref={ref} className="animated-counter">
-      <span className="animated-counter-value">{count}{suffix}</span>
+      <span className="animated-counter-value">{prefix}{count}{suffix}</span>
       {label && <span className="animated-counter-label">{label}</span>}
     </div>
   );
@@ -236,6 +256,200 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
   return (
     <div ref={ref} className="donut-chart">
       <canvas ref={canvasRef} />
+    </div>
+  );
+};
+
+// Premium Component: Bar Chart
+const BarChart: React.FC<{ 
+  data: Array<{ label: string; value: number; color?: string }>;
+  height?: number;
+  showValues?: boolean;
+}> = ({ data, height = 150, showValues = true }) => {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHasAnimated(true);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    if (chartRef.current) {
+      observer.observe(chartRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const maxValue = Math.max(...data.map(d => d.value), 1);
+
+  return (
+    <div ref={chartRef} className="bar-chart" style={{ height }}>
+      {data.map((item, index) => {
+        const percentage = (item.value / maxValue) * 100;
+        const delay = index * 0.05;
+        return (
+          <div key={index} className="bar-chart-item">
+            <div 
+              className="bar-chart-bar-wrapper"
+              style={{ height: '100%' }}
+            >
+              <div 
+                className={`bar-chart-bar ${hasAnimated ? 'animated' : ''}`}
+                style={{
+                  height: hasAnimated ? `${percentage}%` : '0%',
+                  backgroundColor: item.color || '#8B5CF6',
+                  transitionDelay: `${delay}s`
+                }}
+              />
+            </div>
+            {showValues && (
+              <span className="bar-chart-value">{item.value}</span>
+            )}
+            <span className="bar-chart-label">{item.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// Premium Component: Heat Map
+const HeatMap: React.FC<{ 
+  characters: WishCharacter[];
+  year: number;
+  onCellHover?: (date: string | null) => void;
+}> = ({ characters, year, onCellHover }) => {
+  const [hoveredDate, setHoveredDate] = useState<string | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const getDaysInYear = (year: number) => {
+    const date = new Date(year, 0, 1);
+    const days = [];
+    while (date.getFullYear() === year) {
+      days.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+    return days;
+  };
+
+  const getCharactersForDate = (date: Date) => {
+    const dateStr = date.toISOString().split('T')[0];
+    return characters.filter(c => c.date_obtained === dateStr);
+  };
+
+  const getIntensity = (chars: WishCharacter[]) => {
+    if (chars.length === 0) return 0;
+    if (chars.length === 1) return 1;
+    if (chars.length === 2) return 2;
+    return 3;
+  };
+
+  const getIntensityColor = (intensity: number) => {
+    switch (intensity) {
+      case 0: return 'rgba(255,255,255,0.03)';
+      case 1: return 'rgba(122, 224, 219, 0.3)';
+      case 2: return 'rgba(122, 224, 219, 0.6)';
+      case 3: return 'rgba(122, 224, 219, 0.9)';
+      default: return 'rgba(255,255,255,0.03)';
+    }
+  };
+
+  const days = getDaysInYear(year);
+  const weeks: Date[][] = [];
+  let currentWeek: Date[] = [];
+  const firstDay = new Date(year, 0, 1).getDay();
+
+  // Pad first week
+  for (let i = 0; i < firstDay; i++) {
+    currentWeek.push(new Date(year, 0, 1 - firstDay + i));
+  }
+
+  days.forEach(day => {
+    currentWeek.push(day);
+    if (currentWeek.length === 7) {
+      weeks.push(currentWeek);
+      currentWeek = [];
+    }
+  });
+
+  if (currentWeek.length > 0) {
+    weeks.push(currentWeek);
+  }
+
+  const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  return (
+    <div className="heatmap-container">
+      <div className="heatmap-grid" ref={gridRef}>
+        {weeks.map((week, weekIndex) => (
+          <div key={weekIndex} className="heatmap-week">
+            {week.map((day, dayIndex) => {
+              const chars = getCharactersForDate(day);
+              const intensity = getIntensity(chars);
+              const isCurrentMonth = day.getFullYear() === year;
+              const dateStr = day.toISOString().split('T')[0];
+              const isHovered = hoveredDate === dateStr;
+
+              return (
+                <div
+                  key={`${weekIndex}-${dayIndex}`}
+                  className="heatmap-cell"
+                  style={{
+                    backgroundColor: isCurrentMonth ? getIntensityColor(intensity) : 'transparent',
+                    opacity: isCurrentMonth ? 1 : 0.2,
+                    transform: isHovered ? 'scale(1.3)' : 'scale(1)',
+                    zIndex: isHovered ? 2 : 1
+                  }}
+                  onMouseEnter={() => {
+                    setHoveredDate(dateStr);
+                    if (onCellHover) onCellHover(dateStr);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredDate(null);
+                    if (onCellHover) onCellHover(null);
+                  }}
+                  title={chars.length > 0 ? `${formatDate(dateStr)}: ${chars.map(c => c.name).join(', ')}` : ''}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+      <div className="heatmap-legend">
+        <span className="heatmap-legend-label">Less</span>
+        <div className="heatmap-legend-cells">
+          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(255,255,255,0.03)' }} />
+          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.3)' }} />
+          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.6)' }} />
+          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.9)' }} />
+        </div>
+        <span className="heatmap-legend-label">More</span>
+      </div>
+      {hoveredDate && (
+        <div className="heatmap-tooltip">
+          <div className="heatmap-tooltip-content">
+            <span className="heatmap-tooltip-date">{formatDate(hoveredDate)}</span>
+            {getCharactersForDate(new Date(hoveredDate)).map(c => (
+              <div key={c.id} className="heatmap-tooltip-item">
+                <span className="heatmap-tooltip-name">{c.name}</span>
+                <span className={`heatmap-tooltip-outcome ${c.outcome}`}>
+                  {c.outcome === 'won' ? '✓' : '✗'}
+                </span>
+                <span className="heatmap-tooltip-version">v{c.version}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -374,6 +588,7 @@ const WishArchivePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'date' | 'name' | 'version'>('date');
   const [selectedCharacter, setSelectedCharacter] = useState<WishCharacter | null>(null);
+  const [heatmapYear, setHeatmapYear] = useState<number>(new Date().getFullYear());
 
   // Fetch characters
   useEffect(() => {
@@ -460,23 +675,64 @@ const WishArchivePage: React.FC = () => {
     return Object.entries(groups).sort((a, b) => Number(b[0]) - Number(a[0]));
   }, [filteredCharacters]);
 
-  // Statistics
+  // Enhanced Statistics
   const stats: Stats = useMemo(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
     
+    // Yearly data
     const byYear: Record<number, YearData> = {};
     characters.forEach(c => {
       if (!byYear[c.year]) {
-        byYear[c.year] = { total: 0, wins: 0, losses: 0 };
+        byYear[c.year] = { 
+          total: 0, 
+          wins: 0, 
+          losses: 0, 
+          rate: 0, 
+          avgGap: 0, 
+          bestStreak: 0,
+          characters: []
+        };
       }
       byYear[c.year].total++;
       if (c.outcome === 'won') byYear[c.year].wins++;
       else byYear[c.year].losses++;
+      byYear[c.year].characters.push(c.name);
     });
 
+    // Calculate yearly rates and streaks
+    Object.keys(byYear).forEach(year => {
+      const y = byYear[Number(year)];
+      y.rate = y.total > 0 ? (y.wins / y.total) * 100 : 0;
+      
+      // Calculate best streak for the year
+      let streak = 0;
+      let bestStreak = 0;
+      const yearChars = characters.filter(c => c.year === Number(year)).sort(
+        (a, b) => new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
+      );
+      yearChars.forEach(c => {
+        if (c.outcome === 'won') {
+          streak++;
+          if (streak > bestStreak) bestStreak = streak;
+        } else {
+          streak = 0;
+        }
+      });
+      y.bestStreak = bestStreak;
+
+      // Calculate avg gap for the year
+      const dates = yearChars.map(c => new Date(c.date_obtained));
+      let gaps: number[] = [];
+      for (let i = 1; i < dates.length; i++) {
+        gaps.push(Math.floor((dates[i].getTime() - dates[i-1].getTime()) / (1000 * 60 * 60 * 24)));
+      }
+      y.avgGap = gaps.length > 0 ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0;
+    });
+
+    // Element distribution
     const byElement: Record<string, number> = {};
     characters.forEach(c => {
       if (!byElement[c.element]) byElement[c.element] = 0;
@@ -498,6 +754,10 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
+    // Element diversity (number of elements with at least 1 character)
+    const elementDiversity = Object.keys(byElement).length;
+
+    // Version stats
     const byVersion: Record<string, number> = {};
     characters.forEach(c => {
       if (!byVersion[c.version]) byVersion[c.version] = 0;
@@ -513,12 +773,19 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
+    const versions = Object.keys(byVersion).sort();
+    const earliestVersion = versions.length > 0 ? versions[0] : '';
+    const latestVersion = versions.length > 0 ? versions[versions.length - 1] : '';
+    const versionsParticipated = versions.length;
+
+    // First and latest
     const sortedByDate = [...characters].sort((a, b) => 
       new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
     );
     const first = sortedByDate[0] || null;
     const latest = sortedByDate[sortedByDate.length - 1] || null;
 
+    // Gaps
     const gaps: number[] = [];
     for (let i = 1; i < sortedByDate.length; i++) {
       const prev = new Date(sortedByDate[i - 1].date_obtained);
@@ -529,6 +796,7 @@ const WishArchivePage: React.FC = () => {
     const longestGap = gaps.length > 0 ? Math.max(...gaps) : 0;
     const shortestGap = gaps.length > 0 ? Math.min(...gaps) : 0;
 
+    // Streaks
     let currentStreak = 0;
     let longestWinStreak = 0;
     let longestLoseStreak = 0;
@@ -553,6 +821,7 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
+    // 50/50 wins
     let fiftyFiftyWins = 0;
     let guaranteedChars = 0;
     sortedForStreak.forEach((c, index) => {
@@ -565,6 +834,7 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
+    // Double character days
     const dateCounts: Record<string, number> = {};
     characters.forEach(c => {
       if (!dateCounts[c.date_obtained]) dateCounts[c.date_obtained] = 0;
@@ -574,6 +844,7 @@ const WishArchivePage: React.FC = () => {
 
     const activeYears = Object.keys(byYear).length;
 
+    // Busiest year
     let busiestYear = 0;
     let maxYearCount = 0;
     Object.entries(byYear).forEach(([year, data]) => {
@@ -583,22 +854,31 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    const yearStats: Array<{year: number; rate: number}> = [];
-    Object.entries(byYear).forEach(([year, data]) => {
-      const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
-      yearStats.push({ year: Number(year), rate });
-    });
+    // Yearly stats for charts
+    const yearlyStats = Object.entries(byYear).map(([year, data]) => ({
+      year: Number(year),
+      total: data.total,
+      wins: data.wins,
+      losses: data.losses,
+      rate: data.rate
+    })).sort((a, b) => a.year - b.year);
 
+    const versionStats = Object.entries(byVersion).map(([version, total]) => ({
+      version,
+      total
+    })).sort((a, b) => a.version.localeCompare(b.version));
+
+    // Luckiest/Unluckiest year
     let luckiestYear: YearStat | null = null;
     let unluckiestYear: YearStat | null = null;
     
-    if (yearStats.length > 0) {
+    if (yearlyStats.length > 0) {
       let bestRate = -1;
       let worstRate = 101;
       let bestYear = 0;
       let worstYear = 0;
       
-      yearStats.forEach(stat => {
+      yearlyStats.forEach(stat => {
         if (stat.rate > bestRate) {
           bestRate = stat.rate;
           bestYear = stat.year;
@@ -619,7 +899,11 @@ const WishArchivePage: React.FC = () => {
 
     const totalLimitedChars = 80;
     const collectionPercentage = (total / totalLimitedChars) * 100;
+    const avgCharsPerYear = activeYears > 0 ? total / activeYears : 0;
+    const avgWinsPerYear = activeYears > 0 ? wins / activeYears : 0;
+    const avgLossesPerYear = activeYears > 0 ? losses / activeYears : 0;
 
+    // Fun facts
     const funFacts: string[] = [];
     if (luckiestYear !== null) {
       funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
@@ -628,7 +912,7 @@ const WishArchivePage: React.FC = () => {
       funFacts.push(`${unluckiestYear.year} was your unluckiest year with a ${unluckiestYear.rate.toFixed(1)}% win rate.`);
     }
     if (mostCollectedElement) {
-      funFacts.push(`${mostCollectedElement} is your most collected element.`);
+      funFacts.push(`${mostCollectedElement} is your most collected element (${maxCount} characters).`);
     }
     if (doubleDays > 0) {
       funFacts.push(`You obtained two or more limited characters on ${doubleDays} separate day${doubleDays > 1 ? 's' : ''}.`);
@@ -640,7 +924,14 @@ const WishArchivePage: React.FC = () => {
       funFacts.push(`Your collection spans from Version ${first.version} to ${latest.version}.`);
     }
     funFacts.push(`You have collected characters across ${activeYears} major game version${activeYears > 1 ? 's' : ''}.`);
+    if (versionsParticipated > 0) {
+      funFacts.push(`You've pulled in ${versionsParticipated} different game versions.`);
+    }
+    if (longestGap > 0) {
+      funFacts.push(`Your longest gap between pulls was ${longestGap} days.`);
+    }
 
+    // Achievements
     const achievements: Achievement[] = [
       {
         icon: 'mdi:compass',
@@ -671,6 +962,24 @@ const WishArchivePage: React.FC = () => {
         title: 'Cryo Enthusiast',
         description: `${mostCollectedElement} is your most collected element.`,
         unlocked: mostCollectedElement === 'Cryo'
+      },
+      {
+        icon: 'mdi:calendar',
+        title: 'Double Acquisition',
+        description: `Obtained two characters on the same day.`,
+        unlocked: doubleDays > 0
+      },
+      {
+        icon: 'mdi:trophy',
+        title: 'Nine-Win Streak',
+        description: `Won ${longestWinStreak} consecutive 50/50s.`,
+        unlocked: longestWinStreak >= 9
+      },
+      {
+        icon: 'mdi:progress-star',
+        title: 'Collection Milestone',
+        description: `Reached ${Math.floor(total / 10) * 10} characters.`,
+        unlocked: total >= 10
       }
     ];
 
@@ -679,8 +988,19 @@ const WishArchivePage: React.FC = () => {
       wins,
       losses,
       winRate,
+      collectionPercentage,
+      activeYears,
+      avgCharsPerYear,
+      avgWinsPerYear,
+      avgLossesPerYear,
       byYear,
       byElement,
+      mostCollectedElement,
+      leastCollectedElement,
+      elementDiversity,
+      versionsParticipated,
+      earliestVersion,
+      latestVersion,
       first,
       latest,
       currentStreak,
@@ -688,19 +1008,15 @@ const WishArchivePage: React.FC = () => {
       longestLoseStreak,
       luckiestYear,
       unluckiestYear,
-      mostCollectedElement,
-      leastCollectedElement,
-      byVersion,
-      busiestVersion,
       busiestYear,
-      activeYears,
-      avgGap,
+      busiestVersion,
       longestGap,
       shortestGap,
+      avgGap,
       doubleDays,
-      fiftyFiftyWins,
-      guaranteedChars,
-      collectionPercentage,
+      yearlyStats,
+      versionStats,
+      outcomeDistribution: { won: wins, lost: losses },
       funFacts,
       achievements
     };
@@ -876,12 +1192,54 @@ const WishArchivePage: React.FC = () => {
               <span className="wish-stat-premium-label">Most Collected Element</span>
             </div>
           </div>
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">📊</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
+              <span className="wish-stat-premium-label">Elements Collected</span>
+            </div>
+          </div>
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">🎮</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
+              <span className="wish-stat-premium-label">Versions Played</span>
+            </div>
+          </div>
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">⏱️</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
+              <span className="wish-stat-premium-label">Avg Between Pulls</span>
+            </div>
+          </div>
+          <div className="wish-stat-premium">
+            <div className="wish-stat-premium-icon">📈</div>
+            <div className="wish-stat-premium-content">
+              <span className="wish-stat-premium-value">{stats.doubleDays}</span>
+              <span className="wish-stat-premium-label">Double Pull Days</span>
+            </div>
+          </div>
         </div>
 
+        {/* Charts Row */}
         <div className="wish-charts-row">
           <div className="wish-chart-card">
             <h3 className="wish-chart-title">Element Distribution</h3>
             <DonutChart data={stats.byElement} />
+          </div>
+          <div className="wish-chart-card">
+            <h3 className="wish-chart-title">Outcome Distribution</h3>
+            <DonutChart 
+              data={{ 
+                Won: stats.wins, 
+                Lost: stats.losses 
+              }} 
+              colors={{ 
+                Won: '#7eb870', 
+                Lost: '#e06040' 
+              }}
+            />
           </div>
           <div className="wish-chart-card">
             <h3 className="wish-chart-title">Collection Progress</h3>
@@ -920,7 +1278,98 @@ const WishArchivePage: React.FC = () => {
               </div>
             </div>
           </div>
+          <div className="wish-chart-card">
+            <h3 className="wish-chart-title">Characters by Year</h3>
+            <BarChart 
+              data={stats.yearlyStats.map(stat => ({
+                label: stat.year.toString(),
+                value: stat.total,
+                color: `hsl(${200 + stat.year * 10}, 60%, 50%)`
+              }))}
+              height={150}
+            />
+          </div>
         </div>
+      </section>
+
+      {/* Yearly Performance Section */}
+      <section className="wish-section">
+        <h2 className="wish-section-title">📊 Yearly Performance</h2>
+        <div className="wish-yearly-grid">
+          {stats.yearlyStats.map(stat => {
+            const yearData = stats.byYear[stat.year];
+            const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' : 
+                         stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
+            const isBest = stat.rate === Math.max(...stats.yearlyStats.map(s => s.rate));
+            const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
+
+            return (
+              <div key={stat.year} className="wish-yearly-card">
+                <div className="wish-yearly-header">
+                  <h3>{stat.year}</h3>
+                  <span className={`wish-yearly-trend ${trend}`}>
+                    {trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—'}
+                    {isBest && ' (Best)'}
+                    {isWorst && ' (Worst)'}
+                  </span>
+                </div>
+                <div className="wish-yearly-stats">
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{stat.total}</span>
+                    <span className="wish-yearly-stat-label">Characters</span>
+                  </div>
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{stat.wins}</span>
+                    <span className="wish-yearly-stat-label">Wins</span>
+                  </div>
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{stat.losses}</span>
+                    <span className="wish-yearly-stat-label">Losses</span>
+                  </div>
+                  <div className="wish-yearly-stat">
+                    <span className="wish-yearly-stat-value">{Math.round(stat.rate)}%</span>
+                    <span className="wish-yearly-stat-label">Win Rate</span>
+                  </div>
+                </div>
+                {yearData && (
+                  <div className="wish-yearly-details">
+                    <span>Avg {Math.round(yearData.avgGap)} days between pulls</span>
+                    <span>Best streak: {yearData.bestStreak}</span>
+                    <span className="wish-yearly-characters">
+                      {yearData.characters.slice(0, 3).join(', ')}
+                      {yearData.characters.length > 3 && ` +${yearData.characters.length - 3} more`}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Heat Map */}
+      <section className="wish-section">
+        <h2 className="wish-section-title">🔥 Acquisition Heat Map</h2>
+        <div className="wish-heatmap-controls">
+          <div className="wish-heatmap-year-selector">
+            {years.filter(y => y !== 'all').map(year => (
+              <button
+                key={year}
+                className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
+                onClick={() => setHeatmapYear(Number(year))}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
+        </div>
+        <HeatMap 
+          characters={characters} 
+          year={heatmapYear}
+          onCellHover={(date) => {
+            // Optional: update a tooltip or info display
+          }}
+        />
       </section>
 
       {/* Fun Facts */}
