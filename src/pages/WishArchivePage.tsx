@@ -29,6 +29,13 @@ interface YearStat {
   rate: number;
 }
 
+interface Achievement {
+  icon: string;
+  title: string;
+  description: string;
+  unlocked: boolean;
+}
+
 interface Stats {
   total: number;
   wins: number;
@@ -57,7 +64,7 @@ interface Stats {
   guaranteedChars: number;
   collectionPercentage: number;
   funFacts: string[];
-  achievements: Array<{ icon: string; title: string; description: string; unlocked: boolean }>;
+  achievements: Achievement[];
 }
 
 // Helper functions
@@ -290,7 +297,7 @@ const WishArchivePage: React.FC = () => {
   }, [filteredCharacters]);
 
   // Enhanced Statistics
-  const stats = useMemo<Stats>(() => {
+  const stats: Stats = useMemo(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
@@ -448,10 +455,10 @@ const WishArchivePage: React.FC = () => {
 
     // Fun facts generation
     const funFacts: string[] = [];
-    if (luckiestYear) {
+    if (luckiestYear !== null) {
       funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
     }
-    if (unluckiestYear) {
+    if (unluckiestYear !== null) {
       funFacts.push(`${unluckiestYear.year} was your unluckiest year with a ${unluckiestYear.rate.toFixed(1)}% win rate.`);
     }
     if (mostCollectedElement) {
@@ -470,7 +477,7 @@ const WishArchivePage: React.FC = () => {
     funFacts.push(`You have collected characters across ${activeYears} major game version${activeYears > 1 ? 's' : ''}.`);
 
     // Achievements
-    const achievements: Array<{ icon: string; title: string; description: string; unlocked: boolean }> = [
+    const achievements: Achievement[] = [
       {
         icon: 'mdi:compass',
         title: 'First Steps',
@@ -800,11 +807,11 @@ const WishArchivePage: React.FC = () => {
       </section>
 
       {/* Achievements */}
-      {stats.achievements.length > 0 && (
+      {stats.achievements.filter(a => a.unlocked).length > 0 && (
         <section className="wish-section">
           <h2 className="wish-section-title">Achievements</h2>
           <div className="wish-achievements">
-            {stats.achievements.map((achievement, index) => (
+            {stats.achievements.filter(a => a.unlocked).map((achievement, index) => (
               <div key={index} className="wish-achievement">
                 <div className="wish-achievement-icon">
                   <Icon icon={achievement.icon} />
