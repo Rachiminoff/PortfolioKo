@@ -41,7 +41,6 @@ interface Achievement {
 }
 
 interface Stats {
-  // Overall
   total: number;
   wins: number;
   losses: number;
@@ -51,8 +50,6 @@ interface Stats {
   avgCharsPerYear: number;
   avgWinsPerYear: number;
   avgLossesPerYear: number;
-  
-  // Collection
   byYear: Record<number, YearData>;
   byElement: Record<string, number>;
   mostCollectedElement: string;
@@ -61,8 +58,6 @@ interface Stats {
   versionsParticipated: number;
   earliestVersion: string;
   latestVersion: string;
-  
-  // Journey
   first: WishCharacter | null;
   latest: WishCharacter | null;
   currentStreak: number;
@@ -76,16 +71,11 @@ interface Stats {
   shortestGap: number;
   avgGap: number;
   doubleDays: number;
-  
-  // 50/50 stats
   fiftyFiftyWins: number;
   guaranteedChars: number;
-  
-  // Yearly stats for charts
   yearlyStats: Array<{ year: number; total: number; wins: number; losses: number; rate: number }>;
   versionStats: Array<{ version: string; total: number }>;
   outcomeDistribution: { won: number; lost: number };
-  
   funFacts: string[];
   achievements: Achievement[];
 }
@@ -124,6 +114,79 @@ const getElementIcon = (element: string): string => {
     Cryo: 'mdi:snowflake'
   };
   return icons[element] || 'mdi:circle';
+};
+
+// Collapsible Section Component
+const CollapsibleSection: React.FC<{
+  title: string;
+  subtitle?: string;
+  icon?: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+  className?: string;
+}> = ({ title, subtitle, icon, defaultOpen = true, children, className = '' }) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Set default open state based on device
+  useEffect(() => {
+    setIsOpen(isMobile ? false : defaultOpen);
+  }, [isMobile, defaultOpen]);
+
+  useEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(isOpen ? contentRef.current.scrollHeight : 0);
+    }
+  }, [isOpen, children]);
+
+  const toggle = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div className={`collapsible-section ${className} ${isOpen ? 'open' : ''}`}>
+      <button
+        className="collapsible-section-header"
+        onClick={toggle}
+        aria-expanded={isOpen}
+        aria-controls={`section-${title.replace(/\s+/g, '-').toLowerCase()}`}
+      >
+        <div className="collapsible-section-header-left">
+          {icon && <Icon icon={icon} className="collapsible-section-icon" />}
+          <div className="collapsible-section-titles">
+            <span className="collapsible-section-title">{title}</span>
+            {subtitle && <span className="collapsible-section-subtitle">{subtitle}</span>}
+          </div>
+        </div>
+        <Icon 
+          icon={isOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'} 
+          className={`collapsible-section-chevron ${isOpen ? 'open' : ''}`}
+        />
+      </button>
+      <div
+        className="collapsible-section-content"
+        ref={contentRef}
+        style={{
+          maxHeight: isOpen ? contentHeight : 0,
+          opacity: isOpen ? 1 : 0,
+        }}
+      >
+        <div className="collapsible-section-inner">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 // Premium Component: Animated Counter
@@ -371,7 +434,6 @@ const HeatMap: React.FC<{
   let currentWeek: Date[] = [];
   const firstDay = new Date(year, 0, 1).getDay();
 
-  // Pad first week
   for (let i = 0; i < firstDay; i++) {
     currentWeek.push(new Date(year, 0, 1 - firstDay + i));
   }
@@ -455,7 +517,7 @@ const HeatMap: React.FC<{
   );
 };
 
-// Premium Timeline Entry Component
+// Timeline Entry Component
 interface TimelineEntryProps {
   character: WishCharacter;
   index: number;
@@ -517,7 +579,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
   );
 };
 
-// Premium Character Card Component
+// Character Card Component
 interface CharacterCardProps {
   character: WishCharacter;
   onClick: () => void;
@@ -591,7 +653,6 @@ const WishArchivePage: React.FC = () => {
   const [selectedCharacter, setSelectedCharacter] = useState<WishCharacter | null>(null);
   const [heatmapYear, setHeatmapYear] = useState<number>(new Date().getFullYear());
 
-  // Fetch characters
   useEffect(() => {
     fetchCharacters();
   }, []);
@@ -611,7 +672,6 @@ const WishArchivePage: React.FC = () => {
     setLoading(false);
   };
 
-  // Get unique years, elements
   const years = useMemo(() => {
     const yearSet = new Set(characters.map(c => c.year));
     return ['all', ...Array.from(yearSet).sort((a, b) => b - a).map(String)];
@@ -624,7 +684,6 @@ const WishArchivePage: React.FC = () => {
 
   const outcomes = ['all', 'won', 'lost'];
 
-  // Filter and sort characters
   const filteredCharacters = useMemo(() => {
     let filtered = [...characters];
 
@@ -664,7 +723,6 @@ const WishArchivePage: React.FC = () => {
     return filtered;
   }, [characters, selectedYear, selectedElement, selectedOutcome, searchQuery, sortBy]);
 
-  // Group by year for timeline
   const groupedByYear = useMemo(() => {
     const groups: Record<number, WishCharacter[]> = {};
     filteredCharacters.forEach(character => {
@@ -676,14 +734,12 @@ const WishArchivePage: React.FC = () => {
     return Object.entries(groups).sort((a, b) => Number(b[0]) - Number(a[0]));
   }, [filteredCharacters]);
 
-  // Enhanced Statistics
   const stats: Stats = useMemo(() => {
     const total = characters.length;
     const wins = characters.filter(c => c.outcome === 'won').length;
     const losses = characters.filter(c => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
     
-    // Yearly data
     const byYear: Record<number, YearData> = {};
     characters.forEach(c => {
       if (!byYear[c.year]) {
@@ -703,12 +759,10 @@ const WishArchivePage: React.FC = () => {
       byYear[c.year].characters.push(c.name);
     });
 
-    // Calculate yearly rates and streaks
     Object.keys(byYear).forEach(year => {
       const y = byYear[Number(year)];
       y.rate = y.total > 0 ? (y.wins / y.total) * 100 : 0;
       
-      // Calculate best streak for the year
       let streak = 0;
       let bestStreak = 0;
       const yearChars = characters.filter(c => c.year === Number(year)).sort(
@@ -724,7 +778,6 @@ const WishArchivePage: React.FC = () => {
       });
       y.bestStreak = bestStreak;
 
-      // Calculate avg gap for the year
       const dates = yearChars.map(c => new Date(c.date_obtained));
       let gaps: number[] = [];
       for (let i = 1; i < dates.length; i++) {
@@ -733,7 +786,6 @@ const WishArchivePage: React.FC = () => {
       y.avgGap = gaps.length > 0 ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0;
     });
 
-    // Element distribution
     const byElement: Record<string, number> = {};
     characters.forEach(c => {
       if (!byElement[c.element]) byElement[c.element] = 0;
@@ -755,10 +807,8 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // Element diversity (number of elements with at least 1 character)
     const elementDiversity = Object.keys(byElement).length;
 
-    // Version stats
     const byVersion: Record<string, number> = {};
     characters.forEach(c => {
       if (!byVersion[c.version]) byVersion[c.version] = 0;
@@ -779,14 +829,12 @@ const WishArchivePage: React.FC = () => {
     const latestVersion = versions.length > 0 ? versions[versions.length - 1] : '';
     const versionsParticipated = versions.length;
 
-    // First and latest
     const sortedByDate = [...characters].sort((a, b) => 
       new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
     );
     const first = sortedByDate[0] || null;
     const latest = sortedByDate[sortedByDate.length - 1] || null;
 
-    // Gaps
     const gaps: number[] = [];
     for (let i = 1; i < sortedByDate.length; i++) {
       const prev = new Date(sortedByDate[i - 1].date_obtained);
@@ -797,7 +845,6 @@ const WishArchivePage: React.FC = () => {
     const longestGap = gaps.length > 0 ? Math.max(...gaps) : 0;
     const shortestGap = gaps.length > 0 ? Math.min(...gaps) : 0;
 
-    // Streaks
     let currentStreak = 0;
     let longestWinStreak = 0;
     let longestLoseStreak = 0;
@@ -822,7 +869,6 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // 50/50 wins
     let fiftyFiftyWins = 0;
     let guaranteedChars = 0;
     sortedForStreak.forEach((c, index) => {
@@ -835,7 +881,6 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // Double character days
     const dateCounts: Record<string, number> = {};
     characters.forEach(c => {
       if (!dateCounts[c.date_obtained]) dateCounts[c.date_obtained] = 0;
@@ -845,7 +890,6 @@ const WishArchivePage: React.FC = () => {
 
     const activeYears = Object.keys(byYear).length;
 
-    // Busiest year
     let busiestYear = 0;
     let maxYearCount = 0;
     Object.entries(byYear).forEach(([year, data]) => {
@@ -855,7 +899,6 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    // Yearly stats for charts
     const yearlyStats = Object.entries(byYear).map(([year, data]) => ({
       year: Number(year),
       total: data.total,
@@ -869,7 +912,6 @@ const WishArchivePage: React.FC = () => {
       total
     })).sort((a, b) => a.version.localeCompare(b.version));
 
-    // Luckiest/Unluckiest year
     let luckiestYear: YearStat | null = null;
     let unluckiestYear: YearStat | null = null;
     
@@ -904,7 +946,6 @@ const WishArchivePage: React.FC = () => {
     const avgWinsPerYear = activeYears > 0 ? wins / activeYears : 0;
     const avgLossesPerYear = activeYears > 0 ? losses / activeYears : 0;
 
-    // Fun facts
     const funFacts: string[] = [];
     if (luckiestYear !== null) {
       funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
@@ -932,7 +973,6 @@ const WishArchivePage: React.FC = () => {
       funFacts.push(`Your longest gap between pulls was ${longestGap} days.`);
     }
 
-    // Achievements
     const achievements: Achievement[] = [
       {
         icon: 'mdi:compass',
@@ -1025,7 +1065,6 @@ const WishArchivePage: React.FC = () => {
     };
   }, [characters]);
 
-  // Character detail modal
   const CharacterModal = ({ character, onClose }: { character: WishCharacter; onClose: () => void }) => {
     const elementColor = getElementColor(character.element);
 
@@ -1138,7 +1177,7 @@ const WishArchivePage: React.FC = () => {
         </button>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Section - Made more prominent */}
       <section className="wish-hero">
         <div className="wish-hero-content">
           <div className="wish-hero-badge">✦ Collection</div>
@@ -1164,252 +1203,278 @@ const WishArchivePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Statistics Dashboard */}
-      <section className="wish-stats-dashboard">
-        <div className="wish-stats-dashboard-grid">
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">🎯</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
-              <span className="wish-stat-premium-label">Longest Win Streak</span>
+      {/* Collapsible Analytics Sections */}
+      <div className="wish-analytics-container">
+        {/* Statistics Dashboard */}
+        <CollapsibleSection 
+          title="📊 Collection Statistics" 
+          subtitle="Overview of your entire collection"
+          icon="mdi:chart-bar"
+          defaultOpen={true}
+        >
+          <div className="wish-stats-dashboard">
+            <div className="wish-stats-dashboard-grid">
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">🎯</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
+                  <span className="wish-stat-premium-label">Longest Win Streak</span>
+                </div>
+              </div>
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">💫</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
+                  <span className="wish-stat-premium-label">50/50 Wins</span>
+                </div>
+              </div>
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">📅</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
+                  <span className="wish-stat-premium-label">Busiest Year</span>
+                </div>
+              </div>
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">🔮</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
+                  <span className="wish-stat-premium-label">Most Collected Element</span>
+                </div>
+              </div>
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">📊</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
+                  <span className="wish-stat-premium-label">Elements Collected</span>
+                </div>
+              </div>
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">🎮</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
+                  <span className="wish-stat-premium-label">Versions Played</span>
+                </div>
+              </div>
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">⏱️</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
+                  <span className="wish-stat-premium-label">Avg Between Pulls</span>
+                </div>
+              </div>
+              <div className="wish-stat-premium">
+                <div className="wish-stat-premium-icon">📈</div>
+                <div className="wish-stat-premium-content">
+                  <span className="wish-stat-premium-value">{stats.doubleDays}</span>
+                  <span className="wish-stat-premium-label">Double Pull Days</span>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">💫</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
-              <span className="wish-stat-premium-label">50/50 Wins</span>
-            </div>
-          </div>
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">📅</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
-              <span className="wish-stat-premium-label">Busiest Year</span>
-            </div>
-          </div>
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">🔮</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
-              <span className="wish-stat-premium-label">Most Collected Element</span>
-            </div>
-          </div>
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">📊</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
-              <span className="wish-stat-premium-label">Elements Collected</span>
-            </div>
-          </div>
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">🎮</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
-              <span className="wish-stat-premium-label">Versions Played</span>
-            </div>
-          </div>
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">⏱️</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
-              <span className="wish-stat-premium-label">Avg Between Pulls</span>
-            </div>
-          </div>
-          <div className="wish-stat-premium">
-            <div className="wish-stat-premium-icon">📈</div>
-            <div className="wish-stat-premium-content">
-              <span className="wish-stat-premium-value">{stats.doubleDays}</span>
-              <span className="wish-stat-premium-label">Double Pull Days</span>
-            </div>
-          </div>
-        </div>
 
-        {/* Charts Row */}
-        <div className="wish-charts-row">
-          <div className="wish-chart-card">
-            <h3 className="wish-chart-title">Element Distribution</h3>
-            <DonutChart data={stats.byElement} />
-          </div>
-          <div className="wish-chart-card">
-            <h3 className="wish-chart-title">Outcome Distribution</h3>
-            <DonutChart 
-              data={{ 
-                Won: stats.wins, 
-                Lost: stats.losses 
-              }} 
-              colors={{ 
-                Won: '#7eb870', 
-                Lost: '#e06040' 
-              }}
-            />
-          </div>
-          <div className="wish-chart-card">
-            <h3 className="wish-chart-title">Collection Progress</h3>
-            <div className="wish-progress-ring">
-              <svg viewBox="0 0 120 120">
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="rgba(255,255,255,0.04)"
-                  strokeWidth="6"
+            {/* Charts Row */}
+            <div className="wish-charts-row">
+              <div className="wish-chart-card">
+                <h3 className="wish-chart-title">Element Distribution</h3>
+                <DonutChart data={stats.byElement} />
+              </div>
+              <div className="wish-chart-card">
+                <h3 className="wish-chart-title">Outcome Distribution</h3>
+                <DonutChart 
+                  data={{ 
+                    Won: stats.wins, 
+                    Lost: stats.losses 
+                  }} 
+                  colors={{ 
+                    Won: '#7eb870', 
+                    Lost: '#e06040' 
+                  }}
                 />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="url(#progressGradient)"
-                  strokeWidth="6"
-                  strokeDasharray={`${stats.collectionPercentage * 3.14} 314`}
-                  strokeLinecap="round"
-                  transform="rotate(-90 60 60)"
+              </div>
+              <div className="wish-chart-card">
+                <h3 className="wish-chart-title">Collection Progress</h3>
+                <div className="wish-progress-ring">
+                  <svg viewBox="0 0 120 120">
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.04)"
+                      strokeWidth="6"
+                    />
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="50"
+                      fill="none"
+                      stroke="url(#progressGradient)"
+                      strokeWidth="6"
+                      strokeDasharray={`${stats.collectionPercentage * 3.14} 314`}
+                      strokeLinecap="round"
+                      transform="rotate(-90 60 60)"
+                    />
+                    <defs>
+                      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#7ae0db" />
+                        <stop offset="50%" stopColor="#8B5CF6" />
+                        <stop offset="100%" stopColor="#f9b55d" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="wish-progress-ring-content">
+                    <span className="wish-progress-ring-value">{Math.round(stats.collectionPercentage)}%</span>
+                    <span className="wish-progress-ring-label">Collected</span>
+                  </div>
+                </div>
+              </div>
+              <div className="wish-chart-card">
+                <h3 className="wish-chart-title">Characters by Year</h3>
+                <BarChart 
+                  data={stats.yearlyStats.map(stat => ({
+                    label: stat.year.toString(),
+                    value: stat.total,
+                    color: `hsl(${200 + stat.year * 10}, 60%, 50%)`
+                  }))}
+                  height={150}
                 />
-                <defs>
-                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#7ae0db" />
-                    <stop offset="50%" stopColor="#8B5CF6" />
-                    <stop offset="100%" stopColor="#f9b55d" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div className="wish-progress-ring-content">
-                <span className="wish-progress-ring-value">{Math.round(stats.collectionPercentage)}%</span>
-                <span className="wish-progress-ring-label">Collected</span>
               </div>
             </div>
           </div>
-          <div className="wish-chart-card">
-            <h3 className="wish-chart-title">Characters by Year</h3>
-            <BarChart 
-              data={stats.yearlyStats.map(stat => ({
-                label: stat.year.toString(),
-                value: stat.total,
-                color: `hsl(${200 + stat.year * 10}, 60%, 50%)`
-              }))}
-              height={150}
-            />
-          </div>
-        </div>
-      </section>
+        </CollapsibleSection>
 
-      {/* Yearly Performance Section */}
-      <section className="wish-section">
-        <h2 className="wish-section-title">📊 Yearly Performance</h2>
-        <div className="wish-yearly-grid">
-          {stats.yearlyStats.map(stat => {
-            const yearData = stats.byYear[stat.year];
-            const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' : 
-                         stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
-            const isBest = stat.rate === Math.max(...stats.yearlyStats.map(s => s.rate));
-            const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
+        {/* Yearly Performance */}
+        <CollapsibleSection 
+          title="📊 Yearly Performance" 
+          subtitle="Breakdown by year with trends and streaks"
+          icon="mdi:calendar-month"
+          defaultOpen={false}
+        >
+          <div className="wish-yearly-grid">
+            {stats.yearlyStats.map(stat => {
+              const yearData = stats.byYear[stat.year];
+              const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' : 
+                           stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
+              const isBest = stat.rate === Math.max(...stats.yearlyStats.map(s => s.rate));
+              const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
 
-            return (
-              <div key={stat.year} className="wish-yearly-card">
-                <div className="wish-yearly-header">
-                  <h3>{stat.year}</h3>
-                  <span className={`wish-yearly-trend ${trend}`}>
-                    {trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—'}
-                    {isBest && ' (Best)'}
-                    {isWorst && ' (Worst)'}
-                  </span>
-                </div>
-                <div className="wish-yearly-stats">
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{stat.total}</span>
-                    <span className="wish-yearly-stat-label">Characters</span>
-                  </div>
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{stat.wins}</span>
-                    <span className="wish-yearly-stat-label">Wins</span>
-                  </div>
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{stat.losses}</span>
-                    <span className="wish-yearly-stat-label">Losses</span>
-                  </div>
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{Math.round(stat.rate)}%</span>
-                    <span className="wish-yearly-stat-label">Win Rate</span>
-                  </div>
-                </div>
-                {yearData && (
-                  <div className="wish-yearly-details">
-                    <span>Avg {Math.round(yearData.avgGap)} days between pulls</span>
-                    <span>Best streak: {yearData.bestStreak}</span>
-                    <span className="wish-yearly-characters">
-                      {yearData.characters.slice(0, 3).join(', ')}
-                      {yearData.characters.length > 3 && ` +${yearData.characters.length - 3} more`}
+              return (
+                <div key={stat.year} className="wish-yearly-card">
+                  <div className="wish-yearly-header">
+                    <h3>{stat.year}</h3>
+                    <span className={`wish-yearly-trend ${trend}`}>
+                      {trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—'}
+                      {isBest && ' (Best)'}
+                      {isWorst && ' (Worst)'}
                     </span>
                   </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Heat Map */}
-      <section className="wish-section">
-        <h2 className="wish-section-title">🔥 Acquisition Heat Map</h2>
-        <div className="wish-heatmap-controls">
-          <div className="wish-heatmap-year-selector">
-            {years.filter(y => y !== 'all').map(year => (
-              <button
-                key={year}
-                className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
-                onClick={() => setHeatmapYear(Number(year))}
-              >
-                {year}
-              </button>
-            ))}
+                  <div className="wish-yearly-stats">
+                    <div className="wish-yearly-stat">
+                      <span className="wish-yearly-stat-value">{stat.total}</span>
+                      <span className="wish-yearly-stat-label">Characters</span>
+                    </div>
+                    <div className="wish-yearly-stat">
+                      <span className="wish-yearly-stat-value">{stat.wins}</span>
+                      <span className="wish-yearly-stat-label">Wins</span>
+                    </div>
+                    <div className="wish-yearly-stat">
+                      <span className="wish-yearly-stat-value">{stat.losses}</span>
+                      <span className="wish-yearly-stat-label">Losses</span>
+                    </div>
+                    <div className="wish-yearly-stat">
+                      <span className="wish-yearly-stat-value">{Math.round(stat.rate)}%</span>
+                      <span className="wish-yearly-stat-label">Win Rate</span>
+                    </div>
+                  </div>
+                  {yearData && (
+                    <div className="wish-yearly-details">
+                      <span>Avg {Math.round(yearData.avgGap)} days between pulls</span>
+                      <span>Best streak: {yearData.bestStreak}</span>
+                      <span className="wish-yearly-characters">
+                        {yearData.characters.slice(0, 3).join(', ')}
+                        {yearData.characters.length > 3 && ` +${yearData.characters.length - 3} more`}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-        </div>
-        <HeatMap 
-          characters={characters} 
-          year={heatmapYear}
-          onCellHover={(date) => {
-            // Optional: update a tooltip or info display
-          }}
-        />
-      </section>
+        </CollapsibleSection>
 
-      {/* Fun Facts */}
-      <section className="wish-section">
-        <h2 className="wish-section-title">✦ Fun Facts</h2>
-        <div className="wish-fun-facts-grid">
-          {stats.funFacts.map((fact, index) => (
-            <div key={index} className="wish-fun-fact-premium">
-              <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
-              <span>{fact}</span>
+        {/* Heat Map */}
+        <CollapsibleSection 
+          title="🔥 Acquisition Heat Map" 
+          subtitle="View every day a limited character was obtained"
+          icon="mdi:fire"
+          defaultOpen={true}
+        >
+          <div className="wish-heatmap-controls">
+            <div className="wish-heatmap-year-selector">
+              {years.filter(y => y !== 'all').map(year => (
+                <button
+                  key={year}
+                  className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
+                  onClick={() => setHeatmapYear(Number(year))}
+                >
+                  {year}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </div>
+          <HeatMap 
+            characters={characters} 
+            year={heatmapYear}
+            onCellHover={(date) => {
+              // Optional: update a tooltip or info display
+            }}
+          />
+        </CollapsibleSection>
 
-      {/* Achievements */}
-      {stats.achievements.filter(a => a.unlocked).length > 0 && (
-        <section className="wish-section">
-          <h2 className="wish-section-title">🏆 Achievements</h2>
-          <div className="wish-achievements-grid">
-            {stats.achievements.filter(a => a.unlocked).map((achievement, index) => (
-              <div key={index} className="wish-achievement-premium">
-                <div className="wish-achievement-premium-icon">
-                  <Icon icon={achievement.icon} />
-                </div>
-                <div className="wish-achievement-premium-content">
-                  <h4>{achievement.title}</h4>
-                  <p>{achievement.description}</p>
-                </div>
-                <div className="wish-achievement-premium-badge">✓</div>
+        {/* Fun Facts */}
+        <CollapsibleSection 
+          title="✦ Fun Facts" 
+          subtitle="Interesting insights about your collection"
+          icon="mdi:star"
+          defaultOpen={false}
+        >
+          <div className="wish-fun-facts-grid">
+            {stats.funFacts.map((fact, index) => (
+              <div key={index} className="wish-fun-fact-premium">
+                <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
+                <span>{fact}</span>
               </div>
             ))}
           </div>
-        </section>
-      )}
+        </CollapsibleSection>
 
-      {/* Controls */}
+        {/* Achievements */}
+        {stats.achievements.filter(a => a.unlocked).length > 0 && (
+          <CollapsibleSection 
+            title="🏆 Achievements" 
+            subtitle={`${stats.achievements.filter(a => a.unlocked).length} achievements unlocked`}
+            icon="mdi:trophy"
+            defaultOpen={false}
+          >
+            <div className="wish-achievements-grid">
+              {stats.achievements.filter(a => a.unlocked).map((achievement, index) => (
+                <div key={index} className="wish-achievement-premium">
+                  <div className="wish-achievement-premium-icon">
+                    <Icon icon={achievement.icon} />
+                  </div>
+                  <div className="wish-achievement-premium-content">
+                    <h4>{achievement.title}</h4>
+                    <p>{achievement.description}</p>
+                  </div>
+                  <div className="wish-achievement-premium-badge">✓</div>
+                </div>
+              ))}
+            </div>
+          </CollapsibleSection>
+        )}
+      </div>
+
+      {/* Archive Controls */}
       <div className="wish-controls">
         <div className="wish-controls-top">
           <div className="wish-view-controls">
