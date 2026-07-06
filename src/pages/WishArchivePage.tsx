@@ -326,7 +326,8 @@ const WishArchivePage: React.FC = () => {
     let leastCollectedElement = '';
     let maxCount = 0;
     let minCount = Infinity;
-    Object.entries(byElement).forEach(([element, count]) => {
+    const elementEntries = Object.entries(byElement);
+    elementEntries.forEach(([element, count]) => {
       if (count > maxCount) {
         maxCount = count;
         mostCollectedElement = element;
@@ -347,7 +348,8 @@ const WishArchivePage: React.FC = () => {
     // Busiest version
     let busiestVersion = '';
     let maxVersionCount = 0;
-    Object.entries(byVersion).forEach(([version, count]) => {
+    const versionEntries = Object.entries(byVersion);
+    versionEntries.forEach(([version, count]) => {
       if (count > maxVersionCount) {
         maxVersionCount = count;
         busiestVersion = version;
@@ -428,35 +430,51 @@ const WishArchivePage: React.FC = () => {
     // Busiest year
     let busiestYear = 0;
     let maxYearCount = 0;
-    Object.entries(byYear).forEach(([year, data]) => {
+    const yearEntries = Object.entries(byYear);
+    yearEntries.forEach(([year, data]) => {
       if (data.total > maxYearCount) {
         maxYearCount = data.total;
         busiestYear = Number(year);
       }
     });
 
-    // Luckiest/Unluckiest year - explicitly typed with proper null handling
-    const luckiestYear: YearStat | null = (() => {
-      let best: YearStat | null = null;
-      Object.entries(byYear).forEach(([year, data]) => {
-        const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
-        if (!best || rate > best.rate) {
-          best = { year: Number(year), rate };
-        }
-      });
-      return best;
-    })();
+    // Calculate year stats for luckiest/unluckiest years
+    const yearStats: Array<{year: number; rate: number}> = [];
+    Object.entries(byYear).forEach(([year, data]) => {
+      const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
+      yearStats.push({ year: Number(year), rate });
+    });
 
-    const unluckiestYear: YearStat | null = (() => {
-      let worst: YearStat | null = null;
-      Object.entries(byYear).forEach(([year, data]) => {
-        const rate = data.total > 0 ? (data.wins / data.total) * 100 : 0;
-        if (!worst || rate < worst.rate) {
-          worst = { year: Number(year), rate };
+    // Find luckiest and unluckiest years
+    let luckiestYear: YearStat | null = null;
+    let unluckiestYear: YearStat | null = null;
+    
+    if (yearStats.length > 0) {
+      let bestRate = -1;
+      let worstRate = 101;
+      let bestYear = 0;
+      let worstYear = 0;
+      
+      yearStats.forEach(stat => {
+        if (stat.rate > bestRate) {
+          bestRate = stat.rate;
+          bestYear = stat.year;
+        }
+        if (stat.rate < worstRate) {
+          worstRate = stat.rate;
+          worstYear = stat.year;
         }
       });
-      return worst;
-    })();
+      
+      // Only set luckiest if we found a valid rate
+      if (bestRate >= 0) {
+        luckiestYear = { year: bestYear, rate: bestRate };
+      }
+      // Only set unluckiest if we found a valid rate
+      if (worstRate <= 100) {
+        unluckiestYear = { year: worstYear, rate: worstRate };
+      }
+    }
 
     // Collection progress (assuming ~80 total limited characters as of now)
     const totalLimitedChars = 80;
