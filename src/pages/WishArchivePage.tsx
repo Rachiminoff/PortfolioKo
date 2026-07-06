@@ -388,9 +388,6 @@ const HeatMap: React.FC<{
     weeks.push(currentWeek);
   }
 
-  const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const dayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
   return (
     <div className="heatmap-container">
       <div className="heatmap-grid" ref={gridRef}>
