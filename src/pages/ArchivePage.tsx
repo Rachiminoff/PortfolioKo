@@ -226,7 +226,7 @@ function AuthScreen({
    DASHBOARD
 ========================= */
 function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
-  const [activeSection, setActiveSection] = useState<'home' | 'vault' | 'insights'>('home');
+  const [activeSection, setActiveSection] = useState<'home' | 'vault' | 'insights' | 'wish'>('home');
 
   const cards = [
     {
@@ -242,6 +242,13 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       title: 'Insights',
       description: 'Technical articles and writings.',
       color: '#8b5cf6',
+    },
+    {
+      id: 'wish' as const,
+      icon: 'mdi:star-four-points',
+      title: 'Wish Archive',
+      description: 'Genshin Impact wish history and analytics.',
+      color: '#f9b55d',
     },
   ];
 
@@ -279,6 +286,25 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
     );
   }
 
+  if (activeSection === 'wish') {
+    // Lazy load WishArchivePage
+    const WishArchivePage = lazy(() => import('../pages/WishArchivePage'));
+    return (
+      <div className="archive-section">
+        <button
+          className="archive-section-back"
+          onClick={() => setActiveSection('home')}
+        >
+          <Icon icon="mdi:arrow-left" />
+          Back to Archive
+        </button>
+        <Suspense fallback={<div className="archive-loading">Loading Wish Archive...</div>}>
+          <WishArchivePage />
+        </Suspense>
+      </div>
+    );
+  }
+
   return (
     <div className="archive-dashboard">
       <div className="archive-dashboard-header">
@@ -301,6 +327,9 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
               } else if (card.id === 'insights') {
                 setActiveSection('insights');
                 onNavigate('/insights');
+              } else if (card.id === 'wish') {
+                setActiveSection('wish');
+                onNavigate('/wish-archive');
               }
             }}
             style={{ '--card-color': card.color } as React.CSSProperties}
@@ -353,7 +382,7 @@ const ArchivePage: React.FC = () => {
   // Check auth status on mount
   useEffect(() => {
     checkAuthStatus();
-  }, [checkAuthStatus]); // ✅ Fixed: Added dependency
+  }, [checkAuthStatus]);
 
   const handleUnlock = async (password: string) => {
     const result = await unlockArchive(password);

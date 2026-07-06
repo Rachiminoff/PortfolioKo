@@ -266,7 +266,9 @@ function AppContent() {
           path="/wish-archive" 
           element={
             <FullscreenLayout>
-              <WishArchivePage />
+              <ProtectedRoute isUnlocked={isArchiveUnlocked} isLoading={archiveLoading} redirectTo="/archive">
+                <WishArchivePage />
+              </ProtectedRoute>
             </FullscreenLayout>
           } 
         />
