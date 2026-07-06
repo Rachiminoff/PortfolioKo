@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { supabase } from '../lib/supabase';
@@ -162,27 +162,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
   const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !hasAnimated) {
-            setHasAnimated(true);
-            drawChart();
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
-    return () => observer.disconnect();
-  }, [hasAnimated]);
-
-  const drawChart = () => {
+  const drawChart = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -231,7 +211,27 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
     ctx.arc(centerX, centerY, radius * 0.45, 0, 2 * Math.PI);
     ctx.fillStyle = '#0a0a0a';
     ctx.fill();
-  };
+  }, [data, colors]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            drawChart();
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasAnimated, drawChart]);
 
   return (
     <div ref={ref} className="donut-chart">
@@ -279,7 +279,6 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
     >
       <div className="wish-timeline-entry-connector">
         <div className="wish-timeline-entry-dot" style={{ backgroundColor: elementColor }} />
-        {index < 0 && <div className="wish-timeline-entry-line" style={{ borderColor: `${elementColor}33` }} />}
       </div>
       <div className="wish-timeline-entry-content">
         <div className="wish-timeline-entry-header">
@@ -303,7 +302,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
   );
 };
 
-// Components
+// Premium Character Card Component
 interface CharacterCardProps {
   character: WishCharacter;
   onClick: () => void;
