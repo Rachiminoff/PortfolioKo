@@ -3,11 +3,18 @@
 .wish-archive-page {
   position: relative;
   min-height: 100vh;
-  padding: 0 clamp(24px, 5vw, 72px);
   max-width: 1500px;
   margin: 0 auto;
-  color: #ffffff;
+
+  /* Replace horizontal-only padding */
+  padding: 32px clamp(24px, 5vw, 72px) 64px;
+
+  color: #fff;
   background: #0a0a0a;
+
+  /* Prevent first-child margin collapse */
+  display: flow-root;
+  box-sizing: border-box;
 
   &::-webkit-scrollbar {
     width: 6px;
