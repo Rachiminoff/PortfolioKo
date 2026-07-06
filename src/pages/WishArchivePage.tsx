@@ -206,7 +206,7 @@ const WishArchivePage: React.FC = () => {
   // Get unique years, elements
   const years = useMemo(() => {
     const yearSet = new Set(characters.map(c => c.year));
-    return ['all', ...Array.from(yearSet).sort((a, b) => b - a)];
+    return ['all', ...Array.from(yearSet).sort((a, b) => b - a).map(String)];
   }, [characters]);
 
   const elements = useMemo(() => {
