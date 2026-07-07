@@ -49,11 +49,11 @@ const VaultPage: React.FC = () => {
           className="vault-back-button"
           onClick={() => {
             console.log('VaultPage - Going back to archive');
-            navigate('/archive');  // ✅ Navigate to archive
+            navigate('/archive');  
           }}
-          aria-label="Back to archive"  // ✅ Updated label
+          aria-label="Back to archive" 
         >
-          ← Back to Archive  // ✅ Updated text
+          ← Back to Archive  
         </button>
         <h1>Vault</h1>
       </div>

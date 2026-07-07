@@ -22,6 +22,7 @@ const ArchivePage = lazy(() => import('./pages/ArchivePage'));
 const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
+const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStats/AdaShimaStatsPage'));
 
 // Boot Sequence Component
 function BootSequence({ onComplete }: { onComplete: () => void }) {
@@ -221,7 +222,8 @@ function AppContent() {
   const isFullscreenRoute = location.pathname === '/archive' ||
                             location.pathname === '/vault' || 
                             location.pathname === '/insights' || 
-                            location.pathname === '/wish-archive';
+                            location.pathname === '/wish-archive' ||
+                            location.pathname === '/adashima-stats';
 
   return (
     <div className={isFullscreenRoute ? '' : 'main-container dark-mode'}>
@@ -268,6 +270,16 @@ function AppContent() {
             <FullscreenLayout>
               <ProtectedRoute isUnlocked={isArchiveUnlocked} isLoading={archiveLoading} redirectTo="/archive">
                 <WishArchivePage />
+              </ProtectedRoute>
+            </FullscreenLayout>
+          } 
+        />
+        <Route 
+          path="/adashima-stats" 
+          element={
+            <FullscreenLayout>
+              <ProtectedRoute isUnlocked={isArchiveUnlocked} isLoading={archiveLoading} redirectTo="/archive">
+                <AdaShimaStatsPage />
               </ProtectedRoute>
             </FullscreenLayout>
           } 

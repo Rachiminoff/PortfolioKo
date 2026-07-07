@@ -226,7 +226,8 @@ function AuthScreen({
    DASHBOARD
 ========================= */
 function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
-  const [activeSection, setActiveSection] = useState<'home' | 'vault' | 'insights' | 'wish'>('home');
+  const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState<'home' | 'vault' | 'insights' | 'wish' | 'adashima'>('home');
 
   const cards = [
     {
@@ -250,8 +251,16 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       description: 'Genshin Impact wish history and analytics.',
       color: '#f9b55d',
     },
+    {
+      id: 'adashima' as const,
+      icon: 'mdi:book-open-variant',
+      title: 'AdaShima Stats',
+      description: 'Light novel statistics and analytics.',
+      color: '#818cf8',
+    },
   ];
 
+  // Handle section rendering
   if (activeSection === 'vault') {
     return (
       <div className="archive-section">
@@ -287,7 +296,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
   }
 
   if (activeSection === 'wish') {
-    // Lazy load WishArchivePage
     const WishArchivePage = lazy(() => import('../pages/WishArchivePage'));
     return (
       <div className="archive-section">
@@ -305,6 +313,24 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
     );
   }
 
+  if (activeSection === 'adashima') {
+    const AdaShimaStatsPage = lazy(() => import('../pages/AdaShimaStats/AdaShimaStatsPage'));
+    return (
+      <div className="archive-section">
+        <button
+          className="archive-section-back"
+          onClick={() => setActiveSection('home')}
+        >
+          <Icon icon="mdi:arrow-left" />
+          Back to Archive
+        </button>
+        <Suspense fallback={<div className="archive-loading">Loading Statistics...</div>}>
+          <AdaShimaStatsPage />
+        </Suspense>
+      </div>
+    );
+  }
+
   return (
     <div className="archive-dashboard">
       <div className="archive-dashboard-header">
@@ -312,7 +338,17 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
           <Icon icon="mdi:archive" />
           <h1>Archive</h1>
         </div>
-        <p className="archive-dashboard-welcome">Welcome back.</p>
+        <div className="archive-dashboard-actions">
+          <button
+            className="archive-home-button"
+            onClick={() => navigate('/')}
+            aria-label="Back to Home"
+          >
+            <Icon icon="mdi:home" />
+            Home
+          </button>
+          <p className="archive-dashboard-welcome">Welcome back.</p>
+        </div>
       </div>
 
       <div className="archive-dashboard-grid">
@@ -330,6 +366,9 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
               } else if (card.id === 'wish') {
                 setActiveSection('wish');
                 onNavigate('/wish-archive');
+              } else if (card.id === 'adashima') {
+                setActiveSection('adashima');
+                onNavigate('/adashima-stats');
               }
             }}
             style={{ '--card-color': card.color } as React.CSSProperties}
