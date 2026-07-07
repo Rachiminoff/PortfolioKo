@@ -22,7 +22,7 @@ const ArchivePage = lazy(() => import('./pages/ArchivePage'));
 const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
-const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStats/AdaShimaStatsPage'));
+const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStatsPage'));
 
 // Boot Sequence Component
 function BootSequence({ onComplete }: { onComplete: () => void }) {

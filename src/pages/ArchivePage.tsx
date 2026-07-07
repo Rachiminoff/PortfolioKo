@@ -314,7 +314,7 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
   }
 
   if (activeSection === 'adashima') {
-    const AdaShimaStatsPage = lazy(() => import('../pages/AdaShimaStats/AdaShimaStatsPage'));
+    const AdaShimaStatsPage = lazy(() => import('../pages/AdaShimaStatsPage'));
     return (
       <div className="archive-section">
         <button
