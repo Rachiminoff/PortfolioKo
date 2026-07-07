@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { supabase } from '../../lib/supabase';
-import FullscreenLayout from '../../layouts/FullscreenLayout';
+import { supabase } from '../lib/supabase';
+import FullscreenLayout from '../layouts/FullscreenLayout';
 import './styles/AdaShimaStatsPage.scss';
 
 // Types
