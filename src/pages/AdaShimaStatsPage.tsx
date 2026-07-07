@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '../lib/supabase';
 import './styles/AdaShimaStatsPage.scss';
 
 // Types
