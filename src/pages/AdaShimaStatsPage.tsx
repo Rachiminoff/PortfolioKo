@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { supabase } from '../lib/supabase';
@@ -120,28 +120,7 @@ const AdaShimaStatsPage: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Fetch data from Supabase
-  useEffect(() => {
-    fetchVolumes();
-  }, []);
-
-  const fetchVolumes = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('adashima_volumes')
-      .select('*')
-      .order('id', { ascending: true });
-
-    if (error) {
-      console.error('Error fetching Adashima volumes:', error);
-    } else if (data) {
-      setVolumes(data);
-      calculateStats(data);
-    }
-    setLoading(false);
-  };
-
-  const calculateStats = (data: VolumeData[]) => {
+  const calculateStats = useCallback((data: VolumeData[]) => {
     const activeVolumes = data.filter(v => !v.is_upcoming && v.page_count > 0);
     const totalVolumes = data.length;
     const totalChapters = activeVolumes.reduce((sum, v) => sum + v.chapters, 0);
@@ -188,7 +167,28 @@ const AdaShimaStatsPage: React.FC = () => {
       publicationStart: minDate.getFullYear().toString(),
       publicationEnd: maxDate.getFullYear().toString(),
     });
-  };
+  }, []);
+
+  const fetchVolumes = useCallback(async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('adashima_volumes')
+      .select('*')
+      .order('id', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching Adashima volumes:', error);
+    } else if (data) {
+      setVolumes(data);
+      calculateStats(data);
+    }
+    setLoading(false);
+  }, [calculateStats]);
+
+  // Fetch data from Supabase
+  useEffect(() => {
+    fetchVolumes();
+  }, [fetchVolumes]);
 
   const sections = [
     { id: 'overview', label: 'Overview' },
