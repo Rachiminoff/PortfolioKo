@@ -995,7 +995,7 @@ const AdaShimaStatsPage: React.FC = () => {
                             {volume.volume_number}
                           </span>
                           {rank && rank.startsWith('#1') && (
-                            <span className="chart-bar-rank">🏆</span>
+                            <span className="chart-bar-rank">Top</span>
                           )}
                         </div>
                       );
