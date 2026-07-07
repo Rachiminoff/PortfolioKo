@@ -346,7 +346,7 @@ const AdaShimaStatsPage: React.FC = () => {
       {/* Content */}
       <div className="stats-content">
         {/* HERO SECTION */}
-        <div ref={(el) => (sectionRefs.current.overview = el)} data-section="overview">
+        <div ref={(el) => { sectionRefs.current.overview = el; }} data-section="overview">
           <section className="hero-section section-reveal">
             <div className="hero-content">
               <div className="hero-badge">✦ Statistics</div>
@@ -370,7 +370,7 @@ const AdaShimaStatsPage: React.FC = () => {
         </div>
 
         {/* DASHBOARD SECTION */}
-        <div ref={(el) => (sectionRefs.current.dashboard = el)} data-section="dashboard">
+        <div ref={(el) => { sectionRefs.current.dashboard = el; }} data-section="dashboard">
           <section className="dashboard-section section-reveal">
             <div className="section-header">
               <h2 className="section-title">Overview Dashboard</h2>
@@ -443,7 +443,7 @@ const AdaShimaStatsPage: React.FC = () => {
         </div>
 
         {/* TIMELINE SECTION */}
-        <div ref={(el) => (sectionRefs.current.timeline = el)} data-section="timeline">
+        <div ref={(el) => { sectionRefs.current.timeline = el; }} data-section="timeline">
           <section className="timeline-section section-reveal">
             <div className="section-header">
               <h2 className="section-title">Release Timeline</h2>
@@ -515,7 +515,7 @@ const AdaShimaStatsPage: React.FC = () => {
         </div>
 
         {/* TRANSLATION DELAY SECTION */}
-        <div ref={(el) => (sectionRefs.current.translation = el)} data-section="translation">
+        <div ref={(el) => { sectionRefs.current.translation = el; }} data-section="translation">
           <section className="translation-section section-reveal">
             <div className="section-header">
               <h2 className="section-title">Translation Delay</h2>
@@ -593,7 +593,7 @@ const AdaShimaStatsPage: React.FC = () => {
         </div>
 
         {/* CHARTS SECTION */}
-        <div ref={(el) => (sectionRefs.current.charts = el)} data-section="charts">
+        <div ref={(el) => { sectionRefs.current.charts = el; }} data-section="charts">
           <section className="charts-section section-reveal">
             <div className="section-header">
               <h2 className="section-title">Charts</h2>
@@ -695,7 +695,7 @@ const AdaShimaStatsPage: React.FC = () => {
         </div>
 
         {/* VOLUMES EXPLORER SECTION */}
-        <div ref={(el) => (sectionRefs.current.volumes = el)} data-section="volumes">
+        <div ref={(el) => { sectionRefs.current.volumes = el; }} data-section="volumes">
           <section className="volumes-section section-reveal">
             <div className="section-header">
               <h2 className="section-title">Volume Explorer</h2>
@@ -775,7 +775,7 @@ const AdaShimaStatsPage: React.FC = () => {
         </div>
 
         {/* FUN FACTS SECTION */}
-        <div ref={(el) => (sectionRefs.current.funfacts = el)} data-section="funfacts">
+        <div ref={(el) => { sectionRefs.current.funfacts = el; }} data-section="funfacts">
           <section className="funfacts-section section-reveal">
             <div className="section-header">
               <h2 className="section-title">Fun Facts</h2>
