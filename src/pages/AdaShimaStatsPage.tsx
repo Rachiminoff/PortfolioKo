@@ -150,13 +150,10 @@ const AdaShimaStatsPage: React.FC = () => {
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
-  // ---- MOVED ALL useMemo HOOKS HERE (before any conditional returns) ----
-
-  // Filtered volumes for Volume Explorer
+  // ---- useMemo HOOKS ----
   const filteredVolumes = useMemo(() => {
     let filtered = [...volumes];
     
-    // Apply type filter
     if (filterType === 'main') {
       filtered = filtered.filter(v => !v.is_short_story && !v.is_special && !v.is_upcoming);
     } else if (filterType === 'short') {
@@ -167,7 +164,6 @@ const AdaShimaStatsPage: React.FC = () => {
       filtered = filtered.filter(v => v.is_upcoming);
     }
     
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter(v => 
@@ -179,7 +175,6 @@ const AdaShimaStatsPage: React.FC = () => {
     return filtered;
   }, [volumes, filterType, searchQuery]);
 
-  // Chart data calculations
   const cumulativePages = useMemo(() => {
     const sorted = [...volumes].filter(v => !v.is_upcoming && v.page_count > 0)
       .sort((a, b) => new Date(a.jp_release).getTime() - new Date(b.jp_release).getTime());
@@ -220,8 +215,7 @@ const AdaShimaStatsPage: React.FC = () => {
     return { main, short, special, upcoming };
   }, [volumes]);
 
-  // ---- END useMemo HOOKS ----
-
+  // ---- EFFECTS ----
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
@@ -303,9 +297,7 @@ const AdaShimaStatsPage: React.FC = () => {
     });
 
     // Calculate achievements
-    const sortedByPages = [...activeVolumes].sort((a, b) => b.page_count - a.page_count);
     const sortedByChapters = [...activeVolumes].sort((a, b) => b.chapters - a.chapters);
-    const sortedByDelay = [...translated].sort((a, b) => a.jp_en_gap_days - b.jp_en_gap_days);
 
     const achievementList: Achievement[] = [
       {
@@ -481,12 +473,11 @@ const AdaShimaStatsPage: React.FC = () => {
     return () => observer.disconnect();
   }, [isLoaded, volumes]);
 
-  // Get max values for progress bars (moved before conditional return)
+  // ---- CALCULATIONS (before conditional return) ----
   const maxPagesValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.page_count));
   const maxDelayValue = Math.max(...volumes.filter(v => v.jp_en_gap_days > 0).map(v => v.jp_en_gap_days));
   const maxChaptersValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.chapters));
 
-  // Get sorted volumes for translation section (moved before conditional return)
   const activeVolumes = volumes.filter(v => v.jp_en_gap_days > 0);
   const sortedVolumes = [...activeVolumes].sort((a, b) => {
     if (sortDelay === 'longest') return b.jp_en_gap_days - a.jp_en_gap_days;
@@ -494,7 +485,6 @@ const AdaShimaStatsPage: React.FC = () => {
     return a.id - b.id;
   });
 
-  // Rank calculations (moved before conditional return)
   const getRank = (volume: VolumeData, metric: 'pages' | 'chapters' | 'delay'): string => {
     const activeVols = volumes.filter(v => !v.is_upcoming && v.page_count > 0);
     if (metric === 'pages') {
@@ -523,7 +513,6 @@ const AdaShimaStatsPage: React.FC = () => {
     return '';
   };
 
-  // Percentile calculation (moved before conditional return)
   const getPercentile = (volume: VolumeData, metric: 'pages' | 'chapters'): number => {
     const activeVols = volumes.filter(v => !v.is_upcoming && v.page_count > 0);
     const values = activeVols.map(v => metric === 'pages' ? v.page_count : v.chapters);
@@ -533,11 +522,9 @@ const AdaShimaStatsPage: React.FC = () => {
     return Math.round(((index + 1) / sorted.length) * 100);
   };
 
-  // Compare volumes
   const compareVol1 = volumes.find(v => v.id === compareVolume1);
   const compareVol2 = volumes.find(v => v.id === compareVolume2);
 
-  // Static fun facts
   const staticFunFacts = [
     {
       icon: 'mdi:book-open-variant',
@@ -583,7 +570,7 @@ const AdaShimaStatsPage: React.FC = () => {
     },
   ];
 
-  // Loading state (now after all hooks)
+  // ---- LOADING STATE (after all hooks) ----
   if (loading) {
     return (
       <FullscreenLayout>
@@ -597,7 +584,7 @@ const AdaShimaStatsPage: React.FC = () => {
     );
   }
 
-  // Easter egg handler
+  // ---- HANDLERS ----
   const handleEasterEggClick = () => {
     const newCount = clickCount + 1;
     setClickCount(newCount);
@@ -613,6 +600,7 @@ const AdaShimaStatsPage: React.FC = () => {
     }
   };
 
+  // ---- RENDER ----
   return (
     <FullscreenLayout>
       <div className={`adashima-stats-page ${isLoaded ? 'loaded' : ''}`}>
@@ -972,7 +960,7 @@ const AdaShimaStatsPage: React.FC = () => {
             </section>
           </div>
 
-          {/* CHARTS SECTION - Enhanced */}
+          {/* CHARTS SECTION */}
           <div ref={(el) => { sectionRefs.current.charts = el; }} data-section="charts">
             <section className="charts-section section-reveal">
               <div className="section-header">
