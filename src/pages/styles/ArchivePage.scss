@@ -624,3 +624,78 @@
     opacity: 0.25;
   }
 }
+
+// Add to the dashboard header section
+.archive-dashboard-header {
+  margin-bottom: 3rem;
+  text-align: center;
+
+  .archive-dashboard-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+
+    svg {
+      width: 32px;
+      height: 32px;
+      color: #818cf8;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0;
+    }
+  }
+
+  // NEW: Dashboard actions container
+  .archive-dashboard-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+
+    .archive-home-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.06);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .archive-dashboard-welcome {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 300;
+      margin: 0;
+    }
+  }
+}
