@@ -51,10 +51,6 @@ const formatDate = (dateStr: string) => {
   });
 };
 
-const getVolumeLabel = (volume: VolumeData): string => {
-  return `#${volume.volume_number} ${volume.title}`;
-};
-
 // Animated Counter Component
 const AnimatedCounter: React.FC<{ target: number; label: string; suffix?: string }> = ({
   target,
@@ -154,6 +150,78 @@ const AdaShimaStatsPage: React.FC = () => {
 
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
+  // ---- MOVED ALL useMemo HOOKS HERE (before any conditional returns) ----
+
+  // Filtered volumes for Volume Explorer
+  const filteredVolumes = useMemo(() => {
+    let filtered = [...volumes];
+    
+    // Apply type filter
+    if (filterType === 'main') {
+      filtered = filtered.filter(v => !v.is_short_story && !v.is_special && !v.is_upcoming);
+    } else if (filterType === 'short') {
+      filtered = filtered.filter(v => v.is_short_story);
+    } else if (filterType === 'special') {
+      filtered = filtered.filter(v => v.is_special);
+    } else if (filterType === 'upcoming') {
+      filtered = filtered.filter(v => v.is_upcoming);
+    }
+    
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(v => 
+        v.title.toLowerCase().includes(query) ||
+        v.volume_number.toLowerCase().includes(query)
+      );
+    }
+    
+    return filtered;
+  }, [volumes, filterType, searchQuery]);
+
+  // Chart data calculations
+  const cumulativePages = useMemo(() => {
+    const sorted = [...volumes].filter(v => !v.is_upcoming && v.page_count > 0)
+      .sort((a, b) => new Date(a.jp_release).getTime() - new Date(b.jp_release).getTime());
+    let runningTotal = 0;
+    return sorted.map(v => {
+      runningTotal += v.page_count;
+      return { volume: v.volume_number, pages: runningTotal };
+    });
+  }, [volumes]);
+
+  const delayTrendData = useMemo(() => {
+    return [...volumes]
+      .filter(v => !v.is_upcoming && v.jp_en_gap_days > 0)
+      .sort((a, b) => new Date(a.jp_release).getTime() - new Date(b.jp_release).getTime())
+      .map(v => ({
+        volume: v.volume_number,
+        delay: v.jp_en_gap_days,
+        title: v.title,
+      }));
+  }, [volumes]);
+
+  const scatterData = useMemo(() => {
+    return volumes
+      .filter(v => !v.is_upcoming && v.page_count > 0 && v.jp_en_gap_days > 0)
+      .map(v => ({
+        pages: v.page_count,
+        delay: v.jp_en_gap_days,
+        title: v.title,
+        volume: v.volume_number,
+      }));
+  }, [volumes]);
+
+  const categoryBreakdown = useMemo(() => {
+    const main = volumes.filter(v => !v.is_short_story && !v.is_special && !v.is_upcoming).length;
+    const short = volumes.filter(v => v.is_short_story).length;
+    const special = volumes.filter(v => v.is_special).length;
+    const upcoming = volumes.filter(v => v.is_upcoming).length;
+    return { main, short, special, upcoming };
+  }, [volumes]);
+
+  // ---- END useMemo HOOKS ----
+
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
     return () => clearTimeout(timer);
@@ -245,7 +313,7 @@ const AdaShimaStatsPage: React.FC = () => {
         title: 'Largest Volume',
         value: `${mostPages.page_count} pages`,
         volume: mostPages.title,
-        description: `The largest volume in the series`,
+        description: 'The largest volume in the series',
         color: '#f9b55d',
       },
       {
@@ -253,7 +321,7 @@ const AdaShimaStatsPage: React.FC = () => {
         title: 'Smallest Volume',
         value: `${leastPages.page_count} pages`,
         volume: leastPages.title,
-        description: `The smallest volume in the series`,
+        description: 'The smallest volume in the series',
         color: '#7fc4e0',
       },
       {
@@ -261,7 +329,7 @@ const AdaShimaStatsPage: React.FC = () => {
         title: 'Fastest Translation',
         value: `${fastest.jp_en_gap_days} days`,
         volume: fastest.title,
-        description: `Quickest English translation`,
+        description: 'Quickest English translation',
         color: '#7eb870',
       },
       {
@@ -269,7 +337,7 @@ const AdaShimaStatsPage: React.FC = () => {
         title: 'Slowest Translation',
         value: `${slowest.jp_en_gap_days} days`,
         volume: slowest.title,
-        description: `Longest English translation wait`,
+        description: 'Longest English translation wait',
         color: '#e06040',
       },
       {
@@ -277,7 +345,7 @@ const AdaShimaStatsPage: React.FC = () => {
         title: 'Most Chapters',
         value: `${sortedByChapters[0]?.chapters || 0} chapters`,
         volume: sortedByChapters[0]?.title || '',
-        description: `Highest chapter count`,
+        description: 'Highest chapter count',
         color: '#6366f1',
       },
       {
@@ -285,7 +353,7 @@ const AdaShimaStatsPage: React.FC = () => {
         title: 'Longest Publication Gap',
         value: `${longestGap} days`,
         volume: longestGapEntry ? `${longestGapEntry.from} → ${longestGapEntry.to}` : '',
-        description: `Longest wait between volumes`,
+        description: 'Longest wait between volumes',
         color: '#e06040',
       },
       {
@@ -293,7 +361,7 @@ const AdaShimaStatsPage: React.FC = () => {
         title: 'Shortest Publication Gap',
         value: `${shortestGap} days`,
         volume: shortestGapEntry ? `${shortestGapEntry.from} → ${shortestGapEntry.to}` : '',
-        description: `Shortest wait between volumes`,
+        description: 'Shortest wait between volumes',
         color: '#7eb870',
       },
     ];
@@ -323,7 +391,7 @@ const AdaShimaStatsPage: React.FC = () => {
         icon: 'mdi:chart-arc',
         label: 'Average Release Interval',
         value: `${avgGap} days`,
-        description: `Between Japanese releases`,
+        description: 'Between Japanese releases',
       },
       {
         icon: 'mdi:arrow-up-bold',
@@ -413,42 +481,24 @@ const AdaShimaStatsPage: React.FC = () => {
     return () => observer.disconnect();
   }, [isLoaded, volumes]);
 
-  // Filtered volumes for Volume Explorer
-  const filteredVolumes = useMemo(() => {
-    let filtered = [...volumes];
-    
-    // Apply type filter
-    if (filterType === 'main') {
-      filtered = filtered.filter(v => !v.is_short_story && !v.is_special && !v.is_upcoming);
-    } else if (filterType === 'short') {
-      filtered = filtered.filter(v => v.is_short_story);
-    } else if (filterType === 'special') {
-      filtered = filtered.filter(v => v.is_special);
-    } else if (filterType === 'upcoming') {
-      filtered = filtered.filter(v => v.is_upcoming);
-    }
-    
-    // Apply search filter
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(v => 
-        v.title.toLowerCase().includes(query) ||
-        v.volume_number.toLowerCase().includes(query)
-      );
-    }
-    
-    return filtered;
-  }, [volumes, filterType, searchQuery]);
+  // Get max values for progress bars (moved before conditional return)
+  const maxPagesValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.page_count));
+  const maxDelayValue = Math.max(...volumes.filter(v => v.jp_en_gap_days > 0).map(v => v.jp_en_gap_days));
+  const maxChaptersValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.chapters));
 
-  // Get max values for progress bars
-  const maxPages = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.page_count));
-  const maxDelay = Math.max(...volumes.filter(v => v.jp_en_gap_days > 0).map(v => v.jp_en_gap_days));
+  // Get sorted volumes for translation section (moved before conditional return)
+  const activeVolumes = volumes.filter(v => v.jp_en_gap_days > 0);
+  const sortedVolumes = [...activeVolumes].sort((a, b) => {
+    if (sortDelay === 'longest') return b.jp_en_gap_days - a.jp_en_gap_days;
+    if (sortDelay === 'shortest') return a.jp_en_gap_days - b.jp_en_gap_days;
+    return a.id - b.id;
+  });
 
-  // Rank calculations
+  // Rank calculations (moved before conditional return)
   const getRank = (volume: VolumeData, metric: 'pages' | 'chapters' | 'delay'): string => {
-    const activeVolumes = volumes.filter(v => !v.is_upcoming && v.page_count > 0);
+    const activeVols = volumes.filter(v => !v.is_upcoming && v.page_count > 0);
     if (metric === 'pages') {
-      const sorted = [...activeVolumes].sort((a, b) => b.page_count - a.page_count);
+      const sorted = [...activeVols].sort((a, b) => b.page_count - a.page_count);
       const rank = sorted.findIndex(v => v.id === volume.id) + 1;
       if (rank === 1) return '#1 Longest';
       if (rank === 2) return '#2 Longest';
@@ -456,14 +506,14 @@ const AdaShimaStatsPage: React.FC = () => {
       if (rank === sorted.length) return 'Shortest';
       return `#${rank}`;
     } else if (metric === 'chapters') {
-      const sorted = [...activeVolumes].sort((a, b) => b.chapters - a.chapters);
+      const sorted = [...activeVols].sort((a, b) => b.chapters - a.chapters);
       const rank = sorted.findIndex(v => v.id === volume.id) + 1;
       if (rank === 1) return '#1 Most Chapters';
       if (rank === 2) return '#2 Most Chapters';
       if (rank === 3) return '#3 Most Chapters';
       return `#${rank}`;
     } else if (metric === 'delay') {
-      const translated = activeVolumes.filter(v => v.jp_en_gap_days > 0);
+      const translated = activeVols.filter(v => v.jp_en_gap_days > 0);
       const sorted = [...translated].sort((a, b) => a.jp_en_gap_days - b.jp_en_gap_days);
       const rank = sorted.findIndex(v => v.id === volume.id) + 1;
       if (rank === 1) return 'Fastest';
@@ -473,59 +523,21 @@ const AdaShimaStatsPage: React.FC = () => {
     return '';
   };
 
-  // Percentile calculation
+  // Percentile calculation (moved before conditional return)
   const getPercentile = (volume: VolumeData, metric: 'pages' | 'chapters'): number => {
-    const activeVolumes = volumes.filter(v => !v.is_upcoming && v.page_count > 0);
-    const values = activeVolumes.map(v => metric === 'pages' ? v.page_count : v.chapters);
+    const activeVols = volumes.filter(v => !v.is_upcoming && v.page_count > 0);
+    const values = activeVols.map(v => metric === 'pages' ? v.page_count : v.chapters);
     const sorted = [...values].sort((a, b) => a - b);
     const value = metric === 'pages' ? volume.page_count : volume.chapters;
     const index = sorted.indexOf(value);
     return Math.round(((index + 1) / sorted.length) * 100);
   };
 
-  // Easter egg handler
-  const handleEasterEggClick = () => {
-    const newCount = clickCount + 1;
-    setClickCount(newCount);
-    if (newCount === 5) {
-      setEasterEggMessage('You found a secret! Adachi and Shimamura approve!');
-      setShowEasterEgg(true);
-      setTimeout(() => {
-        setShowEasterEgg(false);
-        setClickCount(0);
-      }, 3000);
-    } else if (newCount > 5) {
-      setClickCount(0);
-    }
-  };
+  // Compare volumes
+  const compareVol1 = volumes.find(v => v.id === compareVolume1);
+  const compareVol2 = volumes.find(v => v.id === compareVolume2);
 
-  // Loading state
-  if (loading) {
-    return (
-      <FullscreenLayout>
-        <div className="adashima-stats-page loading">
-          <div className="stats-loading-state">
-            <div className="stats-loading-spinner" />
-            <p>Loading statistics...</p>
-          </div>
-        </div>
-      </FullscreenLayout>
-    );
-  }
-
-  // Get sorted volumes for translation section
-  const activeVolumes = volumes.filter(v => v.jp_en_gap_days > 0);
-  const sortedVolumes = [...activeVolumes].sort((a, b) => {
-    if (sortDelay === 'longest') return b.jp_en_gap_days - a.jp_en_gap_days;
-    if (sortDelay === 'shortest') return a.jp_en_gap_days - b.jp_en_gap_days;
-    return a.id - b.id;
-  });
-
-  const maxDelayValue = Math.max(...activeVolumes.map(v => v.jp_en_gap_days));
-  const maxPagesValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.page_count));
-  const maxChaptersValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.chapters));
-
-  // Static fun facts for display (combined with dynamic ones)
+  // Static fun facts
   const staticFunFacts = [
     {
       icon: 'mdi:book-open-variant',
@@ -571,50 +583,35 @@ const AdaShimaStatsPage: React.FC = () => {
     },
   ];
 
-  // Chart data calculations
-  const cumulativePages = useMemo(() => {
-    const sorted = [...volumes].filter(v => !v.is_upcoming && v.page_count > 0)
-      .sort((a, b) => new Date(a.jp_release).getTime() - new Date(b.jp_release).getTime());
-    let runningTotal = 0;
-    return sorted.map(v => {
-      runningTotal += v.page_count;
-      return { volume: v.volume_number, pages: runningTotal };
-    });
-  }, [volumes]);
+  // Loading state (now after all hooks)
+  if (loading) {
+    return (
+      <FullscreenLayout>
+        <div className="adashima-stats-page loading">
+          <div className="stats-loading-state">
+            <div className="stats-loading-spinner" />
+            <p>Loading statistics...</p>
+          </div>
+        </div>
+      </FullscreenLayout>
+    );
+  }
 
-  const delayTrendData = useMemo(() => {
-    return [...volumes]
-      .filter(v => !v.is_upcoming && v.jp_en_gap_days > 0)
-      .sort((a, b) => new Date(a.jp_release).getTime() - new Date(b.jp_release).getTime())
-      .map(v => ({
-        volume: v.volume_number,
-        delay: v.jp_en_gap_days,
-        title: v.title,
-      }));
-  }, [volumes]);
-
-  const scatterData = useMemo(() => {
-    return volumes
-      .filter(v => !v.is_upcoming && v.page_count > 0 && v.jp_en_gap_days > 0)
-      .map(v => ({
-        pages: v.page_count,
-        delay: v.jp_en_gap_days,
-        title: v.title,
-        volume: v.volume_number,
-      }));
-  }, [volumes]);
-
-  const categoryBreakdown = useMemo(() => {
-    const main = volumes.filter(v => !v.is_short_story && !v.is_special && !v.is_upcoming).length;
-    const short = volumes.filter(v => v.is_short_story).length;
-    const special = volumes.filter(v => v.is_special).length;
-    const upcoming = volumes.filter(v => v.is_upcoming).length;
-    return { main, short, special, upcoming };
-  }, [volumes]);
-
-  // Comparison logic
-  const compareVol1 = volumes.find(v => v.id === compareVolume1);
-  const compareVol2 = volumes.find(v => v.id === compareVolume2);
+  // Easter egg handler
+  const handleEasterEggClick = () => {
+    const newCount = clickCount + 1;
+    setClickCount(newCount);
+    if (newCount === 5) {
+      setEasterEggMessage('You found a secret! Adachi and Shimamura approve!');
+      setShowEasterEgg(true);
+      setTimeout(() => {
+        setShowEasterEgg(false);
+        setClickCount(0);
+      }, 3000);
+    } else if (newCount > 5) {
+      setClickCount(0);
+    }
+  };
 
   return (
     <FullscreenLayout>
@@ -1062,7 +1059,7 @@ const AdaShimaStatsPage: React.FC = () => {
                               className="chart-bar chart-bar-cumulative"
                               style={{
                                 height: `${percentage}%`,
-                                background: `linear-gradient(180deg, #818cf8, #4f46e5)`,
+                                background: 'linear-gradient(180deg, #818cf8, #4f46e5)',
                               }}
                             />
                           </div>
@@ -1111,7 +1108,7 @@ const AdaShimaStatsPage: React.FC = () => {
                   <div className="chart-tooltip-hint">Translation delay over time</div>
                 </div>
 
-                {/* Scatter Plot: Pages vs Translation Delay */}
+                {/* Scatter Plot */}
                 <div className="chart-card chart-card-full stagger-card">
                   <h3 className="chart-title">Pages vs Translation Delay</h3>
                   <div className="scatter-plot">
@@ -1374,7 +1371,7 @@ const AdaShimaStatsPage: React.FC = () => {
             </section>
           </div>
 
-          {/* VOLUMES EXPLORER SECTION - Enhanced */}
+          {/* VOLUMES EXPLORER SECTION */}
           <div ref={(el) => { sectionRefs.current.volumes = el; }} data-section="volumes">
             <section className="volumes-section section-reveal">
               <div className="section-header">
@@ -1382,7 +1379,6 @@ const AdaShimaStatsPage: React.FC = () => {
                 <p className="section-subtitle">Explore each volume in detail</p>
               </div>
 
-              {/* Search and Filters */}
               <div className="volume-controls">
                 <div className="volume-search">
                   <Icon icon="mdi:search" className="volume-search-icon" />
@@ -1481,7 +1477,6 @@ const AdaShimaStatsPage: React.FC = () => {
                       </div>
 
                       <div className={`volume-card-body ${isExpanded ? 'expanded' : ''}`}>
-                        {/* Progress Bars */}
                         <div className="volume-card-progress">
                           <div className="volume-progress-item">
                             <span className="volume-progress-label">Page Count</span>
@@ -1603,7 +1598,7 @@ const AdaShimaStatsPage: React.FC = () => {
             </section>
           </div>
 
-          {/* FUN FACTS SECTION - Enhanced */}
+          {/* FUN FACTS SECTION */}
           <div ref={(el) => { sectionRefs.current.funfacts = el; }} data-section="funfacts">
             <section className="funfacts-section section-reveal">
               <div className="section-header">
