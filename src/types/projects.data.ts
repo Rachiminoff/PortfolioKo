@@ -9,6 +9,11 @@ import wais01 from '../assets/images/ww1.jpg';
 import wais02 from '../assets/images/ww2.jpg';
 import wais03 from '../assets/images/ww3.jpg';
 
+import ledger00 from '../assets/images/ll0.jpg';
+import ledger01 from '../assets/images/ll1.jpg';
+import ledger02 from '../assets/images/ll2.jpg';
+import ledger03 from '../assets/images/ll3.jpg';
+
 export interface Project {
   id: number;
   title: string;
@@ -105,5 +110,35 @@ export const projectsData: Project[] = [
       "Intuitive financial workflows"
     ],
     tech: ["TypeScript", "React", "Frontend"]
+  },
+  {
+    id: 5,
+    title: "LedgerLeaf",
+    subtitle: "Full-stack personal finance management system built around pocket-based budgeting.",
+    role: "Sole Developer",
+    roleClass: "sole",
+    featured: true,
+    link: "https://github.com/Rachiminoff/LedgerLeaf",
+    liveDemo: "https://ledgerleaf.onrender.com/",
+    images: [ledger00, ledger01, ledger02, ledger03],
+    description:
+      "LedgerLeaf is a modern full-stack personal finance management system inspired by my previous mobile project, Wais Wallet. Rebuilt from the ground up as a web application, it introduces a Laravel-powered backend, MySQL database, and a responsive React frontend. Rather than simply tracking expenses, LedgerLeaf promotes intentional spending through a pocket-based budgeting system where users allocate funds before spending, monitor Safe Balance, manage savings goals, and gain meaningful financial insights through interactive dashboards.",
+    features: [
+      "Pocket-based budgeting system",
+      "Expense tracking and financial analytics",
+      "Savings goals with progress monitoring",
+      "Responsive desktop and mobile experience",
+      "PDF and Excel report exporting",
+      "Secure authentication and user profiles"
+    ],
+    tech: [
+      "Laravel",
+      "PHP",
+      "React",
+      "TypeScript",
+      "Inertia.js",
+      "Tailwind CSS",
+      "MySQL"
+    ]
   }
 ];

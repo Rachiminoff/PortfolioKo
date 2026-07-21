@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "api/insights", "api/vault", "api/vault", "api/insights"  ]
 }
