@@ -9,10 +9,10 @@ import wais01 from '../assets/images/ww1.jpg';
 import wais02 from '../assets/images/ww2.jpg';
 import wais03 from '../assets/images/ww3.jpg';
 
-import ledger00 from '../assets/images/ll0.jpg';
-import ledger01 from '../assets/images/ll1.jpg';
-import ledger02 from '../assets/images/ll2.jpg';
-import ledger03 from '../assets/images/ll3.jpg';
+import ledger00 from '../assets/images/ll0.png';
+import ledger01 from '../assets/images/ll1.png';
+import ledger02 from '../assets/images/ll2.png';
+import ledger03 from '../assets/images/ll3.png';
 
 export interface Project {
   id: number;
