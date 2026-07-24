@@ -27,7 +27,7 @@ const VaultPage: React.FC = () => {
     return (
       <div className="vault-loading-state">
         <div className="vault-loading-spinner" />
-        <p>Verifying access...</p>
+        <p>Verifying access</p>
       </div>
     );
   }
@@ -38,37 +38,42 @@ const VaultPage: React.FC = () => {
 
   return (
     <div className="vault-page">
+      {/* Ambient Background */}
       <div className="vault-bg-grid" />
-      <div className="vault-ambient">
-        <div className="vault-ring outer" />
-        <div className="vault-ring inner" />
+      <div className="vault-ambient-shapes">
+        <div className="shape shape-1" />
+        <div className="shape shape-2" />
+        <div className="shape shape-3" />
       </div>
       <div className="vault-vignette" />
 
-      <div className="vault-container">
-        <div className="vault-page-header">
-          <button 
-            className="vault-back-button"
-            onClick={() => navigate('/archive')}
-            aria-label="Back to archive"
-          >
-            <Icon icon="mdi:arrow-left" />
-            <span>Back</span>
-          </button>
-          <div className="vault-header-divider" />
-          <h1 className="vault-page-title">Vault</h1>
-          <span className="vault-header-badge">Encrypted</span>
-        </div>
-
-        <Suspense fallback={
-          <div className="vault-loading-state">
-            <div className="vault-loading-spinner" />
-            <p>Loading archive...</p>
-          </div>
-        }>
-          <Vault />
-        </Suspense>
+      {/* Header */}
+      <div className="vault-page-header">
+        <button 
+          className="vault-back-button"
+          onClick={() => navigate('/archive')}
+          aria-label="Back to archive"
+        >
+          <Icon icon="mdi:arrow-left" />
+          Back
+        </button>
+        <div className="vault-header-divider" />
+        <h1 className="vault-page-title">Vault</h1>
+        <span className="vault-header-badge">
+          <span className="badge-dot" />
+          Encrypted
+        </span>
       </div>
+
+      {/* Content */}
+      <Suspense fallback={
+        <div className="vault-loading-state">
+          <div className="vault-loading-spinner" />
+          <p>Loading vault contents</p>
+        </div>
+      }>
+        <Vault />
+      </Suspense>
     </div>
   );
 };
