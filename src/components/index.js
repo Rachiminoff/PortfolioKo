@@ -8,3 +8,4 @@ export { default as Contact } from './Contact';
 export { default as Footer } from './Footer';
 export { default as Certificates } from './Certificates';
 export { default as FadeIn } from './FadeIn';
+export { default as ProjectDetailsPage } from './ProjectDetailsPage';

@@ -6,7 +6,7 @@ import {
   Terminal,
   Project,
   Contact,
-  Footer
+  Footer,
 } from "./components";
 import FadeIn from "./components/FadeIn";
 import Certificates from "./components/Certificates";
@@ -15,6 +15,9 @@ import { useArchive } from "./hooks/useArchive";
 import { DefaultLayout, FullscreenLayout } from "./layouts";
 
 import "./index.scss";
+
+// Import the new Project components - ONLY ProjectDetailsPage
+import ProjectDetailsPage from './components/ProjectDetailsPage';
 
 // Lazy load pages
 const MainPage = lazy(() => import('./pages/MainPage'));
@@ -236,6 +239,17 @@ function AppContent() {
             </DefaultLayoutWithSections>
           } 
         />
+
+        {/* Only the project details route - no ProjectsPage */}
+        <Route 
+          path="/projects/:slug" 
+          element={
+            <DefaultLayout>
+              <ProjectDetailsPage />
+            </DefaultLayout>
+          } 
+        />
+        
         <Route 
           path="/archive" 
           element={
