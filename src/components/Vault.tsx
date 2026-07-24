@@ -320,7 +320,7 @@ function Vault() {
                                 className="vault-image-placeholder"
                                 onClick={() => openViewer(item.link, item.type, item)}
                             >
-                                📖
+                                <Icon icon="mdi:book-open-variant" />
                             </div>
                         )}
                     </div>
@@ -369,7 +369,7 @@ function Vault() {
                                             className="vault-list-download-btn"
                                             onClick={() => handleDownload(item.link, item.name)}
                                         >
-                                            Download
+                                            <Icon icon="mdi:download" />
                                         </button>
                                     )}
                                 </>
@@ -385,16 +385,7 @@ function Vault() {
                         }}
                         aria-label="Toggle favorite"
                     >
-                        <svg
-                            viewBox="0 0 24 24"
-                            fill={item.favorite ? "currentColor" : "none"}
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        >
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                        </svg>
+                        <Icon icon={item.favorite ? "mdi:star" : "mdi:star-outline"} />
                     </button>
                 </div>
             );
@@ -428,16 +419,7 @@ function Vault() {
                     }}
                     aria-label="Toggle favorite"
                 >
-                    <svg
-                        viewBox="0 0 24 24"
-                        fill={item.favorite ? "currentColor" : "none"}
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
+                    <Icon icon={item.favorite ? "mdi:star" : "mdi:star-outline"} />
                 </button>
 
                 <div className="vault-book-image-wrapper">
@@ -454,7 +436,7 @@ function Vault() {
                             className="vault-image-placeholder"
                             onClick={() => openViewer(item.link, item.type, item)}
                         >
-                            📖
+                            <Icon icon="mdi:book-open-variant" />
                         </div>
                     )}
                 </div>
@@ -490,7 +472,7 @@ function Vault() {
                         >
                             Description
                             <span className={`vault-arrow ${isExpanded ? "expanded" : ""}`}>
-                                ▼
+                                <Icon icon="mdi:chevron-down" />
                             </span>
                         </button>
 
@@ -515,7 +497,8 @@ function Vault() {
                                         className="vault-download-btn"
                                         onClick={() => handleDownload(item.link, item.name)}
                                     >
-                                        Download
+                                        <Icon icon="mdi:download" />
+                                        <span>Download</span>
                                     </button>
                                 )}
                             </>
@@ -544,14 +527,16 @@ function Vault() {
                                 className="vault-series-cover"
                             />
                         )}
-                        <span className="vault-series-icon">📚</span>
+                        <span className="vault-series-icon">
+                            <Icon icon="mdi:bookshelf" />
+                        </span>
                         <h3>{seriesName}</h3>
                         <span className="vault-series-count">
                             ({items.length})
                         </span>
                     </div>
                     <span className={`vault-series-arrow ${isExpanded ? "expanded" : ""}`}>
-                        ▼
+                        <Icon icon="mdi:chevron-down" />
                     </span>
                 </button>
                 {isExpanded && (
@@ -569,16 +554,10 @@ function Vault() {
             <div className="vault-header">
                 <div className="vault-header-top">
                     <div className="vault-header-left">
-                        <h1>📚 Vault Library</h1>
-                        <button 
-                            className="vault-wish-archive-btn"
-                            onClick={() => navigate('/wish-archive')}
-                            aria-label="Go to Wish Archive"
-                            title="Wish Archive"
-                        >
-                            <Icon icon="mdi:star-four-points" />
-                            <span>Wish Archive</span>
-                        </button>
+                        <h1>
+                            <Icon icon="mdi:bookshelf" />
+                            <span>Vault Library</span>
+                        </h1>
                     </div>
 
                     <div className="vault-view-controls">
@@ -587,48 +566,44 @@ function Vault() {
                             onClick={() => setViewMode("grid")}
                             aria-label="Grid view"
                         >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <rect x="3" y="3" width="7" height="7" />
-                                <rect x="14" y="3" width="7" height="7" />
-                                <rect x="3" y="14" width="7" height="7" />
-                                <rect x="14" y="14" width="7" height="7" />
-                            </svg>
+                            <Icon icon="mdi:view-grid" />
                         </button>
                         <button
                             className={`vault-view-btn ${viewMode === "list" ? "active" : ""}`}
                             onClick={() => setViewMode("list")}
                             aria-label="List view"
                         >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                <line x1="8" y1="6" x2="21" y2="6" />
-                                <line x1="8" y1="12" x2="21" y2="12" />
-                                <line x1="8" y1="18" x2="21" y2="18" />
-                                <line x1="3" y1="6" x2="3.01" y2="6" />
-                                <line x1="3" y1="12" x2="3.01" y2="12" />
-                                <line x1="3" y1="18" x2="3.01" y2="18" />
-                            </svg>
+                            <Icon icon="mdi:view-list" />
                         </button>
                     </div>
                 </div>
 
                 <div className="vault-stats">
                     <div className="vault-stat-item">
-                        <span className="vault-stat-icon">📚</span>
+                        <span className="vault-stat-icon">
+                            <Icon icon="mdi:bookshelf" />
+                        </span>
                         <span className="vault-stat-value">{stats.total}</span>
                         <span className="vault-stat-label">Items</span>
                     </div>
                     <div className="vault-stat-item">
-                        <span className="vault-stat-icon">📁</span>
+                        <span className="vault-stat-icon">
+                            <Icon icon="mdi:folder-outline" />
+                        </span>
                         <span className="vault-stat-value">{stats.categories}</span>
                         <span className="vault-stat-label">Collections</span>
                     </div>
                     <div className="vault-stat-item">
-                        <span className="vault-stat-icon">📄</span>
+                        <span className="vault-stat-icon">
+                            <Icon icon="mdi:file-pdf-box" />
+                        </span>
                         <span className="vault-stat-value">{stats.pdfs}</span>
                         <span className="vault-stat-label">PDFs</span>
                     </div>
                     <div className="vault-stat-item">
-                        <span className="vault-stat-icon">📖</span>
+                        <span className="vault-stat-icon">
+                            <Icon icon="mdi:book-open-page-variant" />
+                        </span>
                         <span className="vault-stat-value">{stats.epubs}</span>
                         <span className="vault-stat-label">EPUBs</span>
                     </div>
@@ -636,10 +611,9 @@ function Vault() {
 
                 <div className="vault-controls-bar">
                     <div className="vault-search-wrapper">
-                        <svg className="vault-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <circle cx="11" cy="11" r="8" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                        </svg>
+                        <span className="vault-search-icon">
+                            <Icon icon="mdi:search" />
+                        </span>
                         <input
                             type="text"
                             className="vault-search-input"
@@ -652,7 +626,7 @@ function Vault() {
                                 className="vault-search-clear"
                                 onClick={() => setSearchQuery("")}
                             >
-                                ✕
+                                <Icon icon="mdi:close" />
                             </button>
                         )}
                     </div>
@@ -708,7 +682,8 @@ function Vault() {
                             setSelectedCategory(null);
                         }}
                     >
-                        ⭐ Favorites
+                        <Icon icon="mdi:star" />
+                        <span>Favorites</span>
                     </button>
                 </div>
             </div>
@@ -789,7 +764,9 @@ function Vault() {
                                                         ))}
                                                     </div>
                                                 ) : (
-                                                    <span className="vault-folder-cover-icon">📁</span>
+                                                    <span className="vault-folder-cover-icon">
+                                                        <Icon icon="mdi:folder-outline" />
+                                                    </span>
                                                 )}
                                             </div>
                                             <div className="vault-folder-content">
@@ -817,7 +794,11 @@ function Vault() {
                                             ) : null;
                                         })()}
                                         <h2>
-                                            {showFavorites ? "⭐ Favorites" : selectedCategory}
+                                            {showFavorites ? (
+                                                <><Icon icon="mdi:star" /> Favorites</>
+                                            ) : (
+                                                selectedCategory
+                                            )}
                                         </h2>
                                         <span className="vault-item-count">
                                             {filteredAndSortedItems.length} {filteredAndSortedItems.length === 1 ? "Entry" : "Entries"}
@@ -830,7 +811,8 @@ function Vault() {
                                             setShowFavorites(false);
                                         }}
                                     >
-                                        ← Back
+                                        <Icon icon="mdi:arrow-left" />
+                                        Back
                                     </button>
                                 </div>
 
@@ -848,7 +830,9 @@ function Vault() {
 
                                 {filteredAndSortedItems.length === 0 && (
                                     <div className="vault-empty-state">
-                                        <div className="vault-empty-icon">🔍</div>
+                                        <div className="vault-empty-icon">
+                                            <Icon icon="mdi:search-off" />
+                                        </div>
                                         <p>No entries found matching your criteria.</p>
                                         {(searchQuery || filterChip !== "all" || showFavorites) && (
                                             <button

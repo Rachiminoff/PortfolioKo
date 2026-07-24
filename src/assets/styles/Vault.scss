@@ -1,37 +1,50 @@
-// Vault.scss - Refined Premium Bookshelf Edition (Grayscale)
+// Vault.scss - Architectural Dark Premium Edition
 
-/* ========================================
+/* =========================
+   VARIABLES
+========================= */
+$black: #070707;
+$dark: #0F0F0F;
+$gray-dark: #1A1A1A;
+$gray: #232323;
+$white: #F5F5F5;
+$white-dim: rgba(255, 255, 255, 0.7);
+$white-faint: rgba(255, 255, 255, 0.3);
+$white-subtle: rgba(255, 255, 255, 0.04);
+$cyan: #3BE9E5;
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+/* =========================
    ROOT VARIABLES
-======================================== */
+========================= */
 :root {
-  --vault-bg-primary: #0a0a0a;
-  --vault-bg-secondary: #111111;
-  --vault-bg-card: linear-gradient(160deg, #111111 0%, #1a1a1a 45%, #111111 100%);
-  --vault-border: rgba(255, 255, 255, 0.06);
-  --vault-border-hover: rgba(255, 255, 255, 0.12);
-  --vault-border-active: rgba(255, 255, 255, 0.15);
-  --vault-text: #f0f0f0;
-  --vault-text-primary: #ffffff;
+  --vault-bg-primary: #070707;
+  --vault-bg-secondary: #0F0F0F;
+  --vault-bg-card: linear-gradient(160deg, #0F0F0F 0%, #1A1A1A 45%, #0F0F0F 100%);
+  --vault-border: rgba(255, 255, 255, 0.04);
+  --vault-border-hover: rgba(255, 255, 255, 0.08);
+  --vault-text: #F5F5F5;
+  --vault-text-primary: #F5F5F5;
   --vault-text-secondary: rgba(255, 255, 255, 0.7);
-  --vault-text-muted: rgba(255, 255, 255, 0.4);
-  --vault-text-dim: rgba(255, 255, 255, 0.25);
+  --vault-text-muted: rgba(255, 255, 255, 0.3);
+  --vault-text-dim: rgba(255, 255, 255, 0.15);
   --vault-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
   --vault-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
   --vault-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.7);
   --vault-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.8);
-  --vault-radius-sm: 6px;
-  --vault-radius-md: 10px;
-  --vault-radius-lg: 16px;
-  --vault-radius-xl: 20px;
-  --vault-radius-2xl: 24px;
-  --vault-transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --vault-transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --vault-transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --vault-radius-sm: 4px;
+  --vault-radius-md: 8px;
+  --vault-radius-lg: 12px;
+  --vault-radius-xl: 16px;
+  --vault-transition-fast: 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --vault-transition: 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --vault-transition-slow: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ========================================
-   CONTAINER - PURE GRAYSCALE
-======================================== */
+/* =========================
+   CONTAINER
+========================= */
 .vault-container {
   position: relative;
   min-height: 100vh;
@@ -39,68 +52,62 @@
   color: var(--vault-text);
   background: var(--vault-bg-primary);
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.015) 0%, transparent 40%),
-    linear-gradient(180deg, #0a0a0a 0%, #141414 50%, #0a0a0a 100%);
+    radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.015) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.01) 0%, transparent 40%);
 }
 
-/* ========================================
+/* =========================
    GRAIN TEXTURE
-======================================== */
+========================= */
 .vault-container::after {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='white'%3E%3Ccircle cx='2' cy='2' r='1'/%3E%3C/g%3E%3C/svg%3E");
   z-index: 0;
 }
 
-.vault-container::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.22;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
-  background-size: 120px 120px;
-  animation: dustFloat 35s linear infinite;
-  z-index: 0;
-}
-
-/* ========================================
+/* =========================
    ANIMATIONS
-======================================== */
-@keyframes dustFloat {
-  from { transform: translateY(0); }
-  to { transform: translateY(-120px); }
-}
-
+========================= */
 @keyframes skeletonPulse {
-  0% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-  100% { opacity: 0.4; }
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 @keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ========================================
-   STICKY HEADER
-======================================== */
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   HEADER
+========================= */
 .vault-header {
   position: sticky;
   top: 0;
   z-index: 50;
   padding: 0.75rem 2rem 0.5rem;
-  background: rgba(10, 10, 10, 0.92);
-  backdrop-filter: blur(20px) saturate(1.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(7, 7, 7, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.02);
   transition: var(--vault-transition);
+
+  @media (max-width: 768px) {
+    padding: 0.5rem 1rem 0.4rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.4rem 0.6rem 0.3rem;
+  }
 }
 
 .vault-header-top {
@@ -111,85 +118,194 @@
   gap: 1rem;
 }
 
-.vault-header h1 {
-  margin: 0;
-  font-size: clamp(1.3rem, 1.8vw, 1.6rem);
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
-  white-space: nowrap;
+.vault-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    font-family: $font-sans;
+
+    svg {
+      width: 22px;
+      height: 22px;
+      opacity: 0.15;
+    }
+
+    span {
+      font-weight: 400;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.95rem;
+      
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
 }
 
-.vault-intro {
-  display: none;
+/* =========================
+   VIEW CONTROLS
+========================= */
+.vault-view-controls {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  flex-shrink: 0;
 }
 
-/* ========================================
-   STATS DASHBOARD
-======================================== */
+.vault-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--vault-text-dim);
+  cursor: pointer;
+  transition: var(--vault-transition);
+
+  @media (max-width: 480px) {
+    width: 26px;
+    height: 26px;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+
+    @media (max-width: 480px) {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  &.active {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* =========================
+   STATS
+========================= */
 .vault-stats {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    gap: 0.25rem;
+  }
 }
 
 .vault-stat-item {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.3rem 0.7rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: var(--vault-radius-sm);
+  padding: 0.2rem 0.6rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   transition: var(--vault-transition);
-  height: 32px;
-}
+  height: 28px;
 
-.vault-stat-item:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.08);
-  transform: translateY(-1px);
+  @media (max-width: 480px) {
+    padding: 0.15rem 0.35rem;
+    height: 24px;
+    gap: 0.25rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 .vault-stat-icon {
-  font-size: 0.8rem;
-  opacity: 0.5;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  opacity: 0.2;
+
+  svg {
+    width: 14px;
+    height: 14px;
+
+    @media (max-width: 480px) {
+      width: 12px;
+      height: 12px;
+    }
+  }
 }
 
 .vault-stat-value {
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 500;
   color: #fff;
   letter-spacing: -0.01em;
-  line-height: 1;
+  font-family: $font-mono;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 }
 
 .vault-stat-label {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   color: var(--vault-text-muted);
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  line-height: 1;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-family: $font-mono;
+
+  @media (max-width: 480px) {
+    font-size: 0.5rem;
+  }
 }
 
-/* ========================================
+/* =========================
    CONTROLS BAR
-======================================== */
+========================= */
 .vault-controls-bar {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
   flex-wrap: wrap;
   align-items: center;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
 }
 
 .vault-search-wrapper {
   position: relative;
   flex: 1;
   min-width: 200px;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .vault-search-icon {
@@ -199,32 +315,36 @@
   transform: translateY(-50%);
   color: var(--vault-text-dim);
   pointer-events: none;
-  width: 16px;
-  height: 16px;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .vault-search-input {
   width: 100%;
-  padding: 0.5rem 2.5rem 0.5rem 2.5rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--vault-radius-md);
+  padding: 0.4rem 2rem 0.4rem 2.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
   color: #fff;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   transition: var(--vault-transition);
   outline: none;
-  font-family: inherit;
-}
+  font-family: $font-sans;
 
-.vault-search-input::placeholder {
-  color: var(--vault-text-dim);
-  font-weight: 400;
-}
+  &::placeholder {
+    color: var(--vault-text-dim);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+  }
 
-.vault-search-input:focus {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 30px rgba(255, 255, 255, 0.04);
+  &:focus {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
 }
 
 .vault-search-clear {
@@ -236,154 +356,150 @@
   border: none;
   color: var(--vault-text-dim);
   cursor: pointer;
-  font-size: 0.7rem;
   padding: 0.25rem;
   transition: var(--vault-transition);
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
 
-.vault-search-clear:hover {
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(255, 255, 255, 0.06);
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
 }
 
 .vault-controls-right {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 }
 
 .vault-sort-select,
 .vault-density-select {
-  padding: 0.4rem 0.75rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: var(--vault-radius-sm);
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.75rem;
+  padding: 0.3rem 1.8rem 0.3rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.7rem;
   cursor: pointer;
   transition: var(--vault-transition);
   outline: none;
-  font-family: inherit;
+  font-family: $font-mono;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.3)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.2)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.6rem center;
-  padding-right: 1.8rem;
-  height: 34px;
+  height: 32px;
+
+  @media (max-width: 768px) {
+    flex: 1;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.6rem;
+    padding: 0.2rem 1.5rem 0.2rem 0.6rem;
+    height: 28px;
+  }
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  option {
+    background: #0F0F0F;
+    color: #fff;
+  }
 }
 
-.vault-sort-select:hover,
-.vault-density-select:hover {
-  background-color: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.vault-sort-select option,
-.vault-density-select option {
-  background: #1a1a1a;
-  color: #fff;
-}
-
-/* ========================================
+/* =========================
    FILTER CHIPS
-======================================== */
+========================= */
 .vault-filter-chips {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.3rem;
   margin-bottom: 0;
   flex-wrap: wrap;
 }
 
 .vault-filter-chip {
-  padding: 0.25rem 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.6rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   color: var(--vault-text-muted);
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 0.55rem;
+  font-weight: 400;
   cursor: pointer;
   transition: var(--vault-transition);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  font-family: inherit;
-  height: 28px;
-  display: flex;
-  align-items: center;
-}
+  font-family: $font-mono;
+  height: 26px;
 
-.vault-filter-chip:hover {
-  background: rgba(255, 255, 255, 0.07);
-  color: rgba(255, 255, 255, 0.7);
-}
+  @media (max-width: 480px) {
+    padding: 0.15rem 0.5rem;
+    font-size: 0.5rem;
+    height: 24px;
+  }
 
-.vault-filter-chip.active {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  svg {
+    width: 12px;
+    height: 12px;
+
+    @media (max-width: 480px) {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.06);
+    color: #fff;
+  }
 }
 
 .vault-favorites-chip.active {
-  border-color: rgba(255, 215, 0, 0.3);
+  border-color: rgba(255, 215, 0, 0.15);
   color: #ffd700;
-  background: rgba(255, 215, 0, 0.06);
+  background: rgba(255, 215, 0, 0.03);
 }
 
-/* ========================================
-   VIEW CONTROLS
-======================================== */
-.vault-view-controls {
-  display: flex;
-  gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.04);
-  padding: 0.25rem;
-  border-radius: var(--vault-radius-sm);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  flex-shrink: 0;
-}
-
-.vault-view-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: var(--vault-radius-sm);
-  background: transparent;
-  color: var(--vault-text-dim);
-  cursor: pointer;
-  transition: var(--vault-transition);
-}
-
-.vault-view-btn:hover {
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.vault-view-btn.active {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-}
-
-/* ========================================
+/* =========================
    MAIN CONTENT
-======================================== */
+========================= */
 .vault-main {
   position: relative;
   z-index: 1;
   padding: 1rem 2rem 3rem;
+
+  @media (max-width: 768px) {
+    padding: 0 1rem 2rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0 0.6rem 1.5rem;
+  }
 }
 
-/* ========================================
+/* =========================
    LOADING
-======================================== */
+========================= */
 .vault-loading {
   display: flex;
   flex-direction: column;
@@ -393,8 +509,13 @@
 
 .vault-loading-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1.5rem;
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
 }
 
 .vault-loading-text {
@@ -402,46 +523,59 @@
   color: var(--vault-text-dim);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
+  font-family: $font-mono;
 }
 
 .vault-skeleton-card {
   border-radius: var(--vault-radius-lg);
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   animation: skeletonPulse 1.8s ease infinite;
 }
 
 .vault-skeleton-image {
   width: 100%;
   aspect-ratio: 3/4.2;
-  margin-bottom: 1rem;
-  border-radius: var(--vault-radius-sm);
-  background: rgba(255, 255, 255, 0.04);
+  margin-bottom: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .vault-skeleton-line {
-  height: 12px;
-  margin-bottom: 0.6rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
+  height: 10px;
+  margin-bottom: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+
+  &.short {
+    width: 60%;
+    margin-inline: auto;
+  }
 }
 
-.vault-skeleton-line.short {
-  width: 60%;
-  margin-inline: auto;
-}
-
-/* ========================================
-   FOLDER GRID (Category Cards)
-======================================== */
+/* =========================
+   FOLDER GRID
+========================= */
 .vault-folder-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.25rem;
-  padding: 1rem 0;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2px;
+  padding: 0.5rem 0;
   animation: fadeSlideUp 0.3s ease forwards;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  padding: 2px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    padding: 1px;
+  }
 }
 
 .vault-folder-card {
@@ -450,22 +584,21 @@
   align-items: stretch;
   width: 100%;
   padding: 0;
-  border: 1px solid var(--vault-border);
-  border-radius: var(--vault-radius-lg);
-  background: rgba(255, 255, 255, 0.02);
-  backdrop-filter: blur(8px);
+  border: none;
+  background: rgba(255, 255, 255, 0.01);
   cursor: pointer;
   transition: var(--vault-transition);
   text-align: left;
   overflow: hidden;
-  min-height: 200px;
-}
+  min-height: 160px;
 
-.vault-folder-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--vault-border-hover);
-  background: rgba(255, 255, 255, 0.04);
-  box-shadow: var(--vault-shadow-lg);
+  @media (max-width: 480px) {
+    min-height: 120px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+  }
 }
 
 .vault-folder-cover-area {
@@ -477,6 +610,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 768px) {
+    aspect-ratio: 16/10;
+  }
 }
 
 .vault-folder-cover-collage {
@@ -486,61 +623,91 @@
   gap: 2px;
   width: 100%;
   height: 100%;
-  padding: 3px;
+  padding: 2px;
   background: rgba(0, 0, 0, 0.2);
-}
 
-.vault-folder-cover-collage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 2px;
-  transition: var(--vault-transition);
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--vault-transition);
+    filter: grayscale(0.2) contrast(1.05);
+  }
 }
 
 .vault-folder-card:hover .vault-folder-cover-collage img {
-  transform: scale(1.02);
+  transform: scale(1.03);
+  filter: grayscale(0) contrast(1.1);
 }
 
 .vault-folder-cover-icon {
-  font-size: 3rem;
-  opacity: 0.3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.15;
+
+  svg {
+    width: 48px;
+    height: 48px;
+
+    @media (max-width: 480px) {
+      width: 32px;
+      height: 32px;
+    }
+  }
 }
 
 .vault-folder-content {
-  padding: 0.75rem 1rem 1rem;
+  padding: 0.6rem 0.75rem 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
+
+  h2 {
+    margin: 0;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 0.02em;
+    font-family: $font-sans;
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
+  }
+
+  span {
+    color: var(--vault-text-muted);
+    font-size: 0.6rem;
+    font-weight: 300;
+    font-family: $font-mono;
+    letter-spacing: 0.04em;
+
+    @media (max-width: 480px) {
+      font-size: 0.55rem;
+    }
+  }
 }
 
-.vault-folder-content h2 {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #fff;
-  letter-spacing: -0.01em;
-}
-
-.vault-folder-content span {
-  color: var(--vault-text-muted);
-  font-size: 0.7rem;
-  font-weight: 500;
-}
-
-/* ========================================
-   CATEGORY PAGE HEADER
-======================================== */
+/* =========================
+   CATEGORY HEADER
+========================= */
 .vault-category-header {
   position: relative;
-  padding: 1.25rem 0 1rem;
-  margin-bottom: 1.5rem;
+  padding: 1rem 0 0.75rem;
+  margin-bottom: 1rem;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.75rem;
-  border-bottom: 1px solid var(--vault-border);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.02);
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 0 0.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 .vault-category-header-left {
@@ -550,112 +717,138 @@
 }
 
 .vault-category-cover {
-  width: 48px;
-  height: 68px;
+  width: 40px;
+  height: 56px;
   object-fit: cover;
-  border-radius: var(--vault-radius-sm);
-  border: 1px solid var(--vault-border);
-  box-shadow: var(--vault-shadow-sm);
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  filter: grayscale(0.2) contrast(1.05);
+
+  @media (max-width: 768px) {
+    width: 32px;
+    height: 45px;
+  }
 }
 
 .vault-category-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   margin: 0;
-  font-size: clamp(1.2rem, 2vw, 1.6rem);
-  font-weight: 700;
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 400;
   color: #fff;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
+  font-family: $font-sans;
+
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+    opacity: 0.15;
+
+    @media (max-width: 480px) {
+      width: 14px;
+      height: 14px;
+    }
+  }
 }
 
 .vault-item-count {
   color: var(--vault-text-muted);
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.7rem;
+  font-weight: 300;
+  font-family: $font-mono;
+  letter-spacing: 0.04em;
 }
 
 .vault-back-btn {
-  border: none;
-  border-radius: var(--vault-radius-sm);
-  padding: 0.35rem 0.9rem;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--vault-text-muted);
-  cursor: pointer;
-  transition: var(--vault-transition);
-  font-size: 0.8rem;
-  font-weight: 500;
-  font-family: inherit;
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  height: 34px;
+  border: none;
+  padding: 0.3rem 0.8rem;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--vault-text-muted);
+  cursor: pointer;
+  transition: var(--vault-transition);
+  font-size: 0.7rem;
+  font-family: $font-mono;
+  letter-spacing: 0.04em;
+
+  @media (max-width: 480px) {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+  }
 }
 
-.vault-back-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-  transform: translateX(-2px);
-}
-
-/* ========================================
+/* =========================
    GRID SYSTEM
-======================================== */
+========================= */
 .vault-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 2px;
   align-items: start;
   animation: fadeSlideUp 0.3s ease forwards;
+  background: rgba(255, 255, 255, 0.01);
+  padding: 2px;
 }
 
 .vault-grid-grid {
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    padding: 1px;
+  }
 }
 
 .vault-grid-list {
   grid-template-columns: 1fr;
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
+  background: transparent;
+  padding: 0;
+  gap: 2px;
 }
 
-/* ========================================
-   BOOK CARD - GRID VIEW
-======================================== */
+/* =========================
+   BOOK CARD - GRID
+========================= */
 .vault-book-card {
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  border-radius: var(--vault-radius-lg);
-  background: var(--vault-bg-card);
-  border: 1px solid var(--vault-border);
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   transition: var(--vault-transition);
-  transform-style: preserve-3d;
   height: 100%;
-}
 
-.vault-book-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.025), transparent 80%);
-  transform: translateX(-130%);
-  transition: transform 0.8s ease;
-  pointer-events: none;
-}
-
-.vault-book-card:hover::before {
-  transform: translateX(130%);
-}
-
-.vault-book-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--vault-border-hover);
-  box-shadow: var(--vault-shadow-xl);
+  &:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 .vault-card-glow {
   position: absolute;
   inset: auto -20% -30% -20%;
-  height: 180px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.04), transparent 70%);
+  height: 150px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent 70%);
   filter: blur(60px);
   z-index: 0;
   opacity: 0;
@@ -668,27 +861,29 @@
 
 /* Grid View - Image */
 .vault-book-card-grid .vault-book-image-wrapper {
-  padding: 1rem 1rem 0;
+  padding: 0.75rem 0.75rem 0;
   position: relative;
   z-index: 1;
+
+  @media (max-width: 480px) {
+    padding: 0.4rem 0.4rem 0;
+  }
 }
 
 .vault-book-card-grid .vault-book-image {
   width: 100%;
   aspect-ratio: 3 / 4.2;
   object-fit: cover;
-  border-radius: var(--vault-radius-sm);
-  border: 1px solid var(--vault-border);
-  box-shadow: var(--vault-shadow-sm);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   transition: var(--vault-transition);
   cursor: pointer;
   display: block;
-}
+  filter: grayscale(0.2) contrast(1.05);
 
-.vault-book-card-grid:hover .vault-book-image {
-  transform: scale(1.03);
-  box-shadow: var(--vault-shadow-md);
-  border-color: var(--vault-border-hover);
+  &:hover {
+    filter: grayscale(0) contrast(1.1);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 .vault-image-placeholder {
@@ -697,37 +892,55 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--vault-radius-sm);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--vault-border);
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   color: var(--vault-text-dim);
-  font-size: 2rem;
   cursor: pointer;
   transition: var(--vault-transition);
-}
 
-.vault-image-placeholder:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--vault-border-hover);
+  svg {
+    width: 32px;
+    height: 32px;
+    opacity: 0.15;
+
+    @media (max-width: 480px) {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 /* Grid View - Content */
 .vault-book-card-grid .vault-book-content {
-  padding: 0.75rem 1rem 1rem;
+  padding: 0.5rem 0.75rem 0.75rem;
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.4rem 0.5rem;
+  }
 }
 
 .vault-book-card-grid .vault-book-content h2 {
-  margin: 0 0 0.25rem;
-  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  margin: 0 0 0.2rem;
+  font-size: clamp(0.85rem, 1vw, 1rem);
   line-height: 1.3;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
   color: #fff;
+  font-family: $font-sans;
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+  }
 }
 
 .vault-book-title {
@@ -740,53 +953,52 @@
   transition: var(--vault-transition);
   text-align: left;
   width: 100%;
-}
 
-.vault-book-title:hover {
-  opacity: 0.8;
+  &:hover {
+    opacity: 0.7;
+  }
 }
 
 .vault-meta-row {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-bottom: 0.25rem;
-  color: var(--vault-text-muted);
-  font-size: 0.7rem;
-  flex-wrap: wrap;
-}
-
-.vault-type-badge {
-  display: inline-flex;
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  gap: 0.3rem;
+  margin-bottom: 0.2rem;
   color: var(--vault-text-muted);
   font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  flex-wrap: wrap;
+  font-family: $font-mono;
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    gap: 0.2rem;
+  }
 }
 
+.vault-type-badge,
 .vault-series-badge {
   display: inline-flex;
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 0.05rem 0.4rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   color: var(--vault-text-muted);
-  font-size: 0.6rem;
-  font-weight: 600;
+  font-size: 0.5rem;
+  font-weight: 400;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  font-family: $font-mono;
+
+  @media (max-width: 480px) {
+    font-size: 0.45rem;
+    padding: 0.05rem 0.35rem;
+  }
 }
 
 /* Grid View - Description */
 .vault-book-card-grid .vault-description-dropdown {
-  margin-top: 0.35rem;
-  border-top: 1px solid var(--vault-border);
-  padding-top: 0.35rem;
+  margin-top: 0.3rem;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.02);
+  padding-top: 0.3rem;
 }
 
 .vault-description-toggle {
@@ -797,25 +1009,34 @@
   background: transparent;
   border: none;
   color: var(--vault-text-muted);
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.6rem;
+  font-weight: 400;
   cursor: pointer;
-  padding: 0.15rem 0;
+  padding: 0.1rem 0;
   transition: var(--vault-transition);
-  font-family: inherit;
-}
+  font-family: $font-mono;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 
-.vault-description-toggle:hover {
-  color: rgba(255, 255, 255, 0.7);
+  &:hover {
+    color: rgba(255, 255, 255, 0.6);
+  }
 }
 
 .vault-arrow {
   transition: var(--vault-transition);
-  font-size: 0.6rem;
-}
+  display: flex;
+  align-items: center;
 
-.vault-arrow.expanded {
-  transform: rotate(180deg);
+  svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0.15;
+  }
+
+  &.expanded {
+    transform: rotate(180deg);
+  }
 }
 
 .vault-description-content {
@@ -823,26 +1044,31 @@
   grid-template-rows: 0fr;
   opacity: 0;
   transition: grid-template-rows var(--vault-transition-slow), opacity var(--vault-transition);
-}
 
-.vault-description-content > * {
-  overflow: hidden;
-}
+  > * {
+    overflow: hidden;
+  }
 
-.vault-description-content.expanded {
-  grid-template-rows: 1fr;
-  opacity: 1;
+  &.expanded {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
 }
 
 .vault-book-description {
-  margin-top: 0.35rem;
+  margin-top: 0.3rem;
   color: var(--vault-text-muted);
   line-height: 1.6;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   white-space: pre-wrap;
   opacity: 0;
   transform: translateY(-4px);
   transition: transform var(--vault-transition-slow), opacity var(--vault-transition);
+  font-weight: 300;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 }
 
 .vault-description-content.expanded .vault-book-description {
@@ -854,329 +1080,435 @@
 .vault-book-card-grid .vault-actions-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 0.5rem;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
   align-items: center;
 }
 
 .vault-read-btn {
   flex: 1;
-  min-width: 60px;
-  border: 1px solid var(--vault-border);
-  background: rgba(255, 255, 255, 0.04);
+  min-width: 50px;
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   color: #fff;
-  padding: 0.4rem 0.8rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 400;
   cursor: pointer;
-  border-radius: var(--vault-radius-sm);
   transition: var(--vault-transition);
-  font-family: inherit;
-  height: 34px;
+  font-family: $font-mono;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
+  letter-spacing: 0.04em;
 
-.vault-read-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--vault-border-hover);
-  transform: translateY(-1px);
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    padding: 0.2rem 0.4rem;
+    min-width: 40px;
+    height: 26px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
 }
 
 .vault-download-btn {
   flex: 1;
-  min-width: 60px;
-  border: 1px solid var(--vault-border);
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--vault-text-muted);
-  padding: 0.4rem 0.8rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--vault-radius-sm);
-  transition: var(--vault-transition);
-  font-family: inherit;
-  height: 34px;
+  min-width: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.vault-download-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.85);
-  transform: translateY(-1px);
-}
-
-.vault-download-note {
-  width: 100%;
+  gap: 0.3rem;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
+  color: var(--vault-text-muted);
+  padding: 0.3rem 0.6rem;
   font-size: 0.6rem;
-  color: var(--vault-text-dim);
-  font-style: italic;
-  margin-top: 0.1rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: var(--vault-transition);
+  font-family: $font-mono;
+  height: 30px;
+  letter-spacing: 0.04em;
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    padding: 0.2rem 0.4rem;
+    min-width: 40px;
+    height: 26px;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0.3;
+
+    @media (max-width: 480px) {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  span {
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+  }
 }
 
-/* ========================================
-   BOOK CARD - LIST VIEW (REBUILT)
-======================================== */
+/* =========================
+   BOOK CARD - LIST VIEW
+========================= */
 .vault-book-card-list {
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  min-height: 140px;
+  min-height: 120px;
   padding: 0;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: var(--vault-radius-md);
-  border: 1px solid var(--vault-border);
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   transition: var(--vault-transition);
   overflow: hidden;
   position: relative;
-}
 
-.vault-book-card-list:hover {
-  transform: translateY(-3px);
-  border-color: var(--vault-border-hover);
-  box-shadow: var(--vault-shadow-lg);
-}
+  @media (max-width: 768px) {
+    min-height: 100px;
+  }
 
-.vault-book-card-list .vault-card-glow {
-  inset: auto -10% -20% -10%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent 70%);
-  opacity: 0;
-}
+  @media (max-width: 480px) {
+    min-height: 80px;
+  }
 
-.vault-book-card-list:hover .vault-card-glow {
-  opacity: 0.4;
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .vault-card-glow {
+    inset: auto -10% -20% -10%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.02), transparent 70%);
+    opacity: 0;
+  }
+
+  &:hover .vault-card-glow {
+    opacity: 0.3;
+  }
 }
 
 /* List View - Image */
 .vault-book-card-list .vault-book-image-wrapper {
   position: relative;
-  flex: 0 0 110px;
-  padding: 0.75rem;
+  flex: 0 0 90px;
+  padding: 0.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.15);
   z-index: 1;
+
+  @media (max-width: 768px) {
+    flex: 0 0 70px;
+    padding: 0.4rem;
+  }
+
+  @media (max-width: 480px) {
+    flex: 0 0 50px;
+    padding: 0.3rem;
+  }
 }
 
 .vault-book-card-list .vault-book-image {
   width: 100%;
-  max-width: 95px;
+  max-width: 78px;
   aspect-ratio: 3 / 4.2;
   object-fit: cover;
-  border-radius: var(--vault-radius-sm);
-  border: 1px solid var(--vault-border);
-  box-shadow: var(--vault-shadow-sm);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   transition: var(--vault-transition);
   cursor: pointer;
   display: block;
-}
+  filter: grayscale(0.2) contrast(1.05);
 
-.vault-book-card-list:hover .vault-book-image {
-  transform: scale(1.04);
-  box-shadow: var(--vault-shadow-md);
-  border-color: var(--vault-border-hover);
+  @media (max-width: 768px) {
+    max-width: 60px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 44px;
+  }
+
+  &:hover {
+    filter: grayscale(0) contrast(1.1);
+  }
 }
 
 .vault-book-card-list .vault-image-placeholder {
-  width: 95px;
+  width: 78px;
   aspect-ratio: 3 / 4.2;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--vault-radius-sm);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--vault-border);
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   color: var(--vault-text-dim);
-  font-size: 1.5rem;
   cursor: pointer;
   transition: var(--vault-transition);
-}
 
-.vault-book-card-list .vault-image-placeholder:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--vault-border-hover);
+  @media (max-width: 768px) {
+    width: 60px;
+  }
+
+  @media (max-width: 480px) {
+    width: 44px;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+    opacity: 0.15;
+
+    @media (max-width: 480px) {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 /* List View - Content */
 .vault-book-card-list .vault-book-content {
   flex: 1;
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.75rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-width: 0;
   z-index: 2;
   position: relative;
+
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.4rem;
+  }
 }
 
 .vault-book-card-list .vault-book-content h2 {
-  margin: 0 0 0.2rem;
-  font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+  margin: 0 0 0.15rem;
+  font-size: clamp(0.85rem, 1vw, 1rem);
   line-height: 1.3;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  letter-spacing: 0.02em;
   color: #fff;
+  font-family: $font-sans;
   word-wrap: break-word;
   overflow-wrap: break-word;
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    margin-bottom: 0.1rem;
+  }
 }
 
 .vault-book-card-list .vault-meta-row {
-  margin-bottom: 0.15rem;
-  font-size: 0.7rem;
+  margin-bottom: 0.1rem;
+  font-size: 0.6rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    margin-bottom: 0.05rem;
+  }
 }
 
-/* List View - Description Preview */
 .vault-book-card-list .vault-description-preview {
   color: var(--vault-text-muted);
-  font-size: 0.8rem;
-  line-height: 1.5;
-  margin: 0.15rem 0 0.3rem;
+  font-size: 0.7rem;
+  line-height: 1.4;
+  margin: 0.1rem 0 0.2rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 2.6rem;
+  max-height: 2.2rem;
+  font-weight: 300;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 /* List View - Actions */
 .vault-book-card-list .vault-list-actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.25rem;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
   flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    gap: 0.2rem;
+    margin-top: 0.1rem;
+  }
 }
 
 .vault-book-card-list .vault-list-read-btn {
-  border: 1px solid var(--vault-border);
-  background: rgba(255, 255, 255, 0.04);
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   color: #fff;
-  padding: 0.3rem 0.8rem;
-  font-size: 0.7rem;
-  font-weight: 600;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.6rem;
+  font-weight: 400;
   cursor: pointer;
-  border-radius: var(--vault-radius-sm);
   transition: var(--vault-transition);
-  font-family: inherit;
-  height: 30px;
+  font-family: $font-mono;
+  height: 26px;
   display: flex;
   align-items: center;
-}
+  letter-spacing: 0.04em;
 
-.vault-book-card-list .vault-list-read-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--vault-border-hover);
-  transform: translateY(-1px);
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    padding: 0.15rem 0.4rem;
+    height: 22px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
 }
 
 .vault-book-card-list .vault-list-download-btn {
-  border: 1px solid var(--vault-border);
-  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
   color: var(--vault-text-muted);
-  padding: 0.3rem 0.8rem;
-  font-size: 0.7rem;
-  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 400;
   cursor: pointer;
-  border-radius: var(--vault-radius-sm);
   transition: var(--vault-transition);
-  font-family: inherit;
-  height: 30px;
+  font-family: $font-mono;
+  height: 26px;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    padding: 0.15rem 0.3rem;
+    height: 22px;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0.3;
+
+    @media (max-width: 480px) {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+  }
 }
 
-.vault-book-card-list .vault-list-download-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.85);
-  transform: translateY(-1px);
-}
-
-.vault-book-card-list .vault-list-download-btn svg {
-  flex-shrink: 0;
-}
-
-/* List View - Favorite Button */
-.vault-book-card-list .vault-favorite-btn {
-  position: relative;
-  top: auto;
-  right: auto;
-  margin-right: 0.75rem;
-  flex-shrink: 0;
-  align-self: center;
-}
-
-/* ========================================
-   FAVORITE BUTTON (Shared)
-======================================== */
+/* =========================
+   FAVORITE BUTTON
+========================= */
 .vault-favorite-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 4;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--vault-border);
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   color: var(--vault-text-dim);
-  backdrop-filter: blur(8px);
   transition: var(--vault-transition);
   padding: 0;
-  flex-shrink: 0;
+
+  @media (max-width: 480px) {
+    width: 22px;
+    height: 22px;
+    top: 0.3rem;
+    right: 0.3rem;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    transition: var(--vault-transition);
+
+    @media (max-width: 480px) {
+      width: 12px;
+      height: 12px;
+    }
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  svg[style*="fill: currentColor"] {
+    color: #ffd700;
+  }
+
+  &:hover svg {
+    color: #ffd700;
+  }
 }
 
-.vault-favorite-btn:hover {
-  transform: scale(1.1);
-  background: rgba(0, 0, 0, 0.5);
-  border-color: var(--vault-border-hover);
-}
-
-.vault-favorite-btn svg {
-  width: 16px;
-  height: 16px;
-  color: var(--vault-text-muted);
-  transition: var(--vault-transition);
-}
-
-.vault-favorite-btn svg[fill="currentColor"] {
-  color: #ffd700;
-}
-
-.vault-favorite-btn:hover svg {
-  color: #ffd700;
-}
-
-/* ========================================
+/* =========================
    NEW BADGE
-======================================== */
+========================= */
 .vault-new-badge {
   position: absolute;
   top: 0.5rem;
   left: 0.5rem;
   z-index: 4;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-  background: rgba(255, 215, 0, 0.08);
-  border: 1px solid rgba(255, 215, 0, 0.12);
-  backdrop-filter: blur(8px);
-  color: rgba(255, 215, 0, 0.6);
-  font-size: 0.5rem;
-  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  background: rgba(255, 215, 0, 0.04);
+  border: 0.5px solid rgba(255, 215, 0, 0.06);
+  color: rgba(255, 215, 0, 0.3);
+  font-size: 0.45rem;
+  font-weight: 500;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-family: $font-mono;
+
+  @media (max-width: 480px) {
+    font-size: 0.4rem;
+    padding: 0.05rem 0.3rem;
+    top: 0.3rem;
+    left: 0.3rem;
+  }
 }
 
-/* ========================================
+/* =========================
    SERIES GROUP
-======================================== */
+========================= */
 .vault-series-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .vault-series-header {
@@ -1184,91 +1516,137 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 0.6rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--vault-border);
-  border-radius: var(--vault-radius-md);
+  padding: 0.4rem 0.75rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   cursor: pointer;
   transition: var(--vault-transition);
   color: #fff;
   font: inherit;
   text-align: left;
-  font-family: inherit;
-}
+  font-family: $font-sans;
 
-.vault-series-header:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: var(--vault-border-hover);
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.5rem;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.04);
+  }
 }
 
 .vault-series-header-left {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   min-width: 0;
+
+  @media (max-width: 480px) {
+    gap: 0.3rem;
+  }
 }
 
 .vault-series-cover {
-  width: 32px;
-  height: 45px;
+  width: 28px;
+  height: 40px;
   object-fit: cover;
-  border-radius: var(--vault-radius-sm);
-  border: 1px solid var(--vault-border);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   flex-shrink: 0;
+  filter: grayscale(0.2) contrast(1.05);
+
+  @media (max-width: 480px) {
+    width: 22px;
+    height: 32px;
+  }
 }
 
 .vault-series-icon {
-  font-size: 1.2rem;
-  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0.15;
+
+  svg {
+    width: 18px;
+    height: 18px;
+
+    @media (max-width: 480px) {
+      width: 14px;
+      height: 14px;
+    }
+  }
 }
 
 .vault-series-header h3 {
   margin: 0;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.85rem;
+  font-weight: 400;
   color: #fff;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: $font-sans;
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+  }
 }
 
 .vault-series-count {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   color: var(--vault-text-muted);
-  font-weight: 400;
+  font-weight: 300;
   flex-shrink: 0;
+  font-family: $font-mono;
+  letter-spacing: 0.04em;
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+  }
 }
 
 .vault-series-arrow {
   transition: var(--vault-transition);
   color: var(--vault-text-dim);
-  font-size: 0.7rem;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.15;
+  }
+
+  &.expanded {
+    transform: rotate(180deg);
+  }
 }
 
-.vault-series-arrow.expanded {
-  transform: rotate(180deg);
-}
-
-/* ========================================
+/* =========================
    CONTINUE READING
-======================================== */
+========================= */
 .vault-continue-reading {
-  margin: 0 0 1.5rem;
-  padding: 0.75rem 1.25rem;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: var(--vault-radius-md);
-  border: 1px solid var(--vault-border);
-}
+  margin: 0 0 1rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
 
-.vault-continue-reading h3 {
-  margin: 0 0 0.5rem;
-  font-size: 0.7rem;
-  color: var(--vault-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 600;
+  @media (max-width: 480px) {
+    padding: 0.4rem 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  h3 {
+    margin: 0 0 0.4rem;
+    font-size: 0.6rem;
+    color: var(--vault-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 400;
+    font-family: $font-mono;
+  }
 }
 
 .vault-continue-card {
@@ -1278,110 +1656,127 @@
 }
 
 .vault-continue-cover {
-  width: 44px;
-  height: 62px;
+  width: 40px;
+  height: 56px;
   object-fit: cover;
-  border-radius: var(--vault-radius-sm);
-  border: 1px solid var(--vault-border);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
   flex-shrink: 0;
+  filter: grayscale(0.2) contrast(1.05);
+
+  @media (max-width: 480px) {
+    width: 28px;
+    height: 40px;
+  }
 }
 
 .vault-continue-info {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: 0.05rem;
   flex: 1;
   min-width: 0;
 }
 
 .vault-continue-info h4 {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #fff;
-  font-weight: 600;
+  font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: $font-sans;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 }
 
 .vault-continue-type {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   color: var(--vault-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  font-family: $font-mono;
 }
 
 .vault-continue-btn {
-  padding: 0.25rem 0.75rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--vault-border);
-  border-radius: var(--vault-radius-sm);
+  padding: 0.2rem 0.6rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
   color: #fff;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.6rem;
+  font-weight: 400;
   cursor: pointer;
   transition: var(--vault-transition);
-  font-family: inherit;
+  font-family: $font-mono;
   flex-shrink: 0;
-  height: 30px;
+  height: 26px;
   display: flex;
   align-items: center;
+  letter-spacing: 0.04em;
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    padding: 0.15rem 0.4rem;
+    height: 22px;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.06);
+  }
 }
 
-.vault-continue-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--vault-border-hover);
-}
-
-/* ========================================
+/* =========================
    DENSITY VARIANTS
-======================================== */
+========================= */
 .vault-density-compact {
   .vault-book-card-grid .vault-book-image-wrapper {
-    padding: 0.6rem 0.6rem 0;
+    padding: 0.4rem 0.4rem 0;
   }
   .vault-book-card-grid .vault-book-content {
-    padding: 0.4rem 0.6rem 0.6rem;
+    padding: 0.3rem 0.4rem 0.5rem;
   }
   .vault-book-content h2 {
-    font-size: clamp(0.8rem, 0.9vw, 0.9rem) !important;
+    font-size: 0.75rem !important;
   }
   .vault-meta-row {
-    font-size: 0.6rem !important;
+    font-size: 0.55rem !important;
   }
   .vault-book-card-list .vault-book-image-wrapper {
-    flex: 0 0 80px;
+    flex: 0 0 70px;
   }
   .vault-book-card-list .vault-book-image {
-    max-width: 70px;
+    max-width: 60px;
   }
 }
 
 .vault-density-comfortable {
-  // Default - no changes
+  // Default
 }
 
 .vault-density-large {
   .vault-book-card-grid .vault-book-image-wrapper {
-    padding: 1.5rem 1.5rem 0;
+    padding: 1rem 1rem 0;
   }
   .vault-book-card-grid .vault-book-content {
-    padding: 1rem 1.5rem 1.5rem;
+    padding: 0.75rem 1rem 1rem;
   }
   .vault-book-content h2 {
-    font-size: clamp(1.1rem, 1.4vw, 1.4rem) !important;
+    font-size: 1.1rem !important;
   }
   .vault-book-card-list .vault-book-image-wrapper {
-    flex: 0 0 150px;
+    flex: 0 0 120px;
   }
   .vault-book-card-list .vault-book-image {
-    max-width: 130px;
+    max-width: 100px;
   }
 }
 
-/* ========================================
+/* =========================
    EMPTY STATE
-======================================== */
+========================= */
 .vault-empty-state {
   text-align: center;
   padding: 3rem 1rem;
@@ -1392,475 +1787,54 @@
 }
 
 .vault-empty-icon {
-  font-size: 3rem;
-  opacity: 0.3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.1;
+
+  svg {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 .vault-empty-state p {
   color: var(--vault-text-muted);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   margin: 0;
+  font-weight: 300;
 }
 
 .vault-empty-clear-btn {
-  padding: 0.4rem 1.2rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--vault-border);
-  border-radius: var(--vault-radius-sm);
+  padding: 0.3rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(255, 255, 255, 0.03);
   color: var(--vault-text-muted);
   cursor: pointer;
   transition: var(--vault-transition);
-  font-size: 0.8rem;
-  font-family: inherit;
-  height: 36px;
+  font-size: 0.7rem;
+  font-family: $font-mono;
+  height: 32px;
   display: flex;
   align-items: center;
-}
+  letter-spacing: 0.04em;
 
-.vault-empty-clear-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-
-/* ========================================
-   RESPONSIVE - TABLET
-======================================== */
-@media screen and (max-width: 1024px) {
-  .vault-grid-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  }
-  
-  .vault-folder-grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
   }
 }
 
-@media screen and (max-width: 768px) {
-  .vault-header {
-    padding: 0.5rem 1rem 0.4rem;
-  }
-  
-  .vault-main {
-    padding: 0 1rem 2rem;
-  }
-  
-  .vault-grid-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-  }
-  
-  .vault-folder-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-  }
-  
-  .vault-controls-bar {
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  
-  .vault-controls-right {
-    width: 100%;
-  }
-  
-  .vault-sort-select,
-  .vault-density-select {
-    flex: 1;
-    min-width: unset;
-  }
-  
-  .vault-stats {
-    gap: 0.35rem;
-  }
-  
-  .vault-stat-item {
-    padding: 0.2rem 0.5rem;
-    height: 28px;
-  }
-  
-  .vault-stat-value {
-    font-size: 0.8rem;
-  }
-  
-  .vault-stat-label {
-    font-size: 0.55rem;
-  }
-  
-  .vault-category-header {
-    padding: 0.75rem 0 0.5rem;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .vault-category-cover {
-    width: 40px;
-    height: 56px;
-  }
-  
-  .vault-folder-cover-area {
-    aspect-ratio: 16/10;
-  }
-  
-  /* List View - Tablet */
-  .vault-book-card-list {
-    min-height: 120px;
-  }
-  
-  .vault-book-card-list .vault-book-image-wrapper {
-    flex: 0 0 80px;
-    padding: 0.5rem;
-  }
-  
-  .vault-book-card-list .vault-book-image {
-    max-width: 70px;
-  }
-  
-  .vault-book-card-list .vault-book-content {
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .vault-book-card-list .vault-description-preview {
-    display: none;
-  }
-  
-  .vault-density-large {
-    .vault-book-card-list .vault-book-image-wrapper {
-      flex: 0 0 110px;
-    }
-    .vault-book-card-list .vault-book-image {
-      max-width: 95px;
-    }
-  }
-}
-
-/* ========================================
-   RESPONSIVE - MOBILE
-======================================== */
-@media screen and (max-width: 480px) {
-  .vault-header {
-    padding: 0.4rem 0.6rem 0.3rem;
-  }
-  
-  .vault-header h1 {
-    font-size: 1rem;
-  }
-  
-  .vault-main {
-    padding: 0 0.6rem 1.5rem;
-  }
-  
-  .vault-grid-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
-  }
-  
-  .vault-folder-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.6rem;
-  }
-  
-  .vault-stats {
-    gap: 0.25rem;
-  }
-  
-  .vault-stat-item {
-    padding: 0.15rem 0.35rem;
-    gap: 0.25rem;
-    height: 24px;
-  }
-  
-  .vault-stat-icon {
-    font-size: 0.65rem;
-  }
-  
-  .vault-stat-value {
-    font-size: 0.7rem;
-  }
-  
-  .vault-stat-label {
-    font-size: 0.5rem;
-  }
-  
-  .vault-filter-chip {
-    padding: 0.15rem 0.5rem;
-    font-size: 0.55rem;
-    height: 24px;
-  }
-  
-  .vault-view-btn {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .vault-view-btn svg {
-    width: 14px;
-    height: 14px;
-  }
-  
-  .vault-book-card-grid .vault-book-image-wrapper {
-    padding: 0.4rem 0.4rem 0;
-  }
-  
-  .vault-book-card-grid .vault-book-content {
-    padding: 0.3rem 0.4rem 0.5rem;
-  }
-  
-  .vault-book-content h2 {
-    font-size: 0.75rem !important;
-  }
-  
-  .vault-meta-row {
-    font-size: 0.55rem;
-    gap: 0.2rem;
-  }
-  
-  .vault-type-badge {
-    font-size: 0.5rem;
-    padding: 0.05rem 0.35rem;
-  }
-  
-  .vault-read-btn {
-    font-size: 0.6rem;
-    padding: 0.2rem 0.4rem;
-    min-width: 40px;
-    height: 28px;
-  }
-  
-  .vault-download-btn {
-    font-size: 0.6rem;
-    padding: 0.2rem 0.4rem;
-    min-width: 40px;
-    height: 28px;
-  }
-  
-  .vault-favorite-btn {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .vault-favorite-btn svg {
-    width: 13px;
-    height: 13px;
-  }
-  
-  .vault-new-badge {
-    font-size: 0.4rem;
-    padding: 0.1rem 0.35rem;
-    top: 0.3rem;
-    left: 0.3rem;
-  }
-  
-  .vault-folder-card {
-    min-height: 120px;
-  }
-  
-  .vault-folder-content h2 {
-    font-size: 0.75rem;
-  }
-  
-  .vault-folder-content span {
-    font-size: 0.6rem;
-  }
-  
-  .vault-category-header h2 {
-    font-size: 1rem;
-  }
-  
-  .vault-category-cover {
-    width: 32px;
-    height: 45px;
-  }
-  
-  .vault-continue-reading {
-    padding: 0.4rem 0.6rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .vault-continue-cover {
-    width: 32px;
-    height: 45px;
-  }
-  
-  .vault-continue-info h4 {
-    font-size: 0.7rem;
-  }
-  
-  .vault-series-header {
-    padding: 0.3rem 0.5rem;
-  }
-  
-  .vault-series-header h3 {
-    font-size: 0.75rem;
-  }
-  
-  .vault-series-cover {
-    width: 24px;
-    height: 34px;
-  }
-  
-  .vault-series-icon {
-    font-size: 0.9rem;
-  }
-  
-  /* List View - Mobile */
-  .vault-book-card-list {
-    min-height: 90px;
-    border-radius: var(--vault-radius-sm);
-  }
-  
-  .vault-book-card-list .vault-book-image-wrapper {
-    flex: 0 0 60px;
-    padding: 0.3rem;
-  }
-  
-  .vault-book-card-list .vault-book-image {
-    max-width: 50px;
-  }
-  
-  .vault-book-card-list .vault-book-content {
-    padding: 0.3rem 0.5rem 0.3rem 0.4rem;
-  }
-  
-  .vault-book-card-list .vault-book-content h2 {
-    font-size: 0.75rem;
-    margin-bottom: 0.1rem;
-  }
-  
-  .vault-book-card-list .vault-meta-row {
-    font-size: 0.55rem;
-    margin-bottom: 0.1rem;
-  }
-  
-  .vault-book-card-list .vault-description-preview {
-    display: none;
-  }
-  
-  .vault-book-card-list .vault-list-actions {
-    gap: 0.3rem;
-    margin-top: 0.1rem;
-  }
-  
-  .vault-book-card-list .vault-list-read-btn,
-  .vault-book-card-list .vault-list-download-btn {
-    font-size: 0.6rem;
-    padding: 0.15rem 0.5rem;
-    height: 24px;
-  }
-  
-  .vault-book-card-list .vault-favorite-btn {
-    width: 22px;
-    height: 22px;
-    margin-right: 0.4rem;
-  }
-  
-  .vault-book-card-list .vault-favorite-btn svg {
-    width: 13px;
-    height: 13px;
-  }
-  
-  .vault-density-large {
-    .vault-book-card-list .vault-book-image-wrapper {
-      flex: 0 0 80px;
-    }
-    .vault-book-card-list .vault-book-image {
-      max-width: 70px;
-    }
-  }
-}
-
-/* ========================================
-   PAGE ENTRANCE ANIMATION
-======================================== */
+/* =========================
+   PAGE ENTRANCE
+========================= */
 .vault-container {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(8px);
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
 .vault-container.vault-visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* ========================================
-   STICKY HEADER OPTIMIZATION
-======================================== */
-.vault-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  padding: 0.75rem 2rem 0.5rem;
-  background: rgba(10, 10, 10, 0.92);
-  backdrop-filter: blur(20px) saturate(1.2);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  transition: var(--vault-transition);
-}
-
-/* ==========================================
-   Vault Header Left
-========================================= */
-
-.vault-header-left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* ==========================================
-   Wish Archive Button
-========================================= */
-
-.vault-wish-archive-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.9rem;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 999px;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 0.7rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: inherit;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
-
-.vault-wish-archive-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.85);
-  transform: translateY(-1px);
-}
-
-.vault-wish-archive-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-@media (max-width: 768px) {
-  .vault-wish-archive-btn span {
-    display: none;
-  }
-  
-  .vault-wish-archive-btn {
-    padding: 0.4rem 0.6rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .vault-header-left {
-    gap: 0.5rem;
-  }
-  
-  .vault-wish-archive-btn {
-    padding: 0.3rem 0.5rem;
-  }
-  
-  .vault-wish-archive-btn svg {
-    width: 14px;
-    height: 14px;
-  }
 }

@@ -1,7 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Icon } from '@iconify/react';
-import { useArchive } from '../hooks/useArchive';
+import { useArchive } from '../hooks/useArchive';  // ✅ Fixed import
 
 import "./styles/VaultPage.scss";
 
@@ -9,13 +8,17 @@ const Vault = lazy(() => import('../components/Vault'));
 
 const VaultPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isUnlocked, isLoading } = useArchive();
+  const { isUnlocked, isLoading } = useArchive();  // ✅ Use useArchive
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
+    console.log('VaultPage - State:', { isLoading, isUnlocked, hasRedirected });
+    
+    // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
+      console.log('VaultPage - Not unlocked, redirecting to archive');
       setHasRedirected(true);
-      navigate('/archive', { replace: true });
+      navigate('/archive', { replace: true });  // ✅ Redirect to archive
     }
     
     if (isUnlocked && hasRedirected) {
@@ -27,55 +30,41 @@ const VaultPage: React.FC = () => {
     return (
       <div className="vault-loading-state">
         <div className="vault-loading-spinner" />
-        <p>Verifying access</p>
+        <p>Verifying access...</p>
       </div>
     );
   }
 
   if (!isUnlocked) {
+    console.log('VaultPage - Not unlocked, returning null');
     return null;
   }
 
+  console.log('VaultPage - Rendering vault');
+
   return (
     <div className="vault-page">
-      {/* Background Layers */}
-      <div className="vault-bg-grid" />
-      <div className="vault-ambient-shapes">
-        <div className="shape shape-1" />
-        <div className="shape shape-2" />
-        <div className="shape shape-3" />
-      </div>
-      <div className="vault-vignette" />
-
-      {/* Header */}
-      <header className="vault-page-header">
+      <div className="vault-page-header">
         <button 
           className="vault-back-button"
-          onClick={() => navigate('/archive')}
-          aria-label="Back to archive"
+          onClick={() => {
+            console.log('VaultPage - Going back to archive');
+            navigate('/archive');  
+          }}
+          aria-label="Back to archive" 
         >
-          <Icon icon="mdi:arrow-left" />
-          <span>Back</span>
+          ← Back to Archive  
         </button>
-        <div className="vault-header-divider" />
-        <h1 className="vault-page-title">Vault</h1>
-        <div className="vault-header-badge">
-          <span className="badge-dot" />
-          <span>Encrypted</span>
-        </div>
-      </header>
-
-      {/* Vault Content */}
-      <div className="vault-content-wrapper">
-        <Suspense fallback={
-          <div className="vault-loading-state">
-            <div className="vault-loading-spinner" />
-            <p>Loading vault contents</p>
-          </div>
-        }>
-          <Vault />
-        </Suspense>
+        <h1>Vault</h1>
       </div>
+      <Suspense fallback={
+        <div className="vault-loading-state">
+          <div className="vault-loading-spinner" />
+          <p>Loading archive...</p>
+        </div>
+      }>
+        <Vault />
+      </Suspense>
     </div>
   );
 };
