@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect, useRef } from 'react';
+import React, { Suspense, lazy, useState, useEffect, useRef, useMemo } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import {
   Timeline,
@@ -36,7 +36,7 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
   const animationFrameRef = useRef<number | undefined>(undefined);
   const startTimeRef = useRef<number | undefined>(undefined);
 
-  const statusMessages = [
+  const statusMessages = useMemo(() => [
     'Initializing',
     'Loading interface',
     'Preparing modules',
@@ -44,7 +44,7 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
     'Connecting components',
     'Rendering layout',
     'Finalizing'
-  ];
+  ], []);
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
