@@ -1,3 +1,23 @@
+/* =========================
+   VARIABLES - MATCHING MAIN.SCSS
+========================= */
+$black: #070707;
+$dark: #0F0F0F;
+$gray-dark: #1A1A1A;
+$gray: #232323;
+$white: #F5F5F5;
+$white-dim: rgba(255, 255, 255, 0.7);
+$white-faint: rgba(255, 255, 255, 0.3);
+$white-subtle: rgba(255, 255, 255, 0.04);
+$cyan: #3BE9E5;
+$cyan-dim: rgba(59, 233, 229, 0.15);
+$orange: #FF5A4A;
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+/* =========================
+   ARCHIVE PAGE
+========================= */
 .archive-page {
   min-height: 100vh;
   display: flex;
@@ -5,62 +25,25 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background: #0a0a0f;
+  background: $black;
   padding: 2rem;
   opacity: 0;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   &.loaded {
     opacity: 1;
   }
 
-  // Background Layers
-  .archive-bg-gradient {
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
+  // Background Grid
   .archive-bg-grid {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.03;
     background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.02) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0.5px, transparent 0.5px);
     background-size: 60px 60px;
-  }
-
-  .archive-bg-outlines {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.02;
-    
-    &::before {
-      content: '📁';
-      position: absolute;
-      font-size: 200px;
-      right: -50px;
-      bottom: -50px;
-      opacity: 0.3;
-    }
-    
-    &::after {
-      content: '🗂️';
-      position: absolute;
-      font-size: 150px;
-      left: -30px;
-      top: -30px;
-      opacity: 0.2;
-    }
   }
 
   .archive-vignette {
@@ -68,70 +51,7 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
-  }
-
-  .archive-particles {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  .ambient-shapes {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-
-    .shape {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(100px);
-      opacity: 0.1;
-
-      &.shape-1 {
-        width: 400px;
-        height: 400px;
-        top: -150px;
-        right: -150px;
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent);
-        animation: floatShape 25s ease-in-out infinite;
-      }
-
-      &.shape-2 {
-        width: 350px;
-        height: 350px;
-        bottom: -120px;
-        left: -120px;
-        background: radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent);
-        animation: floatShape 30s ease-in-out infinite reverse;
-      }
-
-      &.shape-3 {
-        width: 250px;
-        height: 250px;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: radial-gradient(circle, rgba(236, 72, 153, 0.08), transparent);
-        animation: pulseShape 20s ease-in-out infinite;
-      }
-    }
-  }
-
-  .archive-noise {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.02;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
   }
 
   .archive-container {
@@ -140,6 +60,98 @@
     width: 100%;
     max-width: 1100px;
     margin: 0 auto;
+  }
+}
+
+/* =========================
+   AMBIENT SHAPES - ARCHITECTURAL
+========================= */
+.ambient-shapes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+
+  .shape {
+    position: absolute;
+
+    &.shape-1 {
+      width: 500px;
+      height: 500px;
+      top: -150px;
+      right: -150px;
+
+      .shape-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+
+        &.outer {
+          width: 100%;
+          height: 100%;
+          animation: rotateShape 45s linear infinite;
+        }
+
+        &.inner {
+          width: 70%;
+          height: 70%;
+          top: 15%;
+          left: 15%;
+          border: 0.5px dashed rgba(59, 233, 229, 0.02);
+          animation: rotateShape 30s linear infinite reverse;
+        }
+      }
+    }
+
+    &.shape-2 {
+      width: 350px;
+      height: 350px;
+      bottom: -100px;
+      left: -100px;
+
+      .shape-ring {
+        position: absolute;
+        border-radius: 50%;
+        border: 0.5px solid rgba(255, 255, 255, 0.015);
+
+        &.outer {
+          width: 100%;
+          height: 100%;
+          animation: rotateShape 35s linear infinite reverse;
+        }
+
+        &.inner {
+          width: 60%;
+          height: 60%;
+          top: 20%;
+          left: 20%;
+          border: 0.5px dashed rgba(255, 255, 255, 0.01);
+          animation: rotateShape 25s linear infinite;
+        }
+      }
+    }
+
+    &.shape-3 {
+      width: 200px;
+      height: 200px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 0.5px solid rgba(59, 233, 229, 0.02);
+      border-radius: 50%;
+      animation: pulseShape 20s ease-in-out infinite;
+    }
+
+    &.shape-4 {
+      width: 150px;
+      height: 150px;
+      top: 20%;
+      left: 10%;
+      border: 0.5px solid rgba(255, 255, 255, 0.01);
+      border-radius: 50%;
+      animation: floatShape 25s ease-in-out infinite;
+    }
   }
 }
 
@@ -153,60 +165,100 @@
   min-height: 70vh;
 
   .archive-auth-content {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 2rem;
+    position: relative;
+    background: rgba(255, 255, 255, 0.01);
+    border: 0.5px solid rgba(255, 255, 255, 0.03);
     padding: 4rem 3.5rem;
     width: 100%;
-    max-width: 480px;
+    max-width: 440px;
     text-align: center;
-    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
-    animation: fadeSlideUp 0.8s ease forwards;
+    animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+
+    // Brackets
+    .archive-auth-brackets {
+      position: absolute;
+      inset: -2px;
+      pointer-events: none;
+
+      .bracket {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 0.5px solid rgba(255, 255, 255, 0.03);
+
+        &.tl {
+          top: -1px;
+          left: -1px;
+          border-right: none;
+          border-bottom: none;
+        }
+        &.tr {
+          top: -1px;
+          right: -1px;
+          border-left: none;
+          border-bottom: none;
+        }
+        &.bl {
+          bottom: -1px;
+          left: -1px;
+          border-right: none;
+          border-top: none;
+        }
+        &.br {
+          bottom: -1px;
+          right: -1px;
+          border-left: none;
+          border-top: none;
+        }
+      }
+    }
 
     .archive-auth-icon {
-      width: 72px;
-      height: 72px;
+      width: 64px;
+      height: 64px;
       margin: 0 auto 1.5rem;
-      background: rgba(99, 102, 241, 0.08);
-      border-radius: 50%;
+      border: 0.5px solid rgba(255, 255, 255, 0.03);
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(99, 102, 241, 0.1);
+      position: relative;
 
       svg {
-        width: 34px;
-        height: 34px;
-        color: #818cf8;
+        width: 28px;
+        height: 28px;
+        color: $white-faint;
+        opacity: 0.3;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: -8px;
+        border: 0.3px solid rgba(255, 255, 255, 0.01);
       }
     }
 
     .archive-auth-title {
       font-size: 2.5rem;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: $white;
+      margin: 0 0 0.25rem 0;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
     }
 
     .archive-auth-subtitle {
-      font-size: 1rem;
-      color: rgba(255, 255, 255, 0.35);
-      margin-bottom: 2.5rem;
+      font-size: 0.8rem;
+      color: $white-faint;
+      margin: 0 0 2.5rem 0;
       font-weight: 300;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .archive-auth-form {
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
 
       .archive-password-wrapper {
         position: relative;
@@ -214,28 +266,30 @@
         .archive-auth-input {
           width: 100%;
           padding: 1rem 3rem 1rem 1.25rem;
-          background: rgba(255, 255, 255, 0.04);
-          border: 1px solid rgba(255, 255, 255, 0.06);
-          border-radius: 1rem;
-          color: #fff;
-          font-size: 1rem;
-          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.02);
+          border: 0.5px solid rgba(255, 255, 255, 0.04);
+          color: $white;
+          font-size: 0.9rem;
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           outline: none;
-          font-family: inherit;
+          font-family: $font-mono;
+          letter-spacing: 0.04em;
 
           &::placeholder {
-            color: rgba(255, 255, 255, 0.2);
+            color: $white-faint;
+            opacity: 0.2;
+            letter-spacing: 0.08em;
+            font-size: 0.75rem;
+            text-transform: uppercase;
           }
 
           &:focus {
-            border-color: rgba(99, 102, 241, 0.3);
-            background: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.03);
           }
 
           &.error {
-            border-color: rgba(239, 68, 68, 0.3);
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.04);
+            border-color: rgba(255, 90, 74, 0.2);
           }
 
           &:disabled {
@@ -251,22 +305,22 @@
           transform: translateY(-50%);
           background: none;
           border: none;
-          color: rgba(255, 255, 255, 0.2);
+          color: $white-faint;
+          opacity: 0.1;
           cursor: pointer;
           padding: 0.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: color 0.2s ease;
-          border-radius: 0.5rem;
+          transition: opacity 0.3s ease;
 
           &:hover {
-            color: rgba(255, 255, 255, 0.5);
+            opacity: 0.3;
           }
 
           svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
           }
         }
       }
@@ -275,99 +329,71 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: #f87171;
-        font-size: 0.875rem;
-        padding: 0.75rem 1rem;
-        background: rgba(239, 68, 68, 0.04);
-        border-radius: 0.75rem;
-        border: 1px solid rgba(239, 68, 68, 0.06);
+        color: rgba(255, 90, 74, 0.5);
+        font-size: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        background: rgba(255, 90, 74, 0.03);
+        border: 0.5px solid rgba(255, 90, 74, 0.04);
+        font-family: $font-mono;
+        letter-spacing: 0.04em;
 
         svg {
-          width: 18px;
-          height: 18px;
+          width: 16px;
+          height: 16px;
           flex-shrink: 0;
         }
 
         .attempts-badge {
           margin-left: auto;
-          padding: 0.15rem 0.6rem;
-          background: rgba(239, 68, 68, 0.08);
-          border-radius: 1rem;
-          font-size: 0.7rem;
+          padding: 0.1rem 0.5rem;
+          background: rgba(255, 90, 74, 0.04);
+          font-size: 0.6rem;
           font-weight: 500;
-        }
-      }
-
-      .archive-auth-attempts {
-        .attempts-dots {
-          display: flex;
-          gap: 0.5rem;
-          justify-content: center;
-
-          .attempt-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-
-            &.active {
-              background: rgba(99, 102, 241, 0.3);
-              border: 1px solid rgba(99, 102, 241, 0.15);
-            }
-
-            &.used {
-              background: rgba(255, 255, 255, 0.03);
-              border: 1px solid rgba(255, 255, 255, 0.03);
-            }
-          }
         }
       }
 
       .archive-auth-button {
         width: 100%;
         padding: 1rem;
-        background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        border: none;
-        border-radius: 1rem;
-        color: #fff;
-        font-size: 1rem;
-        font-weight: 600;
+        background: rgba(255, 255, 255, 0.03);
+        border: 0.5px solid rgba(255, 255, 255, 0.04);
+        color: $white-faint;
+        font-size: 0.8rem;
+        font-weight: 400;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
-        font-family: inherit;
+        gap: 0.75rem;
+        font-family: $font-mono;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
         position: relative;
-        overflow: hidden;
 
         &:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 30px -8px rgba(99, 102, 241, 0.3);
-        }
-
-        &:active:not(:disabled) {
-          transform: translateY(0);
+          background: rgba(255, 255, 255, 0.06);
+          color: $white;
+          border-color: rgba(255, 255, 255, 0.08);
         }
 
         &:disabled {
-          opacity: 0.5;
+          opacity: 0.3;
           cursor: not-allowed;
         }
 
         .spinner {
-          width: 20px;
-          height: 20px;
-          border: 2px solid rgba(255, 255, 255, 0.15);
-          border-top-color: #fff;
+          width: 16px;
+          height: 16px;
+          border: 1.5px solid rgba(255, 255, 255, 0.04);
+          border-top-color: $white-faint;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }
 
         svg {
-          width: 20px;
-          height: 20px;
+          width: 16px;
+          height: 16px;
           transition: transform 0.3s ease;
         }
 
@@ -381,22 +407,32 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 0.5rem;
       padding: 2rem;
-      background: rgba(239, 68, 68, 0.04);
-      border-radius: 1rem;
-      border: 1px solid rgba(239, 68, 68, 0.06);
+      background: rgba(255, 90, 74, 0.02);
+      border: 0.5px solid rgba(255, 90, 74, 0.04);
 
       svg {
-        width: 48px;
-        height: 48px;
-        color: #f87171;
+        width: 32px;
+        height: 32px;
+        color: rgba(255, 90, 74, 0.15);
       }
 
       p {
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.95rem;
+        color: $white-faint;
+        font-size: 0.85rem;
         margin: 0;
+        font-weight: 300;
+        letter-spacing: 0.04em;
+      }
+
+      span {
+        font-family: $font-mono;
+        font-size: 0.6rem;
+        color: $white-faint;
+        opacity: 0.2;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
       }
     }
   }
@@ -406,80 +442,67 @@
    DASHBOARD
 ========================= */
 .archive-dashboard {
-  animation: fadeSlideUp 0.8s ease forwards;
+  animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   padding: 0.5rem 0;
 
-  // Hero Section
-  .archive-hero {
-    padding: 4rem 0 3rem;
+  // Header
+  .archive-header {
+    padding: 3rem 0 2.5rem;
     margin-bottom: 2rem;
     text-align: center;
     position: relative;
 
-    .archive-hero-content {
+    .archive-header-content {
       max-width: 700px;
       margin: 0 auto;
 
-      .archive-hero-badge {
+      .archive-header-badge {
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
-        padding: 0.4rem 1rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        border-radius: 2rem;
-        font-size: 0.7rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.35);
+        padding: 0.3rem 1rem;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        font-family: $font-mono;
+        font-size: 0.5rem;
+        color: $white-faint;
+        opacity: 0.2;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
-        letter-spacing: 0.08em;
         margin-bottom: 2rem;
 
-        svg {
-          width: 14px;
-          height: 14px;
-          color: #818cf8;
+        .badge-dot {
+          width: 3px;
+          height: 3px;
+          background: $cyan;
+          opacity: 0.3;
+          border-radius: 50%;
         }
 
-        .archive-hero-badge-divider {
-          opacity: 0.3;
+        .badge-divider {
+          opacity: 0.2;
         }
       }
 
-      .archive-hero-title {
+      .archive-header-title {
         font-size: 4rem;
-        font-weight: 700;
-        color: #fff;
+        font-weight: 600;
+        color: $white;
         letter-spacing: -0.03em;
         margin: 0 0 0.5rem 0;
-        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
         line-height: 1.1;
       }
 
-      .archive-hero-subtitle {
-        font-size: 1.25rem;
+      .archive-header-description {
+        font-size: 0.9rem;
         font-weight: 300;
-        color: rgba(255, 255, 255, 0.25);
-        margin: 0 0 0.75rem 0;
-        letter-spacing: 0.05em;
+        color: $white-faint;
+        opacity: 0.2;
+        margin: 0 0 2rem 0;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
-      .archive-hero-description {
-        font-size: 1rem;
-        color: rgba(255, 255, 255, 0.3);
-        margin: 0 0 2rem 0;
-        font-weight: 300;
-        line-height: 1.6;
-        max-width: 500px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .archive-hero-actions {
+      .archive-header-actions {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -489,53 +512,64 @@
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.04);
-          border-radius: 0.75rem;
+          background: rgba(255, 255, 255, 0.02);
+          border: 0.5px solid rgba(255, 255, 255, 0.02);
           padding: 0.5rem 1.25rem;
-          color: rgba(255, 255, 255, 0.3);
-          font-size: 0.85rem;
+          color: $white-faint;
+          opacity: 0.2;
+          font-size: 0.7rem;
           cursor: pointer;
-          transition: all 0.3s ease;
-          font-family: inherit;
+          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          font-family: $font-mono;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
 
           &:hover {
-            background: rgba(255, 255, 255, 0.06);
-            color: rgba(255, 255, 255, 0.7);
-            border-color: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
+            opacity: 0.6;
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.04);
           }
 
           svg {
-            width: 18px;
-            height: 18px;
+            width: 16px;
+            height: 16px;
           }
         }
       }
     }
+
+    .archive-header-line {
+      max-width: 200px;
+      margin: 2rem auto 0;
+      height: 0.5px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+    }
   }
 
-  // Collections Section
+  // Collections
   .archive-collections {
-    padding: 1rem 0 3rem;
+    padding: 0.5rem 0 3rem;
 
     .archive-collections-header {
       margin-bottom: 2.5rem;
       text-align: center;
 
       .archive-collections-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 400;
+        color: $white;
         margin: 0 0 0.25rem 0;
-        letter-spacing: -0.01em;
+        letter-spacing: 0.04em;
       }
 
       .archive-collections-subtitle {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.25);
+        font-size: 0.7rem;
+        color: $white-faint;
+        opacity: 0.15;
         margin: 0;
         font-weight: 300;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
       }
     }
   }
@@ -544,11 +578,13 @@
   .archive-dashboard-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+    gap: 2px;
     max-width: 1100px;
     margin: 0 auto;
+    background: rgba(255, 255, 255, 0.01);
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    padding: 2px;
 
-    // Featured card spans 2 columns
     .archive-dashboard-card.featured {
       grid-column: span 2;
     }
@@ -556,78 +592,83 @@
 
   // Cards
   .archive-dashboard-card {
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 1.5rem;
-    padding: 0;
+    background: rgba(255, 255, 255, 0.01);
+    padding: 2rem 1.75rem;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     position: relative;
     overflow: hidden;
-    color: #fff;
-    font-family: inherit;
+    color: $white;
+    font-family: $font-sans;
     text-align: left;
+    border: none;
     animation: cardEntrance 0.6s ease forwards;
     animation-delay: calc(var(--card-index, 0) * 0.08s);
     opacity: 0;
+    min-height: 220px;
 
-    .archive-card-accent {
-      height: 3px;
-      width: 100%;
-      flex-shrink: 0;
-      opacity: 0.6;
-    }
-
-    .archive-card-content {
-      padding: 1.75rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .archive-card-glow {
+    .archive-card-brackets {
       position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 0.6s ease;
+      inset: -1px;
       pointer-events: none;
-      border-radius: 1.5rem;
-    }
 
-    .archive-card-icon-wrapper {
-      margin-bottom: 1.25rem;
+      .bracket {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        transition: border-color 0.4s ease;
 
-      .archive-card-icon {
-        width: 48px;
-        height: 48px;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: transform 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.03);
-
-        svg {
-          width: 24px;
-          height: 24px;
-          transition: transform 0.3s ease;
+        &.tl {
+          top: 0;
+          left: 0;
+          border-right: none;
+          border-bottom: none;
+        }
+        &.tr {
+          top: 0;
+          right: 0;
+          border-left: none;
+          border-bottom: none;
+        }
+        &.bl {
+          bottom: 0;
+          left: 0;
+          border-right: none;
+          border-top: none;
+        }
+        &.br {
+          bottom: 0;
+          right: 0;
+          border-left: none;
+          border-top: none;
         }
       }
     }
 
+    .archive-card-icon {
+      margin-bottom: 1.25rem;
+      opacity: 0.2;
+      transition: all 0.4s ease;
+
+      svg {
+        width: 28px;
+        height: 28px;
+      }
+    }
+
     .archive-card-title {
-      font-size: 1.15rem;
-      font-weight: 600;
-      margin: 0 0 0.35rem 0;
-      color: #fff;
-      letter-spacing: -0.01em;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin: 0 0 0.25rem 0;
+      color: $white;
+      letter-spacing: 0.02em;
     }
 
     .archive-card-description {
-      font-size: 0.85rem;
-      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.8rem;
+      color: $white-faint;
+      opacity: 0.2;
       margin: 0 0 1.25rem 0;
       line-height: 1.5;
       font-weight: 300;
@@ -638,68 +679,82 @@
       align-items: center;
       justify-content: space-between;
       padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      border-top: 0.5px solid rgba(255, 255, 255, 0.02);
 
       .archive-card-metadata {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.2);
-        font-weight: 400;
-        letter-spacing: 0.02em;
+        font-family: $font-mono;
+        font-size: 0.6rem;
+        color: $white-faint;
+        opacity: 0.1;
+        letter-spacing: 0.04em;
       }
 
       .archive-card-action {
         display: inline-flex;
         align-items: center;
         gap: 0.4rem;
-        font-size: 0.8rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.3);
+        font-family: $font-mono;
+        font-size: 0.6rem;
+        color: $white-faint;
+        opacity: 0.1;
         transition: all 0.3s ease;
-        font-family: inherit;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
 
         svg {
-          width: 14px;
-          height: 14px;
+          width: 12px;
+          height: 12px;
           transition: transform 0.3s ease;
         }
       }
     }
 
-    // Hover Effects
-    &:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255, 255, 255, 0.06);
-      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5);
+    .archive-card-glow {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
 
-      .archive-card-glow {
-        opacity: 1;
+    // Hover
+    &:hover {
+      background: rgba(255, 255, 255, 0.02);
+
+      .archive-card-brackets .bracket {
+        border-color: rgba(255, 255, 255, 0.04);
       }
 
-      .archive-card-icon-wrapper .archive-card-icon {
+      .archive-card-icon {
+        opacity: 0.5;
         transform: scale(1.05);
-        
-        svg {
-          transform: scale(1.1);
-        }
       }
 
       .archive-card-action {
-        color: rgba(255, 255, 255, 0.7);
+        opacity: 0.4;
+        color: $white;
 
         svg {
           transform: translateX(4px);
         }
       }
 
-      .archive-card-accent {
+      .archive-card-glow {
         opacity: 1;
+      }
+
+      .archive-card-metadata {
+        opacity: 0.3;
       }
     }
 
-    // Featured card hover
-    &.featured:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+    // Featured
+    &.featured {
+      background: rgba(255, 255, 255, 0.015);
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.025);
+      }
     }
   }
 
@@ -709,8 +764,8 @@
     margin-top: 2rem;
 
     .archive-footer-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+      height: 0.5px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02), transparent);
       margin: 0 auto;
       max-width: 400px;
     }
@@ -720,28 +775,27 @@
       padding: 2rem 0;
 
       .archive-footer-title {
-        font-size: 0.85rem;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.2);
+        font-family: $font-mono;
+        font-size: 0.6rem;
+        color: $white-faint;
+        opacity: 0.05;
         margin: 0 0 0.5rem 0;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
       }
 
       .archive-footer-description {
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.08);
+        font-size: 0.7rem;
+        color: $white-faint;
+        opacity: 0.04;
         margin: 0;
         font-weight: 300;
         max-width: 400px;
         margin-left: auto;
         margin-right: auto;
         line-height: 1.5;
+        letter-spacing: 0.04em;
       }
-    }
-
-    .archive-footer-divider:last-child {
-      margin-top: 0;
     }
   }
 }
@@ -750,7 +804,7 @@
    SECTION VIEW
 ========================= */
 .archive-section {
-  animation: fadeSlideUp 0.6s ease forwards;
+  animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 
   .archive-section-back {
     display: inline-flex;
@@ -758,21 +812,24 @@
     gap: 0.5rem;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.85rem;
+    color: $white-faint;
+    opacity: 0.1;
+    font-size: 0.7rem;
     cursor: pointer;
     padding: 0.5rem 0;
     margin-bottom: 2rem;
-    transition: color 0.3s ease;
-    font-family: inherit;
+    transition: opacity 0.3s ease;
+    font-family: $font-mono;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 
     &:hover {
-      color: rgba(255, 255, 255, 0.7);
+      opacity: 0.4;
     }
 
     svg {
-      width: 18px;
-      height: 18px;
+      width: 16px;
+      height: 16px;
     }
   }
 }
@@ -782,8 +839,11 @@
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 0.9rem;
+  color: $white-faint;
+  opacity: 0.05;
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
 }
 
 .archive-loading-state {
@@ -793,20 +853,23 @@
   justify-content: center;
   min-height: 60vh;
   gap: 1.5rem;
-  color: rgba(255, 255, 255, 0.2);
+  color: $white-faint;
+  opacity: 0.05;
 
   .archive-loading-spinner {
-    width: 40px;
-    height: 40px;
-    border: 2px solid rgba(255, 255, 255, 0.03);
-    border-top-color: #818cf8;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.02);
+    border-top-color: $white-faint;
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
 
   p {
-    font-size: 0.9rem;
+    font-family: $font-mono;
+    font-size: 0.7rem;
     margin: 0;
+    letter-spacing: 0.08em;
   }
 }
 
@@ -819,10 +882,10 @@
   }
 }
 
-@keyframes fadeSlideUp {
+@keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -833,36 +896,40 @@
 @keyframes cardEntrance {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.98);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translateY(0);
+  }
+}
+
+@keyframes rotateShape {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
 @keyframes floatShape {
-  0%,
-  100% {
-    transform: translate(0, 0) rotate(0deg);
+  0%, 100% {
+    transform: translate(0, 0);
   }
-  33% {
-    transform: translate(40px, -25px) rotate(5deg);
-  }
-  66% {
-    transform: translate(-25px, 35px) rotate(-3deg);
+  50% {
+    transform: translate(20px, -30px);
   }
 }
 
 @keyframes pulseShape {
-  0%,
-  100% {
+  0%, 100% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 0.1;
+    opacity: 0.3;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.4);
-    opacity: 0.2;
+    transform: translate(-50%, -50%) scale(1.3);
+    opacity: 0.6;
   }
 }
 
@@ -875,7 +942,7 @@
     padding: 0 1rem;
   }
 
-  .archive-dashboard .archive-hero .archive-hero-title {
+  .archive-dashboard .archive-header .archive-header-title {
     font-size: 3rem;
   }
 
@@ -897,46 +964,57 @@
     padding: 2.5rem 1.5rem;
   }
 
-  .archive-dashboard .archive-hero {
+  .archive-dashboard .archive-header {
     padding: 2rem 0 1.5rem;
   }
 
-  .archive-dashboard .archive-hero .archive-hero-title {
+  .archive-dashboard .archive-header .archive-header-title {
     font-size: 2.5rem;
-  }
-
-  .archive-dashboard .archive-hero .archive-hero-subtitle {
-    font-size: 1rem;
-  }
-
-  .archive-dashboard .archive-hero .archive-hero-description {
-    font-size: 0.9rem;
   }
 
   .archive-dashboard-grid {
     grid-template-columns: 1fr !important;
-    gap: 1rem;
+    gap: 1px;
   }
 
   .archive-dashboard-card.featured {
     grid-column: span 1 !important;
   }
 
-  .archive-dashboard-card .archive-card-content {
+  .archive-dashboard-card {
     padding: 1.5rem;
+    min-height: 180px;
   }
 
   .archive-collections-header .archive-collections-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
   }
 
   .archive-footer .archive-footer-content .archive-footer-description {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     padding: 0 1rem;
   }
 
-  .archive-section .archive-section-back {
-    font-size: 0.8rem;
+  .ambient-shapes .shape {
+    &.shape-1 {
+      width: 300px;
+      height: 300px;
+      top: -80px;
+      right: -80px;
+    }
+    &.shape-2 {
+      width: 200px;
+      height: 200px;
+      bottom: -60px;
+      left: -60px;
+    }
+    &.shape-3 {
+      width: 120px;
+      height: 120px;
+    }
+    &.shape-4 {
+      display: none;
+    }
   }
 }
 
@@ -945,27 +1023,28 @@
     padding: 0.75rem;
   }
 
-  .archive-dashboard .archive-hero .archive-hero-title {
+  .archive-dashboard .archive-header .archive-header-title {
     font-size: 2rem;
   }
 
-  .archive-dashboard .archive-hero .archive-hero-badge {
-    font-size: 0.6rem;
-    padding: 0.3rem 0.75rem;
+  .archive-dashboard .archive-header .archive-header-badge {
+    font-size: 0.45rem;
+    padding: 0.2rem 0.75rem;
     flex-wrap: wrap;
     justify-content: center;
   }
 
-  .archive-dashboard-card .archive-card-content {
+  .archive-dashboard-card {
     padding: 1.25rem;
+    min-height: 160px;
   }
 
   .archive-dashboard-card .archive-card-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .archive-dashboard-card .archive-card-description {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
 
   .archive-auth .archive-auth-content {
@@ -977,13 +1056,33 @@
   }
 
   .archive-auth .archive-auth-subtitle {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
+  }
+
+  .archive-auth .archive-auth-content .archive-auth-brackets .bracket {
+    width: 10px;
+    height: 10px;
   }
 }
 
-// Additional improvements for dark mode consistency
-@media (prefers-color-scheme: dark) {
-  .archive-page {
-    background: #0a0a0f;
+/* =========================
+   REDUCED MOTION
+========================= */
+@media (prefers-reduced-motion: reduce) {
+  .archive-page,
+  .archive-auth-content,
+  .archive-dashboard,
+  .archive-section {
+    animation: none !important;
+  }
+
+  .archive-dashboard-card {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .ambient-shapes .shape .shape-ring,
+  .ambient-shapes .shape {
+    animation: none !important;
   }
 }

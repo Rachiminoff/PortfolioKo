@@ -18,7 +18,6 @@ function Footer() {
   const [unlocked, setUnlocked] = useState(false);
   const [zoom, setZoom] = useState(1);
 
-  // Use ref to track arts length without causing re-renders
   const artsLengthRef = useRef(0);
   artsLengthRef.current = arts.length;
 
@@ -42,7 +41,6 @@ function Footer() {
     }
   };
 
-  // Navigation functions using ref for current length
   const nextArt = useCallback(() => {
     const len = artsLengthRef.current;
     if (len === 0) return;
@@ -72,7 +70,6 @@ function Footer() {
     setZoom(1);
   }, []);
 
-  // Keyboard shortcuts - now with stable dependencies
   React.useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (!showModal || !unlocked) return;
@@ -96,7 +93,6 @@ function Footer() {
     return () => window.removeEventListener("keydown", handleKey);
   }, [showModal, unlocked, nextArt, prevArt, closeModal, zoomIn, zoomOut]);
 
-  // Touch events for mobile
   const [touchStartX, setTouchStartX] = useState(0);
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     setTouchStartX(e.touches[0].clientX);
@@ -118,10 +114,19 @@ function Footer() {
       <footer className="footer">
         <div className="footer-container">
           <div className="footer-logo">
-            <img src={logo} alt="Logo" />
+            <div className="logo-wrapper">
+              <img src={logo} alt="TDY.dev Logo" />
+            </div>
+            <span className="logo-label">TDY.dev</span>
           </div>
+
           <div className="footer-content">
-            <h2>Social Links</h2>
+            <div className="footer-header">
+              <span className="header-dot"></span>
+              <span className="footer-headline">Connect</span>
+              <span className="header-line"></span>
+            </div>
+
             <div className="footer-grid">
               <a
                 href="https://github.com/Rachiminoff"
@@ -155,15 +160,18 @@ function Footer() {
                 onClick={() => setShowModal(true)}
               >
                 <LockIcon />
-                <span>ADMIN</span>
+                <span>Admin</span>
               </button>
             </div>
+
             <div className="footer-bottom">
-              <div className="copyright-icon">©</div>
-              <div>
-                <h3>Tanya Denise Yambao</h3>
-                <p>2026. All Rights Reserved.</p>
+              <div className="footer-meta">
+                <span className="copyright-symbol">©</span>
+                <span className="footer-name">Tanya Denise Yambao</span>
+                <span className="footer-divider"></span>
+                <span className="footer-year">2026</span>
               </div>
+              <span className="footer-tagline">All Rights Reserved</span>
             </div>
           </div>
         </div>
@@ -178,7 +186,7 @@ function Footer() {
 
             {!unlocked ? (
               <>
-                <LockIcon className="modal-lock" />
+                <LockIcon className="modal-lock-icon" />
                 <h2>Admin Access</h2>
                 <p>Enter passcode to continue.</p>
                 <input
@@ -210,9 +218,9 @@ function Footer() {
                     <button className="viewer-btn" onClick={zoomOut}>
                       −
                     </button>
-                    <div className="zoom-label">
+                    <span className="zoom-label">
                       {Math.round(zoom * 100)}%
-                    </div>
+                    </span>
                     <button className="viewer-btn" onClick={zoomIn}>
                       +
                     </button>
@@ -254,11 +262,11 @@ function Footer() {
                         </button>
                       </div>
                       <div className="viewer-toolbar-right">
-                        <div className="toolbar-page">
+                        <span className="toolbar-page">
                           {arts.length > 0
                             ? `${index + 1}/${arts.length}`
                             : "0/0"}
-                        </div>
+                        </span>
                       </div>
                     </div>
 
@@ -277,7 +285,7 @@ function Footer() {
                             style={{ transform: `scale(${zoom})` }}
                           />
                         ) : (
-                          <div style={{ color: "white", padding: "2rem" }}>
+                          <div style={{ color: "rgba(255,255,255,0.04)", padding: "2rem", fontFamily: "'SF Mono', monospace", fontSize: "0.7rem", letterSpacing: "0.08em" }}>
                             No artwork available
                           </div>
                         )}
