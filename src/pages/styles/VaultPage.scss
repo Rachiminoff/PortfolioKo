@@ -1,5 +1,5 @@
 /* =========================
-   VARIABLES 
+   VARIABLES - MATCHING MAIN.SCSS
 ========================= */
 $black: #070707;
 $dark: #0F0F0F;
@@ -323,7 +323,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 /* =========================
-   LOADING
+   LOADING STATE
 ========================= */
 .vault-loading-state {
   flex: 1;
@@ -354,15 +354,73 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 }
 
+/* =========================
+   ERROR STATE
+========================= */
+.vault-error-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 300px;
+  padding: 2rem;
+  text-align: center;
+
+  svg {
+    width: 48px;
+    height: 48px;
+    color: rgba(255, 90, 74, 0.15);
+  }
+
+  p {
+    font-family: $font-mono;
+    font-size: 0.7rem;
+    color: $white-faint;
+    opacity: 0.1;
+    margin: 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .vault-retry-button {
+    padding: 0.5rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 0.5px solid rgba(255, 255, 255, 0.03);
+    color: $white-faint;
+    font-family: $font-mono;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.06);
+      color: $white;
+    }
+  }
+}
+
+/* =========================
+   VAULT CONTENT WRAPPER
+========================= */
+.vault-content {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
 
-/* =========================
-   ANIMATIONS
-========================= */
 @keyframes rotateShape {
   from {
     transform: rotate(0deg);
@@ -448,6 +506,17 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   .vault-bg-grid {
     background-size: 30px 30px;
+  }
+
+  .vault-error-state {
+    svg {
+      width: 36px;
+      height: 36px;
+    }
+
+    p {
+      font-size: 0.6rem;
+    }
   }
 }
 
