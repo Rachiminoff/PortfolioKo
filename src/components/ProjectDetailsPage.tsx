@@ -191,7 +191,6 @@ const ProjectDetailsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [mounted, setMounted] = useState(false);
     const [showBackButton, setShowBackButton] = useState(false);
-    const [visibleSections, setVisibleSections] = useState<string[]>([]);
     const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const heroRef = useRef<HTMLDivElement | null>(null);
 
@@ -212,30 +211,6 @@ const ProjectDetailsPage: React.FC = () => {
             }
         }
     }, [slug, navigate, mounted]);
-
-    useEffect(() => {
-        if (!project) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    const id = entry.target.id;
-                    if (entry.isIntersecting) {
-                        setVisibleSections((prev) => 
-                            prev.includes(id) ? prev : [...prev, id]
-                        );
-                    }
-                });
-            },
-            { threshold: 0.2, rootMargin: '0px 0px -100px 0px' }
-        );
-
-        Object.values(sectionRefs.current).forEach((ref) => {
-            if (ref) observer.observe(ref);
-        });
-
-        return () => observer.disconnect();
-    }, [project]);
 
     // Handle scroll for sticky back button
     useEffect(() => {
