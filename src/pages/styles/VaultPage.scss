@@ -372,6 +372,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     width: 48px;
     height: 48px;
     color: rgba(255, 90, 74, 0.15);
+
+    @media (max-width: 480px) {
+      width: 36px;
+      height: 36px;
+    }
   }
 
   p {
@@ -382,6 +387,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     margin: 0;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+
+    @media (max-width: 480px) {
+      font-size: 0.6rem;
+    }
   }
 
   .vault-retry-button {
@@ -402,14 +411,6 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       color: $white;
     }
   }
-}
-
-/* =========================
-   VAULT CONTENT WRAPPER
-========================= */
-.vault-content {
-  flex: 1;
-  padding: 1rem 0;
 }
 
 /* =========================
@@ -506,17 +507,6 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   .vault-bg-grid {
     background-size: 30px 30px;
-  }
-
-  .vault-error-state {
-    svg {
-      width: 36px;
-      height: 36px;
-    }
-
-    p {
-      font-size: 0.6rem;
-    }
   }
 }
 
