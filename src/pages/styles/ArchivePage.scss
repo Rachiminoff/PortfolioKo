@@ -14,12 +14,61 @@
     opacity: 1;
   }
 
+  // Background Layers
   .archive-bg-gradient {
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    background: 
+      radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.04) 0%, transparent 50%);
     pointer-events: none;
     z-index: 0;
+  }
+
+  .archive-bg-grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.03;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .archive-bg-outlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.02;
+    
+    &::before {
+      content: '📁';
+      position: absolute;
+      font-size: 200px;
+      right: -50px;
+      bottom: -50px;
+      opacity: 0.3;
+    }
+    
+    &::after {
+      content: '🗂️';
+      position: absolute;
+      font-size: 150px;
+      left: -30px;
+      top: -30px;
+      opacity: 0.2;
+    }
+  }
+
+  .archive-vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
   }
 
   .archive-particles {
@@ -41,35 +90,35 @@
     .shape {
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
-      opacity: 0.15;
+      filter: blur(100px);
+      opacity: 0.1;
 
       &.shape-1 {
-        width: 300px;
-        height: 300px;
-        top: -100px;
-        right: -100px;
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.3), transparent);
-        animation: floatShape 20s ease-in-out infinite;
+        width: 400px;
+        height: 400px;
+        top: -150px;
+        right: -150px;
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.2), transparent);
+        animation: floatShape 25s ease-in-out infinite;
       }
 
       &.shape-2 {
-        width: 250px;
-        height: 250px;
-        bottom: -80px;
-        left: -80px;
-        background: radial-gradient(circle, rgba(139, 92, 246, 0.3), transparent);
-        animation: floatShape 25s ease-in-out infinite reverse;
+        width: 350px;
+        height: 350px;
+        bottom: -120px;
+        left: -120px;
+        background: radial-gradient(circle, rgba(139, 92, 246, 0.2), transparent);
+        animation: floatShape 30s ease-in-out infinite reverse;
       }
 
       &.shape-3 {
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: radial-gradient(circle, rgba(236, 72, 153, 0.15), transparent);
-        animation: pulseShape 15s ease-in-out infinite;
+        background: radial-gradient(circle, rgba(236, 72, 153, 0.08), transparent);
+        animation: pulseShape 20s ease-in-out infinite;
       }
     }
   }
@@ -79,7 +128,7 @@
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    opacity: 0.03;
+    opacity: 0.02;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 256px 256px;
@@ -89,7 +138,7 @@
     position: relative;
     z-index: 1;
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
   }
 }
@@ -104,32 +153,32 @@
   min-height: 70vh;
 
   .archive-auth-content {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 2rem;
-    padding: 3.5rem 3rem;
+    padding: 4rem 3.5rem;
     width: 100%;
     max-width: 480px;
     text-align: center;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
     animation: fadeSlideUp 0.8s ease forwards;
 
     .archive-auth-icon {
-      width: 64px;
-      height: 64px;
+      width: 72px;
+      height: 72px;
       margin: 0 auto 1.5rem;
-      background: rgba(99, 102, 241, 0.1);
+      background: rgba(99, 102, 241, 0.08);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.1);
 
       svg {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
         color: #818cf8;
       }
     }
@@ -148,7 +197,7 @@
 
     .archive-auth-subtitle {
       font-size: 1rem;
-      color: rgba(255, 255, 255, 0.4);
+      color: rgba(255, 255, 255, 0.35);
       margin-bottom: 2.5rem;
       font-weight: 300;
       letter-spacing: 0.05em;
@@ -165,8 +214,8 @@
         .archive-auth-input {
           width: 100%;
           padding: 1rem 3rem 1rem 1.25rem;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.06);
           border-radius: 1rem;
           color: #fff;
           font-size: 1rem;
@@ -175,18 +224,18 @@
           font-family: inherit;
 
           &::placeholder {
-            color: rgba(255, 255, 255, 0.25);
+            color: rgba(255, 255, 255, 0.2);
           }
 
           &:focus {
             border-color: rgba(99, 102, 241, 0.3);
-            background: rgba(255, 255, 255, 0.07);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.05);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.04);
           }
 
           &.error {
-            border-color: rgba(239, 68, 68, 0.4);
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.05);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.04);
           }
 
           &:disabled {
@@ -202,7 +251,7 @@
           transform: translateY(-50%);
           background: none;
           border: none;
-          color: rgba(255, 255, 255, 0.3);
+          color: rgba(255, 255, 255, 0.2);
           cursor: pointer;
           padding: 0.5rem;
           display: flex;
@@ -212,7 +261,7 @@
           border-radius: 0.5rem;
 
           &:hover {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.5);
           }
 
           svg {
@@ -228,10 +277,10 @@
         gap: 0.5rem;
         color: #f87171;
         font-size: 0.875rem;
-        padding: 0.75rem;
-        background: rgba(239, 68, 68, 0.05);
+        padding: 0.75rem 1rem;
+        background: rgba(239, 68, 68, 0.04);
         border-radius: 0.75rem;
-        border: 1px solid rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.06);
 
         svg {
           width: 18px;
@@ -241,10 +290,10 @@
 
         .attempts-badge {
           margin-left: auto;
-          padding: 0.2rem 0.6rem;
-          background: rgba(239, 68, 68, 0.1);
+          padding: 0.15rem 0.6rem;
+          background: rgba(239, 68, 68, 0.08);
           border-radius: 1rem;
-          font-size: 0.75rem;
+          font-size: 0.7rem;
           font-weight: 500;
         }
       }
@@ -262,13 +311,13 @@
             transition: all 0.3s ease;
 
             &.active {
-              background: rgba(99, 102, 241, 0.4);
-              border: 1px solid rgba(99, 102, 241, 0.2);
+              background: rgba(99, 102, 241, 0.3);
+              border: 1px solid rgba(99, 102, 241, 0.15);
             }
 
             &.used {
-              background: rgba(255, 255, 255, 0.05);
-              border: 1px solid rgba(255, 255, 255, 0.05);
+              background: rgba(255, 255, 255, 0.03);
+              border: 1px solid rgba(255, 255, 255, 0.03);
             }
           }
         }
@@ -310,7 +359,7 @@
         .spinner {
           width: 20px;
           height: 20px;
-          border: 2px solid rgba(255, 255, 255, 0.2);
+          border: 2px solid rgba(255, 255, 255, 0.15);
           border-top-color: #fff;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
@@ -334,9 +383,9 @@
       align-items: center;
       gap: 1rem;
       padding: 2rem;
-      background: rgba(239, 68, 68, 0.05);
+      background: rgba(239, 68, 68, 0.04);
       border-radius: 1rem;
-      border: 1px solid rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.06);
 
       svg {
         width: 48px;
@@ -345,7 +394,7 @@
       }
 
       p {
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.5);
         font-size: 0.95rem;
         margin: 0;
       }
@@ -358,166 +407,347 @@
 ========================= */
 .archive-dashboard {
   animation: fadeSlideUp 0.8s ease forwards;
+  padding: 0.5rem 0;
 
-  .archive-dashboard-header {
-    margin-bottom: 3rem;
+  // Hero Section
+  .archive-hero {
+    padding: 4rem 0 3rem;
+    margin-bottom: 2rem;
     text-align: center;
+    position: relative;
 
-    .archive-dashboard-title {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
+    .archive-hero-content {
+      max-width: 700px;
+      margin: 0 auto;
 
-      svg {
-        width: 32px;
-        height: 32px;
-        color: #818cf8;
+      .archive-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 2rem;
+        font-size: 0.7rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.35);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 2rem;
+
+        svg {
+          width: 14px;
+          height: 14px;
+          color: #818cf8;
+        }
+
+        .archive-hero-badge-divider {
+          opacity: 0.3;
+        }
       }
 
-      h1 {
-        font-size: 2.5rem;
+      .archive-hero-title {
+        font-size: 4rem;
         font-weight: 700;
         color: #fff;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.03em;
+        margin: 0 0 0.5rem 0;
         background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        margin: 0;
+        line-height: 1.1;
       }
-    }
 
-    .archive-dashboard-welcome {
-      font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.4);
-      font-weight: 300;
-      margin: 0;
+      .archive-hero-subtitle {
+        font-size: 1.25rem;
+        font-weight: 300;
+        color: rgba(255, 255, 255, 0.25);
+        margin: 0 0 0.75rem 0;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .archive-hero-description {
+        font-size: 1rem;
+        color: rgba(255, 255, 255, 0.3);
+        margin: 0 0 2rem 0;
+        font-weight: 300;
+        line-height: 1.6;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .archive-hero-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        .archive-home-button {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.04);
+          border-radius: 0.75rem;
+          padding: 0.5rem 1.25rem;
+          color: rgba(255, 255, 255, 0.3);
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-family: inherit;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.7);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+          }
+
+          svg {
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
     }
   }
 
+  // Collections Section
+  .archive-collections {
+    padding: 1rem 0 3rem;
+
+    .archive-collections-header {
+      margin-bottom: 2.5rem;
+      text-align: center;
+
+      .archive-collections-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0 0 0.25rem 0;
+        letter-spacing: -0.01em;
+      }
+
+      .archive-collections-subtitle {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.25);
+        margin: 0;
+        font-weight: 300;
+      }
+    }
+  }
+
+  // Grid
   .archive-dashboard-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
-    margin-bottom: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
 
-    .archive-dashboard-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    // Featured card spans 2 columns
+    .archive-dashboard-card.featured {
+      grid-column: span 2;
+    }
+  }
+
+  // Cards
+  .archive-dashboard-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 1.5rem;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    font-family: inherit;
+    text-align: left;
+    animation: cardEntrance 0.6s ease forwards;
+    animation-delay: calc(var(--card-index, 0) * 0.08s);
+    opacity: 0;
+
+    .archive-card-accent {
+      height: 3px;
+      width: 100%;
+      flex-shrink: 0;
+      opacity: 0.6;
+    }
+
+    .archive-card-content {
+      padding: 1.75rem;
       position: relative;
-      overflow: hidden;
-      color: #fff;
-      font-family: inherit;
+      z-index: 1;
+    }
 
-      .archive-card-glow {
-        position: absolute;
-        inset: 0;
-        opacity: 0;
-        transition: opacity 0.6s ease;
-        background: radial-gradient(circle at 50% 0%, var(--card-color), transparent 70%);
-        pointer-events: none;
-      }
+    .archive-card-glow {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+      border-radius: 1.5rem;
+    }
 
-      &:hover {
-        transform: translateY(-8px);
-        border-color: rgba(255, 255, 255, 0.1);
-        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
-
-        .archive-card-glow {
-          opacity: 0.08;
-        }
-
-        .archive-card-action {
-          color: #fff;
-          transform: translateX(4px);
-
-          svg {
-            transform: translateX(4px);
-          }
-        }
-
-        .archive-card-icon {
-          transform: scale(1.05);
-        }
-      }
+    .archive-card-icon-wrapper {
+      margin-bottom: 1.25rem;
 
       .archive-card-icon {
         width: 48px;
         height: 48px;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.03);
         border-radius: 1rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-bottom: 1.25rem;
         transition: transform 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.03);
 
         svg {
           width: 24px;
           height: 24px;
-          color: var(--card-color);
+          transition: transform 0.3s ease;
         }
       }
+    }
 
-      .archive-card-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin: 0 0 0.5rem 0;
-        color: #fff;
-      }
+    .archive-card-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin: 0 0 0.35rem 0;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
 
-      .archive-card-description {
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.4);
-        margin: 0 0 1.5rem 0;
-        line-height: 1.5;
+    .archive-card-description {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.3);
+      margin: 0 0 1.25rem 0;
+      line-height: 1.5;
+      font-weight: 300;
+    }
+
+    .archive-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+
+      .archive-card-metadata {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.2);
+        font-weight: 400;
+        letter-spacing: 0.02em;
       }
 
       .archive-card-action {
         display: inline-flex;
         align-items: center;
-        gap: 0.5rem;
-        font-size: 0.9rem;
+        gap: 0.4rem;
+        font-size: 0.8rem;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(255, 255, 255, 0.3);
         transition: all 0.3s ease;
         font-family: inherit;
 
         svg {
-          width: 16px;
-          height: 16px;
+          width: 14px;
+          height: 14px;
           transition: transform 0.3s ease;
         }
       }
     }
+
+    // Hover Effects
+    &:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5);
+
+      .archive-card-glow {
+        opacity: 1;
+      }
+
+      .archive-card-icon-wrapper .archive-card-icon {
+        transform: scale(1.05);
+        
+        svg {
+          transform: scale(1.1);
+        }
+      }
+
+      .archive-card-action {
+        color: rgba(255, 255, 255, 0.7);
+
+        svg {
+          transform: translateX(4px);
+        }
+      }
+
+      .archive-card-accent {
+        opacity: 1;
+      }
+    }
+
+    // Featured card hover
+    &.featured:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6);
+    }
   }
 
-  .archive-dashboard-footer {
-    text-align: center;
-    margin-top: 1.5rem;
+  // Footer
+  .archive-footer {
+    padding: 3rem 0 1rem;
+    margin-top: 2rem;
 
-    .archive-dashboard-hint {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.15);
-      font-weight: 300;
-      letter-spacing: 0.05em;
-      margin: 0;
+    .archive-footer-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+      margin: 0 auto;
+      max-width: 400px;
+    }
+
+    .archive-footer-content {
+      text-align: center;
+      padding: 2rem 0;
+
+      .archive-footer-title {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.2);
+        margin: 0 0 0.5rem 0;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .archive-footer-description {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.08);
+        margin: 0;
+        font-weight: 300;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.5;
+      }
+    }
+
+    .archive-footer-divider:last-child {
+      margin-top: 0;
     }
   }
 }
 
 /* =========================
-   SECTION VIEW (Vault/Insights)
+   SECTION VIEW
 ========================= */
 .archive-section {
   animation: fadeSlideUp 0.6s ease forwards;
@@ -528,8 +758,8 @@
     gap: 0.5rem;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.85rem;
     cursor: pointer;
     padding: 0.5rem 0;
     margin-bottom: 2rem;
@@ -552,8 +782,8 @@
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
 }
 
 .archive-loading-state {
@@ -563,19 +793,19 @@
   justify-content: center;
   min-height: 60vh;
   gap: 1.5rem;
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.2);
 
   .archive-loading-spinner {
     width: 40px;
     height: 40px;
-    border: 2px solid rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.03);
     border-top-color: #818cf8;
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
 
   p {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     margin: 0;
   }
 }
@@ -592,11 +822,22 @@
 @keyframes fadeSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(24px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -606,10 +847,10 @@
     transform: translate(0, 0) rotate(0deg);
   }
   33% {
-    transform: translate(30px, -20px) rotate(5deg);
+    transform: translate(40px, -25px) rotate(5deg);
   }
   66% {
-    transform: translate(-20px, 30px) rotate(-3deg);
+    transform: translate(-25px, 35px) rotate(-3deg);
   }
 }
 
@@ -617,85 +858,132 @@
   0%,
   100% {
     transform: translate(-50%, -50%) scale(1);
-    opacity: 0.15;
+    opacity: 0.1;
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.3);
-    opacity: 0.25;
+    transform: translate(-50%, -50%) scale(1.4);
+    opacity: 0.2;
   }
 }
 
-// Add to the dashboard header section
-.archive-dashboard-header {
-  margin-bottom: 3rem;
-  text-align: center;
-
-  .archive-dashboard-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
-
-    svg {
-      width: 32px;
-      height: 32px;
-      color: #818cf8;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin: 0;
-    }
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 1024px) {
+  .archive-page .archive-container {
+    max-width: 100%;
+    padding: 0 1rem;
   }
 
-  // NEW: Dashboard actions container
-  .archive-dashboard-actions {
-    display: flex;
-    align-items: center;
+  .archive-dashboard .archive-hero .archive-hero-title {
+    font-size: 3rem;
+  }
+
+  .archive-dashboard-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .archive-dashboard-card.featured {
+    grid-column: span 2 !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .archive-page {
+    padding: 1rem;
+  }
+
+  .archive-auth .archive-auth-content {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .archive-dashboard .archive-hero {
+    padding: 2rem 0 1.5rem;
+  }
+
+  .archive-dashboard .archive-hero .archive-hero-title {
+    font-size: 2.5rem;
+  }
+
+  .archive-dashboard .archive-hero .archive-hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .archive-dashboard .archive-hero .archive-hero-description {
+    font-size: 0.9rem;
+  }
+
+  .archive-dashboard-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .archive-dashboard-card.featured {
+    grid-column: span 1 !important;
+  }
+
+  .archive-dashboard-card .archive-card-content {
+    padding: 1.5rem;
+  }
+
+  .archive-collections-header .archive-collections-title {
+    font-size: 1.25rem;
+  }
+
+  .archive-footer .archive-footer-content .archive-footer-description {
+    font-size: 0.75rem;
+    padding: 0 1rem;
+  }
+
+  .archive-section .archive-section-back {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .archive-page {
+    padding: 0.75rem;
+  }
+
+  .archive-dashboard .archive-hero .archive-hero-title {
+    font-size: 2rem;
+  }
+
+  .archive-dashboard .archive-hero .archive-hero-badge {
+    font-size: 0.6rem;
+    padding: 0.3rem 0.75rem;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 1.5rem;
-    margin-top: 0.5rem;
+  }
 
-    .archive-home-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: inherit;
+  .archive-dashboard-card .archive-card-content {
+    padding: 1.25rem;
+  }
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.06);
-        color: #fff;
-        border-color: rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-      }
+  .archive-dashboard-card .archive-card-title {
+    font-size: 1rem;
+  }
 
-      svg {
-        width: 18px;
-        height: 18px;
-      }
-    }
+  .archive-dashboard-card .archive-card-description {
+    font-size: 0.8rem;
+  }
 
-    .archive-dashboard-welcome {
-      font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.4);
-      font-weight: 300;
-      margin: 0;
-    }
+  .archive-auth .archive-auth-content {
+    padding: 2rem 1rem;
+  }
+
+  .archive-auth .archive-auth-title {
+    font-size: 2rem;
+  }
+
+  .archive-auth .archive-auth-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+// Additional improvements for dark mode consistency
+@media (prefers-color-scheme: dark) {
+  .archive-page {
+    background: #0a0a0f;
   }
 }

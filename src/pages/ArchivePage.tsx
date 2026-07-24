@@ -40,14 +40,14 @@ function ArchiveParticles() {
     };
 
     const initParticles = () => {
-      const count = 40;
+      const count = 30;
       particlesRef.current = Array.from({ length: count }, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: (Math.random() - 0.5) * 0.2,
-        radius: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.3 + 0.1,
+        vx: (Math.random() - 0.5) * 0.15,
+        vy: (Math.random() - 0.5) * 0.15,
+        radius: Math.random() * 1.2 + 0.3,
+        opacity: Math.random() * 0.2 + 0.05,
       }));
     };
 
@@ -235,28 +235,36 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       icon: 'mdi:folder-lock',
       title: 'Vault',
       description: 'Personal files and hidden content.',
+      metadata: '38 Files • Encrypted',
       color: '#6366f1',
+      featured: true,
     },
     {
       id: 'insights' as const,
       icon: 'mdi:notebook',
       title: 'Insights',
       description: 'Technical articles and writings.',
+      metadata: '12 Articles • Drafts',
       color: '#8b5cf6',
+      featured: false,
     },
     {
       id: 'wish' as const,
       icon: 'mdi:star-four-points',
       title: 'Wish Archive',
       description: 'Genshin Impact wish history and analytics.',
+      metadata: '1,247 Wishes • Updated',
       color: '#f9b55d',
+      featured: false,
     },
     {
       id: 'adashima' as const,
       icon: 'mdi:book-open-variant',
       title: 'AdaShima Stats',
       description: 'Light novel statistics and analytics.',
+      metadata: '8 Volumes • 42 Chapters',
       color: '#818cf8',
+      featured: false,
     },
   ];
 
@@ -333,65 +341,101 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
 
   return (
     <div className="archive-dashboard">
-      <div className="archive-dashboard-header">
-        <div className="archive-dashboard-title">
-          <Icon icon="mdi:archive" />
-          <h1>Archive</h1>
+      {/* Hero Section */}
+      <header className="archive-hero">
+        <div className="archive-hero-content">
+          <div className="archive-hero-badge">
+            <Icon icon="mdi:shield-check" />
+            <span>Private</span>
+            <span className="archive-hero-badge-divider">•</span>
+            <span>Encrypted</span>
+            <span className="archive-hero-badge-divider">•</span>
+            <span>4 Collections</span>
+          </div>
+          <h1 className="archive-hero-title">Archive</h1>
+          <p className="archive-hero-subtitle">Private Digital Workspace</p>
+          <p className="archive-hero-description">
+            Personal notes, analytics, hidden projects, and private collections.
+          </p>
+          <div className="archive-hero-actions">
+            <button
+              className="archive-home-button"
+              onClick={() => navigate('/')}
+              aria-label="Back to Home"
+            >
+              <Icon icon="mdi:home" />
+              Home
+            </button>
+          </div>
         </div>
-        <div className="archive-dashboard-actions">
-          <button
-            className="archive-home-button"
-            onClick={() => navigate('/')}
-            aria-label="Back to Home"
-          >
-            <Icon icon="mdi:home" />
-            Home
-          </button>
-          <p className="archive-dashboard-welcome">Welcome back.</p>
+      </header>
+
+      {/* Collections Section */}
+      <section className="archive-collections">
+        <div className="archive-collections-header">
+          <h2 className="archive-collections-title">Collections</h2>
+          <p className="archive-collections-subtitle">Access your private workspaces</p>
         </div>
-      </div>
 
-      <div className="archive-dashboard-grid">
-        {cards.map((card) => (
-          <button
-            key={card.id}
-            className="archive-dashboard-card"
-            onClick={() => {
-              if (card.id === 'vault') {
-                setActiveSection('vault');
-                onNavigate('/vault');
-              } else if (card.id === 'insights') {
-                setActiveSection('insights');
-                onNavigate('/insights');
-              } else if (card.id === 'wish') {
-                setActiveSection('wish');
-                onNavigate('/wish-archive');
-              } else if (card.id === 'adashima') {
-                setActiveSection('adashima');
-                onNavigate('/adashima-stats');
-              }
-            }}
-            style={{ '--card-color': card.color } as React.CSSProperties}
-          >
-            <div className="archive-card-icon">
-              <Icon icon={card.icon} />
-            </div>
-            <h2 className="archive-card-title">{card.title}</h2>
-            <p className="archive-card-description">{card.description}</p>
-            <span className="archive-card-action">
-              Open <Icon icon="mdi:arrow-right" />
-            </span>
-            <div className="archive-card-glow" />
-          </button>
-        ))}
-      </div>
+        <div className="archive-dashboard-grid">
+          {cards.map((card, index) => (
+            <button
+              key={card.id}
+              className={`archive-dashboard-card ${card.featured ? 'featured' : ''}`}
+              onClick={() => {
+                if (card.id === 'vault') {
+                  setActiveSection('vault');
+                  onNavigate('/vault');
+                } else if (card.id === 'insights') {
+                  setActiveSection('insights');
+                  onNavigate('/insights');
+                } else if (card.id === 'wish') {
+                  setActiveSection('wish');
+                  onNavigate('/wish-archive');
+                } else if (card.id === 'adashima') {
+                  setActiveSection('adashima');
+                  onNavigate('/adashima-stats');
+                }
+              }}
+              style={{ 
+                '--card-color': card.color,
+                '--card-index': index
+              } as React.CSSProperties}
+            >
+              <div className="archive-card-accent" style={{ background: card.color }} />
+              <div className="archive-card-content">
+                <div className="archive-card-icon-wrapper">
+                  <div className="archive-card-icon" style={{ color: card.color }}>
+                    <Icon icon={card.icon} />
+                  </div>
+                </div>
+                <h3 className="archive-card-title">{card.title}</h3>
+                <p className="archive-card-description">{card.description}</p>
+                <div className="archive-card-footer">
+                  <span className="archive-card-metadata">{card.metadata}</span>
+                  <span className="archive-card-action">
+                    Open
+                    <Icon icon="mdi:arrow-right" />
+                  </span>
+                </div>
+              </div>
+              <div className="archive-card-glow" style={{ background: `radial-gradient(circle at 50% 0%, ${card.color}40, transparent 70%)` }} />
+            </button>
+          ))}
+        </div>
+      </section>
 
-      {/* Future expansion placeholder */}
-      <div className="archive-dashboard-footer">
-        <p className="archive-dashboard-hint">
-          More sections coming soon...
-        </p>
-      </div>
+      {/* Footer */}
+      <footer className="archive-footer">
+        <div className="archive-footer-divider" />
+        <div className="archive-footer-content">
+          <p className="archive-footer-title">Archive Workspace</p>
+          <p className="archive-footer-description">
+            Additional collections and tools will appear here as the archive expands.
+          </p>
+        </div>
+        <div className="archive-footer-divider" />
+      </footer>
     </div>
   );
 }
@@ -446,9 +490,12 @@ const ArchivePage: React.FC = () => {
   return (
     <div className={`archive-page ${isLoaded ? 'loaded' : ''}`}>
       <div className="archive-bg-gradient" />
+      <div className="archive-bg-grid" />
+      <div className="archive-bg-outlines" />
       <ArchiveParticles />
       <AmbientShapes />
       <div className="archive-noise" />
+      <div className="archive-vignette" />
 
       <div className="archive-container">
         {isUnlocked ? (
