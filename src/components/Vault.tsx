@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
