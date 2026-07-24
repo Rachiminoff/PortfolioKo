@@ -69,8 +69,7 @@ export const projectsData: Project[] = [
       "Flutter",
       "Dart",
       "Supabase",
-      "FlutterFlow",
-      "Firebase"
+      "FlutterFlow"
     ],
     "architecture": "The application was built using Flutter and FlutterFlow with Supabase handling authentication, backend services, and real-time synchronization. User progress, tasks, achievements, and profile data are synchronized instantly across devices, while modular feature components allow the gamification system, campus map, and productivity tools to evolve independently as the platform grows.",
     "devNotes": [
@@ -193,8 +192,7 @@ export const projectsData: Project[] = [
     "tech": [
       "Godot 4",
       "GDScript",
-      "Blender",
-      "Aseprite"
+      "Blender"
     ],
     "architecture": "Built in Godot 4, the project combines a simulated desktop environment with traditional game systems. Stage 1 focuses on desktop interaction, dialogue systems, and narrative progression through simulated operating system applications, while Stage 2 transitions into fully explorable 3D environments featuring AI pathfinding, survival gameplay, and enemy chase mechanics powered by Godot's NavigationRegion3D and NavigationAgent3D systems. Blender assets are imported directly into Godot to streamline the environment creation pipeline.",
     "devNotes": [
@@ -296,7 +294,7 @@ export const projectsData: Project[] = [
     "role": "Sole Developer",
     "featured": true,
     "status": "Active",
-    "duration": "3 months",
+    "duration": "2 weeks",
     "link": "https://github.com/Rachiminoff/LedgerLeaf",
     "liveDemo": "https://ledgerleaf.onrender.com/",
     "images": [ledger00, ledger01, ledger02, ledger03],
