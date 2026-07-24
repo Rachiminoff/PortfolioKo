@@ -61,7 +61,6 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
     }
 
     const totalDuration = 1600;
-    const statusDuration = totalDuration / statusMessages.length;
 
     let statusIndex = 0;
     startTimeRef.current = Date.now();
@@ -101,7 +100,7 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [onComplete, prefersReducedMotion]);
+  }, [onComplete, prefersReducedMotion, statusMessages]);
 
   if (!shouldRender) return null;
 

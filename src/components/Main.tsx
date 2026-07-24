@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, Suspense, lazy } from "react";
 import { useNavigate } from "react-router-dom";
-import { Icon } from "@iconify/react";
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
 
