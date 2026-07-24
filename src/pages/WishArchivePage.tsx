@@ -1,3 +1,5 @@
+// WishArchivePage.tsx - Tab-based navigation with no collapsible sections
+
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
@@ -210,7 +212,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
     if (!ctx) return;
 
     const rect = canvas.parentElement?.getBoundingClientRect();
-    const size = Math.min(rect?.width || 200, 180);
+    const size = Math.min(rect?.width || 200, 200);
     canvas.width = size;
     canvas.height = size;
 
@@ -219,7 +221,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
 
     const centerX = size / 2;
     const centerY = size / 2;
-    const radius = size / 2 - 16;
+    const radius = size / 2 - 20;
     let startAngle = -Math.PI / 2;
 
     const elementColors: Record<string, string> = {
@@ -235,23 +237,21 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
     const entries = Object.entries(data);
     entries.forEach(([key, value]) => {
       const sliceAngle = (value / total) * 2 * Math.PI;
-      const color = colors?.[key] || elementColors[key] || 'rgba(255,255,255,0.04)';
+      const color = colors?.[key] || elementColors[key] || '#ffffff';
 
       ctx.beginPath();
       ctx.moveTo(centerX, centerY);
       ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
       ctx.closePath();
       ctx.fillStyle = color;
-      ctx.globalAlpha = 0.15;
       ctx.fill();
-      ctx.globalAlpha = 1;
 
       startAngle += sliceAngle;
     });
 
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius * 0.45, 0, 2 * Math.PI);
-    ctx.fillStyle = '#070707';
+    ctx.fillStyle = '#0a0a0a';
     ctx.fill();
 
     setHasDrawn(true);
@@ -276,6 +276,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
     return () => observer.disconnect();
   }, [hasDrawn, drawChart]);
 
+  // Redraw on resize
   useEffect(() => {
     const handleResize = () => {
       if (hasDrawn) {
@@ -330,7 +331,7 @@ const BarChart: React.FC<{
         const percentage = (item.value / maxValue) * 100;
         const delay = index * 0.05;
         return (
-          <div key={index} className="bar-chart-item">
+          <div key={index} className="bar-chart-item stagger-card">
             <div
               className="bar-chart-bar-wrapper"
               style={{ height: '100%' }}
@@ -339,8 +340,9 @@ const BarChart: React.FC<{
                 className="bar-chart-bar"
                 style={{
                   height: hasAnimated ? `${percentage}%` : '0%',
-                  backgroundColor: item.color || 'rgba(255,255,255,0.04)',
+                  backgroundColor: item.color || '#8B5CF6',
                   transitionDelay: `${delay}s`,
+                  transition: 'height 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
               />
             </div>
@@ -363,7 +365,9 @@ const HeatMap: React.FC<{
 }> = ({ characters, year, onCellHover }) => {
   const [hoveredDate, setHoveredDate] = useState<string | null>(null);
   const [hoveredCharacters, setHoveredCharacters] = useState<WishCharacter[]>([]);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [isAnimating, setIsAnimating] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsAnimating(true);
@@ -395,11 +399,11 @@ const HeatMap: React.FC<{
 
   const getIntensityColor = (intensity: number) => {
     switch (intensity) {
-      case 0: return 'rgba(255,255,255,0.02)';
-      case 1: return 'rgba(122, 224, 219, 0.15)';
-      case 2: return 'rgba(122, 224, 219, 0.3)';
-      case 3: return 'rgba(122, 224, 219, 0.5)';
-      default: return 'rgba(255,255,255,0.02)';
+      case 0: return 'rgba(255,255,255,0.03)';
+      case 1: return 'rgba(122, 224, 219, 0.3)';
+      case 2: return 'rgba(122, 224, 219, 0.6)';
+      case 3: return 'rgba(122, 224, 219, 0.9)';
+      default: return 'rgba(255,255,255,0.03)';
     }
   };
 
@@ -426,7 +430,7 @@ const HeatMap: React.FC<{
 
   return (
     <div className={`heatmap-container ${isAnimating ? 'heatmap-animating' : ''}`}>
-      <div className="heatmap-grid">
+      <div className="heatmap-grid" ref={gridRef}>
         {weeks.map((week, weekIndex) => (
           <div key={weekIndex} className="heatmap-week">
             {week.map((day, dayIndex) => {
@@ -443,10 +447,16 @@ const HeatMap: React.FC<{
                   style={{
                     backgroundColor: isCurrentMonth ? getIntensityColor(intensity) : 'transparent',
                     opacity: isCurrentMonth ? 1 : 0.2,
-                    transform: isHovered ? 'scale(1.2)' : 'scale(1)',
+                    transform: isHovered ? 'scale(1.3)' : 'scale(1)',
                     zIndex: isHovered ? 2 : 1,
+                    transition: 'transform 0.2s ease, background-color 0.3s ease'
                   }}
-                  onMouseEnter={() => {
+                  onMouseEnter={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setTooltipPosition({
+                      x: rect.left + rect.width / 2,
+                      y: rect.top - 10
+                    });
                     setHoveredDate(dateStr);
                     setHoveredCharacters(chars);
                     if (onCellHover) onCellHover(dateStr);
@@ -464,7 +474,14 @@ const HeatMap: React.FC<{
       </div>
 
       {hoveredDate && hoveredCharacters.length > 0 && (
-        <div className="heatmap-tooltip">
+        <div
+          className="heatmap-tooltip"
+          style={{
+            left: tooltipPosition.x,
+            top: tooltipPosition.y,
+            transform: 'translateX(-50%) translateY(-100%)'
+          }}
+        >
           <div className="heatmap-tooltip-content">
             <span className="heatmap-tooltip-date">{formatDate(hoveredDate)}</span>
             {hoveredCharacters.map(c => (
@@ -496,10 +513,10 @@ const HeatMap: React.FC<{
       <div className="heatmap-legend">
         <span className="heatmap-legend-label">Less</span>
         <div className="heatmap-legend-cells">
-          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(255,255,255,0.02)' }} />
-          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.15)' }} />
+          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(255,255,255,0.03)' }} />
           <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.3)' }} />
-          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.5)' }} />
+          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.6)' }} />
+          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.9)' }} />
         </div>
         <span className="heatmap-legend-label">More</span>
       </div>
@@ -540,7 +557,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
   return (
     <div
       ref={entryRef}
-      className="wish-timeline-entry-premium"
+      className="wish-timeline-entry-premium stagger-card"
       style={{ animationDelay: `${index * 0.05}s` }}
       onClick={onClick}
     >
@@ -608,7 +625,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
   return (
     <div
       ref={cardRef}
-      className="premium-card"
+      className="wish-card premium-card stagger-card"
       onClick={onClick}
       style={{ '--card-accent': elementColor } as React.CSSProperties}
     >
@@ -619,7 +636,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
           className="wish-card-image"
           loading="lazy"
         />
-        <div className="wish-card-glow" style={{ background: `radial-gradient(circle, ${elementColor}22, transparent 70%)` }} />
+        <div className="wish-card-glow" style={{ background: `radial-gradient(circle, ${elementColor}44, transparent 70%)` }} />
         <div className="wish-card-element" style={{ backgroundColor: elementColor }}>
           <Icon icon={getElementIcon(character.element)} />
         </div>
@@ -1149,7 +1166,7 @@ const WishArchivePage: React.FC = () => {
         <div className="wish-archive-page">
           <div className="wish-loading-state">
             <div className="wish-loading-spinner" />
-            <p>Loading your journey</p>
+            <p>Loading your journey...</p>
           </div>
         </div>
       </FullscreenLayout>
@@ -1159,21 +1176,23 @@ const WishArchivePage: React.FC = () => {
   // Render Overview Tab
   const renderOverview = () => (
     <section className="wish-overview-tab section-reveal">
+      {/* Hero Stats */}
       <div className="wish-hero-stats">
-        <div className="wish-hero-stat">
+        <div className="wish-hero-stat stagger-card">
           <AnimatedCounter target={stats.total} label="Characters" />
         </div>
-        <div className="wish-hero-stat">
+        <div className="wish-hero-stat stagger-card">
           <AnimatedCounter target={Math.round(stats.winRate)} suffix="%" label="Win Rate" />
         </div>
-        <div className="wish-hero-stat">
+        <div className="wish-hero-stat stagger-card">
           <AnimatedCounter target={stats.wins} label="Wins" />
         </div>
-        <div className="wish-hero-stat">
+        <div className="wish-hero-stat stagger-card">
           <AnimatedCounter target={stats.activeYears} label="Active Years" />
         </div>
       </div>
 
+      {/* Quick Highlights */}
       <div className="wish-hero-highlights">
         <div className="wish-hero-highlight">
           <Icon icon="mdi:calendar-range" />
@@ -1201,10 +1220,11 @@ const WishArchivePage: React.FC = () => {
   const renderAnalytics = () => (
     <section className="wish-analytics-tab section-reveal">
       <div className="wish-stats-dashboard">
+        {/* Stats Grid - Grouped by category */}
         <div className="wish-stats-group">
           <h4 className="wish-stats-group-title">Luck</h4>
           <div className="wish-stats-dashboard-grid">
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:target" />
               </div>
@@ -1213,7 +1233,7 @@ const WishArchivePage: React.FC = () => {
                 <span className="wish-stat-premium-label">Longest Win Streak</span>
               </div>
             </div>
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:star-circle" />
               </div>
@@ -1222,7 +1242,7 @@ const WishArchivePage: React.FC = () => {
                 <span className="wish-stat-premium-label">50/50 Wins</span>
               </div>
             </div>
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:chart-arc" />
               </div>
@@ -1237,7 +1257,7 @@ const WishArchivePage: React.FC = () => {
         <div className="wish-stats-group">
           <h4 className="wish-stats-group-title">Collection</h4>
           <div className="wish-stats-dashboard-grid">
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:crystal-ball" />
               </div>
@@ -1246,7 +1266,7 @@ const WishArchivePage: React.FC = () => {
                 <span className="wish-stat-premium-label">Most Collected Element</span>
               </div>
             </div>
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:chart-pie" />
               </div>
@@ -1255,7 +1275,7 @@ const WishArchivePage: React.FC = () => {
                 <span className="wish-stat-premium-label">Elements Collected</span>
               </div>
             </div>
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:gamepad-variant" />
               </div>
@@ -1270,7 +1290,7 @@ const WishArchivePage: React.FC = () => {
         <div className="wish-stats-group">
           <h4 className="wish-stats-group-title">Journey</h4>
           <div className="wish-stats-dashboard-grid">
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:clock-outline" />
               </div>
@@ -1279,7 +1299,7 @@ const WishArchivePage: React.FC = () => {
                 <span className="wish-stat-premium-label">Avg Between Pulls</span>
               </div>
             </div>
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:calendar" />
               </div>
@@ -1288,7 +1308,7 @@ const WishArchivePage: React.FC = () => {
                 <span className="wish-stat-premium-label">Busiest Year</span>
               </div>
             </div>
-            <div className="wish-stat-premium">
+            <div className="wish-stat-premium stagger-card">
               <div className="wish-stat-premium-icon">
                 <Icon icon="mdi:chart-line" />
               </div>
@@ -1300,12 +1320,13 @@ const WishArchivePage: React.FC = () => {
           </div>
         </div>
 
+        {/* Charts Row */}
         <div className="wish-charts-row">
-          <div className="wish-chart-card">
+          <div className="wish-chart-card stagger-card">
             <h3 className="wish-chart-title">Element Distribution</h3>
             <DonutChart data={stats.byElement} />
           </div>
-          <div className="wish-chart-card">
+          <div className="wish-chart-card stagger-card">
             <h3 className="wish-chart-title">Outcome Distribution</h3>
             <DonutChart
               data={{
@@ -1313,12 +1334,12 @@ const WishArchivePage: React.FC = () => {
                 Lost: stats.losses
               }}
               colors={{
-                Won: 'rgba(126, 184, 112, 0.3)',
-                Lost: 'rgba(224, 96, 64, 0.3)'
+                Won: '#7eb870',
+                Lost: '#e06040'
               }}
             />
           </div>
-          <div className="wish-chart-card">
+          <div className="wish-chart-card stagger-card">
             <h3 className="wish-chart-title">Collection Progress</h3>
             <div className="wish-progress-ring">
               <svg viewBox="0 0 120 120">
@@ -1327,7 +1348,7 @@ const WishArchivePage: React.FC = () => {
                   cy="60"
                   r="50"
                   fill="none"
-                  stroke="rgba(255,255,255,0.02)"
+                  stroke="rgba(255,255,255,0.04)"
                   strokeWidth="6"
                 />
                 <circle
@@ -1335,12 +1356,19 @@ const WishArchivePage: React.FC = () => {
                   cy="60"
                   r="50"
                   fill="none"
-                  stroke="rgba(255,255,255,0.06)"
+                  stroke="url(#progressGradient)"
                   strokeWidth="6"
                   strokeDasharray={`${stats.collectionPercentage * 3.14} 314`}
                   strokeLinecap="round"
                   transform="rotate(-90 60 60)"
                 />
+                <defs>
+                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#7ae0db" />
+                    <stop offset="50%" stopColor="#8B5CF6" />
+                    <stop offset="100%" stopColor="#f9b55d" />
+                  </linearGradient>
+                </defs>
               </svg>
               <div className="wish-progress-ring-content">
                 <span className="wish-progress-ring-value">{Math.round(stats.collectionPercentage)}%</span>
@@ -1348,20 +1376,21 @@ const WishArchivePage: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className="wish-chart-card">
+          <div className="wish-chart-card stagger-card">
             <h3 className="wish-chart-title">Characters by Year</h3>
             <BarChart
               data={stats.yearlyStats.map(stat => ({
                 label: stat.year.toString(),
                 value: stat.total,
-                color: 'rgba(255,255,255,0.04)'
+                color: `hsl(${200 + stat.year * 10}, 60%, 50%)`
               }))}
               height={150}
             />
           </div>
         </div>
 
-        <div className="wish-yearly-grid">
+        {/* Yearly Performance */}
+        <div className="wish-yearly-grid" style={{ marginTop: '3rem' }}>
           {stats.yearlyStats.map(stat => {
             const yearData = stats.byYear[stat.year];
             const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' :
@@ -1370,7 +1399,7 @@ const WishArchivePage: React.FC = () => {
             const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
 
             return (
-              <div key={stat.year} className="wish-yearly-card">
+              <div key={stat.year} className="wish-yearly-card stagger-card">
                 <div className="wish-yearly-header">
                   <h3>{stat.year}</h3>
                   <span className={`wish-yearly-trend ${trend}`}>
@@ -1434,6 +1463,9 @@ const WishArchivePage: React.FC = () => {
       <HeatMap
         characters={characters}
         year={heatmapYear}
+        onCellHover={(date) => {
+          // Optional: update a tooltip or info display
+        }}
       />
     </section>
   );
@@ -1442,7 +1474,7 @@ const WishArchivePage: React.FC = () => {
   const renderFunFacts = () => (
     <section className="wish-funfacts-tab section-reveal">
       {stats.funFacts.length > 0 && (
-        <div className="wish-fun-fact-featured">
+        <div className="wish-fun-fact-featured stagger-card">
           <div className="wish-fun-fact-featured-icon">
             <Icon icon="mdi:sparkle" />
           </div>
@@ -1455,10 +1487,8 @@ const WishArchivePage: React.FC = () => {
 
       <div className="wish-fun-facts-grid">
         {stats.funFacts.slice(1).map((fact, index) => (
-          <div key={index} className="wish-fun-fact-premium">
-            <span className="wish-fun-fact-premium-icon">
-              <Icon icon="mdi:star" />
-            </span>
+          <div key={index} className="wish-fun-fact-premium stagger-card">
+            <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
             <span>{fact}</span>
           </div>
         ))}
@@ -1473,7 +1503,7 @@ const WishArchivePage: React.FC = () => {
         {stats.achievements.map((achievement, index) => (
           <div
             key={index}
-            className={`wish-achievement-premium ${achievement.unlocked ? 'unlocked' : 'locked'}`}
+            className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
           >
             <div className="wish-achievement-premium-icon">
               <Icon icon={achievement.icon} />
@@ -1499,6 +1529,7 @@ const WishArchivePage: React.FC = () => {
   // Render Archive Tab
   const renderArchive = () => (
     <section className="wish-archive-tab section-reveal">
+      {/* Archive Controls */}
       <div className="wish-controls">
         <div className="wish-controls-top">
           <div className="wish-view-controls">
@@ -1519,9 +1550,7 @@ const WishArchivePage: React.FC = () => {
           </div>
 
           <div className="wish-search-wrapper">
-            <span className="wish-search-icon">
-              <Icon icon="mdi:search" />
-            </span>
+            <Icon icon="mdi:search" className="wish-search-icon" />
             <input
               type="text"
               className="wish-search-input"
@@ -1559,7 +1588,7 @@ const WishArchivePage: React.FC = () => {
                 className={`wish-chip ${selectedElement === element ? 'active' : ''}`}
                 onClick={() => setSelectedElement(element)}
                 style={element !== 'all' ? {
-                  borderColor: selectedElement === element ? getElementColor(element) : 'rgba(255,255,255,0.02)'
+                  borderColor: selectedElement === element ? getElementColor(element) : 'rgba(255,255,255,0.06)'
                 } : {}}
               >
                 {element === 'all' ? 'All' : element}
@@ -1595,6 +1624,7 @@ const WishArchivePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Content */}
       <div className="wish-content">
         {filteredCharacters.length === 0 ? (
           <div className="wish-empty">
@@ -1657,44 +1687,41 @@ const WishArchivePage: React.FC = () => {
       <div className="wish-archive-page">
         {/* Premium Background */}
         <div className="wish-bg">
-          <div className="wish-bg-grid" />
-          <div className="wish-bg-vignette" />
-          <div className="wish-bg-shapes">
-            <div className="shape shape-1" />
-            <div className="shape shape-2" />
-            <div className="shape shape-3" />
+          <div className="wish-bg-gradient" />
+          <div className="wish-bg-particles">
+            {[...Array(30)].map((_, i) => (
+              <div
+                key={i}
+                className="wish-bg-particle"
+                style={{
+                  '--delay': `${i * 0.3}s`,
+                  '--x': `${10 + Math.random() * 80}%`,
+                  '--y': `${10 + Math.random() * 80}%`,
+                  '--size': `${1 + Math.random() * 3}px`,
+                  '--duration': `${20 + Math.random() * 30}s`
+                } as React.CSSProperties}
+              />
+            ))}
           </div>
         </div>
 
         {/* Header */}
         <div className="wish-archive-header">
-          <button className="wish-back-button" onClick={() => navigate('/archive')}>
+          <button className="wish-back-button" onClick={() => navigate('/')}>
             <Icon icon="mdi:arrow-left" />
-            Back to Archive
+            Back to Home
           </button>
-          <div className="wish-header-divider" />
-          <span className="wish-header-title">Wish Archive</span>
-          <div className="wish-header-badge">
-            <span className="badge-dot" />
-            <span>Collection</span>
-          </div>
         </div>
 
         {/* Hero Section */}
         <section className="wish-hero section-reveal">
           <div className="wish-hero-content">
-            <div className="wish-hero-badge">
-              <span className="badge-icon">
-                <Icon icon="mdi:star-four-points" />
-              </span>
-              Collection
-            </div>
+            <div className="wish-hero-badge">✦ Collection</div>
             <h1 className="wish-hero-title">Wish Archive</h1>
             <p className="wish-hero-subtitle">
               A personal archive of every limited 5★ character I've obtained in Genshin Impact since 2022.
             </p>
           </div>
-          <div className="wish-hero-line" />
         </section>
 
         {/* Tab Navigation */}
