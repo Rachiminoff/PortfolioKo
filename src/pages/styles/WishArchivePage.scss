@@ -1,33 +1,59 @@
-// WishArchivePage.scss - Enhanced with collapsible sections and improved spacing
+/* =========================
+   VARIABLES
+========================= */
+$black: #070707;
+$dark: #0F0F0F;
+$gray-dark: #1A1A1A;
+$gray: #232323;
+$white: #F5F5F5;
+$white-dim: rgba(255, 255, 255, 0.7);
+$white-faint: rgba(255, 255, 255, 0.3);
+$white-subtle: rgba(255, 255, 255, 0.04);
+$cyan: #3BE9E5;
+$cyan-dim: rgba(59, 233, 229, 0.15);
+$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+/* =========================
+   ELEMENT COLORS
+========================= */
+$anemo: #7ae0db;
+$geo: #f9b55d;
+$electro: #bb7ae0;
+$dendro: #7eb870;
+$hydro: #4a90d9;
+$pyro: #e06040;
+$cryo: #7fc4e0;
 
 .wish-archive-page {
   position: relative;
   min-height: 100vh;
-  padding: 0 clamp(24px, 5vw, 72px);
-  max-width: 1500px;
+  padding: 0 clamp(20px, 4vw, 60px);
+  max-width: 1400px;
   margin: 0 auto;
-  color: #ffffff;
-  background: #0a0a0a;
+  color: $white;
+  background: $black;
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.02);
+    background: transparent;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-
+    background: rgba(255, 255, 255, 0.04);
+    
     &:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.06);
     }
   }
 }
 
-// Background
+/* =========================
+   BACKGROUND
+========================= */
 .wish-bg {
   position: fixed;
   top: 0;
@@ -38,39 +64,100 @@
   pointer-events: none;
   overflow: hidden;
 
-  .wish-bg-gradient {
+  .wish-bg-grid {
     position: absolute;
     inset: 0;
-    background: 
-      radial-gradient(ellipse at 20% 50%, rgba(122, 224, 219, 0.05) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 50%, rgba(139, 92, 246, 0.05) 0%, transparent 60%),
-      radial-gradient(ellipse at 50% 100%, rgba(249, 181, 93, 0.03) 0%, transparent 40%);
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.015) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0.5px, transparent 0.5px);
+    background-size: 60px 60px;
   }
 
-  .wish-bg-particles {
+  .wish-bg-vignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.5) 100%);
+  }
+
+  .wish-bg-shapes {
     position: absolute;
     inset: 0;
     
-    .wish-bg-particle {
+    .shape {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      animation: particleFloat var(--duration) infinite alternate;
-      animation-delay: var(--delay);
-      left: var(--x);
-      top: var(--y);
-      width: var(--size);
-      height: var(--size);
+      border: 0.5px solid rgba(255, 255, 255, 0.015);
+
+      &.shape-1 {
+        width: 400px;
+        height: 400px;
+        top: -100px;
+        right: -100px;
+        animation: floatShape 35s ease-in-out infinite;
+      }
+
+      &.shape-2 {
+        width: 280px;
+        height: 280px;
+        bottom: -80px;
+        left: -80px;
+        animation: floatShape 30s ease-in-out infinite reverse;
+      }
+
+      &.shape-3 {
+        width: 160px;
+        height: 160px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-color: rgba(59, 233, 229, 0.02);
+        animation: pulseShape 20s ease-in-out infinite;
+      }
     }
   }
 }
 
-@keyframes particleFloat {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.1; }
-  100% { transform: translate(20px, -30px) scale(1.5); opacity: 0.4; }
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes floatShape {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(30px, -20px) rotate(3deg); }
+  66% { transform: translate(-20px, 25px) rotate(-2deg); }
 }
 
-// Header
+@keyframes pulseShape {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+  50% { transform: translate(-50%, -50%) scale(1.4); opacity: 0.6; }
+}
+
+@keyframes sectionFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardFadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* =========================
+   HEADER
+========================= */
 .wish-archive-header {
   position: relative;
   z-index: 2;
@@ -83,197 +170,243 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    padding: 0.6rem 1.2rem;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 0.5px solid rgba(255, 255, 255, 0.03);
+    padding: 0.5rem 1.2rem;
+    color: $white-faint;
+    font-family: $font-mono;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(12px);
-    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.06);
+      color: $white;
       transform: translateX(-2px);
     }
 
     .iconify {
-      font-size: 1.2rem;
+      font-size: 1rem;
+    }
+  }
+
+  .wish-header-divider {
+    width: 0.5px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .wish-header-title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: $white;
+    letter-spacing: 0.02em;
+    font-family: $font-sans;
+  }
+
+  .wish-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+    padding: 0.2rem 0.6rem;
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    font-family: $font-mono;
+    font-size: 0.45rem;
+    color: $white-faint;
+    opacity: 0.15;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    .badge-dot {
+      width: 3px;
+      height: 3px;
+      background: $cyan;
+      opacity: 0.3;
+      border-radius: 50%;
     }
   }
 }
 
-// Hero Section
+/* =========================
+   HERO SECTION
+========================= */
 .wish-hero {
   position: relative;
   z-index: 2;
-  padding: 3rem 0 4rem 0;
+  padding: 2rem 0 3rem 0;
   text-align: center;
 
   .wish-hero-content {
-    max-width: 800px;
+    max-width: 700px;
     margin: 0 auto;
 
     .wish-hero-badge {
-      display: inline-block;
-      padding: 0.4rem 1.2rem;
-      background: rgba(122, 224, 219, 0.1);
-      border: 1px solid rgba(122, 224, 219, 0.2);
-      border-radius: 100px;
-      color: #7ae0db;
-      font-size: 0.85rem;
-      font-weight: 500;
-      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.2rem 0.8rem;
+      border: 0.5px solid rgba(255, 255, 255, 0.02);
+      font-family: $font-mono;
+      font-size: 0.5rem;
+      color: $white-faint;
+      opacity: 0.15;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       margin-bottom: 1.5rem;
+
+      .badge-icon {
+        opacity: 0.3;
+        
+        svg {
+          width: 12px;
+          height: 12px;
+        }
+      }
     }
 
     .wish-hero-title {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 700;
-      background: linear-gradient(135deg, #ffffff 0%, #7ae0db 50%, #8B5CF6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin: 0 0 1rem 0;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 500;
+      color: $white;
+      margin: 0 0 0.5rem 0;
       letter-spacing: -0.02em;
+      font-family: $font-sans;
     }
 
     .wish-hero-subtitle {
-      font-size: clamp(1rem, 1.5vw, 1.2rem);
-      color: rgba(255, 255, 255, 0.6);
+      font-size: clamp(0.85rem, 1.2vw, 1rem);
+      color: $white-faint;
+      opacity: 0.15;
       line-height: 1.6;
-      max-width: 600px;
+      max-width: 500px;
       margin: 0 auto;
+      font-weight: 300;
+      letter-spacing: 0.04em;
     }
+  }
+
+  .wish-hero-line {
+    max-width: 200px;
+    margin: 2rem auto 0;
+    height: 0.5px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
   }
 }
 
-// Hero Stats - Overview Tab
+/* =========================
+   HERO STATS
+========================= */
 .wish-hero-stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.75rem;
-  margin-top: 3rem;
-  max-width: 800px;
+  gap: 2px;
+  margin-top: 2.5rem;
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  padding: 2px;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    padding: 0 0.5rem;
   }
 
   @media (max-width: 480px) {
-    gap: 0.75rem;
-    padding: 0 0.25rem;
+    gap: 1px;
   }
 
   .wish-hero-stat {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 1.5rem;
-    backdrop-filter: blur(12px);
-    transition: all 0.3s ease;
+    padding: 1rem 0.75rem;
+    text-align: center;
 
     @media (max-width: 480px) {
-      padding: 1rem 0.75rem;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
+      padding: 0.75rem 0.5rem;
     }
 
     .animated-counter {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.15rem;
 
       .animated-counter-value {
-        font-size: clamp(1.5rem, 3vw, 2.8rem);
-        font-weight: 700;
-        color: #ffffff;
+        font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+        font-weight: 400;
+        color: $white;
+        font-family: $font-mono;
+        letter-spacing: 0.02em;
+
+        @media (max-width: 480px) {
+          font-size: 1.2rem;
+        }
       }
 
       .animated-counter-label {
-        font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.5);
-        font-weight: 400;
+        font-size: 0.6rem;
+        color: $white-faint;
+        opacity: 0.15;
+        font-weight: 300;
+        font-family: $font-mono;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
 
         @media (max-width: 480px) {
-          font-size: 0.7rem;
+          font-size: 0.5rem;
         }
       }
     }
   }
 }
 
-// Hero Highlights
+/* =========================
+   HERO HIGHLIGHTS
+========================= */
 .wish-hero-highlights {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  max-width: 800px;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-
-  @media (max-width: 768px) {
-    gap: 0.75rem;
-    padding: 0 0.5rem;
-  }
-
-  @media (max-width: 480px) {
-    gap: 0.5rem;
-  }
 
   .wish-hero-highlight {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 100px;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.5);
-
-    @media (max-width: 768px) {
-      font-size: 0.75rem;
-      padding: 0.3rem 0.75rem;
-    }
+    gap: 0.4rem;
+    padding: 0.25rem 0.6rem;
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    font-family: $font-mono;
+    font-size: 0.55rem;
+    color: $white-faint;
+    opacity: 0.1;
+    letter-spacing: 0.04em;
 
     @media (max-width: 480px) {
-      font-size: 0.65rem;
-      padding: 0.25rem 0.6rem;
-      gap: 0.3rem;
+      font-size: 0.5rem;
+      padding: 0.2rem 0.4rem;
     }
 
     .iconify {
-      font-size: 1rem;
-      opacity: 0.6;
+      font-size: 0.8rem;
+      opacity: 0.15;
 
       @media (max-width: 480px) {
-        font-size: 0.8rem;
+        font-size: 0.65rem;
       }
-    }
-
-    span {
-      white-space: nowrap;
     }
   }
 }
 
-// Tab Navigation
+/* =========================
+   TAB NAVIGATION
+========================= */
 .tab-nav {
   position: relative;
   z-index: 2;
@@ -281,77 +414,63 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 
-  @media (max-width: 768px) {
-    margin: 1.5rem 0 1.5rem 0;
-    padding: 0 0.25rem;
-  }
-
-  @media (max-width: 480px) {
-    margin: 1rem 0 1rem 0;
-  }
-
   .tab-nav-inner {
     display: flex;
-    gap: 0.5rem;
-    padding-bottom: 0.5rem;
+    gap: 2px;
+    padding-bottom: 0.25rem;
     min-width: fit-content;
-
-    @media (max-width: 768px) {
-      gap: 0.4rem;
-    }
-
-    @media (max-width: 480px) {
-      gap: 0.3rem;
-    }
+    background: rgba(255, 255, 255, 0.01);
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    padding: 2px;
 
     .tab-nav-item {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.6rem 1.2rem;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      border-radius: 12px;
-      color: rgba(255, 255, 255, 0.4);
-      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: none;
+      color: $white-faint;
+      opacity: 0.15;
+      font-family: $font-mono;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: inherit;
-      white-space: nowrap;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
       @media (max-width: 768px) {
         padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
-        gap: 0.3rem;
+        font-size: 0.55rem;
       }
 
       @media (max-width: 480px) {
-        padding: 0.35rem 0.6rem;
-        font-size: 0.7rem;
-        border-radius: 8px;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.5rem;
+        gap: 0.3rem;
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.06);
-        color: rgba(255, 255, 255, 0.7);
+        opacity: 0.4;
+        background: rgba(255, 255, 255, 0.02);
       }
 
       &.active {
-        background: rgba(122, 224, 219, 0.1);
-        border-color: rgba(122, 224, 219, 0.2);
-        color: #7ae0db;
+        opacity: 1;
+        color: $white;
+        background: rgba(255, 255, 255, 0.02);
       }
 
       .iconify {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
 
         @media (max-width: 480px) {
-          font-size: 0.9rem;
+          font-size: 0.75rem;
         }
       }
 
       span {
-        @media (max-width: 768px) {
+        @media (max-width: 480px) {
           display: none;
         }
       }
@@ -359,250 +478,176 @@
   }
 }
 
-// Tab Content
+/* =========================
+   TAB CONTENT
+========================= */
 .wish-tab-content {
   position: relative;
   z-index: 2;
   margin: 1rem 0 3rem 0;
-
-  @media (max-width: 768px) {
-    margin: 0.5rem 0 2rem 0;
-  }
-
-  @media (max-width: 480px) {
-    margin: 0.25rem 0 1.5rem 0;
-  }
 }
 
-// Section Reveal Animation
 .section-reveal {
-  animation: sectionFadeIn 0.6s ease forwards;
+  animation: sectionFadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 
   .stagger-card {
     opacity: 0;
-    transform: translateY(20px);
-    animation: cardFadeIn 0.5s ease forwards;
+    transform: translateY(12px);
+    animation: cardFadeIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
 }
 
-@keyframes sectionFadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes cardFadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-// Overview Tab
-.wish-overview-tab {
-  margin: 0 auto;
-}
-
-// Analytics Tab
+/* =========================
+   ANALYTICS - STATS GROUPS
+========================= */
 .wish-analytics-tab {
   margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 0.25rem;
-  }
 }
 
-// Statistics Dashboard
 .wish-stats-dashboard {
   .wish-stats-group {
     margin-bottom: 2rem;
 
-    @media (max-width: 768px) {
-      margin-bottom: 1.5rem;
-    }
-
-    @media (max-width: 480px) {
-      margin-bottom: 1rem;
-    }
-
     .wish-stats-group-title {
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.2);
+      font-family: $font-mono;
+      font-size: 0.55rem;
+      color: $white-faint;
+      opacity: 0.08;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin: 0 0 1rem 0;
+      letter-spacing: 0.12em;
+      margin: 0 0 0.75rem 0;
       padding-left: 0.25rem;
-
-      @media (max-width: 480px) {
-        font-size: 0.7rem;
-        margin-bottom: 0.75rem;
-      }
     }
   }
 
   .wish-stats-dashboard-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1.75rem;
+    gap: 2px;
     margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.01);
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    padding: 2px;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
-      gap: 1.25rem;
     }
 
-    @media (max-width: 768px) {
-      gap: 0.75rem;
-      padding: 0 0.25rem;
-    }
-
-    @media (max-width: 640px) {
+    @media (max-width: 480px) {
       grid-template-columns: 1fr;
+    }
+
+    .wish-stat-premium {
+      padding: 1rem 0.75rem;
+      display: flex;
+      align-items: center;
       gap: 0.75rem;
-    }
-
-    @media (max-width: 480px) {
-      gap: 0.5rem;
-      padding: 0;
-    }
-  }
-
-  .wish-stat-premium {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    transition: all 0.3s ease;
-
-    @media (max-width: 768px) {
-      padding: 1rem;
-      gap: 0.75rem;
-    }
-
-    @media (max-width: 480px) {
-      padding: 0.75rem;
-      gap: 0.5rem;
-      border-radius: 12px;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .wish-stat-premium-icon {
-      font-size: 1.8rem;
-      flex-shrink: 0;
-      opacity: 0.8;
+      background: transparent;
 
       @media (max-width: 480px) {
-        font-size: 1.4rem;
+        padding: 0.75rem 0.5rem;
       }
-    }
 
-    .wish-stat-premium-content {
-      display: flex;
-      flex-direction: column;
-      gap: 0.1rem;
+      .wish-stat-premium-icon {
+        display: flex;
+        align-items: center;
+        opacity: 0.1;
 
-      .wish-stat-premium-value {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #ffffff;
+        svg {
+          width: 20px;
+          height: 20px;
 
-        @media (max-width: 480px) {
-          font-size: 1rem;
+          @media (max-width: 480px) {
+            width: 16px;
+            height: 16px;
+          }
         }
       }
 
-      .wish-stat-premium-label {
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.4);
-        font-weight: 400;
+      .wish-stat-premium-content {
+        display: flex;
+        flex-direction: column;
+        gap: 0.05rem;
 
-        @media (max-width: 480px) {
-          font-size: 0.7rem;
+        .wish-stat-premium-value {
+          font-size: 1.1rem;
+          font-weight: 400;
+          color: $white;
+          font-family: $font-mono;
+          letter-spacing: 0.02em;
+
+          @media (max-width: 480px) {
+            font-size: 0.9rem;
+          }
+        }
+
+        .wish-stat-premium-label {
+          font-size: 0.55rem;
+          color: $white-faint;
+          opacity: 0.15;
+          font-weight: 300;
+          font-family: $font-mono;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+
+          @media (max-width: 480px) {
+            font-size: 0.5rem;
+          }
         }
       }
     }
   }
 }
 
-// Charts Row
+/* =========================
+   CHARTS ROW
+========================= */
 .wish-charts-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.75rem;
+  gap: 2px;
   margin: 2rem 0 3rem 0;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  padding: 2px;
 
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
-
-  @media (max-width: 768px) {
-    gap: 0.75rem;
-    margin: 1.5rem 0 2rem 0;
-    padding: 0 0.25rem;
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
   }
 
   @media (max-width: 480px) {
-    gap: 0.5rem;
-    margin: 1rem 0 1.5rem 0;
-    padding: 0;
+    grid-template-columns: 1fr;
+    gap: 1px;
   }
 
   .wish-chart-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
     text-align: center;
-    transition: all 0.3s ease;
+    background: transparent;
 
     @media (max-width: 768px) {
-      padding: 1rem;
+      padding: 1rem 0.75rem;
     }
 
     @media (max-width: 480px) {
-      padding: 0.75rem;
-      border-radius: 12px;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
+      padding: 0.75rem 0.5rem;
     }
 
     .wish-chart-title {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: rgba(255, 255, 255, 0.6);
-      margin: 0 0 1rem 0;
-
-      @media (max-width: 480px) {
-        font-size: 0.8rem;
-        margin-bottom: 0.75rem;
-      }
+      font-family: $font-mono;
+      font-size: 0.55rem;
+      color: $white-faint;
+      opacity: 0.08;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin: 0 0 0.75rem 0;
     }
 
     .donut-chart {
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 200px;
-
-      @media (max-width: 480px) {
-        min-height: 160px;
-      }
+      min-height: 180px;
 
       canvas {
         max-width: 100%;
@@ -611,14 +656,9 @@
 
     .wish-progress-ring {
       position: relative;
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       margin: 0 auto;
-
-      @media (max-width: 480px) {
-        width: 100px;
-        height: 100px;
-      }
 
       svg {
         width: 100%;
@@ -639,22 +679,20 @@
 
         .wish-progress-ring-value {
           display: block;
-          font-size: 1.8rem;
-          font-weight: 700;
-          color: #ffffff;
-
-          @media (max-width: 480px) {
-            font-size: 1.4rem;
-          }
+          font-size: 1.4rem;
+          font-weight: 400;
+          color: $white;
+          font-family: $font-mono;
+          letter-spacing: 0.02em;
         }
 
         .wish-progress-ring-label {
-          font-size: 0.7rem;
-          color: rgba(255, 255, 255, 0.4);
-
-          @media (max-width: 480px) {
-            font-size: 0.6rem;
-          }
+          font-size: 0.5rem;
+          color: $white-faint;
+          opacity: 0.15;
+          font-family: $font-mono;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
         }
       }
     }
@@ -663,18 +701,20 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      gap: 0.75rem;
+      gap: 0.5rem;
       padding-top: 0.5rem;
+      height: 150px;
 
       @media (max-width: 480px) {
-        gap: 0.4rem;
+        gap: 0.3rem;
+        height: 120px;
       }
 
       .bar-chart-item {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.2rem;
         flex: 1;
         min-width: 0;
 
@@ -687,161 +727,127 @@
 
           .bar-chart-bar {
             width: 100%;
-            max-width: 30px;
+            max-width: 24px;
             min-height: 2px;
-            border-radius: 4px 4px 0 0;
-            transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+            transition: height 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: rgba(255, 255, 255, 0.04);
 
             @media (max-width: 480px) {
-              max-width: 20px;
+              max-width: 18px;
             }
           }
         }
 
         .bar-chart-value {
-          font-size: 0.7rem;
-          color: rgba(255, 255, 255, 0.5);
-          font-weight: 500;
-
-          @media (max-width: 480px) {
-            font-size: 0.6rem;
-          }
+          font-family: $font-mono;
+          font-size: 0.55rem;
+          color: $white-faint;
+          opacity: 0.1;
         }
 
         .bar-chart-label {
-          font-size: 0.65rem;
-          color: rgba(255, 255, 255, 0.3);
-          font-weight: 400;
+          font-family: $font-mono;
+          font-size: 0.5rem;
+          color: $white-faint;
+          opacity: 0.06;
           text-align: center;
           white-space: nowrap;
-
-          @media (max-width: 480px) {
-            font-size: 0.55rem;
-          }
+          letter-spacing: 0.04em;
         }
       }
     }
   }
 }
 
-// Yearly Performance
+/* =========================
+   YEARLY PERFORMANCE
+========================= */
 .wish-yearly-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2px;
   margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  padding: 2px;
 
   @media (max-width: 768px) {
-    gap: 0.75rem;
-    padding: 0 0.25rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
 
   @media (max-width: 480px) {
-    gap: 0.5rem;
-    padding: 0;
-    margin-top: 1rem;
+    grid-template-columns: 1fr;
   }
 
   .wish-yearly-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-
-    @media (max-width: 768px) {
-      padding: 1rem;
-    }
+    padding: 1.25rem 1rem;
+    background: transparent;
 
     @media (max-width: 480px) {
-      padding: 0.75rem;
-      border-radius: 12px;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
+      padding: 0.75rem 0.5rem;
     }
 
     .wish-yearly-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1rem;
-
-      @media (max-width: 480px) {
-        margin-bottom: 0.75rem;
-      }
+      margin-bottom: 0.75rem;
 
       h3 {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 400;
+        color: $white;
         margin: 0;
+        font-family: $font-mono;
+        letter-spacing: 0.04em;
 
         @media (max-width: 480px) {
-          font-size: 0.95rem;
+          font-size: 0.85rem;
         }
       }
 
       .wish-yearly-trend {
-        font-size: 0.8rem;
-        padding: 0.2rem 0.6rem;
-        border-radius: 100px;
-        background: rgba(255, 255, 255, 0.05);
+        font-family: $font-mono;
+        font-size: 0.5rem;
+        padding: 0.1rem 0.4rem;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        letter-spacing: 0.04em;
 
-        @media (max-width: 480px) {
-          font-size: 0.65rem;
-          padding: 0.15rem 0.4rem;
-        }
-
-        &.up {
-          color: #7eb870;
-        }
-        &.down {
-          color: #e06040;
-        }
-        &.same {
-          color: rgba(255, 255, 255, 0.3);
-        }
+        &.up { color: rgba(126, 184, 112, 0.3); }
+        &.down { color: rgba(224, 96, 64, 0.3); }
+        &.same { color: $white-faint; opacity: 0.06; }
       }
     }
 
     .wish-yearly-stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-
-      @media (max-width: 480px) {
-        gap: 0.4rem;
-      }
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
 
       .wish-yearly-stat {
         text-align: center;
 
         .wish-yearly-stat-value {
           display: block;
-          font-size: 1.2rem;
-          font-weight: 600;
-          color: #ffffff;
+          font-size: 0.95rem;
+          font-weight: 400;
+          color: $white;
+          font-family: $font-mono;
+          letter-spacing: 0.02em;
 
           @media (max-width: 480px) {
-            font-size: 0.95rem;
+            font-size: 0.8rem;
           }
         }
 
         .wish-yearly-stat-label {
-          font-size: 0.65rem;
-          color: rgba(255, 255, 255, 0.3);
-          font-weight: 400;
-
-          @media (max-width: 480px) {
-            font-size: 0.55rem;
-          }
+          font-size: 0.45rem;
+          color: $white-faint;
+          opacity: 0.08;
+          font-family: $font-mono;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
         }
       }
     }
@@ -849,168 +855,134 @@
     .wish-yearly-details {
       display: flex;
       flex-direction: column;
-      gap: 0.3rem;
-      padding-top: 0.75rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.04);
-
-      @media (max-width: 480px) {
-        padding-top: 0.5rem;
-        gap: 0.2rem;
-      }
+      gap: 0.2rem;
+      padding-top: 0.5rem;
+      border-top: 0.5px solid rgba(255, 255, 255, 0.02);
 
       span {
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.4);
-        font-weight: 400;
-
-        @media (max-width: 480px) {
-          font-size: 0.7rem;
-        }
+        font-family: $font-mono;
+        font-size: 0.55rem;
+        color: $white-faint;
+        opacity: 0.06;
+        letter-spacing: 0.04em;
       }
 
       .wish-yearly-characters {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.8rem;
+        color: $white-faint;
+        opacity: 0.1;
+        font-size: 0.6rem;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-
-        @media (max-width: 480px) {
-          font-size: 0.7rem;
-        }
       }
     }
   }
 }
 
-// Heat Map Tab
+/* =========================
+   HEATMAP TAB
+========================= */
 .wish-heatmap-tab {
   margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 0.25rem;
-  }
 }
 
 .wish-heatmap-controls {
-  margin-bottom: 2rem;
-
-  @media (max-width: 768px) {
-    margin-bottom: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    margin-bottom: 1rem;
-  }
+  margin-bottom: 1.5rem;
 
   .wish-heatmap-year-selector {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-
-    @media (max-width: 480px) {
-      gap: 0.3rem;
-    }
+    gap: 2px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    padding: 2px;
+    width: fit-content;
 
     .wish-heatmap-year-btn {
-      padding: 0.5rem 1.2rem;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 8px;
-      color: rgba(255, 255, 255, 0.5);
-      font-size: 0.9rem;
+      padding: 0.3rem 0.8rem;
+      background: transparent;
+      border: none;
+      color: $white-faint;
+      opacity: 0.1;
+      font-family: $font-mono;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
       cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
       @media (max-width: 480px) {
-        padding: 0.35rem 0.8rem;
-        font-size: 0.75rem;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.5rem;
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.08);
-        border-color: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
+        opacity: 0.4;
+        background: rgba(255, 255, 255, 0.02);
       }
 
       &.active {
-        background: rgba(122, 224, 219, 0.15);
-        border-color: #7ae0db;
-        color: #7ae0db;
+        opacity: 1;
+        color: $white;
+        background: rgba(255, 255, 255, 0.02);
       }
     }
   }
 }
 
 .heatmap-container {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  padding: 2rem;
-  transition: all 0.3s ease;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.01);
 
   @media (max-width: 768px) {
     padding: 1rem;
-    border-radius: 12px;
   }
 
   @media (max-width: 480px) {
     padding: 0.75rem;
-    border-radius: 10px;
-  }
-
-  &.heatmap-animating {
-    animation: heatmapFade 0.3s ease;
-  }
-
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.08);
   }
 
   .heatmap-grid {
     display: flex;
-    gap: 0.4rem;
-    margin-bottom: 1.5rem;
+    gap: 0.3rem;
+    margin-bottom: 1rem;
     overflow-x: auto;
-    padding: 0.5rem 0;
+    padding: 0.25rem 0;
 
     @media (max-width: 480px) {
-      gap: 0.2rem;
-      margin-bottom: 1rem;
+      gap: 0.15rem;
     }
 
     .heatmap-week {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.3rem;
       min-width: fit-content;
 
       @media (max-width: 480px) {
-        gap: 0.2rem;
+        gap: 0.15rem;
       }
 
       .heatmap-cell {
-        width: 16px;
-        height: 16px;
-        border-radius: 3px;
+        width: 14px;
+        height: 14px;
+        border-radius: 1px;
         transition: all 0.2s ease;
         cursor: pointer;
         flex-shrink: 0;
 
         @media (min-width: 768px) {
-          width: 18px;
-          height: 18px;
+          width: 16px;
+          height: 16px;
         }
 
         @media (max-width: 480px) {
-          width: 12px;
-          height: 12px;
-          border-radius: 2px;
+          width: 10px;
+          height: 10px;
         }
 
         &:hover {
-          transform: scale(1.3);
+          transform: scale(1.2);
           z-index: 2;
         }
       }
@@ -1020,226 +992,172 @@
   .heatmap-legend {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
     justify-content: center;
 
-    @media (max-width: 480px) {
-      gap: 0.4rem;
-    }
-
     .heatmap-legend-label {
-      font-size: 0.7rem;
-      color: rgba(255, 255, 255, 0.3);
-      font-weight: 400;
-
-      @media (max-width: 480px) {
-        font-size: 0.6rem;
-      }
+      font-family: $font-mono;
+      font-size: 0.5rem;
+      color: $white-faint;
+      opacity: 0.06;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
     .heatmap-legend-cells {
       display: flex;
-      gap: 0.2rem;
+      gap: 0.15rem;
 
       .heatmap-legend-cell {
-        width: 14px;
-        height: 14px;
-        border-radius: 3px;
+        width: 12px;
+        height: 12px;
+        border-radius: 1px;
         flex-shrink: 0;
 
         @media (min-width: 768px) {
-          width: 18px;
-          height: 18px;
+          width: 14px;
+          height: 14px;
         }
 
         @media (max-width: 480px) {
-          width: 10px;
-          height: 10px;
-          border-radius: 2px;
+          width: 8px;
+          height: 8px;
         }
       }
     }
   }
 
   .heatmap-tooltip {
-    margin-top: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    animation: fadeIn 0.3s ease;
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.01);
 
     @media (max-width: 480px) {
-      padding: 0.75rem;
-      margin-top: 0.75rem;
+      padding: 0.5rem 0.75rem;
     }
 
     .heatmap-tooltip-content {
       .heatmap-tooltip-date {
         display: block;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #ffffff;
-        margin-bottom: 0.5rem;
-
-        @media (max-width: 480px) {
-          font-size: 0.8rem;
-        }
+        font-family: $font-mono;
+        font-size: 0.65rem;
+        color: $white-faint;
+        opacity: 0.15;
+        letter-spacing: 0.04em;
+        margin-bottom: 0.3rem;
       }
 
       .heatmap-tooltip-item {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.3rem 0;
-        font-size: 0.85rem;
-
-        @media (max-width: 480px) {
-          gap: 0.5rem;
-          font-size: 0.75rem;
-        }
+        gap: 0.5rem;
+        padding: 0.2rem 0;
+        font-family: $font-mono;
+        font-size: 0.6rem;
+        color: $white-faint;
+        opacity: 0.1;
 
         .heatmap-tooltip-portrait {
-          width: 28px;
-          height: 28px;
+          width: 22px;
+          height: 22px;
           border-radius: 50%;
           object-fit: cover;
           flex-shrink: 0;
-
-          @media (max-width: 480px) {
-            width: 22px;
-            height: 22px;
-          }
+          border: 0.5px solid rgba(255, 255, 255, 0.02);
         }
 
         .heatmap-tooltip-name {
-          color: rgba(255, 255, 255, 0.8);
           flex: 1;
+          color: $white;
+          opacity: 0.6;
         }
 
         .heatmap-tooltip-element {
-          font-size: 1rem;
-          flex-shrink: 0;
-
-          @media (max-width: 480px) {
-            font-size: 0.8rem;
-          }
+          display: flex;
+          align-items: center;
+          font-size: 0.8rem;
         }
 
         .heatmap-tooltip-outcome {
-          font-weight: 500;
-          flex-shrink: 0;
+          font-size: 0.5rem;
+          letter-spacing: 0.04em;
 
-          &.won {
-            color: #7eb870;
-          }
-          &.lost {
-            color: #e06040;
-          }
+          &.won { color: rgba(126, 184, 112, 0.3); }
+          &.lost { color: rgba(224, 96, 64, 0.3); }
         }
 
         .heatmap-tooltip-version {
-          color: rgba(255, 255, 255, 0.3);
-          font-size: 0.75rem;
-          flex-shrink: 0;
-
-          @media (max-width: 480px) {
-            font-size: 0.65rem;
-          }
+          opacity: 0.06;
+          font-size: 0.5rem;
         }
       }
     }
   }
 }
 
-@keyframes heatmapFade {
-  from { opacity: 0.5; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// Fun Facts Tab
+/* =========================
+   FUN FACTS TAB
+========================= */
 .wish-funfacts-tab {
   margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 0.25rem;
-  }
 }
 
 .wish-fun-fact-featured {
   display: flex;
   align-items: flex-start;
-  gap: 1.5rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, rgba(122, 224, 219, 0.05), rgba(139, 92, 246, 0.05));
-  border: 1px solid rgba(122, 224, 219, 0.1);
-  border-radius: 16px;
-  margin-bottom: 2rem;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
+  margin-bottom: 1.5rem;
 
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: 1.5rem;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 1rem;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    border-radius: 12px;
+    padding: 1.25rem;
   }
 
   .wish-fun-fact-featured-icon {
-    font-size: 2.5rem;
+    display: flex;
+    align-items: center;
+    opacity: 0.1;
     flex-shrink: 0;
-    color: #7ae0db;
 
-    @media (max-width: 480px) {
-      font-size: 2rem;
+    svg {
+      width: 28px;
+      height: 28px;
+
+      @media (max-width: 480px) {
+        width: 22px;
+        height: 22px;
+      }
     }
   }
 
   .wish-fun-fact-featured-content {
     .wish-fun-fact-featured-label {
       display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: #7ae0db;
+      font-family: $font-mono;
+      font-size: 0.5rem;
+      color: $white-faint;
+      opacity: 0.08;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 0.25rem;
-
-      @media (max-width: 480px) {
-        font-size: 0.65rem;
-      }
+      letter-spacing: 0.12em;
+      margin-bottom: 0.15rem;
     }
 
     p {
-      font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.95rem;
+      color: $white-faint;
+      opacity: 0.2;
       margin: 0;
       line-height: 1.6;
-
-      @media (max-width: 768px) {
-        font-size: 1rem;
-      }
+      font-weight: 300;
 
       @media (max-width: 480px) {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
       }
     }
   }
@@ -1247,147 +1165,109 @@
 
 .wish-fun-facts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.75rem;
-
-  @media (max-width: 768px) {
-    gap: 0.75rem;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2px;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
+  padding: 2px;
 
   @media (max-width: 480px) {
-    gap: 0.5rem;
+    grid-template-columns: 1fr;
   }
 
   .wish-fun-fact-premium {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    transition: all 0.3s ease;
-
-    @media (max-width: 768px) {
-      padding: 1rem;
-    }
+    gap: 0.75rem;
+    padding: 1rem 0.75rem;
+    background: transparent;
 
     @media (max-width: 480px) {
-      padding: 0.75rem;
-      gap: 0.75rem;
-      border-radius: 12px;
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.1);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      padding: 0.75rem 0.5rem;
     }
 
     .wish-fun-fact-premium-icon {
-      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      opacity: 0.06;
       flex-shrink: 0;
-      color: #7ae0db;
-      opacity: 0.8;
       margin-top: 0.1rem;
 
-      @media (max-width: 480px) {
-        font-size: 1.2rem;
+      svg {
+        width: 16px;
+        height: 16px;
       }
     }
 
     span {
-      font-size: 0.95rem;
-      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.8rem;
+      color: $white-faint;
+      opacity: 0.15;
       line-height: 1.5;
+      font-weight: 300;
+      letter-spacing: 0.02em;
 
       @media (max-width: 480px) {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
       }
     }
   }
 }
 
-// Achievements Tab
+/* =========================
+   ACHIEVEMENTS TAB
+========================= */
 .wish-achievements-tab {
   margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 0.25rem;
-  }
 }
 
 .wish-achievements-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.75rem;
-
-  @media (max-width: 768px) {
-    gap: 0.75rem;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2px;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
+  padding: 2px;
 
   @media (max-width: 480px) {
-    gap: 0.5rem;
+    grid-template-columns: 1fr;
   }
 
   .wish-achievement-premium {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-
-    @media (max-width: 768px) {
-      padding: 1rem;
-      gap: 1rem;
-    }
+    gap: 1rem;
+    padding: 1rem 0.75rem;
+    background: transparent;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     @media (max-width: 480px) {
-      padding: 0.75rem;
+      padding: 0.75rem 0.5rem;
       gap: 0.75rem;
-      border-radius: 12px;
     }
 
     &.unlocked {
-      &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(135deg, rgba(122, 224, 219, 0.05), transparent 50%);
-        opacity: 1;
-      }
-
-      &:hover {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: rgba(122, 224, 219, 0.2);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-
-        .wish-achievement-premium-badge {
-          transform: scale(1.1);
-          box-shadow: 0 0 20px rgba(122, 224, 219, 0.3);
-        }
-      }
-
       .wish-achievement-premium-icon {
-        color: #7ae0db;
+        opacity: 0.3;
+      }
+
+      .wish-achievement-premium-content {
+        h4 { opacity: 0.6; }
+        p { opacity: 0.15; }
       }
 
       .wish-achievement-premium-badge {
-        background: rgba(122, 224, 219, 0.15);
-        border-color: rgba(122, 224, 219, 0.2);
-        color: #7ae0db;
+        opacity: 0.3;
+        color: $white;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.01);
       }
     }
 
     &.locked {
-      opacity: 0.5;
+      opacity: 0.3;
 
       .wish-achievement-premium-icon {
         position: relative;
@@ -1396,114 +1276,101 @@
           position: absolute;
           bottom: -0.2rem;
           right: -0.4rem;
-          font-size: 0.8rem;
-          color: rgba(255, 255, 255, 0.2);
+          
+          svg {
+            width: 12px;
+            height: 12px;
+            opacity: 0.15;
+          }
         }
       }
 
       .wish-achievement-premium-badge {
-        background: rgba(255, 255, 255, 0.03);
-        border-color: rgba(255, 255, 255, 0.04);
-        color: rgba(255, 255, 255, 0.1);
+        opacity: 0.06;
       }
     }
 
     .wish-achievement-premium-icon {
-      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
       flex-shrink: 0;
+      opacity: 0.06;
       position: relative;
-      z-index: 1;
-      opacity: 0.9;
 
-      @media (max-width: 480px) {
-        font-size: 1.8rem;
+      svg {
+        width: 24px;
+        height: 24px;
+
+        @media (max-width: 480px) {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
 
     .wish-achievement-premium-content {
       flex: 1;
-      position: relative;
-      z-index: 1;
 
       h4 {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #ffffff;
-        margin: 0 0 0.2rem 0;
-
-        @media (max-width: 480px) {
-          font-size: 0.9rem;
-        }
-      }
-
-      p {
         font-size: 0.85rem;
-        color: rgba(255, 255, 255, 0.4);
-        margin: 0;
-        line-height: 1.4;
+        font-weight: 400;
+        color: $white;
+        opacity: 0.15;
+        margin: 0 0 0.1rem 0;
+        font-family: $font-sans;
+        letter-spacing: 0.02em;
 
         @media (max-width: 480px) {
           font-size: 0.75rem;
         }
       }
+
+      p {
+        font-size: 0.65rem;
+        color: $white-faint;
+        opacity: 0.04;
+        margin: 0;
+        line-height: 1.4;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+
+        @media (max-width: 480px) {
+          font-size: 0.6rem;
+        }
+      }
     }
 
     .wish-achievement-premium-badge {
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(122, 224, 219, 0.15);
-      border: 1px solid rgba(122, 224, 219, 0.2);
-      border-radius: 50%;
-      color: #7ae0db;
-      font-size: 0.9rem;
-      font-weight: 600;
+      font-family: $font-mono;
+      font-size: 0.6rem;
+      opacity: 0.06;
       flex-shrink: 0;
-      transition: all 0.3s ease;
-      position: relative;
-      z-index: 1;
-
-      @media (max-width: 480px) {
-        width: 24px;
-        height: 24px;
-        font-size: 0.75rem;
-      }
+      letter-spacing: 0.04em;
     }
   }
 }
 
-// Archive Tab
+/* =========================
+   ARCHIVE TAB - CONTROLS
+========================= */
 .wish-archive-tab {
   margin: 0 auto;
-
-  @media (max-width: 768px) {
-    padding: 0 0.25rem;
-  }
 }
 
-// Controls
 .wish-controls {
   position: relative;
   z-index: 2;
-  margin: 0 0 2rem 0;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
-  backdrop-filter: blur(12px);
+  margin: 0 0 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
 
   @media (max-width: 768px) {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border-radius: 16px;
+    padding: 0.75rem 1rem;
   }
 
   @media (max-width: 480px) {
-    padding: 0.75rem;
-    margin-bottom: 1rem;
-    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
   }
 
   .wish-controls-top {
@@ -1511,66 +1378,58 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1.25rem;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
 
     @media (max-width: 768px) {
       flex-direction: column;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    @media (max-width: 480px) {
       gap: 0.5rem;
-      margin-bottom: 0.75rem;
     }
 
     .wish-view-controls {
       display: flex;
-      gap: 0.5rem;
-
-      @media (max-width: 480px) {
-        gap: 0.3rem;
-        width: 100%;
-      }
+      gap: 2px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 0.5px solid rgba(255, 255, 255, 0.02);
+      padding: 2px;
 
       .wish-view-btn {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.6rem 1.2rem;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 10px;
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.9rem;
+        gap: 0.4rem;
+        padding: 0.3rem 0.8rem;
+        background: transparent;
+        border: none;
+        color: $white-faint;
+        opacity: 0.1;
+        font-family: $font-mono;
+        font-size: 0.6rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
         cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: inherit;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
         @media (max-width: 480px) {
-          flex: 1;
-          justify-content: center;
-          padding: 0.5rem 0.75rem;
-          font-size: 0.8rem;
+          padding: 0.2rem 0.6rem;
+          font-size: 0.5rem;
         }
 
         &:hover {
-          background: rgba(255, 255, 255, 0.08);
-          color: rgba(255, 255, 255, 0.8);
+          opacity: 0.4;
+          background: rgba(255, 255, 255, 0.02);
         }
 
         &.active {
-          background: rgba(122, 224, 219, 0.15);
-          border-color: #7ae0db;
-          color: #7ae0db;
+          opacity: 1;
+          color: $white;
+          background: rgba(255, 255, 255, 0.02);
         }
 
         .iconify {
-          font-size: 1.1rem;
+          font-size: 0.85rem;
 
           @media (max-width: 480px) {
-            font-size: 0.9rem;
+            font-size: 0.7rem;
           }
         }
       }
@@ -1579,8 +1438,8 @@
     .wish-search-wrapper {
       position: relative;
       flex: 1;
-      max-width: 400px;
-      min-width: 200px;
+      max-width: 350px;
+      min-width: 160px;
 
       @media (max-width: 768px) {
         max-width: 100%;
@@ -1590,71 +1449,70 @@
 
       .wish-search-icon {
         position: absolute;
-        left: 0.8rem;
+        left: 0.6rem;
         top: 50%;
         transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.2);
-        font-size: 1.1rem;
+        color: $white-faint;
+        opacity: 0.06;
 
-        @media (max-width: 480px) {
-          font-size: 0.9rem;
-          left: 0.6rem;
+        svg {
+          width: 14px;
+          height: 14px;
         }
       }
 
       .wish-search-input {
         width: 100%;
-        padding: 0.7rem 1rem 0.7rem 2.8rem;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 10px;
-        color: #ffffff;
-        font-size: 0.95rem;
+        padding: 0.4rem 0.75rem 0.4rem 2rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        color: $white;
+        font-family: $font-sans;
+        font-size: 0.8rem;
         transition: all 0.3s ease;
-        font-family: inherit;
         outline: none;
 
         @media (max-width: 480px) {
-          padding: 0.5rem 0.75rem 0.5rem 2.2rem;
-          font-size: 0.85rem;
-          border-radius: 8px;
+          padding: 0.3rem 0.5rem 0.3rem 1.8rem;
+          font-size: 0.7rem;
         }
 
         &:focus {
-          background: rgba(255, 255, 255, 0.06);
-          border-color: rgba(122, 224, 219, 0.3);
+          border-color: rgba(255, 255, 255, 0.04);
+          background: rgba(255, 255, 255, 0.03);
         }
 
         &::placeholder {
-          color: rgba(255, 255, 255, 0.2);
+          color: $white-faint;
+          opacity: 0.06;
+          font-weight: 300;
+          letter-spacing: 0.04em;
+          font-size: 0.7rem;
         }
       }
 
       .wish-search-clear {
         position: absolute;
-        right: 0.8rem;
+        right: 0.5rem;
         top: 50%;
         transform: translateY(-50%);
         background: none;
         border: none;
-        color: rgba(255, 255, 255, 0.2);
+        color: $white-faint;
+        opacity: 0.06;
         cursor: pointer;
-        padding: 0.2rem;
+        padding: 0.15rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: color 0.3s ease;
 
         &:hover {
-          color: rgba(255, 255, 255, 0.5);
+          opacity: 0.2;
         }
 
-        .iconify {
-          font-size: 1.1rem;
-
-          @media (max-width: 480px) {
-            font-size: 0.9rem;
-          }
+        svg {
+          width: 14px;
+          height: 14px;
         }
       }
     }
@@ -1664,67 +1522,61 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 
     @media (max-width: 768px) {
       flex-direction: column;
       align-items: stretch;
-      gap: 1rem;
-    }
-
-    @media (max-width: 480px) {
-      gap: 0.75rem;
+      gap: 0.5rem;
     }
 
     .wish-filter-chips {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 0.5rem;
-
-      @media (max-width: 480px) {
-        gap: 0.3rem;
-      }
+      gap: 0.3rem;
 
       .wish-filter-label {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.3);
-        font-weight: 500;
+        font-family: $font-mono;
+        font-size: 0.5rem;
+        color: $white-faint;
+        opacity: 0.06;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin-right: 0.3rem;
+        letter-spacing: 0.12em;
+        margin-right: 0.2rem;
 
         @media (max-width: 480px) {
-          font-size: 0.65rem;
-          margin-right: 0.15rem;
+          font-size: 0.45rem;
         }
       }
 
       .wish-chip {
-        padding: 0.35rem 0.9rem;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 100px;
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 0.8rem;
+        padding: 0.15rem 0.6rem;
+        background: transparent;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        color: $white-faint;
+        opacity: 0.06;
+        font-family: $font-mono;
+        font-size: 0.55rem;
+        letter-spacing: 0.04em;
         cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: inherit;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
         @media (max-width: 480px) {
-          padding: 0.25rem 0.6rem;
-          font-size: 0.7rem;
+          padding: 0.1rem 0.4rem;
+          font-size: 0.5rem;
         }
 
         &:hover {
-          background: rgba(255, 255, 255, 0.08);
-          color: rgba(255, 255, 255, 0.7);
+          opacity: 0.3;
+          background: rgba(255, 255, 255, 0.02);
         }
 
         &.active {
-          background: rgba(122, 224, 219, 0.12);
-          border-color: #7ae0db;
-          color: #7ae0db;
+          opacity: 1;
+          color: $white;
+          background: rgba(255, 255, 255, 0.02);
+          border-color: rgba(255, 255, 255, 0.04);
         }
       }
     }
@@ -1732,7 +1584,7 @@
     .wish-sort {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
       margin-left: auto;
 
       @media (max-width: 768px) {
@@ -1740,184 +1592,96 @@
       }
 
       .wish-filter-label {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.3);
-        font-weight: 500;
+        font-family: $font-mono;
+        font-size: 0.5rem;
+        color: $white-faint;
+        opacity: 0.06;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
-
-        @media (max-width: 480px) {
-          font-size: 0.65rem;
-        }
+        letter-spacing: 0.12em;
       }
 
       .wish-sort-select {
-        padding: 0.4rem 1rem;
-        background: rgba(255, 255, 255, 0.04);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 8px;
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.85rem;
+        padding: 0.2rem 0.6rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        color: $white-faint;
+        opacity: 0.15;
+        font-family: $font-mono;
+        font-size: 0.6rem;
         cursor: pointer;
         transition: all 0.3s ease;
-        font-family: inherit;
         outline: none;
 
         @media (max-width: 480px) {
-          padding: 0.3rem 0.75rem;
-          font-size: 0.75rem;
+          padding: 0.15rem 0.4rem;
+          font-size: 0.55rem;
           flex: 1;
         }
 
         &:hover {
-          background: rgba(255, 255, 255, 0.08);
+          opacity: 0.4;
+          background: rgba(255, 255, 255, 0.03);
         }
 
         &:focus {
-          border-color: rgba(122, 224, 219, 0.3);
+          border-color: rgba(255, 255, 255, 0.04);
         }
 
         option {
-          background: #1a1a1a;
-          color: #ffffff;
+          background: $black;
+          color: $white;
         }
       }
     }
   }
 }
 
-// Content
-.wish-content {
-  position: relative;
-  z-index: 2;
-}
-
-.wish-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 20px;
-
-  @media (max-width: 768px) {
-    padding: 2.5rem 1.5rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 2rem 1rem;
-    border-radius: 12px;
-  }
-
-  .iconify {
-    font-size: 3rem;
-    color: rgba(255, 255, 255, 0.1);
-    margin-bottom: 1rem;
-
-    @media (max-width: 480px) {
-      font-size: 2.5rem;
-    }
-  }
-
-  p {
-    color: rgba(255, 255, 255, 0.4);
-    font-size: 1rem;
-    margin-bottom: 1.5rem;
-
-    @media (max-width: 480px) {
-      font-size: 0.9rem;
-    }
-  }
-
-  .wish-empty-clear {
-    padding: 0.6rem 1.5rem;
-    background: rgba(122, 224, 219, 0.1);
-    border: 1px solid rgba(122, 224, 219, 0.2);
-    border-radius: 10px;
-    color: #7ae0db;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: inherit;
-
-    @media (max-width: 480px) {
-      padding: 0.5rem 1.2rem;
-      font-size: 0.8rem;
-    }
-
-    &:hover {
-      background: rgba(122, 224, 219, 0.15);
-      transform: translateY(-2px);
-    }
-  }
-}
-
-// Timeline
+/* =========================
+   TIMELINE
+========================= */
 .wish-timeline {
   .wish-timeline-year {
-    margin-bottom: 3rem;
-
-    @media (max-width: 768px) {
-      margin-bottom: 2rem;
-    }
-
-    @media (max-width: 480px) {
-      margin-bottom: 1.5rem;
-    }
+    margin-bottom: 2rem;
 
     .wish-timeline-year-divider {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
       flex-wrap: wrap;
 
-      @media (max-width: 768px) {
-        gap: 0.75rem;
-        margin-bottom: 1rem;
-      }
-
-      @media (max-width: 480px) {
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-      }
-
       .wish-timeline-year-label {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.3);
+        font-size: 1.1rem;
+        font-weight: 400;
+        color: $white;
+        opacity: 0.08;
         margin: 0;
-        flex-shrink: 0;
+        font-family: $font-mono;
+        letter-spacing: 0.04em;
 
         @media (max-width: 480px) {
-          font-size: 1.2rem;
+          font-size: 0.9rem;
         }
       }
 
       .wish-timeline-year-line {
         flex: 1;
-        height: 1px;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
-
-        @media (max-width: 480px) {
-          display: none;
-        }
+        height: 0.5px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent);
       }
 
       .wish-timeline-year-stats {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.3);
-        flex-shrink: 0;
+        gap: 0.4rem;
+        font-family: $font-mono;
+        font-size: 0.55rem;
+        color: $white-faint;
+        opacity: 0.04;
+        letter-spacing: 0.04em;
 
         @media (max-width: 480px) {
-          font-size: 0.65rem;
-          gap: 0.3rem;
+          font-size: 0.5rem;
         }
 
         span {
@@ -1929,198 +1693,163 @@
     .wish-timeline-entries {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 2px;
+      border: 0.5px solid rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.01);
+      padding: 2px;
 
-      @media (max-width: 480px) {
-        gap: 0.5rem;
-      }
-    }
-  }
-
-  .wish-timeline-entry-premium {
-    display: flex;
-    gap: 1.25rem;
-    padding: 1rem 1.25rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    opacity: 0;
-    transform: translateY(20px);
-
-    @media (max-width: 768px) {
-      padding: 0.75rem 1rem;
-      gap: 0.75rem;
-    }
-
-    @media (max-width: 480px) {
-      padding: 0.6rem 0.75rem;
-      gap: 0.5rem;
-      border-radius: 10px;
-    }
-
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.08);
-      transform: translateX(4px);
-    }
-
-    .wish-timeline-entry-connector {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 0.3rem;
-      flex-shrink: 0;
-
-      .wish-timeline-entry-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        flex-shrink: 0;
-        transition: transform 0.3s ease;
-
-        @media (max-width: 480px) {
-          width: 8px;
-          height: 8px;
-        }
-
-        .wish-timeline-entry-premium:hover & {
-          transform: scale(1.3);
-        }
-      }
-    }
-
-    .wish-timeline-entry-content {
-      flex: 1;
-      min-width: 0;
-
-      .wish-timeline-entry-header {
+      .wish-timeline-entry-premium {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 0.5rem;
-        margin-bottom: 0.25rem;
+        gap: 1rem;
+        padding: 0.6rem 0.75rem;
+        background: transparent;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        opacity: 0;
+        transform: translateY(12px);
 
         @media (max-width: 480px) {
-          gap: 0.3rem;
+          padding: 0.4rem 0.5rem;
+          gap: 0.5rem;
         }
 
-        .wish-timeline-entry-name {
+        &.visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.01);
+        }
+
+        .wish-timeline-entry-connector {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          gap: 0.5rem;
+          padding-top: 0.3rem;
+          flex-shrink: 0;
+
+          .wish-timeline-entry-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+
+            .wish-timeline-entry-premium:hover & {
+              transform: scale(1.3);
+            }
+          }
+        }
+
+        .wish-timeline-entry-content {
           flex: 1;
           min-width: 0;
 
-          @media (max-width: 480px) {
+          .wish-timeline-entry-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
             gap: 0.3rem;
-          }
+            margin-bottom: 0.1rem;
 
-          .wish-timeline-entry-portrait {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
+            .wish-timeline-entry-name {
+              display: flex;
+              align-items: center;
+              gap: 0.4rem;
+              flex: 1;
+              min-width: 0;
 
-            @media (max-width: 480px) {
-              width: 22px;
-              height: 22px;
+              .wish-timeline-entry-portrait {
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                object-fit: cover;
+                flex-shrink: 0;
+                border: 0.5px solid rgba(255, 255, 255, 0.02);
+
+                @media (max-width: 480px) {
+                  width: 18px;
+                  height: 18px;
+                }
+              }
+
+              h4 {
+                font-size: 0.8rem;
+                font-weight: 400;
+                color: $white;
+                opacity: 0.15;
+                margin: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-family: $font-sans;
+                letter-spacing: 0.02em;
+
+                @media (max-width: 480px) {
+                  font-size: 0.7rem;
+                }
+              }
+
+              .wish-timeline-entry-version {
+                font-family: $font-mono;
+                font-size: 0.5rem;
+                color: $white-faint;
+                opacity: 0.04;
+                flex-shrink: 0;
+                letter-spacing: 0.04em;
+              }
+            }
+
+            .wish-timeline-entry-outcome {
+              font-family: $font-mono;
+              font-size: 0.5rem;
+              padding: 0.05rem 0.4rem;
+              border: 0.5px solid rgba(255, 255, 255, 0.02);
+              letter-spacing: 0.04em;
+              flex-shrink: 0;
+
+              &.won {
+                color: rgba(126, 184, 112, 0.2);
+              }
+              &.lost {
+                color: rgba(224, 96, 64, 0.2);
+              }
             }
           }
 
-          h4 {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #ffffff;
-            margin: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+          .wish-timeline-entry-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
 
-            @media (max-width: 480px) {
-              font-size: 0.85rem;
+            .wish-timeline-entry-date {
+              font-family: $font-mono;
+              font-size: 0.55rem;
+              color: $white-faint;
+              opacity: 0.04;
+              letter-spacing: 0.04em;
+
+              @media (max-width: 480px) {
+                font-size: 0.5rem;
+              }
             }
-          }
 
-          .wish-timeline-entry-version {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.2);
-            font-weight: 400;
-            flex-shrink: 0;
+            .wish-timeline-entry-element {
+              display: flex;
+              align-items: center;
+              gap: 0.2rem;
+              font-family: $font-mono;
+              font-size: 0.5rem;
+              color: $white-faint;
+              opacity: 0.04;
+              letter-spacing: 0.04em;
 
-            @media (max-width: 480px) {
-              font-size: 0.6rem;
-            }
-          }
-        }
-
-        .wish-timeline-entry-outcome {
-          font-size: 0.75rem;
-          font-weight: 500;
-          padding: 0.2rem 0.6rem;
-          border-radius: 100px;
-          flex-shrink: 0;
-
-          @media (max-width: 480px) {
-            font-size: 0.65rem;
-            padding: 0.15rem 0.4rem;
-          }
-
-          &.won {
-            background: rgba(126, 184, 112, 0.1);
-            color: #7eb870;
-          }
-
-          &.lost {
-            background: rgba(224, 96, 64, 0.1);
-            color: #e06040;
-          }
-        }
-      }
-
-      .wish-timeline-entry-meta {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 0.75rem;
-
-        @media (max-width: 480px) {
-          gap: 0.4rem;
-        }
-
-        .wish-timeline-entry-date {
-          font-size: 0.8rem;
-          color: rgba(255, 255, 255, 0.3);
-
-          @media (max-width: 480px) {
-            font-size: 0.7rem;
-          }
-        }
-
-        .wish-timeline-entry-element {
-          display: flex;
-          align-items: center;
-          gap: 0.3rem;
-          font-size: 0.75rem;
-          font-weight: 400;
-
-          @media (max-width: 480px) {
-            font-size: 0.65rem;
-          }
-
-          .iconify {
-            font-size: 0.9rem;
-
-            @media (max-width: 480px) {
-              font-size: 0.75rem;
+              .iconify {
+                font-size: 0.7rem;
+              }
             }
           }
         }
@@ -2129,35 +1858,29 @@
   }
 }
 
-// Gallery
+/* =========================
+   GALLERY
+========================= */
 .wish-gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.75rem;
-
-  @media (max-width: 768px) {
-    gap: 1rem;
-  }
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 2px;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
+  padding: 2px;
 
   @media (max-width: 480px) {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 
   .premium-card {
     position: relative;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
+    background: transparent;
     overflow: hidden;
     cursor: pointer;
-    transition: all 0.4s ease;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     opacity: 0;
-    transform: translateY(20px);
-
-    @media (max-width: 480px) {
-      border-radius: 12px;
-    }
+    transform: translateY(12px);
 
     &.visible {
       opacity: 1;
@@ -2165,16 +1888,10 @@
     }
 
     &:hover {
-      transform: translateY(-4px);
-      border-color: var(--card-accent, rgba(255, 255, 255, 0.1));
-      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
-
-      .wish-card-glow {
-        opacity: 1;
-      }
+      background: rgba(255, 255, 255, 0.01);
 
       .wish-card-image {
-        transform: scale(1.05);
+        transform: scale(1.03);
       }
     }
 
@@ -2182,7 +1899,7 @@
       position: relative;
       padding-top: 100%;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.01);
 
       .wish-card-image {
         position: absolute;
@@ -2191,7 +1908,8 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.5s ease;
+        transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        filter: grayscale(0.2) contrast(1.05);
       }
 
       .wish-card-glow {
@@ -2204,161 +1922,205 @@
 
       .wish-card-element {
         position: absolute;
-        top: 0.6rem;
-        left: 0.6rem;
-        width: 28px;
-        height: 28px;
+        top: 0.4rem;
+        left: 0.4rem;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
 
         @media (max-width: 480px) {
-          width: 22px;
-          height: 22px;
-          top: 0.4rem;
-          left: 0.4rem;
+          width: 18px;
+          height: 18px;
+          top: 0.3rem;
+          left: 0.3rem;
         }
 
         .iconify {
-          font-size: 14px;
-          color: #ffffff;
+          font-size: 11px;
+          color: $white;
+          opacity: 0.3;
 
           @media (max-width: 480px) {
-            font-size: 11px;
+            font-size: 9px;
           }
         }
       }
 
       .wish-card-outcome {
         position: absolute;
-        top: 0.6rem;
-        right: 0.6rem;
-        padding: 0.2rem 0.6rem;
-        border-radius: 100px;
-        font-size: 0.65rem;
-        font-weight: 500;
-        backdrop-filter: blur(8px);
+        top: 0.4rem;
+        right: 0.4rem;
+        padding: 0.1rem 0.4rem;
+        font-family: $font-mono;
+        font-size: 0.45rem;
+        letter-spacing: 0.04em;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
 
         @media (max-width: 480px) {
-          font-size: 0.55rem;
-          padding: 0.15rem 0.4rem;
-          top: 0.4rem;
-          right: 0.4rem;
+          font-size: 0.4rem;
+          padding: 0.05rem 0.3rem;
+          top: 0.3rem;
+          right: 0.3rem;
         }
 
         &.won {
-          background: rgba(126, 184, 112, 0.2);
-          color: #7eb870;
+          color: rgba(126, 184, 112, 0.15);
         }
-
         &.lost {
-          background: rgba(224, 96, 64, 0.2);
-          color: #e06040;
+          color: rgba(224, 96, 64, 0.15);
         }
       }
 
       .wish-card-version-badge {
         position: absolute;
-        bottom: 0.6rem;
-        right: 0.6rem;
-        padding: 0.15rem 0.5rem;
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 100px;
-        font-size: 0.6rem;
-        color: rgba(255, 255, 255, 0.3);
-        backdrop-filter: blur(8px);
+        bottom: 0.4rem;
+        right: 0.4rem;
+        padding: 0.05rem 0.35rem;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        font-family: $font-mono;
+        font-size: 0.45rem;
+        color: $white-faint;
+        opacity: 0.04;
+        letter-spacing: 0.04em;
 
         @media (max-width: 480px) {
-          font-size: 0.5rem;
-          padding: 0.1rem 0.35rem;
-          bottom: 0.4rem;
-          right: 0.4rem;
+          font-size: 0.4rem;
+          padding: 0.05rem 0.25rem;
+          bottom: 0.3rem;
+          right: 0.3rem;
         }
       }
     }
 
     .wish-card-content {
-      padding: 1rem;
+      padding: 0.6rem 0.75rem;
 
       @media (max-width: 480px) {
-        padding: 0.75rem;
+        padding: 0.4rem 0.5rem;
       }
 
       h3 {
-        font-size: 1rem;
-        font-weight: 500;
-        color: #ffffff;
-        margin: 0 0 0.2rem 0;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: $white;
+        opacity: 0.15;
+        margin: 0 0 0.1rem 0;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-family: $font-sans;
+        letter-spacing: 0.02em;
 
         @media (max-width: 480px) {
-          font-size: 0.85rem;
+          font-size: 0.7rem;
         }
       }
 
       .wish-card-date {
-        font-size: 0.75rem;
-        color: rgba(255, 255, 255, 0.3);
+        font-family: $font-mono;
+        font-size: 0.5rem;
+        color: $white-faint;
+        opacity: 0.04;
         margin: 0;
-
-        @media (max-width: 480px) {
-          font-size: 0.65rem;
-        }
+        letter-spacing: 0.04em;
       }
     }
   }
 }
 
-// Loading State
+/* =========================
+   EMPTY STATE
+========================= */
+.wish-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  border: 0.5px solid rgba(255, 255, 255, 0.02);
+
+  @media (max-width: 480px) {
+    padding: 2rem 1rem;
+  }
+
+  .iconify {
+    font-size: 2.5rem;
+    color: $white-faint;
+    opacity: 0.02;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    color: $white-faint;
+    opacity: 0.04;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+
+  .wish-empty-clear {
+    padding: 0.3rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    color: $white-faint;
+    opacity: 0.06;
+    font-family: $font-mono;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      opacity: 0.3;
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+}
+
+/* =========================
+   LOADING STATE
+========================= */
 .wish-loading-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 60vh;
-  gap: 1.5rem;
+  gap: 1rem;
 
   .wish-loading-spinner {
-    width: 48px;
-    height: 48px;
-    border: 3px solid rgba(255, 255, 255, 0.06);
-    border-top-color: #7ae0db;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid rgba(255, 255, 255, 0.02);
+    border-top-color: $white-faint;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
-
-    @media (max-width: 480px) {
-      width: 36px;
-      height: 36px;
-      border-width: 2px;
-    }
   }
 
   p {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.95rem;
-
-    @media (max-width: 480px) {
-      font-size: 0.85rem;
-    }
+    color: $white-faint;
+    opacity: 0.04;
+    font-family: $font-mono;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
   }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-// Modal
+/* =========================
+   MODAL
+========================= */
 .wish-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(7, 7, 7, 0.92);
   backdrop-filter: blur(20px);
   z-index: 1000;
   display: flex;
@@ -2372,25 +2134,22 @@
   }
 
   .wish-modal {
-    background: #0a0a0a;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 24px;
-    max-width: 600px;
+    background: $black;
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    max-width: 500px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
-    padding: 2rem;
+    padding: 1.5rem;
     position: relative;
-    animation: scaleIn 0.3s ease;
+    animation: scaleIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
     @media (max-width: 768px) {
-      padding: 1.5rem;
-      border-radius: 20px;
+      padding: 1.25rem;
     }
 
     @media (max-width: 480px) {
       padding: 1rem;
-      border-radius: 16px;
       max-height: 95vh;
     }
 
@@ -2403,44 +2162,41 @@
     }
 
     &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.04);
     }
 
     .wish-modal-close {
       position: sticky;
       top: 0;
       float: right;
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 50%;
-      color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.02);
+      border: 0.5px solid rgba(255, 255, 255, 0.02);
+      color: $white-faint;
+      opacity: 0.06;
       cursor: pointer;
       transition: all 0.3s ease;
       z-index: 1;
-      backdrop-filter: blur(8px);
 
       @media (max-width: 480px) {
-        width: 30px;
-        height: 30px;
+        width: 26px;
+        height: 26px;
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        transform: rotate(90deg);
+        opacity: 0.4;
+        background: rgba(255, 255, 255, 0.04);
       }
 
       .iconify {
-        font-size: 1.2rem;
+        font-size: 1rem;
 
         @media (max-width: 480px) {
-          font-size: 1rem;
+          font-size: 0.85rem;
         }
       }
     }
@@ -2448,46 +2204,43 @@
     .wish-modal-content {
       .wish-modal-image-wrapper {
         position: relative;
-        border-radius: 16px;
         overflow: hidden;
-        margin-bottom: 1.5rem;
-
-        @media (max-width: 480px) {
-          border-radius: 12px;
-          margin-bottom: 1rem;
-        }
+        margin-bottom: 1rem;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
 
         .wish-modal-image {
           width: 100%;
           aspect-ratio: 1/1;
           object-fit: cover;
+          filter: grayscale(0.2) contrast(1.05);
         }
 
         .wish-modal-element {
           position: absolute;
-          top: 1rem;
-          left: 1rem;
-          width: 40px;
-          height: 40px;
+          top: 0.75rem;
+          left: 0.75rem;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+          border: 0.5px solid rgba(255, 255, 255, 0.02);
 
           @media (max-width: 480px) {
-            width: 32px;
-            height: 32px;
-            top: 0.75rem;
-            left: 0.75rem;
+            width: 26px;
+            height: 26px;
+            top: 0.5rem;
+            left: 0.5rem;
           }
 
           .iconify {
-            font-size: 20px;
-            color: #ffffff;
+            font-size: 16px;
+            color: $white;
+            opacity: 0.3;
 
             @media (max-width: 480px) {
-              font-size: 16px;
+              font-size: 13px;
             }
           }
         }
@@ -2495,37 +2248,34 @@
 
       .wish-modal-info {
         h2 {
-          font-size: 1.8rem;
-          font-weight: 600;
-          color: #ffffff;
-          margin: 0 0 1.25rem 0;
+          font-size: 1.4rem;
+          font-weight: 400;
+          color: $white;
+          margin: 0 0 1rem 0;
+          font-family: $font-sans;
+          letter-spacing: 0.02em;
 
           @media (max-width: 480px) {
-            font-size: 1.4rem;
-            margin-bottom: 1rem;
+            font-size: 1.1rem;
           }
         }
 
         .wish-modal-details {
           display: grid;
-          gap: 0.75rem;
-
-          @media (max-width: 480px) {
-            gap: 0.5rem;
-          }
+          gap: 0.5rem;
 
           .wish-modal-detail {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 0.3rem 0;
+            border-bottom: 0.5px solid rgba(255, 255, 255, 0.01);
 
             @media (max-width: 480px) {
               flex-direction: column;
               align-items: flex-start;
-              gap: 0.2rem;
-              padding: 0.4rem 0;
+              gap: 0.1rem;
+              padding: 0.25rem 0;
             }
 
             &:last-child {
@@ -2533,49 +2283,52 @@
             }
 
             .wish-modal-detail-label {
-              font-size: 0.85rem;
-              color: rgba(255, 255, 255, 0.3);
+              font-family: $font-mono;
+              font-size: 0.55rem;
+              color: $white-faint;
+              opacity: 0.06;
+              letter-spacing: 0.08em;
+              text-transform: uppercase;
 
               @media (max-width: 480px) {
-                font-size: 0.75rem;
+                font-size: 0.5rem;
               }
             }
 
             .wish-modal-detail-value {
-              font-size: 0.95rem;
-              color: rgba(255, 255, 255, 0.7);
+              font-family: $font-mono;
+              font-size: 0.7rem;
+              color: $white-faint;
+              opacity: 0.1;
+              letter-spacing: 0.04em;
 
               @media (max-width: 480px) {
-                font-size: 0.85rem;
+                font-size: 0.65rem;
               }
 
               &.won {
-                color: #7eb870;
+                color: rgba(126, 184, 112, 0.15);
               }
-
               &.lost {
-                color: #e06040;
+                color: rgba(224, 96, 64, 0.15);
               }
 
               .iconify {
-                margin-right: 0.3rem;
-                font-size: 1rem;
-
-                @media (max-width: 480px) {
-                  font-size: 0.85rem;
-                }
+                margin-right: 0.2rem;
+                font-size: 0.8rem;
               }
 
               &.wish-modal-description {
                 text-align: right;
-                font-size: 0.85rem;
-                color: rgba(255, 255, 255, 0.5);
+                font-size: 0.65rem;
+                color: $white-faint;
+                opacity: 0.04;
                 max-width: 60%;
 
                 @media (max-width: 480px) {
                   text-align: left;
                   max-width: 100%;
-                  font-size: 0.8rem;
+                  font-size: 0.6rem;
                 }
               }
             }
@@ -2586,158 +2339,23 @@
   }
 }
 
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-// Responsive - Additional mobile improvements
-@media (max-width: 768px) {
-  .wish-archive-page {
-    padding-inline: clamp(16px, 3vw, 24px);
+/* =========================
+   REDUCED MOTION
+========================= */
+@media (prefers-reduced-motion: reduce) {
+  .wish-bg-shapes .shape,
+  .wish-hero-stats .animated-counter-value,
+  .bar-chart .bar-chart-bar {
+    animation: none !important;
+    transition: none !important;
   }
 
-  .wish-hero {
-    padding: 2rem 0 2.5rem 0;
-
-    .wish-hero-stats {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
-    }
-
-    .wish-hero-highlights {
-      gap: 0.75rem;
-
-      .wish-hero-highlight {
-        font-size: 0.75rem;
-        padding: 0.3rem 0.75rem;
-      }
-    }
-  }
-
-  .wish-stats-dashboard {
-    .wish-stats-dashboard-grid {
-      gap: 0.75rem;
-    }
-  }
-
-  .wish-charts-row {
-    gap: 0.75rem;
-  }
-
-  .wish-yearly-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .wish-fun-facts-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .wish-achievements-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .wish-gallery {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1rem;
-  }
-
-  .tab-nav {
-    .tab-nav-inner {
-      .tab-nav-item {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8rem;
-
-        span {
-          display: none;
-        }
-
-        .iconify {
-          font-size: 1.2rem;
-        }
-      }
-    }
-  }
-
-  .wish-fun-fact-featured {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 1.5rem;
-
-    .wish-fun-fact-featured-content {
-      p {
-        font-size: 1rem;
-      }
-    }
-  }
-}
-
-@media (max-width: 480px) {
-  .wish-archive-page {
-    padding-inline: 12px;
-  }
-
-  .wish-hero-stats {
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-
-    .wish-hero-stat {
-      padding: 1rem 0.75rem;
-
-      .animated-counter {
-        .animated-counter-value {
-          font-size: 1.5rem;
-        }
-        .animated-counter-label {
-          font-size: 0.7rem;
-        }
-      }
-    }
-  }
-
-  .wish-hero-highlights {
-    gap: 0.4rem;
-
-    .wish-hero-highlight {
-      font-size: 0.65rem;
-      padding: 0.2rem 0.5rem;
-    }
-  }
-
-  .wish-modal {
-    padding: 0.75rem;
-    border-radius: 12px;
-
-    .wish-modal-content {
-      .wish-modal-info {
-        h2 {
-          font-size: 1.2rem;
-        }
-
-        .wish-modal-details {
-          .wish-modal-detail {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.15rem;
-            padding: 0.3rem 0;
-
-            .wish-modal-detail-value {
-              &.wish-modal-description {
-                max-width: 100%;
-                text-align: left;
-                font-size: 0.75rem;
-              }
-            }
-          }
-        }
-      }
-    }
+  .section-reveal,
+  .stagger-card,
+  .wish-timeline-entry-premium,
+  .premium-card {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
