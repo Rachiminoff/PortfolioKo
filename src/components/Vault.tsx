@@ -26,7 +26,6 @@ type FilterChip = "all" | "pdf" | "epub";
 type DensityOption = "compact" | "comfortable" | "large";
 
 function Vault() {
-    const navigate = useNavigate();
     const [vaultItems, setVaultItems] = useState<VaultItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
