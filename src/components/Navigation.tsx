@@ -30,7 +30,7 @@ const navItems: [string, Section, string][] = [
 function Navigation() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [activeSection, setActiveSection] = useState<Section>("expertise");
+  const [activeSection, setActiveSection] = useState<Section>("main");
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,7 +57,7 @@ function Navigation() {
       // Only detect active section if not on fullscreen route
       if (!isFullscreenRoute) {
         const sections = navItems.map(([, section]) => section);
-        let currentSection: Section = "expertise";
+        let currentSection: Section = "main";
         
         for (const section of sections) {
           const element = document.getElementById(section);
@@ -108,8 +108,7 @@ function Navigation() {
     <Box className="navigation-drawer" role="navigation" aria-label="Mobile navigation">
       <Box className="drawer-header">
         <Box className="drawer-brand">
-          <Icon icon="mdi:compass" className="drawer-brand-icon" />
-          <span className="drawer-brand-name"> TDY.dev </span>
+          <span className="drawer-brand-name">TDY.dev</span>
         </Box>
         <IconButton
           className="drawer-close-button"
@@ -159,7 +158,6 @@ function Navigation() {
         <Toolbar className="navbar-toolbar">
           {/* Brand/Logo */}
           <Box className="navbar-brand">
-            <Icon icon="mdi:compass" className="navbar-brand-icon" />
             <span className="navbar-brand-name">TDY.dev</span>
           </Box>
 

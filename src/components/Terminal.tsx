@@ -4,25 +4,20 @@ import "../assets/styles/Terminal.scss";
 function Terminal() {
   return (
     <div className="terminal-section">
-
       {/* LEFT SIDE — TERMINAL */}
       <div className="terminal-container">
         <div className="terminal-window">
-
           <div className="terminal-topbar">
             <div className="terminal-dots">
               <span className="dot red"></span>
               <span className="dot yellow"></span>
               <span className="dot green"></span>
             </div>
-
-            <div className="terminal-title">
-              td.yambao — python shell
-            </div>
+            <div className="terminal-title">td.yambao — shell</div>
+            <div className="terminal-annotation">TERMINAL 01</div>
           </div>
 
           <div className="terminal-content">
-
             <div className="line blue">
               <span className="prompt-symbol">➜</span> (td@yambao)-[~/about_me]
             </div>
@@ -110,9 +105,7 @@ function Terminal() {
 
             <div className="line">
               <span className="cyan">└─$ </span>
-              <span className="white">
-                result = AboutMe().philosophy()
-              </span>
+              <span className="white">result = AboutMe().philosophy()</span>
             </div>
 
             <div className="line">
@@ -122,17 +115,16 @@ function Terminal() {
               </span>
               <span className="cursor">█</span>
             </div>
-
           </div>
         </div>
       </div>
 
       {/* RIGHT SIDE — ABOUT ME */}
       <div className="about-container">
-
         <div className="about-header">
-          <span className="about-badge">✦</span>
-          <h1 className="about-title">About Me</h1>
+          <span className="about-badge">●</span>
+          <h1 className="about-title">About</h1>
+          <span className="about-badge">●</span>
         </div>
 
         <div className="about-line">
@@ -140,29 +132,24 @@ function Terminal() {
         </div>
 
         <div className="about-text-wrapper">
-          <span className="quote-mark left">"</span>
           <p className="about-text">
             I enjoy the process of testing and debugging, even when it gets frustrating. There is something satisfying about going through broken logic, tracing issues, and gradually seeing a feature finally work the way it was intended. Ironically, that struggle is often the part I find most engaging in development.
           </p>
-          <span className="quote-mark right">"</span>
         </div>
 
         <div className="about-divider"></div>
 
         <div className="about-text-wrapper">
-          <span className="quote-mark left">"</span>
           <p className="about-text">
             I feel the most proud when a project is completed and I get to demo it to others. Seeing everything come together into a working system gives a strong sense of closure, especially after all the iterations and fixes along the way.
           </p>
-          <span className="quote-mark right">"</span>
         </div>
 
         <div className="about-footer">
-          <span className="footer-dot"></span>
-          <span className="footer-dot"></span>
-          <span className="footer-dot"></span>
+          <span className="footer-label">IDENTITY 01</span>
+          <span className="footer-divider">|</span>
+          <span className="footer-label">BUILD v1.0</span>
         </div>
-
       </div>
     </div>
   );

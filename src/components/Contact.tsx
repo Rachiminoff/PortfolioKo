@@ -195,6 +195,7 @@ function Contact() {
       className="contact-container"
     >
       <div className="contact-header">
+        <span className="header-tag">CONTACT</span>
         <h2>Let's Work Together</h2>
         
         <div className="contact-divider" />

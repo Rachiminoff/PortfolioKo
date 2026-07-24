@@ -246,24 +246,14 @@ function Expertise() {
     }
   };
 
-  // Helper to convert hex to rgb for shadow effects
-  const hexToRgb = (hex: string) => {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : { r: 124, g: 92, b: 255 };
-  };
-
   return (
     <div className={`expertise-container ${inView ? 'visible' : ''}`} id="expertise" ref={ref}>
       {/* Header */}
       <div className={`expertise-header ${inView ? 'animate-in' : ''}`}>
         <div className="header-top">
           <div>
-            <span className="header-tag">✦ Technology Stack</span>
-            <h1>Expertise &amp; Tools</h1>
+            <span className="header-tag">EXPERTISE</span>
+            <h1>Tools &amp; Technologies</h1>
             <p className="expertise-subtitle">
               Technologies I work with — scroll through the stack
             </p>
@@ -271,7 +261,7 @@ function Expertise() {
           <div className="expertise-stats">
             <div className="stat-badge">
               <Icon icon="mdi:code-tags" />
-              <span>{techStack.length}+ Technologies</span>
+              <span>{techStack.length} Technologies</span>
             </div>
             <div className="stat-badge">
               <Icon icon="mdi:star" />
@@ -309,7 +299,6 @@ function Expertise() {
       >
         <div className="tech-stack-scroll" ref={scrollRef}>
           {[...filteredTech, ...filteredTech].map((tech, index) => {
-            const rgb = hexToRgb(tech.color);
             return (
               <div
                 key={`${tech.name}-${index}`}
@@ -317,13 +306,12 @@ function Expertise() {
                 style={
                   {
                     "--tech-color": tech.color,
-                    "--tech-color-rgb": `${rgb.r}, ${rgb.g}, ${rgb.b}`,
                   } as React.CSSProperties
                 }
                 onClick={() => handleTechClick(tech)}
                 role="button"
                 tabIndex={0}
-                aria-label={`${tech.name} - ${tech.proficiency}% proficiency`}
+                aria-label={tech.name}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
@@ -338,30 +326,6 @@ function Expertise() {
                       <Icon icon="mdi:sparkle" />
                     </div>
                   )}
-                  <div className="proficiency-ring">
-                    <svg viewBox="0 0 36 36" aria-hidden="true">
-                      <path
-                        d="M18 2.0845
-                          a 15.9155 15.9155 0 0 1 0 31.831
-                          a 15.9155 15.9155 0 0 1 0 -31.831"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.05)"
-                        strokeWidth="2"
-                      />
-                      <path
-                        d="M18 2.0845
-                          a 15.9155 15.9155 0 0 1 0 31.831
-                          a 15.9155 15.9155 0 0 1 0 -31.831"
-                        fill="none"
-                        stroke={tech.color}
-                        strokeWidth="2"
-                        strokeDasharray={`${tech.proficiency}, 100`}
-                        strokeLinecap="round"
-                        className="ring-progress"
-                      />
-                    </svg>
-                    <span className="proficiency-text">{tech.proficiency}%</span>
-                  </div>
                 </div>
                 <span className="tech-name">{tech.name}</span>
                 {selectedTech === tech && (
@@ -393,7 +357,7 @@ function Expertise() {
           <span>Featured Expertise</span>
         </div>
         <div className="featured-tags">
-          {featuredTech.slice(0, 5).map((tech, idx) => (
+          {featuredTech.slice(0, 6).map((tech, idx) => (
             <div
               key={idx}
               className="skill-tag"
@@ -401,7 +365,6 @@ function Expertise() {
             >
               <Icon icon={tech.icon} />
               {tech.name}
-              <span className="skill-proficiency">{tech.proficiency}%</span>
             </div>
           ))}
         </div>

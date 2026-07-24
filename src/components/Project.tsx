@@ -62,7 +62,7 @@ function ProjectCard({ project, index }: ProjectCardProps) {
             <div className="project-card-content">
                 <div className="project-card-header">
                     <h3 className="project-title">{project.title}</h3>
-                    <Icon icon="mdi:arrow-right" className="arrow-icon" width={20} height={20} />
+                    <Icon icon="mdi:arrow-right" className="arrow-icon" width={18} height={18} />
                 </div>
                 <p className="project-subtitle">{project.subtitle}</p>
                 
@@ -96,6 +96,7 @@ function Projects() {
     return (
         <div className="projects-container" id="projects">
             <div className="projects-header">
+                <span className="header-tag">PROJECTS</span>
                 <h1>Selected Work</h1>
                 <p className="projects-subtitle">Click on any project to explore the case study</p>
             </div>

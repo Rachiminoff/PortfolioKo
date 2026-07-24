@@ -68,8 +68,9 @@ function Certificates() {
         ref={ref}
       >
         <div className="certificates__header">
-          <span className="certificates__tag">✦ Learning</span>
-          <h2 className="certificates__title">Certifications</h2>
+          <span className="certificates__tag">CERTIFICATIONS</span>
+          <h2 className="certificates__title">Certificates</h2>
+          <p className="certificates__subtitle">Professional certifications and credentials</p>
         </div>
 
         <div className="certificates__grid">
@@ -78,7 +79,7 @@ function Certificates() {
               key={cert.id}
               className={`certificates__card ${inView ? "animate-in" : ""}`}
               style={
-                { animationDelay: `${index * 100}ms` } as React.CSSProperties
+                { animationDelay: `${index * 80}ms` } as React.CSSProperties
               }
             >
               <div className="certificates__card-icon">

@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 1.1rem !important;
+  background: #070707;
 }
 
 code {
@@ -15,8 +16,7 @@ code {
 
 .main-container {
   position: relative;
-  background-color: #0d1116;
-
+  background-color: #070707;
 }
 
 a {
@@ -24,247 +24,18 @@ a {
 }
 
 a:hover {
-  color: #5000ca;
+  color: #3BE9E5;
   transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
 }
 
 p, a, h1, h2, h3, h4, h5, label, button {
-  color: white;
-  font-family: "Lato", sans-serif;
-}
-
-.navigation-bar {
-  justify-content: space-between;
-  background-color: #0d1116;
-
-  button {
-    font-size: 1.1rem;
-    font-family: "Lato", sans-serif;
-    text-transform: initial;
-    padding: 6px 10px;
-  }
-
-  svg {
-    cursor: pointer;
-  }
-}
-
-.navigation-bar-responsive {
-  span, p {
-    color: #0d1116;
-    font-family: "Lato", sans-serif;
-  }
-}
-
-.container {
-  margin-top: 64px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.header-image {
-  width: 100%;
-  height: 450px;
-
-  img {
-    width: 100%;
-    height: 450px;
-    object-fit: cover;
-  }
-}
-
-.mobile-menu-top {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  font-weight: bold;
-}
-
-.items-container {
-  padding: 5% 10%;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.light-mode {
-  background-color: #f8f9fa;
-
-  .navigation-bar {
-    background-color: #f8f9fa;
-  }
-
-  p, a, h1, h2, h3, h4, h5, label, button {
-    color: #0d1116;
-  }
-
-  a:hover {
-    color: #5000ca;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
-  }
-
-  .navigation-bar svg {
-    color: #0d1116;
-  }
-
-  .skills-container svg {
-    color: #0d1116;
-  }
-
-  .chip {
-    background-color: rgba(0, 0, 0, 0.08);
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  }
-
-  .vertical-timeline::before {
-    background-color: rgba(0, 0, 0, 0.08);
-  }
-
-  .vertical-timeline--animate .vertical-timeline-element-content.bounce-in {
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-  }
-
-  .vertical-timeline--two-columns .vertical-timeline-element-content .vertical-timeline-element-date {
-    color: gray;
-  }
-
-  .vertical-timeline-element-content-arrow {
-    border-right: 7px solid rgba(0, 0, 0, 0.08) !important;
-  }
-
-  .flex-chips .chip-title {
-    color: #0d1116;
-  }
-}
-
-@media screen {
-  @media (max-width: 768px) {
-    .items-container {
-      padding: 5% 5%;
-    }
-  }
-}
-
-/* Vault and Insights Page Styles */
-.vault-page,
-.insights-page {
-  min-height: 100vh;
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 1;
-}
-
-.vault-page-header,
-.insights-page-header {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.vault-back-button,
-.insights-back-button {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #fff;
-  padding: 0.5rem 1.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.vault-back-button:hover,
-.insights-back-button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateX(-2px);
-}
-
-.vault-page-header h1,
-.insights-page-header h1 {
-  font-size: 2rem;
-  background: linear-gradient(135deg, #fff 0%, #a8b8d8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Loading states */
-.app-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  gap: 1rem;
-}
-
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-.vault-loading-state,
-.insights-loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 2rem;
-  gap: 1rem;
-}
-
-.vault-loading-spinner,
-.insights-loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* Mobile adjustments */
-@media (max-width: 768px) {
-  .vault-page,
-  .insights-page {
-    padding: 1rem;
-  }
-  
-  .vault-page-header,
-  .insights-page-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .vault-page-header h1,
-  .insights-page-header h1 {
-    font-size: 1.5rem;
-  }
+  color: #F5F5F5;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* ============================================
-   BOOT SEQUENCE - Premium System Initialization
-   Futuristic, cinematic, minimal
+   BOOT SEQUENCE - Swiss Style
+   Minimal, clean, architectural
    ============================================ */
 
 .boot-screen {
@@ -274,11 +45,11 @@ p, a, h1, h2, h3, h4, h5, label, button {
   width: 100vw;
   height: 100vh;
   z-index: 9999;
-  background: #0d1116;
+  background: #070707;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 600ms ease-in-out;
+  transition: opacity 500ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity;
   pointer-events: all;
   overflow: hidden;
@@ -289,10 +60,6 @@ p, a, h1, h2, h3, h4, h5, label, button {
   }
 }
 
-/* ============================================
-   AMBIENT BACKGROUND
-   ============================================ */
-
 .boot-background {
   position: absolute;
   top: 0;
@@ -302,37 +69,6 @@ p, a, h1, h2, h3, h4, h5, label, button {
   overflow: hidden;
 }
 
-/* Subtle moving gradient overlay */
-.boot-ambient-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 80vmin;
-  height: 80vmin;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle at center,
-    rgba(80, 0, 202, 0.08) 0%,
-    rgba(80, 0, 202, 0.03) 30%,
-    transparent 60%
-  );
-  border-radius: 50%;
-  animation: ambientPulse 4s ease-in-out infinite alternate;
-  will-change: transform, opacity;
-}
-
-@keyframes ambientPulse {
-  0% {
-    transform: translate(-50%, -50%) scale(0.9);
-    opacity: 0.5;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.3);
-    opacity: 1;
-  }
-}
-
-/* Minimal grid overlay for depth */
 .boot-grid-overlay {
   position: absolute;
   top: 0;
@@ -340,64 +76,12 @@ p, a, h1, h2, h3, h4, h5, label, button {
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-  background-size: 60px 60px;
-  opacity: 0.3;
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.5;
   pointer-events: none;
 }
-
-/* ============================================
-   FLOATING PARTICLES
-   ============================================ */
-
-.boot-particles {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.boot-particle {
-  position: absolute;
-  width: var(--size, 2px);
-  height: var(--size, 2px);
-  background: rgba(255, 255, 255, var(--opacity, 0.15));
-  border-radius: 50%;
-  top: var(--y, 50%);
-  left: var(--x, 50%);
-  opacity: 0;
-  animation: particleDrift var(--duration, 4s) ease-in-out var(--delay, 0s) infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes particleDrift {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.5);
-  }
-  15% {
-    opacity: var(--opacity, 0.15);
-  }
-  50% {
-    opacity: calc(var(--opacity, 0.15) * 1.5);
-    transform: translate(calc(var(--x, 50%) * -0.3), calc(var(--y, 50%) * -0.3)) scale(1.2);
-  }
-  85% {
-    opacity: var(--opacity, 0.15);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(calc(var(--x, 50%) * 0.5), calc(var(--y, 50%) * 0.5)) scale(0.5);
-  }
-}
-
-/* ============================================
-   MAIN CONTENT
-   ============================================ */
 
 .boot-content {
   position: relative;
@@ -405,349 +89,190 @@ p, a, h1, h2, h3, h4, h5, label, button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 24px;
   z-index: 2;
   padding: 2rem;
   max-width: 90vw;
 }
 
-/* ============================================
-   STATUS TEXT WITH FADE TRANSITIONS
-   ============================================ */
+.boot-brand {
+  margin-bottom: 8px;
+}
+
+.boot-brand-name {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.06);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
 
 .boot-status-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 3.5rem;
-  position: relative;
+  min-height: 40px;
 }
 
 .boot-status {
-  font-family: "Lato", sans-serif;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-weight: 300;
-  font-size: clamp(1.1rem, 2.5vw, 1.8rem);
-  letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(0.8rem, 1.5vw, 1.1rem);
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.2);
   text-align: center;
-  animation: statusFade 0.8s ease-out forwards;
-  position: relative;
-  text-shadow: 0 0 30px rgba(80, 0, 202, 0.05);
   user-select: none;
 }
 
-@keyframes statusFade {
-  0% {
+.boot-ellipsis {
+  display: inline-block;
+  margin-left: 2px;
+  
+  span {
+    display: inline-block;
+    animation: bootEllipsis 1.4s ease-in-out infinite;
     opacity: 0;
-    transform: translateY(8px);
-    filter: blur(2px);
-  }
-  30% {
-    opacity: 0.5;
-    transform: translateY(2px);
-    filter: blur(0.5px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
+    
+    &:nth-child(1) { animation-delay: 0s; }
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
   }
 }
 
-/* "Ready." state with subtle emphasis */
-.boot-status-ready {
-  color: rgba(255, 255, 255, 1);
-  text-shadow: 0 0 40px rgba(80, 0, 202, 0.15);
-  animation: statusReady 1s ease-out forwards;
-}
-
-@keyframes statusReady {
-  0% {
-    opacity: 0.8;
+@keyframes bootEllipsis {
+  0%, 80%, 100% {
+    opacity: 0;
     transform: translateY(0);
-    filter: blur(0);
   }
-  50% {
+  40% {
     opacity: 1;
     transform: translateY(-2px);
-    filter: blur(0);
-    text-shadow: 0 0 60px rgba(80, 0, 202, 0.25);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
   }
 }
-
-/* ============================================
-   PREMIUM LOADING BAR
-   ============================================ */
 
 .boot-progress-wrapper {
-  width: clamp(200px, 30vw, 350px);
-  height: 2px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 4px;
+  width: clamp(160px, 25vw, 280px);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.04);
   overflow: hidden;
   position: relative;
-  opacity: 0;
-  animation: progressReveal 0.6s ease-out 0.3s forwards;
-}
-
-@keyframes progressReveal {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 .boot-progress-bar {
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(80, 0, 202, 0.4),
-    rgba(80, 0, 202, 0.9),
-    rgba(120, 40, 220, 1),
-    rgba(80, 0, 202, 0.9),
-    rgba(80, 0, 202, 0.4)
-  );
-  background-size: 200% 100%;
-  border-radius: 4px;
-  transition: width 0.15s cubic-bezier(0.65, 0, 0.35, 1);
+  background: rgba(59, 233, 229, 0.15);
+  transition: width 0.1s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: width;
-  position: relative;
-  animation: progressGlow 2s ease-in-out infinite;
-}
-
-/* Soft glow on the progress bar */
-@keyframes progressGlow {
-  0%, 100% {
-    box-shadow: 0 0 8px rgba(80, 0, 202, 0.2);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(80, 0, 202, 0.4);
-  }
-}
-
-/* Shimmer effect */
-.boot-progress-bar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.08),
-    transparent
-  );
-  animation: shimmer 2.5s ease-in-out infinite;
-  border-radius: 4px;
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
 }
 
 /* ============================================
-   SYSTEM INDICATOR DOTS
+   APP LOADING STATE
    ============================================ */
 
-.boot-system-indicator {
+.app-loading {
   display: flex;
-  gap: 6px;
-  margin-top: 0.5rem;
-  opacity: 0;
-  animation: indicatorReveal 1s ease-out 0.8s forwards;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #070707;
 }
 
-@keyframes indicatorReveal {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.loading-spinner {
+  width: 24px;
+  height: 24px;
+  border: 0.5px solid rgba(255, 255, 255, 0.04);
+  border-top: 0.5px solid rgba(59, 233, 229, 0.2);
+  animation: spin 0.8s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
-.boot-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  animation: dotPulse 1.8s ease-in-out infinite;
-}
-
-.boot-dot:nth-child(1) {
-  animation-delay: 0s;
-}
-.boot-dot:nth-child(2) {
-  animation-delay: 0.3s;
-}
-.boot-dot:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
-@keyframes dotPulse {
-  0%, 100% {
-    opacity: 0.2;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 0.6;
-    transform: scale(1.2);
-  }
-}
-
-/* ============================================
-   APP REVEAL STATES
-   ============================================ */
-
-.app-hidden {
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-
-.app-revealed {
-  opacity: 1;
-  transition: opacity 1s ease 0.3s;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ============================================
    REDUCED MOTION PREFERENCE
-   Graceful degradation for accessibility
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
   .boot-screen {
-    transition-duration: 400ms;
+    transition-duration: 300ms;
     
     &.boot-fade-out {
-      transition-duration: 400ms;
+      transition-duration: 300ms;
     }
   }
   
   .boot-status {
     animation: none;
     opacity: 1;
-    transform: none;
-    filter: none;
   }
   
-  .boot-status-ready {
-    animation: none;
-    text-shadow: 0 0 20px rgba(80, 0, 202, 0.1);
-  }
-  
-  .boot-ambient-glow {
-    animation: none;
-    opacity: 0.3;
-  }
-  
-  .boot-progress-wrapper {
+  .boot-ellipsis span {
     animation: none;
     opacity: 1;
   }
   
   .boot-progress-bar {
-    transition-duration: 0.1s;
-    
-    &::after {
-      animation: none;
-    }
+    transition-duration: 0.05s;
   }
   
-  .boot-progress-bar {
+  .loading-spinner {
     animation: none;
-  }
-  
-  .boot-particle {
-    animation: none;
-    opacity: 0.1;
-    display: none;
-  }
-  
-  .boot-system-indicator {
-    animation: none;
-    opacity: 0.5;
-  }
-  
-  .boot-dot {
-    animation: none;
-    opacity: 0.5;
+    border-top-color: rgba(255, 255, 255, 0.1);
   }
 }
 
 /* ============================================
-   RESPONSIVE ADJUSTMENTS
+   RESPONSIVE
    ============================================ */
 
 @media (max-width: 768px) {
   .boot-content {
-    gap: 1.5rem;
+    gap: 20px;
     padding: 1.5rem;
   }
   
   .boot-status {
-    font-size: clamp(0.9rem, 3vw, 1.4rem);
-    letter-spacing: 0.1em;
-  }
-  
-  .boot-status-wrapper {
-    min-height: 2.8rem;
+    font-size: clamp(0.7rem, 2.5vw, 0.9rem);
   }
   
   .boot-progress-wrapper {
-    width: clamp(160px, 50vw, 280px);
+    width: clamp(140px, 40vw, 220px);
   }
   
-  .boot-ambient-glow {
-    width: 100vmin;
-    height: 100vmin;
-  }
-  
-  .boot-grid-overlay {
-    background-size: 40px 40px;
+  .boot-brand-name {
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
-  .boot-status {
-    font-size: clamp(0.8rem, 3.5vw, 1.1rem);
-    letter-spacing: 0.08em;
+  .boot-content {
+    gap: 16px;
+    padding: 1rem;
   }
   
-  .boot-status-wrapper {
-    min-height: 2.2rem;
+  .boot-status {
+    font-size: clamp(0.6rem, 3vw, 0.8rem);
   }
   
   .boot-progress-wrapper {
-    width: clamp(140px, 60vw, 200px);
+    width: clamp(120px, 50vw, 180px);
   }
   
-  .boot-content {
-    gap: 1.2rem;
-    padding: 1rem;
+  .boot-grid-overlay {
+    background-size: 32px 32px;
+  }
+  
+  .boot-brand-name {
+    font-size: 0.85rem;
   }
 }
 
-/* ========================================
+/* ============================================
    LAYOUTS
-======================================== */
+   ============================================ */
 
-/* Default Layout */
 .default-layout {
   display: flex;
   flex-direction: column;
@@ -760,7 +285,6 @@ p, a, h1, h2, h3, h4, h5, label, button {
   z-index: 1;
 }
 
-/* Fullscreen Layout */
 .fullscreen-layout {
   position: fixed;
   top: 0;
@@ -772,101 +296,7 @@ p, a, h1, h2, h3, h4, h5, label, button {
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 100;
-  background: #0a0a0a;
-}
-
-/* Ensure fullscreen pages take full viewport */
-.fullscreen-layout > * {
-  min-height: 100%;
-  width: 100%;
-}
-
-/* Remove any default padding/margins from fullscreen pages */
-.fullscreen-layout .vault-container,
-.fullscreen-layout .insights-container {
-  padding: 0;
-  margin: 0;
-  min-height: 100vh;
-  width: 100%;
-  max-width: none;
-  border-radius: 0;
-}
-
-/* Ensure fullscreen pages have no max-width restrictions */
-.fullscreen-layout .vault-header,
-.fullscreen-layout .insights-header {
-  max-width: none;
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
-.fullscreen-layout .vault-main,
-.fullscreen-layout .insights-main {
-  max-width: none;
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
-/* Override any container max-width */
-.fullscreen-layout .vault-container,
-.fullscreen-layout .insights-container {
-  max-width: none !important;
-}
-
-/* Remove any inherited margins */
-.fullscreen-layout .vault-container::before,
-.fullscreen-layout .vault-container::after,
-.fullscreen-layout .insights-container::before,
-.fullscreen-layout .insights-container::after {
-  display: none;
-}
-
-/* Responsive adjustments for fullscreen */
-@media screen and (max-width: 768px) {
-  .fullscreen-layout .vault-header,
-  .fullscreen-layout .insights-header {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .fullscreen-layout .vault-main,
-  .fullscreen-layout .insights-main {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .fullscreen-layout .vault-header,
-  .fullscreen-layout .insights-header {
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
-  }
-  
-  .fullscreen-layout .vault-main,
-  .fullscreen-layout .insights-main {
-    padding-left: 0.6rem;
-    padding-right: 0.6rem;
-  }
-}
-
-/* ========================================
-   FULLSCREEN LAYOUT
-   - No constraints, no padding, full viewport
-======================================== */
-
-.fullscreen-layout {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  z-index: 100;
-  background: #0a0a0a;
+  background: #070707;
   margin: 0;
   padding: 0;
 }
@@ -879,7 +309,10 @@ p, a, h1, h2, h3, h4, h5, label, button {
   padding: 0 !important;
 }
 
-/* Ensure fullscreen pages occupy full width */
+/* ============================================
+   FULLSCREEN PAGES
+   ============================================ */
+
 .fullscreen-layout .insights-container,
 .fullscreen-layout .vault-container {
   width: 100%;
@@ -889,7 +322,6 @@ p, a, h1, h2, h3, h4, h5, label, button {
   border-radius: 0 !important;
 }
 
-/* Remove any inherited constraints */
 .fullscreen-layout .insights-hero,
 .fullscreen-layout .insights-controls-section,
 .fullscreen-layout .insights-main,
@@ -921,17 +353,4 @@ p, a, h1, h2, h3, h4, h5, label, button {
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
   }
-}
-
-/* Default Layout */
-.default-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.default-layout-main {
-  flex: 1;
-  position: relative;
-  z-index: 1;
 }

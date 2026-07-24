@@ -27,28 +27,23 @@ const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
 const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStatsPage'));
 
-// Boot Sequence Component
+// Boot Sequence Component - Swiss Style
 function BootSequence({ onComplete }: { onComplete: () => void }) {
-  const [currentStatusIndex, setCurrentStatusIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [shouldRender, setShouldRender] = useState(true);
-  const [showReady, setShowReady] = useState(false);
+  const [status, setStatus] = useState('Initializing');
   const animationFrameRef = useRef<number | undefined>(undefined);
   const startTimeRef = useRef<number | undefined>(undefined);
 
   const statusMessages = [
-    "Initializing portfolio...",
-    "Loading interface...",
-    "Preparing projects...",
-    "Compiling experience...",
-    "Connecting components...",
-    "Rendering timeline...",
-    "Loading terminal...",
-    "Decrypting archive...",
-    "Unlocking insights...",
-    "Synchronizing animations...",
-    "Finalizing experience..."
+    'Initializing',
+    'Loading interface',
+    'Preparing modules',
+    'Compiling assets',
+    'Connecting components',
+    'Rendering layout',
+    'Finalizing'
   ];
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -61,17 +56,14 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
           setShouldRender(false);
           onComplete();
         }, 400);
-      }, 1000);
+      }, 800);
       return () => clearTimeout(timer);
     }
 
-    const totalDuration = 1800;
+    const totalDuration = 1600;
     const statusDuration = totalDuration / statusMessages.length;
-    const readyDelay = 200;
 
-    let statusInterval: NodeJS.Timeout;
     let statusIndex = 0;
-
     startTimeRef.current = Date.now();
 
     const animateProgress = () => {
@@ -80,85 +72,61 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
       const eased = 1 - Math.pow(1 - rawProgress, 3);
       setProgress(eased * 100);
 
+      const newStatusIndex = Math.min(
+        Math.floor((elapsed / totalDuration) * statusMessages.length),
+        statusMessages.length - 1
+      );
+      if (newStatusIndex !== statusIndex) {
+        statusIndex = newStatusIndex;
+        setStatus(statusMessages[statusIndex]);
+      }
+
       if (rawProgress < 1) {
         animationFrameRef.current = requestAnimationFrame(animateProgress);
-      }
-    };
-
-    statusInterval = setInterval(() => {
-      if (statusIndex < statusMessages.length - 1) {
-        statusIndex++;
-        setCurrentStatusIndex(statusIndex);
       } else {
-        clearInterval(statusInterval);
-        setShowReady(true);
-        
         setTimeout(() => {
           setIsVisible(false);
           setTimeout(() => {
             setShouldRender(false);
             onComplete();
-          }, 600);
-        }, readyDelay);
+          }, 500);
+        }, 200);
       }
-    }, statusDuration);
+    };
 
     animateProgress();
 
     return () => {
-      if (statusInterval) clearInterval(statusInterval);
       if (animationFrameRef.current !== undefined) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [onComplete, prefersReducedMotion, statusMessages.length]);
+  }, [onComplete, prefersReducedMotion]);
 
   if (!shouldRender) return null;
-
-  const currentStatus = showReady ? "Ready." : statusMessages[currentStatusIndex];
-  const isReady = showReady;
 
   return (
     <div className={`boot-screen ${!isVisible ? 'boot-fade-out' : ''}`}>
       <div className="boot-background">
-        <div className="boot-ambient-glow" />
         <div className="boot-grid-overlay" />
       </div>
-      <div className="boot-particles">
-        {[...Array(12)].map((_, i) => (
-          <div 
-            key={i}
-            className="boot-particle"
-            style={{
-              '--delay': `${i * 0.12}s`,
-              '--x': `${10 + Math.random() * 80}%`,
-              '--y': `${10 + Math.random() * 80}%`,
-              '--size': `${1.5 + Math.random() * 3}px`,
-              '--duration': `${4 + Math.random() * 3}s`,
-              '--opacity': `${0.1 + Math.random() * 0.2}`
-            } as React.CSSProperties}
-          />
-        ))}
-      </div>
       <div className="boot-content">
-        <div className="boot-status-wrapper" key={currentStatus}>
-          <div className={`boot-status ${isReady ? 'boot-status-ready' : ''}`}>
-            {currentStatus}
+        <div className="boot-brand">
+          <span className="boot-brand-name">TDY.dev</span>
+        </div>
+        <div className="boot-status-wrapper">
+          <div className="boot-status">
+            {status}
+            <span className="boot-ellipsis">
+              <span>.</span><span>.</span><span>.</span>
+            </span>
           </div>
         </div>
         <div className="boot-progress-wrapper">
           <div 
             className="boot-progress-bar"
-            style={{ 
-              width: `${progress}%`,
-              opacity: isVisible ? 1 : 0
-            }}
+            style={{ width: `${progress}%` }}
           />
-        </div>
-        <div className="boot-system-indicator">
-          <span className="boot-dot" />
-          <span className="boot-dot" />
-          <span className="boot-dot" />
         </div>
       </div>
     </div>
@@ -196,7 +164,6 @@ function AppContent() {
     });
   }, [location.pathname]);
 
-  // Wait for authentication to complete
   useEffect(() => {
     if (!archiveLoading) {
       const timer = setTimeout(() => {
@@ -206,22 +173,14 @@ function AppContent() {
     }
   }, [archiveLoading]);
 
-  console.log('App - Current path:', location.pathname);
-  console.log('App - Archive unlocked:', isArchiveUnlocked);
-  console.log('App - Archive loading:', archiveLoading);
-  console.log('App - Is ready:', isReady);
-
-  // Show loading state while authenticating
   if (!isReady) {
     return (
       <div className="app-loading">
         <div className="loading-spinner" />
-        <p>Loading...</p>
       </div>
     );
   }
 
-  // Check if current route is fullscreen
   const isFullscreenRoute = location.pathname === '/archive' ||
                             location.pathname === '/vault' || 
                             location.pathname === '/insights' || 
@@ -239,8 +198,6 @@ function AppContent() {
             </DefaultLayoutWithSections>
           } 
         />
-
-        {/* Only the project details route - no ProjectsPage */}
         <Route 
           path="/projects/:slug" 
           element={
@@ -249,7 +206,6 @@ function AppContent() {
             </DefaultLayout>
           } 
         />
-        
         <Route 
           path="/archive" 
           element={
@@ -315,7 +271,6 @@ function App() {
     <Suspense fallback={
       <div className="app-loading">
         <div className="loading-spinner" />
-        <p>Loading...</p>
       </div>
     }>
       {showBoot ? (

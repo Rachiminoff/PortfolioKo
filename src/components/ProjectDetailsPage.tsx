@@ -63,17 +63,17 @@ const ProjectGallery: React.FC<{ images: string[]; title: string }> = ({ images,
                     />
                     <div className="gallery-overlay">
                         <span className="gallery-hint">
-                            <Icon icon="mdi:expand" width={20} height={20} />
+                            <Icon icon="mdi:expand" width={18} height={18} />
                             Click to expand
                         </span>
                     </div>
                     {images.length > 1 && (
                         <>
                             <button className="gallery-nav prev" onClick={prevSlide} aria-label="Previous image">
-                                <Icon icon="mdi:chevron-left" width={24} height={24} />
+                                <Icon icon="mdi:chevron-left" width={22} height={22} />
                             </button>
                             <button className="gallery-nav next" onClick={nextSlide} aria-label="Next image">
-                                <Icon icon="mdi:chevron-right" width={24} height={24} />
+                                <Icon icon="mdi:chevron-right" width={22} height={22} />
                             </button>
                             <div className="gallery-counter">
                                 {current + 1} / {images.length}
@@ -161,7 +161,7 @@ const HighlightCard: React.FC<{ icon: string; title: string; description: string
 }) => (
     <div className="highlight-card">
         <div className="highlight-icon-wrapper">
-            <Icon icon={icon} width={28} height={28} />
+            <Icon icon={icon} width={24} height={24} />
         </div>
         <h4 className="highlight-title">{title}</h4>
         <p className="highlight-description">{description}</p>
@@ -236,9 +236,9 @@ const ProjectDetailsPage: React.FC = () => {
     if (!project) return null;
 
     const statusColor = {
-        'Active': '#22c55e',
-        'Completed': '#3b82f6',
-        'In Development': '#eab308',
+        'Active': '#3BE9E5',
+        'Completed': '#3BE9E5',
+        'In Development': '#3BE9E5',
         'Archived': '#6b7280'
     };
 
@@ -272,7 +272,7 @@ const ProjectDetailsPage: React.FC = () => {
             {/* Back Button - Sticky */}
             <div className={`back-button-container ${showBackButton ? 'visible' : ''}`}>
                 <Link to="/projects" className="back-button sticky-back">
-                    <Icon icon="mdi:arrow-left" width={20} height={20} />
+                    <Icon icon="mdi:arrow-left" width={18} height={18} />
                     <span>Back to Projects</span>
                 </Link>
             </div>
@@ -281,7 +281,7 @@ const ProjectDetailsPage: React.FC = () => {
             <section className="details-hero" id="hero" ref={heroRef}>
                 {/* Regular Back Button (visible at top) */}
                 <Link to="/projects" className="back-button hero-back">
-                    <Icon icon="mdi:arrow-left" width={20} height={20} />
+                    <Icon icon="mdi:arrow-left" width={18} height={18} />
                     <span>Back to Projects</span>
                 </Link>
 
@@ -438,7 +438,7 @@ const ProjectDetailsPage: React.FC = () => {
                         <div className="dev-notes-content">
                             {project.devNotes.map((note, i) => (
                                 <div key={i} className="dev-note">
-                                    <Icon icon="mdi:note-text" width={20} height={20} />
+                                    <Icon icon="mdi:note-text" width={18} height={18} />
                                     <p>{note}</p>
                                 </div>
                             ))}
@@ -471,7 +471,7 @@ const ProjectDetailsPage: React.FC = () => {
                     <h2 className="section-title">Resources</h2>
                     <div className="resources-grid">
                         <a href={project.link} target="_blank" rel="noreferrer" className="resource-card">
-                            <Icon icon="mdi:github" width={24} height={24} />
+                            <Icon icon="mdi:github" width={22} height={22} />
                             <span className="resource-label">GitHub Repository</span>
                             <span className="resource-arrow">
                                 <Icon icon="mdi:arrow-right" width={16} height={16} />
@@ -479,7 +479,7 @@ const ProjectDetailsPage: React.FC = () => {
                         </a>
                         {project.liveDemo && (
                             <a href={project.liveDemo} target="_blank" rel="noreferrer" className="resource-card">
-                                <Icon icon="mdi:open-in-new" width={24} height={24} />
+                                <Icon icon="mdi:open-in-new" width={22} height={22} />
                                 <span className="resource-label">Live Demo</span>
                                 <span className="resource-arrow">
                                     <Icon icon="mdi:arrow-right" width={16} height={16} />
@@ -488,7 +488,7 @@ const ProjectDetailsPage: React.FC = () => {
                         )}
                         {project.itchLink && (
                             <a href={project.itchLink} target="_blank" rel="noreferrer" className="resource-card">
-                                <Icon icon="mdi:download" width={24} height={24} />
+                                <Icon icon="mdi:download" width={22} height={22} />
                                 <span className="resource-label">Download Demo</span>
                                 <span className="resource-arrow">
                                     <Icon icon="mdi:arrow-right" width={16} height={16} />

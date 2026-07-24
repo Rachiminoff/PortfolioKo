@@ -1,6 +1,15 @@
 /* ========================================
-   PDF VIEWER - Fullscreen Overlay
+   PDF VIEWER - SWISS STYLE
 ======================================== */
+
+$cyan: #3BE9E5;
+$black: #070707;
+$dark: #0F0F0F;
+$gray-dark: #1A1A1A;
+$white: #F5F5F5;
+$white-dim: rgba(255, 255, 255, 0.7);
+$white-faint: rgba(255, 255, 255, 0.3);
+$font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 .pdf-viewer {
     position: fixed;
@@ -8,8 +17,9 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at top, rgba(120, 80, 120, 0.22), rgba(0, 0, 0, 0.93));
-    backdrop-filter: blur(14px);
+    background: rgba(7, 7, 7, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +27,16 @@
     padding: 2.5vh 2.5vw;
     overflow-y: auto;
     overflow-x: hidden;
-    animation: viewerFade 0.2s ease;
+    animation: viewerFade 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+    @media (max-width: 768px) {
+        padding: 1vh 1vw;
+    }
+
+    @media (max-width: 480px) {
+        padding: 0;
+        align-items: center;
+    }
 }
 
 .pdf-window {
@@ -29,131 +48,209 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 16px;
-    background: rgba(24, 24, 24, 0.88);
-    backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.72);
-    animation: windowPop 0.22s ease;
+    background: $black;
+    border: 0.5px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+    animation: windowPop 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     flex-shrink: 0;
     margin: auto;
-}
+    border-radius: 0;
 
-.pdf-window::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    pointer-events: none;
-    border-radius: 16px;
+    @media (max-width: 768px) {
+        width: min(1700px, 98vw);
+        height: min(1100px, 98vh);
+        max-width: 98vw;
+        max-height: 98vh;
+    }
+
+    @media (max-width: 480px) {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        margin: 0;
+    }
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        pointer-events: none;
+    }
 }
 
 .pdf-window-topbar {
-    height: 50px;
-    min-height: 50px;
-    background: linear-gradient(to bottom, #363636, #252525);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    height: 48px;
+    min-height: 48px;
+    background: $dark;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1rem;
+    padding: 0 16px;
     flex-shrink: 0;
+
+    @media (max-width: 768px) {
+        height: 44px;
+        min-height: 44px;
+        padding: 0 12px;
+    }
+
+    @media (max-width: 480px) {
+        height: 40px;
+        min-height: 40px;
+        padding: 0 10px;
+    }
 }
 
 .window-left {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 12px;
     min-width: 0;
+
+    @media (max-width: 768px) {
+        gap: 8px;
+    }
 }
 
 .window-controls {
     display: flex;
-    gap: 0.5rem;
+    gap: 6px;
     flex-shrink: 0;
-}
 
-.window-controls span {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-}
+    span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        opacity: 0.3;
 
-.window-controls .red {
-    background: #ff5f57;
-}
+        &.red {
+            background: #ff5f57;
+        }
 
-.window-controls .yellow {
-    background: #febc2e;
-}
+        &.yellow {
+            background: #febc2e;
+        }
 
-.window-controls .green {
-    background: #28c840;
+        &.green {
+            background: #28c840;
+        }
+    }
 }
 
 .window-title {
-    color: rgba(255, 255, 255, 0.88);
-    font-size: 0.85rem;
-    font-weight: 500;
+    color: $white-faint;
+    font-family: $font-mono;
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 280px;
+
+    @media (max-width: 768px) {
+        max-width: 120px;
+        font-size: 0.65rem;
+    }
+
+    @media (max-width: 480px) {
+        max-width: 80px;
+        font-size: 0.6rem;
+    }
 }
 
 .window-actions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
     flex-shrink: 0;
+
+    @media (max-width: 768px) {
+        gap: 6px;
+    }
 }
 
 .window-btn {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.85);
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 0.5px solid rgba(255, 255, 255, 0.04);
+    color: $white-faint;
+    padding: 4px 12px;
     cursor: pointer;
-    transition: 0.2s ease;
-    font-size: 0.8rem;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    font-family: $font-mono;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
     white-space: nowrap;
-}
+    border-radius: 0;
 
-.window-btn:hover {
-    background: rgba(255, 255, 255, 0.12);
+    &:hover {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.08);
+        color: $white;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 0.6rem;
+        padding: 3px 10px;
+    }
+
+    @media (max-width: 480px) {
+        font-size: 0.55rem;
+        padding: 2px 8px;
+    }
 }
 
 .window-close {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(255, 255, 255, 0.06);
-    color: white;
-    font-size: 1.1rem;
+    width: 30px;
+    height: 30px;
+    border: 0.5px solid rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.01);
+    color: $white-faint;
+    font-size: 1rem;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     flex-shrink: 0;
-}
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0;
 
-.window-close:hover {
-    background: #ff5f57;
+    &:hover {
+        background: rgba(255, 71, 87, 0.1);
+        border-color: rgba(255, 71, 87, 0.2);
+        color: $white;
+    }
+
+    @media (max-width: 768px) {
+        width: 28px;
+        height: 28px;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 480px) {
+        width: 24px;
+        height: 24px;
+        font-size: 0.8rem;
+    }
 }
 
 .pdf-frame-wrapper {
     position: relative;
     flex: 1;
     min-height: 0;
-    background: #111111;
-}
+    background: $black;
 
-.pdf-frame-wrapper iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    background: white;
-    display: block;
+    iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background: $white;
+        display: block;
+    }
 }
 
 .viewer-loading {
@@ -162,10 +259,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    font-size: 1rem;
+    background: $black;
+    color: $white-faint;
+    font-family: $font-mono;
+    font-size: 0.8rem;
+    font-weight: 300;
+    letter-spacing: 0.06em;
     z-index: 5;
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 24px;
+        height: 0.5px;
+        background: rgba(255, 255, 255, 0.04);
+    }
 }
 
 /* ========================================
@@ -183,7 +294,7 @@
 
 @keyframes windowPop {
     from {
-        transform: scale(0.96);
+        transform: scale(0.98);
         opacity: 0;
     }
     to {
@@ -209,72 +320,46 @@
     }
 }
 
-@media (max-width: 768px) {
+/* ========================================
+   REDUCED MOTION
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
     .pdf-viewer {
-        padding: 1vh 1vw;
+        animation: none;
     }
-    
+
     .pdf-window {
-        width: min(1700px, 98vw);
-        height: min(1100px, 98vh);
-        max-width: 98vw;
-        max-height: 98vh;
-        border-radius: 12px;
-    }
-    
-    .pdf-window::before {
-        border-radius: 12px;
-    }
-    
-    .window-title {
-        max-width: 120px;
-        font-size: 0.75rem;
-    }
-    
-    .window-btn {
-        font-size: 0.7rem;
-        padding: 0.3rem 0.6rem;
-    }
-    
-    .window-close {
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
+        animation: none;
     }
 }
 
-@media (max-width: 480px) {
+/* ========================================
+   PRINT
+======================================== */
+
+@media print {
     .pdf-viewer {
+        position: static;
+        background: white;
         padding: 0;
-        align-items: center;
     }
-    
+
     .pdf-window {
-        width: 100vw;
-        height: 100vh;
-        max-width: 100vw;
-        max-height: 100vh;
-        border-radius: 0;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        border: none;
+        box-shadow: none;
         margin: 0;
     }
-    
-    .pdf-window::before {
-        border-radius: 0;
+
+    .pdf-window-topbar {
+        display: none;
     }
-    
-    .window-title {
-        max-width: 80px;
-        font-size: 0.7rem;
-    }
-    
-    .window-btn {
-        font-size: 0.65rem;
-        padding: 0.25rem 0.5rem;
-    }
-    
-    .window-close {
-        width: 28px;
-        height: 28px;
-        font-size: 0.9rem;
+
+    .pdf-frame-wrapper {
+        height: 100vh;
     }
 }
