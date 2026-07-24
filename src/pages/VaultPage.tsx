@@ -38,7 +38,7 @@ const VaultPage: React.FC = () => {
 
   return (
     <div className="vault-page">
-      {/* Ambient Background */}
+      {/* Background Layers */}
       <div className="vault-bg-grid" />
       <div className="vault-ambient-shapes">
         <div className="shape shape-1" />
@@ -48,32 +48,34 @@ const VaultPage: React.FC = () => {
       <div className="vault-vignette" />
 
       {/* Header */}
-      <div className="vault-page-header">
+      <header className="vault-page-header">
         <button 
           className="vault-back-button"
           onClick={() => navigate('/archive')}
           aria-label="Back to archive"
         >
           <Icon icon="mdi:arrow-left" />
-          Back
+          <span>Back</span>
         </button>
         <div className="vault-header-divider" />
         <h1 className="vault-page-title">Vault</h1>
-        <span className="vault-header-badge">
+        <div className="vault-header-badge">
           <span className="badge-dot" />
-          Encrypted
-        </span>
-      </div>
-
-      {/* Content */}
-      <Suspense fallback={
-        <div className="vault-loading-state">
-          <div className="vault-loading-spinner" />
-          <p>Loading vault contents</p>
+          <span>Encrypted</span>
         </div>
-      }>
-        <Vault />
-      </Suspense>
+      </header>
+
+      {/* Vault Content */}
+      <div className="vault-content-wrapper">
+        <Suspense fallback={
+          <div className="vault-loading-state">
+            <div className="vault-loading-spinner" />
+            <p>Loading vault contents</p>
+          </div>
+        }>
+          <Vault />
+        </Suspense>
+      </div>
     </div>
   );
 };

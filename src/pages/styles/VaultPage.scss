@@ -1,17 +1,12 @@
 /* =========================
-   VARIABLES - MATCHING MAIN.SCSS
+   VARIABLES
 ========================= */
 $black: #070707;
 $dark: #0F0F0F;
-$gray-dark: #1A1A1A;
-$gray: #232323;
 $white: #F5F5F5;
-$white-dim: rgba(255, 255, 255, 0.7);
 $white-faint: rgba(255, 255, 255, 0.3);
 $white-subtle: rgba(255, 255, 255, 0.04);
 $cyan: #3BE9E5;
-$cyan-dim: rgba(59, 233, 229, 0.15);
-$orange: #FF5A4A;
 $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
@@ -25,295 +20,228 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   position: relative;
   overflow: hidden;
   padding-bottom: 4rem;
-}
 
-/* =========================
-   BACKGROUND LAYERS
-========================= */
-.vault-bg-grid {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.015) 0.5px, transparent 0.5px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0.5px, transparent 0.5px);
-  background-size: 60px 60px;
-}
+  /* =========================
+     BACKGROUND LAYERS
+  ========================= */
+  .vault-bg-grid {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: 
+      linear-gradient(rgba(255, 255, 255, 0.015) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.015) 0.5px, transparent 0.5px);
+    background-size: 60px 60px;
+  }
 
-.vault-vignette {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
-}
+  .vault-vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+  }
 
-/* =========================
-   AMBIENT SHAPES
-========================= */
-.vault-ambient-shapes {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
+  /* =========================
+     AMBIENT SHAPES
+  ========================= */
+  .vault-ambient-shapes {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
 
-  .shape {
-    position: absolute;
-    border-radius: 50%;
-    border: 0.5px solid rgba(255, 255, 255, 0.015);
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      border: 0.5px solid rgba(255, 255, 255, 0.015);
 
-    &.shape-1 {
-      width: 400px;
-      height: 400px;
-      top: -120px;
-      right: -120px;
-      animation: vaultFloat 35s ease-in-out infinite;
+      &.shape-1 {
+        width: 400px;
+        height: 400px;
+        top: -120px;
+        right: -120px;
+        animation: vaultFloat 35s ease-in-out infinite;
+      }
+
+      &.shape-2 {
+        width: 280px;
+        height: 280px;
+        bottom: -80px;
+        left: -80px;
+        animation: vaultFloat 30s ease-in-out infinite reverse;
+      }
+
+      &.shape-3 {
+        width: 160px;
+        height: 160px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-color: rgba(59, 233, 229, 0.02);
+        animation: vaultPulse 20s ease-in-out infinite;
+      }
     }
+  }
 
-    &.shape-2 {
-      width: 280px;
-      height: 280px;
-      bottom: -80px;
-      left: -80px;
-      animation: vaultFloat 30s ease-in-out infinite reverse;
+  /* =========================
+     HEADER
+  ========================= */
+  .vault-page-header {
+    position: relative;
+    z-index: 2;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    @media (max-width: 768px) {
+      padding: 1.5rem 1.5rem 1rem;
+      gap: 1rem;
     }
-
-    &.shape-3 {
-      width: 160px;
-      height: 160px;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      border-color: rgba(59, 233, 229, 0.02);
-      animation: vaultPulse 20s ease-in-out infinite;
-    }
-  }
-}
-
-/* =========================
-   HEADER
-========================= */
-.vault-page-header {
-  position: relative;
-  z-index: 1;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-
-  @media (max-width: 768px) {
-    padding: 1.5rem 1.5rem 1rem;
-    gap: 1rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 1rem 1rem 0.75rem;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-}
-
-/* =========================
-   BACK BUTTON
-========================= */
-.vault-back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.6rem 1.2rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
-  color: $white-faint;
-  font-family: $font-mono;
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-
-  @media (max-width: 768px) {
-    padding: 0.5rem 1rem;
-    font-size: 0.65rem;
-  }
-
-  @media (max-width: 480px) {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.6rem;
-    gap: 0.4rem;
-  }
-
-  svg {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.3s ease;
 
     @media (max-width: 480px) {
-      width: 14px;
-      height: 14px;
+      padding: 1rem 1rem 0.75rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
   }
 
-  &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
-    color: $white;
-
-    svg {
-      transform: translateX(-2px);
-    }
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  &:focus-visible {
-    outline: 0.5px solid rgba(255, 255, 255, 0.06);
-    outline-offset: 2px;
-  }
-}
-
-/* =========================
-   HEADER DIVIDER
-========================= */
-.vault-header-divider {
-  width: 0.5px;
-  height: 24px;
-  background: rgba(255, 255, 255, 0.03);
-
-  @media (max-width: 480px) {
-    display: none;
-  }
-}
-
-/* =========================
-   PAGE TITLE
-========================= */
-.vault-page-title {
-  font-size: 1.4rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: $white;
-  margin: 0;
-  font-family: $font-sans;
-
-  @media (max-width: 768px) {
-    font-size: 1.2rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 1rem;
-  }
-}
-
-/* =========================
-   HEADER BADGE
-========================= */
-.vault-header-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-left: auto;
-  padding: 0.3rem 0.8rem;
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
-  font-family: $font-mono;
-  font-size: 0.5rem;
-  color: $white-faint;
-  opacity: 0.15;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-
-  @media (max-width: 480px) {
-    font-size: 0.45rem;
-    padding: 0.2rem 0.6rem;
-  }
-
-  .badge-dot {
-    width: 3px;
-    height: 3px;
-    background: $cyan;
-    opacity: 0.3;
-    border-radius: 50%;
-  }
-}
-
-/* =========================
-   LOADING STATE
-========================= */
-.vault-loading-state {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-  position: relative;
-  z-index: 1;
-
-  .vault-loading-spinner {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(255, 255, 255, 0.03);
-    border-top-color: $white-faint;
-    animation: vaultSpin 0.8s linear infinite;
-  }
-
-  p {
+  /* =========================
+     BACK BUTTON
+  ========================= */
+  .vault-back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 1.2rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 0.5px solid rgba(255, 255, 255, 0.03);
+    color: $white-faint;
     font-family: $font-mono;
     font-size: 0.7rem;
-    color: $white-faint;
-    opacity: 0.1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+
+    @media (max-width: 768px) {
+      padding: 0.5rem 1rem;
+      font-size: 0.65rem;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.6rem;
+      gap: 0.4rem;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s ease;
+
+      @media (max-width: 480px) {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.06);
+      color: $white;
+
+      svg {
+        transform: translateX(-2px);
+      }
+    }
+
+    &:active {
+      transform: scale(0.97);
+    }
+
+    &:focus-visible {
+      outline: 0.5px solid rgba(255, 255, 255, 0.06);
+      outline-offset: 2px;
+    }
+  }
+
+  /* =========================
+     HEADER DIVIDER
+  ========================= */
+  .vault-header-divider {
+    width: 0.5px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.03);
+
+    @media (max-width: 480px) {
+      display: none;
+    }
+  }
+
+  /* =========================
+     PAGE TITLE
+  ========================= */
+  .vault-page-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: $white;
     margin: 0;
+    font-family: $font-sans;
+
+    @media (max-width: 768px) {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
+  }
+
+  /* =========================
+     HEADER BADGE
+  ========================= */
+  .vault-header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-left: auto;
+    padding: 0.3rem 0.8rem;
+    border: 0.5px solid rgba(255, 255, 255, 0.02);
+    font-family: $font-mono;
+    font-size: 0.5rem;
+    color: $white-faint;
+    opacity: 0.15;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-  }
-}
 
-/* =========================
-   ANIMATIONS
-========================= */
-@keyframes vaultSpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+    @media (max-width: 480px) {
+      font-size: 0.45rem;
+      padding: 0.2rem 0.6rem;
+      margin-left: 0;
+    }
 
-@keyframes vaultFloat {
-  0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
+    .badge-dot {
+      width: 3px;
+      height: 3px;
+      background: $cyan;
+      opacity: 0.3;
+      border-radius: 50%;
+    }
   }
-  33% {
-    transform: translate(30px, -20px) rotate(3deg);
-  }
-  66% {
-    transform: translate(-20px, 25px) rotate(-2deg);
-  }
-}
 
-@keyframes vaultPulse {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.3;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.4);
-    opacity: 0.6;
-  }
-}
-
-/* =========================
-   VAULT CONTENT OVERRIDES
-   (For the Vault component inside)
-========================= */
-.vault-page {
-  .vault-container,
-  [class*="vault-"]:not(.vault-page):not(.vault-page-header):not(.vault-back-button):not(.vault-page-title):not(.vault-header-badge):not(.vault-loading-state):not(.vault-loading-spinner):not(.vault-bg-grid):not(.vault-ambient-shapes):not(.vault-vignette):not(.vault-header-divider) {
+  /* =========================
+     VAULT CONTENT WRAPPER
+     Overrides Vault component styles
+  ========================= */
+  .vault-content-wrapper {
     position: relative;
     z-index: 1;
     max-width: 1440px;
@@ -327,34 +255,194 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     @media (max-width: 480px) {
       padding: 0 1rem;
     }
-  }
-}
 
-/* =========================
-   REDUCED MOTION
-========================= */
-@media (prefers-reduced-motion: reduce) {
-  .vault-ambient-shapes .shape {
-    animation: none !important;
-  }
+    // Override Vault component styles
+    .vault-container,
+    .vault-main,
+    .vault-content,
+    .vault-grid,
+    .vault-list,
+    .vault-items,
+    [class*="vault-"] {
+      background: transparent !important;
+      border-color: rgba(255, 255, 255, 0.03) !important;
+      color: $white !important;
+    }
 
-  .vault-back-button {
-    transition: none !important;
+    // Style Vault cards/items
+    .vault-card,
+    .vault-item,
+    [class*="card"],
+    [class*="item"] {
+      background: rgba(255, 255, 255, 0.01) !important;
+      border: 0.5px solid rgba(255, 255, 255, 0.03) !important;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 
-    svg {
-      transition: none !important;
+      &:hover {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-color: rgba(255, 255, 255, 0.06) !important;
+        transform: translateY(-2px);
+      }
+    }
+
+    // Style buttons inside Vault
+    button,
+    .vault-button,
+    [class*="button"] {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border: 0.5px solid rgba(255, 255, 255, 0.03) !important;
+      color: $white-faint !important;
+      font-family: $font-mono !important;
+      font-size: 0.7rem !important;
+      letter-spacing: 0.06em !important;
+      text-transform: uppercase !important;
+      transition: all 0.3s ease !important;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.04) !important;
+        border-color: rgba(255, 255, 255, 0.06) !important;
+        color: $white !important;
+      }
+    }
+
+    // Style inputs inside Vault
+    input,
+    textarea,
+    [class*="input"] {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border: 0.5px solid rgba(255, 255, 255, 0.03) !important;
+      color: $white !important;
+      font-family: $font-mono !important;
+
+      &:focus {
+        border-color: rgba(255, 255, 255, 0.06) !important;
+        outline: none !important;
+      }
+    }
+
+    // Style headings inside Vault
+    h1, h2, h3, h4, h5, h6,
+    [class*="heading"],
+    [class*="title"] {
+      color: $white !important;
+      font-weight: 400 !important;
+      letter-spacing: 0.02em !important;
+    }
+
+    // Style text inside Vault
+    p, span, div,
+    [class*="text"],
+    [class*="description"] {
+      color: $white-faint !important;
+      font-weight: 300 !important;
+    }
+
+    // Remove any bright colors or gradients
+    [style*="background"] {
+      background: rgba(255, 255, 255, 0.01) !important;
+    }
+
+    [style*="gradient"] {
+      background: none !important;
+    }
+
+    // Hide wish archive button if present
+    .wish-archive-button,
+    [class*="wish"],
+    [class*="archive-button"] {
+      display: none !important;
     }
   }
 
-  .vault-loading-spinner {
-    animation-duration: 0.01ms !important;
-  }
-}
+  /* =========================
+     LOADING STATE
+  ========================= */
+  .vault-loading-state {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    position: relative;
+    z-index: 1;
 
-/* =========================
-   SCROLLBAR STYLING
-========================= */
-.vault-page {
+    .vault-loading-spinner {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.03);
+      border-top-color: $white-faint;
+      animation: vaultSpin 0.8s linear infinite;
+    }
+
+    p {
+      font-family: $font-mono;
+      font-size: 0.7rem;
+      color: $white-faint;
+      opacity: 0.1;
+      margin: 0;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+  }
+
+  /* =========================
+     ANIMATIONS
+  ========================= */
+  @keyframes vaultSpin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes vaultFloat {
+    0%, 100% {
+      transform: translate(0, 0) rotate(0deg);
+    }
+    33% {
+      transform: translate(30px, -20px) rotate(3deg);
+    }
+    66% {
+      transform: translate(-20px, 25px) rotate(-2deg);
+    }
+  }
+
+  @keyframes vaultPulse {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.4);
+      opacity: 0.6;
+    }
+  }
+
+  /* =========================
+     REDUCED MOTION
+  ========================= */
+  @media (prefers-reduced-motion: reduce) {
+    .vault-ambient-shapes .shape {
+      animation: none !important;
+    }
+
+    .vault-back-button {
+      transition: none !important;
+
+      svg {
+        transition: none !important;
+      }
+    }
+
+    .vault-loading-spinner {
+      animation-duration: 0.01ms !important;
+    }
+  }
+
+  /* =========================
+     SCROLLBAR
+  ========================= */
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -370,30 +458,5 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   &::-webkit-scrollbar-thumb:hover {
     background: rgba(255, 255, 255, 0.06);
-  }
-}
-
-/* =========================
-   PRINT STYLES
-========================= */
-@media print {
-  .vault-page {
-    background: #fff;
-    color: #000;
-  }
-
-  .vault-bg-grid,
-  .vault-ambient-shapes,
-  .vault-vignette {
-    display: none !important;
-  }
-
-  .vault-back-button {
-    display: none !important;
-  }
-
-  .vault-header-badge {
-    border-color: rgba(0, 0, 0, 0.05);
-    color: rgba(0, 0, 0, 0.3);
   }
 }
