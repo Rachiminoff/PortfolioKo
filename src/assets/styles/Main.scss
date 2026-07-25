@@ -234,7 +234,7 @@ body {
 }
 
 /* =========================
-   GEOMETRIC SHAPES - IMPROVED
+   GEOMETRIC SHAPES - UNIFIED SYSTEM
 ========================= */
 .geometric-shapes {
     position: fixed;
@@ -249,254 +249,377 @@ body {
     .shape {
         position: absolute;
         opacity: 1 !important;
+    }
 
-        &.construction-circle {
-            width: 560px;
-            height: 560px;
-            top: 10%;
-            right: 8%;
+    /* === LAYER 1: Foundation Grid === */
+    .layer-foundation {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 800px;
+        height: 800px;
+        
+        .concentric-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
             
-            .circle-ring {
-                position: absolute;
-                border-radius: 50%;
-                
-                &.outer {
-                    width: 100%;
-                    height: 100%;
-                    border: 1px solid rgba(255, 255, 255, 0.06);
-                    animation: rotateCircle 45s linear infinite;
-                }
-                
-                &.inner {
-                    width: 75%;
-                    height: 75%;
-                    top: 12.5%;
-                    left: 12.5%;
-                    border: 1px dashed rgba(45, 212, 191, 0.08);
-                    animation: rotateCircle 30s linear infinite reverse;
-                }
-                
-                &.dotted {
-                    width: 50%;
-                    height: 50%;
-                    top: 25%;
-                    left: 25%;
-                    border: 1px dotted rgba(255, 255, 255, 0.04);
-                    animation: rotateCircle 20s linear infinite;
-                }
+            &.ring-1 {
+                width: 100%;
+                height: 100%;
+                border: 1px solid rgba(255, 255, 255, 0.03);
             }
             
-            .circle-label {
-                position: absolute;
-                bottom: -28px;
-                right: -16px;
-                font-family: $font-mono;
-                font-size: 0.5rem;
-                color: rgba(255, 255, 255, 0.08);
-                letter-spacing: 0.08em;
+            &.ring-2 {
+                width: 75%;
+                height: 75%;
+                border: 1px solid rgba(255, 255, 255, 0.04);
             }
             
-            .circle-dot {
-                position: absolute;
-                border-radius: 50%;
-                background: rgba(45, 212, 191, 0.06);
-                
-                &.dot-1 {
-                    width: 6px;
-                    height: 6px;
-                    top: 15%;
-                    right: 10%;
-                }
-                
-                &.dot-2 {
-                    width: 4px;
-                    height: 4px;
-                    bottom: 20%;
-                    left: 15%;
-                    background: rgba(255, 255, 255, 0.04);
-                }
+            &.ring-3 {
+                width: 50%;
+                height: 50%;
+                border: 1px dashed rgba(45, 212, 191, 0.05);
+                animation: rotateCircle 40s linear infinite;
             }
-
-            @media (max-width: 768px) {
-                width: 320px;
-                height: 320px;
-                top: 20%;
-                right: -40px;
+            
+            &.ring-4 {
+                width: 25%;
+                height: 25%;
+                border: 1px dotted rgba(255, 255, 255, 0.04);
+                animation: rotateCircle 25s linear infinite reverse;
             }
         }
-
-        &.guide-ring {
-            width: 320px;
-            height: 320px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            top: 45%;
-            right: 22%;
+        
+        .cross-hair {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             
-            &::after {
-                content: '';
+            &.horizontal {
+                width: 100%;
+                height: 1px;
+                background: rgba(255, 255, 255, 0.03);
+            }
+            
+            &.vertical {
+                width: 1px;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.03);
+            }
+            
+            &.diagonal-1 {
+                width: 141.4%;
+                height: 1px;
+                transform: translate(-50%, -50%) rotate(45deg);
+                background: rgba(255, 255, 255, 0.02);
+            }
+            
+            &.diagonal-2 {
+                width: 141.4%;
+                height: 1px;
+                transform: translate(-50%, -50%) rotate(-45deg);
+                background: rgba(255, 255, 255, 0.02);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            width: 500px;
+            height: 500px;
+        }
+        
+        @media (max-width: 567px) {
+            width: 300px;
+            height: 300px;
+            
+            .concentric-ring {
+                &.ring-3 {
+                    animation: none !important;
+                }
+                &.ring-4 {
+                    animation: none !important;
+                }
+            }
+        }
+    }
+
+    /* === LAYER 2: Secondary Structure === */
+    .layer-structure {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        
+        .quadrant-grid {
+            position: absolute;
+            width: 45%;
+            height: 45%;
+            
+            &.tl {
+                top: 5%;
+                left: 5%;
+            }
+            
+            &.br {
+                bottom: 5%;
+                right: 5%;
+            }
+            
+            .grid-line {
                 position: absolute;
+                background: rgba(255, 255, 255, 0.02);
+                
+                &.h {
+                    left: 0;
+                    right: 0;
+                    height: 1px;
+                }
+                
+                &.v {
+                    top: 0;
+                    bottom: 0;
+                    width: 1px;
+                }
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .quadrant-grid {
+                display: none;
+            }
+        }
+    }
+
+    /* === LAYER 3: Dynamic Elements === */
+    .layer-dynamic {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        
+        .dynamic-hexagon {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            top: 20%;
+            right: 12%;
+            animation: rotateCircle 60s linear infinite;
+            
+            svg {
+                width: 100%;
+                height: 100%;
+            }
+            
+            @media (max-width: 768px) {
+                width: 80px;
+                height: 80px;
                 top: 15%;
-                left: 15%;
-                width: 70%;
-                height: 70%;
+                right: 8%;
+                animation-duration: 40s;
+            }
+            
+            @media (max-width: 567px) {
+                display: none;
+            }
+        }
+        
+        .orbit-dots {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            bottom: 10%;
+            left: 8%;
+            
+            .orbit-dot {
+                position: absolute;
                 border-radius: 50%;
-                border: 1px dashed rgba(45, 212, 191, 0.04);
+                background: rgba(45, 212, 191, 0.04);
+                animation: orbitFloat 8s ease-in-out infinite;
+                
+                $dot-sizes: (6px, 4px, 3px, 5px, 2px, 4px);
+                $dot-positions: (
+                    (50%, -4%, 0),
+                    (85%, 15%, -1.5s),
+                    (104%, 50%, -3s),
+                    (85%, 85%, -4.5s),
+                    (50%, 104%, -6s),
+                    (15%, 85%, -7.5s)
+                );
+                
+                @each $size in $dot-sizes {
+                    $i: index($dot-sizes, $size);
+                    $pos: nth($dot-positions, $i);
+                    
+                    &:nth-child(#{$i}) {
+                        width: $size;
+                        height: $size;
+                        top: nth($pos, 1);
+                        left: nth($pos, 2);
+                        animation-delay: nth($pos, 3);
+                        
+                        @if $i % 2 == 0 {
+                            background: rgba(255, 255, 255, 0.03);
+                        }
+                    }
+                }
             }
             
             @media (max-width: 768px) {
                 width: 200px;
                 height: 200px;
-                top: 50%;
-                right: 10%;
-            }
-        }
-
-        &.bezier-connector {
-            width: 400px;
-            height: 300px;
-            top: 30%;
-            left: 15%;
-
-            svg {
-                width: 100%;
-                height: 100%;
-                opacity: 0.4;
-            }
-
-            @media (max-width: 768px) {
-                width: 250px;
-                height: 200px;
-                top: 40%;
-                left: 10%;
-            }
-        }
-
-        &.alignment-bracket {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 1px solid rgba(45, 212, 191, 0.06);
-            
-            &.top {
-                top: 15%;
-                right: 35%;
-                border-bottom: none;
-                border-left: none;
-            }
-            
-            &.bottom {
-                bottom: 20%;
-                left: 28%;
-                border-top: none;
-                border-right: none;
-            }
-            
-            &.left {
-                top: 40%;
+                bottom: 15%;
                 left: 5%;
-                border-right: none;
-                border-bottom: none;
             }
             
-            &.right {
-                top: 30%;
-                right: 5%;
-                border-left: none;
-                border-bottom: none;
+            @media (max-width: 567px) {
+                display: none;
             }
+        }
+    }
 
-            @media (max-width: 768px) {
-                width: 40px;
-                height: 40px;
-                
-                &.top { top: 25%; right: 25%; }
-                &.bottom { bottom: 30%; left: 20%; }
-                &.left { display: none; }
-                &.right { display: none; }
-            }
-        }
+    /* === LAYER 4: Accent Geometry === */
+    .layer-accent {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         
-        &.diagonal-lines {
+        .golden-spiral {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            
-            .diagonal {
-                position: absolute;
-                background: rgba(255, 255, 255, 0.02);
-                
-                &.d1 {
-                    top: 20%;
-                    left: 10%;
-                    width: 2px;
-                    height: 60%;
-                    transform: rotate(35deg);
-                    transform-origin: top left;
-                }
-                
-                &.d2 {
-                    bottom: 25%;
-                    right: 15%;
-                    width: 2px;
-                    height: 50%;
-                    transform: rotate(-25deg);
-                    transform-origin: bottom right;
-                }
-            }
-        }
-        
-        &.floating-dots {
-            .dot {
-                position: absolute;
-                border-radius: 50%;
-                background: rgba(45, 212, 191, 0.04);
-                
-                &.d1 {
-                    width: 3px;
-                    height: 3px;
-                    top: 20%;
-                    left: 45%;
-                }
-                
-                &.d2 {
-                    width: 2px;
-                    height: 2px;
-                    top: 65%;
-                    left: 55%;
-                    background: rgba(255, 255, 255, 0.03);
-                }
-                
-                &.d3 {
-                    width: 4px;
-                    height: 4px;
-                    top: 40%;
-                    left: 75%;
-                }
-                
-                &.d4 {
-                    width: 2px;
-                    height: 2px;
-                    top: 75%;
-                    left: 30%;
-                    background: rgba(45, 212, 191, 0.03);
-                }
-            }
-        }
-        
-        &.hex-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.15;
+            width: 200px;
+            height: 200px;
+            top: 15%;
+            left: 10%;
+            opacity: 0.5;
             
             svg {
                 width: 100%;
                 height: 100%;
+            }
+            
+            @media (max-width: 768px) {
+                width: 120px;
+                height: 120px;
+                top: 20%;
+                left: 5%;
+            }
+            
+            @media (max-width: 567px) {
+                display: none;
+            }
+        }
+        
+        .fibonacci-rectangles {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            right: 8%;
+            
+            .fib-rect {
+                position: absolute;
+                border: 1px solid rgba(255, 255, 255, 0.02);
+                
+                &.r1 {
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                }
+                
+                &.r2 {
+                    width: 61.8%;
+                    height: 61.8%;
+                    top: 0;
+                    right: 0;
+                }
+                
+                &.r3 {
+                    width: 38.2%;
+                    height: 38.2%;
+                    bottom: 0;
+                    right: 0;
+                }
+                
+                &.r4 {
+                    width: 23.6%;
+                    height: 23.6%;
+                    bottom: 0;
+                    left: 0;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                width: 100px;
+                height: 100px;
+                bottom: 15%;
+                right: 5%;
+            }
+            
+            @media (max-width: 567px) {
+                display: none;
+            }
+        }
+    }
+
+    /* === LAYER 5: Points & Markers === */
+    .layer-points {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        
+        .point-marker {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: rgba(45, 212, 191, 0.06);
+            
+            $positions: (
+                (15%, 20%),
+                (85%, 25%),
+                (20%, 75%),
+                (80%, 80%),
+                (45%, 10%),
+                (55%, 90%),
+                (10%, 50%),
+                (90%, 55%)
+            );
+            
+            @each $pos in $positions {
+                $i: index($positions, $pos);
+                
+                &:nth-child(#{$i}) {
+                    top: nth($pos, 1);
+                    left: nth($pos, 2);
+                    
+                    @if $i % 2 == 0 {
+                        background: rgba(255, 255, 255, 0.03);
+                        width: 2px;
+                        height: 2px;
+                    }
+                    
+                    @if $i % 3 == 0 {
+                        width: 4px;
+                        height: 4px;
+                        background: rgba(45, 212, 191, 0.08);
+                    }
+                }
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .point-marker {
+                display: none;
             }
         }
     }
@@ -508,6 +631,13 @@ body {
 @keyframes rotateCircle {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
+}
+
+@keyframes orbitFloat {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-8px, -12px); }
+    50% { transform: translate(4px, -20px); }
+    75% { transform: translate(10px, -8px); }
 }
 
 @keyframes fadeUp {
@@ -529,11 +659,6 @@ body {
 @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-6px); }
-}
-
-@keyframes pulseGlow {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
 }
 
 /* =========================
@@ -1436,42 +1561,6 @@ body {
         }
     }
 
-    .geometric-shapes .shape {
-        &.construction-circle {
-            width: 220px;
-            height: 220px;
-            top: 25%;
-            right: -20px;
-        }
-        
-        &.guide-ring {
-            width: 140px;
-            height: 140px;
-            top: 55%;
-            right: 5%;
-        }
-        
-        &.bezier-connector {
-            display: none;
-        }
-        
-        &.alignment-bracket {
-            display: none;
-        }
-        
-        &.diagonal-lines {
-            display: none;
-        }
-        
-        &.floating-dots {
-            display: none;
-        }
-        
-        &.hex-grid {
-            display: none;
-        }
-    }
-
     .hero-annotations {
         display: none;
     }
@@ -1511,7 +1600,15 @@ body {
         display: none !important;
     }
     
-    .geometric-shapes .shape.construction-circle .circle-ring {
+    .geometric-shapes .shape.layer-foundation .concentric-ring {
+        animation: none !important;
+    }
+    
+    .geometric-shapes .shape.layer-dynamic .dynamic-hexagon {
+        animation: none !important;
+    }
+    
+    .geometric-shapes .shape.layer-dynamic .orbit-dots .orbit-dot {
         animation: none !important;
     }
     

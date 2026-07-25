@@ -85,82 +85,109 @@ function ConstructionGrid() {
 }
 
 /* =========================
-   GEOMETRIC SHAPES - IMPROVED
+   GEOMETRIC SHAPES - UNIFIED SYSTEM
 ========================= */
 function GeometricShapes() {
     return (
         <div className="geometric-shapes" aria-hidden="true">
-            {/* Large construction circle */}
-            <div className="shape construction-circle">
-                <div className="circle-ring outer" />
-                <div className="circle-ring inner" />
-                <div className="circle-ring dotted" />
-                <span className="circle-label">R=280</span>
-                <div className="circle-dot dot-1" />
-                <div className="circle-dot dot-2" />
+            {/* === LAYER 1: Foundation Grid === */}
+            <div className="shape layer-foundation">
+                {/* Concentric rings - centered */}
+                <div className="concentric-ring ring-1" />
+                <div className="concentric-ring ring-2" />
+                <div className="concentric-ring ring-3" />
+                <div className="concentric-ring ring-4" />
+                
+                {/* Cross hairs */}
+                <div className="cross-hair horizontal" />
+                <div className="cross-hair vertical" />
+                
+                {/* Diagonal cross */}
+                <div className="cross-hair diagonal-1" />
+                <div className="cross-hair diagonal-2" />
             </div>
-            
-            {/* Secondary guide ring */}
-            <div className="shape guide-ring" />
-            
-            {/* Bézier curve connecting left to right */}
-            <div className="shape bezier-connector">
-                <svg viewBox="0 0 400 300" fill="none">
-                    <path 
-                        d="M0 150 C100 50, 300 250, 400 150" 
-                        stroke="rgba(59, 233, 229, 0.04)" 
-                        strokeWidth="0.5"
-                    />
-                    <path 
-                        d="M0 150 C100 50, 300 250, 400 150" 
-                        stroke="rgba(59, 233, 229, 0.08)" 
-                        strokeWidth="0.3"
-                        strokeDasharray="3 6"
-                    />
-                    <circle cx="100" cy="50" r="1.5" fill="rgba(59, 233, 229, 0.06)" />
-                    <circle cx="300" cy="250" r="1.5" fill="rgba(59, 233, 229, 0.06)" />
-                    
-                    {/* Additional curve */}
-                    <path 
-                        d="M0 250 C100 150, 300 50, 400 250" 
-                        stroke="rgba(255, 255, 255, 0.02)" 
-                        strokeWidth="0.3"
-                    />
-                </svg>
+
+            {/* === LAYER 2: Secondary Structure === */}
+            <div className="shape layer-structure">
+                {/* Top-left quadrant grid */}
+                <div className="quadrant-grid tl">
+                    <div className="grid-line h" style={{ top: '33.33%' }} />
+                    <div className="grid-line h" style={{ top: '66.66%' }} />
+                    <div className="grid-line v" style={{ left: '33.33%' }} />
+                    <div className="grid-line v" style={{ left: '66.66%' }} />
+                </div>
+                
+                {/* Bottom-right quadrant grid */}
+                <div className="quadrant-grid br">
+                    <div className="grid-line h" style={{ top: '33.33%' }} />
+                    <div className="grid-line h" style={{ top: '66.66%' }} />
+                    <div className="grid-line v" style={{ left: '33.33%' }} />
+                    <div className="grid-line v" style={{ left: '66.66%' }} />
+                </div>
             </div>
-            
-            {/* Alignment brackets */}
-            <div className="shape alignment-bracket top" />
-            <div className="shape alignment-bracket bottom" />
-            <div className="shape alignment-bracket left" />
-            <div className="shape alignment-bracket right" />
-            
-            {/* Diagonal lines */}
-            <div className="shape diagonal-lines">
-                <div className="diagonal d1" />
-                <div className="diagonal d2" />
-            </div>
-            
-            {/* Floating dots */}
-            <div className="shape floating-dots">
-                <div className="dot d1" />
-                <div className="dot d2" />
-                <div className="dot d3" />
-                <div className="dot d4" />
-            </div>
-            
-            {/* Hexagonal grid pattern (subtle) */}
-            <div className="shape hex-grid">
-                <svg viewBox="0 0 1000 1000" fill="none">
-                    <pattern id="hex" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
-                        <path d="M30 0 L60 15 L60 37 L30 52 L0 37 L0 15 Z" 
-                              stroke="rgba(45, 212, 191, 0.02)" 
-                              strokeWidth="0.5"
-                              fill="none"
+
+            {/* === LAYER 3: Dynamic Elements === */}
+            <div className="shape layer-dynamic">
+                {/* Rotating hexagon */}
+                <div className="dynamic-hexagon">
+                    <svg viewBox="0 0 100 100" fill="none">
+                        <polygon
+                            points="50,5 90,27 90,73 50,95 10,73 10,27"
+                            stroke="rgba(45, 212, 191, 0.06)"
+                            strokeWidth="0.5"
                         />
-                    </pattern>
-                    <rect width="1000" height="1000" fill="url(#hex)" />
-                </svg>
+                        <polygon
+                            points="50,15 80,32 80,68 50,85 20,68 20,32"
+                            stroke="rgba(255,255,255,0.03)"
+                            strokeWidth="0.3"
+                        />
+                    </svg>
+                </div>
+                
+                {/* Orbiting dots */}
+                <div className="orbit-dots">
+                    <div className="orbit-dot dot-1" />
+                    <div className="orbit-dot dot-2" />
+                    <div className="orbit-dot dot-3" />
+                    <div className="orbit-dot dot-4" />
+                    <div className="orbit-dot dot-5" />
+                    <div className="orbit-dot dot-6" />
+                </div>
+            </div>
+
+            {/* === LAYER 4: Accent Geometry === */}
+            <div className="shape layer-accent">
+                {/* Golden spiral approximation */}
+                <div className="golden-spiral">
+                    <svg viewBox="0 0 200 200" fill="none">
+                        <path
+                            d="M100 100 L100 50 A50 50 0 0 1 150 100 L150 150 A50 50 0 0 1 100 200 L50 200 A50 50 0 0 1 0 150 L0 100 A50 50 0 0 1 50 50 L75 50 A25 25 0 0 1 100 75 L100 100"
+                            stroke="rgba(255,255,255,0.03)"
+                            strokeWidth="0.5"
+                            fill="none"
+                        />
+                    </svg>
+                </div>
+                
+                {/* Fibonacci rectangles - subtle */}
+                <div className="fibonacci-rectangles">
+                    <div className="fib-rect r1" />
+                    <div className="fib-rect r2" />
+                    <div className="fib-rect r3" />
+                    <div className="fib-rect r4" />
+                </div>
+            </div>
+
+            {/* === LAYER 5: Points & Markers === */}
+            <div className="shape layer-points">
+                <div className="point-marker p1" />
+                <div className="point-marker p2" />
+                <div className="point-marker p3" />
+                <div className="point-marker p4" />
+                <div className="point-marker p5" />
+                <div className="point-marker p6" />
+                <div className="point-marker p7" />
+                <div className="point-marker p8" />
             </div>
         </div>
     );
