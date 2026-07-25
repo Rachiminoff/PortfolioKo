@@ -1,43 +1,42 @@
-/* =========================
-   PROJECT DETAILS - SWISS STYLE
-========================= */
-
-$cyan: #3BE9E5;
-$cyan-dim: rgba(59, 233, 229, 0.08);
-$black: #070707;
-$dark: #0F0F0F;
-$gray-dark: #1A1A1A;
-$white: #F5F5F5;
-$white-dim: rgba(255, 255, 255, 0.7);
-$white-faint: rgba(255, 255, 255, 0.3);
-$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+// ========== VARIABLES ==========
+$cyan: #2dd4bf;
+$cyan-dim: rgba(45, 212, 191, 0.08);
+$cyan-glow: rgba(45, 212, 191, 0.12);
+$black: #0f0f0f;
+$dark: #181818;
+$gray-dark: #222222;
+$gray: #2c2c2c;
+$gray-medium: #3a3a3a;
+$white: #f5f5f5;
+$white-dim: rgba(255, 255, 255, 0.92);
+$white-muted: rgba(255, 255, 255, 0.75);
+$white-faint: rgba(255, 255, 255, 0.55);
+$white-very-faint: rgba(255, 255, 255, 0.3);
+$border-solid: rgba(255, 255, 255, 0.1);
+$border-medium: rgba(255, 255, 255, 0.18);
+$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
+// ========== GLOBAL ==========
 .project-details-page {
     min-height: 100vh;
-    padding: 4% 8% 6%;
+    padding: 0;
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
     background: $black;
-
-    @media (max-width: 1100px) {
-        padding: 4% 5% 6%;
-    }
+    padding-top: 80px;
 
     @media (max-width: 768px) {
-        padding: 16px 16px 80px;
+        padding-top: 64px;
     }
 
     @media (max-width: 480px) {
-        padding: 12px 12px 80px;
+        padding-top: 56px;
     }
 }
 
-/* =========================
-   LOADING STATE
-========================= */
-
+// ========== LOADING ==========
 .project-details-loading {
     min-height: 60vh;
     display: flex;
@@ -48,9 +47,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     .loading-spinner {
         width: 32px;
         height: 32px;
-        border: 0.5px solid rgba(255, 255, 255, 0.04);
-        border-top: 0.5px solid rgba(59, 233, 229, 0.3);
-        border-radius: 0;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-top: 1px solid $cyan;
+        border-radius: 50%;
         animation: spin 0.8s linear infinite;
     }
 }
@@ -60,38 +59,39 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     100% { transform: rotate(360deg); }
 }
 
-/* =========================
-   BACK BUTTON - STICKY
-========================= */
-
+// ========== BACK BUTTON - STICKY ==========
 .back-button-container {
     position: fixed;
     top: 72px;
     left: 0;
     right: 0;
     z-index: 99;
-    padding: 12px 8%;
+    padding: 12px 32px;
     transform: translateY(-100%);
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     pointer-events: none;
-    background: $black;
-    border-bottom: 0.5px solid transparent;
+    background: rgba(15, 15, 15, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid transparent;
+    max-width: 1200px;
+    margin: 0 auto;
 
     &.visible {
         transform: translateY(0);
         opacity: 1;
         pointer-events: auto;
-        border-bottom-color: rgba(255, 255, 255, 0.03);
+        border-bottom-color: $border-solid;
     }
 
     @media (max-width: 768px) {
-        top: 64px;
+        top: 56px;
         padding: 10px 16px;
     }
 
     @media (max-width: 480px) {
-        top: 56px;
+        top: 48px;
         padding: 8px 12px;
     }
 
@@ -100,18 +100,19 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         align-items: center;
         gap: 8px;
         padding: 6px 14px;
-        font-size: 0.75rem;
-        color: $white-faint;
+        font-size: 0.7rem;
+        color: $white-muted;
         text-decoration: none;
         transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-        background: rgba(255, 255, 255, 0.01);
-        border: 0.5px solid rgba(255, 255, 255, 0.04);
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid $border-solid;
         font-family: $font-mono;
+        letter-spacing: 0.04em;
 
         &:hover {
             color: $white;
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: $border-medium;
         }
 
         svg {
@@ -123,7 +124,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         }
 
         @media (max-width: 480px) {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             padding: 4px 10px;
             gap: 6px;
             
@@ -134,28 +135,26 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 }
 
-/* =========================
-   BACK BUTTON - HERO
-========================= */
-
+// ========== HERO BACK BUTTON ==========
 .back-button.hero-back {
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 6px 14px;
-    font-size: 0.75rem;
-    color: $white-faint;
+    font-size: 0.7rem;
+    color: $white-muted;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    margin-bottom: 20px;
-    border: 0.5px solid transparent;
+    margin-bottom: 24px;
+    border: 1px solid transparent;
     background: rgba(255, 255, 255, 0.01);
     font-family: $font-mono;
+    letter-spacing: 0.04em;
 
     &:hover {
         color: $white;
         background: rgba(255, 255, 255, 0.03);
-        border-color: rgba(255, 255, 255, 0.06);
+        border-color: $border-solid;
         transform: translateX(-4px);
     }
 
@@ -168,7 +167,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 
     @media (max-width: 480px) {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         padding: 4px 10px;
         margin-bottom: 16px;
         
@@ -178,26 +177,24 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 }
 
-/* =========================
-   HERO SECTION
-========================= */
-
+// ========== HERO SECTION ==========
 .details-hero {
-    margin-bottom: 60px;
+    padding: 0 32px 48px;
+    position: relative;
 
     @media (max-width: 768px) {
-        margin-bottom: 40px;
+        padding: 0 16px 32px;
     }
 
     @media (max-width: 480px) {
-        margin-bottom: 32px;
+        padding: 0 12px 24px;
     }
 
     .hero-content {
-        margin-top: 40px;
+        margin-top: 32px;
 
         @media (max-width: 768px) {
-            margin-top: 28px;
+            margin-top: 24px;
         }
 
         @media (max-width: 480px) {
@@ -216,14 +213,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             }
 
             .role-badge {
-                padding: 4px 12px;
+                padding: 4px 14px;
                 font-size: 0.6rem;
                 font-weight: 400;
                 text-transform: uppercase;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.08em;
                 background: rgba(255, 255, 255, 0.02);
-                border: 0.5px solid rgba(255, 255, 255, 0.04);
-                color: $white-faint;
+                border: 1px solid $border-solid;
+                color: $white-muted;
                 font-family: $font-mono;
 
                 @media (max-width: 480px) {
@@ -236,12 +233,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                padding: 4px 12px;
+                padding: 4px 14px;
                 font-size: 0.6rem;
                 font-weight: 400;
                 text-transform: uppercase;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.08em;
                 font-family: $font-mono;
+                border: 1px solid rgba(45, 212, 191, 0.06);
+                background: rgba(45, 212, 191, 0.03);
 
                 @media (max-width: 480px) {
                     font-size: 0.55rem;
@@ -249,9 +248,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 }
 
                 .status-dot {
-                    width: 4px;
-                    height: 4px;
+                    width: 5px;
+                    height: 5px;
                     display: inline-block;
+                    border-radius: 50%;
                     animation: pulse-dot 2s ease-in-out infinite;
                 }
             }
@@ -260,14 +260,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                padding: 4px 12px;
+                padding: 4px 14px;
                 font-size: 0.6rem;
                 font-weight: 400;
                 background: rgba(255, 255, 255, 0.01);
-                border: 0.5px solid rgba(255, 255, 255, 0.03);
-                color: $white-faint;
+                border: 1px solid $border-solid;
+                color: $white-muted;
                 text-transform: uppercase;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.08em;
                 font-family: $font-mono;
 
                 @media (max-width: 480px) {
@@ -278,8 +278,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         }
 
         .hero-title {
-            font-size: clamp(2rem, 5.5vw, 4.5rem);
-            font-weight: 600;
+            font-size: clamp(2.8rem, 6vw, 5rem);
+            font-weight: 700;
             letter-spacing: -0.03em;
             color: $white;
             margin: 0 0 8px 0;
@@ -287,17 +287,17 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             font-family: $font-sans;
 
             @media (max-width: 480px) {
-                font-size: clamp(1.6rem, 8vw, 2.2rem);
-                margin-bottom: 4px;
+                font-size: clamp(1.8rem, 8vw, 2.4rem);
             }
         }
 
         .hero-subtitle {
-            font-size: clamp(0.95rem, 1.5vw, 1.3rem);
-            color: $white-faint;
+            font-size: clamp(1rem, 1.5vw, 1.3rem);
+            color: $white-muted;
             margin: 0 0 16px 0;
             font-weight: 300;
             font-family: $font-sans;
+            opacity: 0.7;
 
             @media (max-width: 480px) {
                 font-size: 0.9rem;
@@ -306,8 +306,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         }
 
         .hero-description {
-            font-size: clamp(0.85rem, 1.2vw, 1.05rem);
-            color: rgba(255, 255, 255, 0.45);
+            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+            color: $white-faint;
             line-height: 1.8;
             max-width: 640px;
             margin: 0 0 32px 0;
@@ -320,7 +320,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             }
 
             @media (max-width: 480px) {
-                font-size: 0.8rem;
+                font-size: 0.85rem;
                 line-height: 1.7;
                 margin-bottom: 20px;
             }
@@ -335,42 +335,56 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 gap: 8px;
             }
 
+            @media (max-width: 380px) {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
             .btn-primary,
             .btn-secondary {
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                padding: 10px 20px;
-                font-size: 0.8rem;
+                padding: 10px 22px;
+                font-size: 0.75rem;
                 font-weight: 400;
                 text-decoration: none;
                 transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-                border: 0.5px solid transparent;
+                border: 1px solid transparent;
                 font-family: $font-mono;
-                letter-spacing: 0.02em;
+                letter-spacing: 0.04em;
+                min-height: 44px;
 
                 @media (max-width: 480px) {
-                    padding: 8px 14px;
-                    font-size: 0.7rem;
+                    padding: 8px 16px;
+                    font-size: 0.65rem;
                     flex: 1;
                     justify-content: center;
                     min-width: 100px;
+                    min-height: 40px;
                 }
 
                 @media (max-width: 380px) {
                     flex: 1 1 100%;
+                    min-height: 44px;
                 }
             }
 
             .btn-primary {
-                background: rgba(59, 233, 229, 0.04);
-                border-color: rgba(59, 233, 229, 0.08);
-                color: rgba(255, 255, 255, 0.7);
+                background: rgba(45, 212, 191, 0.04);
+                border-color: rgba(45, 212, 191, 0.08);
+                color: $white-muted;
 
                 &:hover {
-                    background: rgba(59, 233, 229, 0.08);
-                    border-color: rgba(59, 233, 229, 0.15);
+                    background: rgba(45, 212, 191, 0.08);
+                    border-color: rgba(45, 212, 191, 0.15);
                     color: $white;
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 24px rgba(45, 212, 191, 0.06);
+
+                    @media (max-width: 480px) {
+                        transform: none;
+                    }
                 }
 
                 svg {
@@ -380,13 +394,18 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
             .btn-secondary {
                 background: rgba(255, 255, 255, 0.01);
-                border-color: rgba(255, 255, 255, 0.04);
-                color: $white-faint;
+                border-color: $border-solid;
+                color: $white-muted;
 
                 &:hover {
                     background: rgba(255, 255, 255, 0.03);
-                    border-color: rgba(255, 255, 255, 0.08);
+                    border-color: $border-medium;
                     color: $white;
+                    transform: translateY(-2px);
+
+                    @media (max-width: 480px) {
+                        transform: none;
+                    }
                 }
 
                 svg {
@@ -399,13 +418,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    50% { opacity: 0.2; }
 }
 
-/* =========================
-   GALLERY
-========================= */
-
+// ========== GALLERY ==========
 .gallery-wrapper {
     margin-bottom: 8px;
 }
@@ -413,11 +429,26 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .gallery-container {
     overflow: hidden;
     background: $dark;
-    border: 0.5px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid $border-solid;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
 
     @media (max-width: 480px) {
-        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        padding: 1px;
+        background: linear-gradient(135deg, rgba(45, 212, 191, 0.04), transparent 50%, rgba(45, 212, 191, 0.04));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        z-index: 3;
     }
 
     &.zoomed {
@@ -428,8 +459,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         z-index: 1000;
         max-width: 90vw;
         max-height: 90vh;
-        border-color: rgba(59, 233, 229, 0.08);
-        box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+        border-color: $border-medium;
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.8);
+
+        &::before {
+            opacity: 0;
+        }
 
         @media (max-width: 768px) {
             max-width: 95vw;
@@ -451,7 +486,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         .image-skeleton {
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.01) 25%, rgba(255, 255, 255, 0.02) 50%, rgba(255, 255, 255, 0.01) 75%);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.01) 25%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0.01) 75%);
             background-size: 200% 100%;
             animation: shimmer-skeleton 1.5s ease-in-out infinite;
             z-index: 1;
@@ -462,16 +497,19 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             height: 100%;
             object-fit: contain;
             opacity: 0;
-            transition: opacity 0.6s ease, transform 0.4s ease;
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
             z-index: 1;
+            background: $black;
 
             &.loaded {
                 opacity: 1;
             }
 
-            &:hover {
-                transform: scale(1.02);
+            @media (min-width: 769px) {
+                &:hover {
+                    transform: scale(1.02);
+                }
             }
         }
 
@@ -481,37 +519,46 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             display: flex;
             align-items: flex-end;
             justify-content: flex-end;
-            padding: 14px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.3), transparent 60%);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.4s ease;
             z-index: 2;
             pointer-events: none;
 
             @media (max-width: 768px) {
                 opacity: 0.5;
-                padding: 10px;
+                padding: 12px;
             }
 
             @media (max-width: 480px) {
-                opacity: 0.7;
-                padding: 8px;
+                opacity: 0.6;
+                padding: 10px;
             }
 
             .gallery-hint {
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                padding: 4px 10px;
-                font-size: 0.6rem;
-                color: $white-faint;
-                background: rgba(0, 0, 0, 0.3);
-                border: 0.5px solid rgba(255, 255, 255, 0.04);
+                padding: 4px 12px;
+                font-size: 0.55rem;
+                color: $white-muted;
+                background: rgba(0, 0, 0, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.04);
                 font-family: $font-mono;
+                letter-spacing: 0.04em;
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
 
                 @media (max-width: 480px) {
-                    font-size: 0.55rem;
+                    font-size: 0.5rem;
                     padding: 3px 8px;
+                }
+
+                .hint-text {
+                    @media (max-width: 480px) {
+                        display: none;
+                    }
                 }
             }
         }
@@ -523,16 +570,18 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         .gallery-nav {
             position: absolute;
             top: 50%;
-            transform: translateY(-50%) scale(0.9);
-            width: 36px;
-            height: 36px;
-            border: 0.5px solid rgba(255, 255, 255, 0.04);
-            background: rgba(0, 0, 0, 0.3);
-            color: $white-faint;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border: 1px solid $border-solid;
+            background: rgba(0, 0, 0, 0.4);
+            color: $white-muted;
             cursor: pointer;
             z-index: 5;
             opacity: 0;
             transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
 
             @media (max-width: 768px) {
                 width: 32px;
@@ -551,14 +600,18 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             }
 
             &:hover {
-                background: rgba(0, 0, 0, 0.5);
+                background: rgba(0, 0, 0, 0.6);
                 color: $white;
-                transform: translateY(-50%) scale(1);
-                border-color: rgba(255, 255, 255, 0.08);
+                border-color: $border-medium;
+                transform: translateY(-50%) scale(1.05);
+
+                @media (max-width: 768px) {
+                    transform: translateY(-50%);
+                }
             }
 
             &.prev {
-                left: 12px;
+                left: 16px;
 
                 @media (max-width: 480px) {
                     left: 6px;
@@ -566,7 +619,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             }
 
             &.next {
-                right: 12px;
+                right: 16px;
 
                 @media (max-width: 480px) {
                     right: 6px;
@@ -574,29 +627,31 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             }
         }
 
-        .gallery-container:hover & .gallery-nav {
-            opacity: 0.8;
+        &:hover .gallery-nav {
+            opacity: 0.9;
         }
 
         .gallery-counter {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
-            padding: 3px 10px;
-            font-size: 0.6rem;
+            bottom: 16px;
+            right: 16px;
+            padding: 3px 12px;
+            font-size: 0.55rem;
             font-weight: 400;
-            color: $white-faint;
-            background: rgba(0, 0, 0, 0.3);
-            border: 0.5px solid rgba(255, 255, 255, 0.04);
+            color: $white-muted;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             z-index: 5;
             font-variant-numeric: tabular-nums;
             font-family: $font-mono;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
 
             @media (max-width: 480px) {
-                font-size: 0.55rem;
-                padding: 2px 8px;
-                bottom: 8px;
-                right: 8px;
+                font-size: 0.5rem;
+                padding: 2px 10px;
+                bottom: 10px;
+                right: 10px;
             }
         }
     }
@@ -604,20 +659,34 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     .gallery-thumbnails {
         display: flex;
         gap: 6px;
-        padding: 10px 14px;
-        background: rgba(0, 0, 0, 0.15);
+        padding: 12px 16px;
+        background: rgba(0, 0, 0, 0.2);
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
 
         @media (max-width: 480px) {
-            padding: 6px 10px;
+            padding: 8px 12px;
             gap: 4px;
+        }
+
+        &::-webkit-scrollbar {
+            height: 3px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 0;
         }
 
         .thumbnail {
             position: relative;
-            width: 72px;
-            height: 44px;
+            width: 80px;
+            height: 48px;
             border: none;
             overflow: hidden;
             cursor: pointer;
@@ -625,11 +694,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
             transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             flex-shrink: 0;
             padding: 0;
-            border: 0.5px solid transparent;
+            border: 1px solid transparent;
+            background: transparent;
 
             @media (max-width: 480px) {
-                width: 56px;
-                height: 34px;
+                width: 60px;
+                height: 36px;
             }
 
             &:hover {
@@ -638,13 +708,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
             &.active {
                 opacity: 1;
-                border-color: rgba(59, 233, 229, 0.1);
+                border-color: rgba(45, 212, 191, 0.15);
             }
 
             img {
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
+                background: $black;
             }
         }
     }
@@ -655,34 +726,93 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     100% { background-position: 200% 0; }
 }
 
-/* =========================
-   VIDEO CONTAINER
-========================= */
-
+// ========== VIDEO CONTAINER ==========
 .video-container {
     overflow: hidden;
     background: $dark;
-    border: 0.5px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid $border-solid;
     aspect-ratio: 16/9;
+    position: relative;
 
     @media (max-width: 480px) {
-        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        padding: 1px;
+        background: linear-gradient(135deg, rgba(45, 212, 191, 0.04), transparent 50%, rgba(45, 212, 191, 0.04));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+        z-index: 1;
     }
 
     iframe {
         width: 100%;
         height: 100%;
         border: none;
+        position: relative;
+        z-index: 0;
     }
 }
 
-/* =========================
-   DETAILS SECTIONS
-========================= */
+// ========== SECTION TITLE ==========
+.section-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
 
+    @media (max-width: 480px) {
+        margin-bottom: 24px;
+        gap: 12px;
+    }
+
+    .section-number {
+        font-family: $font-mono;
+        font-size: 0.55rem;
+        color: rgba(255, 255, 255, 0.04);
+        letter-spacing: 0.08em;
+        padding: 2px 8px;
+        border: 1px solid $border-solid;
+        flex-shrink: 0;
+    }
+
+    .section-title {
+        font-size: clamp(1.2rem, 2vw, 1.8rem);
+        font-weight: 600;
+        color: $white;
+        margin: 0;
+        letter-spacing: -0.02em;
+        font-family: $font-sans;
+        flex: 1;
+
+        @media (max-width: 480px) {
+            font-size: 1.1rem;
+        }
+    }
+
+    .section-accent {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(to right, $border-solid, transparent);
+        min-width: 40px;
+
+        @media (max-width: 480px) {
+            min-width: 20px;
+        }
+    }
+}
+
+// ========== DETAILS SECTIONS ==========
 .details-section {
-    padding: 48px 0;
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.03);
+    padding: 56px 32px;
+    border-bottom: 1px solid $border-solid;
     opacity: 0;
     transform: translateY(20px);
     animation: fadeInUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -693,7 +823,6 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     &:nth-child(4) { animation-delay: 0.2s; }
     &:nth-child(5) { animation-delay: 0.25s; }
     &:nth-child(6) { animation-delay: 0.3s; }
-    &:nth-child(7) { animation-delay: 0.35s; }
 
     &:last-of-type {
         border-bottom: none;
@@ -701,11 +830,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 
     @media (max-width: 768px) {
-        padding: 36px 0;
+        padding: 40px 16px;
     }
 
     @media (max-width: 480px) {
-        padding: 28px 0;
+        padding: 32px 12px;
     }
 }
 
@@ -723,42 +852,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .section-container {
     max-width: 100%;
 
-    .section-title {
-        font-size: clamp(1.1rem, 2vw, 1.8rem);
-        font-weight: 500;
-        color: $white;
-        margin: 0 0 28px 0;
-        letter-spacing: -0.02em;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-family: $font-sans;
-
-        @media (max-width: 480px) {
-            font-size: 1rem;
-            margin-bottom: 20px;
-        }
-
-        &::after {
-            content: '';
-            flex: 1;
-            height: 0.5px;
-            background: linear-gradient(to right, rgba(255, 255, 255, 0.04), transparent);
-        }
-    }
-
-    h3 {
-        font-size: 0.95rem;
-        font-weight: 400;
-        color: $white-faint;
-        margin: 0 0 8px 0;
-        letter-spacing: -0.01em;
-        font-family: $font-sans;
-    }
-
     p {
         font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.45);
+        color: $white-faint;
         line-height: 1.8;
         margin: 0;
         font-weight: 300;
@@ -771,57 +867,46 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 }
 
-/* =========================
-   OVERVIEW SECTION
-========================= */
-
+// ========== OVERVIEW ==========
 .overview-section {
     .overview-content {
-        max-width: 800px;
-
-        @media (max-width: 768px) {
-            max-width: 100%;
-        }
-        
         .overview-text {
-            font-size: clamp(0.9rem, 1.2vw, 1rem);
-            color: rgba(255, 255, 255, 0.5);
-            line-height: 1.9;
+            font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+            color: $white-muted;
+            line-height: 2;
             margin: 0;
             font-weight: 300;
+            max-width: 800px;
 
             @media (max-width: 480px) {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
                 line-height: 1.8;
             }
         }
     }
 }
 
-/* =========================
-   HIGHLIGHTS SECTION
-========================= */
-
+// ========== HIGHLIGHTS ==========
 .highlights-section {
     .highlights-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 16px;
+        gap: 20px;
 
         @media (max-width: 480px) {
             grid-template-columns: 1fr;
-            gap: 10px;
+            gap: 12px;
         }
 
         .highlight-card {
-            padding: 20px;
+            padding: 24px;
             background: rgba(255, 255, 255, 0.01);
-            border: 0.5px solid rgba(255, 255, 255, 0.03);
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            border: 1px solid $border-solid;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
 
             @media (max-width: 480px) {
-                padding: 16px;
+                padding: 18px;
             }
 
             &::before {
@@ -830,17 +915,22 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 top: 0;
                 left: 0;
                 right: 0;
-                height: 0.5px;
-                background: rgba(59, 233, 229, 0);
-                transition: opacity 0.3s ease;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.04), transparent);
+                opacity: 0;
+                transition: opacity 0.4s ease;
             }
 
-            &:hover {
-                background: rgba(255, 255, 255, 0.02);
-                border-color: rgba(255, 255, 255, 0.06);
+            @media (min-width: 769px) {
+                &:hover {
+                    background: rgba(255, 255, 255, 0.02);
+                    border-color: $border-medium;
+                    transform: translateY(-4px);
+                    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
 
-                &::before {
-                    background: rgba(59, 233, 229, 0.1);
+                    &::before {
+                        opacity: 1;
+                    }
                 }
             }
 
@@ -848,19 +938,27 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                padding: 8px;
-                background: rgba(59, 233, 229, 0.03);
-                border: 0.5px solid rgba(59, 233, 229, 0.04);
-                color: rgba(59, 233, 229, 0.3);
-                margin-bottom: 14px;
+                padding: 10px;
+                background: rgba(45, 212, 191, 0.03);
+                border: 1px solid rgba(45, 212, 191, 0.04);
+                color: rgba(45, 212, 191, 0.3);
+                margin-bottom: 16px;
+                transition: all 0.3s ease;
 
                 @media (max-width: 480px) {
-                    padding: 6px;
-                    margin-bottom: 10px;
+                    padding: 8px;
+                    margin-bottom: 12px;
 
                     svg {
                         width: 20px;
                         height: 20px;
+                    }
+                }
+
+                @media (min-width: 769px) {
+                    .highlight-card:hover & {
+                        background: rgba(45, 212, 191, 0.06);
+                        color: rgba(45, 212, 191, 0.5);
                     }
                 }
             }
@@ -879,7 +977,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
             .highlight-description {
                 font-size: 0.85rem;
-                color: rgba(255, 255, 255, 0.35);
+                color: $white-faint;
                 line-height: 1.6;
                 margin: 0;
                 font-weight: 300;
@@ -893,33 +991,36 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 }
 
-/* =========================
-   TECH STACK SECTION
-========================= */
-
+// ========== TECH STACK ==========
 .tech-section {
     .tech-stack-container {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 28px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 24px;
 
         @media (max-width: 480px) {
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 380px) {
             grid-template-columns: 1fr;
-            gap: 20px;
         }
 
         .tech-category {
             .tech-category-title {
-                font-size: 0.65rem;
+                font-size: 0.55rem;
                 font-weight: 400;
                 text-transform: uppercase;
                 letter-spacing: 0.08em;
                 color: rgba(255, 255, 255, 0.08);
-                margin: 0 0 10px 0;
+                margin: 0 0 12px 0;
                 font-family: $font-mono;
+                padding-bottom: 8px;
+                border-bottom: 1px solid $border-solid;
 
                 @media (max-width: 480px) {
-                    font-size: 0.6rem;
+                    font-size: 0.5rem;
                 }
             }
 
@@ -942,45 +1043,48 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         align-items: center;
         gap: 6px;
         padding: 6px 14px;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 400;
         background: rgba(255, 255, 255, 0.01);
-        border: 0.5px solid rgba(255, 255, 255, 0.03);
-        color: $white-faint;
+        border: 1px solid $border-solid;
+        color: $white-muted;
         transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         font-family: $font-mono;
+        letter-spacing: 0.02em;
 
         @media (max-width: 480px) {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             padding: 4px 10px;
         }
 
         svg {
             opacity: 0.3;
             transition: opacity 0.3s ease;
+            width: 16px;
+            height: 16px;
         }
 
-        &:hover {
-            background: rgba(255, 255, 255, 0.02);
-            border-color: rgba(255, 255, 255, 0.06);
-            color: $white;
+        @media (min-width: 769px) {
+            &:hover {
+                background: rgba(255, 255, 255, 0.03);
+                border-color: $border-medium;
+                color: $white;
+                transform: translateY(-2px);
 
-            svg {
-                opacity: 0.6;
+                svg {
+                    opacity: 0.6;
+                }
             }
         }
     }
 }
 
-/* =========================
-   FEATURES SECTION
-========================= */
-
+// ========== FEATURES ==========
 .features-section {
     .features-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 36px;
+        gap: 40px;
 
         @media (max-width: 768px) {
             grid-template-columns: 1fr;
@@ -993,19 +1097,18 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
         .feature-group {
             .feature-group-title {
-                font-size: 0.8rem;
+                font-size: 0.6rem;
                 font-weight: 400;
-                color: rgba(255, 255, 255, 0.2);
-                margin: 0 0 14px 0;
-                letter-spacing: -0.01em;
-                padding-bottom: 8px;
-                border-bottom: 0.5px solid rgba(255, 255, 255, 0.03);
+                color: rgba(255, 255, 255, 0.08);
+                margin: 0 0 16px 0;
+                padding-bottom: 10px;
+                border-bottom: 1px solid $border-solid;
                 font-family: $font-mono;
                 text-transform: uppercase;
-                letter-spacing: 0.06em;
+                letter-spacing: 0.08em;
 
                 @media (max-width: 480px) {
-                    font-size: 0.7rem;
+                    font-size: 0.55rem;
                 }
             }
 
@@ -1015,30 +1118,31 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 margin: 0;
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
+                gap: 10px;
 
                 @media (max-width: 480px) {
-                    gap: 6px;
+                    gap: 8px;
                 }
 
                 li {
                     display: flex;
                     align-items: flex-start;
-                    gap: 10px;
-                    color: rgba(255, 255, 255, 0.4);
+                    gap: 12px;
+                    color: $white-faint;
                     font-size: 0.85rem;
                     line-height: 1.6;
-                    padding: 4px 0;
+                    padding: 6px 0;
                     font-weight: 300;
                     font-family: $font-sans;
 
                     @media (max-width: 480px) {
                         font-size: 0.8rem;
-                        gap: 8px;
+                        gap: 10px;
+                        padding: 4px 0;
                     }
 
                     svg {
-                        color: rgba(59, 233, 229, 0.15);
+                        color: rgba(45, 212, 191, 0.15);
                         flex-shrink: 0;
                         margin-top: 2px;
                         transition: color 0.3s ease;
@@ -1050,7 +1154,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                     }
 
                     &:hover svg {
-                        color: rgba(59, 233, 229, 0.3);
+                        color: rgba(45, 212, 191, 0.3);
                     }
                 }
             }
@@ -1058,15 +1162,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 }
 
-/* =========================
-   DEV NOTES SECTION
-========================= */
-
+// ========== DEV NOTES ==========
 .dev-notes-section {
     .dev-notes-content {
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 14px;
 
         @media (max-width: 480px) {
             gap: 10px;
@@ -1075,24 +1176,28 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         .dev-note {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-            padding: 14px 18px;
+            gap: 14px;
+            padding: 16px 20px;
             background: rgba(255, 255, 255, 0.01);
-            border: 0.5px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid $border-solid;
             transition: all 0.3s ease;
+            border-left: 1px solid rgba(45, 212, 191, 0.04);
 
             @media (max-width: 480px) {
-                padding: 12px 14px;
+                padding: 12px 16px;
                 gap: 10px;
             }
 
-            &:hover {
-                background: rgba(255, 255, 255, 0.015);
-                border-color: rgba(255, 255, 255, 0.05);
+            @media (min-width: 769px) {
+                &:hover {
+                    background: rgba(255, 255, 255, 0.015);
+                    border-color: $border-medium;
+                    border-left-color: rgba(45, 212, 191, 0.08);
+                }
             }
 
             svg {
-                color: rgba(59, 233, 229, 0.1);
+                color: rgba(45, 212, 191, 0.1);
                 flex-shrink: 0;
                 margin-top: 2px;
 
@@ -1104,7 +1209,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
             p {
                 font-size: 0.9rem;
-                color: rgba(255, 255, 255, 0.4);
+                color: $white-faint;
                 line-height: 1.7;
                 margin: 0;
                 font-weight: 300;
@@ -1118,27 +1223,35 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 }
 
-/* =========================
-   ARCHITECTURE SECTION
-========================= */
-
+// ========== ARCHITECTURE ==========
 .architecture-section {
     .architecture-content {
         .architecture-code {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border: 0.5px solid rgba(255, 255, 255, 0.03);
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid $border-solid;
             overflow-x: auto;
             font-family: $font-mono;
             font-size: 0.8rem;
             line-height: 1.8;
-            color: rgba(255, 255, 255, 0.4);
+            color: $white-faint;
             margin: 0;
             white-space: pre-wrap;
             word-break: break-word;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.04), transparent);
+            }
 
             @media (max-width: 480px) {
-                padding: 14px;
+                padding: 16px;
                 font-size: 0.7rem;
                 line-height: 1.6;
             }
@@ -1146,35 +1259,45 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
 }
 
-/* =========================
-   RESOURCES SECTION
-========================= */
-
+// ========== RESOURCES ==========
 .resources-section {
     .resources-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px;
+        gap: 12px;
 
         @media (max-width: 480px) {
             grid-template-columns: 1fr;
-            gap: 6px;
+            gap: 8px;
         }
 
         .resource-card {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 18px;
+            gap: 14px;
+            padding: 16px 20px;
             background: rgba(255, 255, 255, 0.01);
-            border: 0.5px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid $border-solid;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            color: $white-faint;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            color: $white-muted;
+            position: relative;
 
             @media (max-width: 480px) {
-                padding: 12px 14px;
-                gap: 10px;
+                padding: 14px 16px;
+                gap: 12px;
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.04), transparent);
+                opacity: 0;
+                transition: opacity 0.4s ease;
             }
 
             svg {
@@ -1189,12 +1312,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
             .resource-label {
                 flex: 1;
-                font-size: 0.85rem;
+                font-size: 0.8rem;
                 font-weight: 400;
                 font-family: $font-sans;
 
                 @media (max-width: 480px) {
-                    font-size: 0.8rem;
+                    font-size: 0.75rem;
                 }
             }
 
@@ -1204,28 +1327,201 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
                 transition: all 0.3s ease;
             }
 
-            &:hover {
-                background: rgba(255, 255, 255, 0.02);
-                border-color: rgba(255, 255, 255, 0.06);
-                color: $white;
+            @media (min-width: 769px) {
+                &:hover {
+                    background: rgba(255, 255, 255, 0.02);
+                    border-color: $border-medium;
+                    color: $white;
+                    transform: translateY(-2px);
 
-                svg {
-                    opacity: 0.6;
-                }
+                    &::before {
+                        opacity: 1;
+                    }
 
-                .resource-arrow {
-                    opacity: 1;
-                    transform: translateX(0);
+                    svg {
+                        opacity: 0.6;
+                    }
+
+                    .resource-arrow {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
                 }
             }
         }
     }
 }
 
-/* =========================
-   REDUCED MOTION
-========================= */
+// ========== CTA SECTION ==========
+.cta-section {
+    padding-bottom: 64px !important;
 
+    @media (max-width: 768px) {
+        padding-bottom: 48px !important;
+    }
+
+    @media (max-width: 480px) {
+        padding-bottom: 40px !important;
+    }
+
+    .cta-container {
+        text-align: center;
+
+        .cta-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, $border-solid, transparent);
+            margin: 0 auto 48px;
+            max-width: 400px;
+
+            @media (max-width: 480px) {
+                margin: 0 auto 32px;
+                max-width: 200px;
+            }
+        }
+
+        .cta-content {
+            .cta-title {
+                font-size: clamp(1.5rem, 3vw, 2.5rem);
+                font-weight: 600;
+                color: $white;
+                margin: 0 0 12px 0;
+                letter-spacing: -0.02em;
+                font-family: $font-sans;
+
+                @media (max-width: 480px) {
+                    font-size: 1.3rem;
+                }
+            }
+
+            .cta-description {
+                font-size: 1rem;
+                color: $white-muted;
+                max-width: 560px;
+                margin: 0 auto 32px;
+                line-height: 1.7;
+                font-weight: 300;
+
+                @media (max-width: 480px) {
+                    font-size: 0.9rem;
+                    margin-bottom: 24px;
+                    padding: 0 8px;
+                }
+            }
+
+            .cta-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+
+                @media (max-width: 480px) {
+                    flex-direction: column;
+                    align-items: stretch;
+                    gap: 8px;
+                    padding: 0 4px;
+                }
+
+                .cta-primary,
+                .cta-secondary,
+                .cta-tertiary {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    padding: 10px 22px;
+                    font-size: 0.75rem;
+                    font-weight: 400;
+                    text-decoration: none;
+                    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+                    font-family: $font-mono;
+                    letter-spacing: 0.04em;
+                    border: 1px solid transparent;
+                    min-height: 44px;
+
+                    @media (max-width: 480px) {
+                        padding: 12px 16px;
+                        font-size: 0.7rem;
+                        min-height: 48px;
+                        width: 100%;
+                        justify-content: center;
+                    }
+                }
+
+                .cta-primary {
+                    background: rgba(45, 212, 191, 0.04);
+                    border-color: rgba(45, 212, 191, 0.08);
+                    color: $white-muted;
+
+                    @media (min-width: 769px) {
+                        &:hover {
+                            background: rgba(45, 212, 191, 0.08);
+                            border-color: rgba(45, 212, 191, 0.15);
+                            color: $white;
+                            transform: translateY(-2px);
+                        }
+                    }
+
+                    @media (max-width: 480px) {
+                        background: rgba(45, 212, 191, 0.06);
+                        border-color: rgba(45, 212, 191, 0.1);
+                    }
+                }
+
+                .cta-secondary {
+                    background: rgba(255, 255, 255, 0.01);
+                    border-color: $border-solid;
+                    color: $white-muted;
+
+                    @media (min-width: 769px) {
+                        &:hover {
+                            background: rgba(255, 255, 255, 0.03);
+                            border-color: $border-medium;
+                            color: $white;
+                            transform: translateY(-2px);
+                        }
+                    }
+
+                    @media (max-width: 480px) {
+                        background: rgba(255, 255, 255, 0.02);
+                    }
+                }
+
+                .cta-tertiary {
+                    background: transparent;
+                    border-color: transparent;
+                    color: $white-very-faint;
+
+                    @media (min-width: 769px) {
+                        &:hover {
+                            color: $white-muted;
+                            transform: translateY(-2px);
+                        }
+                    }
+
+                    @media (max-width: 480px) {
+                        color: $white-very-faint;
+                        border-color: $border-solid;
+                        
+                        &:hover {
+                            color: $white-muted;
+                        }
+                    }
+                }
+            }
+        }
+
+        .cta-divider:last-child {
+            margin-top: 48px;
+            margin-bottom: 0;
+
+            @media (max-width: 480px) {
+                margin-top: 32px;
+            }
+        }
+    }
+}
+
+// ========== REDUCED MOTION ==========
 @media (prefers-reduced-motion: reduce) {
     .project-details-loading .loading-spinner {
         animation: none;
@@ -1237,37 +1533,24 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         transform: none;
     }
 
-    .gallery-container {
-        .gallery-main .gallery-nav {
-            opacity: 0.8;
-        }
-
-        .gallery-thumbnails .thumbnail {
-            transition: none;
-        }
+    .gallery-container .gallery-main .gallery-nav {
+        opacity: 0.8;
     }
 
-    .tech-chip {
+    .gallery-container .gallery-thumbnails .thumbnail {
         transition: none;
-
-        &:hover {
-            transform: none;
-        }
     }
 
-    .highlight-card {
-        transition: none;
-
+    .tech-chip,
+    .highlight-card,
+    .resource-card,
+    .btn-primary,
+    .btn-secondary,
+    .back-button {
+        transition: none !important;
+        
         &:hover {
-            transform: none;
-        }
-    }
-
-    .resource-card {
-        transition: none;
-
-        &:hover {
-            transform: none;
+            transform: none !important;
         }
     }
 
@@ -1275,31 +1558,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         animation: none;
     }
 
-    .btn-primary, .btn-secondary {
-        transition: none;
-
-        &:hover {
-            transform: none;
-        }
-    }
-
-    .back-button {
-        transition: none;
-
-        &:hover {
-            transform: none;
-        }
-    }
-
-    .back-button-container {
-        transition: none;
+    .status-dot {
+        animation: none !important;
     }
 }
 
-/* =========================
-   TOUCH DEVICE OPTIMIZATIONS
-========================= */
-
+// ========== TOUCH DEVICE OPTIMIZATIONS ==========
 @media (hover: none) and (pointer: coarse) {
     .gallery-container .gallery-main .gallery-nav {
         opacity: 0.8;
@@ -1311,20 +1575,98 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         opacity: 0.5;
     }
 
-    .tech-chip:hover {
-        transform: none;
-    }
-
-    .highlight-card:hover {
-        transform: none;
-    }
-
+    .tech-chip:hover,
+    .highlight-card:hover,
     .resource-card:hover {
-        transform: none;
+        transform: none !important;
     }
 
     .btn-primary:hover,
     .btn-secondary:hover {
-        transform: none;
+        transform: none !important;
+    }
+}
+
+// ========== PRINT ==========
+@media print {
+    .project-details-page {
+        padding: 0 !important;
+        background: white !important;
+    }
+
+    .back-button-container {
+        display: none !important;
+    }
+
+    .details-hero {
+        padding: 0 16px 32px !important;
+    }
+
+    .details-section {
+        padding: 24px 16px !important;
+        border-color: #ddd !important;
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+    }
+
+    .hero-title {
+        color: #333 !important;
+    }
+
+    .hero-subtitle,
+    .hero-description {
+        color: #666 !important;
+    }
+
+    .gallery-container {
+        border-color: #ddd !important;
+        
+        .gallery-overlay,
+        .gallery-nav,
+        .gallery-counter {
+            display: none !important;
+        }
+    }
+
+    .tech-chip {
+        border-color: #ddd !important;
+        color: #666 !important;
+        background: #f5f5f5 !important;
+    }
+
+    .highlight-card {
+        border-color: #ddd !important;
+        
+        .highlight-title {
+            color: #333 !important;
+        }
+        
+        .highlight-description {
+            color: #666 !important;
+        }
+    }
+
+    .cta-section {
+        .cta-divider {
+            background: #ddd !important;
+        }
+        
+        .cta-title {
+            color: #333 !important;
+        }
+        
+        .cta-description {
+            color: #666 !important;
+        }
+    }
+
+    .section-number {
+        color: #999 !important;
+        border-color: #ddd !important;
+    }
+
+    .section-title {
+        color: #333 !important;
     }
 }

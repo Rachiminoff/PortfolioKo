@@ -4,7 +4,9 @@ import { Icon } from '@iconify/react';
 import { projectsData, Project } from '../types/projects.data';
 import '../assets/styles/ProjectDetailsPage.scss';
 
-// Image Gallery Component with improved interactions
+// ============================================================
+// IMAGE GALLERY - PREMIUM
+// ============================================================
 const ProjectGallery: React.FC<{ images: string[]; title: string }> = ({ images, title }) => {
     const [current, setCurrent] = useState(0);
     const [isHovering, setIsHovering] = useState(false);
@@ -45,6 +47,34 @@ const ProjectGallery: React.FC<{ images: string[]; title: string }> = ({ images,
         setImageLoaded(false);
     }, [images.length]);
 
+    // Handle touch swipe
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStart(e.touches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.touches[0].clientX);
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+        
+        if (isLeftSwipe && images.length > 1) {
+            nextSlide({ stopPropagation: () => {} } as React.MouseEvent);
+        }
+        if (isRightSwipe && images.length > 1) {
+            prevSlide({ stopPropagation: () => {} } as React.MouseEvent);
+        }
+        setTouchStart(null);
+        setTouchEnd(null);
+    };
+
     return (
         <div 
             className="gallery-wrapper"
@@ -52,7 +82,13 @@ const ProjectGallery: React.FC<{ images: string[]; title: string }> = ({ images,
             onMouseLeave={() => setIsHovering(false)}
         >
             <div className={`gallery-container ${isZoomed ? 'zoomed' : ''}`}>
-                <div className="gallery-main" onClick={() => setIsZoomed(!isZoomed)}>
+                <div 
+                    className="gallery-main" 
+                    onClick={() => setIsZoomed(!isZoomed)}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                >
                     {!imageLoaded && <div className="image-skeleton" />}
                     <img
                         src={images[current]}
@@ -60,11 +96,12 @@ const ProjectGallery: React.FC<{ images: string[]; title: string }> = ({ images,
                         className={`gallery-image ${imageLoaded ? 'loaded' : ''}`}
                         loading="lazy"
                         onLoad={() => setImageLoaded(true)}
+                        draggable={false}
                     />
                     <div className="gallery-overlay">
                         <span className="gallery-hint">
-                            <Icon icon="mdi:expand" width={18} height={18} />
-                            Click to expand
+                            <Icon icon="mdi:expand" width={16} height={16} />
+                            <span className="hint-text">Tap to expand</span>
                         </span>
                     </div>
                     {images.length > 1 && (
@@ -93,7 +130,7 @@ const ProjectGallery: React.FC<{ images: string[]; title: string }> = ({ images,
                                 }}
                                 aria-label={`Go to image ${idx + 1}`}
                             >
-                                <img src={img} alt={`Thumbnail ${idx + 1}`} loading="lazy" />
+                                <img src={img} alt={`Thumbnail ${idx + 1}`} loading="lazy" draggable={false} />
                             </button>
                         ))}
                     </div>
@@ -103,7 +140,9 @@ const ProjectGallery: React.FC<{ images: string[]; title: string }> = ({ images,
     );
 };
 
-// Tech Stack Category Component
+// ============================================================
+// TECH CATEGORY
+// ============================================================
 const TechCategory: React.FC<{ category: string; items: string[] }> = ({ category, items }) => {
     const techIconMap: Record<string, string> = {
         'React': 'mdi:react',
@@ -155,7 +194,9 @@ const TechCategory: React.FC<{ category: string; items: string[] }> = ({ categor
     );
 };
 
-// Highlight Card Component
+// ============================================================
+// HIGHLIGHT CARD
+// ============================================================
 const HighlightCard: React.FC<{ icon: string; title: string; description: string }> = ({ 
     icon, title, description 
 }) => (
@@ -168,7 +209,9 @@ const HighlightCard: React.FC<{ icon: string; title: string; description: string
     </div>
 );
 
-// Feature Group Component
+// ============================================================
+// FEATURE GROUP
+// ============================================================
 const FeatureGroup: React.FC<{ title: string; features: string[] }> = ({ title, features }) => (
     <div className="feature-group">
         <h4 className="feature-group-title">{title}</h4>
@@ -183,7 +226,20 @@ const FeatureGroup: React.FC<{ title: string; features: string[] }> = ({ title, 
     </div>
 );
 
-// Main Project Details Page
+// ============================================================
+// SECTION TITLE COMPONENT
+// ============================================================
+const SectionTitle: React.FC<{ number: string; title: string }> = ({ number, title }) => (
+    <div className="section-title-wrapper">
+        <span className="section-number">{number}</span>
+        <h2 className="section-title">{title}</h2>
+        <span className="section-accent" />
+    </div>
+);
+
+// ============================================================
+// MAIN PROJECT DETAILS PAGE
+// ============================================================
 const ProjectDetailsPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const navigate = useNavigate();
@@ -191,7 +247,6 @@ const ProjectDetailsPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [mounted, setMounted] = useState(false);
     const [showBackButton, setShowBackButton] = useState(false);
-    const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const heroRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
@@ -236,9 +291,9 @@ const ProjectDetailsPage: React.FC = () => {
     if (!project) return null;
 
     const statusColor = {
-        'Active': '#3BE9E5',
-        'Completed': '#3BE9E5',
-        'In Development': '#3BE9E5',
+        'Active': '#2dd4bf',
+        'Completed': '#2dd4bf',
+        'In Development': '#2dd4bf',
         'Archived': '#6b7280'
     };
 
@@ -262,11 +317,6 @@ const ProjectDetailsPage: React.FC = () => {
         return acc;
     }, {} as { [key: string]: string[] });
 
-    // Set ref callback
-    const setSectionRef = (id: string) => (el: HTMLDivElement | null) => {
-        sectionRefs.current[id] = el;
-    };
-
     return (
         <div className="project-details-page">
             {/* Back Button - Sticky */}
@@ -277,14 +327,14 @@ const ProjectDetailsPage: React.FC = () => {
                 </Link>
             </div>
 
-            {/* Hero Section */}
+            {/* ========== HERO SECTION ========== */}
             <section className="details-hero" id="hero" ref={heroRef}>
-                {/* Regular Back Button (visible at top) */}
                 <Link to="/projects" className="back-button hero-back">
                     <Icon icon="mdi:arrow-left" width={18} height={18} />
                     <span>Back to Projects</span>
                 </Link>
 
+                {/* Gallery or Video */}
                 {project.images && project.images.length > 0 && (
                     <ProjectGallery images={project.images} title={project.title} />
                 )}
@@ -302,7 +352,9 @@ const ProjectDetailsPage: React.FC = () => {
                         ></iframe>
                     </div>
                 )}
+
                 <div className="hero-content">
+                    {/* Meta Badges */}
                     <div className="hero-meta">
                         <span className="role-badge">{project.role}</span>
                         <span className="status-badge" style={{ 
@@ -317,10 +369,12 @@ const ProjectDetailsPage: React.FC = () => {
                             {project.duration}
                         </span>
                     </div>
+
                     <h1 className="hero-title">{project.title}</h1>
                     <p className="hero-subtitle">{project.subtitle}</p>
                     <p className="hero-description">{project.description}</p>
                     
+                    {/* Action Buttons */}
                     <div className="hero-actions">
                         <a href={project.link} target="_blank" rel="noreferrer" className="btn-primary">
                             <Icon icon="mdi:github" width={18} height={18} />
@@ -342,29 +396,21 @@ const ProjectDetailsPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Overview Section */}
-            <section 
-                className="details-section overview-section" 
-                id="overview"
-                ref={setSectionRef('overview')}
-            >
+            {/* ========== OVERVIEW SECTION ========== */}
+            <section className="details-section overview-section" id="overview">
                 <div className="section-container">
-                    <h2 className="section-title">Overview</h2>
+                    <SectionTitle number="01" title="Overview" />
                     <div className="overview-content">
                         <p className="overview-text">{project.overview || project.description}</p>
                     </div>
                 </div>
             </section>
 
-            {/* Highlights Section */}
+            {/* ========== HIGHLIGHTS SECTION ========== */}
             {project.highlights && project.highlights.length > 0 && (
-                <section 
-                    className="details-section highlights-section"
-                    id="highlights"
-                    ref={setSectionRef('highlights')}
-                >
+                <section className="details-section highlights-section" id="highlights">
                     <div className="section-container">
-                        <h2 className="section-title">Highlights</h2>
+                        <SectionTitle number="02" title="Highlights" />
                         <div className="highlights-grid">
                             {project.highlights.map((highlight, idx) => (
                                 <HighlightCard 
@@ -379,14 +425,10 @@ const ProjectDetailsPage: React.FC = () => {
                 </section>
             )}
 
-            {/* Tech Stack Section */}
-            <section 
-                className="details-section tech-section"
-                id="tech-stack"
-                ref={setSectionRef('tech-stack')}
-            >
+            {/* ========== TECH STACK SECTION ========== */}
+            <section className="details-section tech-section" id="tech-stack">
                 <div className="section-container">
-                    <h2 className="section-title">Tech Stack</h2>
+                    <SectionTitle number="03" title="Tech Stack" />
                     <div className="tech-stack-container">
                         {Object.entries(categorizedTech).map(([category, items]) => (
                             <TechCategory key={category} category={category} items={items} />
@@ -405,14 +447,10 @@ const ProjectDetailsPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section 
-                className="details-section features-section"
-                id="features"
-                ref={setSectionRef('features')}
-            >
+            {/* ========== FEATURES SECTION ========== */}
+            <section className="details-section features-section" id="features">
                 <div className="section-container">
-                    <h2 className="section-title">Features</h2>
+                    <SectionTitle number="04" title="Features" />
                     <div className="features-grid">
                         <FeatureGroup 
                             title="Core Features"
@@ -426,15 +464,11 @@ const ProjectDetailsPage: React.FC = () => {
                 </div>
             </section>
 
-            {/* Development Notes */}
+            {/* ========== DEVELOPMENT NOTES ========== */}
             {project.devNotes && project.devNotes.length > 0 && (
-                <section 
-                    className="details-section dev-notes-section"
-                    id="development"
-                    ref={setSectionRef('development')}
-                >
+                <section className="details-section dev-notes-section" id="development">
                     <div className="section-container">
-                        <h2 className="section-title">Development Notes</h2>
+                        <SectionTitle number="05" title="Development Notes" />
                         <div className="dev-notes-content">
                             {project.devNotes.map((note, i) => (
                                 <div key={i} className="dev-note">
@@ -447,15 +481,11 @@ const ProjectDetailsPage: React.FC = () => {
                 </section>
             )}
 
-            {/* Architecture (if available) */}
+            {/* ========== ARCHITECTURE ========== */}
             {project.architecture && (
-                <section 
-                    className="details-section architecture-section"
-                    id="architecture"
-                    ref={setSectionRef('architecture')}
-                >
+                <section className="details-section architecture-section" id="architecture">
                     <div className="section-container">
-                        <h2 className="section-title">Architecture</h2>
+                        <SectionTitle number="06" title="Architecture" />
                         <div className="architecture-content">
                             <pre className="architecture-code">
                                 <code>{project.architecture}</code>
@@ -465,10 +495,10 @@ const ProjectDetailsPage: React.FC = () => {
                 </section>
             )}
 
-            {/* Resources Section */}
+            {/* ========== RESOURCES SECTION ========== */}
             <section className="details-section resources-section" id="resources">
                 <div className="section-container">
-                    <h2 className="section-title">Resources</h2>
+                    <SectionTitle number="07" title="Resources" />
                     <div className="resources-grid">
                         <a href={project.link} target="_blank" rel="noreferrer" className="resource-card">
                             <Icon icon="mdi:github" width={22} height={22} />
@@ -496,6 +526,34 @@ const ProjectDetailsPage: React.FC = () => {
                             </a>
                         )}
                     </div>
+                </div>
+            </section>
+
+            {/* ========== PREMIUM ENDING / CTA ========== */}
+            <section className="details-section cta-section" id="cta">
+                <div className="section-container cta-container">
+                    <div className="cta-divider" />
+                    <div className="cta-content">
+                        <h2 className="cta-title">Interested in this project?</h2>
+                        <p className="cta-description">
+                            Explore the source code, try the live demo, or reach out to discuss how we can build something similar together.
+                        </p>
+                        <div className="cta-actions">
+                            <a href={project.link} target="_blank" rel="noreferrer" className="cta-primary">
+                                <Icon icon="mdi:github" width={20} height={20} />
+                                View Source
+                            </a>
+                            <a href="mailto:tdy.alhassan@gmail.com" className="cta-secondary">
+                                <Icon icon="mdi:email-outline" width={20} height={20} />
+                                Let's Talk
+                            </a>
+                            <Link to="/projects" className="cta-tertiary">
+                                <Icon icon="mdi:arrow-left" width={18} height={18} />
+                                All Projects
+                            </Link>
+                        </div>
+                    </div>
+                    <div className="cta-divider" />
                 </div>
             </section>
         </div>
