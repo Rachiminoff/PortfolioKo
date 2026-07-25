@@ -1,19 +1,26 @@
 /* =========================
-   VARIABLES - DARK PREMIUM
+   VARIABLES 
 ========================= */
-$black: #070707;
-$dark: #0F0F0F;
-$gray-dark: #1A1A1A;
-$gray: #232323;
-$gray-light: #3A3A3A;
-$white: #F5F5F5;
-$white-dim: rgba(255, 255, 255, 0.7);
-$white-faint: rgba(255, 255, 255, 0.3);
-$white-subtle: rgba(255, 255, 255, 0.04);
-$cyan: #3BE9E5;
-$cyan-dim: rgba(59, 233, 229, 0.15);
-$orange: #FF5A4A;
-$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$black: #0f0f0f;
+$dark: #181818;
+$gray-dark: #222222;
+$gray: #2c2c2c;
+$gray-medium: #3a3a3a;
+$gray-light: #4a4a4a;
+$gray-lighter: #5a5a5a;
+$white: #f5f5f5;
+$white-dim: rgba(255, 255, 255, 0.92);
+$white-muted: rgba(255, 255, 255, 0.7);
+$white-faint: rgba(255, 255, 255, 0.5);
+$white-subtle: rgba(255, 255, 255, 0.1);
+$cyan: #2dd4bf;
+$cyan-bright: #5eead4;
+$cyan-dim: rgba(45, 212, 191, 0.15);
+$cyan-glow: rgba(45, 212, 191, 0.3);
+$border-solid: rgba(255, 255, 255, 0.15);
+$border-medium: rgba(255, 255, 255, 0.25);
+$border-light: rgba(255, 255, 255, 0.35);
+$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 /* =========================
@@ -51,6 +58,17 @@ body {
     z-index: 1;
     background: $black;
     opacity: 1 !important;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 2.5rem;
+
+    @media (max-width: 1024px) {
+        padding: 0 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        padding: 0 1rem;
+    }
 }
 
 /* =========================
@@ -64,6 +82,7 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 0;
+    overflow: hidden;
 
     .grid-line {
         position: absolute;
@@ -71,28 +90,28 @@ body {
         &.vertical {
             top: 0;
             bottom: 0;
-            width: 0.5px;
-            background: rgba(255, 255, 255, 0.02);
+            width: 1px;
+            background: rgba(255, 255, 255, 0.06);
             
             &.major {
-                background: rgba(255, 255, 255, 0.06);
+                background: rgba(255, 255, 255, 0.12);
             }
         }
 
         &.horizontal {
             left: 0;
             right: 0;
-            height: 0.5px;
-            background: rgba(255, 255, 255, 0.02);
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
             
             &.major {
-                background: rgba(255, 255, 255, 0.06);
+                background: rgba(255, 255, 255, 0.12);
             }
         }
         
         &.connector {
-            height: 0.3px;
-            background: rgba(59, 233, 229, 0.04);
+            height: 1px;
+            background: rgba(45, 212, 191, 0.08);
             pointer-events: none;
         }
     }
@@ -101,7 +120,7 @@ body {
         position: absolute;
         font-family: $font-mono;
         font-size: 0.5rem;
-        color: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.15);
         letter-spacing: 0.12em;
         pointer-events: none;
     }
@@ -110,7 +129,7 @@ body {
         position: absolute;
         width: 16px;
         height: 16px;
-        border: 0.5px solid rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         
         &.tl {
             top: 16px;
@@ -145,7 +164,7 @@ body {
         position: absolute;
         font-family: $font-mono;
         font-size: 0.45rem;
-        color: rgba(255, 255, 255, 0.03);
+        color: rgba(255, 255, 255, 0.1);
         letter-spacing: 0.05em;
         pointer-events: none;
     }
@@ -181,7 +200,7 @@ body {
                 &.outer {
                     width: 100%;
                     height: 100%;
-                    border: 0.5px solid rgba(255, 255, 255, 0.04);
+                    border: 1px solid rgba(255, 255, 255, 0.08);
                     animation: rotateCircle 45s linear infinite;
                 }
                 
@@ -190,7 +209,7 @@ body {
                     height: 75%;
                     top: 12.5%;
                     left: 12.5%;
-                    border: 0.5px dashed rgba(59, 233, 229, 0.04);
+                    border: 1px dashed rgba(45, 212, 191, 0.1);
                     animation: rotateCircle 30s linear infinite reverse;
                 }
             }
@@ -201,7 +220,7 @@ body {
                 right: -16px;
                 font-family: $font-mono;
                 font-size: 0.5rem;
-                color: rgba(255, 255, 255, 0.04);
+                color: rgba(255, 255, 255, 0.1);
                 letter-spacing: 0.08em;
             }
 
@@ -217,7 +236,7 @@ body {
             width: 320px;
             height: 320px;
             border-radius: 50%;
-            border: 0.3px solid rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             top: 45%;
             right: 22%;
             
@@ -252,7 +271,7 @@ body {
             position: absolute;
             width: 60px;
             height: 60px;
-            border: 0.5px solid rgba(59, 233, 229, 0.04);
+            border: 1px solid rgba(45, 212, 191, 0.08);
             
             &.top {
                 top: 15%;
@@ -303,6 +322,27 @@ body {
     to { transform: rotate(360deg); }
 }
 
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulseBorder {
+    0%, 100% { border-color: rgba(45, 212, 191, 0.1); }
+    50% { border-color: rgba(45, 212, 191, 0.3); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+}
+
 /* =========================
    HERO SECTION
 ========================= */
@@ -311,17 +351,17 @@ body {
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 40px 60px;
+    padding: 40px 0;
     position: relative;
     background: $black;
     width: 100%;
 
     @media (max-width: 1024px) {
-        padding: 40px 40px;
+        padding: 30px 0;
     }
 
     @media (max-width: 768px) {
-        padding: 24px 20px;
+        padding: 20px 0;
         align-items: flex-start;
         padding-top: 30px;
     }
@@ -331,7 +371,6 @@ body {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
     gap: 60px;
-    max-width: 1360px;
     width: 100%;
     align-items: center;
 
@@ -352,7 +391,7 @@ body {
 .hero-left {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 
     @media (max-width: 768px) {
         gap: 12px;
@@ -365,16 +404,23 @@ body {
     align-items: center;
     gap: 12px;
     font-family: $font-mono;
-    font-size: 0.6rem;
+    font-size: 0.65rem;
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.4);
+    animation: fadeUp 0.6s ease forwards;
 
     .meta-dot {
         font-size: 0.3rem;
         color: $cyan;
-        opacity: 0.3;
+        opacity: 0.7;
+    }
+
+    .meta-label {
+        &:first-child {
+            color: rgba(255, 255, 255, 0.5);
+        }
     }
 
     @media (max-width: 768px) {
@@ -385,7 +431,7 @@ body {
 
 .hero-title {
     font-size: clamp(3.5rem, 10vw, 8.5rem);
-    font-weight: 700;
+    font-weight: 900;
     letter-spacing: -0.03em;
     line-height: 0.9;
     display: flex;
@@ -393,6 +439,7 @@ body {
     text-transform: uppercase;
     cursor: default;
     color: $white;
+    animation: fadeUp 0.8s ease forwards;
 
     .title-line {
         display: block;
@@ -401,7 +448,8 @@ body {
         position: relative;
         opacity: 1 !important;
         transform: none !important;
-        font-weight: 700;
+        font-weight: 900;
+        transition: color 0.3s ease;
 
         &::after {
             content: '';
@@ -409,14 +457,18 @@ body {
             bottom: 2px;
             left: 0;
             width: 0;
-            height: 1px;
+            height: 2px;
             background: $cyan;
             transition: width 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            opacity: 0.15;
+            opacity: 0.5;
         }
 
-        &:hover::after {
-            width: 100%;
+        &:hover {
+            color: $cyan-bright;
+            
+            &::after {
+                width: 100%;
+            }
         }
     }
 
@@ -431,10 +483,11 @@ body {
     flex-direction: column;
     gap: 2px;
     margin-top: 4px;
+    animation: fadeUp 1s ease forwards;
 
     .subtitle-primary {
         font-size: clamp(1rem, 1.5vw, 1.4rem);
-        font-weight: 300;
+        font-weight: 400;
         color: $white-dim;
         letter-spacing: 0.04em;
     }
@@ -442,7 +495,7 @@ body {
     .subtitle-secondary {
         font-size: clamp(0.85rem, 1.2vw, 1.1rem);
         font-weight: 300;
-        color: $white-faint;
+        color: $white-muted;
         letter-spacing: 0.06em;
     }
 
@@ -461,22 +514,15 @@ body {
 ========================= */
 .hero-actions {
     display: flex;
-    gap: 2px;
+    gap: 10px;
     margin-top: 8px;
     flex-wrap: wrap;
     align-items: center;
-    background: $dark;
-    border: 0.5px solid rgba(255, 255, 255, 0.03);
-    padding: 2px;
-    max-width: fit-content;
+    animation: fadeUp 1.2s ease forwards;
 
     @media (max-width: 768px) {
         width: 100%;
-        max-width: 100%;
         flex-direction: column;
-        background: transparent;
-        border: none;
-        padding: 0;
         gap: 8px;
     }
 
@@ -484,15 +530,15 @@ body {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        color: $white-faint;
+        color: $white-muted;
         text-decoration: none;
         font-size: 0.75rem;
-        font-weight: 400;
+        font-weight: 500;
         letter-spacing: 0.04em;
         background: transparent;
-        border: none;
+        border: 1px solid $border-solid;
         cursor: pointer;
-        padding: 12px 24px;
+        padding: 12px 28px;
         position: relative;
         transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         font-family: $font-sans;
@@ -504,46 +550,46 @@ body {
             width: 100%;
             justify-content: center;
             padding: 14px 20px;
-            border: 0.5px solid rgba(255, 255, 255, 0.04);
-            background: rgba(255, 255, 255, 0.02);
         }
 
         .action-text {
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.08em;
+            font-weight: 500;
         }
 
         .action-arrow {
             transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            opacity: 0.3;
+            opacity: 0.4;
             font-size: 0.8rem;
         }
 
         &:hover {
             color: $white;
-            background: rgba(255, 255, 255, 0.02);
+            border-color: $cyan;
+            box-shadow: 0 0 25px $cyan-glow, inset 0 0 25px $cyan-dim;
 
             .action-arrow {
                 transform: translateX(4px);
                 opacity: 0.8;
-            }
-
-            @media (max-width: 768px) {
-                background: rgba(255, 255, 255, 0.04);
+                color: $cyan;
             }
         }
 
         &.primary {
             color: $white;
-            background: rgba(255, 255, 255, 0.03);
+            border-color: $cyan;
+            background: $cyan-dim;
 
             .action-arrow {
                 opacity: 0.6;
+                color: $cyan;
             }
 
             &:hover {
-                background: rgba(255, 255, 255, 0.06);
+                background: rgba(45, 212, 191, 0.2);
+                box-shadow: 0 0 35px $cyan-glow, inset 0 0 35px $cyan-dim;
             }
 
             @media (max-width: 768px) {
@@ -557,6 +603,7 @@ body {
                 
                 .action-arrow {
                     opacity: 0.8;
+                    color: $black;
                 }
             }
         }
@@ -577,11 +624,12 @@ body {
     gap: 20px;
     margin-top: 12px;
     flex-wrap: wrap;
+    animation: fadeUp 1.4s ease forwards;
 
     .annotation {
         font-family: $font-mono;
         font-size: 0.5rem;
-        color: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.15);
         letter-spacing: 0.12em;
         text-transform: uppercase;
         position: relative;
@@ -592,8 +640,8 @@ body {
             bottom: -2px;
             left: 0;
             right: 0;
-            height: 0.5px;
-            background: rgba(255, 255, 255, 0.02);
+            height: 1px;
+            background: rgba(255, 255, 255, 0.06);
         }
     }
 
@@ -609,6 +657,7 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    animation: fadeUp 1s ease forwards;
 
     @media (max-width: 768px) {
         justify-content: center;
@@ -620,9 +669,25 @@ body {
 .profile-module {
     width: 100%;
     max-width: 480px;
-    background: rgba(255, 255, 255, 0.01);
-    border: 0.5px solid rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid $border-solid;
     padding: 28px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    position: relative;
+    animation: float 6s ease-in-out infinite;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        padding: 1px;
+        background: linear-gradient(135deg, rgba(45, 212, 191, 0.12), transparent 50%, rgba(45, 212, 191, 0.12));
+        -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+    }
 
     @media (max-width: 768px) {
         max-width: 380px;
@@ -630,7 +695,7 @@ body {
     }
 
     @media (max-width: 400px) {
-        max-width: 300px;
+        max-width: 320px;
         padding: 16px;
     }
 }
@@ -640,13 +705,13 @@ body {
     justify-content: space-between;
     align-items: center;
     padding-bottom: 16px;
-    border-bottom: 0.5px solid rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid $border-solid;
     margin-bottom: 24px;
 
     .module-label {
         font-family: $font-mono;
         font-size: 0.6rem;
-        color: rgba(255, 255, 255, 0.06);
+        color: rgba(255, 255, 255, 0.2);
         letter-spacing: 0.12em;
         text-transform: uppercase;
     }
@@ -656,7 +721,7 @@ body {
         font-size: 0.5rem;
         color: $cyan;
         letter-spacing: 0.08em;
-        opacity: 0.4;
+        opacity: 0.8;
     }
 
     @media (max-width: 768px) {
@@ -694,6 +759,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    animation: pulseBorder 4s ease-in-out infinite;
 
     @media (max-width: 768px) {
         width: 260px;
@@ -713,7 +779,7 @@ body {
         &.outer {
             width: 100%;
             height: 100%;
-            border: 0.5px solid rgba(255, 255, 255, 0.04);
+            border: 1px solid $border-solid;
             top: 0;
             left: 0;
         }
@@ -723,7 +789,7 @@ body {
             height: 92%;
             top: 4%;
             left: 4%;
-            border: 0.3px solid rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
     }
 
@@ -738,7 +804,7 @@ body {
             height: 85%;
             top: 7.5%;
             left: 7.5%;
-            border: 0.5px solid rgba(59, 233, 229, 0.04);
+            border: 1px solid rgba(45, 212, 191, 0.12);
             animation: rotateCircle 40s linear infinite;
         }
         
@@ -747,7 +813,7 @@ body {
             height: 60%;
             top: 20%;
             left: 20%;
-            border: 0.5px dashed rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(255, 255, 255, 0.08);
             animation: rotateCircle 25s linear infinite reverse;
         }
     }
@@ -756,7 +822,7 @@ body {
         position: absolute;
         inset: -30px;
         pointer-events: none;
-        opacity: 0.02;
+        opacity: 0.03;
         background-image: radial-gradient(circle, $cyan 1px, transparent 1px);
         background-size: 16px 16px;
         background-position: 0 0;
@@ -788,20 +854,20 @@ body {
             object-fit: cover;
             display: block;
             transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            filter: grayscale(0.3) contrast(1.05);
+            filter: grayscale(0.1) contrast(1.05);
         }
 
         .profile-image-overlay {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 30% 30%, transparent 40%, rgba(0,0,0,0.15) 100%);
+            background: radial-gradient(circle at 30% 30%, transparent 40%, rgba(0,0,0,0.1) 100%);
             pointer-events: none;
         }
 
         .profile-image-border {
             position: absolute;
             inset: 0;
-            border: 0.5px solid rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             pointer-events: none;
             transition: all 0.4s ease;
         }
@@ -812,7 +878,7 @@ body {
             }
 
             .profile-image-border {
-                border-color: rgba(59, 233, 229, 0.08);
+                border-color: rgba(45, 212, 191, 0.3);
             }
         }
     }
@@ -822,7 +888,7 @@ body {
         position: absolute;
         width: 24px;
         height: 24px;
-        border: 0.5px solid rgba(255, 255, 255, 0.04);
+        border: 1px solid $border-solid;
         z-index: 3;
         
         &.tl {
@@ -867,7 +933,7 @@ body {
     /* Extended guide lines */
     .frame-guide {
         position: absolute;
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(255, 255, 255, 0.05);
         pointer-events: none;
         z-index: 1;
         
@@ -875,7 +941,7 @@ body {
             top: -60px;
             bottom: -60px;
             left: 50%;
-            width: 0.3px;
+            width: 1px;
             transform: translateX(-50%);
         }
         
@@ -883,13 +949,13 @@ body {
             left: -60px;
             right: -60px;
             top: 50%;
-            height: 0.3px;
+            height: 1px;
             transform: translateY(-50%);
         }
         
         &.diagonal-1 {
             width: 260%;
-            height: 0.3px;
+            height: 1px;
             top: 50%;
             left: -80%;
             transform: translateY(-50%) rotate(45deg);
@@ -898,7 +964,7 @@ body {
         
         &.diagonal-2 {
             width: 260%;
-            height: 0.3px;
+            height: 1px;
             top: 50%;
             left: -80%;
             transform: translateY(-50%) rotate(-45deg);
@@ -925,14 +991,14 @@ body {
 
     .measurement-tick {
         position: absolute;
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(255, 255, 255, 0.08);
         z-index: 1;
         
         &.top {
             top: -20px;
             left: 50%;
             width: 16px;
-            height: 0.5px;
+            height: 1px;
             transform: translateX(-50%);
         }
         
@@ -940,14 +1006,14 @@ body {
             bottom: -20px;
             left: 50%;
             width: 16px;
-            height: 0.5px;
+            height: 1px;
             transform: translateX(-50%);
         }
         
         &.left {
             left: -20px;
             top: 50%;
-            width: 0.5px;
+            width: 1px;
             height: 16px;
             transform: translateY(-50%);
         }
@@ -955,7 +1021,7 @@ body {
         &.right {
             right: -20px;
             top: 50%;
-            width: 0.5px;
+            width: 1px;
             height: 16px;
             transform: translateY(-50%);
         }
@@ -978,7 +1044,7 @@ body {
         position: absolute;
         font-family: $font-mono;
         font-size: 0.45rem;
-        color: rgba(255, 255, 255, 0.03);
+        color: rgba(255, 255, 255, 0.1);
         letter-spacing: 0.05em;
         pointer-events: none;
         z-index: 1;
@@ -998,7 +1064,7 @@ body {
     justify-content: space-between;
     padding-top: 20px;
     margin-top: 20px;
-    border-top: 0.5px solid rgba(255, 255, 255, 0.02);
+    border-top: 1px solid $border-solid;
     gap: 8px;
 
     .footer-item {
@@ -1010,7 +1076,7 @@ body {
         .footer-label {
             font-family: $font-mono;
             font-size: 0.45rem;
-            color: rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.2);
             letter-spacing: 0.08em;
             text-transform: uppercase;
         }
@@ -1018,16 +1084,16 @@ body {
         .footer-value {
             font-family: $font-sans;
             font-size: 0.6rem;
-            color: rgba(255, 255, 255, 0.15);
-            font-weight: 400;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 500;
             letter-spacing: 0.02em;
         }
     }
 
     .footer-divider {
-        width: 0.5px;
+        width: 1px;
         height: 28px;
-        background: rgba(255, 255, 255, 0.02);
+        background: $border-solid;
     }
 
     @media (max-width: 768px) {
@@ -1082,8 +1148,12 @@ body {
    RESPONSIVE - MOBILE
 ========================= */
 @media (max-width: 567px) {
+    .main-container {
+        padding: 0 0.75rem;
+    }
+
     .hero-section {
-        padding: 16px 14px;
+        padding: 16px 0;
         padding-top: 20px;
         min-height: 100vh;
         align-items: center;
@@ -1204,7 +1274,7 @@ body {
 
 @media (max-width: 400px) {
     .profile-module {
-        max-width: 260px;
+        max-width: 280px;
         padding: 12px;
     }
     
@@ -1251,13 +1321,21 @@ body {
     .action-link .action-arrow {
         transition: none !important;
     }
+
+    .profile-module {
+        animation: none !important;
+    }
+
+    .profile-frame {
+        animation: none !important;
+    }
 }
 
 /* =========================
    FOCUS STATES
 ========================= */
 .action-link:focus-visible {
-    outline: 0.5px solid $cyan;
+    outline: 1px solid $cyan;
     outline-offset: 2px;
 }
 

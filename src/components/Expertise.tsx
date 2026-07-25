@@ -35,6 +35,15 @@ const techStack: Tech[] = [
     description: "Type-safe JavaScript for scalable applications"
   },
   {
+    name: "Tailwind CSS",
+    icon: "logos:tailwindcss-icon",
+    color: "#06B6D4",
+    category: "Frontend",
+    proficiency: 92,
+    featured: true,
+    description: "Utility-first CSS framework for rapid UI development"
+  },
+  {
     name: "React Native",
     icon: "logos:react",
     color: "#61DAFB",
@@ -54,6 +63,15 @@ const techStack: Tech[] = [
   },
 
   // Backend & Database
+  {
+    name: "Laravel",
+    icon: "logos:laravel",
+    color: "#FF2D20",
+    category: "Backend",
+    proficiency: 82,
+    featured: true,
+    description: "PHP framework for building modern web applications"
+  },
   {
     name: "Supabase",
     icon: "logos:supabase-icon",
@@ -86,9 +104,9 @@ const techStack: Tech[] = [
     icon: "logos:php",
     color: "#777BB4",
     category: "Backend",
-    proficiency: 70,
+    proficiency: 78,
     featured: false,
-    description: "Server-side scripting"
+    description: "Server-side scripting language"
   },
 
   // Game Development
@@ -193,8 +211,7 @@ const techStack: Tech[] = [
     category: "Tools",
     proficiency: 80,
     featured: true,
-    description:
-      "Crafting structured prompts, managing context, and iteratively refining instructions to improve the accuracy and consistency of large language model responses."
+    description: "Crafting structured prompts for LLMs"
   },
   {
     name: "Vercel",
@@ -203,7 +220,7 @@ const techStack: Tech[] = [
     category: "Tools",
     proficiency: 85,
     featured: true,
-    description: "Deploying, hosting, and managing modern web applications with automated CI/CD and preview deployments."
+    description: "Deployment and hosting platform"
   },
 ];
 

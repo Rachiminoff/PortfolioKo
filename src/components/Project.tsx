@@ -26,7 +26,7 @@ function ProjectCard({ project, index }: ProjectCardProps) {
                     observer.disconnect();
                 }
             },
-            { threshold: 0.1 }
+            { threshold: 0.1, rootMargin: '0px 0px -20px 0px' }
         );
 
         if (cardRef.current) {
@@ -48,11 +48,14 @@ function ProjectCard({ project, index }: ProjectCardProps) {
         }
     };
 
+    const displayTech = project.tech.slice(0, 4);
+    const remainingTech = project.tech.length - 4;
+
     return (
         <div 
             ref={cardRef}
             className={`project-card ${isVisible ? 'visible' : ''}`}
-            style={{ transitionDelay: `${index * 0.05}s` }}
+            style={{ transitionDelay: `${index * 0.04}s` }}
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
             role="button"
@@ -61,18 +64,31 @@ function ProjectCard({ project, index }: ProjectCardProps) {
         >
             <div className="project-card-content">
                 <div className="project-card-header">
-                    <h3 className="project-title">{project.title}</h3>
-                    <Icon icon="mdi:arrow-right" className="arrow-icon" width={18} height={18} />
+                    <div className="project-title-wrapper">
+                        <span className="project-number">
+                            {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <h3 className="project-title">{project.title}</h3>
+                    </div>
+                    <div className="arrow-icon-wrapper">
+                        <Icon 
+                            icon="mdi:arrow-right" 
+                            className="arrow-icon" 
+                            width={20} 
+                            height={20} 
+                        />
+                    </div>
                 </div>
+                
                 <p className="project-subtitle">{project.subtitle}</p>
                 
-                {/* Tech tags - Minimal chips */}
+                {/* Tech tags */}
                 <div className="tech-tags">
-                    {project.tech.slice(0, 4).map((tech, i) => (
+                    {displayTech.map((tech, i) => (
                         <span key={i} className="tech-tag">{tech}</span>
                     ))}
-                    {project.tech.length > 4 && (
-                        <span className="tech-tag more">+{project.tech.length - 4}</span>
+                    {remainingTech > 0 && (
+                        <span className="tech-tag more">+{remainingTech}</span>
                     )}
                 </div>
             </div>
@@ -96,9 +112,11 @@ function Projects() {
     return (
         <div className="projects-container" id="projects">
             <div className="projects-header">
-                <span className="header-tag">PROJECTS</span>
+                <span className="header-tag">PORTFOLIO</span>
                 <h1>Selected Work</h1>
-                <p className="projects-subtitle">Click on any project to explore the case study</p>
+                <p className="projects-subtitle">
+                    Explore my latest projects and case studies
+                </p>
             </div>
 
             <div className="projects-grid">

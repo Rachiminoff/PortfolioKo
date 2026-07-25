@@ -37,7 +37,6 @@ function Contact() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [sendError, setSendError] = useState(false);
-
   const [referenceId, setReferenceId] = useState('');
 
   const validateEmail = (value: string) =>
@@ -45,38 +44,28 @@ function Contact() {
 
   const getBrowserName = () => {
     const ua = navigator.userAgent;
-
     if (ua.includes('Edg')) return 'Microsoft Edge';
     if (ua.includes('Chrome')) return 'Google Chrome';
     if (ua.includes('Firefox')) return 'Mozilla Firefox';
     if (ua.includes('Safari')) return 'Safari';
-
     return 'Unknown';
   };
 
   const isFormValid = useMemo(
-    () =>
-      name.trim() &&
-      validateEmail(email) &&
-      subject.trim() &&
-      message.trim(),
+    () => name.trim() && validateEmail(email) && subject.trim() && message.trim(),
     [name, email, subject, message]
   );
 
   useEffect(() => {
     if (!success && !sendError) return;
-
     const timer = setTimeout(() => {
       setSuccess(false);
       setSendError(false);
     }, 6000);
-
     return () => clearTimeout(timer);
   }, [success, sendError]);
 
-  const sendEmail = async (
-    e: React.FormEvent<HTMLFormElement>
-  ) => {
+  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setSuccess(false);
@@ -106,42 +95,23 @@ function Contact() {
         .join('');
 
       const timestamp = new Date().toLocaleString();
-
-      const inquiryId =
-        '#' + Date.now().toString(36).toUpperCase();
-
+      const inquiryId = '#' + Date.now().toString(36).toUpperCase();
       setReferenceId(inquiryId);
 
       const browser = getBrowserName();
-
       const platform = navigator.platform;
       const language = navigator.language;
-
-      const timezone =
-        Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
       let ip = '';
       let location = '';
 
       try {
-        const { data } = await axios.get(
-          'https://ipapi.co/json/'
-        );
-
+        const { data } = await axios.get('https://ipapi.co/json/');
         ip = data.ip ?? '';
-
-        location = [
-          data.city,
-          data.region,
-          data.country_name,
-        ]
-          .filter(Boolean)
-          .join(', ');
+        location = [data.city, data.region, data.country_name].filter(Boolean).join(', ');
       } catch (err) {
-        console.error(
-          'Failed to fetch IP/location:',
-          err
-        );
+        console.error('Failed to fetch IP/location:', err);
       }
 
       await emailjs.send(
@@ -153,15 +123,12 @@ function Contact() {
           email,
           subject,
           message,
-
           timestamp,
           id: inquiryId,
-
           browser,
           platform,
           language,
           timezone,
-
           ip,
           location,
         },
@@ -169,18 +136,11 @@ function Contact() {
       );
 
       setSuccess(true);
-
       setName('');
       setEmail('');
       setSubject('');
       setMessage('');
-
-      setError({
-        name: false,
-        email: false,
-        subject: false,
-        message: false,
-      });
+      setError({ name: false, email: false, subject: false, message: false });
     } catch (err) {
       console.error('EmailJS failed:', err);
       setSendError(true);
@@ -189,28 +149,27 @@ function Contact() {
     }
   };
 
+  const handleChipClick = (value: string) => {
+    setSubject(value);
+    if (error.subject) {
+      setError((prev) => ({ ...prev, subject: false }));
+    }
+  };
+
   return (
-    <div
-      id="contact"
-      className="contact-container"
-    >
+    <div id="contact" className="contact-container">
       <div className="contact-header">
         <span className="header-tag">CONTACT</span>
         <h2>Let's Work Together</h2>
-        
         <div className="contact-divider" />
-        
         <p className="contact-subtitle">
-          Have a project in mind, a question, or just want to say hello? 
+          Have a project in mind, a question, or just want to say hello?
           <br />
           I'd love to hear from you.
         </p>
       </div>
 
-      <Paper
-        className="contact-card"
-        elevation={0}
-      >
+      <Paper className="contact-card" elevation={0}>
         <div className="contact-card-header">
           <Typography variant="h4" className="card-title">
             Send a Message
@@ -229,7 +188,6 @@ function Contact() {
                 icon={<CheckCircleIcon />}
                 severity="success"
                 className="alert-success"
-                sx={{ mb: 3 }}
               >
                 <div className="alert-content">
                   <strong>Message sent successfully!</strong>
@@ -250,7 +208,6 @@ function Contact() {
                 icon={<ErrorIcon />}
                 severity="error"
                 className="alert-error"
-                sx={{ mb: 3 }}
               >
                 <div className="alert-content">
                   <strong>Failed to send message.</strong>
@@ -266,58 +223,26 @@ function Contact() {
           <Typography variant="caption" className="chips-label">
             Quick subject suggestions
           </Typography>
-          
-          <Stack
-            direction="row"
-            spacing={1}
-            flexWrap="wrap"
-            useFlexGap
-            className="chips-stack"
-          >
-            <Chip
-              label="Project Inquiry"
-              onClick={() => setSubject('Project Inquiry')}
-              className={`chip-item ${subject === 'Project Inquiry' ? 'chip-selected' : ''}`}
-            />
-
-            <Chip
-              label="Collaboration"
-              onClick={() => setSubject('Collaboration')}
-              className={`chip-item ${subject === 'Collaboration' ? 'chip-selected' : ''}`}
-            />
-
-            <Chip
-              label="General Question"
-              onClick={() => setSubject('General Question')}
-              className={`chip-item ${subject === 'General Question' ? 'chip-selected' : ''}`}
-            />
-
-            <Chip
-              label="Bug Report"
-              onClick={() => setSubject('Bug Report')}
-              className={`chip-item ${subject === 'Bug Report' ? 'chip-selected' : ''}`}
-            />
+          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap className="chips-stack">
+            {['Project Inquiry', 'Collaboration', 'General Question', 'Bug Report'].map((label) => (
+              <Chip
+                key={label}
+                label={label}
+                onClick={() => handleChipClick(label)}
+                className={`chip-item ${subject === label ? 'chip-selected' : ''}`}
+              />
+            ))}
           </Stack>
         </Box>
 
-        <Box
-          component="form"
-          onSubmit={sendEmail}
-          className="contact-form"
-        >
+        <Box component="form" onSubmit={sendEmail} className="contact-form">
           <div className="form-grid-2">
             <TextField
               label="Your Name"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-
-                if (error.name) {
-                  setError((prev) => ({
-                    ...prev,
-                    name: false,
-                  }));
-                }
+                if (error.name) setError((prev) => ({ ...prev, name: false }));
               }}
               error={error.name}
               helperText={error.name ? 'Name is required' : ''}
@@ -331,20 +256,11 @@ function Contact() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-
-                if (error.email) {
-                  setError((prev) => ({
-                    ...prev,
-                    email: false,
-                  }));
-                }
+                if (error.email) setError((prev) => ({ ...prev, email: false }));
               }}
               onBlur={() => {
                 if (email.trim()) {
-                  setError((prev) => ({
-                    ...prev,
-                    email: !validateEmail(email),
-                  }));
+                  setError((prev) => ({ ...prev, email: !validateEmail(email) }));
                 }
               }}
               error={error.email}
@@ -360,13 +276,7 @@ function Contact() {
             value={subject}
             onChange={(e) => {
               setSubject(e.target.value);
-
-              if (error.subject) {
-                setError((prev) => ({
-                  ...prev,
-                  subject: false,
-                }));
-              }
+              if (error.subject) setError((prev) => ({ ...prev, subject: false }));
             }}
             error={error.subject}
             helperText={error.subject ? 'Subject is required' : ''}
@@ -381,29 +291,17 @@ function Contact() {
             value={message}
             onChange={(e) => {
               setMessage(e.target.value);
-
-              if (error.message) {
-                setError((prev) => ({
-                  ...prev,
-                  message: false,
-                }));
-              }
+              if (error.message) setError((prev) => ({ ...prev, message: false }));
             }}
             error={error.message}
-            helperText={
-              error.message 
-                ? 'Message is required' 
-                : `${message.length}/1000 characters`
-            }
+            helperText={error.message ? 'Message is required' : `${message.length}/1000 characters`}
             multiline
             rows={8}
             fullWidth
             className="form-field"
             variant="outlined"
             sx={{ mt: 2 }}
-            inputProps={{
-              maxLength: 1000,
-            }}
+            inputProps={{ maxLength: 1000 }}
           />
 
           <div className="form-actions">
@@ -414,11 +312,7 @@ function Contact() {
               className="send-button"
               endIcon={
                 loading ? (
-                  <CircularProgress
-                    size={20}
-                    color="inherit"
-                    className="button-spinner"
-                  />
+                  <CircularProgress size={20} color="inherit" className="button-spinner" />
                 ) : (
                   <SendIcon className="send-icon" />
                 )

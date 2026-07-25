@@ -1,18 +1,23 @@
-/* =========================
-   VARIABLES - MATCHING MAIN.SCSS
-========================= */
-$black: #070707;
-$dark: #0F0F0F;
-$gray-dark: #1A1A1A;
-$gray: #232323;
-$white: #F5F5F5;
-$white-dim: rgba(255, 255, 255, 0.7);
-$white-faint: rgba(255, 255, 255, 0.3);
-$white-subtle: rgba(255, 255, 255, 0.04);
-$cyan: #3BE9E5;
-$cyan-dim: rgba(59, 233, 229, 0.15);
-$orange: #FF5A4A;
-$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+// ========== VARIABLES ==========
+$cyan: #2dd4bf;
+$cyan-dim: rgba(45, 212, 191, 0.08);
+$cyan-glow: rgba(45, 212, 191, 0.12);
+$black: #0f0f0f;
+$dark: #181818;
+$gray-dark: #222222;
+$gray: #2c2c2c;
+$gray-medium: #3a3a3a;
+$white: #f5f5f5;
+$white-dim: rgba(255, 255, 255, 0.92);
+$white-muted: rgba(255, 255, 255, 0.7);
+$white-faint: rgba(255, 255, 255, 0.5);
+$white-very-faint: rgba(255, 255, 255, 0.25);
+$border-solid: rgba(255, 255, 255, 0.12);
+$border-medium: rgba(255, 255, 255, 0.2);
+$border-light: rgba(255, 255, 255, 0.3);
+$orange: #ff5a4a;
+$orange-dim: rgba(255, 90, 74, 0.08);
+$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 /* =========================
@@ -28,21 +33,20 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   background: $black;
   padding: 2rem;
   opacity: 0;
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 
   &.loaded {
     opacity: 1;
   }
 
-  // Background Grid
   .archive-bg-grid {
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
     background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.02) 0.5px, transparent 0.5px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0.5px, transparent 0.5px);
+      linear-gradient(rgba(255, 255, 255, 0.04) 0.5px, transparent 0.5px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0.5px, transparent 0.5px);
     background-size: 60px 60px;
   }
 
@@ -51,7 +55,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.4) 100%);
   }
 
   .archive-container {
@@ -85,7 +89,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       .shape-ring {
         position: absolute;
         border-radius: 50%;
-        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
 
         &.outer {
           width: 100%;
@@ -98,7 +102,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
           height: 70%;
           top: 15%;
           left: 15%;
-          border: 0.5px dashed rgba(59, 233, 229, 0.02);
+          border: 1px dashed rgba(45, 212, 191, 0.04);
           animation: rotateShape 30s linear infinite reverse;
         }
       }
@@ -113,7 +117,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       .shape-ring {
         position: absolute;
         border-radius: 50%;
-        border: 0.5px solid rgba(255, 255, 255, 0.015);
+        border: 1px solid rgba(255, 255, 255, 0.03);
 
         &.outer {
           width: 100%;
@@ -126,7 +130,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
           height: 60%;
           top: 20%;
           left: 20%;
-          border: 0.5px dashed rgba(255, 255, 255, 0.01);
+          border: 1px dashed rgba(255, 255, 255, 0.02);
           animation: rotateShape 25s linear infinite;
         }
       }
@@ -138,7 +142,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      border: 0.5px solid rgba(59, 233, 229, 0.02);
+      border: 1px solid rgba(45, 212, 191, 0.03);
       border-radius: 50%;
       animation: pulseShape 20s ease-in-out infinite;
     }
@@ -148,7 +152,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       height: 150px;
       top: 20%;
       left: 10%;
-      border: 0.5px solid rgba(255, 255, 255, 0.01);
+      border: 1px solid rgba(255, 255, 255, 0.02);
       border-radius: 50%;
       animation: floatShape 25s ease-in-out infinite;
     }
@@ -166,25 +170,24 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   .archive-auth-content {
     position: relative;
-    background: rgba(255, 255, 255, 0.01);
-    border: 0.5px solid rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid $border-solid;
     padding: 4rem 3.5rem;
     width: 100%;
     max-width: 440px;
     text-align: center;
-    animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 
-    // Brackets
     .archive-auth-brackets {
       position: absolute;
-      inset: -2px;
+      inset: -1px;
       pointer-events: none;
 
       .bracket {
         position: absolute;
         width: 16px;
         height: 16px;
-        border: 0.5px solid rgba(255, 255, 255, 0.03);
+        border: 1px solid $border-solid;
 
         &.tl {
           top: -1px;
@@ -217,7 +220,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       width: 64px;
       height: 64px;
       margin: 0 auto 1.5rem;
-      border: 0.5px solid rgba(255, 255, 255, 0.03);
+      border: 1px solid $border-solid;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -226,15 +229,15 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       svg {
         width: 28px;
         height: 28px;
-        color: $white-faint;
-        opacity: 0.3;
+        color: $white-muted;
+        opacity: 0.4;
       }
 
       &::after {
         content: '';
         position: absolute;
         inset: -8px;
-        border: 0.3px solid rgba(255, 255, 255, 0.01);
+        border: 1px solid rgba(255, 255, 255, 0.04);
       }
     }
 
@@ -248,11 +251,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
     .archive-auth-subtitle {
       font-size: 0.8rem;
-      color: $white-faint;
+      color: $white-muted;
       margin: 0 0 2.5rem 0;
       font-weight: 300;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      opacity: 0.6;
     }
 
     .archive-auth-form {
@@ -266,30 +270,30 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         .archive-auth-input {
           width: 100%;
           padding: 1rem 3rem 1rem 1.25rem;
-          background: rgba(255, 255, 255, 0.02);
-          border: 0.5px solid rgba(255, 255, 255, 0.04);
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid $border-solid;
           color: $white;
           font-size: 0.9rem;
-          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
           outline: none;
           font-family: $font-mono;
           letter-spacing: 0.04em;
 
           &::placeholder {
             color: $white-faint;
-            opacity: 0.2;
+            opacity: 0.3;
             letter-spacing: 0.08em;
             font-size: 0.75rem;
             text-transform: uppercase;
           }
 
           &:focus {
-            border-color: rgba(255, 255, 255, 0.06);
-            background: rgba(255, 255, 255, 0.03);
+            border-color: $border-medium;
+            background: rgba(255, 255, 255, 0.05);
           }
 
           &.error {
-            border-color: rgba(255, 90, 74, 0.2);
+            border-color: rgba(255, 90, 74, 0.3);
           }
 
           &:disabled {
@@ -305,8 +309,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
           transform: translateY(-50%);
           background: none;
           border: none;
-          color: $white-faint;
-          opacity: 0.1;
+          color: $white-muted;
+          opacity: 0.2;
           cursor: pointer;
           padding: 0.5rem;
           display: flex;
@@ -315,7 +319,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
           transition: opacity 0.3s ease;
 
           &:hover {
-            opacity: 0.3;
+            opacity: 0.5;
           }
 
           svg {
@@ -329,11 +333,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         display: flex;
         align-items: center;
         gap: 0.5rem;
-        color: rgba(255, 90, 74, 0.5);
+        color: rgba(255, 90, 74, 0.6);
         font-size: 0.75rem;
         padding: 0.5rem 0.75rem;
-        background: rgba(255, 90, 74, 0.03);
-        border: 0.5px solid rgba(255, 90, 74, 0.04);
+        background: rgba(255, 90, 74, 0.04);
+        border: 1px solid rgba(255, 90, 74, 0.06);
         font-family: $font-mono;
         letter-spacing: 0.04em;
 
@@ -346,22 +350,23 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         .attempts-badge {
           margin-left: auto;
           padding: 0.1rem 0.5rem;
-          background: rgba(255, 90, 74, 0.04);
+          background: rgba(255, 90, 74, 0.06);
           font-size: 0.6rem;
           font-weight: 500;
+          color: rgba(255, 90, 74, 0.4);
         }
       }
 
       .archive-auth-button {
         width: 100%;
         padding: 1rem;
-        background: rgba(255, 255, 255, 0.03);
-        border: 0.5px solid rgba(255, 255, 255, 0.04);
-        color: $white-faint;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid $border-solid;
+        color: $white-muted;
         font-size: 0.8rem;
         font-weight: 400;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -372,9 +377,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         position: relative;
 
         &:hover:not(:disabled) {
-          background: rgba(255, 255, 255, 0.06);
+          background: rgba(255, 255, 255, 0.08);
           color: $white;
-          border-color: rgba(255, 255, 255, 0.08);
+          border-color: $border-medium;
         }
 
         &:disabled {
@@ -385,8 +390,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         .spinner {
           width: 16px;
           height: 16px;
-          border: 1.5px solid rgba(255, 255, 255, 0.04);
-          border-top-color: $white-faint;
+          border: 1.5px solid rgba(255, 255, 255, 0.08);
+          border-top-color: $white-muted;
           border-radius: 50%;
           animation: spin 0.8s linear infinite;
         }
@@ -409,17 +414,17 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       align-items: center;
       gap: 0.5rem;
       padding: 2rem;
-      background: rgba(255, 90, 74, 0.02);
-      border: 0.5px solid rgba(255, 90, 74, 0.04);
+      background: rgba(255, 90, 74, 0.03);
+      border: 1px solid rgba(255, 90, 74, 0.06);
 
       svg {
         width: 32px;
         height: 32px;
-        color: rgba(255, 90, 74, 0.15);
+        color: rgba(255, 90, 74, 0.2);
       }
 
       p {
-        color: $white-faint;
+        color: $white-muted;
         font-size: 0.85rem;
         margin: 0;
         font-weight: 300;
@@ -430,7 +435,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         font-family: $font-mono;
         font-size: 0.6rem;
         color: $white-faint;
-        opacity: 0.2;
+        opacity: 0.3;
         letter-spacing: 0.12em;
         text-transform: uppercase;
       }
@@ -442,10 +447,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
    DASHBOARD
 ========================= */
 .archive-dashboard {
-  animation: fadeIn 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: fadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   padding: 0.5rem 0;
 
-  // Header
   .archive-header {
     padding: 3rem 0 2.5rem;
     margin-bottom: 2rem;
@@ -461,20 +465,20 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         align-items: center;
         gap: 0.5rem;
         padding: 0.3rem 1rem;
-        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        border: 1px solid $border-solid;
         font-family: $font-mono;
         font-size: 0.5rem;
-        color: $white-faint;
-        opacity: 0.2;
+        color: $white-muted;
+        opacity: 0.4;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         margin-bottom: 2rem;
 
         .badge-dot {
-          width: 3px;
-          height: 3px;
+          width: 4px;
+          height: 4px;
           background: $cyan;
-          opacity: 0.3;
+          opacity: 0.5;
           border-radius: 50%;
         }
 
@@ -495,8 +499,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       .archive-header-description {
         font-size: 0.9rem;
         font-weight: 300;
-        color: $white-faint;
-        opacity: 0.2;
+        color: $white-muted;
+        opacity: 0.4;
         margin: 0 0 2rem 0;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -512,22 +516,22 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
           display: inline-flex;
           align-items: center;
           gap: 0.5rem;
-          background: rgba(255, 255, 255, 0.02);
-          border: 0.5px solid rgba(255, 255, 255, 0.02);
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid $border-solid;
           padding: 0.5rem 1.25rem;
-          color: $white-faint;
-          opacity: 0.2;
+          color: $white-muted;
+          opacity: 0.4;
           font-size: 0.7rem;
           cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+          transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
           font-family: $font-mono;
           letter-spacing: 0.08em;
           text-transform: uppercase;
 
           &:hover {
-            opacity: 0.6;
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.04);
+            opacity: 0.8;
+            background: rgba(255, 255, 255, 0.06);
+            border-color: $border-medium;
           }
 
           svg {
@@ -541,12 +545,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     .archive-header-line {
       max-width: 200px;
       margin: 2rem auto 0;
-      height: 0.5px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, $border-solid, transparent);
     }
   }
 
-  // Collections
   .archive-collections {
     padding: 0.5rem 0 3rem;
 
@@ -564,8 +567,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
       .archive-collections-subtitle {
         font-size: 0.7rem;
-        color: $white-faint;
-        opacity: 0.15;
+        color: $white-muted;
+        opacity: 0.25;
         margin: 0;
         font-weight: 300;
         letter-spacing: 0.12em;
@@ -574,34 +577,29 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
   }
 
-  // Grid
   .archive-dashboard-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
+    gap: 0.5rem;
     max-width: 1100px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.01);
-    border: 0.5px solid rgba(255, 255, 255, 0.02);
-    padding: 2px;
 
     .archive-dashboard-card.featured {
       grid-column: span 2;
     }
   }
 
-  // Cards
   .archive-dashboard-card {
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.02);
     padding: 2rem 1.75rem;
     cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     overflow: hidden;
     color: $white;
     font-family: $font-sans;
     text-align: left;
-    border: none;
+    border: 1px solid $border-solid;
     animation: cardEntrance 0.6s ease forwards;
     animation-delay: calc(var(--card-index, 0) * 0.08s);
     opacity: 0;
@@ -616,7 +614,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         position: absolute;
         width: 12px;
         height: 12px;
-        border: 0.5px solid rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.04);
         transition: border-color 0.4s ease;
 
         &.tl {
@@ -648,7 +646,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
     .archive-card-icon {
       margin-bottom: 1.25rem;
-      opacity: 0.2;
+      opacity: 0.3;
       transition: all 0.4s ease;
 
       svg {
@@ -667,8 +665,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
     .archive-card-description {
       font-size: 0.8rem;
-      color: $white-faint;
-      opacity: 0.2;
+      color: $white-muted;
+      opacity: 0.4;
       margin: 0 0 1.25rem 0;
       line-height: 1.5;
       font-weight: 300;
@@ -679,13 +677,13 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       align-items: center;
       justify-content: space-between;
       padding-top: 1rem;
-      border-top: 0.5px solid rgba(255, 255, 255, 0.02);
+      border-top: 1px solid $border-solid;
 
       .archive-card-metadata {
         font-family: $font-mono;
         font-size: 0.6rem;
-        color: $white-faint;
-        opacity: 0.1;
+        color: $white-muted;
+        opacity: 0.2;
         letter-spacing: 0.04em;
       }
 
@@ -695,8 +693,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         gap: 0.4rem;
         font-family: $font-mono;
         font-size: 0.6rem;
-        color: $white-faint;
-        opacity: 0.1;
+        color: $white-muted;
+        opacity: 0.2;
         transition: all 0.3s ease;
         letter-spacing: 0.06em;
         text-transform: uppercase;
@@ -717,21 +715,21 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       pointer-events: none;
     }
 
-    // Hover
     &:hover {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: $border-medium;
 
       .archive-card-brackets .bracket {
-        border-color: rgba(255, 255, 255, 0.04);
+        border-color: $border-solid;
       }
 
       .archive-card-icon {
-        opacity: 0.5;
+        opacity: 0.6;
         transform: scale(1.05);
       }
 
       .archive-card-action {
-        opacity: 0.4;
+        opacity: 0.6;
         color: $white;
 
         svg {
@@ -744,28 +742,26 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       }
 
       .archive-card-metadata {
-        opacity: 0.3;
+        opacity: 0.4;
       }
     }
 
-    // Featured
     &.featured {
-      background: rgba(255, 255, 255, 0.015);
+      background: rgba(255, 255, 255, 0.03);
 
       &:hover {
-        background: rgba(255, 255, 255, 0.025);
+        background: rgba(255, 255, 255, 0.05);
       }
     }
   }
 
-  // Footer
   .archive-footer {
     padding: 3rem 0 1rem;
     margin-top: 2rem;
 
     .archive-footer-divider {
-      height: 0.5px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02), transparent);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, $border-solid, transparent);
       margin: 0 auto;
       max-width: 400px;
     }
@@ -777,8 +773,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       .archive-footer-title {
         font-family: $font-mono;
         font-size: 0.6rem;
-        color: $white-faint;
-        opacity: 0.05;
+        color: $white-muted;
+        opacity: 0.1;
         margin: 0 0 0.5rem 0;
         letter-spacing: 0.12em;
         text-transform: uppercase;
@@ -786,8 +782,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
       .archive-footer-description {
         font-size: 0.7rem;
-        color: $white-faint;
-        opacity: 0.04;
+        color: $white-muted;
+        opacity: 0.08;
         margin: 0;
         font-weight: 300;
         max-width: 400px;
@@ -804,7 +800,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
    SECTION VIEW
 ========================= */
 .archive-section {
-  animation: fadeIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 
   .archive-section-back {
     display: inline-flex;
@@ -812,8 +808,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     gap: 0.5rem;
     background: none;
     border: none;
-    color: $white-faint;
-    opacity: 0.1;
+    color: $white-muted;
+    opacity: 0.2;
     font-size: 0.7rem;
     cursor: pointer;
     padding: 0.5rem 0;
@@ -824,7 +820,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     text-transform: uppercase;
 
     &:hover {
-      opacity: 0.4;
+      opacity: 0.6;
     }
 
     svg {
@@ -839,8 +835,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   align-items: center;
   justify-content: center;
   min-height: 200px;
-  color: $white-faint;
-  opacity: 0.05;
+  color: $white-muted;
+  opacity: 0.1;
   font-family: $font-mono;
   font-size: 0.7rem;
   letter-spacing: 0.08em;
@@ -853,14 +849,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   justify-content: center;
   min-height: 60vh;
   gap: 1.5rem;
-  color: $white-faint;
-  opacity: 0.05;
+  color: $white-muted;
+  opacity: 0.1;
 
   .archive-loading-spinner {
     width: 32px;
     height: 32px;
-    border: 1.5px solid rgba(255, 255, 255, 0.02);
-    border-top-color: $white-faint;
+    border: 1.5px solid rgba(255, 255, 255, 0.06);
+    border-top-color: $white-muted;
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
@@ -974,7 +970,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   .archive-dashboard-grid {
     grid-template-columns: 1fr !important;
-    gap: 1px;
+    gap: 0.5rem;
   }
 
   .archive-dashboard-card.featured {

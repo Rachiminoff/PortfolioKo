@@ -1,26 +1,36 @@
-/* =========================
-   TIMELINE - SWISS STYLE
-========================= */
-
 // ========== VARIABLES ==========
-$cyan: #3BE9E5;
-$cyan-dim: rgba(59, 233, 229, 0.08);
-$black: #070707;
-$dark: #0F0F0F;
-$gray-dark: #1A1A1A;
-$white: #F5F5F5;
-$white-dim: rgba(255, 255, 255, 0.7);
-$white-faint: rgba(255, 255, 255, 0.3);
-$font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$cyan: #2dd4bf;
+$cyan-dim: rgba(45, 212, 191, 0.08);
+$cyan-glow: rgba(45, 212, 191, 0.15);
+$black: #0f0f0f;
+$dark: #181818;
+$gray-dark: #222222;
+$gray: #2c2c2c;
+$gray-medium: #3a3a3a;
+$white: #f5f5f5;
+$white-dim: rgba(255, 255, 255, 0.85);
+$white-muted: rgba(255, 255, 255, 0.6);
+$white-faint: rgba(255, 255, 255, 0.35);
+$border-solid: rgba(255, 255, 255, 0.1);
+$border-medium: rgba(255, 255, 255, 0.15);
+$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 // ========== SECTION CONTAINER ==========
 .timeline-section {
   position: relative;
-  padding: 5rem 0 7rem;
+  padding: 4rem 0 5rem;
   background: $black;
   overflow: hidden;
   min-height: 100vh;
+
+  @media (max-width: 768px) {
+    padding: 3rem 0 4rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2rem 0 3rem;
+  }
 }
 
 // ========== TIMELINE CONTAINER ==========
@@ -34,22 +44,36 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   @media (max-width: 768px) {
     padding: 0 1rem;
   }
+
+  @media (max-width: 480px) {
+    padding: 0 0.75rem;
+  }
 }
 
 // ========== SECTION HEADER ==========
 .section-header {
-  margin-bottom: 4.5rem;
-  padding: 0 1rem;
+  margin-bottom: 4rem;
+  padding: 0 0.5rem;
   position: relative;
 
   @media (max-width: 768px) {
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
+    padding: 0;
+  }
+
+  @media (max-width: 480px) {
+    margin-bottom: 2rem;
   }
 }
 
 .section-header-content {
   display: inline-block;
   text-align: left;
+
+  @media (max-width: 768px) {
+    display: block;
+    text-align: center;
+  }
 }
 
 .section-label {
@@ -59,10 +83,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-weight: 400;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.15);
   padding: 0.25rem 0;
   margin-bottom: 0.75rem;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 
   @media (max-width: 768px) {
     font-size: 0.5rem;
@@ -79,13 +103,18 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   @media (max-width: 768px) {
     font-size: 2.2rem;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.8rem;
   }
 }
 
 .section-subtitle {
   font-size: 1rem;
   font-weight: 300;
-  color: $white-faint;
+  color: $white-muted;
   max-width: 420px;
   margin: 0;
   line-height: 1.6;
@@ -93,6 +122,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   @media (max-width: 768px) {
     font-size: 0.85rem;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
   }
 }
 
@@ -108,8 +143,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   transform: translateX(-50%);
   top: 0;
   bottom: 0;
-  width: 0.5px;
-  background: rgba(255, 255, 255, 0.02);
+  width: 1px;
+  background: rgba(255, 255, 255, 0.04);
   z-index: 1;
   overflow: hidden;
   
@@ -124,7 +159,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   left: 0;
   width: 100%;
   height: 0%;
-  background: rgba(59, 233, 229, 0.06);
+  background: $cyan-dim;
   border-radius: 0;
   transition: height 0.3s ease;
 }
@@ -136,8 +171,28 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   z-index: 2;
   
   &::before {
-    background: rgba(255, 255, 255, 0.02) !important;
-    width: 0.5px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    width: 1px !important;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+}
+
+.vertical-timeline-element {
+  margin: 0 0 3rem 0 !important;
+  
+  &:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  @media (max-width: 768px) {
+    margin: 0 0 2.5rem 0 !important;
+  }
+
+  @media (max-width: 480px) {
+    margin: 0 0 2rem 0 !important;
   }
 }
 
@@ -152,8 +207,19 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     transform: translateY(20px) scale(0.98);
     transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
     border-radius: 0;
-    padding: 1.5rem 1.8rem !important;
+    padding: 1.8rem 2rem !important;
     position: relative;
+    background: $dark !important;
+    border: 1px solid $border-solid !important;
+    box-shadow: none !important;
+
+    @media (max-width: 768px) {
+      padding: 1.25rem 1.25rem !important;
+    }
+
+    @media (max-width: 480px) {
+      padding: 1rem 1rem !important;
+    }
 
     &::before {
       content: '';
@@ -161,8 +227,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       top: 0;
       left: 0;
       right: 0;
-      height: 0.5px;
-      background: linear-gradient(90deg, transparent, rgba(59, 233, 229, 0.06), transparent);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, $cyan-dim, transparent);
       opacity: 0;
       transition: opacity 0.4s ease;
     }
@@ -173,6 +239,27 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     opacity: 0;
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     border-radius: 0 !important;
+    background: $gray-dark !important;
+    border: 1px solid $border-solid !important;
+    box-shadow: none !important;
+    width: 42px !important;
+    height: 42px !important;
+    margin-left: -21px !important;
+    
+    .svg-inline--fa {
+      color: rgba(255, 255, 255, 0.2);
+      font-size: 1.1rem !important;
+    }
+
+    @media (max-width: 480px) {
+      width: 32px !important;
+      height: 32px !important;
+      margin-left: -16px !important;
+      
+      .svg-inline--fa {
+        font-size: 0.9rem !important;
+      }
+    }
   }
 
   // ====== VISIBLE STATES ======
@@ -193,22 +280,26 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       transform: scale(1);
       opacity: 1;
     }
-
-    &.active {
-      .vertical-timeline-element-content {
-        border-color: rgba(59, 233, 229, 0.04);
-      }
-    }
   }
 
   // ====== CONNECTOR ARROW ======
   .vertical-timeline-element-content-arrow {
+    border-right: 7px solid $dark !important;
     transition: transform 0.3s ease;
-    border-right-width: 7px !important;
+
+    @media (max-width: 768px) {
+      border-right: 6px solid $dark !important;
+    }
   }
 
-  &:hover .vertical-timeline-element-content-arrow {
-    transform: scale(1.02);
+  &:hover {
+    .vertical-timeline-element-content {
+      border-color: $border-medium !important;
+    }
+    
+    .vertical-timeline-element-content-arrow {
+      transform: scale(1.02);
+    }
   }
 
   // ====== TYPOGRAPHY ======
@@ -219,14 +310,30 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     letter-spacing: -0.01em;
     margin: 0;
     font-family: $font-sans;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.95rem;
+    }
   }
 
   h4 {
-    color: $white-faint;
+    color: $white-muted;
     font-weight: 400;
     font-size: 0.85rem;
     margin: 0.15rem 0 0.4rem;
     font-family: $font-sans;
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem;
+    }
   }
 
   p {
@@ -235,6 +342,15 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: 0.9rem;
     margin: 0.4rem 0 0;
     font-family: $font-sans;
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
   }
 
   // ====== DATE ======
@@ -242,8 +358,16 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     color: rgba(255, 255, 255, 0.08) !important;
     font-family: $font-mono;
     font-weight: 400;
-    font-size: 0.8rem !important;
+    font-size: 0.75rem !important;
     letter-spacing: 0.04em;
+
+    @media (max-width: 768px) {
+      font-size: 0.65rem !important;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.55rem !important;
+    }
   }
 }
 
@@ -264,16 +388,21 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   margin-bottom: 0.15rem;
   flex-wrap: wrap;
 
-  @media (max-width: 768px) {
-    flex-wrap: wrap;
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+    margin-bottom: 0.1rem;
   }
 }
 
 .milestone-title-group {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+  }
 }
 
 .milestone-title {
@@ -287,6 +416,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   @media (max-width: 768px) {
     font-size: 1rem;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 }
 
 .milestone-year {
@@ -294,9 +427,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-size: 0.55rem;
   font-weight: 400;
   letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.06);
-  padding: 0.1rem 0.4rem;
-  border: 0.5px solid rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.08);
+  padding: 0.1rem 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  @media (max-width: 480px) {
+    font-size: 0.5rem;
+    padding: 0.05rem 0.4rem;
+  }
 }
 
 .milestone-status {
@@ -305,39 +443,49 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.15rem 0.5rem;
-  border: 0.5px solid rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.06);
+  padding: 0.15rem 0.6rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.08);
   white-space: nowrap;
   flex-shrink: 0;
+
+  @media (max-width: 480px) {
+    font-size: 0.4rem;
+    padding: 0.1rem 0.4rem;
+  }
 }
 
 .milestone-status-current {
-  border-color: rgba(59, 233, 229, 0.08);
-  color: rgba(59, 233, 229, 0.15);
+  border-color: $cyan-dim;
+  color: rgba(45, 212, 191, 0.3);
 }
 
 .milestone-status-future {
-  border-color: rgba(255, 255, 255, 0.02);
-  color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.04);
 }
 
 .milestone-subtitle {
   font-size: 0.85rem;
   font-weight: 400;
-  color: $white-faint;
+  color: $white-muted;
   margin: 0.15rem 0 0.4rem;
   font-family: $font-sans;
 
   @media (max-width: 768px) {
     font-size: 0.8rem;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    margin: 0.1rem 0 0.3rem;
+  }
 }
 
 .milestone-description {
   font-size: 0.9rem;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.45);
   margin: 0.25rem 0 0;
   font-family: $font-sans;
   max-width: 480px;
@@ -349,31 +497,49 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   @media (max-width: 768px) {
     font-size: 0.85rem;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    margin: 0.15rem 0 0;
+  }
 }
 
 // ========== EMPHASIZED MILESTONE ==========
 .milestone-emphasized {
   .vertical-timeline-element-content {
-    border-color: rgba(59, 233, 229, 0.04) !important;
+    border-color: $cyan-dim !important;
+  }
+
+  .vertical-timeline-element-icon {
+    border-color: $cyan-dim !important;
+    
+    .svg-inline--fa {
+      color: rgba(45, 212, 191, 0.2) !important;
+    }
   }
 
   .milestone-status {
-    border-color: rgba(59, 233, 229, 0.08);
-    color: rgba(59, 233, 229, 0.15);
+    border-color: $cyan-dim;
+    color: rgba(45, 212, 191, 0.3);
   }
 }
 
 // ========== TERMINAL WINDOW ==========
 .terminal-window {
-  background: #0A0A0A;
+  background: $black;
   border-radius: 0;
   overflow: hidden;
-  margin: 0.4rem 0 0.2rem;
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  margin: 0.5rem 0 0.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
   max-width: 400px;
 
   @media (max-width: 768px) {
     max-width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    margin: 0.3rem 0 0.1rem;
   }
 }
 
@@ -382,7 +548,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   align-items: center;
   padding: 0.3rem 0.75rem;
   background: rgba(255, 255, 255, 0.01);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+
+  @media (max-width: 480px) {
+    padding: 0.2rem 0.5rem;
+  }
 }
 
 .terminal-controls {
@@ -391,8 +561,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 .terminal-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   transition: opacity 0.2s ease;
   cursor: pointer;
@@ -400,23 +570,37 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   &:hover {
     opacity: 0.8;
   }
+
+  @media (max-width: 480px) {
+    width: 6px;
+    height: 6px;
+  }
 }
 
-.terminal-dot-red { background: #ff5f56; opacity: 0.3; }
-.terminal-dot-yellow { background: #ffbd2e; opacity: 0.2; }
-.terminal-dot-green { background: #27c93f; opacity: 0.2; }
+.terminal-dot-red { background: #ff5f56; opacity: 0.4; }
+.terminal-dot-yellow { background: #ffbd2e; opacity: 0.3; }
+.terminal-dot-green { background: #27c93f; opacity: 0.3; }
 
 .terminal-title {
-  color: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.06);
   font-family: $font-mono;
   font-size: 0.5rem;
   font-weight: 400;
   letter-spacing: 0.08em;
   margin-left: 0.75rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.4rem;
+    margin-left: 0.5rem;
+  }
 }
 
 .terminal-body {
   padding: 0.4rem 0.75rem;
+
+  @media (max-width: 480px) {
+    padding: 0.3rem 0.5rem;
+  }
 }
 
 .terminal-code {
@@ -430,6 +614,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   @media (max-width: 768px) {
     font-size: 0.65rem;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    line-height: 1.5;
+  }
 }
 
 .terminal-prompt {
@@ -437,6 +626,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   margin-right: 0.6rem;
   user-select: none;
   font-weight: 400;
+
+  @media (max-width: 480px) {
+    margin-right: 0.4rem;
+  }
 }
 
 .terminal-command {
@@ -459,6 +652,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   margin-left: 2px;
   vertical-align: text-bottom;
   animation: blink 1s step-end infinite;
+
+  @media (max-width: 480px) {
+    width: 4px;
+    height: 10px;
+  }
 }
 
 @keyframes blink {
@@ -469,8 +667,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 // ========== FUTURE MILESTONE ==========
 .milestone-future {
   .vertical-timeline-element-content {
-    border: 0.5px dashed rgba(255, 255, 255, 0.03) !important;
+    border: 1px dashed rgba(255, 255, 255, 0.04) !important;
     background: rgba(255, 255, 255, 0.005) !important;
+    
+    &::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.02), transparent) !important;
+    }
   }
   
   .milestone-title {
@@ -482,43 +684,23 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
   
   .milestone-year {
-    opacity: 0.2;
+    opacity: 0.15;
   }
 
   .milestone-status {
-    opacity: 0.2;
+    opacity: 0.15;
+  }
+  
+  .vertical-timeline-element-icon {
+    opacity: 0.3 !important;
+    
+    .svg-inline--fa {
+      opacity: 0.3 !important;
+    }
   }
   
   &:hover .vertical-timeline-element-content {
-    border-color: rgba(255, 255, 255, 0.04) !important;
-  }
-}
-
-// ========== ICON STYLING ==========
-.vertical-timeline-element-icon {
-  border-radius: 0 !important;
-  width: 40px !important;
-  height: 40px !important;
-  margin-left: -20px !important;
-  background: $gray-dark !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  .svg-inline--fa {
-    color: rgba(255, 255, 255, 0.15);
-    font-size: 1.2rem !important;
-    animation: none !important;
-  }
-
-  @media (max-width: 768px) {
-    width: 32px !important;
-    height: 32px !important;
-    margin-left: -16px !important;
-    
-    .svg-inline--fa {
-      font-size: 1rem !important;
-    }
+    border-color: rgba(255, 255, 255, 0.06) !important;
   }
 }
 
@@ -530,7 +712,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
   
   .milestone-card .vertical-timeline-element-content {
-    padding: 1.25rem 1.5rem !important;
+    padding: 1.5rem 1.5rem !important;
   }
   
   .milestone-card:hover {
@@ -548,7 +730,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
   
   .milestone-card .vertical-timeline-element-content {
-    padding: 1rem 1.25rem !important;
+    padding: 1.25rem 1.25rem !important;
   }
   
   .milestone-header {
@@ -557,15 +739,37 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
   
   .milestone-title-group {
-    gap: 0.35rem;
+    gap: 0.5rem;
   }
   
   .vertical-timeline {
     padding: 0;
   }
+  
+  .vertical-timeline-element {
+    margin: 0 0 2.5rem 0 !important;
+  }
+
+  // Fix for mobile timeline layout
+  .vertical-timeline.vertical-timeline--two-columns {
+    .vertical-timeline-element {
+      .vertical-timeline-element-icon {
+        left: 50% !important;
+        transform: translateX(-50%) scale(0.5);
+      }
+      
+      &.visible .vertical-timeline-element-icon {
+        transform: translateX(-50%) scale(1);
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 480px) {
+  .timeline-section {
+    padding: 2rem 0 3rem;
+  }
+  
   .section-title {
     font-size: 1.8rem;
   }
@@ -575,15 +779,79 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
   
   .milestone-card .vertical-timeline-element-content {
-    padding: 0.75rem 1rem !important;
+    padding: 1rem 1rem !important;
   }
   
   .milestone-title {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
   
   .milestone-description {
     font-size: 0.8rem;
+  }
+  
+  .vertical-timeline-element-icon {
+    width: 32px !important;
+    height: 32px !important;
+    margin-left: -16px !important;
+    
+    .svg-inline--fa {
+      font-size: 0.9rem !important;
+    }
+  }
+
+  // Mobile specific fixes
+  .vertical-timeline.vertical-timeline--two-columns {
+    .vertical-timeline-element {
+      .vertical-timeline-element-content {
+        padding: 1rem 1rem !important;
+        margin-left: 1.5rem !important;
+        width: calc(100% - 2.5rem) !important;
+      }
+
+      .vertical-timeline-element-content-arrow {
+        border-right: 6px solid $dark !important;
+        left: -6px !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .timeline-container {
+    padding: 0 0.5rem;
+  }
+
+  .milestone-card .vertical-timeline-element-content {
+    padding: 0.75rem 0.75rem !important;
+  }
+
+  .milestone-title {
+    font-size: 0.85rem;
+  }
+
+  .milestone-description {
+    font-size: 0.75rem;
+  }
+
+  .milestone-status {
+    font-size: 0.35rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  .milestone-year {
+    font-size: 0.45rem;
+    padding: 0.05rem 0.35rem;
+  }
+
+  .vertical-timeline.vertical-timeline--two-columns {
+    .vertical-timeline-element {
+      .vertical-timeline-element-content {
+        padding: 0.75rem 0.75rem !important;
+        margin-left: 1.25rem !important;
+        width: calc(100% - 2rem) !important;
+      }
+    }
   }
 }
 
@@ -626,19 +894,19 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     .vertical-timeline-element-content {
       opacity: 1 !important;
       transform: none !important;
-      border: 0.5px solid rgba(255,255,255,0.1) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
       background: transparent !important;
     }
     
     .vertical-timeline-element-icon {
       opacity: 1 !important;
       transform: none !important;
-      border: 0.5px solid rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.05) !important;
     }
   }
   
   .terminal-window {
-    border: 0.5px solid rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
     background: transparent !important;
   }
   

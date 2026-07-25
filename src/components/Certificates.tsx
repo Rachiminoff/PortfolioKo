@@ -15,6 +15,12 @@ const getOrganizationIcon = (org: string) => {
   if (orgLower.includes("cisco")) {
     return <Icon icon="simple-icons:cisco" />;
   }
+  if (orgLower.includes("microsoft")) {
+    return <Icon icon="simple-icons:microsoft" />;
+  }
+  if (orgLower.includes("google")) {
+    return <Icon icon="simple-icons:google" />;
+  }
 
   return <Icon icon="mdi:school" />;
 };

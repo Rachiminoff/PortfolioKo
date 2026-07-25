@@ -37,10 +37,6 @@ function Timeline() {
                 card.classList.add('card-visible');
               }, 400);
             }
-          } else {
-            if (activeIndex === index) {
-              element.classList.remove('active');
-            }
           }
         });
       },
@@ -98,23 +94,23 @@ function Timeline() {
             <VerticalTimelineElement
               className="vertical-timeline-element--work milestone-card milestone-completed"
               contentStyle={{ 
-                background: '#0F0F0F',
-                color: '#F5F5F5',
+                background: '#181818',
+                color: '#f5f5f5',
                 borderRadius: '0',
-                border: '0.5px solid rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.08)',
                 boxShadow: 'none',
-                padding: '1.5rem 1.8rem',
+                padding: '1.8rem 2rem',
               }}
               contentArrowStyle={{ 
-                borderRight: '7px solid #0F0F0F',
+                borderRight: '7px solid #181818',
               }}
               date="2022"
               dateClassName="custom-date"
               iconStyle={{ 
-                background: '#1A1A1A',
-                color: '#F5F5F5',
-                boxShadow: '0 0 0 2px rgba(255,255,255,0.04)',
-                border: '0.5px solid rgba(255,255,255,0.06)',
+                background: '#222222',
+                color: '#f5f5f5',
+                boxShadow: 'none',
+                border: '1px solid rgba(255,255,255,0.08)',
               }}
               icon={<FontAwesomeIcon icon={faPython} />}
             >
@@ -161,23 +157,23 @@ function Timeline() {
             <VerticalTimelineElement
               className="vertical-timeline-element--education milestone-card milestone-completed milestone-emphasized"
               contentStyle={{ 
-                background: '#0F0F0F',
-                color: '#F5F5F5',
+                background: '#181818',
+                color: '#f5f5f5',
                 borderRadius: '0',
-                border: '0.5px solid rgba(59, 233, 229, 0.08)',
+                border: '1px solid rgba(45, 212, 191, 0.1)',
                 boxShadow: 'none',
-                padding: '1.5rem 1.8rem',
+                padding: '1.8rem 2rem',
               }}
               contentArrowStyle={{ 
-                borderRight: '7px solid #0F0F0F',
+                borderRight: '7px solid #181818',
               }}
               date="2023"
               dateClassName="custom-date"
               iconStyle={{ 
-                background: '#1A1A1A',
-                color: '#F5F5F5',
-                boxShadow: '0 0 0 2px rgba(59, 233, 229, 0.06)',
-                border: '0.5px solid rgba(59, 233, 229, 0.08)',
+                background: '#222222',
+                color: '#f5f5f5',
+                boxShadow: 'none',
+                border: '1px solid rgba(45, 212, 191, 0.1)',
               }}
               icon={<FontAwesomeIcon icon={faGraduationCap} />}
             >
@@ -193,7 +189,7 @@ function Timeline() {
                 <h4 className="milestone-subtitle">Cavite State University — Main Campus</h4>
                 
                 <p className="milestone-description">
-                  Currently pursuing a Bachelor's degree in Computer Science.
+                  Currently pursuing a Bachelor's degree in Computer Science. Building a strong foundation in algorithms, data structures, and software engineering principles.
                 </p>
               </div>
             </VerticalTimelineElement>
@@ -202,24 +198,23 @@ function Timeline() {
             <VerticalTimelineElement
               className="vertical-timeline-element--work milestone-card milestone-future"
               contentStyle={{ 
-                background: '#0A0A0A',
-                color: '#F5F5F5',
+                background: '#141414',
+                color: '#f5f5f5',
                 borderRadius: '0',
-                border: '0.5px dashed rgba(255,255,255,0.04)',
+                border: '1px dashed rgba(255,255,255,0.04)',
                 boxShadow: 'none',
-                padding: '1.5rem 1.8rem',
-                opacity: 0.6,
+                padding: '1.8rem 2rem',
               }}
               contentArrowStyle={{ 
-                borderRight: '7px solid #0A0A0A',
+                borderRight: '7px solid #141414',
               }}
               date="Future"
               dateClassName="custom-date"
               iconStyle={{ 
-                background: '#1A1A1A',
-                color: '#F5F5F5',
-                boxShadow: '0 0 0 2px rgba(255,255,255,0.02)',
-                border: '0.5px solid rgba(255,255,255,0.03)',
+                background: '#222222',
+                color: '#f5f5f5',
+                boxShadow: 'none',
+                border: '1px solid rgba(255,255,255,0.03)',
                 opacity: 0.4,
               }}
               icon={<FontAwesomeIcon icon={faRocket} />}
