@@ -17,6 +17,7 @@ function Footer() {
   const [index, setIndex] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
   const [zoom, setZoom] = useState(1);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const artsLengthRef = useRef(0);
   artsLengthRef.current = arts.length;
@@ -33,11 +34,18 @@ function Footer() {
   };
 
   const handleSubmit = async () => {
+    if (!passcode.trim()) {
+      setErrorMessage("Please enter a passcode");
+      return;
+    }
+    
     if (passcode === "sining") {
       setUnlocked(true);
+      setErrorMessage("");
       await fetchArts();
     } else {
-      alert("Incorrect Passcode");
+      setErrorMessage("Incorrect passcode. Please try again.");
+      setPasscode("");
     }
   };
 
@@ -68,6 +76,7 @@ function Footer() {
     setUnlocked(false);
     setPasscode("");
     setZoom(1);
+    setErrorMessage("");
   }, []);
 
   React.useEffect(() => {
@@ -133,6 +142,7 @@ function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 className="footer-card"
+                aria-label="GitHub"
               >
                 <GitHubIcon />
                 <span>GitHub</span>
@@ -142,6 +152,7 @@ function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 className="footer-card"
+                aria-label="LinkedIn"
               >
                 <LinkedInIcon />
                 <span>LinkedIn</span>
@@ -151,6 +162,7 @@ function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 className="footer-card"
+                aria-label="YouTube"
               >
                 <YouTubeIcon />
                 <span>YouTube</span>
@@ -158,6 +170,7 @@ function Footer() {
               <button
                 className="footer-card admin-card"
                 onClick={() => setShowModal(true)}
+                aria-label="Admin Access"
               >
                 <LockIcon />
                 <span>Admin</span>
@@ -178,9 +191,12 @@ function Footer() {
       </footer>
 
       {showModal && (
-        <div className="admin-modal-overlay">
-          <div className={`admin-modal ${unlocked ? "" : "locked"}`}>
-            <button className="close-btn" onClick={closeModal}>
+        <div className="admin-modal-overlay" onClick={closeModal}>
+          <div 
+            className={`admin-modal ${unlocked ? "" : "locked"}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button className="close-btn" onClick={closeModal} aria-label="Close modal">
               <CloseIcon />
             </button>
 
@@ -193,10 +209,17 @@ function Footer() {
                   type="password"
                   placeholder="Enter Passcode"
                   value={passcode}
-                  onChange={(e) => setPasscode(e.target.value)}
+                  onChange={(e) => {
+                    setPasscode(e.target.value);
+                    if (errorMessage) setErrorMessage("");
+                  }}
                   onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
                   autoFocus
+                  className={errorMessage ? "input-error" : ""}
                 />
+                {errorMessage && (
+                  <div className="error-message">{errorMessage}</div>
+                )}
                 <button className="submit-btn" onClick={handleSubmit}>
                   Unlock
                 </button>
@@ -215,13 +238,13 @@ function Footer() {
                     </div>
                   </div>
                   <div className="viewer-actions">
-                    <button className="viewer-btn" onClick={zoomOut}>
+                    <button className="viewer-btn" onClick={zoomOut} aria-label="Zoom out">
                       −
                     </button>
                     <span className="zoom-label">
                       {Math.round(zoom * 100)}%
                     </span>
-                    <button className="viewer-btn" onClick={zoomIn}>
+                    <button className="viewer-btn" onClick={zoomIn} aria-label="Zoom in">
                       +
                     </button>
                   </div>
@@ -240,6 +263,7 @@ function Footer() {
                             setIndex(i);
                             setZoom(1);
                           }}
+                          aria-label={`View ${art.title}`}
                         >
                           <img src={art.image_url} alt={art.title} />
                           <div className="art-meta">
@@ -254,10 +278,10 @@ function Footer() {
                   <div className="art-main">
                     <div className="viewer-toolbar">
                       <div className="viewer-toolbar-left">
-                        <button className="viewer-btn" onClick={prevArt}>
+                        <button className="viewer-btn" onClick={prevArt} aria-label="Previous">
                           ‹
                         </button>
-                        <button className="viewer-btn" onClick={nextArt}>
+                        <button className="viewer-btn" onClick={nextArt} aria-label="Next">
                           ›
                         </button>
                       </div>
@@ -285,7 +309,7 @@ function Footer() {
                             style={{ transform: `scale(${zoom})` }}
                           />
                         ) : (
-                          <div style={{ color: "rgba(255,255,255,0.04)", padding: "2rem", fontFamily: "'SF Mono', monospace", fontSize: "0.7rem", letterSpacing: "0.08em" }}>
+                          <div className="empty-state">
                             No artwork available
                           </div>
                         )}

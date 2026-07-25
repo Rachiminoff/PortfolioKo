@@ -354,3 +354,20 @@ p, a, h1, h2, h3, h4, h5, label, button {
     padding-right: 0.75rem !important;
   }
 }
+
+/* Hide navbar on project details page */
+body.hide-navbar nav.navbar,
+body.hide-navbar .navbar {
+  display: none !important;
+}
+
+/* Adjust body padding when navbar is hidden */
+body.hide-navbar {
+  padding-top: 0 !important;
+}
+
+/* If there's a container that wraps the navbar, hide it too */
+body.hide-navbar .navbar-container,
+body.hide-navbar header.navbar {
+  display: none !important;
+}

@@ -8,6 +8,22 @@ import PDFViewer from "./PDFViewer";
 
 const INITIAL_DISPLAY = 3;
 
+// Color variants for cards
+const colorVariants = [
+    'blue',
+    'purple',
+    'teal',
+    'rose',
+    'amber',
+    'emerald',
+    'indigo',
+    'slate'
+];
+
+const getColorVariant = (index: number): string => {
+    return colorVariants[index % colorVariants.length];
+};
+
 // Icon mapping based on organization
 const getOrganizationIcon = (org: string) => {
   const orgLower = org.toLowerCase();
@@ -20,6 +36,18 @@ const getOrganizationIcon = (org: string) => {
   }
   if (orgLower.includes("google")) {
     return <Icon icon="simple-icons:google" />;
+  }
+  if (orgLower.includes("meta") || orgLower.includes("facebook")) {
+    return <Icon icon="simple-icons:meta" />;
+  }
+  if (orgLower.includes("aws") || orgLower.includes("amazon")) {
+    return <Icon icon="simple-icons:amazonaws" />;
+  }
+  if (orgLower.includes("ibm")) {
+    return <Icon icon="simple-icons:ibm" />;
+  }
+  if (orgLower.includes("freecodecamp")) {
+    return <Icon icon="simple-icons:freecodecamp" />;
   }
 
   return <Icon icon="mdi:school" />;
@@ -80,64 +108,67 @@ function Certificates() {
         </div>
 
         <div className="certificates__grid">
-          {displayedCertificates.map((cert, index) => (
-            <div
-              key={cert.id}
-              className={`certificates__card ${inView ? "animate-in" : ""}`}
-              style={
-                { animationDelay: `${index * 80}ms` } as React.CSSProperties
-              }
-            >
-              <div className="certificates__card-icon">
-                {getOrganizationIcon(cert.organization)}
-              </div>
-
-              <div className="certificates__card-content">
-                <h3 className="certificates__card-title">{cert.title}</h3>
-
-                <div className="certificates__card-meta">
-                  <span className="certificates__card-org">
-                    {cert.organization}
-                  </span>
-                  <span className="certificates__card-year">
-                    {cert.year}
-                  </span>
+          {displayedCertificates.map((cert, index) => {
+            const colorVariant = getColorVariant(index);
+            return (
+              <div
+                key={cert.id}
+                className={`certificates__card certificates__card--${colorVariant} ${inView ? "animate-in" : ""}`}
+                style={
+                  { animationDelay: `${index * 80}ms` } as React.CSSProperties
+                }
+              >
+                <div className="certificates__card-icon">
+                  {getOrganizationIcon(cert.organization)}
                 </div>
 
-                <div className="certificates__card-tags">
-                  {cert.tags?.slice(0, 3).map((tag, i) => (
-                    <span key={i} className="certificates__card-tag">
-                      {tag}
+                <div className="certificates__card-content">
+                  <h3 className="certificates__card-title">{cert.title}</h3>
+
+                  <div className="certificates__card-meta">
+                    <span className="certificates__card-org">
+                      {cert.organization}
                     </span>
-                  ))}
+                    <span className="certificates__card-year">
+                      {cert.year}
+                    </span>
+                  </div>
+
+                  <div className="certificates__card-tags">
+                    {cert.tags?.slice(0, 3).map((tag, i) => (
+                      <span key={i} className="certificates__card-tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="certificates__card-actions">
+                  {cert.pdfUrl && (
+                    <button
+                      className="certificates__card-action"
+                      onClick={(e) => handleViewCertificate(e, cert.pdfUrl)}
+                      aria-label={`View ${cert.title} certificate`}
+                    >
+                      <Icon icon="mdi:eye-outline" />
+                      <span>View</span>
+                    </button>
+                  )}
+
+                  {cert.verifyUrl && (
+                    <button
+                      className="certificates__card-action certificates__card-action--verify"
+                      onClick={(e) => handleVerify(e, cert.verifyUrl)}
+                      aria-label={`Verify ${cert.title} credential`}
+                    >
+                      <Icon icon="mdi:shield-check-outline" />
+                      <span>Verify</span>
+                    </button>
+                  )}
                 </div>
               </div>
-
-              <div className="certificates__card-actions">
-                {cert.pdfUrl && (
-                  <button
-                    className="certificates__card-action"
-                    onClick={(e) => handleViewCertificate(e, cert.pdfUrl)}
-                    aria-label={`View ${cert.title} certificate`}
-                  >
-                    <Icon icon="mdi:eye-outline" />
-                    <span>View</span>
-                  </button>
-                )}
-
-                {cert.verifyUrl && (
-                  <button
-                    className="certificates__card-action certificates__card-action--verify"
-                    onClick={(e) => handleVerify(e, cert.verifyUrl)}
-                    aria-label={`Verify ${cert.title} credential`}
-                  >
-                    <Icon icon="mdi:shield-check-outline" />
-                    <span>Verify</span>
-                  </button>
-                )}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {hasMore && !showAll && (

@@ -10,28 +10,54 @@ function ConstructionGrid() {
     return (
         <div className="construction-grid" aria-hidden="true">
             {/* Major grid lines */}
-            <div className="grid-line vertical major" style={{ left: '33.333%' }} />
-            <div className="grid-line vertical major" style={{ left: '66.666%' }} />
+            <div className="grid-line vertical major" style={{ left: '25%' }} />
+            <div className="grid-line vertical major" style={{ left: '50%' }} />
+            <div className="grid-line vertical major" style={{ left: '75%' }} />
             <div className="grid-line horizontal major" style={{ top: '25%' }} />
             <div className="grid-line horizontal major" style={{ top: '50%' }} />
             <div className="grid-line horizontal major" style={{ top: '75%' }} />
             
             {/* Minor grid lines */}
-            <div className="grid-line vertical minor" style={{ left: '16.666%' }} />
-            <div className="grid-line vertical minor" style={{ left: '50%' }} />
-            <div className="grid-line vertical minor" style={{ left: '83.333%' }} />
+            <div className="grid-line vertical minor" style={{ left: '12.5%' }} />
+            <div className="grid-line vertical minor" style={{ left: '37.5%' }} />
+            <div className="grid-line vertical minor" style={{ left: '62.5%' }} />
+            <div className="grid-line vertical minor" style={{ left: '87.5%' }} />
             <div className="grid-line horizontal minor" style={{ top: '12.5%' }} />
             <div className="grid-line horizontal minor" style={{ top: '37.5%' }} />
             <div className="grid-line horizontal minor" style={{ top: '62.5%' }} />
             <div className="grid-line horizontal minor" style={{ top: '87.5%' }} />
             
-            {/* Connecting lines from left to right */}
-            <div className="grid-line connector" style={{ top: '50%', left: '0', right: '66.666%' }} />
-            <div className="grid-line connector" style={{ top: '25%', left: '33.333%', right: '0' }} />
+            {/* Diagonal connectors */}
+            <div className="grid-line connector" style={{ 
+                top: '50%', 
+                left: '25%', 
+                right: '50%',
+                transform: 'rotate(15deg)',
+                transformOrigin: 'left center'
+            }} />
+            <div className="grid-line connector" style={{ 
+                top: '50%', 
+                left: '50%', 
+                right: '25%',
+                transform: 'rotate(-15deg)',
+                transformOrigin: 'right center'
+            }} />
+            
+            {/* Vertical connectors */}
+            <div className="grid-line connector-vertical" style={{ 
+                top: '25%', 
+                bottom: '50%', 
+                left: '50%' 
+            }} />
+            <div className="grid-line connector-vertical" style={{ 
+                top: '50%', 
+                bottom: '25%', 
+                left: '50%' 
+            }} />
             
             {/* Grid labels */}
             <span className="grid-label" style={{ bottom: '12px', left: '16px' }}>GRID 04</span>
-            <span className="grid-label" style={{ top: '12px', right: '16px' }}>BUILD v1.0</span>
+            <span className="grid-label" style={{ top: '12px', right: '16px' }}>BUILD v2.0</span>
             
             {/* Corner crop marks */}
             <div className="crop-mark tl" />
@@ -40,17 +66,26 @@ function ConstructionGrid() {
             <div className="crop-mark br" />
             
             {/* Coordinate labels */}
-            <span className="coord-label" style={{ top: '12px', left: '33.333%' }}>X:420</span>
-            <span className="coord-label" style={{ top: '12px', left: '66.666%' }}>X:840</span>
+            <span className="coord-label" style={{ top: '12px', left: '25%' }}>X:360</span>
+            <span className="coord-label" style={{ top: '12px', left: '50%' }}>X:720</span>
+            <span className="coord-label" style={{ top: '12px', left: '75%' }}>X:1080</span>
             <span className="coord-label" style={{ left: '12px', top: '25%' }}>Y:180</span>
             <span className="coord-label" style={{ left: '12px', top: '50%' }}>Y:360</span>
             <span className="coord-label" style={{ left: '12px', top: '75%' }}>Y:540</span>
+            
+            {/* Center mark */}
+            <div className="grid-center-mark" />
+            
+            {/* Arc guides */}
+            <div className="grid-arc arc-1" />
+            <div className="grid-arc arc-2" />
+            <div className="grid-arc arc-3" />
         </div>
     );
 }
 
 /* =========================
-   GEOMETRIC SHAPES - INTEGRATED
+   GEOMETRIC SHAPES - IMPROVED
 ========================= */
 function GeometricShapes() {
     return (
@@ -59,7 +94,10 @@ function GeometricShapes() {
             <div className="shape construction-circle">
                 <div className="circle-ring outer" />
                 <div className="circle-ring inner" />
+                <div className="circle-ring dotted" />
                 <span className="circle-label">R=280</span>
+                <div className="circle-dot dot-1" />
+                <div className="circle-dot dot-2" />
             </div>
             
             {/* Secondary guide ring */}
@@ -81,6 +119,13 @@ function GeometricShapes() {
                     />
                     <circle cx="100" cy="50" r="1.5" fill="rgba(59, 233, 229, 0.06)" />
                     <circle cx="300" cy="250" r="1.5" fill="rgba(59, 233, 229, 0.06)" />
+                    
+                    {/* Additional curve */}
+                    <path 
+                        d="M0 250 C100 150, 300 50, 400 250" 
+                        stroke="rgba(255, 255, 255, 0.02)" 
+                        strokeWidth="0.3"
+                    />
                 </svg>
             </div>
             
@@ -89,6 +134,34 @@ function GeometricShapes() {
             <div className="shape alignment-bracket bottom" />
             <div className="shape alignment-bracket left" />
             <div className="shape alignment-bracket right" />
+            
+            {/* Diagonal lines */}
+            <div className="shape diagonal-lines">
+                <div className="diagonal d1" />
+                <div className="diagonal d2" />
+            </div>
+            
+            {/* Floating dots */}
+            <div className="shape floating-dots">
+                <div className="dot d1" />
+                <div className="dot d2" />
+                <div className="dot d3" />
+                <div className="dot d4" />
+            </div>
+            
+            {/* Hexagonal grid pattern (subtle) */}
+            <div className="shape hex-grid">
+                <svg viewBox="0 0 1000 1000" fill="none">
+                    <pattern id="hex" x="0" y="0" width="60" height="52" patternUnits="userSpaceOnUse">
+                        <path d="M30 0 L60 15 L60 37 L30 52 L0 37 L0 15 Z" 
+                              stroke="rgba(45, 212, 191, 0.02)" 
+                              strokeWidth="0.5"
+                              fill="none"
+                        />
+                    </pattern>
+                    <rect width="1000" height="1000" fill="url(#hex)" />
+                </svg>
+            </div>
         </div>
     );
 }

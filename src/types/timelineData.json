@@ -1,0 +1,61 @@
+{
+  "milestones": [
+    {
+      "id": 1,
+      "title": "First Line of Code",
+      "year": "2022",
+      "subtitle": "Python",
+      "description": "The beginning of my programming journey—writing my first Python script and discovering the satisfaction of turning ideas into working code.",
+      "status": "BEGINNING",
+      "icon": "python",
+      "terminal": {
+        "title": "python",
+        "code": [
+          { "type": "prompt", "value": "❯" },
+          { "type": "command", "value": "print" },
+          { "type": "punctuation", "value": "(" },
+          { "type": "string", "value": "\"hello, world\"" },
+          { "type": "punctuation", "value": ")" }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "title": "Started Computer Science",
+      "year": "2023",
+      "subtitle": "Cavite State University — Main Campus",
+      "description": "Pursuing a Bachelor's degree in Computer Science while building a strong foundation in software engineering, algorithms, data structures, and modern web development.",
+      "status": "COMPLETED",
+      "icon": "graduation",
+      "terminal": null
+    },
+    {
+    "id": 3,
+    "title": "Software Development Intern",
+    "year": "2026",
+    "subtitle": "GoodStrings Inc.",
+    "description": "Currently undergoing my internship, contributing to both Quality Assurance and Software Development. My work involves system testing, bug verification, and developing internal web applications with CRUD functionality while collaborating within a professional software development workflow.",
+    "status": "CURRENT",
+    "icon": "briefcase",
+    "terminal": {
+        "title": "git",
+        "code": [
+        { "type": "prompt", "value": "❯" },
+        { "type": "command", "value": "git" },
+        { "type": "text", "value": " commit -m " },
+        { "type": "string", "value": "\"Implement CRUD features & fix reported issues\"" }
+        ]
+    }
+    },
+    {
+      "id": 4,
+      "title": "What's Next?",
+      "year": "Future",
+      "subtitle": "Future Goals & Aspirations",
+      "description": "Continuing to deepen my expertise in full-stack development, building software that solves real-world problems, contributing to open-source projects, and exploring emerging technologies.",
+      "status": "UPCOMING",
+      "icon": "rocket",
+      "terminal": null
+    }
+  ]
+}

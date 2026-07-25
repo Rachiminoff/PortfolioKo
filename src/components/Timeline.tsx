@@ -5,6 +5,19 @@ import { faPython } from '@fortawesome/free-brands-svg-icons';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import '../assets/styles/Timeline.scss';
+import timelineData from '../types/timelineData.json';
+
+const iconMap = {
+  python: faPython,
+  graduation: faGraduationCap,
+  rocket: faRocket,
+};
+
+const statusClassMap = {
+  current: 'milestone-status-current',
+  future: 'milestone-status-future',
+  default: '',
+};
 
 function Timeline() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -70,10 +83,45 @@ function Timeline() {
     };
   }, [activeIndex]);
 
+  const renderTerminal = (terminal: any) => {
+    if (!terminal) return null;
+
+    return (
+      <div className="terminal-window">
+        <div className="terminal-header">
+          <div className="terminal-controls">
+            <span className="terminal-dot terminal-dot-red"></span>
+            <span className="terminal-dot terminal-dot-yellow"></span>
+            <span className="terminal-dot terminal-dot-green"></span>
+          </div>
+          <span className="terminal-title">{terminal.title}</span>
+        </div>
+        <div className="terminal-body">
+          <code className="terminal-code">
+            {terminal.code.map((segment: any, index: number) => (
+              <span key={index} className={`terminal-${segment.type}`}>
+                {segment.value}
+              </span>
+            ))}
+            <span className="terminal-cursor"></span>
+          </code>
+        </div>
+      </div>
+    );
+  };
+
+  const getIcon = (iconName: string) => {
+    return iconMap[iconName as keyof typeof iconMap] || faRocket;
+  };
+
+  const getStatusClass = (status: string) => {
+    const type = status.toLowerCase();
+    return statusClassMap[type as keyof typeof statusClassMap] || '';
+  };
+
   return (
     <div id="history" ref={timelineRef} className="timeline-section">
       <div className="timeline-container">
-        {/* Section Header */}
         <div className="section-header">
           <div className="section-header-content">
             <span className="section-label">JOURNEY</span>
@@ -83,160 +131,55 @@ function Timeline() {
         </div>
 
         <div className="timeline-wrapper">
-          {/* Progress fill indicator */}
           <div className="timeline-progress-track">
             <div ref={progressRef} className="timeline-progress-fill"></div>
           </div>
 
           <VerticalTimeline lineColor="rgba(255,255,255,0.04)">
-            
-            {/* First Python Code - Milestone 1 */}
-            <VerticalTimelineElement
-              className="vertical-timeline-element--work milestone-card milestone-completed"
-              contentStyle={{ 
-                background: '#181818',
-                color: '#f5f5f5',
-                borderRadius: '0',
-                border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: 'none',
-                padding: '1.8rem 2rem',
-              }}
-              contentArrowStyle={{ 
-                borderRight: '7px solid #181818',
-              }}
-              date="2022"
-              dateClassName="custom-date"
-              iconStyle={{ 
-                background: '#222222',
-                color: '#f5f5f5',
-                boxShadow: 'none',
-                border: '1px solid rgba(255,255,255,0.08)',
-              }}
-              icon={<FontAwesomeIcon icon={faPython} />}
-            >
-              <div className="milestone-content">
-                <div className="milestone-header">
-                  <div className="milestone-title-group">
-                    <h3 className="milestone-title">First Line of Code</h3>
-                    <span className="milestone-year">2022</span>
-                  </div>
-                  <span className="milestone-status">BEGINNING</span>
-                </div>
-                
-                <h4 className="milestone-subtitle">Python</h4>
-                
-                {/* Terminal Window */}
-                <div className="terminal-window">
-                  <div className="terminal-header">
-                    <div className="terminal-controls">
-                      <span className="terminal-dot terminal-dot-red"></span>
-                      <span className="terminal-dot terminal-dot-yellow"></span>
-                      <span className="terminal-dot terminal-dot-green"></span>
+            {timelineData.milestones.map((milestone) => (
+              <VerticalTimelineElement
+                key={milestone.id}
+                className="vertical-timeline-element--work milestone-card"
+                contentStyle={{ 
+                  background: '#181818',
+                  color: '#f5f5f5',
+                  borderRadius: '0',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  boxShadow: 'none',
+                  padding: '1.8rem 2rem',
+                }}
+                contentArrowStyle={{ 
+                  borderRight: '7px solid #181818',
+                }}
+                date={milestone.year}
+                dateClassName="custom-date"
+                iconStyle={{ 
+                  background: '#222222',
+                  color: '#f5f5f5',
+                  boxShadow: 'none',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                }}
+                icon={<FontAwesomeIcon icon={getIcon(milestone.icon)} />}
+              >
+                <div className="milestone-content">
+                  <div className="milestone-header">
+                    <div className="milestone-title-group">
+                      <h3 className="milestone-title">{milestone.title}</h3>
+                      <span className="milestone-year">{milestone.year}</span>
                     </div>
-                    <span className="terminal-title">python</span>
+                    <span className={`milestone-status ${getStatusClass(milestone.status)}`}>
+                      {milestone.status}
+                    </span>
                   </div>
-                  <div className="terminal-body">
-                    <code className="terminal-code">
-                      <span className="terminal-prompt">❯</span>
-                      <span className="terminal-command">print</span>
-                      <span className="terminal-punctuation">(</span>
-                      <span className="terminal-string">"hello, world"</span>
-                      <span className="terminal-punctuation">)</span>
-                      <span className="terminal-cursor"></span>
-                    </code>
-                  </div>
+                  
+                  <h4 className="milestone-subtitle">{milestone.subtitle}</h4>
+                  
+                  {renderTerminal(milestone.terminal)}
+                  
+                  <p className="milestone-description">{milestone.description}</p>
                 </div>
-                
-                <p className="milestone-description">
-                  The beginning of my programming journey — writing my first Python script and discovering the joy of coding.
-                </p>
-              </div>
-            </VerticalTimelineElement>
-
-            {/* Computer Science Start - Milestone 2 */}
-            <VerticalTimelineElement
-              className="vertical-timeline-element--education milestone-card milestone-completed milestone-emphasized"
-              contentStyle={{ 
-                background: '#181818',
-                color: '#f5f5f5',
-                borderRadius: '0',
-                border: '1px solid rgba(45, 212, 191, 0.1)',
-                boxShadow: 'none',
-                padding: '1.8rem 2rem',
-              }}
-              contentArrowStyle={{ 
-                borderRight: '7px solid #181818',
-              }}
-              date="2023"
-              dateClassName="custom-date"
-              iconStyle={{ 
-                background: '#222222',
-                color: '#f5f5f5',
-                boxShadow: 'none',
-                border: '1px solid rgba(45, 212, 191, 0.1)',
-              }}
-              icon={<FontAwesomeIcon icon={faGraduationCap} />}
-            >
-              <div className="milestone-content">
-                <div className="milestone-header">
-                  <div className="milestone-title-group">
-                    <h3 className="milestone-title">Started Computer Science</h3>
-                    <span className="milestone-year">2023</span>
-                  </div>
-                  <span className="milestone-status milestone-status-current">CURRENT</span>
-                </div>
-                
-                <h4 className="milestone-subtitle">Cavite State University — Main Campus</h4>
-                
-                <p className="milestone-description">
-                  Currently pursuing a Bachelor's degree in Computer Science. Building a strong foundation in algorithms, data structures, and software engineering principles.
-                </p>
-              </div>
-            </VerticalTimelineElement>
-
-            {/* Future - Milestone 3 */}
-            <VerticalTimelineElement
-              className="vertical-timeline-element--work milestone-card milestone-future"
-              contentStyle={{ 
-                background: '#141414',
-                color: '#f5f5f5',
-                borderRadius: '0',
-                border: '1px dashed rgba(255,255,255,0.04)',
-                boxShadow: 'none',
-                padding: '1.8rem 2rem',
-              }}
-              contentArrowStyle={{ 
-                borderRight: '7px solid #141414',
-              }}
-              date="Future"
-              dateClassName="custom-date"
-              iconStyle={{ 
-                background: '#222222',
-                color: '#f5f5f5',
-                boxShadow: 'none',
-                border: '1px solid rgba(255,255,255,0.03)',
-                opacity: 0.4,
-              }}
-              icon={<FontAwesomeIcon icon={faRocket} />}
-            >
-              <div className="milestone-content">
-                <div className="milestone-header">
-                  <div className="milestone-title-group">
-                    <h3 className="milestone-title">What's Next?</h3>
-                    <span className="milestone-year">Future</span>
-                  </div>
-                  <span className="milestone-status milestone-status-future">UPCOMING</span>
-                </div>
-                
-                <h4 className="milestone-subtitle">Future Goals &amp; Aspirations</h4>
-                
-                <p className="milestone-description">
-                  Exploring emerging technologies, building impactful open-source projects, and 
-                  continuously growing as a developer. The journey continues...
-                </p>
-              </div>
-            </VerticalTimelineElement>
-
+              </VerticalTimelineElement>
+            ))}
           </VerticalTimeline>
         </div>
       </div>

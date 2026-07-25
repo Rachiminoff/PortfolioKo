@@ -12,11 +12,18 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Fade from '@mui/material/Fade';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
 import SendIcon from '@mui/icons-material/Send';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import ScheduleIcon from '@mui/icons-material/Schedule';
+import EmailIcon from '@mui/icons-material/Email';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import emailjs from '@emailjs/browser';
 import axios from 'axios';
@@ -38,6 +45,8 @@ function Contact() {
   const [success, setSuccess] = useState(false);
   const [sendError, setSendError] = useState(false);
   const [referenceId, setReferenceId] = useState('');
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [charCount, setCharCount] = useState(0);
 
   const validateEmail = (value: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -64,6 +73,13 @@ function Contact() {
     }, 6000);
     return () => clearTimeout(timer);
   }, [success, sendError]);
+
+  useEffect(() => {
+    if (copySuccess) {
+      const timer = setTimeout(() => setCopySuccess(false), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [copySuccess]);
 
   const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -140,6 +156,7 @@ function Contact() {
       setEmail('');
       setSubject('');
       setMessage('');
+      setCharCount(0);
       setError({ name: false, email: false, subject: false, message: false });
     } catch (err) {
       console.error('EmailJS failed:', err);
@@ -156,178 +173,270 @@ function Contact() {
     }
   };
 
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText('your.email@example.com');
+    setCopySuccess(true);
+  };
+
   return (
     <div id="contact" className="contact-container">
-      <div className="contact-header">
-        <span className="header-tag">CONTACT</span>
-        <h2>Let's Work Together</h2>
-        <div className="contact-divider" />
-        <p className="contact-subtitle">
-          Have a project in mind, a question, or just want to say hello?
-          <br />
-          I'd love to hear from you.
-        </p>
-      </div>
-
-      <Paper className="contact-card" elevation={0}>
-        <div className="contact-card-header">
-          <Typography variant="h4" className="card-title">
-            Send a Message
-          </Typography>
-          <Typography variant="body2" className="card-subtitle">
-            I'll get back to you as soon as possible
-          </Typography>
-        </div>
-
-        <Divider className="card-divider" />
-
-        <Fade in={success} timeout={400}>
-          <Box>
-            {success && (
-              <Alert
-                icon={<CheckCircleIcon />}
-                severity="success"
-                className="alert-success"
-              >
-                <div className="alert-content">
-                  <strong>Message sent successfully!</strong>
-                  <br />
-                  <span className="alert-reference">
-                    Reference ID: <strong>{referenceId}</strong>
-                  </span>
-                </div>
-              </Alert>
-            )}
-          </Box>
-        </Fade>
-
-        <Fade in={sendError} timeout={400}>
-          <Box>
-            {sendError && (
-              <Alert
-                icon={<ErrorIcon />}
-                severity="error"
-                className="alert-error"
-              >
-                <div className="alert-content">
-                  <strong>Failed to send message.</strong>
-                  <br />
-                  <span>Please try again or contact me directly.</span>
-                </div>
-              </Alert>
-            )}
-          </Box>
-        </Fade>
-
-        <Box className="chips-container">
-          <Typography variant="caption" className="chips-label">
-            Quick subject suggestions
-          </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap className="chips-stack">
-            {['Project Inquiry', 'Collaboration', 'General Question', 'Bug Report'].map((label) => (
-              <Chip
-                key={label}
-                label={label}
-                onClick={() => handleChipClick(label)}
-                className={`chip-item ${subject === label ? 'chip-selected' : ''}`}
-              />
-            ))}
-          </Stack>
-        </Box>
-
-        <Box component="form" onSubmit={sendEmail} className="contact-form">
-          <div className="form-grid-2">
-            <TextField
-              label="Your Name"
-              value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                if (error.name) setError((prev) => ({ ...prev, name: false }));
-              }}
-              error={error.name}
-              helperText={error.name ? 'Name is required' : ''}
-              fullWidth
-              className="form-field"
-              variant="outlined"
-            />
-
-            <TextField
-              label="Email Address"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                if (error.email) setError((prev) => ({ ...prev, email: false }));
-              }}
-              onBlur={() => {
-                if (email.trim()) {
-                  setError((prev) => ({ ...prev, email: !validateEmail(email) }));
-                }
-              }}
-              error={error.email}
-              helperText={error.email ? 'Please enter a valid email' : ''}
-              fullWidth
-              className="form-field"
-              variant="outlined"
-            />
+      <div className="contact-grid">
+        {/* LEFT COLUMN - Info */}
+        <div className="contact-info">
+          <div className="contact-header">
+            <span className="header-tag">CONTACT</span>
+            <h2>Let's Work Together</h2>
+            <div className="contact-divider" />
+            <p className="contact-subtitle">
+              Have a project in mind, a question, or just want to say hello?
+              <br /><br/>
+              I'd love to hear from you.
+            </p>
           </div>
 
-          <TextField
-            label="Subject"
-            value={subject}
-            onChange={(e) => {
-              setSubject(e.target.value);
-              if (error.subject) setError((prev) => ({ ...prev, subject: false }));
-            }}
-            error={error.subject}
-            helperText={error.subject ? 'Subject is required' : ''}
-            fullWidth
-            className="form-field"
-            variant="outlined"
-            sx={{ mt: 2 }}
-          />
+          <div className="contact-details">
+            <div className="contact-detail-item">
+              <div className="detail-icon">
+                <EmailIcon />
+              </div>
+              <div className="detail-content">
+                <span className="detail-label">Email</span>
+                <div className="detail-value-wrapper">
+                  <span className="detail-value">tdy.alhssan@gmail.com</span>
+                  <Tooltip title={copySuccess ? 'Copied!' : 'Copy email'}>
+                    <IconButton 
+                      className="copy-button" 
+                      onClick={handleCopyEmail}
+                      size="small"
+                    >
+                      {copySuccess ? (
+                        <CheckCircleIcon className="copy-success" />
+                      ) : (
+                        <ContentCopyIcon />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                </div>
+              </div>
+            </div>
 
-          <TextField
-            label="Message"
-            value={message}
-            onChange={(e) => {
-              setMessage(e.target.value);
-              if (error.message) setError((prev) => ({ ...prev, message: false }));
-            }}
-            error={error.message}
-            helperText={error.message ? 'Message is required' : `${message.length}/1000 characters`}
-            multiline
-            rows={8}
-            fullWidth
-            className="form-field"
-            variant="outlined"
-            sx={{ mt: 2 }}
-            inputProps={{ maxLength: 1000 }}
-          />
+            <div className="contact-detail-item">
+              <div className="detail-icon">
+                <LocationOnIcon />
+              </div>
+              <div className="detail-content">
+                <span className="detail-label">Location</span>
+                <span className="detail-value">Cavite, The Philippines</span>
+              </div>
+            </div>
 
-          <div className="form-actions">
-            <Button
-              type="submit"
-              variant="contained"
-              disabled={!isFormValid || loading}
-              className="send-button"
-              endIcon={
-                loading ? (
-                  <CircularProgress size={20} color="inherit" className="button-spinner" />
-                ) : (
-                  <SendIcon className="send-icon" />
-                )
-              }
-            >
-              {loading ? 'Sending...' : 'Send Message'}
-            </Button>
-
-            <div className="trust-indicator">
-              <ScheduleIcon className="trust-icon" />
-              <span>Typically replies within 24–48 hours</span>
+            <div className="contact-detail-item">
+              <div className="detail-icon">
+                <AccessTimeIcon />
+              </div>
+              <div className="detail-content">
+                <span className="detail-label">Availability</span>
+                <span className="detail-value">Open to opportunities</span>
+                <span className="detail-badge">Available</span>
+              </div>
             </div>
           </div>
-        </Box>
-      </Paper>
+        </div>
+
+        {/* RIGHT COLUMN - Form */}
+        <Paper className="contact-card" elevation={0}>
+          <div className="contact-card-header">
+            <Typography variant="h4" className="card-title">
+              Send a Message
+            </Typography>
+            <Typography variant="body2" className="card-subtitle">
+              I'll get back to you as soon as possible
+            </Typography>
+          </div>
+
+          <Divider className="card-divider" />
+
+          <Fade in={success} timeout={400}>
+            <Box>
+              {success && (
+                <Alert
+                  icon={<CheckCircleIcon />}
+                  severity="success"
+                  className="alert-success"
+                >
+                  <div className="alert-content">
+                    <strong>Message sent successfully!</strong>
+                    <br />
+                    <span className="alert-reference">
+                      Reference ID: <strong>{referenceId}</strong>
+                    </span>
+                    <br />
+                    <span className="alert-thanks">
+                      Thank you for reaching out. I'll respond within 24-48 hours.
+                    </span>
+                  </div>
+                </Alert>
+              )}
+            </Box>
+          </Fade>
+
+          <Fade in={sendError} timeout={400}>
+            <Box>
+              {sendError && (
+                <Alert
+                  icon={<ErrorIcon />}
+                  severity="error"
+                  className="alert-error"
+                >
+                  <div className="alert-content">
+                    <strong>Failed to send message.</strong>
+                    <br />
+                    <span>Please try again or contact me directly via email.</span>
+                  </div>
+                </Alert>
+              )}
+            </Box>
+          </Fade>
+
+          <Box className="chips-container">
+            <Typography variant="caption" className="chips-label">
+              Quick subject suggestions
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap className="chips-stack">
+              {['Project Inquiry', 'Collaboration', 'General Question', 'Bug Report', 'Feedback'].map((label) => (
+                <Chip
+                  key={label}
+                  label={label}
+                  onClick={() => handleChipClick(label)}
+                  className={`chip-item ${subject === label ? 'chip-selected' : ''}`}
+                />
+              ))}
+            </Stack>
+          </Box>
+
+          <Box component="form" onSubmit={sendEmail} className="contact-form">
+            <div className="form-grid-2">
+              <TextField
+                label="Your Name"
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (error.name) setError((prev) => ({ ...prev, name: false }));
+                }}
+                error={error.name}
+                helperText={error.name ? 'Name is required' : ''}
+                fullWidth
+                className="form-field"
+                variant="outlined"
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+
+              <TextField
+                label="Email Address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (error.email) setError((prev) => ({ ...prev, email: false }));
+                }}
+                onBlur={() => {
+                  if (email.trim()) {
+                    setError((prev) => ({ ...prev, email: !validateEmail(email) }));
+                  }
+                }}
+                error={error.email}
+                helperText={error.email ? 'Please enter a valid email' : ''}
+                fullWidth
+                className="form-field"
+                variant="outlined"
+                required
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </div>
+
+            <TextField
+              label="Subject"
+              value={subject}
+              onChange={(e) => {
+                setSubject(e.target.value);
+                if (error.subject) setError((prev) => ({ ...prev, subject: false }));
+              }}
+              error={error.subject}
+              helperText={error.subject ? 'Subject is required' : ''}
+              fullWidth
+              className="form-field"
+              variant="outlined"
+              sx={{ mt: 2 }}
+              required
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+
+            <TextField
+              label="Message"
+              value={message}
+              onChange={(e) => {
+                const value = e.target.value;
+                setMessage(value);
+                setCharCount(value.length);
+                if (error.message) setError((prev) => ({ ...prev, message: false }));
+              }}
+              error={error.message}
+              helperText={
+                error.message 
+                  ? 'Message is required' 
+                  : `${charCount}/1000 characters${charCount > 800 ? ' (almost there!)' : ''}`
+              }
+              multiline
+              rows={5}
+              fullWidth
+              className="form-field"
+              variant="outlined"
+              sx={{ mt: 2 }}
+              inputProps={{ maxLength: 1000 }}
+              required
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+
+            <div className="form-actions">
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={!isFormValid || loading}
+                className="send-button"
+                endIcon={
+                  loading ? (
+                    <CircularProgress size={20} color="inherit" className="button-spinner" />
+                  ) : (
+                    <SendIcon className="send-icon" />
+                  )
+                }
+              >
+                {loading ? 'Sending...' : 'Send Message'}
+              </Button>
+
+              <div className="trust-indicator">
+                <ScheduleIcon className="trust-icon" />
+                <span>Typically replies within 24–48 hours</span>
+              </div>
+            </div>
+
+            <div className="form-footer">
+              <span className="form-footer-text">
+                <OpenInNewIcon className="footer-icon" />
+                Your message will be sent securely
+              </span>
+            </div>
+          </Box>
+        </Paper>
+      </div>
     </div>
   );
 }

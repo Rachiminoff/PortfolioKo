@@ -1,7 +1,3 @@
-/* =========================
-   CONTACT - IMPROVED & CLEANER
-========================= */
-
 // ========== VARIABLES ==========
 $cyan: #2dd4bf;
 $cyan-dim: rgba(45, 212, 191, 0.06);
@@ -13,10 +9,11 @@ $gray: #2c2c2c;
 $gray-medium: #3a3a3a;
 $white: #f5f5f5;
 $white-dim: rgba(255, 255, 255, 0.85);
-$white-muted: rgba(255, 255, 255, 0.6);
-$white-faint: rgba(255, 255, 255, 0.35);
+$white-muted: rgba(255, 255, 255, 0.65);
+$white-faint: rgba(255, 255, 255, 0.4);
+$white-very-faint: rgba(255, 255, 255, 0.15);
 $border-solid: rgba(255, 255, 255, 0.08);
-$border-medium: rgba(255, 255, 255, 0.12);
+$border-medium: rgba(255, 255, 255, 0.15);
 $font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
@@ -50,11 +47,45 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 // ============================================================
-// HEADER
+// GRID LAYOUT - TWO COLUMN
 // ============================================================
 
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 2.5rem;
+  align-items: stretch;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+// ============================================================
+// LEFT COLUMN - INFO
+// ============================================================
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
+  padding-top: 0.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    align-items: center;
+    text-align: center;
+  }
+}
+
 .contact-header {
-  margin-bottom: 3rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -62,7 +93,6 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   width: 100%;
 
   @media (max-width: 768px) {
-    margin-bottom: 2rem;
     align-items: center;
     text-align: center;
   }
@@ -88,17 +118,17 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   h2 {
     margin: 0 0 0.5rem 0;
     color: $white;
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-size: clamp(2.2rem, 3vw, 3.2rem);
     font-weight: 600;
     letter-spacing: -0.02em;
     font-family: $font-sans;
 
     @media (max-width: 768px) {
-      font-size: 2rem;
+      font-size: clamp(1.8rem, 5vw, 2.2rem);
     }
 
     @media (max-width: 480px) {
-      font-size: 1.8rem;
+      font-size: clamp(1.5rem, 6vw, 1.8rem);
     }
   }
 }
@@ -119,7 +149,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   color: $white-muted;
   font-size: 1rem;
   line-height: 1.7;
-  max-width: 560px;
+  max-width: 440px;
   font-weight: 300;
   font-family: $font-sans;
 
@@ -131,32 +161,223 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   @media (max-width: 480px) {
     font-size: 0.85rem;
+    line-height: 1.6;
   }
 }
 
 // ============================================================
-// CONTACT CARD
+// CONTACT DETAILS
+// ============================================================
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.875rem;
+    margin-top: 1.25rem;
+  }
+}
+
+.contact-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.625rem;
+    max-width: 100%;
+  }
+
+  .detail-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $border-solid;
+    background: rgba(255, 255, 255, 0.02);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+
+    svg {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.2);
+      transition: color 0.3s ease;
+    }
+
+    &:hover {
+      border-color: $border-medium;
+      
+      svg {
+        color: rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: 36px;
+      height: 36px;
+
+      svg {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1;
+    min-width: 0;
+
+    @media (max-width: 768px) {
+      align-items: flex-start;
+    }
+
+    @media (max-width: 480px) {
+      gap: 0.05rem;
+    }
+  }
+
+  .detail-label {
+    font-family: $font-mono;
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.15);
+
+    @media (max-width: 480px) {
+      font-size: 0.45rem;
+    }
+  }
+
+  .detail-value-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    @media (max-width: 768px) {
+      justify-content: flex-start;
+    }
+  }
+
+  .detail-value {
+    font-family: $font-sans;
+    font-size: 0.9rem;
+    color: $white-muted;
+    font-weight: 300;
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .detail-badge-wrapper {
+    margin-top: 0.1rem;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: $font-mono;
+    font-size: 0.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $cyan;
+    background: rgba(45, 212, 191, 0.08);
+    border: 1px solid rgba(45, 212, 191, 0.12);
+    padding: 0.1rem 0.5rem;
+    width: fit-content;
+
+    @media (max-width: 480px) {
+      font-size: 0.4rem;
+      padding: 0.05rem 0.4rem;
+    }
+  }
+
+  .copy-button {
+    padding: 0 !important;
+    color: rgba(255, 255, 255, 0.08) !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.25) !important;
+    }
+
+    svg {
+      font-size: 0.85rem !important;
+    }
+
+    @media (max-width: 480px) {
+      svg {
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+
+  .copy-success {
+    color: $cyan !important;
+  }
+}
+
+// ============================================================
+// RIGHT COLUMN - CONTACT CARD
 // ============================================================
 
 .contact-card {
   width: 100%;
-  flex: 1;
-  padding: 2rem !important;
+  padding: 2.5rem !important;
   border: 1px solid $border-solid;
-  background: $dark !important;
+  background: $gray-dark !important;
   color: $white;
   box-sizing: border-box;
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   border-radius: 0 !important;
   box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     border-color: $border-medium;
-    background: rgba(255, 255, 255, 0.015) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
   }
 
   @media (min-width: 1200px) {
-    padding: 2.5rem 3rem !important;
+    padding: 2.5rem 2.5rem !important;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 2rem !important;
   }
 
   @media (max-width: 768px) {
@@ -176,7 +397,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 480px) {
+    margin-bottom: 1rem;
+  }
 }
 
 .card-title {
@@ -187,7 +412,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-family: $font-sans !important;
 
   @media (min-width: 1200px) {
-    font-size: 1.75rem !important;
+    font-size: 1.6rem !important;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem !important;
   }
 
   @media (max-width: 480px) {
@@ -196,23 +425,31 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 .card-subtitle {
-  color: $white-faint !important;
+  color: $white-muted !important;
   font-size: 0.85rem !important;
   font-weight: 300 !important;
   font-family: $font-sans !important;
 
   @media (min-width: 1200px) {
-    font-size: 0.95rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem !important;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.8rem !important;
+    font-size: 0.75rem !important;
   }
 }
 
 .card-divider {
-  margin: 0 0 1.5rem 0 !important;
+  margin: 0 0 1.25rem 0 !important;
   border-color: rgba(255, 255, 255, 0.04) !important;
+
+  @media (max-width: 480px) {
+    margin: 0 0 1rem 0 !important;
+  }
 }
 
 // ============================================================
@@ -222,54 +459,89 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .alert-success,
 .alert-error {
   border-radius: 0 !important;
-  padding: 1rem 1.25rem !important;
+  padding: 0.75rem 1rem !important;
   border-width: 1px !important;
   border-style: solid !important;
-  margin-bottom: 1.5rem !important;
+  margin-bottom: 1.25rem !important;
   
   .MuiAlert-icon {
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.625rem 0.875rem !important;
   }
 
   @media (max-width: 480px) {
-    padding: 0.75rem 1rem !important;
+    padding: 0.5rem 0.75rem !important;
     font-size: 0.85rem !important;
+    
+    .MuiAlert-icon {
+      font-size: 0.95rem !important;
+    }
   }
 }
 
 .alert-success {
-  background: rgba(45, 212, 191, 0.03) !important;
-  border-color: rgba(45, 212, 191, 0.08) !important;
-  color: rgba(45, 212, 191, 0.7) !important;
+  background: rgba(45, 212, 191, 0.05) !important;
+  border-color: rgba(45, 212, 191, 0.12) !important;
+  color: $white-muted !important;
   
   .MuiAlert-icon {
     color: $cyan !important;
   }
+  
+  strong {
+    color: $white !important;
+  }
 }
 
 .alert-error {
-  background: rgba(255, 71, 87, 0.03) !important;
-  border-color: rgba(255, 71, 87, 0.08) !important;
-  color: rgba(255, 71, 87, 0.7) !important;
+  background: rgba(255, 71, 87, 0.05) !important;
+  border-color: rgba(255, 71, 87, 0.12) !important;
+  color: $white-muted !important;
   
   .MuiAlert-icon {
     color: #ff4757 !important;
   }
+  
+  strong {
+    color: $white !important;
+  }
 }
 
 .alert-content {
-  line-height: 1.6;
+  line-height: 1.5;
   font-family: $font-sans;
   
   strong {
     font-weight: 500;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
 }
 
 .alert-reference {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   opacity: 0.6;
   font-family: $font-mono;
+
+  @media (max-width: 480px) {
+    font-size: 0.65rem;
+  }
+}
+
+.alert-thanks {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  display: block;
+  margin-top: 0.15rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
 }
 
 // ============================================================
@@ -277,43 +549,57 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 // ============================================================
 
 .chips-container {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 480px) {
+    margin-bottom: 1rem;
+  }
 }
 
 .chips-label {
   display: block;
-  color: rgba(255, 255, 255, 0.12) !important;
+  color: $white-very-faint !important;
   font-family: $font-mono !important;
   font-size: 0.55rem !important;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 
   @media (min-width: 1200px) {
     font-size: 0.6rem !important;
   }
+
+  @media (max-width: 480px) {
+    font-size: 0.5rem !important;
+    margin-bottom: 0.4rem;
+  }
 }
 
 .chips-stack {
-  gap: 0.5rem !important;
+  gap: 0.4rem !important;
+
+  @media (max-width: 480px) {
+    gap: 0.3rem !important;
+  }
 }
 
 .chip-item {
-  background: rgba(255, 255, 255, 0.01) !important;
-  color: $white-faint !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: $white-muted !important;
   border: 1px solid $border-solid !important;
   border-radius: 0 !important;
-  padding: 0 1rem !important;
-  height: 2rem !important;
-  font-size: 0.65rem !important;
+  padding: 0 0.75rem !important;
+  height: 1.75rem !important;
+  font-size: 0.6rem !important;
   font-weight: 400 !important;
   font-family: $font-mono !important;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
   cursor: pointer;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.03) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
     border-color: $border-medium !important;
+    color: $white !important;
   }
   
   .MuiChip-label {
@@ -321,21 +607,27 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   @media (min-width: 1200px) {
-    height: 2.25rem !important;
-    padding: 0 1.25rem !important;
-    font-size: 0.7rem !important;
+    height: 2rem !important;
+    padding: 0 1rem !important;
+    font-size: 0.65rem !important;
+  }
+
+  @media (max-width: 768px) {
+    height: 1.625rem !important;
+    font-size: 0.55rem !important;
+    padding: 0 0.625rem !important;
   }
 
   @media (max-width: 480px) {
-    height: 1.75rem !important;
-    font-size: 0.6rem !important;
-    padding: 0 0.75rem !important;
+    height: 1.5rem !important;
+    font-size: 0.5rem !important;
+    padding: 0 0.5rem !important;
   }
 }
 
 .chip-selected {
-  background: rgba(45, 212, 191, 0.04) !important;
-  border-color: rgba(45, 212, 191, 0.12) !important;
+  background: rgba(45, 212, 191, 0.08) !important;
+  border-color: rgba(45, 212, 191, 0.15) !important;
   color: $white !important;
 }
 
@@ -346,46 +638,51 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .contact-form {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
 }
 
 .form-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.75rem;
 
   @media (min-width: 1200px) {
-    gap: 1.25rem;
+    gap: 1rem;
   }
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
   }
 }
 
 // ============================================================
-// TEXT FIELDS
+// TEXT FIELDS - MOBILE OPTIMIZED
 // ============================================================
 
 .form-field {
   .MuiOutlinedInput-root {
     border-radius: 0;
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.05);
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     
     &:hover {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.07);
       
       .MuiOutlinedInput-notchedOutline {
-        border-color: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.2);
       }
     }
     
     &.Mui-focused {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.07);
       
       .MuiOutlinedInput-notchedOutline {
-        border-color: rgba(255, 255, 255, 0.25) !important;
+        border-color: rgba(45, 212, 191, 0.3) !important;
         border-width: 1px !important;
       }
     }
@@ -405,7 +702,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
     
     .MuiOutlinedInput-notchedOutline {
-      border-color: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
       border-width: 1px;
       transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -413,65 +710,121 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   
   .MuiInputBase-input {
     color: $white !important;
-    padding: 0.75rem 1rem !important;
+    padding: 0.75rem 0.85rem !important;
     font-size: 0.9rem !important;
     font-family: $font-sans !important;
     
     &::placeholder {
-      color: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.25);
       opacity: 1;
     }
 
     @media (min-width: 1200px) {
-      padding: 0.875rem 1.25rem !important;
+      padding: 0.85rem 1rem !important;
       font-size: 0.95rem !important;
     }
 
-    @media (max-width: 480px) {
-      padding: 0.625rem 0.75rem !important;
+    @media (max-width: 768px) {
+      padding: 0.65rem 0.75rem !important;
       font-size: 0.85rem !important;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.55rem 0.65rem !important;
+      font-size: 0.8rem !important;
+    }
+  }
+
+  // Textarea specific
+  .MuiInputBase-root textarea {
+    padding: 0.75rem 0.85rem !important;
+    font-size: 0.9rem !important;
+    line-height: 1.6;
+
+    @media (min-width: 1200px) {
+      padding: 0.85rem 1rem !important;
+      font-size: 0.95rem !important;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.65rem 0.75rem !important;
+      font-size: 0.85rem !important;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.55rem 0.65rem !important;
+      font-size: 0.8rem !important;
     }
   }
   
   .MuiInputLabel-root {
-    color: rgba(255, 255, 255, 0.25) !important;
+    color: rgba(255, 255, 255, 0.45) !important;
     font-size: 0.85rem !important;
     font-family: $font-sans !important;
-    transform: translate(14px, 14px) scale(1) !important;
+    transform: translate(14px, 12px) scale(1) !important;
+    font-weight: 400 !important;
     
     &.Mui-focused {
-      color: rgba(255, 255, 255, 0.4) !important;
+      color: rgba(45, 212, 191, 0.6) !important;
       transform: translate(14px, -9px) scale(0.75) !important;
+      font-weight: 400 !important;
     }
     
     &.Mui-error {
       color: rgba(255, 71, 87, 0.5) !important;
     }
 
+    &.MuiInputLabel-shrink {
+      transform: translate(14px, -9px) scale(0.75) !important;
+      color: rgba(255, 255, 255, 0.35) !important;
+    }
+
     @media (min-width: 1200px) {
       font-size: 0.9rem !important;
-      transform: translate(16px, 16px) scale(1) !important;
+      transform: translate(16px, 14px) scale(1) !important;
       
       &.Mui-focused {
         transform: translate(16px, -9px) scale(0.75) !important;
       }
+
+      &.MuiInputLabel-shrink {
+        transform: translate(16px, -9px) scale(0.75) !important;
+      }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 768px) {
       font-size: 0.8rem !important;
       transform: translate(12px, 10px) scale(1) !important;
       
       &.Mui-focused {
-        transform: translate(12px, -9px) scale(0.7) !important;
+        transform: translate(12px, -8px) scale(0.7) !important;
+      }
+
+      &.MuiInputLabel-shrink {
+        transform: translate(12px, -8px) scale(0.7) !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem !important;
+      transform: translate(10px, 10px) scale(1) !important;
+      
+      &.Mui-focused {
+        transform: translate(10px, -8px) scale(0.65) !important;
+      }
+
+      &.MuiInputLabel-shrink {
+        transform: translate(10px, -8px) scale(0.65) !important;
       }
     }
   }
   
   .MuiFormHelperText-root {
-    color: rgba(255, 255, 255, 0.2) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
     font-size: 0.7rem !important;
     font-family: $font-sans !important;
     margin: 4px 0 0 14px !important;
+    font-weight: 300 !important;
     
     &.Mui-error {
       color: rgba(255, 71, 87, 0.5) !important;
@@ -480,6 +833,16 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     @media (min-width: 1200px) {
       font-size: 0.75rem !important;
       margin: 6px 0 0 16px !important;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.65rem !important;
+      margin: 3px 0 0 12px !important;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.6rem !important;
+      margin: 2px 0 0 10px !important;
     }
   }
   
@@ -491,7 +854,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   textarea:-webkit-autofill:hover,
   textarea:-webkit-autofill:focus {
     -webkit-text-fill-color: $white !important;
-    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.01) inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset !important;
     transition: background-color 5000s ease-in-out 0s;
   }
 }
@@ -504,19 +867,26 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
 
   @media (min-width: 1200px) {
     flex-direction: row;
     align-items: center;
-    gap: 1.5rem;
-    margin-top: 2rem;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
   }
 
   @media (max-width: 768px) {
     width: 100%;
     align-items: stretch;
+    gap: 0.625rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+    margin-top: 0.875rem;
   }
 }
 
@@ -528,38 +898,40 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   margin-top: 0 !important;
   align-self: flex-start;
 
-  background: rgba(255, 255, 255, 0.03) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
   color: $white !important;
   font-family: $font-mono !important;
   font-weight: 400 !important;
   text-transform: none !important;
-  padding: 0.75rem 1.5rem !important;
+  padding: 0.6rem 1.25rem !important;
   border: 1px solid $border-solid !important;
   border-radius: 0 !important;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
-  min-height: 48px;
+  min-height: 42px;
+  font-size: 0.85rem !important;
 
   @media (min-width: 1200px) {
-    padding: 0.875rem 2rem !important;
-    min-width: 180px;
-    font-size: 0.95rem !important;
+    padding: 0.75rem 1.75rem !important;
+    min-width: 160px;
+    font-size: 0.9rem !important;
     
     .send-icon {
       transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
     
     &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.06) !important;
-      border-color: $border-medium !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(45, 212, 191, 0.25) !important;
       
       .send-icon {
         transform: translateX(4px);
+        color: $cyan;
       }
     }
   }
 
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.05) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
   }
 
   &.Mui-disabled {
@@ -569,19 +941,26 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   @media (max-width: 768px) {
     width: 100%;
     justify-content: center;
+    padding: 0.55rem 1rem !important;
+    min-height: 38px;
+    font-size: 0.8rem !important;
   }
 
   @media (max-width: 480px) {
-    font-size: 0.85rem !important;
-    padding: 0.75rem 1.25rem !important;
-    min-height: 44px;
+    padding: 0.5rem 0.875rem !important;
+    min-height: 36px;
+    font-size: 0.75rem !important;
   }
 }
 
 .send-icon {
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
   opacity: 0.6;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem !important;
+  }
 }
 
 .button-spinner {
@@ -589,6 +968,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   
   .MuiCircularProgress-svg {
     animation-duration: 0.8s;
+  }
+
+  @media (max-width: 480px) {
+    width: 18px !important;
+    height: 18px !important;
   }
 }
 
@@ -599,30 +983,95 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .trust-indicator {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.12);
-  font-size: 0.7rem;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.65rem;
   letter-spacing: 0.02em;
   padding: 0.25rem 0;
   font-family: $font-mono;
 
   @media (min-width: 1200px) {
-    font-size: 0.75rem;
-    gap: 0.625rem;
+    font-size: 0.7rem;
+    gap: 0.5rem;
   }
 
   @media (max-width: 768px) {
     justify-content: center;
-    font-size: 0.65rem;
+    font-size: 0.6rem;
+    padding: 0.125rem 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    gap: 0.3rem;
   }
 }
 
 .trust-icon {
-  font-size: 0.85rem !important;
+  font-size: 0.75rem !important;
   opacity: 0.3;
 
   @media (min-width: 1200px) {
-    font-size: 0.95rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.65rem !important;
+  }
+}
+
+// ============================================================
+// FORM FOOTER
+// ============================================================
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    margin-top: 0.625rem;
+    padding-top: 0.625rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+}
+
+.form-footer-text {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: $font-mono;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.08);
+  letter-spacing: 0.02em;
+
+  .footer-icon {
+    font-size: 0.7rem !important;
+    opacity: 0.3;
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 0.6rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.45rem;
+    gap: 0.3rem;
+
+    .footer-icon {
+      font-size: 0.6rem !important;
+    }
   }
 }
 
@@ -647,6 +1096,62 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 // ============================================================
+// TOUCH DEVICE OPTIMIZATIONS
+// ============================================================
+
+@media (hover: none) and (pointer: coarse) {
+  .chip-item {
+    &:hover {
+      background: rgba(255, 255, 255, 0.03) !important;
+      border-color: $border-solid !important;
+      color: $white-muted !important;
+    }
+    
+    &:active {
+      background: rgba(255, 255, 255, 0.06) !important;
+      transform: scale(0.96);
+    }
+  }
+
+  .send-button {
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-color: $border-solid !important;
+      
+      .send-icon {
+        transform: none !important;
+      }
+    }
+    
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+  }
+
+  .contact-detail-item {
+    .detail-icon {
+      &:hover {
+        border-color: $border-solid;
+        
+        svg {
+          color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+  }
+
+  .copy-button {
+    &:hover {
+      color: rgba(255, 255, 255, 0.08) !important;
+    }
+    
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+// ============================================================
 // REDUCED MOTION
 // ============================================================
 
@@ -655,6 +1160,22 @@ textarea::-webkit-scrollbar-thumb:hover {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .chip-item {
+    transition: none !important;
+    
+    &:active {
+      transform: none !important;
+    }
+  }
+
+  .send-button {
+    transition: none !important;
+    
+    &:active:not(:disabled) {
+      transform: none !important;
+    }
   }
 }
 
@@ -678,5 +1199,23 @@ textarea::-webkit-scrollbar-thumb:hover {
     background: #f5f5f5 !important;
     color: #333 !important;
     border-color: #ddd !important;
+  }
+
+  .contact-details {
+    .detail-icon {
+      border-color: #ddd !important;
+      
+      svg {
+        color: #999 !important;
+      }
+    }
+    
+    .detail-value {
+      color: #666 !important;
+    }
+  }
+
+  .copy-button {
+    display: none !important;
   }
 }
