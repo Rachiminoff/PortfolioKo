@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import { Icon } from "@iconify/react";
 import "../assets/styles/Insights.scss";
 
 interface BlogPost {
@@ -128,12 +129,10 @@ function Insights({ onClose }: InsightsProps) {
   // Extract unique categories and years from posts
   useEffect(() => {
     if (posts.length > 0) {
-      // Extract unique categories - using Array.from instead of spread operator
       const categorySet = new Set(posts.map(post => post.category).filter(Boolean));
       const categories = Array.from(categorySet);
       setAvailableCategories(categories.sort());
       
-      // Extract unique years from created_at
       const yearSet = new Set(posts.map(post => {
         if (post.created_at) {
           return new Date(post.created_at).getFullYear().toString();
@@ -184,7 +183,6 @@ function Insights({ onClose }: InsightsProps) {
   const filteredAndSortedPosts = useMemo(() => {
     let items = [...posts];
 
-    // Category filter
     if (selectedCategory !== "all") {
       items = items.filter(item => 
         item.category === selectedCategory ||
@@ -192,7 +190,6 @@ function Insights({ onClose }: InsightsProps) {
       );
     }
 
-    // Year filter
     if (selectedYear !== "all") {
       items = items.filter(item => {
         if (item.created_at) {
@@ -202,7 +199,6 @@ function Insights({ onClose }: InsightsProps) {
       });
     }
 
-    // Search query
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       items = items.filter(item =>
@@ -213,7 +209,6 @@ function Insights({ onClose }: InsightsProps) {
       );
     }
 
-    // Sorting
     switch (sortOption) {
       case "newest":
         items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
@@ -239,34 +234,25 @@ function Insights({ onClose }: InsightsProps) {
     return posts.find(post => post.featured) || null;
   }, [posts]);
 
-  // Get regular posts (non-featured) from filtered results
   const allRegularPosts = useMemo(() => {
     return filteredAndSortedPosts.filter(post => !post.featured);
   }, [filteredAndSortedPosts]);
 
-  // Get visible subset of regular posts
   const visiblePosts = useMemo(() => {
     return allRegularPosts.slice(0, visibleCount);
   }, [allRegularPosts, visibleCount]);
 
-  // Check if there are more posts to load
   const hasMorePosts = useMemo(() => {
     return visibleCount < allRegularPosts.length;
   }, [visibleCount, allRegularPosts.length]);
 
-  // Handle loading more posts
   const handleLoadMore = () => {
     if (isLoadingMore) return;
     
     setIsLoadingMore(true);
-    
-    // Calculate new count
     const newCount = Math.min(visibleCount + ARTICLES_PER_BATCH, allRegularPosts.length);
-    
-    // Update visible count
     setVisibleCount(newCount);
     
-    // After state update, scroll to reveal new content
     setTimeout(() => {
       if (gridRef.current) {
         const gridRect = gridRef.current.getBoundingClientRect();
@@ -280,7 +266,6 @@ function Insights({ onClose }: InsightsProps) {
     }, 300);
   };
 
-  // Build category filter chips from available categories
   const categoryChips = [
     { id: "all", label: "All" },
     ...availableCategories.map(cat => ({ id: cat, label: cat }))
@@ -310,7 +295,6 @@ function Insights({ onClose }: InsightsProps) {
     setRelatedPosts([]);
     setIsVisible(false);
     
-    // Generate TOC and fetch navigation
     const headingRegex = /^(#{1,6})\s+(.+)$/gm;
     const matches = Array.from(post.content.matchAll(headingRegex));
     const tocItems = matches.map((match: RegExpMatchArray) => ({
@@ -320,7 +304,6 @@ function Insights({ onClose }: InsightsProps) {
     }));
     setToc(tocItems);
 
-    // Get navigation posts from filtered results
     const currentIndex = filteredAndSortedPosts.findIndex(p => p.id === post.id);
     if (currentIndex > 0) {
       setPrevPost(filteredAndSortedPosts[currentIndex - 1]);
@@ -329,7 +312,6 @@ function Insights({ onClose }: InsightsProps) {
       setNextPost(filteredAndSortedPosts[currentIndex + 1]);
     }
 
-    // Get related posts
     const related = filteredAndSortedPosts
       .filter(p => p.id !== post.id && p.category === post.category)
       .slice(0, 3);
@@ -365,16 +347,13 @@ function Insights({ onClose }: InsightsProps) {
     }
   };
 
-  // Password Screen (unchanged)
+  // Password Screen
   if (!isUnlocked) {
     return (
       <div className="insights-container insights-locked">
         <div className="insights-lock-screen">
           <div className="insights-lock-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0110 0v4" />
-            </svg>
+            <Icon icon="mdi:lock-outline" width={40} height={40} />
           </div>
           <h1>Insights</h1>
           <p className="insights-lock-subtitle">Enter your password to access articles</p>
@@ -398,7 +377,7 @@ function Insights({ onClose }: InsightsProps) {
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? "👁️" : "👁️‍🗨️"}
+                <Icon icon={showPassword ? "mdi:eye-off-outline" : "mdi:eye-outline"} width={20} height={20} />
               </button>
             </div>
             {passwordError && (
@@ -428,7 +407,7 @@ function Insights({ onClose }: InsightsProps) {
     );
   }
 
-  // Article Reader View (unchanged)
+  // Article Reader View
   if (selectedPost) {
     return (
       <div className={`insights-container insights-reader ${isVisible ? 'visible' : ''}`}>
@@ -451,27 +430,16 @@ function Insights({ onClose }: InsightsProps) {
               <h1 className="insights-reader-hero-title">{selectedPost.title}</h1>
               <div className="insights-reader-hero-meta">
                 <div className="insights-reader-hero-meta-item">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <polyline points="12 6 12 12 16 14" />
-                  </svg>
+                  <Icon icon="mdi:clock-outline" width={16} height={16} />
                   <span>{selectedPost.reading_time}</span>
                 </div>
                 <div className="insights-reader-hero-meta-item">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                    <line x1="16" y1="2" x2="16" y2="6" />
-                    <line x1="8" y1="2" x2="8" y2="6" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                  </svg>
+                  <Icon icon="mdi:calendar-outline" width={16} height={16} />
                   <span>{formatDate(selectedPost.created_at)}</span>
                 </div>
                 {selectedPost.updated_at && selectedPost.updated_at !== selectedPost.created_at && (
                   <div className="insights-reader-hero-meta-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
+                    <Icon icon="mdi:update" width={16} height={16} />
                     <span>Updated {formatDate(selectedPost.updated_at)}</span>
                   </div>
                 )}
@@ -485,7 +453,7 @@ function Insights({ onClose }: InsightsProps) {
           {toc.length > 0 && (
             <aside className="insights-reader-toc">
               <div className="insights-reader-toc-inner">
-                <h3>Table of Contents</h3>
+                <h3>Contents</h3>
                 <nav>
                   {toc.map((item, index) => (
                     <a
@@ -513,10 +481,7 @@ function Insights({ onClose }: InsightsProps) {
           <article className="insights-reader-content-wrapper">
             <div className="insights-reader-content-inner">
               <button className="insights-reader-back-btn" onClick={handleBack}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="19" y1="12" x2="5" y2="12" />
-                  <polyline points="12 19 5 12 12 5" />
-                </svg>
+                <Icon icon="mdi:arrow-left" width={18} height={18} />
                 Back to Insights
               </button>
 
@@ -603,21 +568,6 @@ function Insights({ onClose }: InsightsProps) {
                         <table className="insights-reader-table" {...props}>{children}</table>
                       </div>
                     ),
-                    thead: ({ children, ...props }: any) => (
-                      <thead {...props}>{children}</thead>
-                    ),
-                    tbody: ({ children, ...props }: any) => (
-                      <tbody {...props}>{children}</tbody>
-                    ),
-                    tr: ({ children, ...props }: any) => (
-                      <tr {...props}>{children}</tr>
-                    ),
-                    th: ({ children, ...props }: any) => (
-                      <th {...props}>{children}</th>
-                    ),
-                    td: ({ children, ...props }: any) => (
-                      <td {...props}>{children}</td>
-                    ),
                     a: ({ href, children, ...props }: any) => (
                       <a href={href} className="insights-reader-link" target="_blank" rel="noopener noreferrer" {...props}>
                         {children}
@@ -647,22 +597,13 @@ function Insights({ onClose }: InsightsProps) {
               {/* Navigation */}
               <div className="insights-reader-navigation">
                 <button className="insights-reader-back-btn" onClick={handleBack}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12" />
-                    <polyline points="12 19 5 12 12 5" />
-                  </svg>
+                  <Icon icon="mdi:arrow-left" width={18} height={18} />
                   Back to Insights
                 </button>
                 
                 <div className="insights-reader-actions">
                   <button className="insights-reader-share-btn" onClick={handleShare}>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="18" cy="5" r="3" />
-                      <circle cx="6" cy="12" r="3" />
-                      <circle cx="18" cy="19" r="3" />
-                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                    </svg>
+                    <Icon icon="mdi:share-outline" width={18} height={18} />
                     Share
                   </button>
                 </div>
@@ -756,10 +697,7 @@ function Insights({ onClose }: InsightsProps) {
       <div className="insights-controls-section">
         <div className="insights-controls-bar">
           <div className="insights-search-wrapper">
-            <svg className="insights-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
+            <Icon icon="mdi:search" className="insights-search-icon" width={16} height={16} />
             <input
               type="text"
               className="insights-search-input"
@@ -792,7 +730,7 @@ function Insights({ onClose }: InsightsProps) {
           </div>
         </div>
 
-        {/* Category Filters - Dynamic from Supabase */}
+        {/* Category Filters */}
         <div className="insights-filter-chips">
           {categoryChips.map(category => (
             <button
@@ -805,7 +743,7 @@ function Insights({ onClose }: InsightsProps) {
           ))}
         </div>
 
-        {/* Year Filters - Dynamic from Supabase */}
+        {/* Year Filters */}
         {availableYears.length > 0 && (
           <div className="insights-filter-chips insights-year-chips">
             <button
@@ -970,9 +908,7 @@ function Insights({ onClose }: InsightsProps) {
                     ) : (
                       <>
                         View More Articles
-                        <svg className="insights-load-more-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
+                        <Icon icon="mdi:chevron-down" className="insights-load-more-arrow" width={18} height={18} />
                       </>
                     )}
                   </button>
@@ -991,7 +927,7 @@ function Insights({ onClose }: InsightsProps) {
             {/* Empty State */}
             {allRegularPosts.length === 0 && !loading && (
               <div className="insights-empty-state">
-                <div className="insights-empty-icon">🔍</div>
+                <Icon icon="mdi:search" className="insights-empty-icon" width={48} height={48} />
                 <p>No articles found matching your criteria.</p>
                 {(searchQuery || selectedCategory !== "all" || selectedYear !== "all") && (
                   <button

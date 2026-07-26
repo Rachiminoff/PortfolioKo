@@ -27,26 +27,41 @@ const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
 const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStatsPage'));
 
-// Boot Sequence Component - Swiss Style
+// Boot Sequence Component - CRT TV Style
 function BootSequence({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
   const [shouldRender, setShouldRender] = useState(true);
-  const [status, setStatus] = useState('Initializing');
+  const [status, setStatus] = useState('TUNING');
+  const [glitchActive, setGlitchActive] = useState(false);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const startTimeRef = useRef<number | undefined>(undefined);
 
   const statusMessages = useMemo(() => [
-    'Initializing',
-    'Loading interface',
-    'Preparing modules',
-    'Compiling assets',
-    'Connecting components',
-    'Rendering layout',
-    'Finalizing'
+    'TUNING',
+    'RECEIVING',
+    'SCANNING',
+    'DECODING',
+    'SYNCHRONIZING',
+    'RENDERING',
+    'CONNECTED'
   ], []);
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Random glitch effect
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    
+    const glitchInterval = setInterval(() => {
+      if (Math.random() > 0.7) {
+        setGlitchActive(true);
+        setTimeout(() => setGlitchActive(false), 50 + Math.random() * 100);
+      }
+    }, 2000 + Math.random() * 3000);
+
+    return () => clearInterval(glitchInterval);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     if (prefersReducedMotion) {
@@ -60,7 +75,7 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
       return () => clearTimeout(timer);
     }
 
-    const totalDuration = 1600;
+    const totalDuration = 2000;
 
     let statusIndex = 0;
     startTimeRef.current = Date.now();
@@ -89,7 +104,7 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
             setShouldRender(false);
             onComplete();
           }, 500);
-        }, 200);
+        }, 300);
       }
     };
 
@@ -106,13 +121,40 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div className={`boot-screen ${!isVisible ? 'boot-fade-out' : ''}`}>
-      <div className="boot-background">
-        <div className="boot-grid-overlay" />
-      </div>
-      <div className="boot-content">
+      {/* CRT Curved Screen */}
+      <div className="boot-crt-curve" />
+      
+      {/* Chromatic Aberration */}
+      <div className="boot-chromatic" />
+      
+      {/* Scanlines */}
+      <div className="boot-scanlines" />
+      
+      {/* Interlace */}
+      <div className="boot-interlace" />
+      
+      {/* Static overlay */}
+      <div className="boot-static" />
+      
+      {/* Noise particles */}
+      <div className="boot-noise" />
+      
+      {/* TV Vignette */}
+      <div className="boot-vignette" />
+      
+      {/* TV Frame */}
+      <div className="boot-tv-frame" />
+      
+      {/* Glow effect */}
+      <div className="boot-glow" />
+      
+      {/* Content */}
+      <div className={`boot-content ${glitchActive ? 'boot-glitch-active' : ''}`}>
         <div className="boot-brand">
+          <div className="boot-channel">CH. 04</div>
           <span className="boot-brand-name">TDY.dev</span>
         </div>
+        
         <div className="boot-status-wrapper">
           <div className="boot-status">
             {status}
@@ -120,13 +162,21 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
               <span>.</span><span>.</span><span>.</span>
             </span>
           </div>
+          <span className="boot-status-dot" />
         </div>
+        
         <div className="boot-progress-wrapper">
           <div 
             className="boot-progress-bar"
             style={{ width: `${progress}%` }}
           />
         </div>
+        
+        <div className="boot-progress-percent">
+          {Math.round(progress)}%
+        </div>
+        
+        <div className="boot-tuning">◀ ▶ TUNE</div>
       </div>
     </div>
   );

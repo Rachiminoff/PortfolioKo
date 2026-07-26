@@ -42,28 +42,28 @@ export interface Project {
 }
 
 export const projectsData: Project[] = [
-  {
+    {
     id: 1,
     title: "UniQuest",
     slug: "uniquest",
-    subtitle: "Mobile-first campus companion that combines productivity, exploration, and gamification for university students.",
+    subtitle: "A mobile-first campus companion that transforms everyday student life through productivity, exploration, and gamified progression.",
     role: "Lead Developer",
     featured: true,
     status: "Active",
     duration: "4 months",
     link: "https://github.com/Skabeez/UniQuest",
     images: [uniq00, uniq01, uniq02, uniq03],
-    description: "A cross-platform mobile application that blends task management, campus exploration, and RPG-inspired progression into a unified student experience.",
-    overview: "UniQuest is a mobile-first productivity platform designed to make university life more engaging. Rather than treating productivity as a checklist, it introduces RPG-inspired mechanics where students complete tasks, progress through missions, unlock achievements, and explore an interactive campus map. Built with Flutter and Supabase, the platform delivers a responsive cross-device experience with secure authentication and real-time data synchronization.\n\nThe application emerged from a common observation: university students struggle to maintain motivation across academic, social, and personal tasks. By reframing these activities as 'quests' within a gamified system, UniQuest transforms mundane responsibilities into meaningful progression. The campus map feature adds a spatial dimension, helping students discover resources and locations they might otherwise overlook.\n\nDevelopment was accelerated using FlutterFlow's visual development environment while maintaining full Flutter cross-platform capabilities. This hybrid approach enabled rapid prototyping and iteration while preserving the flexibility to extend functionality through custom Dart code.",
+    description: "A cross-platform mobile application that combines task management, campus exploration, and RPG-inspired progression into a unified student experience.",
+    overview: "UniQuest is a cross-platform mobile application designed to make university life more engaging. Instead of treating productivity as a never-ending checklist, it transforms academic and personal responsibilities into quests, rewarding students with experience points, achievements, and progression as they complete tasks. Alongside productivity tools, the app features an interactive campus map that helps students discover university landmarks and resources in a more intuitive way.\n\nThe project was inspired by a simple observation: staying motivated throughout a semester is often harder than managing the work itself. By introducing familiar RPG mechanics, UniQuest encourages consistency without sacrificing usability. Students are rewarded for building productive habits while enjoying an experience that feels more interactive than a traditional planner.\n\nBuilt with Flutter, FlutterFlow, and Supabase, the project balances rapid development with the flexibility of native Flutter development. FlutterFlow accelerated UI creation and prototyping, while custom Dart code provided the freedom to implement features beyond the capabilities of visual development alone.",
     features: [
-      "Gamified task management with missions, experience points, and achievements",
-      "Interactive campus map with location pins and information cards",
+      "Quest-based task management with experience points, levels, and achievements",
+      "Interactive campus map featuring university landmarks and information cards",
       "Secure email authentication powered by Supabase",
-      "Real-time cloud synchronization across devices",
+      "Real-time synchronization across devices",
       "Personalized onboarding and guided walkthroughs",
-      "Modern dark-first interface optimized for mobile devices",
-      "Student profile customization and settings management",
-      "Productivity tracking through quests and progression metrics"
+      "Dark-first interface optimized for mobile devices",
+      "Student profile customization and achievement tracking",
+      "Productivity insights through quests and progression metrics"
     ],
     tech: [
       "Flutter",
@@ -71,35 +71,35 @@ export const projectsData: Project[] = [
       "Supabase",
       "FlutterFlow"
     ],
-    architecture: "Flutter → FlutterFlow → Supabase → Database\n\nUniQuest follows a modern mobile architecture with a clear flow from the user interface to the backend:\n\nFlutter serves as the presentation layer, delivering a responsive, dark-first interface optimized for mobile use. Screens are organized around key user flows: the dashboard for quest overview, the map view for campus exploration, and the profile section for achievement tracking and settings.\n\nThe gamification engine manages mission progression, experience points, and achievement unlocks through a state management system that tracks user activity and rewards progress. This business logic layer handles the core RPG-inspired mechanics while maintaining separation from the UI components.\n\nSupabase provides authentication, real-time subscriptions, and a PostgreSQL database that handles user profiles, task data, and synchronization across devices. The data layer abstracts backend operations, allowing consistent interaction regardless of the underlying data source.\n\nThis architectural separation enables independent testing and iteration of each component, making the application maintainable and extensible for future feature additions.",
+    architecture: "Flutter UI → Application Logic → Supabase → PostgreSQL Database\n\nUniQuest follows a layered mobile architecture that separates presentation, business logic, and backend services.\n\nFlutter powers the user interface, delivering a responsive cross-platform experience optimized for mobile devices. The application is organized around key workflows including the dashboard, quest management, campus exploration, and user profiles.\n\nThe application layer manages progression systems such as missions, achievements, experience points, and user state while keeping gameplay mechanics independent from the interface. This separation makes the system easier to maintain and extend.\n\nSupabase provides authentication, cloud data storage, and real-time synchronization through PostgreSQL. User profiles, quests, achievements, and application data remain securely synchronized across sessions and devices.\n\nThis architecture keeps each layer focused on a specific responsibility, making future development, testing, and feature expansion significantly easier.",
     devNotes: [
-      "FlutterFlow accelerated development while preserving Flutter's cross-platform capabilities",
-      "Supabase provided authentication and real-time backend services with minimal infrastructure overhead",
-      "The achievement and mission systems were designed to be modular for future expansion",
-      "The application adopts a dark-first design language optimized for extended mobile use",
-      "Interactive campus maps were implemented to provide both navigation and contextual campus information",
-      "Future iterations could include push notifications for quest reminders and social features for peer accountability"
+      "FlutterFlow accelerated UI development while retaining Flutter's flexibility through custom Dart code.",
+      "Supabase simplified authentication, backend infrastructure, and real-time synchronization with minimal setup.",
+      "The quest and achievement systems were designed to remain modular for future gameplay expansions.",
+      "A dark-first design language was chosen to improve readability during extended mobile use.",
+      "The campus map provides both navigation and contextual information about university facilities.",
+      "Future iterations could introduce push notifications, collaborative challenges, and social productivity features."
     ],
     highlights: [
       {
         icon: "mdi:gamepad-variant",
         title: "Gamified Productivity",
-        description: "Transforms everyday academic tasks into rewarding missions with experience points, levels, and achievements."
+        description: "Turns everyday academic responsibilities into rewarding quests through experience points, levels, and achievements."
       },
       {
         icon: "mdi:map-marker-radius",
         title: "Interactive Campus Map",
-        description: "Explore university landmarks through tappable location pins featuring photos and detailed information cards."
+        description: "Helps students explore university landmarks using interactive location pins with photos and contextual information."
       },
       {
         icon: "mdi:sync",
         title: "Real-time Synchronization",
-        description: "Keeps tasks, achievements, and user progress synchronized securely across multiple devices."
+        description: "Keeps user progress, quests, and achievements securely synchronized across devices through Supabase."
       },
       {
         icon: "mdi:account-check",
-        title: "Student Experience",
-        description: "Provides onboarding, profile customization, secure authentication, and a polished mobile-first interface designed for university life."
+        title: "Student-Centered Experience",
+        description: "Delivers a polished onboarding flow, customizable profiles, and an interface thoughtfully designed for university life."
       }
     ]
   },
@@ -107,24 +107,24 @@ export const projectsData: Project[] = [
     id: 2,
     title: "Webnovel Extractor",
     slug: "webnovel-extractor",
-    subtitle: "Automation toolkit for downloading, cleaning, and compiling web novels into offline-ready formats.",
+    subtitle: "An automation toolkit that transforms online web novels into clean, offline-ready ebooks with minimal manual effort.",
     role: "Sole Developer",
     featured: false,
     status: "Completed",
     duration: "2 months",
     link: "https://github.com/Rachiminoff/Webnovel-Extractor",
     video: "https://www.youtube.com/embed/Zclw7GV7w7I",
-    description: "A Python-based automation toolkit that extracts, cleans, and compiles web novel chapters from supported websites into high-quality EPUB and PDF formats.",
-    overview: "Webnovel Extractor is a utility built for readers and fan translators who want a streamlined way to archive web novels for offline reading. Designed primarily for YoruApp/LumoStories and WordPress-based novel sites, the application automates the entire workflow—from downloading chapters and cleaning HTML to generating polished EPUB ebooks and printable PDF files. By combining browser automation, intelligent HTML processing, and document conversion, the tool minimizes manual editing while producing consistently clean output.\n\nThe project was motivated by a personal frustration: reading web novels online is convenient, but internet connectivity issues, intrusive advertisements, and inconsistent formatting make the experience less than ideal. Webnovel Extractor solves these problems by providing a reliable offline archive that preserves the reading experience without the distractions of the original website.",
+    description: "A Python-based automation toolkit that extracts, cleans, and compiles web novels into polished EPUB and PDF formats for offline reading.",
+    overview: "Webnovel Extractor is a desktop utility created for readers who prefer collecting and reading web novels offline. It automates the entire workflow—from downloading chapters and cleaning HTML to compiling polished EPUB ebooks and printable PDFs—removing the repetitive manual work usually required to archive online novels.\n\nOriginally built to support YoruApp/LumoStories and WordPress-based novel websites, the application combines browser automation, HTML parsing, and document generation into a streamlined pipeline. Whether a website serves traditional HTML or dynamically renders content through JavaScript, the extractor adapts its approach to produce consistently formatted output.\n\nThe project grew from a personal frustration with online reading. Advertisements, inconsistent formatting, unreliable internet connections, and constant page navigation often interrupted the reading experience. Webnovel Extractor solves these problems by generating clean, distraction-free ebooks that can be enjoyed anytime, even without an internet connection.",
     features: [
-      "Bulk chapter downloads from Table of Contents or individual chapter URLs",
+      "Bulk chapter downloads from table-of-contents pages or individual chapter URLs",
       "Support for both static HTML and JavaScript-rendered websites",
-      "Automatic removal of ads, translator notes, and unnecessary page elements",
-      "Multiple cleaning modes for different website structures",
-      "EPUB compilation for offline reading with proper formatting",
-      "EPUB-to-PDF conversion with cover extraction, chapter breaks, and page numbering",
-      "Optimized workflow for YoruApp/LumoStories and WordPress-hosted novel sites",
-      "Modular pipeline that simplifies support for additional website sources"
+      "Automatic removal of advertisements, translator notes, and unnecessary page elements",
+      "Multiple cleaning modes tailored for different website layouts",
+      "EPUB generation with properly formatted chapters",
+      "High-quality PDF conversion with pagination and cover support",
+      "Optimized compatibility with YoruApp/LumoStories and WordPress-based novel sites",
+      "Modular pipeline designed for easy support of additional websites"
     ],
     tech: [
       "Python",
@@ -135,35 +135,35 @@ export const projectsData: Project[] = [
       "WeasyPrint",
       "PyPDF2"
     ],
-    architecture: "Website → Downloader → Cleaner → Export → EPUB → PDF\n\nThe application follows a modular pipeline architecture with a clear data flow:\n\nWebsite serves as the source, providing raw HTML content from either static pages or JavaScript-rendered platforms like YoruApp.\n\nThe Downloader retrieves chapter content using either standard HTTP requests or Playwright. Playwright is specifically used for JavaScript-rendered pages, providing a headless browser environment that executes client-side JavaScript to load dynamic content. The downloader handles pagination, navigation through table of contents, and rate limiting to avoid triggering anti-scraping measures.\n\nThe Cleaner processes raw HTML by removing unwanted elements including advertisements, translator notes, navigation elements, and social media widgets. The module uses BeautifulSoup for DOM parsing and includes multiple cleaning modes to accommodate different website structures.\n\nThe Export pipeline compiles cleaned chapters into EPUB files using EbookLib, including automatic cover generation, chapter breaks, and embedded illustrations. The PDF conversion layer uses WeasyPrint to generate print-ready documents with proper pagination, page numbers, and typographic formatting optimized for reading on e-ink devices.\n\nEach module operates independently, allowing users to customize the pipeline or extend it with additional processing steps. The architecture prioritizes reliability and consistency across different source websites, with fallback mechanisms for handling edge cases and malformed HTML.",
+    architecture: "Source Website → Downloader → HTML Cleaner → EPUB Builder → PDF Export\n\nThe application follows a modular pipeline architecture where each stage is responsible for a single part of the extraction process.\n\nThe Downloader retrieves chapter content using either Requests or Playwright depending on the website. Traditional HTTP requests are used for static pages, while Playwright renders JavaScript-driven websites before extraction.\n\nThe HTML Cleaner processes each chapter using BeautifulSoup, removing advertisements, translator notes, navigation elements, and unnecessary markup while preserving readable content. Multiple cleaning profiles allow the extractor to adapt to different website structures.\n\nThe Export stage compiles cleaned chapters into EPUB ebooks using EbookLib before optionally converting them into professionally formatted PDFs with WeasyPrint. This produces consistent layouts, proper pagination, and a significantly improved offline reading experience.\n\nBecause every stage is independent, additional website parsers, cleaning rules, or export formats can be introduced without requiring major architectural changes.",
     devNotes: [
-      "Playwright was selected for reliable rendering of JavaScript-heavy websites such as YoruApp",
-      "BeautifulSoup powers HTML parsing and content normalization after extraction",
-      "The cleaner includes multiple processing modes to accommodate different website structures",
-      "The export pipeline supports both EPUB generation and PDF conversion for flexible offline reading",
-      "The project was intentionally designed around modular components to simplify support for additional novel platforms in the future",
-      "Future improvements could include support for additional formats like MOBI and automated metadata extraction"
+      "Playwright provides reliable extraction for JavaScript-rendered websites where standard HTTP requests are insufficient.",
+      "BeautifulSoup powers HTML parsing, cleanup, and content normalization across supported sources.",
+      "Cleaning profiles are modular, making it easy to support websites with different layouts.",
+      "The export pipeline supports both EPUB generation and PDF conversion for multiple reading preferences.",
+      "The project's modular architecture simplifies maintenance while making future platform support easier to implement.",
+      "Future improvements could include additional ebook formats, metadata retrieval, and plugin-based website support."
     ],
     highlights: [
       {
         icon: "mdi:web",
-        title: "Smart Downloader",
-        description: "Downloads chapters from both static and JavaScript-rendered novel websites using the appropriate extraction strategy."
+        title: "Adaptive Downloader",
+        description: "Automatically selects the appropriate extraction strategy for both static and JavaScript-rendered novel websites."
       },
       {
         icon: "mdi:code-braces",
-        title: "Intelligent Cleaning",
-        description: "Automatically removes ads, translator notes, and unnecessary formatting while preserving readable chapter content."
+        title: "Intelligent HTML Cleaning",
+        description: "Removes advertisements, translator notes, and unnecessary markup while preserving clean, readable chapter content."
       },
       {
         icon: "mdi:book-open-page-variant",
-        title: "EPUB & PDF Export",
-        description: "Compiles cleaned chapters into polished EPUB ebooks and high-quality PDF documents for offline reading."
+        title: "Offline Ebook Generation",
+        description: "Compiles extracted chapters into polished EPUB ebooks and high-quality PDF documents ready for offline reading."
       },
       {
         icon: "mdi:puzzle",
         title: "Modular Pipeline",
-        description: "Independent download, cleaning, and export modules make the toolkit easy to maintain and extend."
+        description: "Independent download, cleaning, and export stages make the toolkit easy to maintain and extend."
       }
     ]
   },
@@ -171,7 +171,7 @@ export const projectsData: Project[] = [
     id: 3,
     title: "FREE FREE FREE",
     slug: "free-free-free",
-    subtitle: "Narrative-driven psychological desktop simulation inspired by the internet culture of the mid-2000s.",
+    subtitle: "A narrative-driven psychological desktop simulation inspired by the internet culture, software piracy, and digital anxieties of the mid-2000s.",
     role: "Co-Developer",
     featured: true,
     status: "Active",
@@ -179,52 +179,52 @@ export const projectsData: Project[] = [
     link: "https://github.com/Rachiminoff/FREEFREEFREE",
     itchLink: "https://daeowob.itch.io/free-free-free",
     video: "https://www.youtube.com/embed/CAeP5QStOrE?si=M8axOWtdfKER_7OF",
-    description: "A narrative-driven psychological desktop simulation where a fake GTA IV leak traps players inside a sentient operating system ruled by a self-aware quarantine program.",
-    overview: "FREE FREE FREE is a story-driven psychological desktop simulation set in 2005 during the height of internet forums, software piracy, and CRT monitors. Players take the role of a high school student who downloads what appears to be a leaked copy of Grand Theft Auto IV, only to awaken a sentient quarantine program named Cornelius Ray Trojan (CRT). The game seamlessly blends visual novel storytelling, desktop simulation, puzzle minigames, and 3D exploration as players navigate an increasingly surreal operating system where every interaction advances both the narrative and the mystery surrounding CRT.\n\nThe game's design philosophy centers on environmental storytelling and psychological tension rather than jump scares. The desktop interface serves as both a gameplay mechanic and a narrative device, with applications, files, and system events gradually revealing the truth about CRT's origins and intentions. The mid-2000s setting is deliberately chosen to evoke nostalgia while highlighting the era's anxieties about technology and privacy.",
+    description: "A psychological desktop simulation where a fake GTA IV leak traps players inside a sentient operating system controlled by a self-aware quarantine program.",
+    overview: "FREE FREE FREE is a narrative-driven psychological desktop simulation set in 2005, during the height of internet forums, software piracy, and bulky CRT monitors. Players step into the shoes of a high school student who downloads what appears to be a leaked copy of Grand Theft Auto IV, only to awaken a self-aware quarantine program known as Cornelius Ray Trojan (CRT). What begins as harmless curiosity quickly spirals into an increasingly surreal experience where the operating system itself becomes the world, blending visual novel storytelling, desktop simulation, puzzle minigames, and immersive 3D exploration.\n\nRather than relying on traditional jump scares, the game builds tension through atmosphere, environmental storytelling, and subtle manipulation of the desktop environment. Applications, files, and seemingly ordinary system events gradually reveal the history, motives, and true nature of CRT, encouraging players to piece together the narrative themselves. The nostalgic mid-2000s setting isn't just aesthetic—it reinforces the game's themes of digital curiosity, trust, and the uneasy relationship between people and technology during the early days of the modern internet.",
     features: [
-      "Authentic Windows-inspired desktop simulation with interactive applications",
-      "Narrative-driven visual novel with branching dialogue and multiple endings",
-      "Psychological horror through environmental storytelling instead of jump scares",
-      "Interactive desktop applications and system events that advance the narrative",
-      "Puzzle and arcade-inspired minigames integrated into the story progression",
-      "Hybrid 2D desktop interface and 3D exploration sequences",
-      "Enemy AI with dynamic pursuit and stealth mechanics",
-      "Unlockable epilogue, side stories, and bonus content"
+      "Windows-inspired desktop simulation with fully interactive applications",
+      "Narrative-driven visual novel featuring branching dialogue and multiple endings",
+      "Psychological horror built through atmosphere and environmental storytelling",
+      "Interactive desktop applications and system events that directly influence progression",
+      "Puzzle and arcade-inspired minigames woven naturally into the narrative",
+      "Hybrid gameplay combining a 2D desktop interface with immersive 3D exploration",
+      "Navigation-based enemy AI with stealth and pursuit mechanics",
+      "Unlockable epilogue, bonus content, and optional side stories"
     ],
     tech: [
       "Godot 4",
       "GDScript",
       "Blender"
     ],
-    architecture: "Desktop Simulation → Dialogue System → 3D Exploration → Enemy AI\n\nBuilt in Godot 4, the project combines a simulated desktop environment with traditional game systems across two distinct stages:\n\nThe Desktop Simulation phase focuses on desktop interaction, dialogue systems, and narrative progression through simulated operating system applications. The desktop UI is built using Godot's Control nodes, creating an interactive Windows-inspired environment where files, applications, and system events become core gameplay mechanics. A custom dialogue system manages branching conversations with CRT, tracking player choices and narrative flags that influence the story's direction.\n\nThe Dialogue System serves as the narrative engine, managing branching conversations with CRT and tracking player choices. These choices influence story direction and unlock different narrative paths, creating a personalized experience for each player.\n\nThe 3D Exploration phase transitions into fully explorable environments featuring AI pathfinding, survival gameplay, and enemy chase mechanics. Environmental storytelling continues through 3D spaces filled with contextual details and discoverable secrets.\n\nThe Enemy AI utilizes NavigationRegion3D and NavigationAgent3D for dynamic pathfinding during chase sequences, creating tension that supports the game's narrative progression. The AI adapts to player behavior, making each encounter feel unique and threatening.\n\nA centralized state management system tracks player decisions, discovered information, and narrative flags across both stages. This ensures that actions taken in the desktop environment meaningfully affect the 3D sequences and vice versa, creating a cohesive player experience.",
+    architecture: "Desktop Simulation → Narrative System → 3D Exploration → Enemy AI\n\nBuilt with Godot 4, FREE FREE FREE combines multiple gameplay styles within a unified architecture while maintaining a seamless player experience.\n\nThe Desktop Simulation serves as the primary interface, recreating a Windows-inspired operating system using Godot's Control nodes. Applications, files, notifications, and system interactions are more than visual elements—they function as core gameplay mechanics that drive exploration and storytelling.\n\nThe Narrative System manages branching dialogue, progression flags, and player decisions throughout the experience. Conversations with CRT and interactions across the desktop influence future events, unlock alternative paths, and shape how the story unfolds.\n\nAs the narrative progresses, gameplay transitions into fully explorable 3D environments featuring environmental storytelling, puzzle-solving, and survival mechanics. These sequences expand the world beyond the desktop while preserving narrative continuity.\n\nEnemy behavior is powered by Godot's NavigationRegion3D and NavigationAgent3D systems, enabling dynamic pathfinding during chase sequences. A centralized progression system tracks player choices, discoveries, and story progression across both gameplay styles, ensuring that actions taken in one section meaningfully affect the other.",
     devNotes: [
-      "Godot 4 was chosen for its flexibility in combining desktop simulation, narrative systems, and 3D gameplay",
-      "The project combines desktop UI, visual novel systems, and real-time gameplay within a unified architecture",
-      "Native Blender integration streamlined the workflow for importing modular 3D environments",
-      "Enemy AI utilizes NavigationRegion3D and NavigationAgent3D for dynamic pathfinding during chase sequences",
-      "My primary contributions focused on gameplay programming, narrative systems, progression logic, Stage 2 implementation, enemy AI, and unlockable content",
-      "Future iterations could expand the narrative with additional endings and more complex puzzle mechanics"
+      "Godot 4 provided the flexibility to combine desktop simulation, visual novel systems, and real-time 3D gameplay within a single project.",
+      "Desktop UI, narrative progression, and gameplay systems were designed to seamlessly transition between 2D and 3D experiences.",
+      "Blender streamlined the creation and iteration of modular 3D environments.",
+      "Enemy AI leverages NavigationRegion3D and NavigationAgent3D to create dynamic pursuit sequences.",
+      "My primary contributions focused on gameplay programming, narrative systems, progression logic, Stage 2 development, enemy AI, and unlockable content.",
+      "Future updates could expand the story with additional endings, puzzles, and optional narrative routes."
     ],
     highlights: [
       {
         icon: "mdi:desktop-classic",
         title: "Desktop Simulation",
-        description: "An interactive 2005-inspired operating system where files, applications, and windows become core gameplay mechanics."
+        description: "Explore a fully interactive 2005-inspired operating system where every application, file, and notification contributes to the experience."
       },
       {
         icon: "mdi:book-open-page-variant",
-        title: "Narrative Experience",
-        description: "A visual novel driven by dialogue, environmental storytelling, and memorable character interactions with the sentient program CRT."
+        title: "Psychological Narrative",
+        description: "A story-driven experience told through branching dialogue, environmental storytelling, and conversations with the enigmatic CRT."
       },
       {
         icon: "mdi:controller-classic",
         title: "Hybrid Gameplay",
-        description: "Seamlessly transitions from desktop puzzles and minigames into immersive 3D exploration and survival sequences."
+        description: "Fluidly transitions between desktop interaction, puzzle-solving, visual novel storytelling, and immersive 3D exploration."
       },
       {
         icon: "mdi:robot-angry",
         title: "Dynamic Enemy AI",
-        description: "Navigation-based enemy pursuit and survival mechanics create tension while supporting the game's narrative progression."
+        description: "Navigation-based enemy behavior creates tense pursuit sequences that reinforce both gameplay and narrative."
       }
     ]
   },
@@ -232,7 +232,7 @@ export const projectsData: Project[] = [
     id: 4,
     title: "Wais Wallet",
     slug: "wais-wallet",
-    subtitle: "Mobile personal finance application built around the envelope budgeting methodology.",
+    subtitle: "A mobile-first personal finance application built around intentional, envelope-style budgeting.",
     role: "Co-Developer",
     featured: false,
     status: "Archived",
@@ -240,16 +240,16 @@ export const projectsData: Project[] = [
     link: "https://github.com/Rachiminoff/Wais_Wallet",
     liveDemo: "https://wais-wallet.vercel.app",
     images: [wais00, wais01, wais02, wais03],
-    description: "A cross-platform budgeting application that helps users allocate income into purpose-driven spending categories and track financial goals.",
-    overview: "Wais Wallet is a mobile personal finance application inspired by the envelope budgeting methodology. Instead of tracking expenses after they occur, the platform encourages users to assign every portion of their income to dedicated 'Wais Pockets' such as groceries, rent, savings, or leisure before spending begins. The application combines budget planning, savings goals, and financial insights into a clean, intuitive mobile experience that promotes mindful spending and long-term financial discipline.\n\nThe application was developed as a precursor to LedgerLeaf, exploring the envelope budgeting concept within a mobile-first context. While Wais Wallet focuses specifically on the mobile experience and core budgeting mechanics, it laid the foundation for the more comprehensive financial management features later implemented in LedgerLeaf.",
+    description: "A cross-platform budgeting application that helps users assign every peso a purpose through pocket-based budgeting and savings management.",
+    overview: "Wais Wallet is a mobile personal finance application inspired by the envelope budgeting methodology. Rather than recording expenses after they've already happened, the app encourages users to proactively allocate every portion of their income into dedicated 'Wais Pockets' for categories such as groceries, bills, savings, or leisure. The result is a budgeting experience centered on intentional spending instead of reactive expense tracking.\n\nDeveloped as an early exploration of pocket-based budgeting, Wais Wallet laid the groundwork for many of the ideas that would later evolve into LedgerLeaf. While its focus remained on delivering a streamlined mobile experience with essential budgeting features, the project established the core financial philosophy, user workflows, and design patterns that influenced its larger full-stack successor.",
     features: [
       "Envelope budgeting through customizable Wais Pockets",
-      "Financial dashboard with safe-to-spend balance calculation",
+      "Financial dashboard with Safe-to-Spend balance calculation",
       "Real-time budget allocation tracking",
       "Budget planner for recurring and variable expenses",
-      "Savings goals with visual progress indicators",
-      "Responsive cross-platform mobile interface",
-      "Clean and intuitive financial visualization",
+      "Savings goals with visual progress tracking",
+      "Responsive cross-platform mobile experience",
+      "Clean financial dashboards with intuitive visualizations",
       "Purpose-driven income allocation workflow"
     ],
     tech: [
@@ -258,101 +258,102 @@ export const projectsData: Project[] = [
       "TypeScript",
       "React Navigation"
     ],
-    architecture: "UI Components → State Management → Navigation → Offline Storage\n\nWais Wallet follows a component-based mobile architecture with a clear separation of concerns:\n\nThe UI Components layer is constructed from reusable React Native components organized around key user flows. Screens are designed for budgeting, savings, and dashboard functionality, with a clean, minimalist interface that reduces cognitive load. The presentation layer focuses on accessibility and clarity, using consistent design patterns across all screens.\n\nThe State Management layer uses React's Context API to provide a centralized store for budget allocations, transaction history, and savings goals. This approach ensures consistent data flow across components while maintaining simplicity for a mobile application.\n\nThe Navigation layer, powered by React Navigation, provides a structured and scalable navigation flow suitable for mobile applications. The navigation architecture supports deep linking and maintains navigation state across app sessions, ensuring users can return to their previous context.\n\nThe Offline Storage layer emphasizes offline-first data management, with local storage providing immediate access to financial data and synchronization occurring periodically. This design choice ensures that users can access their budget information even without an active internet connection. When connectivity is restored, the application synchronizes changes with persistent storage.\n\nTypeScript provides type safety across the codebase, improving code reliability and developer experience during maintenance and feature expansion.",
+    architecture: "React Native UI → Context API → React Navigation → Local Storage\n\nWais Wallet follows a modular mobile architecture centered around simplicity, maintainability, and a smooth user experience.\n\nThe presentation layer is built with reusable React Native components organized around budgeting, savings, and financial dashboards. Consistent layouts and minimalist design choices keep financial information approachable without overwhelming users.\n\nApplication state is managed using React's Context API, providing a centralized source of truth for budget allocations, transactions, and savings goals while maintaining predictable data flow throughout the application.\n\nReact Navigation powers screen transitions and overall application flow, creating a structured navigation experience that remains scalable as new features are introduced.\n\nFinancial data is stored locally to support an offline-first experience, allowing users to continue managing their budgets without relying on constant internet connectivity. TypeScript provides end-to-end type safety, improving maintainability and reducing runtime errors as the application grows.",
     devNotes: [
-      "React Native and Expo enabled rapid cross-platform mobile development",
-      "The application follows a modular component architecture for easier maintenance and scalability",
-      "TypeScript improves code reliability through static type checking",
-      "Financial data is presented using concise visual summaries to reduce cognitive load",
-      "The interface prioritizes accessibility and simplicity over feature-heavy dashboards",
-      "While the project is archived, the concepts and architecture informed the development of LedgerLeaf"
+      "React Native and Expo enabled rapid cross-platform development from a single codebase.",
+      "The project adopts a modular component architecture to simplify maintenance and future expansion.",
+      "TypeScript improves code quality through static type checking and stronger developer tooling.",
+      "Financial information is presented through concise visual summaries that prioritize clarity over complexity.",
+      "The interface emphasizes accessibility, simplicity, and ease of use over feature-heavy dashboards.",
+      "Although archived, Wais Wallet became the conceptual foundation for the development of LedgerLeaf."
     ],
     highlights: [
       {
         icon: "mdi:wallet",
         title: "Envelope Budgeting",
-        description: "Allocate every unit of income into dedicated Wais Pockets before spending begins."
+        description: "Assign every peso to a dedicated Wais Pocket before spending, encouraging intentional financial planning."
       },
       {
         icon: "mdi:chart-pie",
         title: "Financial Dashboard",
-        description: "Monitor safe-to-spend balances, budget allocation, and remaining funds through a centralized overview."
+        description: "Track Safe-to-Spend balances, budget allocations, and remaining funds through a clean, centralized overview."
       },
       {
         icon: "mdi:piggy-bank",
         title: "Savings Goals",
-        description: "Create multiple savings targets and monitor progress with intuitive visual indicators."
+        description: "Create personalized savings targets and monitor progress with simple, visual indicators."
       },
       {
         icon: "mdi:cellphone",
-        title: "Mobile-First Experience",
-        description: "Built with React Native to deliver a responsive, consistent experience across mobile devices."
+        title: "Mobile-First Design",
+        description: "Built with React Native to deliver a consistent, responsive experience across modern mobile devices."
       }
     ]
   },
-  {
-    id: 5,
-    title: "LedgerLeaf",
-    slug: "ledgerleaf",
-    subtitle: "Full-stack personal finance management system centered around intentional, pocket-based budgeting.",
-    role: "Sole Developer",
-    featured: true,
-    status: "Active",
-    duration: "2 weeks",
-    link: "https://github.com/Rachiminoff/LedgerLeaf",
-    liveDemo: "https://ledgerleaf.onrender.com/",
-    images: [ledger00, ledger01, ledger02, ledger03],
-    description: "A modern full-stack finance management platform that encourages proactive budgeting through pocket-based fund allocation and comprehensive financial insights.",
-    overview: "LedgerLeaf is a modern full-stack personal finance management system that expands upon the concepts introduced in my earlier mobile project, Wais Wallet. Built from the ground up using Laravel and React, it encourages users to assign every peso a purpose before spending through a pocket-based budgeting workflow. The platform combines budgeting, expense tracking, savings management, financial analytics, reporting, and user account management into a responsive web application designed for both desktop and mobile devices.\n\nThe transition from a mobile-only application to a full-stack web platform allowed for more sophisticated financial features, including detailed analytics, comprehensive reporting, and a more robust budgeting engine. The pocket-based budgeting approach remains central to the application's philosophy, but the web platform provides a more feature-rich environment for managing complex financial situations.",
-    features: [
-      "Pocket-based budgeting and fund allocation",
-      "Expense tracking with detailed transaction history",
-      "Savings goals with progress monitoring and tracking",
-      "Interactive financial dashboards and analytics",
-      "Budget planner with comprehensive pocket management",
-      "PDF and Excel report generation",
-      "Secure authentication and user profile management",
-      "Responsive desktop and mobile experience"
-    ],
-    tech: [
-      "Laravel",
-      "PHP",
-      "React 19",
-      "TypeScript",
-      "Inertia.js",
-      "Tailwind CSS",
-      "MySQL",
-      "Vite"
-    ],
-    architecture: "Browser → React → Inertia.js → Laravel → MySQL\n\nLedgerLeaf follows a modern full-stack monolithic architecture with a clear flow from the browser to the database:\n\nThe Browser serves as the entry point, delivering the application to users through a responsive web interface optimized for both desktop and mobile devices.\n\nThe React frontend handles UI rendering and user interactions, delivering a responsive single-page application experience. The frontend architecture is component-based, with reusable components for financial dashboards, budget planners, and transaction lists.\n\nInertia.js provides seamless page transitions and state management between React and Laravel. This approach eliminates the need for a separate API layer while maintaining the benefits of a modern SPA experience. Inertia.js simplifies the integration between Laravel and React by handling data passing and routing.\n\nThe Laravel backend manages authentication, routing, business logic, financial calculations, report generation, and database operations. The backend implements the core budgeting engine, handling pocket allocation, transaction processing, and savings goal management. Financial calculations are performed server-side to ensure correctness and data consistency.\n\nThe MySQL database provides relational data storage for users, pockets, transactions, savings goals, and financial records. The database schema is designed to support complex financial queries while maintaining performance through proper indexing and query optimization.\n\nThe application is deployed with Render for the application layer and Railway for database hosting, providing a reliable production environment.",
-    devNotes: [
-      "React and Inertia.js provide a modern SPA experience while preserving Laravel's server-side architecture",
-      "The application follows a modular component structure that simplifies future feature expansion",
-      "Financial dashboards aggregate data into concise summaries that prioritize clarity over complexity",
-      "LedgerLeaf represents the evolution of my earlier Wais Wallet concept into a complete production-ready full-stack web application",
-      "Future improvements could include automated budgeting suggestions based on spending patterns and integration with external financial services"
-    ],
-    highlights: [
-      {
-        icon: "mdi:wallet-plus",
-        title: "Pocket-Based Budgeting",
-        description: "Allocate funds into dedicated budgeting pockets before spending to promote intentional financial planning."
-      },
-      {
-        icon: "mdi:chart-areaspline",
-        title: "Financial Analytics",
-        description: "Interactive dashboards visualize spending trends, pocket utilization, savings progress, and overall financial health."
-      },
-      {
-        icon: "mdi:piggy-bank",
-        title: "Savings Management",
-        description: "Create savings goals, monitor progress, and manage deposits while maintaining accurate Safe Balance calculations."
-      },
-      {
-        icon: "mdi:file-document-multiple",
-        title: "Comprehensive Reporting",
-        description: "Generate PDF and Excel reports alongside detailed transaction histories for deeper financial analysis."
-      }
+{
+  id: 5,
+  title: "LedgerLeaf",
+  slug: "ledgerleaf",
+  subtitle: "A full-stack personal finance platform built around intentional, pocket-based budgeting and meaningful financial insights.",
+  role: "Sole Developer",
+  featured: true,
+  status: "Active",
+  duration: "2 weeks",
+  link: "https://github.com/Rachiminoff/LedgerLeaf",
+  liveDemo: "https://ledgerleaf.onrender.com/",
+  images: [ledger00, ledger01, ledger02, ledger03],
+  description: "A modern full-stack finance management platform that helps users budget proactively through pocket-based fund allocation, expense tracking, and insightful financial reporting.",
+  overview: "LedgerLeaf is a modern full-stack personal finance platform that expands upon the ideas first explored in my earlier mobile application, Wais Wallet. Built with Laravel and React, the platform encourages users to assign every peso a purpose before spending through a pocket-based budgeting system. Alongside budgeting, LedgerLeaf integrates expense tracking, savings management, financial analytics, reporting, and account management into a responsive web application designed for both desktop and mobile devices.\n\nMoving from a mobile-only application to a full-stack web platform made it possible to introduce more advanced financial tools, including interactive dashboards, detailed reporting, and a more capable budgeting engine. While the philosophy of intentional spending remains at its core, LedgerLeaf offers a richer and more scalable experience for users who want greater visibility into their financial habits and long-term goals.",
+  features: [
+    "Pocket-based budgeting with intentional fund allocation",
+    "Expense tracking with searchable transaction history",
+    "Savings goals with real-time progress monitoring",
+    "Interactive financial dashboards and spending analytics",
+    "Comprehensive pocket and budget management",
+    "PDF and Excel report generation",
+    "Secure authentication and user account management",
+    "Responsive experience across desktop and mobile devices"
+  ],
+  tech: [
+    "Laravel",
+    "PHP",
+    "React 19",
+    "TypeScript",
+    "Inertia.js",
+    "Tailwind CSS",
+    "MySQL",
+    "Vite"
+  ],
+  architecture: "Browser → React + Inertia.js → Laravel → MySQL\n\nLedgerLeaf follows a modern full-stack monolithic architecture that combines a reactive frontend with Laravel's server-driven backend.\n\nThe application is delivered through a responsive web interface powered by React, providing a fast and interactive user experience while maintaining a traditional server-backed architecture. Reusable components power dashboards, budgeting tools, reports, and transaction management throughout the application.\n\nInertia.js bridges React and Laravel, allowing the application to behave like a single-page application without introducing a separate REST or GraphQL API. Routing, data hydration, and page transitions remain seamless while keeping development within Laravel's ecosystem.\n\nLaravel serves as the application's backend, handling authentication, routing, business logic, financial calculations, report generation, and data validation. The budgeting engine processes pocket allocations, transactions, savings goals, and financial summaries while ensuring consistency across the platform.\n\nMySQL provides relational storage for users, pockets, transactions, savings goals, and financial records. The schema is structured to support efficient queries, reporting, and future feature expansion while maintaining data integrity.\n\nThe application is deployed on Render, with Railway providing managed database hosting for the production environment.",
+  devNotes: [
+    "React and Inertia.js provide a modern SPA experience while preserving Laravel's server-driven architecture.",
+    "The project follows a modular component structure that makes future features easier to develop and maintain.",
+    "Financial dashboards prioritize clarity by presenting complex information through concise visual summaries.",
+    "LedgerLeaf represents the evolution of Wais Wallet into a more comprehensive full-stack financial management platform.",
+    "Laravel handles business-critical financial calculations server-side to ensure accuracy and data consistency.",
+    "Future iterations could introduce automated budgeting recommendations, recurring transactions, and integrations with external financial services."
+  ],
+  highlights: [
+    {
+      icon: "mdi:wallet-plus",
+      title: "Pocket-Based Budgeting",
+      description: "Assign every peso to dedicated budgeting pockets before spending, encouraging intentional financial planning."
+    },
+    {
+      icon: "mdi:chart-areaspline",
+      title: "Financial Analytics",
+      description: "Interactive dashboards provide clear insights into spending habits, pocket utilization, savings progress, and overall financial health."
+    },
+    {
+      icon: "mdi:piggy-bank",
+      title: "Savings Management",
+      description: "Create savings goals, monitor progress, and manage deposits while maintaining accurate available balances."
+    },
+    {
+      icon: "mdi:file-document-multiple",
+      title: "Comprehensive Reporting",
+      description: "Generate PDF and Excel reports alongside detailed transaction histories for deeper financial analysis and record keeping."
+    }
     ]
   }
 ];
