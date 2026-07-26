@@ -683,10 +683,12 @@ function Insights({ onClose }: InsightsProps) {
           </div>
           <div className="insights-hero-metadata">
             <span className="insights-hero-metadata-item">
+              <Icon icon="mdi:book-open-variant" width={14} height={14} />
               {stats.total} {stats.total === 1 ? 'writing' : 'writings'}
             </span>
             <span className="insights-hero-metadata-divider">·</span>
             <span className="insights-hero-metadata-item">
+              <Icon icon="mdi:tag-outline" width={14} height={14} />
               {stats.categories} {stats.categories === 1 ? 'topic' : 'topics'}
             </span>
           </div>
