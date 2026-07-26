@@ -1,5 +1,6 @@
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Icon } from '@iconify/react';
 import { useArchive } from '../hooks/useArchive';
 
 import "./styles/InsightsPage.scss";
@@ -44,7 +45,8 @@ const InsightsPage: React.FC = () => {
 
   return (
     <div className="insights-page">
-      <div className="insights-page-header">
+      {/* Sticky Back Button */}
+      <div className="insights-back-button-container">
         <button 
           className="insights-back-button"
           onClick={() => {
@@ -53,10 +55,11 @@ const InsightsPage: React.FC = () => {
           }}
           aria-label="Back to archive"
         >
-          ← Back to Archive
+          <Icon icon="mdi:arrow-left" width={18} height={18} />
+          <span>Back to Archive</span>
         </button>
-        <h1>Insights</h1>
       </div>
+
       <Suspense fallback={
         <div className="insights-loading-state">
           <div className="insights-loading-spinner" />
