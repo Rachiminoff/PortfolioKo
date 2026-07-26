@@ -1,7 +1,3 @@
-/* =========================
-   FOOTER - IMPROVED VISIBILITY
-========================= */
-
 // ========== VARIABLES ==========
 $cyan: #2dd4bf;
 $cyan-dim: rgba(45, 212, 191, 0.08);
@@ -169,7 +165,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 /* =========================
-   SOCIAL GRID - IMPROVED VISIBILITY
+   SOCIAL GRID
 ========================= */
 .footer-grid {
   display: grid;
@@ -195,7 +191,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   justify-content: center;
   gap: 0.75rem;
   padding: 0.875rem 1.25rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.02);
   border: 1px solid $border-solid;
   color: $white-muted;
   text-decoration: none;
@@ -233,7 +229,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   &:hover {
     color: $white;
     border-color: $border-medium;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     transform: translateY(-1px);
 
     &::before {
@@ -285,13 +281,12 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   // Admin card special styling
   &.admin-card {
-    border-color: rgba(255, 90, 74, 0.12);
+    border-color: rgba(255, 90, 74, 0.08);
     color: rgba(255, 90, 74, 0.5);
-    background: rgba(255, 90, 74, 0.02);
 
     &:hover {
-      border-color: rgba(255, 90, 74, 0.25);
-      background: rgba(255, 90, 74, 0.06);
+      border-color: rgba(255, 90, 74, 0.2);
+      background: rgba(255, 90, 74, 0.05);
       color: $orange;
     }
 
@@ -319,7 +314,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 /* =========================
-   FOOTER BOTTOM - IMPROVED VISIBILITY
+   FOOTER BOTTOM
 ========================= */
 .footer-bottom {
   display: flex;
@@ -350,7 +345,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   .copyright-symbol {
     font-family: $font-mono;
     font-size: 0.6rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.15);
     letter-spacing: 0.12em;
   }
 
@@ -369,7 +364,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   .footer-year {
     font-family: $font-mono;
     font-size: 0.55rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.15);
     letter-spacing: 0.08em;
 
     @media (max-width: 768px) {
@@ -390,7 +385,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   .footer-tagline {
     font-family: $font-mono;
     font-size: 0.5rem;
-    color: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.1);
     letter-spacing: 0.12em;
     text-transform: uppercase;
 
@@ -401,18 +396,18 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 /* =========================
-   ADMIN MODAL - OVERLAYS EVERYTHING
+   ADMIN MODAL - REDESIGNED
 ========================= */
 .admin-modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 99999 !important;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
   background: rgba(15, 15, 15, 0.95);
-  backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px);
   animation: modalFade 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 
   @media (max-width: 768px) {
@@ -427,7 +422,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
   to {
     opacity: 1;
-    backdrop-filter: blur(16px);
+    backdrop-filter: blur(12px);
   }
 }
 
@@ -439,7 +434,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   overflow: hidden;
   background: $black;
   border: 1px solid $border-solid;
-  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
   animation: modalPop 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   position: relative;
 
@@ -523,7 +518,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   input {
     width: 100%;
     padding: 0.875rem 1.125rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
     border: 1px solid $border-solid;
     color: $white;
     font-size: 0.85rem;
@@ -536,10 +531,6 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
     &:focus {
       border-color: $border-medium;
-    }
-
-    &.input-error {
-      border-color: rgba(255, 90, 74, 0.3);
     }
 
     &::placeholder {
@@ -556,26 +547,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     }
   }
 
-  .error-message {
-    color: $orange;
-    font-size: 0.7rem;
-    font-family: $font-mono;
-    letter-spacing: 0.04em;
-    margin: -0.5rem 0 0.75rem 0;
-    text-align: left;
-    width: 100%;
-    opacity: 0.8;
-
-    @media (max-width: 480px) {
-      font-size: 0.65rem;
-      margin: -0.25rem 0 0.5rem 0;
-    }
-  }
-
   .submit-btn {
     width: 100%;
     padding: 0.875rem;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid $border-solid;
     color: $white-muted;
     font-family: $font-mono;
@@ -587,7 +562,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     border-radius: 0;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
       color: $white;
       border-color: $border-medium;
     }
@@ -1004,14 +979,6 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     @media (max-width: 480px) {
       max-height: 40vh;
     }
-  }
-
-  .empty-state {
-    color: rgba(255, 255, 255, 0.04);
-    padding: 2rem;
-    font-family: $font-mono;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
   }
 }
 
