@@ -1,29 +1,68 @@
-# My Portfolio
+# Personal Portfolio
 
-A modern portfolio website showcasing my projects, technical expertise, professional experience, and certifications as a Full-Stack Developer.
+<p align="center">
+  <strong>A modern, responsive portfolio built with React and TypeScript.</strong><br/>
+  Showcasing projects, technical expertise, professional experience, certifications, and development insights.
+</p>
+
+<p align="center">
+
+  ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+  ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+  ![SCSS](https://img.shields.io/badge/SCSS-C76494?style=for-the-badge&logo=sass&logoColor=white)
+  ![React Router](https://img.shields.io/badge/React_Router-7-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+  ![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+
+</p>
+
+<p align="center">
+
+  <a href="#overview">Overview</a> •
+  <a href="#features">Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#project-structure">Project Structure</a> •
+  <a href="#license">License</a>
+
+</p>
+
+---
 
 ## Overview
 
-This portfolio serves as a central hub for my work, featuring selected projects, technical skills, development experience, certifications, and contact information. Built with React and TypeScript, it emphasizes performance, accessibility, and responsive design to deliver a seamless experience across desktop and mobile devices.
+This repository contains the source code for my personal portfolio website.
 
-## Technologies
+Designed with a focus on clean presentation, performance, and accessibility, it serves as a central hub for showcasing my work as a Full-Stack Developer. The website highlights selected projects, technical skills, professional experience, certifications, and provides an easy way to get in touch.
 
-- React
-- TypeScript
-- SCSS
-- React Router
-- Framer Motion
-- React Icons
+The application is fully responsive and optimised for both desktop and mobile devices, delivering a consistent user experience across screen sizes.
+
+---
 
 ## Features
 
-- Responsive interface optimized for desktop and mobile
+- Responsive layout for desktop, tablet, and mobile
 - Project showcase with detailed information
-- Technical skills and expertise overview
-- Professional timeline
-- Certifications
-- Contact section
-- Smooth animations and transitions
+- Technical skills and technology overview
+- Professional experience timeline
+- Certifications section
+- Contact page
+- Smooth page transitions and animations
+- Fast client-side navigation
+- Clean, accessible interface
+
+---
+
+## Tech Stack
+
+| Category | Technologies |
+|----------|--------------|
+| Frontend | React, TypeScript |
+| Styling | SCSS |
+| Routing | React Router |
+| Animation | Framer Motion |
+| Icons | React Icons |
+
+---
 
 ## Getting Started
 
@@ -36,11 +75,13 @@ This portfolio serves as a central hub for my work, featuring selected projects,
 
 ```bash
 git clone https://github.com/Rachiminoff/Rachiminoff.github.io.git
+
 cd Rachiminoff.github.io
+
 npm install
 ```
 
-### Running the Development Server
+### Run the Development Server
 
 ```bash
 npm start
@@ -52,15 +93,19 @@ The application will be available at:
 http://localhost:3000
 ```
 
-### Building for Production
+### Production Build
 
 ```bash
 npm run build
 ```
 
+---
+
 ## Live Website
 
-(secret)
+> Private
+
+---
 
 ## Project Structure
 
@@ -74,6 +119,29 @@ src/
 └── utils/
 ```
 
+---
+
+## Design Goals
+
+This portfolio was built with the following principles in mind:
+
+- Performance-first architecture
+- Responsive design
+- Accessibility
+- Maintainable codebase
+- Modern UI with subtle animations
+- Clean and readable developer experience
+
+---
+
 ## License
 
-This repository contains the source code for my personal portfolio website. The source code may be referenced for educational purposes, but the portfolio's content, branding, and assets are not intended for redistribution or reuse without permission.
+This repository contains the source code for my personal portfolio website.
+
+The source code may be referenced for educational purposes. However, the website's branding, written content, images, assets, and overall identity are proprietary and may not be copied, redistributed, or reused without prior permission.
+
+---
+
+<p align="center">
+Built with React, TypeScript, and SCSS.
+</p>
