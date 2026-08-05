@@ -30,22 +30,25 @@
       "terminal": null
     },
     {
-    "id": 3,
-    "title": "Software Development Intern",
-    "year": "2026",
-    "subtitle": "GoodStrings Inc.",
-    "description": "Currently undergoing my internship, contributing to both Quality Assurance and Software Development. My work involves system testing, bug verification, and developing internal web applications with CRUD functionality while collaborating within a professional software development workflow.",
-    "status": "COMPLETED",
-    "icon": "briefcase",
-    "terminal": {
+      "id": 3,
+      "title": "Software Development Intern",
+      "year": "2026",
+      "subtitle": "GoodStrings Inc.",
+      "description": "Completed my internship as a Software Development Intern, contributing to both Quality Assurance and Software Development throughout the software development lifecycle. Performed system testing, validated bug fixes, and developed internal web applications with full CRUD functionality while collaborating with developers in an Agile environment, following industry-standard development and version control practices.",
+      "status": "COMPLETED",
+      "icon": "briefcase",
+      "terminal": {
         "title": "git",
         "code": [
-        { "type": "prompt", "value": "❯" },
-        { "type": "command", "value": "git" },
-        { "type": "text", "value": " commit -m " },
-        { "type": "string", "value": "\"Implement CRUD features & fix reported issues\"" }
+          { "type": "prompt", "value": "❯" },
+          { "type": "command", "value": "git" },
+          { "type": "text", "value": " commit -m " },
+          {
+            "type": "string",
+            "value": "\"Complete internship: QA, CRUD implementation & production fixes\""
+          }
         ]
-    }
+      }
     },
     {
       "id": 4,
