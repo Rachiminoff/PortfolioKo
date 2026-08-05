@@ -34,7 +34,7 @@
       "title": "Software Development Intern",
       "year": "2026",
       "subtitle": "GoodStrings Inc.",
-      "description": "Completed my internship as a Software Development Intern, contributing to both Quality Assurance and Software Development throughout the software development lifecycle. Performed system testing, validated bug fixes, and developed internal web applications with full CRUD functionality while collaborating with developers in an Agile environment, following industry-standard development and version control practices.",
+      "description": "Completed my Software Development internship at GoodStrings Inc., gaining hands-on experience in both Quality Assurance and full-stack web development. Performed functional testing, validated bug fixes, and collaborated with developers to improve software quality before transitioning into application development. Built an Expense Tracker and other internal web applications using Laravel, React, Tailwind CSS, Chart.js, and Git while working within an Agile software development environment.",
       "status": "COMPLETED",
       "icon": "briefcase",
       "terminal": {
@@ -45,7 +45,7 @@
           { "type": "text", "value": " commit -m " },
           {
             "type": "string",
-            "value": "\"Complete internship: QA, CRUD implementation & production fixes\""
+            "value": "\"Complete internship: QA, Laravel + React & Agile delivery\""
           }
         ]
       }
