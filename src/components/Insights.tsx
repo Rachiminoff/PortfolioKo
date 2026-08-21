@@ -927,9 +927,10 @@ function Insights({ onClose }: InsightsProps) {
               type="button"
               className="insights-new-post-button"
               onClick={openNewPostEditor}
+              aria-label="Write a new post"
             >
-              <Icon icon="mdi:plus" width={16} height={16} />
-              New Post
+              <Icon icon="mdi:pencil-outline" width={17} height={17} />
+              <span>Ooh, writer.</span>
             </button>
             <span className="insights-hero-metadata-item">
               <Icon icon="mdi:book-open-variant" width={14} height={14} />
@@ -1203,8 +1204,13 @@ function Insights({ onClose }: InsightsProps) {
           <div className="insights-editor-modal">
             <div className="insights-editor-header">
               <div>
-                <span className="insights-editor-eyebrow">{editorPost ? "EDITOR" : "NEW ARTICLE"}</span>
-                <h2>{editorPost ? "Edit post" : "Create a new post"}</h2>
+                <span className="insights-editor-eyebrow">{editorPost ? "BACK TO THE DRAFT" : "A FRESH PAGE"}</span>
+                <h2>{editorPost ? "Keep writing." : "Ooh, writer."}</h2>
+                <p className="insights-editor-intro">
+                  {editorPost
+                    ? "Polish the idea, move a few words around, and make it yours."
+                    : "No need to have it all figured out. Start with a title and see where it goes."}
+                </p>
               </div>
               <button className="insights-editor-close" onClick={() => setIsEditorOpen(false)} aria-label="Close editor">
                 <Icon icon="mdi:close" width={22} height={22} />
@@ -1214,6 +1220,10 @@ function Insights({ onClose }: InsightsProps) {
             {editorError && <div className="insights-editor-error">{editorError}</div>}
 
             <div className="insights-editor-fields">
+              <div className="insights-editor-section-label insights-editor-full">
+                <span>01</span>
+                <div><strong>The idea</strong><small>Give the piece a name and a little context.</small></div>
+              </div>
               <label>
                 <span>Title</span>
                 <input
@@ -1237,6 +1247,10 @@ function Insights({ onClose }: InsightsProps) {
                 <span>Excerpt</span>
                 <textarea value={editorForm.excerpt} onChange={e => setEditorForm(prev => ({ ...prev, excerpt: e.target.value }))} rows={3} placeholder="Short description shown on cards" />
               </label>
+              <div className="insights-editor-section-label insights-editor-full insights-editor-section-spaced">
+                <span>02</span>
+                <div><strong>Make it yours</strong><small>Organize it now; you can always change it later.</small></div>
+              </div>
               <label>
                 <span>Category</span>
                 <input value={editorForm.category} onChange={e => setEditorForm(prev => ({ ...prev, category: e.target.value }))} placeholder="Development" />
@@ -1264,6 +1278,10 @@ function Insights({ onClose }: InsightsProps) {
             </div>
 
             <div className="insights-editor-content">
+              <div className="insights-editor-writing-label">
+                <span>03</span>
+                <div><strong>The actual writing</strong><small>This is the good part.</small></div>
+              </div>
               <div className="insights-editor-content-header">
                 <div className="insights-editor-mode">
                   <button className={editorMode === "rich" ? "active" : ""} onClick={() => switchEditorMode("rich")}>Rich Text</button>
