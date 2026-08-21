@@ -913,13 +913,13 @@ function Insights({ onClose }: InsightsProps) {
       <section className="insights-hero">
         <div className="insights-hero-content">
           <div className="insights-hero-header">
-            <p className="insights-hero-eyebrow">— Journal</p>
+            <p className="insights-hero-eyebrow">— NOTES FROM THE DESK</p>
             <h1 className="insights-hero-title">
               My little corner of the internet.
             </h1>
             <p className="insights-hero-subtitle">
-              A collection of thoughts on software, projects, books, 
-              and the things I'm learning along the way.
+              A little archive of things I've built, noticed, read, and
+              spent far too much time thinking about.
             </p>
           </div>
           <div className="insights-hero-metadata">
@@ -953,7 +953,7 @@ function Insights({ onClose }: InsightsProps) {
             <input
               type="text"
               className="insights-search-input"
-              placeholder="Search articles, categories, tags..."
+              placeholder="Search the archive..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
