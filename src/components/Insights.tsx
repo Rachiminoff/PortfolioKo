@@ -94,6 +94,7 @@ function Insights({ onClose }: InsightsProps) {
   const [editorSaving, setEditorSaving] = useState(false);
   const [editorError, setEditorError] = useState("");
   const editorRef = useRef<HTMLDivElement>(null);
+  const editorInitializedRef = useRef(false);
 
   // Progressive loading state
   const [visibleCount, setVisibleCount] = useState(ARTICLES_PER_BATCH);
@@ -467,10 +468,16 @@ function Insights({ onClose }: InsightsProps) {
   };
 
   useEffect(() => {
-    if (isEditorOpen && editorMode === "rich" && editorRef.current) {
-      editorRef.current.innerHTML = markdownToHtml(editorContent);
+    if (!isEditorOpen || editorMode !== "rich") {
+      editorInitializedRef.current = false;
+      return;
     }
-  }, [isEditorOpen, editorMode]);
+
+    if (!editorInitializedRef.current && editorRef.current) {
+      editorRef.current.innerHTML = markdownToHtml(editorContent);
+      editorInitializedRef.current = true;
+    }
+  }, [isEditorOpen, editorMode, editorContent]);
 
   const switchEditorMode = (mode: "rich" | "markdown") => {
     if (mode === editorMode) return;
@@ -982,6 +989,15 @@ function Insights({ onClose }: InsightsProps) {
           </div>
 
           <div className="insights-controls-right">
+            <button
+              className="insights-editor-action insights-new-post-action"
+              onClick={openNewPostEditor}
+              type="button"
+              title="Create a new post"
+            >
+              <Icon icon="mdi:plus" width={17} height={17} />
+              New Post
+            </button>
             <select
               className="insights-sort-select"
               value={sortOption}
