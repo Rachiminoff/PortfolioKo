@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
+import { supabase } from "../lib/supabase";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
@@ -39,6 +40,9 @@ interface CodeComponentProps {
 
 type SortOption = "newest" | "oldest" | "az" | "za" | "custom";
 
+// Get password from environment
+const BLOG_PASSWORD = process.env.REACT_APP_BLOG_PASSWORD || "blog123";
+
 // Number of articles to load per batch
 const ARTICLES_PER_BATCH = 5;
 
@@ -73,46 +77,15 @@ function Insights({ onClose }: InsightsProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Post editor state
-  const [editorPost, setEditorPost] = useState<BlogPost | null>(null);
-  const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [editorMode, setEditorMode] = useState<"rich" | "markdown">("rich");
-  const [editorContent, setEditorContent] = useState("");
-  const [editorForm, setEditorForm] = useState({
-    title: "",
-    slug: "",
-    excerpt: "",
-    thumbnail: "",
-    cover_image: "",
-    category: "",
-    tags: "",
-    reading_time: "",
-    published: true,
-    featured: false,
-    display_order: 0,
-  });
-  const [editorSaving, setEditorSaving] = useState(false);
-  const [editorError, setEditorError] = useState("");
-  const editorRef = useRef<HTMLDivElement>(null);
-  const editorInitializedRef = useRef(false);
-
   // Progressive loading state
   const [visibleCount, setVisibleCount] = useState(ARTICLES_PER_BATCH);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // Verify the HTTP-only admin session on the server.
+  // Check if already unlocked
   useEffect(() => {
-    let cancelled = false;
-    fetch("/api/blog/auth", { credentials: "include" })
-      .then(response => response.json())
-      .then(result => {
-        if (!cancelled) setIsUnlocked(result.valid === true);
-      })
-      .catch(() => {
-        if (!cancelled) setIsUnlocked(false);
-      });
-    return () => { cancelled = true; };
+    const unlocked = localStorage.getItem("blogUnlocked") === "true";
+    setIsUnlocked(unlocked);
   }, []);
 
   // Load continue reading from localStorage
@@ -173,17 +146,19 @@ function Insights({ onClose }: InsightsProps) {
 
   const fetchPosts = async () => {
     setLoading(true);
-    try {
-      const response = await fetch("/api/blog/posts", { credentials: "include" });
-      const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Unable to load posts.");
-      setPosts(result.data || []);
-    } catch (error) {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("published", true)
+      .order("display_order", { ascending: false })
+      .order("created_at", { ascending: false });
+
+    if (error) {
       console.error("Error fetching posts:", error);
-      setPosts([]);
-    } finally {
-      setLoading(false);
+    } else {
+      setPosts(data || []);
     }
+    setLoading(false);
   };
 
   const handleUnlock = async (e: React.FormEvent) => {
@@ -191,33 +166,22 @@ function Insights({ onClose }: InsightsProps) {
     setPasswordError(false);
     setIsLoading(true);
 
-    try {
-      const response = await fetch("/api/blog/auth", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ password }),
-      });
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        setPasswordError(true);
-        setPassword("");
-        return;
-      }
-
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    if (password === BLOG_PASSWORD) {
+      localStorage.setItem("blogUnlocked", "true");
       setIsUnlocked(true);
       setPassword("");
-    } catch {
-      setPasswordError(true);
-      setPassword("");
-    } finally {
       setIsLoading(false);
+    } else {
+      setPasswordError(true);
+      setIsLoading(false);
+      setPassword("");
     }
   };
 
   const filteredAndSortedPosts = useMemo(() => {
-    let items = posts.filter(post => post.published !== false);
+    let items = [...posts];
 
     if (selectedCategory !== "all") {
       items = items.filter(item => 
@@ -320,233 +284,6 @@ function Insights({ onClose }: InsightsProps) {
       month: 'long',
       day: 'numeric'
     });
-  };
-
-  const slugify = (value: string) =>
-    value
-      .toLowerCase()
-      .trim()
-      .replace(/['"]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-
-  const estimateReadingTime = (value: string) => {
-    const words = value.replace(/[#>*_`[\]()]/g, " ").trim().split(/\s+/).filter(Boolean).length;
-    return `${Math.max(1, Math.ceil(words / 200))} min read`;
-  };
-
-  const htmlToMarkdown = (html: string) => {
-    const doc = new DOMParser().parseFromString(html, "text/html");
-
-    const convert = (node: Node): string => {
-      if (node.nodeType === Node.TEXT_NODE) {
-        return node.textContent || "";
-      }
-      if (node.nodeType !== Node.ELEMENT_NODE) return "";
-
-      const el = node as HTMLElement;
-      const inner = Array.from(el.childNodes).map(convert).join("");
-      const tag = el.tagName.toLowerCase();
-
-      switch (tag) {
-        case "h1": return `# ${inner.trim()}\n\n`;
-        case "h2": return `## ${inner.trim()}\n\n`;
-        case "h3": return `### ${inner.trim()}\n\n`;
-        case "h4": return `#### ${inner.trim()}\n\n`;
-        case "h5": return `##### ${inner.trim()}\n\n`;
-        case "h6": return `###### ${inner.trim()}\n\n`;
-        case "p": return `${inner.trim()}\n\n`;
-        case "strong":
-        case "b": return `**${inner.trim()}**`;
-        case "em":
-        case "i": return `*${inner.trim()}*`;
-        case "del":
-        case "s": return `~~${inner.trim()}~~`;
-        case "code": return `\`${inner}\``;
-        case "pre": return `\`\`\`\n${el.textContent || ""}\n\`\`\`\n\n`;
-        case "blockquote": return `> ${inner.trim().replace(/\n+/g, "\n> ")}\n\n`;
-        case "ul": return `${Array.from(el.children).map(li => `- ${convert(li).trim()}`).join("\n")}\n\n`;
-        case "ol": return `${Array.from(el.children).map((li, i) => `${i + 1}. ${convert(li).trim()}`).join("\n")}\n\n`;
-        case "li": return inner;
-        case "br": return "\n";
-        case "hr": return "\n---\n\n";
-        case "a": {
-          const href = el.getAttribute("href") || "";
-          return href ? `[${inner.trim()}](${href})` : inner;
-        }
-        case "img": {
-          const src = el.getAttribute("src") || "";
-          const alt = el.getAttribute("alt") || "";
-          return src ? `![${alt}](${src})` : "";
-        }
-        case "div":
-        case "section":
-        case "article": return `${inner.trim()}\n\n`;
-        default: return inner;
-      }
-    };
-
-    return convert(doc.body).replace(/\n{3,}/g, "\n\n").trim();
-  };
-
-  const markdownToHtml = (markdown: string) => {
-    const escape = (value: string) =>
-      value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-    return markdown
-      .split(/\n{2,}/)
-      .map(block => {
-        const trimmed = block.trim();
-        if (!trimmed) return "";
-        if (/^```[\s\S]*```$/.test(trimmed)) {
-          return `<pre><code>${escape(trimmed.replace(/^```[^\n]*\n?/, "").replace(/```$/, ""))}</code></pre>`;
-        }
-        if (/^#{1,6}\s/.test(trimmed)) {
-          const match = trimmed.match(/^(#{1,6})\s+(.+)$/);
-          return match ? `<h${match[1].length}>${escape(match[2])}</h${match[1].length}>` : `<p>${escape(trimmed)}</p>`;
-        }
-        if (/^>\s/.test(trimmed)) return `<blockquote>${escape(trimmed.replace(/^>\s?/gm, ""))}</blockquote>`;
-        if (/^(?:-\s|\*\s)/m.test(trimmed)) {
-          return `<ul>${trimmed.split("\n").map(line => `<li>${escape(line.replace(/^(?:-\s|\*\s)/, ""))}</li>`).join("")}</ul>`;
-        }
-        if (/^\d+\.\s/m.test(trimmed)) {
-          return `<ol>${trimmed.split("\n").map(line => `<li>${escape(line.replace(/^\d+\.\s/, ""))}</li>`).join("")}</ol>`;
-        }
-
-        let html = escape(trimmed).replace(/\n/g, "<br>");
-        html = html
-          .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-          .replace(/__(.+?)__/g, "<strong>$1</strong>")
-          .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, "<em>$1</em>")
-          .replace(/`([^`\n]+)`/g, "<code>$1</code>")
-          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-        return `<p>${html}</p>`;
-      })
-      .join("");
-  };
-
-  const openNewPostEditor = () => {
-    setEditorPost(null);
-    setEditorMode("rich");
-    setEditorContent("");
-    setEditorForm({
-      title: "",
-      slug: "",
-      excerpt: "",
-      thumbnail: "",
-      cover_image: "",
-      category: "",
-      tags: "",
-      reading_time: "1 min read",
-      published: true,
-      featured: false,
-      display_order: 0,
-    });
-    setEditorError("");
-    setIsEditorOpen(true);
-  };
-
-  const openEditPostEditor = (post: BlogPost) => {
-    setEditorPost(post);
-    setEditorMode("rich");
-    setEditorContent(post.content || "");
-    setEditorForm({
-      title: post.title || "",
-      slug: post.slug || "",
-      excerpt: post.excerpt || "",
-      thumbnail: post.thumbnail || "",
-      cover_image: post.cover_image || "",
-      category: post.category || "",
-      tags: (post.tags || []).join(", "),
-      reading_time: post.reading_time || estimateReadingTime(post.content || ""),
-      published: post.published !== false,
-      featured: !!post.featured,
-      display_order: post.display_order || 0,
-    });
-    setEditorError("");
-    setIsEditorOpen(true);
-  };
-
-  useEffect(() => {
-    if (!isEditorOpen || editorMode !== "rich") {
-      editorInitializedRef.current = false;
-      return;
-    }
-
-    if (!editorInitializedRef.current && editorRef.current) {
-      editorRef.current.innerHTML = markdownToHtml(editorContent);
-      editorInitializedRef.current = true;
-    }
-  }, [isEditorOpen, editorMode, editorContent]);
-
-  const switchEditorMode = (mode: "rich" | "markdown") => {
-    if (mode === editorMode) return;
-    const nextContent = editorMode === "rich"
-      ? htmlToMarkdown(editorRef.current?.innerHTML || "")
-      : editorContent;
-    setEditorContent(nextContent);
-    setEditorMode(mode);
-  };
-
-  const formatRichText = (command: string, value?: string) => {
-    editorRef.current?.focus();
-    document.execCommand(command, false, value);
-  };
-
-  const handleEditorSave = async () => {
-    setEditorError("");
-    const content = editorMode === "rich"
-      ? htmlToMarkdown(editorRef.current?.innerHTML || "")
-      : editorContent;
-
-    const title = editorForm.title.trim();
-    const slug = (editorForm.slug.trim() || slugify(title));
-    if (!title || !slug || !content.trim()) {
-      setEditorError("Title, slug, and content are required.");
-      return;
-    }
-
-    setEditorSaving(true);
-    const payload = {
-      title,
-      slug,
-      excerpt: editorForm.excerpt.trim(),
-      content,
-      thumbnail: editorForm.thumbnail.trim(),
-      cover_image: editorForm.cover_image.trim(),
-      category: editorForm.category.trim(),
-      tags: editorForm.tags.split(",").map(tag => tag.trim()).filter(Boolean),
-      reading_time: editorForm.reading_time.trim() || estimateReadingTime(content),
-      published: editorForm.published,
-      featured: editorForm.featured,
-      display_order: Number(editorForm.display_order) || 0,
-      updated_at: new Date().toISOString(),
-    };
-
-    try {
-      const response = await fetch(
-        editorPost ? `/api/blog/posts?id=${editorPost.id}` : "/api/blog/posts",
-        {
-          method: editorPost ? "PATCH" : "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(payload),
-        }
-      );
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || "Unable to save the post.");
-      }
-
-      setIsEditorOpen(false);
-      await fetchPosts();
-    } catch (error) {
-      console.error("Error saving post:", error);
-      setEditorError(error instanceof Error ? error.message : "Unable to save the post.");
-    }
-
-    setEditorSaving(false);
   };
 
   const handleCardClick = (post: BlogPost) => {
@@ -865,14 +602,6 @@ function Insights({ onClose }: InsightsProps) {
                 </button>
                 
                 <div className="insights-reader-actions">
-                    <button
-                      className="insights-editor-action"
-                      onClick={() => openEditPostEditor(selectedPost)}
-                      title="Edit article"
-                    >
-                      <Icon icon="mdi:pencil-outline" width={17} height={17} />
-                      Edit
-                    </button>
                   <button className="insights-reader-share-btn" onClick={handleShare}>
                     <Icon icon="mdi:share-outline" width={18} height={18} />
                     Share
@@ -989,15 +718,6 @@ function Insights({ onClose }: InsightsProps) {
           </div>
 
           <div className="insights-controls-right">
-            <button
-              className="insights-editor-action insights-new-post-action"
-              onClick={openNewPostEditor}
-              type="button"
-              title="Create a new post"
-            >
-              <Icon icon="mdi:plus" width={17} height={17} />
-              New Post
-            </button>
             <select
               className="insights-sort-select"
               value={sortOption}
@@ -1228,129 +948,6 @@ function Insights({ onClose }: InsightsProps) {
           </>
         )}
       </div>
-
-      {isEditorOpen && (
-        <div className="insights-editor-overlay" role="dialog" aria-modal="true" aria-label={editorPost ? "Edit post" : "Create post"}>
-          <div className="insights-editor-modal">
-            <div className="insights-editor-header">
-              <div>
-                <span className="insights-editor-eyebrow">{editorPost ? "EDITOR" : "NEW ARTICLE"}</span>
-                <h2>{editorPost ? "Edit post" : "Create a new post"}</h2>
-              </div>
-              <button className="insights-editor-close" onClick={() => setIsEditorOpen(false)} aria-label="Close editor">
-                <Icon icon="mdi:close" width={22} height={22} />
-              </button>
-            </div>
-
-            {editorError && <div className="insights-editor-error">{editorError}</div>}
-
-            <div className="insights-editor-fields">
-              <label>
-                <span>Title</span>
-                <input
-                  value={editorForm.title}
-                  onChange={e => {
-                    const title = e.target.value;
-                    setEditorForm(prev => ({
-                      ...prev,
-                      title,
-                      slug: editorPost ? prev.slug : slugify(title)
-                    }));
-                  }}
-                  placeholder="Post title"
-                />
-              </label>
-              <label>
-                <span>Slug</span>
-                <input value={editorForm.slug} onChange={e => setEditorForm(prev => ({ ...prev, slug: e.target.value }))} placeholder="post-slug" />
-              </label>
-              <label className="insights-editor-full">
-                <span>Excerpt</span>
-                <textarea value={editorForm.excerpt} onChange={e => setEditorForm(prev => ({ ...prev, excerpt: e.target.value }))} rows={3} placeholder="Short description shown on cards" />
-              </label>
-              <label>
-                <span>Category</span>
-                <input value={editorForm.category} onChange={e => setEditorForm(prev => ({ ...prev, category: e.target.value }))} placeholder="Development" />
-              </label>
-              <label>
-                <span>Tags <small>comma separated</small></span>
-                <input value={editorForm.tags} onChange={e => setEditorForm(prev => ({ ...prev, tags: e.target.value }))} placeholder="React, Supabase, Notes" />
-              </label>
-              <label>
-                <span>Thumbnail URL</span>
-                <input value={editorForm.thumbnail} onChange={e => setEditorForm(prev => ({ ...prev, thumbnail: e.target.value }))} />
-              </label>
-              <label>
-                <span>Cover image URL</span>
-                <input value={editorForm.cover_image} onChange={e => setEditorForm(prev => ({ ...prev, cover_image: e.target.value }))} />
-              </label>
-              <label>
-                <span>Reading time</span>
-                <input value={editorForm.reading_time} onChange={e => setEditorForm(prev => ({ ...prev, reading_time: e.target.value }))} placeholder="5 min read" />
-              </label>
-              <label>
-                <span>Display order</span>
-                <input type="number" value={editorForm.display_order} onChange={e => setEditorForm(prev => ({ ...prev, display_order: Number(e.target.value) }))} />
-              </label>
-            </div>
-
-            <div className="insights-editor-content">
-              <div className="insights-editor-content-header">
-                <div className="insights-editor-mode">
-                  <button className={editorMode === "rich" ? "active" : ""} onClick={() => switchEditorMode("rich")}>Rich Text</button>
-                  <button className={editorMode === "markdown" ? "active" : ""} onClick={() => switchEditorMode("markdown")}>Markdown</button>
-                </div>
-                {editorMode === "rich" && (
-                  <div className="insights-editor-toolbar">
-                    <button onClick={() => formatRichText("formatBlock", "H2")} title="Heading">H</button>
-                    <button onClick={() => formatRichText("bold")} title="Bold"><strong>B</strong></button>
-                    <button onClick={() => formatRichText("italic")} title="Italic"><em>I</em></button>
-                    <button onClick={() => formatRichText("formatBlock", "BLOCKQUOTE")} title="Quote">❝</button>
-                    <button onClick={() => formatRichText("insertUnorderedList")} title="Bulleted list">•</button>
-                    <button onClick={() => formatRichText("insertOrderedList")} title="Numbered list">1.</button>
-                    <button onClick={() => {
-                      const url = window.prompt("Link URL");
-                      if (url) formatRichText("createLink", url);
-                    }} title="Link">↗</button>
-                    <button onClick={() => formatRichText("removeFormat")} title="Clear formatting">Tx</button>
-                  </div>
-                )}
-              </div>
-
-              {editorMode === "rich" ? (
-                <div
-                  ref={editorRef}
-                  className="insights-rich-editor"
-                  contentEditable
-                  suppressContentEditableWarning
-                  onInput={e => setEditorContent((e.currentTarget as HTMLDivElement).innerText)}
-                  data-placeholder="Write your article here..."
-                />
-              ) : (
-                <textarea
-                  className="insights-markdown-editor"
-                  value={editorContent}
-                  onChange={e => setEditorContent(e.target.value)}
-                  placeholder={"# Your article\n\nWrite Markdown here..."}
-                  spellCheck={false}
-                />
-              )}
-            </div>
-
-            <div className="insights-editor-options">
-              <label><input type="checkbox" checked={editorForm.published} onChange={e => setEditorForm(prev => ({ ...prev, published: e.target.checked }))} /> Published</label>
-              <label><input type="checkbox" checked={editorForm.featured} onChange={e => setEditorForm(prev => ({ ...prev, featured: e.target.checked }))} /> Featured</label>
-            </div>
-
-            <div className="insights-editor-footer">
-              <button className="insights-editor-cancel" onClick={() => setIsEditorOpen(false)}>Cancel</button>
-              <button className="insights-editor-save" onClick={handleEditorSave} disabled={editorSaving}>
-                {editorSaving ? "Saving..." : editorPost ? "Save Changes" : "Publish Post"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
