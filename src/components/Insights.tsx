@@ -456,6 +456,8 @@ function Insights({ onClose }: InsightsProps) {
     if (isEditorOpen && editorMode === "rich" && editorRef.current) {
       editorRef.current.innerHTML = markdownToHtml(editorContent);
     }
+  // editorContent intentionally omitted: updating it on every keystroke would reset the contentEditable DOM/caret.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditorOpen, editorMode]);
 
   const switchEditorMode = (mode: "rich" | "markdown") => {
@@ -921,6 +923,14 @@ function Insights({ onClose }: InsightsProps) {
             </p>
           </div>
           <div className="insights-hero-metadata">
+            <button
+              type="button"
+              className="insights-new-post-button"
+              onClick={openNewPostEditor}
+            >
+              <Icon icon="mdi:plus" width={16} height={16} />
+              New Post
+            </button>
             <span className="insights-hero-metadata-item">
               <Icon icon="mdi:book-open-variant" width={14} height={14} />
               {stats.total} {stats.total === 1 ? 'writing' : 'writings'}
@@ -1282,7 +1292,7 @@ function Insights({ onClose }: InsightsProps) {
                   className="insights-rich-editor"
                   contentEditable
                   suppressContentEditableWarning
-                  onInput={e => setEditorContent((e.currentTarget as HTMLDivElement).innerText)}
+                  onInput={e => setEditorContent(htmlToMarkdown((e.currentTarget as HTMLDivElement).innerHTML))}
                   data-placeholder="Write your article here..."
                 />
               ) : (
