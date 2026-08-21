@@ -47,6 +47,15 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
     'CONNECTED'
   ], []);
 
+  const quantumLines = useMemo(() => [
+    [50, 50, 8, 18], [50, 50, 18, 7], [50, 50, 31, 12], [50, 50, 44, 5],
+    [50, 50, 58, 10], [50, 50, 72, 5], [50, 50, 86, 18], [50, 50, 94, 34],
+    [50, 50, 91, 53], [50, 50, 82, 77], [50, 50, 67, 91], [50, 50, 49, 95],
+    [50, 50, 31, 90], [50, 50, 16, 78], [50, 50, 6, 58], [50, 50, 12, 37],
+    [50, 50, 27, 25], [50, 50, 64, 23], [50, 50, 78, 38], [50, 50, 70, 66],
+    [50, 50, 35, 72], [50, 50, 24, 51], [50, 50, 61, 50], [50, 50, 42, 34]
+  ], []);
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Random glitch effect
@@ -147,6 +156,32 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
       
       {/* Glow effect */}
       <div className="boot-glow" />
+
+      {/* Quantum state visualization */}
+      <div className="boot-quantum-field" aria-hidden="true">
+        <div className="boot-quantum-grid" />
+        <div className="boot-quantum-orbit boot-quantum-orbit-a" />
+        <div className="boot-quantum-orbit boot-quantum-orbit-b" />
+        <svg className="boot-quantum-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          {quantumLines.map(([x1, y1, x2, y2], index) => (
+            <line
+              key={`quantum-line-${index}`}
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              className="boot-quantum-line"
+              style={{ animationDelay: `${index * -0.11}s` }}
+            />
+          ))}
+        </svg>
+        <div className="boot-quantum-core">
+          <span />
+        </div>
+        {Array.from({ length: 14 }, (_, index) => (
+          <i key={`quantum-node-${index}`} className="boot-quantum-node" style={{ '--node-index': index } as React.CSSProperties} />
+        ))}
+      </div>
       
       {/* Content */}
       <div className={`boot-content ${glitchActive ? 'boot-glitch-active' : ''}`}>
