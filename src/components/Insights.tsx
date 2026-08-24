@@ -1299,6 +1299,18 @@ function Insights({ onClose }: InsightsProps) {
                       const url = window.prompt("Link URL");
                       if (url) formatRichText("createLink", url);
                     }} title="Link">↗</button>
+                    <button onClick={() => {
+                      const url = window.prompt("Image URL");
+                      if (!url) return;
+                      const alt = window.prompt("Image description / caption (optional)") || "";
+                      document.execCommand("insertImage", false, url.trim());
+                      const selection = window.getSelection();
+                      const image = selection?.anchorNode?.parentElement?.querySelector('img:last-of-type') as HTMLImageElement | null;
+                      if (image && alt) image.alt = alt;
+                      if (editorRef.current) {
+                        setEditorContent(htmlToMarkdown(editorRef.current.innerHTML));
+                      }
+                    }} title="Insert image" aria-label="Insert image">🖼</button>
                     <button onClick={() => formatRichText("removeFormat")} title="Clear formatting">Tx</button>
                   </div>
                 )}
