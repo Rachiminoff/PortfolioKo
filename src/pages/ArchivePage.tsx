@@ -2,7 +2,6 @@ import React, { Suspense, lazy, useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useArchive } from '../hooks/useArchive';
-
 import './styles/ArchivePage.scss';
 
 // Lazy load components
