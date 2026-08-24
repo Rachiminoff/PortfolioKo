@@ -158,7 +158,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       icon: 'mdi:folder-lock',
       title: 'Vault',
       description: 'Personal files and hidden content',
-      metadata: '38 Files',
       color: '#6366f1',
       featured: true,
     },
@@ -167,7 +166,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       icon: 'mdi:notebook',
       title: 'Insights',
       description: 'Technical articles and writings',
-      metadata: '12 Articles',
       color: '#8b5cf6',
       featured: false,
     },
@@ -176,7 +174,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       icon: 'mdi:star-four-points',
       title: 'Wish Archive',
       description: 'Genshin Impact wish history',
-      metadata: '1,247 Wishes',
       color: '#f9b55d',
       featured: false,
     },
@@ -185,7 +182,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       icon: 'mdi:book-open-variant',
       title: 'AdaShima Stats',
       description: 'Light novel statistics',
-      metadata: '8 Volumes',
       color: '#818cf8',
       featured: false,
     },
@@ -269,15 +265,11 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
         <div className="archive-header-content">
           <div className="archive-header-badge">
             <span className="badge-dot" />
-            <span>Private</span>
-            <span className="badge-divider" />
-            <span>Encrypted</span>
-            <span className="badge-divider" />
-            <span>4 Collections</span>
+            <span>Private workspace</span>
           </div>
           <h1 className="archive-header-title">Archive</h1>
           <p className="archive-header-description">
-            Private digital workspace
+            A personal space for projects, records, writing, and things worth keeping
           </p>
           <div className="archive-header-actions">
             <button
@@ -296,8 +288,8 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       {/* Collections */}
       <section className="archive-collections">
         <div className="archive-collections-header">
-          <h2 className="archive-collections-title">Collections</h2>
-          <p className="archive-collections-subtitle">Access your private workspaces</p>
+          <h2 className="archive-collections-title">Explore the archive</h2>
+          <p className="archive-collections-subtitle">Choose a space to continue where you left off</p>
         </div>
 
         <div className="archive-dashboard-grid">
@@ -337,9 +329,8 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
               <h3 className="archive-card-title">{card.title}</h3>
               <p className="archive-card-description">{card.description}</p>
               <div className="archive-card-footer">
-                <span className="archive-card-metadata">{card.metadata}</span>
                 <span className="archive-card-action">
-                  Open
+                  Open space
                   <Icon icon="mdi:arrow-right" />
                 </span>
               </div>
@@ -353,9 +344,9 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       <footer className="archive-footer">
         <div className="archive-footer-divider" />
         <div className="archive-footer-content">
-          <p className="archive-footer-title">Archive Workspace</p>
+          <p className="archive-footer-title">Personal archive</p>
           <p className="archive-footer-description">
-            Additional collections and tools will appear as the archive expands.
+            A growing collection of work, records, and things worth revisiting.
           </p>
         </div>
         <div className="archive-footer-divider" />
