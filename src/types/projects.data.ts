@@ -14,6 +14,18 @@ import ledger01 from '../assets/images/ll1.png';
 import ledger02 from '../assets/images/ll2.png';
 import ledger03 from '../assets/images/ll3.png';
 
+export const PROJECT_STATUSES = ['Active', 'Archived', 'In Development', 'Completed'] as const;
+export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
+
+export const PROJECT_CATEGORIES = ['Mobile App', 'Web App', 'Web Platform', 'Game', 'Automation Tool'] as const;
+export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
+
+export interface ProjectHighlight {
+  icon: string;
+  title: string;
+  description: string;
+}
+
 export interface Project {
   id: number;
   title: string;
@@ -21,7 +33,8 @@ export interface Project {
   subtitle: string;
   role: string;
   featured: boolean;
-  status: 'Active' | 'Archived' | 'In Development' | 'Completed';
+  status: ProjectStatus;
+  category: ProjectCategory;
   duration: string;
   link: string;
   description: string;
@@ -34,11 +47,7 @@ export interface Project {
   itchLink?: string;
   architecture?: string;
   devNotes: string[];
-  highlights: {
-    icon: string;
-    title: string;
-    description: string;
-  }[];
+  highlights: ProjectHighlight[];
 }
 
 export const projectsData: Project[] = [
@@ -50,6 +59,7 @@ export const projectsData: Project[] = [
     role: "Lead Developer",
     featured: true,
     status: "Active",
+    category: "Mobile App",
     duration: "4 months",
     link: "https://github.com/Skabeez/UniQuest",
     images: [uniq00, uniq01, uniq02, uniq03],
@@ -111,6 +121,7 @@ export const projectsData: Project[] = [
     role: "Sole Developer",
     featured: false,
     status: "Completed",
+    category: "Automation Tool",
     duration: "2 months",
     link: "https://github.com/Rachiminoff/Webnovel-Extractor",
     video: "https://www.youtube.com/embed/Zclw7GV7w7I",
@@ -175,6 +186,7 @@ export const projectsData: Project[] = [
     role: "Co-Developer",
     featured: true,
     status: "Active",
+    category: "Game",
     duration: "2 months",
     link: "https://github.com/Rachiminoff/FREEFREEFREE",
     itchLink: "https://daeowob.itch.io/free-free-free",
@@ -236,6 +248,7 @@ export const projectsData: Project[] = [
     role: "Co-Developer",
     featured: false,
     status: "Archived",
+    category: "Mobile App",
     duration: "2 months",
     link: "https://github.com/Rachiminoff/Wais_Wallet",
     liveDemo: "https://wais-wallet.vercel.app",
@@ -298,6 +311,7 @@ export const projectsData: Project[] = [
   role: "Sole Developer",
   featured: true,
   status: "Active",
+  category: "Web App",
   duration: "2 weeks",
   link: "https://github.com/Rachiminoff/LedgerLeaf",
   liveDemo: "https://ledgerleaf.onrender.com/",
@@ -355,6 +369,71 @@ export const projectsData: Project[] = [
       description: "Generate PDF and Excel reports alongside detailed transaction histories for deeper financial analysis and record keeping."
     }
     ]
+  },
+  {
+    id: 6,
+    title: "Loreboard",
+    slug: "loreboard",
+    subtitle: "A multilingual, data-driven archive and reference platform for cataloguing a slice-of-life media franchise across novels, manga, music, and community translations.",
+    role: "Sole Developer",
+    featured: false,
+    status: "Active",
+    category: "Web Platform",
+    duration: "Ongoing",
+    link: "",
+    description: "A static-first reference site that organizes an expansive fandom catalogue — novels, manga, gallery art, music, and translated extras — into a fast, fully searchable, bilingual experience.",
+    overview: "Loreboard is a static-first archive and reference site built to catalogue an expansive body of fandom content: light novels, manga, gallery illustrations, music, statistics, and community-translated extras. Rather than scattering this information across forums and file shares, the project centralizes it into a single, structured, and searchable experience available in both English and Spanish.\n\nThe site deliberately avoids a heavyweight frontend framework. Each major section is its own HTML entry point, with page-specific JavaScript fetching structured JSON at runtime and rendering it into the DOM. This keeps the site lightweight and fast while making content updates as simple as editing a JSON file rather than touching markup or logic.\n\nBecause catalogue accuracy matters as much as presentation, the project ships with an extensive Python and Playwright-driven QA suite that validates every declared data entry — including full bilingual coverage of the music library — alongside browser-based interaction tests and performance checks, giving confidence that new content doesn't silently break existing pages.",
+    features: [
+      "Structured, JSON-driven catalogue covering novels, manga, music, gallery art, and translated extras",
+      "Bilingual content delivery (English and Spanish) with shared data conventions across locales",
+      "Static, framework-free architecture using vanilla HTML, CSS, and JavaScript for speed and simplicity",
+      "Multi-page Vite build pipeline with runtime-loaded JSON and shared HTML components",
+      "Exhaustive automated QA suite covering static data validation, browser interactions, and performance",
+      "Search, filtering, and favoriting across the music and reading libraries",
+      "Clean-URL routing via Cloudflare Pages redirects for a traditional multi-page site",
+      "Clear separation between content (JSON) and presentation (JS/CSS) for low-cost catalogue updates"
+    ],
+    tech: [
+      "JavaScript",
+      "HTML5",
+      "CSS3",
+      "Vite",
+      "Python",
+      "Playwright",
+      "ESLint",
+      "Prettier"
+    ],
+    architecture: "HTML Page → Shared Components (menu/footer) → Page JavaScript → fetch() → JSON Data → DOM Render\n\nLoreboard follows a deliberately simple, static-first architecture with no frontend framework or client-side router. Each major site section is its own HTML entry point under a pages directory, paired with page-specific JavaScript and styles.\n\nContent lives entirely in structured JSON rather than hard-coded markup. Page scripts fetch the relevant JSON at runtime and render it into the DOM, so routine catalogue changes only require editing data files, not application code.\n\nShared UI such as the navigation menu, footer, and feedback widget is factored into reusable HTML/JS components to avoid duplicating site-wide behavior across pages.\n\nVite serves as the development server and production build tool, using multi-page build support to register each HTML entry point as a separate build target. A custom runtime-copy plugin ensures JSON data, shared HTML fragments, and Cloudflare Pages configuration are carried into the final build output, since some assets are loaded dynamically rather than through Vite's module graph.\n\nThe site deploys as a static build to Cloudflare Pages, with clean URLs resolved through redirect rules. A separate Python and Playwright-based QA harness builds the site, serves it locally, and runs static, browser, and performance checks before changes are considered safe to ship.",
+    devNotes: [
+      "Keeping the frontend framework-free kept the site fast and let each page stay independently simple to reason about.",
+      "Centralizing all catalogue content in JSON made large-scale content additions a data task rather than a code task.",
+      "Bilingual support required consistent field naming across locale files so shared rendering logic could serve both languages.",
+      "The QA suite was built to be exhaustive rather than representative — every music track, for example, is validated in both supported languages.",
+      "Vite's multi-page build mode was a good fit for preserving a traditional page-per-section structure while still getting modern tooling.",
+      "Future iterations could add a lightweight content-authoring workflow to further reduce the friction of routine catalogue updates."
+    ],
+    highlights: [
+      {
+        icon: "mdi:book-multiple",
+        title: "Unified Fandom Catalogue",
+        description: "Brings novels, manga, gallery art, music, and translated extras together into one structured, browsable archive."
+      },
+      {
+        icon: "mdi:translate",
+        title: "Bilingual by Design",
+        description: "Serves English and Spanish content from shared data conventions, keeping both locales consistent as the catalogue grows."
+      },
+      {
+        icon: "mdi:speedometer",
+        title: "Static-First Performance",
+        description: "A framework-free, JSON-driven architecture keeps pages lightweight, fast, and simple to deploy on Cloudflare Pages."
+      },
+      {
+        icon: "mdi:test-tube",
+        title: "Exhaustive Automated QA",
+        description: "A Python and Playwright test harness validates catalogue data, page interactions, and performance before every release."
+      }
+    ]
   }
 ];
 
@@ -362,3 +441,23 @@ export const projectsData: Project[] = [
 export const generateSlug = (title: string): string => {
   return title.toLowerCase().replace(/\s+/g, '-');
 };
+
+// Look up a single project by its slug (e.g. for a /projects/:slug route)
+export const getProjectBySlug = (slug: string): Project | undefined =>
+  projectsData.find((project) => project.slug === slug);
+
+// Projects flagged for prominent display (e.g. on the homepage)
+export const getFeaturedProjects = (): Project[] =>
+  projectsData.filter((project) => project.featured);
+
+// Filter projects by their current status
+export const getProjectsByStatus = (status: ProjectStatus): Project[] =>
+  projectsData.filter((project) => project.status === status);
+
+// Filter projects by category (Mobile App, Web App, Game, etc.)
+export const getProjectsByCategory = (category: ProjectCategory): Project[] =>
+  projectsData.filter((project) => project.category === category);
+
+// Deduplicated, alphabetized list of every technology used across all projects
+export const getAllTechnologies = (): string[] =>
+  Array.from(new Set(projectsData.flatMap((project) => project.tech))).sort();
