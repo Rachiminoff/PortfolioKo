@@ -150,3 +150,25 @@
     font-size: 1.1rem;
   }
 }
+// =========================
+// SWISS DARK VISUAL SYSTEM
+// =========================
+.vault-page {
+  background: #0b0d10;
+  color: #f4f1e8;
+  .vault-page-header { border-bottom: 1px solid #303841; padding: 1.25rem 0; }
+  .vault-page-header h1 { color: #f4f1e8; background: none; -webkit-text-fill-color: initial; font-weight: 900; letter-spacing: -.065em; text-transform: uppercase; }
+  .vault-page-header p { color: #9da3ad; }
+  .vault-back-button, button { border-radius: 0; border: 1px solid #303841; background: transparent; color: #f4f1e8; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+  .vault-back-button:hover, button:hover { background: #f4c430; color: #0b0d10; border-color: #f4c430; }
+}
+
+
+/* Bauhaus × Swiss page finish */
+.vault-page {
+  background:#07151d;
+  color:#f4ead4;
+  min-height:100vh;
+}
+.vault-page h1, .vault-page h2, .vault-page h3, .vault-page p, .vault-page label, .vault-page span { text-shadow:none; }
+.vault-page button, .vault-page input, .vault-page select { color:#f4ead4; }

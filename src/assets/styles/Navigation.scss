@@ -1,663 +1,326 @@
-// ========== VARIABLES ==========
-$cyan: #2dd4bf;
-$cyan-dim: rgba(45, 212, 191, 0.06);
-$cyan-glow: rgba(45, 212, 191, 0.08);
-$black: #0f0f0f;
-$dark: #181818;
-$gray-dark: #222222;
-$gray: #2c2c2c;
-$gray-medium: #3a3a3a;
-$white: #f5f5f5;
-$white-dim: rgba(255, 255, 255, 0.92);
-$white-muted: rgba(255, 255, 255, 0.7);
-$white-faint: rgba(255, 255, 255, 0.5);
-$border-solid: rgba(255, 255, 255, 0.12);
-$border-medium: rgba(255, 255, 255, 0.2);
-$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-$font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+// Bauhaus × Swiss navigation system
+$ink: #07151d;
+$paper: #f1e7d2;
+$red: #ed3424;
+$yellow: #f5b91b;
+$blue: #174b80;
+$green: #3d704e;
+$line: rgba(241, 231, 210, .28);
+$muted: rgba(241, 231, 210, .66);
+$nav-height: 76px;
 
-// ==========================================
-// Variables
-// ==========================================
-$navbar-height: 64px;
-$navbar-height-mobile: 56px;
-$navbar-bg: rgba(15, 15, 15, 0.92);
-$navbar-bg-scrolled: rgba(15, 15, 15, 0.97);
-$navbar-border: rgba(255, 255, 255, 0.08);
-$navbar-shadow-scrolled: 0 4px 40px rgba(0, 0, 0, 0.5);
-
-$text-primary: $white;
-$text-secondary: $white-faint;
-$text-hover: $white;
-$accent-color: $cyan;
-
-$button-bg-hover: rgba(255, 255, 255, 0.04);
-$button-bg-active: rgba(45, 212, 191, 0.06);
-
-$transition-smooth: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-$transition-spring: 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-$transition-drawer: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-
-// ==========================================
-// Container
-// ==========================================
 .navigation-container {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto;
   z-index: 1100;
+  pointer-events: none;
 }
 
-// ==========================================
-// Navbar
-// ==========================================
 .navbar {
   position: fixed !important;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: $navbar-height;
-  background: $navbar-bg !important;
-  backdrop-filter: blur(16px) saturate(1.2);
-  -webkit-backdrop-filter: blur(16px) saturate(1.2);
-  border-bottom: 1px solid transparent;
-  transition: all $transition-smooth;
-  box-shadow: none;
+  inset: 0 0 auto;
+  height: $nav-height;
+  background: $ink !important;
+  border-bottom: 2px solid $paper;
+  box-shadow: none !important;
+  pointer-events: auto;
+  transition: background .25s ease, border-color .25s ease;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+  }
+
+  // A cropped geometric composition sits behind the navigation, like a poster margin.
+  &::before {
+    width: 170px;
+    height: 170px;
+    right: 9%;
+    top: -110px;
+    background: $red;
+    transform: rotate(45deg);
+    opacity: .95;
+  }
+
+  &::after {
+    width: 64px;
+    height: 64px;
+    right: 4%;
+    bottom: -34px;
+    border-radius: 50%;
+    background: $yellow;
+  }
 
   &.scrolled {
-    background: $navbar-bg-scrolled !important;
-    border-bottom: 1px solid $navbar-border;
-    box-shadow: $navbar-shadow-scrolled;
+    background: darken($ink, 2%) !important;
+    border-bottom-color: $red;
   }
 
-  // ==========================================
-  // Toolbar
-  // ==========================================
   .navbar-toolbar {
-    height: $navbar-height;
-    min-height: $navbar-height;
-    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+    height: $nav-height;
+    min-height: $nav-height;
+    padding: 0 34px;
     display: flex;
+    align-items: stretch;
     justify-content: space-between;
-    align-items: center;
 
-    @media (max-width: 600px) {
-      height: $navbar-height-mobile;
-      min-height: $navbar-height-mobile;
-      padding: 0 16px;
-    }
-
-    @media (max-width: 400px) {
-      padding: 0 12px;
+    @media (max-width: 700px) {
+      height: 64px;
+      min-height: 64px;
+      padding: 0 18px;
     }
   }
 
-  // ==========================================
-  // Brand/Logo
-  // ==========================================
   .navbar-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: $text-primary;
+    min-width: 155px;
+    color: $paper;
     text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    letter-spacing: 0.02em;
-    transition: all $transition-smooth;
-    font-family: $font-mono;
+    font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 900;
+    letter-spacing: -.06em;
+    text-transform: uppercase;
+
+    &::before {
+      content: '';
+      width: 13px;
+      height: 13px;
+      margin-right: 12px;
+      background: $yellow;
+      border-radius: 50%;
+      box-shadow: 9px 0 0 $red;
+    }
 
     .navbar-brand-name {
-      color: $text-primary;
-      letter-spacing: 0.04em;
-      font-weight: 500;
-
-      @media (max-width: 600px) {
-        font-size: 0.9rem;
-      }
-
-      @media (max-width: 400px) {
-        font-size: 0.85rem;
-      }
-    }
-
-    &:hover {
-      opacity: 0.7;
+      color: $paper;
+      line-height: 1;
     }
   }
 
-  // ==========================================
-  // Desktop Navigation Items
-  // ==========================================
   .nav-items-desktop {
-    display: none;
-    gap: 2px;
-    align-items: center;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
 
-    @media (min-width: 601px) {
-      display: flex;
+    @media (max-width: 900px) {
+      display: none;
     }
   }
 
-  // ==========================================
-  // Navigation Button
-  // ==========================================
   .nav-button {
     position: relative;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 18px;
+    min-width: 92px;
+    min-height: $nav-height;
+    padding: 0 14px;
+    border: 0;
+    border-left: 1px solid $line;
     border-radius: 0;
-    color: $text-secondary;
-    font-size: 0.7rem;
-    font-weight: 400;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    transition: all $transition-smooth;
     background: transparent;
-    border: 1px solid transparent;
-    min-height: 36px;
-    font-family: $font-mono;
+    color: $muted;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 5px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: .67rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    transition: color .2s ease, background .2s ease;
 
     .nav-button-icon {
-      font-size: 1rem;
-      opacity: 0.3;
-      transition: all $transition-smooth;
+      display: none;
     }
 
     .nav-button-label {
       position: relative;
-      transition: all $transition-smooth;
+      z-index: 1;
     }
 
-    &:hover {
-      color: $text-hover;
-      background: $button-bg-hover;
-      border-color: $navbar-border;
-
-      .nav-button-icon {
-        opacity: 0.6;
-      }
+    &::before {
+      content: '';
+      width: 18px;
+      height: 3px;
+      background: $muted;
+      transition: width .2s ease, background .2s ease;
     }
 
+    &:hover,
     &.active {
-      color: $text-hover;
-      background: $button-bg-active;
-      border-color: rgba(45, 212, 191, 0.08);
+      color: $ink;
+      background: $paper;
 
-      .nav-button-icon {
-        opacity: 0.9;
-        color: $accent-color;
+      &::before {
+        width: 34px;
+        background: $red;
       }
+    }
 
-      &::after {
-        content: '';
-        position: absolute;
-        bottom: 4px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 20px;
-        height: 1px;
-        background: $accent-color;
-        transition: all $transition-smooth;
-      }
+    &.active::after {
+      content: '';
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      background: $red;
+      border-radius: 50%;
     }
 
     &:focus-visible {
-      outline: 1px solid $accent-color;
-      outline-offset: 2px;
-    }
-
-    @media (min-width: 601px) and (max-width: 1024px) {
-      padding: 6px 14px;
-      font-size: 0.65rem;
-      gap: 6px;
-      min-height: 32px;
-
-      .nav-button-icon {
-        font-size: 0.9rem;
-      }
+      outline: 3px solid $yellow;
+      outline-offset: -3px;
     }
   }
 
-  // ==========================================
-  // Mobile Hamburger Button
-  // ==========================================
   .mobile-menu-button {
-    display: flex !important;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 40px;
-    height: 40px;
+    display: none !important;
+    width: 46px;
+    height: 46px;
+    align-self: center;
     padding: 0;
-    border: 1px solid transparent;
-    background: transparent;
-    cursor: pointer;
-    position: relative;
+    border: 1px solid $paper;
+    border-radius: 0;
+    background: $red;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 5px;
-    transition: all $transition-smooth;
 
-    @media (min-width: 601px) {
-      display: none !important;
-    }
-
-    &:hover {
-      border-color: $navbar-border;
+    @media (max-width: 900px) {
+      display: flex !important;
     }
 
     .hamburger-line {
-      display: block;
-      width: 20px;
-      height: 1.5px;
-      background: $text-primary;
-      transition: all $transition-smooth;
-      transform-origin: center;
-      position: relative;
-      opacity: 0.6;
-
-      &:nth-child(1) {
-        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                    opacity 0.2s ease;
-      }
-
-      &:nth-child(2) {
-        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                    opacity 0.2s ease;
-      }
-
-      &:nth-child(3) {
-        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-      }
+      width: 22px;
+      height: 2px;
+      background: $paper;
+      transition: transform .2s ease, opacity .2s ease;
     }
 
-    // Open state - Animate to X
     &.open {
-      .hamburger-line {
-        opacity: 1;
-        
-        &:nth-child(1) {
-          transform: translateY(6.5px) rotate(45deg);
-        }
-
-        &:nth-child(2) {
-          opacity: 0;
-          transform: scaleX(0);
-        }
-
-        &:nth-child(3) {
-          transform: translateY(-6.5px) rotate(-45deg);
-        }
-      }
-    }
-
-    &:hover {
-      .hamburger-line {
-        opacity: 1;
-      }
-    }
-
-    &:active {
-      transform: scale(0.95);
-    }
-
-    &:focus-visible {
-      outline: 1px solid $accent-color;
-      outline-offset: 2px;
+      .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .hamburger-line:nth-child(2) { opacity: 0; }
+      .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
     }
   }
 }
 
-// ==========================================
-// Drawer Overlay
-// ==========================================
-.drawer-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1199;
-  animation: fadeIn 0.3s ease-out;
+.mobile-drawer .MuiDrawer-paper,
+.drawer-paper {
+  width: min(360px, 88vw) !important;
+  background: $paper !important;
+  color: $ink;
+  border-left: 10px solid $red;
+  border-radius: 0 !important;
 }
 
-// ==========================================
-// Mobile Drawer
-// ==========================================
-.mobile-drawer {
-  .drawer-paper {
-    width: 300px;
-    max-width: 85vw;
-    background: $black !important;
-    border-left: 1px solid $navbar-border;
-    box-shadow: -8px 0 60px rgba(0, 0, 0, 0.6);
-    overflow: hidden;
-    animation: slideInRight 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+.navigation-drawer {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background:
+    linear-gradient(135deg, transparent 0 78%, $yellow 78% 86%, transparent 86%),
+    $paper;
 
-    @media (max-width: 400px) {
-      width: 260px;
-    }
-  }
-
-  // ==========================================
-  // Drawer Content
-  // ==========================================
-  .navigation-drawer {
+  .drawer-header {
     display: flex;
-    flex-direction: column;
-    height: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 22px 20px;
+    border-bottom: 2px solid $ink;
+  }
+
+  .drawer-brand-name {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: -.07em;
+    text-transform: uppercase;
+  }
+
+  .drawer-close-button {
+    border: 1px solid $ink;
+    border-radius: 0;
+    color: $ink;
+  }
+
+  .drawer-divider { display: none; }
+
+  .drawer-list {
     padding: 0;
-
-    // ==========================================
-    // Drawer Header
-    // ==========================================
-    .drawer-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 24px 16px;
-      flex-shrink: 0;
-
-      @media (max-width: 400px) {
-        padding: 16px 20px 12px;
-      }
-
-      .drawer-brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        color: $text-primary;
-
-        .drawer-brand-name {
-          font-family: $font-mono;
-          font-size: 1rem;
-          font-weight: 500;
-          color: $text-primary;
-          letter-spacing: 0.04em;
-
-          @media (max-width: 400px) {
-            font-size: 0.9rem;
-          }
-        }
-      }
-
-      .drawer-close-button {
-        color: $text-secondary;
-        padding: 8px;
-        transition: all $transition-smooth;
-        border: 1px solid transparent;
-
-        &:hover {
-          color: $text-hover;
-          background: $button-bg-hover;
-          border-color: $navbar-border;
-        }
-
-        &:active {
-          transform: scale(0.9);
-        }
-
-        &:focus-visible {
-          outline: 1px solid $accent-color;
-          outline-offset: 2px;
-        }
-
-        .MuiSvgIcon-root {
-          font-size: 1.3rem;
-        }
-      }
-    }
-
-    // ==========================================
-    // Drawer Divider
-    // ==========================================
-    .drawer-divider {
-      background: $navbar-border;
-      margin: 0 24px 8px;
-      flex-shrink: 0;
-    }
-
-    // ==========================================
-    // Drawer List
-    // ==========================================
-    .drawer-list {
-      padding: 8px 12px;
-      flex: 1;
-      overflow-y: auto;
-
-      .drawer-list-item {
-        padding: 2px 0;
-        animation: slideInItem 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        opacity: 0;
-        transform: translateX(20px);
-
-        @for $i from 1 through 10 {
-          &:nth-child(#{$i}) {
-            animation-delay: #{$i * 0.05}s;
-          }
-        }
-
-        // ==========================================
-        // Drawer Button
-        // ==========================================
-        .drawer-button {
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          padding: 12px 16px;
-          color: $text-secondary;
-          transition: all $transition-smooth;
-          position: relative;
-          width: 100%;
-          min-height: 48px;
-          border-radius: 0;
-          border: 1px solid transparent;
-
-          @media (max-width: 400px) {
-            padding: 10px 14px;
-            min-height: 44px;
-          }
-
-          .drawer-item-icon {
-            font-size: 1.2rem;
-            opacity: 0.3;
-            transition: all $transition-smooth;
-            width: 24px;
-            text-align: center;
-            flex-shrink: 0;
-
-            @media (max-width: 400px) {
-              font-size: 1rem;
-            }
-          }
-
-          .drawer-item-text {
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            color: inherit;
-            transition: all $transition-smooth;
-            font-family: $font-mono;
-
-            .MuiTypography-root {
-              font-weight: 400;
-            }
-
-            @media (max-width: 400px) {
-              font-size: 0.8rem;
-            }
-          }
-
-          .drawer-item-indicator {
-            position: absolute;
-            right: 12px;
-            width: 2px;
-            height: 20px;
-            background: $accent-color;
-            opacity: 0;
-            transition: all $transition-smooth;
-          }
-
-          // Hover state
-          &:hover {
-            color: $text-hover;
-            background: $button-bg-hover;
-            border-color: $navbar-border;
-
-            .drawer-item-icon {
-              opacity: 0.6;
-            }
-          }
-
-          // Active state
-          &.active {
-            color: $text-hover;
-            background: $button-bg-active;
-            border-color: rgba(45, 212, 191, 0.08);
-
-            .drawer-item-icon {
-              opacity: 0.9;
-              color: $accent-color;
-            }
-
-            .drawer-item-text {
-              font-weight: 500;
-            }
-
-            .drawer-item-indicator {
-              opacity: 1;
-            }
-
-            &::before {
-              content: '';
-              position: absolute;
-              left: 0;
-              top: 50%;
-              transform: translateY(-50%);
-              width: 2px;
-              height: 24px;
-              background: $accent-color;
-            }
-          }
-
-          // Focus state
-          &:focus-visible {
-            outline: 1px solid $accent-color;
-            outline-offset: -2px;
-          }
-        }
-      }
-    }
-
-    // ==========================================
-    // Drawer Footer
-    // ==========================================
-    .drawer-footer {
-      padding: 20px 24px;
-      border-top: 1px solid $navbar-border;
-      flex-shrink: 0;
-
-      .drawer-footer-text {
-        font-family: $font-mono;
-        font-size: 0.65rem;
-        color: $text-secondary;
-        opacity: 0.25;
-        letter-spacing: 0.04em;
-      }
-
-      @media (max-width: 400px) {
-        padding: 16px 20px;
-      }
-    }
-  }
-}
-
-// ==========================================
-// Animations
-// ==========================================
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-@keyframes slideInItem {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-// ==========================================
-// Reduced Motion Preferences
-// ==========================================
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    margin: 0;
   }
 
-  .drawer-overlay {
-    animation: none;
-  }
-
-  .mobile-drawer .drawer-paper {
-    animation: none;
-  }
-
-  .navigation-drawer .drawer-list .drawer-list-item {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-}
-
-// ==========================================
-// Touch Device Optimizations
-// ==========================================
-@media (hover: none) and (pointer: coarse) {
-  .nav-button {
-    &:hover {
-      transform: none !important;
-    }
-  }
+  .drawer-list-item { border-bottom: 1px solid rgba(7, 21, 29, .2); }
 
   .drawer-button {
-    &:hover {
-      transform: none !important;
+    position: relative;
+    min-height: 64px;
+    padding: 0 22px;
+    border-radius: 0;
+    color: $ink;
+    gap: 14px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+
+    .drawer-item-icon { color: $blue; }
+    .drawer-item-text { margin: 0; }
+
+    &:hover,
+    &.active {
+      background: $blue;
+      color: $paper;
+      .drawer-item-icon { color: $yellow; }
     }
+  }
+
+  .drawer-item-indicator {
+    width: 10px;
+    height: 10px;
+    margin-left: auto;
+    border-radius: 50%;
+    background: $red;
+  }
+
+  .drawer-footer {
+    margin-top: auto;
+    padding: 20px 22px;
+    border-top: 2px solid $ink;
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
   }
 }
 
-// ==========================================
-// Print
-// ==========================================
-@media print {
-  .navigation-container {
-    display: none !important;
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1099;
+  background: rgba(7, 21, 29, .72);
+  pointer-events: auto;
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    height: 64px;
+    .navbar-toolbar { height: 64px; min-height: 64px; }
+    .navbar-brand { min-width: 0; font-size: 1rem; }
   }
 }
+
+/* Bauhaus × Swiss navbar: readable contrast and clear hierarchy */
+.navbar { background:#07151d; color:#f4ead4; border-bottom:2px solid #f4ead4; }
+.navbar a, .navbar button, .navbar-brand, .navbar-link { color:#f4ead4 !important; }
+.navbar a:hover, .navbar button:hover, .navbar-link:hover { color:#07151d !important; background:#f5b719; }
+.navbar .active, .navbar .active-link { color:#07151d !important; background:#f4ead4; }

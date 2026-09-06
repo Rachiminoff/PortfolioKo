@@ -3531,3 +3531,10 @@
   .insights-rich-editor,
   .insights-markdown-editor { min-height: 38dvh !important; padding: 14px !important; }
 }
+
+// Swiss dark system — integrated component treatment
+.insights-container { background:#0b0b0b; color:#f2f0e8; }
+.insights-reader-hero,.insights-lock-screen { border-radius:0; border:1px solid rgba(242,240,232,.4); background:#151515; }
+.insights-reader-hero-title { text-transform:uppercase; letter-spacing:-.06em; font-weight:900; }
+.insights-reader-category-badge,.insights-reader-tag-badge { border-radius:0; background:#e63946; color:#0b0b0b; }
+.insights-unlock-btn { border-radius:0; background:#0b8fd3; color:#0b0b0b; }

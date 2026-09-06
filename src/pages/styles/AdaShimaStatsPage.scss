@@ -2068,3 +2068,31 @@
     }
   }
 }
+// =========================
+// SWISS DARK VISUAL SYSTEM
+// =========================
+.adashima-stats-page {
+  background: #0b0d10;
+  color: #f4f1e8;
+  .stats-header { border-bottom: 1px solid #303841; padding: 1.25rem 0; }
+  .stats-nav { background: #12161b; border: 1px solid #303841; border-radius: 0; backdrop-filter: none; }
+  .stats-nav-item { border-radius: 0; color: #9da3ad; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+  .stats-nav-item.active { background: #f4c430; color: #0b0d10; }
+  .stats-back-button, button { border-radius: 0; border: 1px solid #303841; background: transparent; color: #f4f1e8; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+  .stats-back-button:hover, button:hover { background: #f4c430; color: #0b0d10; border-color: #f4c430; }
+  .dashboard-card, .chart-card, .compare-card, .volume-card, .achievement-card, .funfact-card { background: #12161b; border: 1px solid #303841; border-radius: 0; box-shadow: 8px 8px 0 rgba(0,0,0,.25); backdrop-filter: none; }
+  .dashboard-card:hover, .volume-card:hover { transform: translate(-3px,-3px); border-color: #f4f1e8; }
+  .dashboard-card-title, .section-title, .chart-title, .volume-card-title { color: #f4f1e8; font-weight: 800; }
+  .hero-stat-value, .dashboard-card-value, .gap-stat-value { color: #f4c430; font-weight: 900; }
+  .stats-footer { border-top: 1px solid #303841; }
+}
+
+
+/* Bauhaus × Swiss page finish */
+.adashima-stats-page {
+  background:#07151d;
+  color:#f4ead4;
+  min-height:100vh;
+}
+.adashima-stats-page h1, .adashima-stats-page h2, .adashima-stats-page h3, .adashima-stats-page p, .adashima-stats-page label, .adashima-stats-page span { text-shadow:none; }
+.adashima-stats-page button, .adashima-stats-page input, .adashima-stats-page select { color:#f4ead4; }

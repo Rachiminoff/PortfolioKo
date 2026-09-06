@@ -786,3 +786,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     display: none !important;
   }
 }
+// Swiss dark system — integrated component treatment
+.timeline-section { background:#0b0b0b; color:#f2f0e8; }
+.timeline-container,.timeline-wrapper { border-radius:0; }
+.section-title { text-transform:uppercase; letter-spacing:-.06em; font-weight:900; }
+.timeline-progress-track { border-radius:0; background:#242424; }
+.timeline-progress-fill { border-radius:0; background:#e63946; }

@@ -1208,3 +1208,39 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   .archive-card-icon { width: 42px; height: 42px; margin-bottom: 1rem; border-radius: 12px; }
   .archive-card-footer { padding-top: 1.1rem; }
 }
+
+// =========================
+// SWISS DARK VISUAL SYSTEM
+// Integrated into the page stylesheet (not an override stylesheet).
+// =========================
+.archive-page {
+  background: #0b0d10;
+  color: #f4f1e8;
+  isolation: isolate;
+
+  .archive-container { max-width: 1200px; }
+  .archive-header { border-bottom: 1px solid #303841; padding: 1.25rem 0; }
+  .archive-header-title { color: #f4f1e8; font-weight: 900; letter-spacing: -.065em; text-transform: uppercase; }
+  .archive-header-description { color: #9da3ad; }
+  .archive-card, .archive-dashboard-card { background: #12161b; border: 1px solid #303841; border-radius: 0; box-shadow: 8px 8px 0 rgba(0,0,0,.25); backdrop-filter: none; }
+  .archive-card:hover, .archive-dashboard-card:hover { transform: translate(-3px,-3px); border-color: #f4f1e8; }
+  .archive-card-title, .dashboard-card-title, .section-title { color: #f4f1e8; font-weight: 800; letter-spacing: -.035em; }
+  .archive-card-icon, .dashboard-card-icon, .category-count { color: #f4c430; }
+  .archive-header-badge { background: #ff3b30; border: 0; border-radius: 0; color: #fff; }
+  .archive-home-button, .archive-auth-button, .tab-nav-item { border-radius: 0; border: 1px solid #303841; background: transparent; color: #f4f1e8; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+  .archive-home-button:hover, .archive-auth-button:hover, .tab-nav-item.active { background: #f4c430; color: #0b0d10; border-color: #f4c430; }
+  .archive-auth-content, .archive-dashboard-card { background: #12161b; }
+  input, select, .volume-search-input, .archive-auth-input { border-radius: 0; background: #0b0d10; border: 1px solid #303841; color: #f4f1e8; }
+  .category-bar-fill, .volume-progress-fill, .translation-item-progress { background: #ff3b30; }
+  .archive-footer { border-top: 1px solid #303841; background: transparent; }
+}
+
+
+/* Bauhaus × Swiss page finish */
+.archive-page {
+  background:#07151d;
+  color:#f4ead4;
+  min-height:100vh;
+}
+.archive-page h1, .archive-page h2, .archive-page h3, .archive-page p, .archive-page label, .archive-page span { text-shadow:none; }
+.archive-page button, .archive-page input, .archive-page select { color:#f4ead4; }

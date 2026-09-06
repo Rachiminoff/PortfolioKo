@@ -2741,3 +2741,31 @@
     }
   }
 }
+// =========================
+// SWISS DARK VISUAL SYSTEM
+// =========================
+.wish-archive-page {
+  background: #0b0d10;
+  color: #f4f1e8;
+  .wish-archive-header { border-bottom: 1px solid #303841; padding: 1.25rem 0; }
+  .wish-hero-title { color: #f4f1e8; background: none; -webkit-text-fill-color: initial; font-weight: 900; letter-spacing: -.065em; text-transform: uppercase; }
+  .wish-hero-subtitle { color: #9da3ad; }
+  .wish-card, .wish-chart-card, .wish-hero-stat, .wish-stat-premium, .wish-fun-fact-featured, .wish-fun-fact-premium, .wish-yearly-card, .wish-timeline-entry-content { background: #12161b; border: 1px solid #303841; border-radius: 0; box-shadow: 8px 8px 0 rgba(0,0,0,.25); backdrop-filter: none; }
+  .wish-card:hover { transform: translate(-3px,-3px); border-color: #f4f1e8; }
+  .wish-card-name, .wish-chart-title, .wish-stats-group-title, .wish-timeline-entry-name { color: #f4f1e8; font-weight: 800; }
+  .wish-back-button, .wish-sort-select, button { border-radius: 0; border: 1px solid #303841; background: transparent; color: #f4f1e8; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+  .wish-back-button:hover, button:hover { background: #f4c430; color: #0b0d10; border-color: #f4c430; }
+  .wish-hero-badge { background: #ff3b30; border: 0; border-radius: 0; color: #fff; }
+  .animated-counter-value, .wish-stat-premium-value { color: #f4c430; font-weight: 900; }
+  .wish-progress-ring { background: #ff3b30; }
+}
+
+
+/* Bauhaus × Swiss page finish */
+.wish-archive-page {
+  background:#07151d;
+  color:#f4ead4;
+  min-height:100vh;
+}
+.wish-archive-page h1, .wish-archive-page h2, .wish-archive-page h3, .wish-archive-page p, .wish-archive-page label, .wish-archive-page span { text-shadow:none; }
+.wish-archive-page button, .wish-archive-page input, .wish-archive-page select { color:#f4ead4; }

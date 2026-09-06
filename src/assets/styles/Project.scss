@@ -1011,3 +1011,10 @@ $space-4xl: 80px;
         color: #666 !important;
     }
 }
+// Swiss dark system — integrated component treatment
+.project-card,.project-card-content { border-radius:0; }
+.project-card { background:#151515; border:1px solid rgba(242,240,232,.4); box-shadow:8px 8px 0 #e63946; }
+.project-card:hover { box-shadow:8px 8px 0 #0b8fd3; }
+.project-number { color:#f2c94c; }
+.project-title { text-transform:uppercase; letter-spacing:-.05em; font-weight:900; }
+.tech-tag { border-radius:0; background:#f2f0e8; color:#0b0b0b; }

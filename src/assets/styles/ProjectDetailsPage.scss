@@ -1837,3 +1837,9 @@ $space-4xl: 80px;
     min-width: 80px;
   }
 }
+// Swiss dark system — integrated component treatment
+.project-details-page { background:#0b0b0b; color:#f2f0e8; }
+.toc-container,.figure-wrapper,.tech-category { border-radius:0; border:1px solid rgba(242,240,232,.4); background:#151515; }
+.toc-number,.figure-label { color:#e63946; }
+.figure-nav { border-radius:0; background:#f2f0e8; color:#0b0b0b; }
+.tech-category-title { text-transform:uppercase; letter-spacing:.08em; }

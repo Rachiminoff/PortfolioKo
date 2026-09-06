@@ -529,3 +529,9 @@ $space-4xl: 80px;
     display: none !important;
   }
 }
+// Swiss dark system — integrated component treatment
+.modal-overlay { background:rgba(0,0,0,.82); }
+.modal-container { border:2px solid #f2f0e8; border-radius:0; background:#0b0b0b; color:#f2f0e8; box-shadow:12px 12px 0 #e63946; }
+.modal-header { border-bottom:1px solid rgba(242,240,232,.4); }
+.modal-control-btn { border-radius:0; }
+.modal-control-btn:hover { background:#f2c94c; color:#0b0b0b; }

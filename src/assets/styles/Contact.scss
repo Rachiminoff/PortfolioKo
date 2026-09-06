@@ -1219,3 +1219,10 @@ textarea::-webkit-scrollbar-thumb:hover {
     display: none !important;
   }
 }
+// Swiss dark system — integrated component treatment
+.contact-container { background:#0b0b0b; color:#f2f0e8; }
+.contact-grid { gap:0; }
+.contact-info,.contact-form { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; }
+.contact-header,.header-tag { text-transform:uppercase; letter-spacing:.08em; }
+.contact-detail-item { border-bottom:1px solid rgba(242,240,232,.25); border-radius:0; }
+.copy-button,.contact-submit { border-radius:0; background:#e63946; color:#0b0b0b; }

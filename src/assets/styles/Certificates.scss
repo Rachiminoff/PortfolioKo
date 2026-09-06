@@ -673,3 +673,9 @@ $cert-colors: (
     }
   }
 }
+// Swiss dark system — integrated component treatment
+.certificates { background:#0b0b0b; color:#f2f0e8; }
+.certificates__title { text-transform:uppercase; letter-spacing:-.06em; font-weight:900; }
+.certificates__card { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; box-shadow:6px 6px 0 #0b8fd3; }
+.certificates__card:hover { border-color:#e63946; box-shadow:6px 6px 0 #e63946; }
+.certificates__card-tag { border-radius:0; background:#f2f0e8; color:#0b0b0b; }

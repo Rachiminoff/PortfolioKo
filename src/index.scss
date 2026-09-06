@@ -1055,3 +1055,195 @@ body.hide-navbar .navbar-container,
 body.hide-navbar header.navbar {
   display: none !important;
 }
+
+/* ============================================
+   BAUHAUS BOOT SCREEN
+   Dark Swiss / Bauhaus loading treatment
+   ============================================ */
+.boot-screen {
+  background: #07131a;
+  color: #f2ead8;
+  isolation: isolate;
+  transition: opacity 500ms ease;
+}
+
+.boot-screen::before,
+.boot-screen::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+
+.boot-screen::before {
+  inset: 0;
+  background:
+    linear-gradient(90deg, transparent 0 49.8%, rgba(242,234,216,.08) 49.8% 50%, transparent 50%),
+    linear-gradient(0deg, transparent 0 49.8%, rgba(242,234,216,.08) 49.8% 50%, transparent 50%);
+  background-size: 25vw 25vh;
+  opacity: .32;
+}
+
+.boot-screen::after {
+  width: 42vw;
+  height: 42vw;
+  max-width: 620px;
+  max-height: 620px;
+  right: -12vw;
+  top: -14vw;
+  background: #e9362b;
+  border-radius: 50%;
+  box-shadow: -18vw 42vh 0 -8vw #f3bd24, -45vw 56vh 0 -12vw #17549a;
+  z-index: -1;
+}
+
+.boot-crt-curve,
+.boot-chromatic,
+.boot-scanlines,
+.boot-interlace,
+.boot-static,
+.boot-noise,
+.boot-vignette,
+.boot-tv-frame,
+.boot-glow,
+.boot-quantum-grid,
+.boot-quantum-orbit,
+.boot-quantum-lines,
+.boot-quantum-node { display: none !important; }
+
+.boot-quantum-field {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.boot-quantum-field::before,
+.boot-quantum-field::after {
+  content: '';
+  position: absolute;
+  display: block;
+}
+
+.boot-quantum-field::before {
+  width: 22vw;
+  height: 22vw;
+  left: 8vw;
+  bottom: 8vh;
+  background: #17549a;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transform: rotate(45deg);
+}
+
+.boot-quantum-field::after {
+  width: 12vw;
+  height: 12vw;
+  left: 23vw;
+  top: 14vh;
+  background: #f3bd24;
+  border-radius: 50%;
+  box-shadow: 8vw 22vh 0 0 #e9362b;
+}
+
+.boot-quantum-core {
+  position: absolute;
+  width: min(18vw, 230px);
+  height: min(18vw, 230px);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #f2ead8;
+  border-radius: 50%;
+  border: min(1.2vw, 18px) solid #07131a;
+  box-shadow: 0 0 0 min(2vw, 30px) #e9362b, 0 0 0 min(3.4vw, 52px) #17549a;
+}
+
+.boot-quantum-core span {
+  position: absolute;
+  width: 38%;
+  height: 38%;
+  left: 31%;
+  top: 31%;
+  background: #07131a;
+  border-radius: 50%;
+}
+
+.boot-content {
+  position: relative;
+  z-index: 3;
+  width: min(680px, 72vw);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 22px 40px;
+  align-items: end;
+  padding: 34px;
+  background: #07131a;
+  border: 2px solid #f2ead8;
+  box-shadow: 14px 14px 0 #e9362b, -14px -14px 0 #f3bd24;
+}
+
+.boot-brand { grid-column: 1 / -1; }
+.boot-channel,
+.boot-status,
+.boot-progress-percent,
+.boot-tuning {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.boot-channel { color: #f3bd24; margin-bottom: 8px; }
+.boot-brand-name {
+  display: block;
+  font-family: 'Archivo', Arial, sans-serif;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  line-height: .82;
+  letter-spacing: -.08em;
+  color: #f2ead8;
+}
+
+.boot-status-wrapper { display: flex; align-items: center; gap: 12px; }
+.boot-status { color: #f2ead8; }
+.boot-status-dot { width: 10px; height: 10px; background: #e9362b; display: block; }
+.boot-ellipsis span { animation: bootDot 1s steps(1) infinite; }
+.boot-ellipsis span:nth-child(2) { animation-delay: .2s; }
+.boot-ellipsis span:nth-child(3) { animation-delay: .4s; }
+@keyframes bootDot { 0%, 30% { opacity: 0; } 31%, 100% { opacity: 1; } }
+
+.boot-progress-wrapper {
+  grid-column: 1 / -1;
+  height: 24px;
+  border: 2px solid #f2ead8;
+  padding: 4px;
+}
+.boot-progress-bar { height: 100%; background: #e9362b !important; transition: width .08s linear; }
+.boot-progress-percent { color: #f3bd24; }
+.boot-tuning { color: #17549a; text-align: right; font-weight: 700; }
+
+@media (max-width: 640px) {
+  .boot-content { width: calc(100vw - 56px); padding: 24px; grid-template-columns: 1fr; gap: 18px; }
+  .boot-progress-percent, .boot-tuning { text-align: left; }
+  .boot-quantum-core { width: 34vw; height: 34vw; }
+}
+
+/* Global loading screen — Bauhaus × Swiss */
+.app-loading {
+  position:relative;
+  overflow:hidden;
+  background:#07151d !important;
+  color:#f4ead4 !important;
+  isolation:isolate;
+}
+.app-loading::before, .app-loading::after {
+  content:''; position:absolute; z-index:-1; pointer-events:none;
+}
+.app-loading::before { width:38vw; height:38vw; left:-12vw; top:-12vw; background:#e63329; border-radius:50%; }
+.app-loading::after { width:22vw; height:22vw; right:8vw; bottom:8vh; background:#f5b719; transform:rotate(45deg); }
+.app-loading .loading-spinner {
+  width:72px !important; height:72px !important; border:12px solid #f4ead4 !important;
+  border-top-color:#e63329 !important; border-right-color:#2457d6 !important;
+  border-radius:0 !important; transform:rotate(45deg); animation:bauhaus-load 1s linear infinite !important;
+}
+@keyframes bauhaus-load { to { transform:rotate(405deg); } }

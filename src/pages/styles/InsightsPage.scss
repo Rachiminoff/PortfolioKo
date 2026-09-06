@@ -219,3 +219,25 @@
     padding: 2rem;
   }
 }
+// =========================
+// SWISS DARK VISUAL SYSTEM
+// =========================
+.insights-page {
+  background: #0b0d10;
+  color: #f4f1e8;
+  .insights-back-button-container { border-bottom: 1px solid #303841; padding: 1.25rem 0; }
+  .insights-hero h1 { color: #f4f1e8; background: none; -webkit-text-fill-color: initial; font-weight: 900; letter-spacing: -.065em; text-transform: uppercase; }
+  .insights-hero p { color: #9da3ad; }
+  .insights-back-button, button { border-radius: 0; border: 1px solid #303841; background: transparent; color: #f4f1e8; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+  .insights-back-button:hover, button:hover { background: #f4c430; color: #0b0d10; border-color: #f4c430; }
+}
+
+
+/* Bauhaus × Swiss page finish */
+.insights-page {
+  background:#07151d;
+  color:#f4ead4;
+  min-height:100vh;
+}
+.insights-page h1, .insights-page h2, .insights-page h3, .insights-page p, .insights-page label, .insights-page span { text-shadow:none; }
+.insights-page button, .insights-page input, .insights-page select { color:#f4ead4; }
