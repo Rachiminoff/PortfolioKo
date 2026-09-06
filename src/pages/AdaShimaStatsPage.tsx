@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { supabase } from '../lib/supabase';
-import FullscreenLayout from '../layouts/FullscreenLayout';
 import './styles/AdaShimaStatsPage.scss';
 
 // Types
@@ -573,14 +572,12 @@ const AdaShimaStatsPage: React.FC = () => {
   // ---- LOADING STATE (after all hooks) ----
   if (loading) {
     return (
-      <FullscreenLayout>
-        <div className="adashima-stats-page loading">
-          <div className="stats-loading-state">
-            <div className="stats-loading-spinner" />
-            <p>Loading statistics...</p>
-          </div>
+      <div className="adashima-stats-page loading">
+        <div className="stats-loading-state">
+          <div className="stats-loading-spinner" />
+          <p>Loading statistics...</p>
         </div>
-      </FullscreenLayout>
+      </div>
     );
   }
 
@@ -602,8 +599,7 @@ const AdaShimaStatsPage: React.FC = () => {
 
   // ---- RENDER ----
   return (
-    <FullscreenLayout>
-      <div className={`adashima-stats-page ${isLoaded ? 'loaded' : ''}`}>
+    <div className={`adashima-stats-page ${isLoaded ? 'loaded' : ''}`}>
         {/* Background Effects */}
         <div className="stats-bg">
           <div className="stats-bg-gradient" />
@@ -1642,7 +1638,6 @@ const AdaShimaStatsPage: React.FC = () => {
           <p className="stats-footer-sub">Data sourced from the light novel series</p>
         </div>
       </div>
-    </FullscreenLayout>
   );
 };
 

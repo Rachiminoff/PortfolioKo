@@ -9,3 +9,57 @@
 .vault-page .vault-card,.vault-page .vault-item,.vault-page [class*="card"]{border-radius:0!important;box-shadow:none!important;border-color:var(--ink)!important;background:var(--paper)!important}
 .vault-page .vault-card:hover,.vault-page .vault-item:hover{background:var(--yellow)!important}
 @media(max-width:700px){.vault-page-header{width:calc(100% - 28px);padding-top:48px;align-items:flex-start;flex-direction:column}.vault-back-button{order:0}}
+
+
+/* Final shell repair: keep Vault's internal library layout intact. */
+.vault-page {
+  min-height:100vh !important;
+  background:#070707 !important;
+  color:#f5f5f5 !important;
+  overflow-x:hidden;
+}
+.vault-page:before { color:rgba(255,255,255,.28) !important; }
+.vault-page-header {
+  width:min(1400px,calc(100% - 40px)) !important;
+  margin:0 auto !important;
+  padding:18px 0 !important;
+  min-height:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:14px !important;
+  border-bottom:1px solid rgba(255,255,255,.08) !important;
+}
+.vault-page-header h1 {
+  margin:0 !important;
+  font:600 12px/1 'IBM Plex Mono',monospace !important;
+  letter-spacing:.12em !important;
+  text-transform:uppercase !important;
+  color:rgba(255,255,255,.55) !important;
+}
+.vault-page .vault-back-button {
+  order:0 !important;
+  padding:9px 12px !important;
+  background:#111 !important;
+  color:#f5f5f5 !important;
+  border-color:rgba(255,255,255,.16) !important;
+}
+.vault-page .vault-back-button:hover { background:#fff !important; color:#000 !important; }
+.vault-page .vault-container {
+  width:100% !important;
+  max-width:none !important;
+  background:transparent !important;
+}
+.vault-page .vault-header,
+.vault-page .vault-main {
+  width:min(1400px,calc(100% - 40px)) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+@media(max-width:700px){
+  .vault-page-header { width:calc(100% - 28px) !important; padding:12px 0 !important; }
+  .vault-page .vault-header,
+  .vault-page .vault-main { width:calc(100% - 28px) !important; }
+}

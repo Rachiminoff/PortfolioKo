@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { supabase } from '../lib/supabase';
-import FullscreenLayout from '../layouts/FullscreenLayout';
 import './styles/WishArchivePage.scss';
 
 interface WishCharacter {
@@ -1162,14 +1161,12 @@ const WishArchivePage: React.FC = () => {
 
   if (loading) {
     return (
-      <FullscreenLayout>
         <div className="wish-archive-page">
           <div className="wish-loading-state">
             <div className="wish-loading-spinner" />
             <p>Loading your journey...</p>
           </div>
         </div>
-      </FullscreenLayout>
     );
   }
 
@@ -1683,8 +1680,7 @@ const WishArchivePage: React.FC = () => {
   );
 
   return (
-    <FullscreenLayout>
-      <div className="wish-archive-page">
+    <div className="wish-archive-page">
         {/* Premium Background */}
         <div className="wish-bg">
           <div className="wish-bg-gradient" />
@@ -1749,7 +1745,6 @@ const WishArchivePage: React.FC = () => {
           />
         )}
       </div>
-    </FullscreenLayout>
   );
 };
 
