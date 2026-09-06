@@ -1261,8 +1261,10 @@ a{text-decoration:none}
 
 /* ============================================================
    BAUHAUS × SWISS / BLACK FIELD SYSTEM
-   All primary page surfaces are black. Color is reserved for
-   structure, navigation, emphasis, and interaction.
+   Structural accent colors (red/blue/yellow) are constants used
+   in both themes. Surface/text colors below are dark-theme only —
+   see LIGHT / DARK MODE and THEME CONTEXT SYSTEM further down for
+   the light-mode equivalents, which are the true default look.
    ============================================================ */
 :root {
   --bau-red: #ff3030;
@@ -1279,93 +1281,122 @@ a{text-decoration:none}
   --display: 'Archivo', 'Inter', Arial, sans-serif;
 }
 
-html, body, #root, .main-container {
-  background: #000 !important;
-}
-
-body {
-  color: var(--text-white) !important;
-}
-
-/* Keep the system visually black even where older component styles
-   still define a light surface. */
-.timeline-section,
-.expertise-container,
-.projects-container,
-.certificates,
-.contact-container,
-.footer-container,
-footer,
-.project-details-page {
-  background: #000 !important;
-}
-
-/* ============================================================
-   BLACK CANVAS — GLOBAL PORTFOLIO SURFACE
-   ============================================================ */
+/* Sensible pre-hydration fallback only (JS sets data-theme immediately
+   after mount, defaulting to dark — see App.tsx / Navigation.tsx). */
 html, body, #root {
-  background: #000 !important;
+  background: #000;
   color: #f5f5f5;
 }
 body {
   overflow-x: hidden;
 }
 
-/* Custom scrollbar */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #e6392f #000;
+body[data-theme='dark'] {
+  --swiss-paper: #000;
+  --swiss-ink: #f5f5f5;
 }
 
-::-webkit-scrollbar {
+html[data-theme='dark'],
+body[data-theme='dark'],
+body[data-theme='dark'] #root,
+body[data-theme='dark'] .main-container {
+  background: #000 !important;
+  color: var(--text-white) !important;
+}
+
+/* Keep the system visually black in dark mode even where older
+   component styles still define a light surface. */
+body[data-theme='dark'] .timeline-section,
+body[data-theme='dark'] .expertise-container,
+body[data-theme='dark'] .projects-container,
+body[data-theme='dark'] .certificates,
+body[data-theme='dark'] .contact-container,
+body[data-theme='dark'] .footer-container,
+body[data-theme='dark'] footer,
+body[data-theme='dark'] .project-details-page,
+body[data-theme='dark'] .archive-page,
+body[data-theme='dark'] .insights-page,
+body[data-theme='dark'] .vault-page,
+body[data-theme='dark'] .wish-archive-page,
+body[data-theme='dark'] .adashima-stats-page,
+body[data-theme='dark'] .archive-password-page,
+body[data-theme='dark'] .projects-page,
+body[data-theme='dark'] .history-section,
+body[data-theme='dark'] .expertise-section,
+body[data-theme='dark'] .certificates-section,
+body[data-theme='dark'] .contact-section {
+  background-color: #000 !important;
+}
+
+/* Custom scrollbar — dark theme */
+body[data-theme='dark'] * {
+  scrollbar-width: thin;
+  scrollbar-color: #ff3030 #000;
+}
+
+body[data-theme='dark']::-webkit-scrollbar,
+body[data-theme='dark'] *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-::-webkit-scrollbar-track {
+body[data-theme='dark']::-webkit-scrollbar-track,
+body[data-theme='dark'] *::-webkit-scrollbar-track {
   background: #000;
   border-left: 1px solid rgba(255,255,255,.12);
 }
 
-::-webkit-scrollbar-thumb {
-  background: #e6392f;
+body[data-theme='dark']::-webkit-scrollbar-thumb,
+body[data-theme='dark'] *::-webkit-scrollbar-thumb {
+  background: #ff3030;
   border: 2px solid #000;
   border-radius: 0;
   min-height: 48px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #f2c230;
+body[data-theme='dark']::-webkit-scrollbar-thumb:hover,
+body[data-theme='dark'] *::-webkit-scrollbar-thumb:hover {
+  background: #ffd21f;
 }
 
-::-webkit-scrollbar-corner {
+body[data-theme='dark']::-webkit-scrollbar-corner {
   background: #000;
 }
 
-/* Keep every page canvas black; component-level accent blocks remain intentional. */
-.archive-page,.insights-page,.vault-page,.wish-archive-page,.adashima-stats-page,
-.archive-password-page,.project-details-page,.projects-page,.history-section,
-.expertise-section,.certificates-section,.contact-section,
-footer,.footer-container {
-  background-color:#000 !important;
+/* Custom scrollbar — light theme (paper canvas) */
+body[data-theme='light'] * {
+  scrollbar-width: thin;
+  scrollbar-color: #e6392f #f2f0e8;
 }
 
-/* GLOBAL BLACK CANVAS + CUSTOM SCROLLBAR */
-html { background: #000 !important; }
-body, #root { background: #000 !important; color: #f5f5f5; }
-body {
-  scrollbar-width: thin;
-  scrollbar-color: #ff3030 #000;
+body[data-theme='light']::-webkit-scrollbar,
+body[data-theme='light'] *::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
-body::-webkit-scrollbar { width: 10px; height: 10px; }
-body::-webkit-scrollbar-track { background: #000; }
-body::-webkit-scrollbar-thumb {
-  background: #ff3030;
-  border: 2px solid #000;
-  min-height: 44px;
+
+body[data-theme='light']::-webkit-scrollbar-track,
+body[data-theme='light'] *::-webkit-scrollbar-track {
+  background: #f2f0e8;
+  border-left: 1px solid rgba(17,19,24,.12);
 }
-body::-webkit-scrollbar-thumb:hover { background: #ffd21f; }
-* { scrollbar-color: #ff3030 #000; scrollbar-width: thin; }
+
+body[data-theme='light']::-webkit-scrollbar-thumb,
+body[data-theme='light'] *::-webkit-scrollbar-thumb {
+  background: #e6392f;
+  border: 2px solid #f2f0e8;
+  border-radius: 0;
+  min-height: 48px;
+}
+
+body[data-theme='light']::-webkit-scrollbar-thumb:hover,
+body[data-theme='light'] *::-webkit-scrollbar-thumb:hover {
+  background: #f2c230;
+}
+
+body[data-theme='light']::-webkit-scrollbar-corner {
+  background: #f2f0e8;
+}
 
 /* ============================================================
    LIGHT / DARK MODE
@@ -1611,6 +1642,16 @@ body[data-theme='light'] .navbar .theme-toggle-button {
 body[data-theme='light'] .navbar .nav-button,
 body[data-theme='light'] .navbar .theme-toggle-button {
   border-left-color: rgba(17,19,24,.18) !important;
+}
+
+/* The hamburger icon and mobile drawer are paper-colored by default,
+   which disappears against a paper navbar in light mode. */
+body[data-theme='light'] .navbar .hamburger-line {
+  background: #111318 !important;
+}
+
+body[data-theme='light'] .drawer-overlay {
+  background: rgba(17,19,24,.45) !important;
 }
 
 body[data-theme='light'] .navbar .nav-button:hover,
@@ -2127,4 +2168,355 @@ body[data-theme='dark'] .wish-archive-page,
 body[data-theme='dark'] .adashima-stats-page {
   background-color: var(--page-bg) !important;
   color: var(--page-ink) !important;
+}
+
+/* ============================================================
+   LIGHT MODE — TARGETED FIXES
+   Several sections had unconditional dark styles (or class-name
+   mismatches) that never received a light-mode counterpart. These
+   rules are appended last and scoped tightly so they win the
+   cascade without touching the existing dark-theme behavior.
+   ============================================================ */
+
+/* ---- Terminal / About ---- */
+body[data-theme='light'] .terminal-section {
+  background: var(--ui-bg) !important;
+}
+
+body[data-theme='light'] .terminal-topbar {
+  background: var(--ui-surface-2) !important;
+  border-bottom-color: var(--ui-line) !important;
+}
+
+/* The About panel's real code-content class is `.terminal-content`,
+   not `.terminal-body` (that name belongs to the Timeline's mini
+   git terminal) — this was the missing piece keeping it black. */
+body[data-theme='light'] .terminal-content {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .terminal-content .white {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .terminal-content .gray {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .terminal-content .comma,
+body[data-theme='light'] .terminal-content .colon,
+body[data-theme='light'] .terminal-content .parens,
+body[data-theme='light'] .terminal-content .operator {
+  color: rgba(17, 19, 24, .4) !important;
+}
+
+body[data-theme='light'] .terminal-content .quote {
+  color: rgba(17, 19, 24, .3) !important;
+}
+
+body[data-theme='light'] .terminal-content .blue {
+  color: #2b5fd9 !important;
+}
+
+body[data-theme='light'] .terminal-content .cyan {
+  color: #0f8a8a !important;
+}
+
+body[data-theme='light'] .terminal-content .purple {
+  color: #7c5cd4 !important;
+}
+
+body[data-theme='light'] .terminal-content .yellow-text {
+  color: #a1650a !important;
+}
+
+body[data-theme='light'] .terminal-content .green-text,
+body[data-theme='light'] .terminal-content .output-arrow {
+  color: #15803d !important;
+}
+
+body[data-theme='light'] .terminal-content .brace {
+  color: rgba(21, 128, 61, .55) !important;
+}
+
+body[data-theme='light'] .about-badge {
+  color: var(--ui-faint) !important;
+}
+
+body[data-theme='light'] .about-line {
+  background: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .about-divider {
+  background: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .about-footer .footer-label,
+body[data-theme='light'] .about-footer .footer-divider {
+  color: var(--ui-faint) !important;
+}
+
+/* ---- Certificates ---- */
+body[data-theme='light'] .certificates__card-icon {
+  background: var(--ui-surface-2) !important;
+  border-color: var(--ui-line) !important;
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .certificates__card-tag {
+  background: var(--ui-surface-2) !important;
+  border-color: var(--ui-line) !important;
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .certificates__tag {
+  color: var(--ui-faint) !important;
+  border-bottom-color: var(--ui-line) !important;
+}
+
+/* ---- Contact form ---- */
+body[data-theme='light'] .contact-card .card-title {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .chips-label {
+  color: var(--ui-faint) !important;
+}
+
+body[data-theme='light'] .chip-item {
+  background: var(--ui-surface-2) !important;
+  color: var(--ui-muted) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .chip-item:hover {
+  background: var(--ui-surface-3) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-faint) !important;
+}
+
+body[data-theme='light'] .chip-selected {
+  background: rgba(24, 174, 190, .12) !important;
+  border-color: rgba(24, 174, 190, .4) !important;
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .form-field .MuiOutlinedInput-root {
+  background: var(--ui-input) !important;
+}
+
+body[data-theme='light'] .form-field .MuiOutlinedInput-notchedOutline {
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .form-field .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--ui-faint) !important;
+}
+
+body[data-theme='light'] .form-field .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #18aebe !important;
+}
+
+body[data-theme='light'] .form-field .MuiInputBase-input {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .form-field .MuiInputBase-input::placeholder {
+  color: var(--ui-faint) !important;
+  opacity: 1 !important;
+}
+
+body[data-theme='light'] .form-field .MuiInputLabel-root {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .form-field .MuiInputLabel-root.MuiInputLabel-shrink {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .form-field .MuiInputLabel-root.Mui-focused {
+  color: #18aebe !important;
+}
+
+body[data-theme='light'] .form-field .MuiFormHelperText-root {
+  color: var(--ui-faint) !important;
+}
+
+body[data-theme='light'] .alert-success,
+body[data-theme='light'] .alert-error {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .trust-indicator,
+body[data-theme='light'] .form-footer-text {
+  color: var(--ui-faint) !important;
+}
+
+/* ---- Timeline / History ---- */
+body[data-theme='light'] .vertical-timeline::before {
+  background: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .milestone-card .vertical-timeline-element-content,
+body[data-theme='light'] .vertical-timeline-element-content {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .milestone-card .vertical-timeline-element-content-arrow,
+body[data-theme='light'] .vertical-timeline-element-content-arrow {
+  border-right-color: var(--ui-surface) !important;
+}
+
+body[data-theme='light'] .vertical-timeline-element-icon {
+  background: var(--ui-surface-2) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .vertical-timeline-element-icon svg,
+body[data-theme='light'] .vertical-timeline-element-icon .svg-inline--fa {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .vertical-timeline-element-date.custom-date {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .milestone-title {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .milestone-year {
+  color: var(--ui-muted) !important;
+  background: var(--ui-surface-2) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .milestone-status {
+  color: var(--ui-faint) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .milestone-status-current {
+  border-color: #18aebe !important;
+  color: #0f8a8a !important;
+  background: rgba(24, 174, 190, .08) !important;
+}
+
+body[data-theme='light'] .milestone-status-future {
+  border-color: var(--ui-line) !important;
+  color: var(--ui-faint) !important;
+  background: var(--ui-surface-2) !important;
+}
+
+body[data-theme='light'] .milestone-subtitle {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .milestone-description {
+  color: var(--ui-muted) !important;
+}
+
+/* Mini git/python terminal embedded inside timeline cards */
+body[data-theme='light'] .milestone-card .terminal-window {
+  background: var(--ui-surface-2) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .milestone-card .terminal-header {
+  background: var(--ui-surface-3) !important;
+  border-bottom-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .milestone-card .terminal-title {
+  color: var(--ui-faint) !important;
+}
+
+body[data-theme='light'] .milestone-card .terminal-code,
+body[data-theme='light'] .milestone-card .terminal-command {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .milestone-card .terminal-prompt {
+  color: #15803d !important;
+}
+
+body[data-theme='light'] .milestone-card .terminal-punctuation {
+  color: #b91c1c !important;
+}
+
+body[data-theme='light'] .milestone-card .terminal-string {
+  color: #a1650a !important;
+}
+
+body[data-theme='light'] .milestone-card .terminal-cursor {
+  background: #15803d !important;
+}
+
+body[data-theme='light'] .section-subtitle {
+  color: var(--ui-muted) !important;
+}
+
+/* ============================================================
+   THEME-SWITCH TRANSITION ANIMATION
+   Uses the View Transitions API for a circular "wipe" that expands
+   from the toggle button. Navigation.tsx sets --theme-toggle-x/y/r
+   right before calling document.startViewTransition(). Browsers
+   without support (Safari < 18, Firefox) simply skip straight to
+   the new theme with the CSS crossfade below as a graceful fallback.
+   ============================================================ */
+
+html, body, #root, .main-container, .navbar,
+.terminal-section, .terminal-window, .terminal-content, .about-container,
+.timeline-section, .milestone-card, .vertical-timeline-element-content,
+.expertise-container, .projects-container, .project-card,
+.certificates, .certificates__card, .certificates__card-icon,
+.contact-container, .contact-card, .form-field .MuiOutlinedInput-root,
+.footer-container, .footer-card, .direct-email-card {
+  transition: background-color .45s ease, color .45s ease,
+              border-color .45s ease, box-shadow .45s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html, body, #root, .main-container, .navbar,
+  .terminal-section, .terminal-window, .terminal-content, .about-container,
+  .timeline-section, .milestone-card, .vertical-timeline-element-content,
+  .expertise-container, .projects-container, .project-card,
+  .certificates, .certificates__card, .certificates__card-icon,
+  .contact-container, .contact-card, .form-field .MuiOutlinedInput-root,
+  .footer-container, .footer-card, .direct-email-card {
+    transition: none !important;
+  }
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 2;
+  animation: theme-toggle-reveal .55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes theme-toggle-reveal {
+  from {
+    clip-path: circle(0px at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--theme-toggle-radius, 150%) at var(--theme-toggle-x, 50%) var(--theme-toggle-y, 50%));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

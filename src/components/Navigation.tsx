@@ -66,7 +66,42 @@ function Navigation() {
     }
   }, [isLightMode]);
 
-  const toggleTheme = () => setIsLightMode((prev) => !prev);
+  // Toggle the theme with a circular "wipe" animation expanding from the
+  // button that was pressed, using the View Transitions API. Browsers
+  // without support (Safari < 18, Firefox) fall back to an instant swap
+  // plus the CSS crossfade transition already defined in index.scss.
+  const toggleTheme = (event?: React.MouseEvent<HTMLElement>) => {
+    const applyTheme = () => setIsLightMode((prev) => !prev);
+
+    const supportsViewTransitions =
+      typeof document !== "undefined" &&
+      typeof (document as any).startViewTransition === "function";
+
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!supportsViewTransitions || prefersReducedMotion || !event) {
+      applyTheme();
+      return;
+    }
+
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+    const radius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    document.documentElement.style.setProperty("--theme-toggle-x", `${x}px`);
+    document.documentElement.style.setProperty("--theme-toggle-y", `${y}px`);
+    document.documentElement.style.setProperty("--theme-toggle-radius", `${radius}px`);
+
+    (document as any).startViewTransition(() => {
+      applyTheme();
+    });
+  };
 
   // Handle scroll events for navbar styling
   useEffect(() => {
@@ -157,7 +192,11 @@ function Navigation() {
         ))}
       </List>
       <Box className="drawer-footer">
-        <button className="drawer-theme-toggle" onClick={toggleTheme} type="button">
+        <button
+          className="drawer-theme-toggle"
+          onClick={(event) => toggleTheme(event)}
+          type="button"
+        >
           <Icon icon={isLightMode ? "mdi:weather-night" : "mdi:white-balance-sunny"} />
           <span>{isLightMode ? "Dark mode" : "Light mode"}</span>
         </button>
@@ -204,7 +243,7 @@ function Navigation() {
 
           <IconButton
             className="theme-toggle-button"
-            onClick={toggleTheme}
+            onClick={(event) => toggleTheme(event)}
             aria-label={isLightMode ? "Switch to dark mode" : "Switch to light mode"}
             title={isLightMode ? "Dark mode" : "Light mode"}
           >

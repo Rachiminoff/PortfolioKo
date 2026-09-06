@@ -786,6 +786,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     display: none !important;
   }
 }
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 // Swiss dark system — integrated component treatment
 .timeline-section { background:#0b0b0b; color:#f2f0e8; }
 .timeline-container,.timeline-wrapper { border-radius:0; }
@@ -839,3 +842,5 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .timeline-progress-fill{background:var(--bau-red) !important}
 @media(max-width:1170px){.vertical-timeline::before{left:20px !important}.vertical-timeline-element-icon{left:20px !important}.vertical-timeline-element-content{margin-left:55px !important}.vertical-timeline-element-date.custom-date{display:block !important;position:static !important;margin:0 0 .75rem 55px !important;text-align:left !important}}
 @media(max-width:600px){.timeline-section .section-title{font-size:clamp(2.7rem,16vw,4.8rem)}.milestone-card .vertical-timeline-element-content{padding:1.35rem !important}.milestone-description{font-size:14px !important}}
+
+}

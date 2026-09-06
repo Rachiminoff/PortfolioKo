@@ -721,6 +721,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
         border: 1px solid #ccc !important;
     }
 }
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 // Swiss dark system — integrated component treatment
 .expertise-container { background:#0b0b0b; color:#f2f0e8; }
 .expertise-title { text-transform:uppercase; letter-spacing:-.06em; font-weight:900; }
@@ -750,6 +753,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .tech-tooltip{border-radius:0 !important;background:#fff !important;color:#000 !important;border:0 !important}
 .scroll-gradient{background:linear-gradient(to right,#000,transparent) !important}
 .scroll-gradient.right{background:linear-gradient(to left,#000,transparent) !important}
+
+}
+
 
 /* Category color codes are intentionally shown as data, not only as swatches. */
 .legend-code {

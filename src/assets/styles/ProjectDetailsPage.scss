@@ -18,6 +18,9 @@
 .project-details-page .article-navigation,.project-details-page .footer-actions{border-top:2px solid var(--ink)!important;background:var(--paper)!important}.project-details-page .footer-link{border:1px solid var(--ink)!important;border-radius:0!important;color:var(--ink)!important;background:transparent!important}.project-details-page .footer-link:hover{background:var(--ink)!important;color:var(--paper)!important}
 @media(max-width:850px){.project-details-page .documentation-layout{grid-template-columns:1fr;padding-top:25px}.project-details-page .article-header{padding-top:55px}.project-details-page .toc-container{padding-left:0}}
 
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 /* ============================================================
    CASE STUDIES — READABLE BLACK EDITORIAL
    The previous version was visually strong but too compressed.
@@ -400,4 +403,6 @@
   .project-details-page .docs-footer {
     width:calc(100% - 24px) !important;
   }
+}
+
 }

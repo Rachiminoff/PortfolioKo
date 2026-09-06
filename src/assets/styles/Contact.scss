@@ -1351,6 +1351,9 @@ textarea::-webkit-scrollbar-thumb:hover {
     display: none !important;
   }
 }
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 // Swiss dark system — integrated component treatment
 .contact-container { background:#0b0b0b; color:#f2f0e8; }
 .contact-grid { gap:0; }
@@ -1389,3 +1392,5 @@ textarea::-webkit-scrollbar-thumb:hover {
 .send-button:hover{background:#fff !important;color:#000 !important}
 .alert-success,.alert-error{border-radius:0 !important}
 @media(max-width:768px){.contact-grid{grid-template-columns:1fr !important}.contact-info,.contact-card{padding:1.35rem !important}.contact-header h2{font-size:clamp(3rem,16vw,5rem) !important}}
+
+}

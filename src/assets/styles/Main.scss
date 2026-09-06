@@ -15,6 +15,9 @@ $paper:#f2f0e8;$ink:#111318;$red:#e6392f;$blue:#2457d6;$yellow:#f2c230;$cyan:#18
 @media(max-width:850px){.hero-section{align-items:flex-start;padding-top:70px}.hero-content{grid-template-columns:1fr}.hero-title{font-size:clamp(4rem,16vw,8rem)}.hero-right{max-width:620px}.main-container:after{width:65vw;height:65vw;right:-25vw;top:55vh}}
 @media(max-width:520px){.hero-section{padding:60px 16px 24px}.hero-subtitle{display:block}.subtitle-secondary{display:block;margin-top:8px}.hero-actions{display:grid;grid-template-columns:1fr 1fr}.action-link{min-width:0}.hero-annotations{flex-wrap:wrap}.profile-module{box-shadow:9px 9px 0 $red}}
 
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 /* ============================================================
    BLACK / BAUHAUS HERO OVERRIDES
    ============================================================ */
@@ -65,3 +68,5 @@ $paper:#f2f0e8;$ink:#111318;$red:#e6392f;$blue:#2457d6;$yellow:#f2c230;$cyan:#18
 .profile-image-overlay { display:none !important; }
 .profile-image-border { display:none !important; }
 .module-content { background:#ffd21f !important; }
+
+}

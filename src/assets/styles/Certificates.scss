@@ -673,6 +673,9 @@ $cert-colors: (
     }
   }
 }
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 // Swiss dark system — integrated component treatment
 .certificates { background:#0b0b0b; color:#f2f0e8; }
 .certificates__title { text-transform:uppercase; letter-spacing:-.06em; font-weight:900; }
@@ -700,3 +703,5 @@ $cert-colors: (
 .certificates__card-action,.certificates__view-all-btn{border-radius:0 !important;border:1px solid rgba(255,255,255,.24) !important;background:#000 !important;font-family:var(--mono) !important;text-transform:uppercase !important}
 .certificates__card-action:hover,.certificates__view-all-btn:hover{background:var(--bau-red) !important;border-color:var(--bau-red) !important;color:#fff !important}
 @media(max-width:760px){.certificates__grid{grid-template-columns:1fr}.certificates__card{padding:1.25rem !important}}
+
+}

@@ -1838,9 +1838,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 // Swiss dark system — integrated component treatment
 .vault-container { background:#0b0b0b; color:#f2f0e8; }
 .vault-book-card { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; box-shadow:8px 8px 0 #f2c94c; }
 .vault-book-card:hover { box-shadow:8px 8px 0 #e63946; }
 .vault-book-title { text-transform:uppercase; letter-spacing:-.04em; font-weight:900; }
 .vault-type-badge,.vault-series-badge { border-radius:0; }
+
+}

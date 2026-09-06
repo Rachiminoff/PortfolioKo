@@ -1011,6 +1011,9 @@ $space-4xl: 80px;
         color: #666 !important;
     }
 }
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
 // Swiss dark system — integrated component treatment
 .project-card,.project-card-content { border-radius:0; }
 .project-card { background:#151515; border:1px solid rgba(242,240,232,.4); box-shadow:8px 8px 0 #e63946; }
@@ -1042,3 +1045,5 @@ $space-4xl: 80px;
 .tech-tag{border-radius:0 !important;border:1px solid rgba(255,255,255,.22) !important;background:transparent !important}
 .arrow-icon-wrapper{border:1px solid rgba(255,255,255,.25) !important;border-radius:0 !important}
 @media(max-width:768px){.project-card{min-height:300px}.project-card-content{padding:1.25rem !important}}
+
+}

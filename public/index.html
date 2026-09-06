@@ -31,6 +31,16 @@
     />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Apply the saved theme before React paints to prevent a dark/light flash. -->
+    <script>
+      try {
+        var savedTheme = localStorage.getItem("tdy-theme");
+        document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
+      } catch (e) {
+        document.documentElement.dataset.theme = "dark";
+      }
+    </script>
     <meta name="theme-color" content="#0f172a" />
 
     <!-- Canonical -->
