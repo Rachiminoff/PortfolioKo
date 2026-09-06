@@ -1247,3 +1247,127 @@ body.hide-navbar header.navbar {
   border-radius:0 !important; transform:rotate(45deg); animation:bauhaus-load 1s linear infinite !important;
 }
 @keyframes bauhaus-load { to { transform:rotate(405deg); } }
+
+/* ============================================
+   BAUHAUS × SWISS GLOBAL LAYER
+   ============================================ */
+:root{--swiss-paper:#f2f0e8;--swiss-ink:#111318;--swiss-red:#e6392f;--swiss-blue:#2457d6;--swiss-yellow:#f2c230;--swiss-cyan:#18aebe}
+body{background:var(--swiss-paper);font-size:16px!important}
+a{text-decoration:none}
+.archive-page,.archive-page p,.archive-page a,.archive-page h1,.archive-page h2,.archive-page h3,.archive-page button,
+.archive-auth,.archive-auth p,.archive-auth h1,.archive-auth button,
+.vault-page,.vault-page p,.vault-page a,.vault-page h1,.vault-page h2,.vault-page h3,.vault-page button,
+.insights-page,.insights-page p,.insights-page a,.insights-page h1,.insights-page h2,.insights-page h3,.insights-page button,
+.adashima-stats-page,.adashima-stats-page p,.adashima-stats-page a,.adashima-stats-page h1,.adashima-stats-page h2,.adashima-stats-page h3,.adashima-stats-page button,
+.wish-archive-page,.wish-archive-page p,.wish-archive-page a,.wish-archive-page h1,.wish-archive-page h2,.wish-archive-page h3,.wish-archive-page button,
+.project-details-page,.project-details-page p,.project-details-page a,.project-details-page h1,.project-details-page h2,.project-details-page h3,.project-details-page button,
+.footer,.footer p,.footer a,.footer h1,.footer h2,.footer h3,.footer button{color:var(--swiss-ink)}
+.archive-page a:hover,.archive-auth a:hover,.vault-page a:hover,.insights-page a:hover,.adashima-stats-page a:hover,.wish-archive-page a:hover,.project-details-page a:hover,.footer a:hover{color:inherit}
+
+/* ============================================================
+   BAUHAUS × SWISS / BLACK FIELD SYSTEM
+   All primary page surfaces are black. Color is reserved for
+   structure, navigation, emphasis, and interaction.
+   ============================================================ */
+:root {
+  --bau-red: #ff3030;
+  --bau-blue: #2855ff;
+  --bau-yellow: #ffd21f;
+  --field-black: #000000;
+  --panel-black: #080808;
+  --panel-black-2: #0d0d0d;
+  --line-white: rgba(255,255,255,.18);
+  --line-soft: rgba(255,255,255,.09);
+  --text-white: #f5f5f5;
+  --text-muted: rgba(255,255,255,.62);
+  --mono: 'IBM Plex Mono', 'SF Mono', Consolas, monospace;
+  --display: 'Archivo', 'Inter', Arial, sans-serif;
+}
+
+html, body, #root, .main-container {
+  background: #000 !important;
+}
+
+body {
+  color: var(--text-white) !important;
+}
+
+/* Keep the system visually black even where older component styles
+   still define a light surface. */
+.timeline-section,
+.expertise-container,
+.projects-container,
+.certificates,
+.contact-container,
+.footer-container,
+footer,
+.project-details-page {
+  background: #000 !important;
+}
+
+/* ============================================================
+   BLACK CANVAS — GLOBAL PORTFOLIO SURFACE
+   ============================================================ */
+html, body, #root {
+  background: #000 !important;
+  color: #f5f5f5;
+}
+body {
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #e6392f #000;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000;
+  border-left: 1px solid rgba(255,255,255,.12);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e6392f;
+  border: 2px solid #000;
+  border-radius: 0;
+  min-height: 48px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f2c230;
+}
+
+::-webkit-scrollbar-corner {
+  background: #000;
+}
+
+/* Keep every page canvas black; component-level accent blocks remain intentional. */
+.archive-page,.insights-page,.vault-page,.wish-archive-page,.adashima-stats-page,
+.archive-password-page,.project-details-page,.projects-page,.history-section,
+.expertise-section,.certificates-section,.contact-section,
+footer,.footer-container {
+  background-color:#000 !important;
+}
+
+/* GLOBAL BLACK CANVAS + CUSTOM SCROLLBAR */
+html { background: #000 !important; }
+body, #root { background: #000 !important; color: #f5f5f5; }
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #ff3030 #000;
+}
+body::-webkit-scrollbar { width: 10px; height: 10px; }
+body::-webkit-scrollbar-track { background: #000; }
+body::-webkit-scrollbar-thumb {
+  background: #ff3030;
+  border: 2px solid #000;
+  min-height: 44px;
+}
+body::-webkit-scrollbar-thumb:hover { background: #ffd21f; }
+* { scrollbar-color: #ff3030 #000; scrollbar-width: thin; }

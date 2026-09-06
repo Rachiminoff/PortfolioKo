@@ -299,8 +299,7 @@ function Main() {
                                 onClick={openCVViewer}
                                 disabled={pdfLoading}
                             >
-                                <span className="action-text">Resume</span>
-                                <span className="action-arrow">→</span>
+                                <span className="action-text">Resume→</span>
                             </button>
                             <a
                                 href="https://github.com/Rachiminoff"
@@ -308,8 +307,7 @@ function Main() {
                                 rel="noreferrer"
                                 className="action-link"
                             >
-                                <span className="action-text">GitHub</span>
-                                <span className="action-arrow">→</span>
+                                <span className="action-text">GitHub→</span>
                             </a>
                             <a
                                 href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
@@ -317,8 +315,7 @@ function Main() {
                                 rel="noreferrer"
                                 className="action-link"
                             >
-                                <span className="action-text">LinkedIn</span>
-                                <span className="action-arrow">→</span>
+                                <span className="action-text">LinkedIn→</span>
                             </a>
                         </div>
 

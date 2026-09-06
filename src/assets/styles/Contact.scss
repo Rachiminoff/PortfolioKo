@@ -1226,3 +1226,34 @@ textarea::-webkit-scrollbar-thumb:hover {
 .contact-header,.header-tag { text-transform:uppercase; letter-spacing:.08em; }
 .contact-detail-item { border-bottom:1px solid rgba(242,240,232,.25); border-radius:0; }
 .copy-button,.contact-submit { border-radius:0; background:#e63946; color:#0b0b0b; }
+
+/* ============================================================
+   CONTACT — POSTER / FORM HYBRID
+   ============================================================ */
+.contact-container{max-width:1320px !important;margin:0 auto !important;padding:clamp(5rem,8vw,8rem) clamp(1rem,4vw,4rem) !important;background:#000 !important}
+.contact-grid{grid-template-columns:minmax(260px,.8fr) minmax(0,1.4fr) !important;gap:1px !important;background:rgba(255,255,255,.16) !important;border:1px solid rgba(255,255,255,.16) !important}
+.contact-info{background:#000 !important;padding:2.5rem !important}
+.contact-header .header-tag{color:var(--bau-red) !important;font-family:var(--mono) !important;font-weight:700 !important}
+.contact-header h2{font-family:'Archivo',sans-serif !important;font-size:clamp(3rem,6vw,6rem) !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:-.07em !important;line-height:.86 !important}
+.contact-divider{width:100% !important;height:5px !important;background:var(--bau-yellow) !important;margin:1.5rem 0 !important}
+.contact-subtitle{color:rgba(255,255,255,.62) !important;line-height:1.75 !important}
+.contact-details{border-top:1px solid rgba(255,255,255,.16);margin-top:2rem !important;padding-top:1rem}
+.contact-detail-item{border-bottom:1px solid rgba(255,255,255,.12);padding:1rem 0}
+.contact-detail-item .detail-icon{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:#080808 !important}
+.detail-label{font:700 9px var(--mono) !important;text-transform:uppercase !important;color:var(--bau-blue) !important}
+.detail-value{font-family:var(--mono) !important;font-size:12px !important;color:#fff !important}
+.detail-badge{border-radius:0 !important;background:var(--bau-red) !important;color:#fff !important;font:700 9px var(--mono) !important;text-transform:uppercase}
+.contact-card{background:#080808 !important;border:0 !important;border-radius:0 !important;padding:2.5rem !important}
+.contact-card-header{border-bottom:1px solid rgba(255,255,255,.16) !important;padding-bottom:1.25rem}
+.contact-card .card-title{font-family:'Archivo',sans-serif !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:-.035em !important}
+.contact-card .card-subtitle{color:rgba(255,255,255,.55) !important}
+.card-divider{background:rgba(255,255,255,.14) !important}
+.chips-label,.form-footer-text,.trust-indicator{font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important;color:rgba(255,255,255,.5) !important}
+.chip-item{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:#000 !important;color:#fff !important;font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important}
+.chip-selected{background:var(--bau-blue) !important;border-color:var(--bau-blue) !important;color:#fff !important}
+.form-field{border-radius:0 !important}
+.form-field input,.form-field textarea,.form-field .MuiInputBase-root{background:#000 !important;color:#fff !important;border-radius:0 !important}
+.send-button{border-radius:0 !important;background:var(--bau-red) !important;font-family:var(--mono) !important;font-weight:800 !important;text-transform:uppercase !important}
+.send-button:hover{background:#fff !important;color:#000 !important}
+.alert-success,.alert-error{border-radius:0 !important}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr !important}.contact-info,.contact-card{padding:1.35rem !important}.contact-header h2{font-size:clamp(3rem,16vw,5rem) !important}}

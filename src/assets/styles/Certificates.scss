@@ -679,3 +679,24 @@ $cert-colors: (
 .certificates__card { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; box-shadow:6px 6px 0 #0b8fd3; }
 .certificates__card:hover { border-color:#e63946; box-shadow:6px 6px 0 #e63946; }
 .certificates__card-tag { border-radius:0; background:#f2f0e8; color:#0b0b0b; }
+
+/* ============================================================
+   CERTIFICATES — CREDENTIAL INDEX
+   ============================================================ */
+.certificates{background:#000 !important;max-width:1320px !important;margin:0 auto !important;padding:clamp(5rem,8vw,8rem) clamp(1rem,4vw,4rem) !important}
+.certificates__header{border-bottom:1px solid rgba(255,255,255,.2) !important;padding-bottom:2rem !important;margin-bottom:2rem !important}
+.certificates__tag{color:var(--bau-yellow) !important;font-family:var(--mono) !important;font-weight:700 !important}
+.certificates__title{font-family:'Archivo',sans-serif !important;font-weight:900 !important;font-size:clamp(3rem,7vw,7rem) !important;line-height:.86 !important;letter-spacing:-.07em !important;text-transform:uppercase !important}
+.certificates__subtitle{color:rgba(255,255,255,.62) !important}
+.certificates__grid{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px !important;background:rgba(255,255,255,.16) !important;border:1px solid rgba(255,255,255,.16) !important}
+.certificates__card{background:#080808 !important;border:0 !important;border-radius:0 !important;box-shadow:none !important;padding:1.75rem !important}
+.certificates__card:nth-child(3n+1){border-top:5px solid var(--bau-red) !important}
+.certificates__card:nth-child(3n+2){border-top:5px solid var(--bau-yellow) !important}
+.certificates__card:nth-child(3n){border-top:5px solid var(--bau-blue) !important}
+.certificates__card-icon{border-radius:0 !important;background:#000 !important;border:1px solid rgba(255,255,255,.2) !important}
+.certificates__card-title{font-family:'Archivo',sans-serif !important;font-weight:800 !important;text-transform:uppercase;letter-spacing:-.025em !important}
+.certificates__card-org,.certificates__card-year,.certificates__card-tag{font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important}
+.certificates__card-tag{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:transparent !important}
+.certificates__card-action,.certificates__view-all-btn{border-radius:0 !important;border:1px solid rgba(255,255,255,.24) !important;background:#000 !important;font-family:var(--mono) !important;text-transform:uppercase !important}
+.certificates__card-action:hover,.certificates__view-all-btn:hover{background:var(--bau-red) !important;border-color:var(--bau-red) !important;color:#fff !important}
+@media(max-width:760px){.certificates__grid{grid-template-columns:1fr}.certificates__card{padding:1.25rem !important}}

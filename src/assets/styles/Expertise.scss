@@ -729,3 +729,24 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .tech-item { background:#f2f0e8; color:#0b0b0b; border:0; }
 .tech-item:nth-child(3n) { background:#e63946; }
 .tech-item:nth-child(4n) { background:#f2c94c; }
+
+/* ============================================================
+   EXPERTISE — SWISS TECHNICAL INDEX
+   ============================================================ */
+.expertise-container{background:#000 !important;max-width:1320px !important;padding:clamp(5rem,8vw,8rem) clamp(1rem,4vw,4rem) !important}
+.expertise-header{max-width:none !important;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:2rem;margin-bottom:2rem !important}
+.expertise-header .header-tag{color:var(--bau-blue) !important;font-family:var(--mono) !important;font-weight:700 !important}
+.expertise-header h1{font-family:'Archivo',sans-serif !important;font-size:clamp(3rem,7vw,7rem) !important;font-weight:900 !important;text-transform:uppercase;letter-spacing:-.07em !important;line-height:.86 !important}
+.expertise-subtitle{color:rgba(255,255,255,.62) !important}
+.expertise-stats .stat-badge{border:1px solid rgba(255,255,255,.2) !important;border-radius:0 !important;background:#080808 !important;font-family:var(--mono) !important}
+.legend{border:1px solid rgba(255,255,255,.16) !important;background:#050505 !important;border-radius:0 !important;padding:10px !important}
+.legend-item{font-family:var(--mono) !important}
+.tech-stack-wrapper{border-top:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18);padding:1rem 0 !important;background:#000 !important}
+.tech-stack-scroll{gap:1px !important;background:rgba(255,255,255,.12) !important}
+.tech-item{background:#080808 !important;border:0 !important;border-radius:0 !important;min-height:145px !important}
+.tech-item:nth-child(3n){background:#0b0b0b !important}
+.tech-icon-wrapper{border:1px solid rgba(255,255,255,.18) !important;border-radius:0 !important;background:#000 !important}
+.tech-name{font:800 11px var(--mono) !important;text-transform:uppercase !important;letter-spacing:.02em}
+.tech-tooltip{border-radius:0 !important;background:#fff !important;color:#000 !important;border:0 !important}
+.scroll-gradient{background:linear-gradient(to right,#000,transparent) !important}
+.scroll-gradient.right{background:linear-gradient(to left,#000,transparent) !important}
