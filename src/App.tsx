@@ -240,6 +240,21 @@ function AppContent() {
   const { isUnlocked: isArchiveUnlocked, isLoading: archiveLoading } = useArchive();
   const [isReady, setIsReady] = useState(false);
 
+  // Apply the persisted appearance before the routed page is displayed.
+  // Navigation owns the toggle itself; this keeps direct visits to fullscreen
+  // routes in the correct theme even when the navbar is not rendered there.
+  useEffect(() => {
+    let theme: "light" | "dark" = "dark";
+    try {
+      theme = localStorage.getItem("tdy-theme") === "light" ? "light" : "dark";
+    } catch {
+      // Use the default dark theme when storage is unavailable.
+    }
+
+    document.documentElement.dataset.theme = theme;
+    document.body.dataset.theme = theme;
+  }, []);
+
   useEffect(() => {
     window.scrollTo({
       top: 0,

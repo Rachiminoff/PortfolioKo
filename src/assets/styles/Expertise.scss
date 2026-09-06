@@ -750,3 +750,100 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .tech-tooltip{border-radius:0 !important;background:#fff !important;color:#000 !important;border:0 !important}
 .scroll-gradient{background:linear-gradient(to right,#000,transparent) !important}
 .scroll-gradient.right{background:linear-gradient(to left,#000,transparent) !important}
+
+/* Category color codes are intentionally shown as data, not only as swatches. */
+.legend-code {
+  font-family: $font-mono;
+  font-size: .55rem;
+  color: $white-faint;
+  letter-spacing: .02em;
+  margin-left: .15rem;
+}
+
+@media (max-width: 480px) {
+  .legend-code { font-size: .48rem; }
+}
+
+/* ============================================================
+   THEME CONTEXT — EXPERTISE
+   The category swatches are real color blocks, while the rest of
+   the component adapts its surface, borders and text to the theme.
+   ============================================================ */
+body[data-theme='dark'] .expertise-container {
+    --expertise-bg: #000;
+    --expertise-panel: #080808;
+    --expertise-panel-alt: #0b0b0b;
+    --expertise-text: #f5f5f5;
+    --expertise-muted: rgba(255,255,255,.62);
+    --expertise-faint: rgba(255,255,255,.42);
+    --expertise-line: rgba(255,255,255,.18);
+}
+
+body[data-theme='light'] .expertise-container {
+    --expertise-bg: #f2f0e8;
+    --expertise-panel: #fff;
+    --expertise-panel-alt: #ebe8df;
+    --expertise-text: #111318;
+    --expertise-muted: rgba(17,19,24,.68);
+    --expertise-faint: rgba(17,19,24,.52);
+    --expertise-line: rgba(17,19,24,.18);
+
+    background: var(--expertise-bg) !important;
+}
+
+body[data-theme='light'] .expertise-container .expertise-header,
+body[data-theme='light'] .expertise-container .legend {
+    border-color: var(--expertise-line) !important;
+}
+
+body[data-theme='light'] .expertise-container .header-tag {
+    color: var(--bau-blue) !important;
+}
+
+body[data-theme='light'] .expertise-container h1,
+body[data-theme='light'] .expertise-container .tech-name {
+    color: var(--expertise-text) !important;
+}
+
+body[data-theme='light'] .expertise-container .expertise-subtitle,
+body[data-theme='light'] .expertise-container .stat-badge,
+body[data-theme='light'] .expertise-container .legend-item {
+    color: var(--expertise-muted) !important;
+}
+
+body[data-theme='light'] .expertise-container .stat-badge,
+body[data-theme='light'] .expertise-container .legend {
+    background: var(--expertise-panel-alt) !important;
+}
+
+body[data-theme='light'] .expertise-container .tech-stack-wrapper {
+    background: var(--expertise-bg) !important;
+    border-color: var(--expertise-line) !important;
+}
+
+body[data-theme='light'] .expertise-container .tech-item {
+    background: var(--expertise-panel) !important;
+    color: var(--expertise-text) !important;
+}
+
+body[data-theme='light'] .expertise-container .tech-icon-wrapper {
+    background: #f8f6ef !important;
+    border-color: var(--category-color) !important;
+}
+
+body[data-theme='light'] .expertise-container .tech-tooltip {
+    background: var(--expertise-text) !important;
+    color: var(--expertise-bg) !important;
+}
+
+.legend-color {
+    display: inline-block !important;
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    background: var(--legend-color) !important;
+    border: 1px solid rgba(0,0,0,.28) !important;
+    border-radius: 0 !important;
+    box-shadow: 2px 2px 0 rgba(0,0,0,.2);
+}

@@ -1366,3 +1366,765 @@ body::-webkit-scrollbar-thumb {
 }
 body::-webkit-scrollbar-thumb:hover { background: #ffd21f; }
 * { scrollbar-color: #ff3030 #000; scrollbar-width: thin; }
+
+/* ============================================================
+   LIGHT / DARK MODE
+   The dark theme remains the default. Light mode keeps the same
+   Bauhaus / Swiss composition while replacing the black field with
+   paper-white surfaces and dark editorial text.
+   ============================================================ */
+html[data-theme='light'],
+body[data-theme='light'],
+body[data-theme='light'] #root {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+}
+
+body[data-theme='light'] {
+  --field-black: #f2f0e8;
+  --panel-black: #ffffff;
+  --panel-black-2: #f7f5ed;
+  --line-white: rgba(17,19,24,.18);
+  --line-soft: rgba(17,19,24,.1);
+  --text-white: #111318;
+  --text-muted: rgba(17,19,24,.68);
+  --swiss-paper: #f2f0e8;
+  --swiss-ink: #111318;
+}
+
+body[data-theme='light'] .main-container,
+body[data-theme='light'] .default-layout,
+body[data-theme='light'] .default-layout-main,
+body[data-theme='light'] .main-container.dark-mode,
+body[data-theme='light'] .timeline-section,
+body[data-theme='light'] .expertise-container,
+body[data-theme='light'] .projects-container,
+body[data-theme='light'] .certificates,
+body[data-theme='light'] .contact-container,
+body[data-theme='light'] .footer-container,
+body[data-theme='light'] footer,
+body[data-theme='light'] .project-details-page {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+}
+
+body[data-theme='light'] p,
+body[data-theme='light'] h1,
+body[data-theme='light'] h2,
+body[data-theme='light'] h3,
+body[data-theme='light'] h4,
+body[data-theme='light'] h5,
+body[data-theme='light'] h6,
+body[data-theme='light'] label,
+body[data-theme='light'] button,
+body[data-theme='light'] a,
+body[data-theme='light'] .project-title,
+body[data-theme='light'] .project-subtitle,
+body[data-theme='light'] .timeline-container,
+body[data-theme='light'] .terminal-container,
+body[data-theme='light'] .footer,
+body[data-theme='light'] .footer-container {
+  color: #111318;
+}
+
+/* Main sections */
+body[data-theme='light'] .expertise-header h1,
+body[data-theme='light'] .projects-header h1,
+body[data-theme='light'] .contact-header h2,
+body[data-theme='light'] .certificates__title,
+body[data-theme='light'] .footer-headline,
+body[data-theme='light'] .terminal-title,
+body[data-theme='light'] .timeline-container {
+  color: #111318 !important;
+}
+
+body[data-theme='light'] .expertise-subtitle,
+body[data-theme='light'] .projects-subtitle,
+body[data-theme='light'] .contact-subtitle,
+body[data-theme='light'] .certificates__subtitle,
+body[data-theme='light'] .footer-description,
+body[data-theme='light'] .timeline-container p {
+  color: rgba(17,19,24,.68) !important;
+}
+
+body[data-theme='light'] .expertise-header,
+body[data-theme='light'] .projects-header,
+body[data-theme='light'] .contact-header,
+body[data-theme='light'] .certificates__header {
+  border-color: rgba(17,19,24,.22) !important;
+}
+
+/* Expertise */
+body[data-theme='light'] .expertise-stats .stat-badge,
+body[data-theme='light'] .legend,
+body[data-theme='light'] .tech-stack-wrapper {
+  background: #ebe8df !important;
+  border-color: rgba(17,19,24,.18) !important;
+}
+
+body[data-theme='light'] .stat-badge,
+body[data-theme='light'] .legend-item,
+body[data-theme='light'] .legend-label,
+body[data-theme='light'] .legend-code {
+  color: #111318 !important;
+}
+
+body[data-theme='light'] .tech-stack-scroll {
+  background: rgba(17,19,24,.14) !important;
+}
+
+body[data-theme='light'] .tech-item {
+  background: #f8f6ef !important;
+  color: #111318 !important;
+}
+
+body[data-theme='light'] .tech-item:nth-child(3n) {
+  background: #fff !important;
+}
+
+body[data-theme='light'] .tech-icon-wrapper {
+  background: #fff !important;
+  border-color: var(--category-color, rgba(17,19,24,.18)) !important;
+}
+
+body[data-theme='light'] .tech-name {
+  color: #111318 !important;
+}
+
+body[data-theme='light'] .tech-tooltip {
+  background: #111318 !important;
+  color: #f2f0e8 !important;
+}
+
+body[data-theme='light'] .scroll-gradient.left {
+  background: linear-gradient(to right, #f2f0e8, transparent) !important;
+}
+body[data-theme='light'] .scroll-gradient.right {
+  background: linear-gradient(to left, #f2f0e8, transparent) !important;
+}
+
+/* Projects / certificates / contact cards */
+body[data-theme='light'] .project-card,
+body[data-theme='light'] .certificates__card,
+body[data-theme='light'] .contact-card,
+body[data-theme='light'] .direct-email-card,
+body[data-theme='light'] .footer-card {
+  background: #fff !important;
+  color: #111318 !important;
+  border-color: rgba(17,19,24,.24) !important;
+}
+
+body[data-theme='light'] .project-card-content,
+body[data-theme='light'] .certificates__card-content,
+body[data-theme='light'] .contact-detail-item,
+body[data-theme='light'] .direct-email-meta,
+body[data-theme='light'] .direct-email-address,
+body[data-theme='light'] .footer-card {
+  color: #111318 !important;
+}
+
+body[data-theme='light'] .project-card p,
+body[data-theme='light'] .certificates__card-meta,
+body[data-theme='light'] .certificates__card-org,
+body[data-theme='light'] .contact-detail-item p,
+body[data-theme='light'] .footer-card p {
+  color: rgba(17,19,24,.68) !important;
+}
+
+body[data-theme='light'] .direct-email-card {
+  background: #fff !important;
+  box-shadow: 10px 10px 0 #e6392f !important;
+}
+
+body[data-theme='light'] .direct-email-row {
+  border-color: rgba(17,19,24,.18) !important;
+}
+
+body[data-theme='light'] .direct-email-copy {
+  color: #111318 !important;
+  border-color: rgba(17,19,24,.28) !important;
+  background: #f2f0e8 !important;
+}
+
+/* Timeline */
+body[data-theme='light'] .timeline-wrapper,
+body[data-theme='light'] .timeline-container {
+  color: #111318 !important;
+}
+
+/* Terminal */
+body[data-theme='light'] .terminal-window,
+body[data-theme='light'] .terminal-body,
+body[data-theme='light'] .terminal-code {
+  background: #fff !important;
+  color: #111318 !important;
+  border-color: rgba(17,19,24,.2) !important;
+}
+
+/* Footer */
+body[data-theme='light'] .footer-divider,
+body[data-theme='light'] .footer-item,
+body[data-theme='light'] .footer-bottom {
+  border-color: rgba(17,19,24,.18) !important;
+}
+
+/* Project detail pages */
+body[data-theme='light'] .project-details-page {
+  --field-black: #f2f0e8;
+  --panel-black: #fff;
+}
+
+/* Fullscreen archive-style pages inherit the same appearance switch. */
+body[data-theme='light'] .fullscreen-layout,
+body[data-theme='light'] .archive-page,
+body[data-theme='light'] .archive-password-page,
+body[data-theme='light'] .vault-page,
+body[data-theme='light'] .insights-page,
+body[data-theme='light'] .wish-archive-page,
+body[data-theme='light'] .adashima-stats-page {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+}
+
+body[data-theme='light'] .archive-page *,
+body[data-theme='light'] .vault-page *,
+body[data-theme='light'] .insights-page *,
+body[data-theme='light'] .wish-archive-page *,
+body[data-theme='light'] .adashima-stats-page * {
+  border-color: rgba(17,19,24,.18);
+}
+
+/* Navigation */
+body[data-theme='light'] .navbar {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+  border-bottom-color: #111318 !important;
+}
+
+body[data-theme='light'] .navbar .navbar-brand,
+body[data-theme='light'] .navbar .navbar-brand-name,
+body[data-theme='light'] .navbar .nav-button,
+body[data-theme='light'] .navbar .theme-toggle-button {
+  color: #111318 !important;
+}
+
+body[data-theme='light'] .navbar .nav-button,
+body[data-theme='light'] .navbar .theme-toggle-button {
+  border-left-color: rgba(17,19,24,.18) !important;
+}
+
+body[data-theme='light'] .navbar .nav-button:hover,
+body[data-theme='light'] .navbar .nav-button.active {
+  color: #f2f0e8 !important;
+  background: #111318 !important;
+}
+
+body[data-theme='light'] .navbar .theme-toggle-button:hover {
+  color: #111318 !important;
+  background: #ffd21f !important;
+}
+
+/* Theme-aware page scrollbar */
+body[data-theme='light'] * {
+  scrollbar-color: #e6392f #f2f0e8;
+}
+body[data-theme='light']::-webkit-scrollbar-track {
+  background: #f2f0e8;
+}
+body[data-theme='light']::-webkit-scrollbar-thumb {
+  background: #e6392f;
+  border-color: #f2f0e8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar.scrolled .nav-button,
+  .navbar.scrolled .theme-toggle-button,
+  .navbar.scrolled .navbar-brand {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   THEME CONTEXT SYSTEM
+   Each UI surface receives an explicit light/dark treatment instead
+   of relying on the page background alone. Accent colors remain
+   structural and are intentionally preserved in both modes.
+   ============================================================ */
+
+body[data-theme='dark'] {
+  --ui-bg: #000;
+  --ui-surface: #080808;
+  --ui-surface-2: #101010;
+  --ui-surface-3: #151515;
+  --ui-text: #f5f5f5;
+  --ui-muted: rgba(255,255,255,.62);
+  --ui-faint: rgba(255,255,255,.42);
+  --ui-line: rgba(255,255,255,.18);
+  --ui-line-soft: rgba(255,255,255,.09);
+  --ui-input: #080808;
+  --ui-shadow: rgba(0,0,0,.42);
+}
+
+body[data-theme='light'] {
+  --ui-bg: #f2f0e8;
+  --ui-surface: #fff;
+  --ui-surface-2: #ebe8df;
+  --ui-surface-3: #e2ded3;
+  --ui-text: #111318;
+  --ui-muted: rgba(17,19,24,.68);
+  --ui-faint: rgba(17,19,24,.48);
+  --ui-line: rgba(17,19,24,.18);
+  --ui-line-soft: rgba(17,19,24,.1);
+  --ui-input: #fff;
+  --ui-shadow: rgba(17,19,24,.16);
+}
+
+/* Page surfaces */
+body[data-theme='light'] .main-container,
+body[data-theme='light'] .default-layout,
+body[data-theme='light'] .default-layout-main,
+body[data-theme='light'] .timeline-section,
+body[data-theme='light'] .expertise-container,
+body[data-theme='light'] .projects-container,
+body[data-theme='light'] .certificates,
+body[data-theme='light'] .contact-container,
+body[data-theme='light'] .footer-container,
+body[data-theme='light'] footer,
+body[data-theme='light'] .project-details-page,
+body[data-theme='light'] .history-section,
+body[data-theme='light'] .expertise-section,
+body[data-theme='light'] .certificates-section,
+body[data-theme='light'] .contact-section,
+body[data-theme='light'] .projects-page {
+  background: var(--ui-bg) !important;
+  color: var(--ui-text) !important;
+}
+
+/* Main / hero UI */
+body[data-theme='light'] .hero-section,
+body[data-theme='light'] .profile-module,
+body[data-theme='light'] .module-content,
+body[data-theme='light'] .module-header,
+body[data-theme='light'] .hero-meta,
+body[data-theme='light'] .hero-annotations {
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .hero-subtitle,
+body[data-theme='light'] .meta-label,
+body[data-theme='light'] .annotation,
+body[data-theme='light'] .coord-label,
+body[data-theme='light'] .grid-label,
+body[data-theme='light'] .frame-coord {
+  color: var(--ui-muted) !important;
+}
+
+/* Timeline */
+body[data-theme='light'] .timeline-container,
+body[data-theme='light'] .milestone-card,
+body[data-theme='light'] .milestone-content,
+body[data-theme='light'] .timeline-progress-track {
+  color: var(--ui-text) !important;
+  background-color: var(--ui-surface) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .milestone-description,
+body[data-theme='light'] .milestone-subtitle,
+body[data-theme='light'] .section-subtitle {
+  color: var(--ui-muted) !important;
+}
+
+/* Projects */
+body[data-theme='light'] .project-card,
+body[data-theme='light'] .project-card-content,
+body[data-theme='light'] .projects-grid .project-card {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+  box-shadow: 8px 8px 0 rgba(230,57,47,.92) !important;
+}
+
+body[data-theme='light'] .project-title,
+body[data-theme='light'] .project-number,
+body[data-theme='light'] .project-meta-item {
+  color: var(--ui-text) !important;
+}
+
+body[data-theme='light'] .project-subtitle,
+body[data-theme='light'] .project-meta,
+body[data-theme='light'] .project-card p {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .tech-tag {
+  background: var(--ui-surface-2) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+/* Certificates */
+body[data-theme='light'] .certificates__card,
+body[data-theme='light'] .certificates__card-content {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .certificates__card-meta,
+body[data-theme='light'] .certificates__card-org,
+body[data-theme='light'] .certificates__subtitle {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .certificates__card-action,
+body[data-theme='light'] .certificates__view-all-btn {
+  border-color: var(--ui-line) !important;
+  color: var(--ui-text) !important;
+  background: var(--ui-surface-2) !important;
+}
+
+/* Contact */
+body[data-theme='light'] .contact-card,
+body[data-theme='light'] .direct-email-card,
+body[data-theme='light'] .contact-form {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .contact-detail-item,
+body[data-theme='light'] .direct-email-row,
+body[data-theme='light'] .card-divider,
+body[data-theme='light'] .contact-divider {
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .contact-detail-item p,
+body[data-theme='light'] .direct-email-meta,
+body[data-theme='light'] .form-footer-text,
+body[data-theme='light'] .card-subtitle {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .direct-email-copy,
+body[data-theme='light'] .form-field input,
+body[data-theme='light'] .form-field textarea,
+body[data-theme='light'] .form-field select {
+  background: var(--ui-input) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+/* Terminal / About */
+body[data-theme='light'] .terminal-container,
+body[data-theme='light'] .terminal-window,
+body[data-theme='light'] .terminal-body,
+body[data-theme='light'] .about-container,
+body[data-theme='light'] .about-text-wrapper {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .terminal-code,
+body[data-theme='light'] .about-text,
+body[data-theme='light'] .about-line,
+body[data-theme='light'] .terminal-annotation {
+  color: var(--ui-muted) !important;
+}
+
+/* Footer */
+body[data-theme='light'] .footer-card {
+  background: var(--ui-surface) !important;
+  color: var(--ui-text) !important;
+  border-color: var(--ui-line) !important;
+}
+
+body[data-theme='light'] .footer-description,
+body[data-theme='light'] .footer-meta,
+body[data-theme='light'] .footer-year {
+  color: var(--ui-muted) !important;
+}
+
+body[data-theme='light'] .footer-divider,
+body[data-theme='light'] .footer-bottom,
+body[data-theme='light'] .footer-item {
+  border-color: var(--ui-line) !important;
+}
+
+/* Shared controls */
+body[data-theme='light'] button,
+body[data-theme='light'] .action-link,
+body[data-theme='light'] .view-all-btn,
+body[data-theme='light'] .send-button {
+  border-color: var(--ui-line) !important;
+}
+
+/* Scrollbars follow the active surface. */
+body[data-theme='light'],
+body[data-theme='light'] * {
+  scrollbar-color: #e6392f #f2f0e8;
+}
+
+body[data-theme='light']::-webkit-scrollbar-track,
+body[data-theme='light'] *::-webkit-scrollbar-track {
+  background: #f2f0e8;
+}
+
+body[data-theme='light']::-webkit-scrollbar-thumb,
+body[data-theme='light'] *::-webkit-scrollbar-thumb {
+  background: #e6392f;
+  border-color: #f2f0e8;
+}
+
+body[data-theme='light']::-webkit-scrollbar-thumb:hover,
+body[data-theme='light'] *::-webkit-scrollbar-thumb:hover {
+  background: #f2c230;
+}
+
+/* Smoothly transition the theme without washing out accent blocks. */
+html,
+body,
+.main-container,
+.expertise-container,
+.projects-container,
+.certificates,
+.contact-container,
+.footer-container,
+.project-card,
+.certificates__card,
+.contact-card,
+.direct-email-card,
+.terminal-window,
+.terminal-body,
+.timeline-container,
+.tech-stack-wrapper,
+.tech-item,
+.tech-icon-wrapper,
+.legend,
+.stat-badge {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: .25s;
+  transition-timing-function: ease;
+}
+
+/* ============================================================
+   THEME CONTEXT — FULLSCREEN / ARCHIVE UI
+   ============================================================ */
+
+body[data-theme='light'] .archive-page,
+body[data-theme='light'] .archive-auth,
+body[data-theme='light'] .archive-loading,
+body[data-theme='light'] .archive-loading-state,
+body[data-theme='light'] .vault-page,
+body[data-theme='light'] .vault-loading-state,
+body[data-theme='light'] .insights-page,
+body[data-theme='light'] .insights-loading-state,
+body[data-theme='light'] .wish-archive-page,
+body[data-theme='light'] .adashima-stats-page {
+  --page-bg: #f2f0e8;
+  --page-surface: #fff;
+  --page-surface-2: #ebe8df;
+  --page-ink: #111318;
+  --page-muted: rgba(17,19,24,.68);
+  --page-line: rgba(17,19,24,.18);
+  background-color: var(--page-bg) !important;
+  color: var(--page-ink) !important;
+}
+
+/* Archive */
+body[data-theme='light'] .archive-container,
+body[data-theme='light'] .archive-header,
+body[data-theme='light'] .archive-collections-header,
+body[data-theme='light'] .archive-footer {
+  color: var(--page-ink) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .archive-card,
+body[data-theme='light'] .archive-auth-content {
+  background: var(--page-surface) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-ink) !important;
+}
+
+body[data-theme='light'] .archive-card-description,
+body[data-theme='light'] .archive-header-description,
+body[data-theme='light'] .archive-collections-subtitle,
+body[data-theme='light'] .archive-footer-description {
+  color: var(--page-muted) !important;
+}
+
+body[data-theme='light'] .archive-auth-input,
+body[data-theme='light'] .archive-password-wrapper,
+body[data-theme='light'] .archive-auth-error,
+body[data-theme='light'] .archive-auth-locked {
+  background: var(--page-surface) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-ink) !important;
+}
+
+body[data-theme='light'] .archive-home-button,
+body[data-theme='light'] .archive-section-back,
+body[data-theme='light'] .archive-password-toggle {
+  color: var(--page-ink) !important;
+  border-color: var(--page-ink) !important;
+}
+
+/* Insights */
+body[data-theme='light'] .insights-page .insights-back-button-container {
+  background: rgba(242,240,232,.94) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .insights-page .insights-back-button,
+body[data-theme='light'] .insights-page .article-card,
+body[data-theme='light'] .insights-page .post-card {
+  color: var(--page-ink) !important;
+  background: var(--page-surface) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .insights-page .insights-reader-content-wrapper,
+body[data-theme='light'] .insights-page .insights-reader-content-inner {
+  color: var(--page-ink) !important;
+}
+
+body[data-theme='light'] .insights-page p,
+body[data-theme='light'] .insights-page .insights-reader-content-inner p {
+  color: var(--page-muted) !important;
+}
+
+/* Vault */
+body[data-theme='light'] .vault-page-header,
+body[data-theme='light'] .vault-header,
+body[data-theme='light'] .vault-content,
+body[data-theme='light'] .vault-main {
+  color: var(--page-ink) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .vault-card,
+body[data-theme='light'] .vault-item {
+  background: var(--page-surface) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .vault-back-button {
+  color: var(--page-ink) !important;
+  background: transparent !important;
+  border-color: var(--page-ink) !important;
+}
+
+/* Wish Archive */
+body[data-theme='light'] .wish-archive-page .wish-hero,
+body[data-theme='light'] .wish-archive-page .wish-card,
+body[data-theme='light'] .wish-archive-page .wish-chart-card,
+body[data-theme='light'] .wish-archive-page .wish-yearly-card,
+body[data-theme='light'] .wish-archive-page .wish-fun-fact-featured,
+body[data-theme='light'] .wish-archive-page .wish-fun-fact-premium,
+body[data-theme='light'] .wish-archive-page .wish-stat-premium,
+body[data-theme='light'] .wish-archive-page .wish-achievement-premium,
+body[data-theme='light'] .wish-archive-page .wish-tab-content {
+  background: var(--page-surface) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-hero-subtitle,
+body[data-theme='light'] .wish-archive-page .wish-card-date,
+body[data-theme='light'] .wish-archive-page .wish-chart-title,
+body[data-theme='light'] .wish-archive-page .wish-yearly-stat-label,
+body[data-theme='light'] .wish-archive-page .wish-timeline-entry-meta {
+  color: var(--page-muted) !important;
+}
+
+body[data-theme='light'] .wish-archive-page .tab-nav,
+body[data-theme='light'] .wish-archive-page .wish-controls,
+body[data-theme='light'] .wish-archive-page .wish-search-wrapper,
+body[data-theme='light'] .wish-archive-page .wish-sort-select {
+  background: var(--page-surface-2) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-search-input,
+body[data-theme='light'] .wish-archive-page .wish-sort-select {
+  color: var(--page-ink) !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-modal-overlay {
+  background: rgba(17,19,24,.48) !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-modal-content {
+  background: var(--page-surface) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-ink) !important;
+}
+
+/* Stats */
+body[data-theme='light'] .adashima-stats-page .dashboard-card,
+body[data-theme='light'] .adashima-stats-page .chart-card,
+body[data-theme='light'] .adashima-stats-page .volume-card,
+body[data-theme='light'] .adashima-stats-page .achievement-card,
+body[data-theme='light'] .adashima-stats-page .funfact-card,
+body[data-theme='light'] .adashima-stats-page .funfact-dynamic,
+body[data-theme='light'] .adashima-stats-page .compare-card {
+  background: var(--page-surface) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-line) !important;
+}
+
+body[data-theme='light'] .adashima-stats-page .hero-subtitle,
+body[data-theme='light'] .adashima-stats-page .section-subtitle,
+body[data-theme='light'] .adashima-stats-page .dashboard-card-description,
+body[data-theme='light'] .adashima-stats-page .achievement-card-description,
+body[data-theme='light'] .adashima-stats-page .funfact-card-description,
+body[data-theme='light'] .adashima-stats-page .funfact-dynamic-desc,
+body[data-theme='light'] .adashima-stats-page .stats-footer-sub {
+  color: var(--page-muted) !important;
+}
+
+body[data-theme='light'] .adashima-stats-page .volume-search,
+body[data-theme='light'] .adashima-stats-page .volume-search-input,
+body[data-theme='light'] .adashima-stats-page .compare-select {
+  background: var(--page-surface) !important;
+  color: var(--page-ink) !important;
+  border-color: var(--page-line) !important;
+}
+
+/* Theme controls always remain legible against their own surface. */
+body[data-theme='light'] .drawer-theme-toggle {
+  background: var(--ui-surface-2, #ebe8df) !important;
+  color: var(--ui-text, #111318) !important;
+  border-color: var(--ui-line, rgba(17,19,24,.18)) !important;
+}
+
+/* Explicit dark context for the same fullscreen components. */
+body[data-theme='dark'] .archive-page,
+body[data-theme='dark'] .archive-auth,
+body[data-theme='dark'] .vault-page,
+body[data-theme='dark'] .insights-page,
+body[data-theme='dark'] .wish-archive-page,
+body[data-theme='dark'] .adashima-stats-page {
+  --page-bg: #000;
+  --page-surface: #080808;
+  --page-surface-2: #101010;
+  --page-ink: #f5f5f5;
+  --page-muted: rgba(255,255,255,.62);
+  --page-line: rgba(255,255,255,.18);
+}
+
+body[data-theme='dark'] .archive-page,
+body[data-theme='dark'] .archive-auth,
+body[data-theme='dark'] .vault-page,
+body[data-theme='dark'] .insights-page,
+body[data-theme='dark'] .wish-archive-page,
+body[data-theme='dark'] .adashima-stats-page {
+  background-color: var(--page-bg) !important;
+  color: var(--page-ink) !important;
+}

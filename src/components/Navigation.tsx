@@ -31,6 +31,13 @@ function Navigation() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<Section>("main");
+  const [isLightMode, setIsLightMode] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem("tdy-theme") === "light";
+    } catch {
+      return false;
+    }
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -46,12 +53,27 @@ function Navigation() {
     setMobileOpen(false);
   };
 
+  // Keep the selected appearance on the document so every portfolio section
+  // follows the same theme, including routes where the navbar is hidden.
+  useEffect(() => {
+    document.documentElement.dataset.theme = isLightMode ? "light" : "dark";
+    document.body.dataset.theme = isLightMode ? "light" : "dark";
+
+    try {
+      localStorage.setItem("tdy-theme", isLightMode ? "light" : "dark");
+    } catch {
+      // Storage can be unavailable in restricted browser contexts.
+    }
+  }, [isLightMode]);
+
+  const toggleTheme = () => setIsLightMode((prev) => !prev);
+
   // Handle scroll events for navbar styling
   useEffect(() => {
     const handleScroll = () => {
       const navbar = document.getElementById("navigation");
       if (navbar) {
-        setScrolled(window.scrollY > 20);
+        setScrolled(window.scrollY > 48);
       }
 
       // Only detect active section if not on fullscreen route
@@ -135,6 +157,10 @@ function Navigation() {
         ))}
       </List>
       <Box className="drawer-footer">
+        <button className="drawer-theme-toggle" onClick={toggleTheme} type="button">
+          <Icon icon={isLightMode ? "mdi:weather-night" : "mdi:white-balance-sunny"} />
+          <span>{isLightMode ? "Dark mode" : "Light mode"}</span>
+        </button>
         <span className="drawer-footer-text">© 2026 TDY</span>
       </Box>
     </Box>
@@ -175,6 +201,16 @@ function Navigation() {
               </Button>
             ))}
           </Box>
+
+          <IconButton
+            className="theme-toggle-button"
+            onClick={toggleTheme}
+            aria-label={isLightMode ? "Switch to dark mode" : "Switch to light mode"}
+            title={isLightMode ? "Dark mode" : "Light mode"}
+          >
+            <Icon icon={isLightMode ? "mdi:weather-night" : "mdi:white-balance-sunny"} />
+            <span>{isLightMode ? "DARK" : "LIGHT"}</span>
+          </IconButton>
 
           {/* Mobile Hamburger */}
           <IconButton

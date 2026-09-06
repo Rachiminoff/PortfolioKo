@@ -349,11 +349,16 @@ function Expertise() {
         <div className="legend">
           {categories.map(cat => (
             <div key={cat.name} className="legend-item">
-              <span 
-                className="legend-color" 
-                style={{ backgroundColor: cat.color }}
+              <span
+                className="legend-color"
+                style={{
+                  '--legend-color': cat.color,
+                  backgroundColor: cat.color,
+                } as React.CSSProperties}
+                aria-hidden="true"
               />
               <span className="legend-label">{cat.name}</span>
+              <span className="legend-code">{cat.color}</span>
             </div>
           ))}
         </div>

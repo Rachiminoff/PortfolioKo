@@ -13,14 +13,11 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import Fade from '@mui/material/Fade';
 import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
 
 import SendIcon from '@mui/icons-material/Send';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import ScheduleIcon from '@mui/icons-material/Schedule';
-import EmailIcon from '@mui/icons-material/Email';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -174,7 +171,7 @@ function Contact() {
   };
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('your.email@example.com');
+    navigator.clipboard.writeText('tdy.alhssan@gmail.com');
     setCopySuccess(true);
   };
 
@@ -194,42 +191,27 @@ function Contact() {
             </p>
           </div>
 
+          <div className="direct-email-card">
+            <div className="direct-email-meta">
+              <span>DIRECT EMAIL</span>
+              <span>CAVITE, PH (GMT+8)</span>
+            </div>
+            <div className="direct-email-row">
+              <span className="direct-email-address">tdy.alhssan@gmail.com</span>
+              <Tooltip title={copySuccess ? 'Copied!' : 'Copy email'}>
+                <Button
+                  className="direct-email-copy"
+                  onClick={handleCopyEmail}
+                  size="small"
+                  startIcon={copySuccess ? <CheckCircleIcon /> : <ContentCopyIcon />}
+                >
+                  {copySuccess ? 'COPIED' : 'COPY'}
+                </Button>
+              </Tooltip>
+            </div>
+          </div>
+
           <div className="contact-details">
-            <div className="contact-detail-item">
-              <div className="detail-icon">
-                <EmailIcon />
-              </div>
-              <div className="detail-content">
-                <span className="detail-label">Email</span>
-                <div className="detail-value-wrapper">
-                  <span className="detail-value">tdy.alhssan@gmail.com</span>
-                  <Tooltip title={copySuccess ? 'Copied!' : 'Copy email'}>
-                    <IconButton 
-                      className="copy-button" 
-                      onClick={handleCopyEmail}
-                      size="small"
-                    >
-                      {copySuccess ? (
-                        <CheckCircleIcon className="copy-success" />
-                      ) : (
-                        <ContentCopyIcon />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                </div>
-              </div>
-            </div>
-
-            <div className="contact-detail-item">
-              <div className="detail-icon">
-                <LocationOnIcon />
-              </div>
-              <div className="detail-content">
-                <span className="detail-label">Location</span>
-                <span className="detail-value">Cavite, The Philippines</span>
-              </div>
-            </div>
-
             <div className="contact-detail-item">
               <div className="detail-icon">
                 <AccessTimeIcon />

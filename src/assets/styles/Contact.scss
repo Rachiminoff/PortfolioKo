@@ -1,19 +1,22 @@
 // ========== VARIABLES ==========
-$cyan: #2dd4bf;
-$cyan-dim: rgba(45, 212, 191, 0.06);
-$cyan-glow: rgba(45, 212, 191, 0.08);
-$black: #0f0f0f;
-$dark: #181818;
-$gray-dark: #222222;
-$gray: #2c2c2c;
-$gray-medium: #3a3a3a;
+$red: #e6392f;
+$yellow: #f2c230;
+$blue: #2457d6;
+$cyan: #18aebe;
+$cyan-dim: rgba(24, 174, 190, 0.08);
+$cyan-glow: rgba(24, 174, 190, 0.12);
+$black: #000;
+$dark: #111318;
+$gray-dark: #111318;
+$gray: #20242b;
+$gray-medium: #343941;
 $white: #f5f5f5;
 $white-dim: rgba(255, 255, 255, 0.85);
 $white-muted: rgba(255, 255, 255, 0.65);
 $white-faint: rgba(255, 255, 255, 0.4);
 $white-very-faint: rgba(255, 255, 255, 0.15);
-$border-solid: rgba(255, 255, 255, 0.08);
-$border-medium: rgba(255, 255, 255, 0.15);
+$border-solid: rgba(245, 245, 245, 0.22);
+$border-medium: rgba(245, 245, 245, 0.5);
 $font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
@@ -24,25 +27,25 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .contact-container {
   width: 100%;
   min-height: 100vh;
-  padding: 5rem 2rem;
+  padding: 7rem clamp(20px, 4vw, 72px) 5rem;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   position: relative;
   background: $black;
-  max-width: 1200px;
+  max-width: 1480px;
   margin: 0 auto;
 
   @media (max-width: 1100px) {
-    padding: 4rem 1.5rem;
+    padding: 5rem 1.5rem;
   }
 
   @media (max-width: 768px) {
-    padding: 3rem 1rem;
+    padding: 4rem 1rem;
   }
 
   @media (max-width: 480px) {
-    padding: 2rem 0.75rem;
+    padding: 3rem 0.75rem;
   }
 }
 
@@ -104,10 +107,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-weight: 400;
     text-transform: uppercase;
     letter-spacing: 0.15em;
-    color: rgba(255, 255, 255, 0.12);
+    color: rgba(245, 245, 245, 0.58);
     padding: 0.25rem 0;
-    margin-bottom: 0.75rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    margin-bottom: 0.9rem;
+    border-bottom: 2px solid $red;
 
     @media (max-width: 768px) {
       font-size: 0.5rem;
@@ -118,9 +121,10 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   h2 {
     margin: 0 0 0.5rem 0;
     color: $white;
-    font-size: clamp(2.2rem, 3vw, 3.2rem);
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    font-size: clamp(2.8rem, 5vw, 5.8rem);
+    line-height: .9;
+    font-weight: 900;
+    letter-spacing: -0.055em;
     font-family: $font-sans;
 
     @media (max-width: 768px) {
@@ -134,9 +138,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 .contact-divider {
-  width: 40px;
-  height: 1px;
-  background: rgba(45, 212, 191, 0.15);
+  width: 64px;
+  height: 6px;
+  background: $yellow;
   margin: 0.5rem 0 1.25rem 0;
 
   @media (max-width: 768px) {
@@ -148,9 +152,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .contact-subtitle {
   color: $white-muted;
   font-size: 1rem;
-  line-height: 1.7;
-  max-width: 440px;
-  font-weight: 300;
+  line-height: 1.55;
+  max-width: 560px;
+  font-weight: 400;
   font-family: $font-sans;
 
   @media (max-width: 768px) {
@@ -162,6 +166,134 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   @media (max-width: 480px) {
     font-size: 0.85rem;
     line-height: 1.6;
+  }
+}
+
+// ============================================================
+// DIRECT EMAIL
+// ============================================================
+
+.direct-email-card {
+  position: relative;
+  margin-top: 2.5rem;
+  padding: 1.15rem 1.25rem 1.25rem;
+  background: $dark;
+  border: 1px solid $border-medium;
+  box-shadow: 10px 10px 0 $red;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    right: -28px;
+    top: -28px;
+    background: $yellow;
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    right: 18px;
+    bottom: 18px;
+    background: $blue;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 560px;
+    margin-top: 2rem;
+    box-shadow: 7px 7px 0 $red;
+    text-align: left;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+.direct-email-meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: .9rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(245, 245, 245, .22);
+  color: rgba(245, 245, 245, .58);
+  font-family: $font-mono;
+  font-size: .58rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+
+  span:last-child {
+    text-align: right;
+  }
+
+  @media (max-width: 480px) {
+    font-size: .48rem;
+    gap: .75rem;
+  }
+}
+
+.direct-email-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.direct-email-address {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: $white;
+  font-family: $font-mono;
+  font-size: clamp(.88rem, 1.35vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+.direct-email-copy {
+  flex-shrink: 0;
+  min-height: 38px !important;
+  padding: 0 .9rem !important;
+  border: 1px solid rgba(245, 245, 245, .08) !important;
+  border-radius: 0 !important;
+  background: #202735 !important;
+  color: $white !important;
+  font-family: $font-mono !important;
+  font-size: .66rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .06em !important;
+  transition: .2s ease !important;
+
+  .MuiButton-startIcon {
+    margin-right: .45rem !important;
+  }
+
+  svg {
+    font-size: 1rem !important;
+  }
+
+  &:hover {
+    background: $yellow !important;
+    color: $black !important;
+    border-color: $yellow !important;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 34px !important;
+    padding: 0 .65rem !important;
+    font-size: .56rem !important;
   }
 }
 
@@ -207,19 +339,19 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   .detail-icon {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid $border-solid;
-    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid $border-medium;
+    background: $dark;
     flex-shrink: 0;
     transition: all 0.3s ease;
 
     svg {
       font-size: 1.1rem;
-      color: rgba(255, 255, 255, 0.2);
+      color: $yellow;
       transition: color 0.3s ease;
     }
 
@@ -1134,7 +1266,7 @@ textarea::-webkit-scrollbar-thumb:hover {
         border-color: $border-solid;
         
         svg {
-          color: rgba(255, 255, 255, 0.2);
+          color: $yellow;
         }
       }
     }
