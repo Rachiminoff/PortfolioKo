@@ -1,3 +1,111 @@
-/* Wish Archive — personal data atlas */
-.wish-archive-page{--bg:#000;--fg:#fff;--red:#e6392f;--blue:#2457d6;--yellow:#f2c230;background:#000!important;color:#fff!important;min-height:100vh;padding:40px clamp(20px,4vw,64px) 90px}.wish-bg{display:none!important}.wish-content{width:min(1320px,100%);margin:auto}.wish-back-button,.wish-sort-select,.wish-filter-chip,.wish-search-input,.wish-view-controls button,.wish-tab-nav button{border-radius:0!important;background:#000!important;color:#fff!important;border:1px solid rgba(255,255,255,.4)!important;font:700 10px 'IBM Plex Mono';text-transform:uppercase}.wish-back-button:hover,.wish-filter-chip.active{background:#e6392f!important;color:#fff!important}.wish-archive-header{border-bottom:1px solid rgba(255,255,255,.4);padding-bottom:28px}.wish-hero-title{font:900 clamp(4rem,11vw,9rem)/.8 'Archivo';letter-spacing:-.08em;color:#fff!important;text-transform:uppercase}.wish-hero-subtitle{color:rgba(255,255,255,.6)!important;max-width:620px;line-height:1.7}.wish-hero-stats,.wish-stats-dashboard-grid,.wish-yearly-grid,.wish-charts-row,.wish-fun-facts-grid,.wish-achievements-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px!important;background:rgba(255,255,255,.35)!important}.wish-hero-stat,.wish-stat-premium,.wish-yearly-card,.wish-chart-card,.wish-fun-fact-featured,.wish-fun-fact-premium,.wish-achievement-premium-content,.wish-card,.wish-timeline-entry-premium{background:#000!important;color:#fff!important;border:0!important;border-radius:0!important;box-shadow:none!important}.wish-hero-stat{padding:25px;min-height:150px}.wish-hero-stat:nth-child(2){border-top:6px solid #f2c230}.wish-hero-stat:nth-child(3){border-top:6px solid #e6392f}.wish-hero-stat:nth-child(4){border-top:6px solid #2457d6}.wish-hero-stat .animated-counter-value,.wish-hero-stat .animated-counter-label{color:#fff!important}.wish-tab-content,.wish-overview-tab,.wish-analytics-tab,.wish-achievements-tab,.wish-funfacts-tab,.wish-heatmap-tab{background:#000!important}.wish-section-title,.wish-stats-group-title,.wish-chart-title{color:#fff!important;text-transform:uppercase}.wish-timeline{border-left:1px solid rgba(255,255,255,.35)}.wish-timeline-entry-content{background:#000!important;border:1px solid rgba(255,255,255,.35)!important}.wish-card-image-wrapper,.wish-card-image{background:#000!important}.wish-card-content{background:#000!important;color:#fff!important}.wish-card-date,.wish-card-element,.wish-card-version-badge{color:rgba(255,255,255,.55)!important}.wish-progress-ring{border-color:#e6392f!important}.wish-modal-overlay{background:rgba(0,0,0,.92)!important}.wish-modal-content{background:#000!important;color:#fff!important;border:1px solid rgba(255,255,255,.5)}
-@media(max-width:850px){.wish-hero-stats,.wish-stats-dashboard-grid,.wish-yearly-grid,.wish-charts-row,.wish-fun-facts-grid,.wish-achievements-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.wish-hero-stats,.wish-stats-dashboard-grid,.wish-yearly-grid,.wish-charts-row,.wish-fun-facts-grid,.wish-achievements-grid{grid-template-columns:1fr}}
+
+/* =========================================================
+   WISH ARCHIVE / COLLECTION ATLAS REWORK
+   ========================================================= */
+.wish-archive-page,.wish-archive-page *{box-sizing:border-box}
+.wish-archive-page{
+  --paper:#050505;--ink:#f4f2e8;--muted:rgba(244,242,232,.58);--line:rgba(244,242,232,.22);
+  --red:#e6392f;--blue:#2457d6;--yellow:#f2c230;--cyan:#18aebe;
+  min-height:100vh;padding:22px clamp(18px,4vw,64px) 90px;background:var(--paper)!important;
+  color:var(--ink)!important;font-family:'Archivo',Arial,sans-serif!important;
+}
+.wish-archive-page .wish-bg{display:none!important}
+.wish-archive-page .wish-content{width:min(1480px,100%);margin:auto}
+.wish-archive-page .wish-archive-header{padding:0 0 18px;border-bottom:2px solid var(--ink)}
+.wish-archive-page .wish-back-button{
+  display:inline-flex;align-items:center;gap:9px;padding:10px 13px;border:1px solid var(--ink)!important;border-radius:0!important;
+  background:transparent!important;color:var(--ink)!important;font:800 10px 'IBM Plex Mono'!important;text-transform:uppercase;cursor:pointer
+}
+.wish-archive-page .wish-back-button:hover{background:var(--red)!important;border-color:var(--red)!important;color:var(--ink)!important}
+.wish-archive-page .wish-hero{padding:50px 0 40px;border-bottom:1px solid var(--line)}
+.wish-archive-page .wish-hero-content{max-width:1050px}
+.wish-archive-page .wish-hero-badge{display:inline-block;padding:6px 8px;border:1px solid var(--ink);background:var(--yellow);font:800 9px 'IBM Plex Mono';text-transform:uppercase}
+.wish-archive-page .wish-hero-title{
+  margin:20px 0 0!important;color:var(--ink)!important;font:900 clamp(4.5rem,12vw,11rem)/.76 'Archivo'!important;
+  letter-spacing:-.09em!important;text-transform:uppercase!important;
+}
+.wish-archive-page .wish-hero-subtitle{max-width:700px;margin:25px 0 0!important;padding-left:16px;border-left:8px solid var(--red);color:var(--muted)!important;font:500 13px/1.6 'IBM Plex Mono'!important}
+.wish-archive-page .wish-hero-stats{
+  display:grid!important;grid-template-columns:repeat(4,1fr);gap:1px!important;margin-top:30px;background:var(--ink)!important;border:1px solid var(--ink)!important;
+}
+.wish-archive-page .wish-hero-stat{min-height:150px;padding:20px;background:var(--paper)!important;color:var(--ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.wish-archive-page .wish-hero-stat:nth-child(2){background:var(--yellow)!important}
+.wish-archive-page .wish-hero-stat:nth-child(3){background:var(--red)!important;color:var(--ink)!important}
+.wish-archive-page .wish-hero-stat:nth-child(4){background:var(--blue)!important;color:var(--ink)!important}
+.wish-archive-page .animated-counter{height:100%;display:flex;flex-direction:column;justify-content:space-between}
+.wish-archive-page .animated-counter-value{font-size:clamp(2.4rem,5vw,5rem);line-height:.85;font-weight:900;letter-spacing:-.07em;color:inherit!important}
+.wish-archive-page .animated-counter-label{font:800 9px 'IBM Plex Mono';text-transform:uppercase;color:inherit!important}
+.wish-archive-page .wish-hero-highlights{display:flex;flex-wrap:wrap;gap:1px;margin-top:20px;background:var(--ink);border:1px solid var(--ink)}
+.wish-archive-page .wish-hero-highlight{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#0c0c0c;color:var(--ink);font:800 9px 'IBM Plex Mono';text-transform:uppercase}
+.wish-archive-page .tab-nav{margin-top:28px;border-bottom:2px solid var(--ink);background:var(--paper)!important}
+.wish-archive-page .tab-nav-inner{display:flex;overflow:auto}
+.wish-archive-page .tab-nav-item{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;padding:13px 16px;border:0;border-right:1px solid var(--line);
+  background:transparent;color:var(--ink);font:800 9px 'IBM Plex Mono';text-transform:uppercase;cursor:pointer
+}
+.wish-archive-page .tab-nav-item:hover{background:var(--yellow)}
+.wish-archive-page .tab-nav-item.active{background:var(--red);color:var(--ink)}
+.wish-archive-page .wish-tab-content{background:var(--paper)!important}
+.wish-archive-page .wish-overview-tab,.wish-archive-page .wish-analytics-tab,.wish-archive-page .wish-heatmap-tab,.wish-archive-page .wish-funfacts-tab,.wish-archive-page .wish-achievements-tab,.wish-archive-page .wish-archive-tab{padding-top:35px}
+.wish-archive-page .wish-stats-group{margin-bottom:42px}
+.wish-archive-page .wish-stats-group-title,.wish-archive-page .wish-chart-title{
+  margin:0 0 12px;color:var(--ink)!important;font-size:clamp(1.3rem,2.5vw,2.1rem);font-weight:900;letter-spacing:-.06em;text-transform:uppercase
+}
+.wish-archive-page .wish-stats-dashboard-grid{display:grid!important;grid-template-columns:repeat(3,1fr);gap:1px!important;background:var(--ink)!important;border:1px solid var(--ink)!important}
+.wish-archive-page .wish-stat-premium{min-height:150px;padding:18px;display:flex;gap:15px;background:var(--paper)!important;color:var(--ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.wish-archive-page .wish-stat-premium:nth-child(3n+2){background:var(--yellow)!important}
+.wish-archive-page .wish-stat-premium:nth-child(3n){background:#0c0c0c!important}
+.wish-archive-page .wish-stat-premium-icon{font-size:24px}
+.wish-archive-page .wish-stat-premium-value{font-size:28px;font-weight:900;letter-spacing:-.05em;color:var(--ink)!important}
+.wish-archive-page .wish-stat-premium-label{display:block;margin-top:7px;color:var(--muted);font:800 9px 'IBM Plex Mono';text-transform:uppercase}
+.wish-archive-page .wish-charts-row{display:grid!important;grid-template-columns:1fr 1fr;gap:1px!important;background:var(--ink)!important;border:1px solid var(--ink)!important}
+.wish-archive-page .wish-chart-card{padding:20px;min-height:330px;background:var(--paper)!important;color:var(--ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.wish-archive-page .bar-chart{display:flex;align-items:stretch;gap:8px;padding-top:15px}
+.wish-archive-page .bar-chart-item{min-width:0;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.wish-archive-page .bar-chart-bar-wrapper{width:100%;max-width:35px;display:flex;align-items:flex-end;background:rgba(17,19,24,.07)}
+.wish-archive-page .bar-chart-bar{width:100%;background:var(--red)!important;border-radius:0!important}
+.wish-archive-page .bar-chart-value,.wish-archive-page .bar-chart-label{font:800 8px 'IBM Plex Mono';text-transform:uppercase;color:var(--ink)}
+.wish-archive-page .bar-chart-label{margin-top:7px;white-space:nowrap}
+.wish-archive-page .wish-yearly-grid{display:grid!important;grid-template-columns:repeat(3,1fr);gap:1px!important;background:var(--ink)!important;border:1px solid var(--ink)!important}
+.wish-archive-page .wish-yearly-card{padding:18px;background:var(--paper)!important;color:var(--ink)!important;border:0!important;border-radius:0!important}
+.wish-archive-page .wish-yearly-card:nth-child(3n+2){background:var(--blue)!important;color:var(--ink)!important}
+.wish-archive-page .wish-yearly-card:nth-child(3n+2) *{color:var(--ink)!important}
+.wish-archive-page .wish-yearly-card:nth-child(3n){background:var(--yellow)!important}
+.wish-archive-page .wish-yearly-header{display:flex;justify-content:space-between;align-items:center}
+.wish-archive-page .wish-yearly-stat-value{font-size:32px;font-weight:900;letter-spacing:-.06em}
+.wish-archive-page .wish-yearly-stat-label,.wish-archive-page .wish-yearly-characters{font:700 9px/1.5 'IBM Plex Mono';text-transform:uppercase}
+.wish-archive-page .wish-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ink);border:1px solid var(--ink)}
+.wish-archive-page .wish-card{background:var(--paper)!important;color:var(--ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden;cursor:pointer}
+.wish-archive-page .wish-card:hover{background:#0c0c0c!important;transform:translateY(-2px)}
+.wish-archive-page .wish-card-image-wrapper{aspect-ratio:3/4;background:var(--cyan);overflow:hidden}
+.wish-archive-page .wish-card-image{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.75)}
+.wish-archive-page .wish-card-content{padding:13px;background:var(--paper)!important;color:var(--ink)!important}
+.wish-archive-page .wish-card-date,.wish-archive-page .wish-card-element,.wish-archive-page .wish-card-version-badge{font:800 8px 'IBM Plex Mono';text-transform:uppercase;color:var(--muted)!important}
+.wish-archive-page .wish-card-content h3{margin:7px 0;color:var(--ink);font-size:20px;letter-spacing:-.05em}
+.wish-archive-page .wish-timeline{border-left:2px solid var(--ink);padding-left:24px;margin-left:12px}
+.wish-archive-page .wish-timeline-year{margin:30px 0 12px;font-size:28px;font-weight:900;letter-spacing:-.06em}
+.wish-archive-page .wish-timeline-entry-content{background:#0c0c0c!important;border:1px solid var(--ink)!important;border-radius:0!important;color:var(--ink)!important}
+.wish-archive-page .wish-timeline-entry-dot{background:var(--red)!important;border:2px solid var(--paper)}
+.wish-archive-page .wish-progress-ring{border-color:var(--red)!important}
+.wish-archive-page .wish-fun-facts-grid,.wish-archive-page .wish-achievements-grid{display:grid!important;grid-template-columns:repeat(3,1fr);gap:1px!important;background:var(--ink)!important;border:1px solid var(--ink)!important}
+.wish-archive-page .wish-fun-fact-featured,.wish-archive-page .wish-fun-fact-premium,.wish-archive-page .wish-achievement-premium-content{
+  min-height:180px;padding:20px;background:var(--paper)!important;color:var(--ink)!important;border:0!important;border-radius:0!important;box-shadow:none!important
+}
+.wish-archive-page .wish-fun-fact-featured{grid-column:span 2;background:var(--yellow)!important}
+.wish-archive-page .wish-achievement-premium-content:nth-child(3n+2){background:var(--blue)!important;color:var(--ink)!important}
+.wish-archive-page .wish-heatmap-controls{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:15px}
+.wish-archive-page .wish-heatmap-year-selector{display:flex;gap:7px;flex-wrap:wrap}
+.wish-archive-page .wish-heatmap-year-selector button,.wish-archive-page .wish-sort-select,.wish-archive-page .wish-filter-chip,.wish-archive-page .wish-view-controls button{
+  min-height:40px;padding:0 11px;border:1px solid var(--ink)!important;border-radius:0!important;background:transparent!important;color:var(--ink)!important;
+  font:800 9px 'IBM Plex Mono'!important;text-transform:uppercase;cursor:pointer
+}
+.wish-archive-page .wish-heatmap-year-selector button.active,.wish-archive-page .wish-filter-chip.active{background:var(--red)!important;color:var(--ink)!important}
+.wish-archive-page .heatmap-grid{display:flex;gap:3px;overflow:auto;padding:15px;border:1px solid var(--ink);background:#050505}
+.wish-archive-page .heatmap-week{display:flex;flex-direction:column;gap:3px}
+.wish-archive-page .heatmap-cell{width:11px;height:11px;border-radius:0!important}
+.wish-archive-page .heatmap-legend{display:flex;gap:8px;align-items:center;margin-top:10px;font:800 8px 'IBM Plex Mono';text-transform:uppercase}
+.wish-archive-page .wish-modal-overlay{background:rgba(17,19,24,.82)!important}
+.wish-archive-page .wish-modal-content{width:min(720px,calc(100vw - 30px));background:var(--paper)!important;color:var(--ink)!important;border:1px solid var(--ink)!important;border-radius:0!important;box-shadow:12px 12px 0 var(--red)}
+.wish-archive-page .wish-modal-close{border:0;background:transparent;color:var(--ink);cursor:pointer}
+@media(max-width:950px){.wish-archive-page .wish-hero-stats{grid-template-columns:repeat(2,1fr)}.wish-archive-page .wish-stats-dashboard-grid,.wish-archive-page .wish-yearly-grid,.wish-archive-page .wish-fun-facts-grid,.wish-archive-page .wish-achievements-grid{grid-template-columns:repeat(2,1fr)}.wish-archive-page .wish-gallery{grid-template-columns:repeat(3,1fr)}.wish-archive-page .wish-charts-row{grid-template-columns:1fr}}
+@media(max-width:620px){.wish-archive-page{padding-inline:14px}.wish-archive-page .wish-hero-title{font-size:clamp(4rem,21vw,7rem)!important}.wish-archive-page .wish-hero-stats,.wish-archive-page .wish-stats-dashboard-grid,.wish-archive-page .wish-yearly-grid,.wish-archive-page .wish-fun-facts-grid,.wish-archive-page .wish-achievements-grid,.wish-archive-page .wish-gallery{grid-template-columns:1fr}.wish-archive-page .wish-fun-fact-featured{grid-column:auto}}

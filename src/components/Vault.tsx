@@ -552,6 +552,14 @@ function Vault() {
             <div className="vault-header">
                 <div className="vault-header-top">
                     <div className="vault-header-left">
+                        <button
+                            className="vault-back-btn vault-global-back"
+                            onClick={() => navigate('/archive')}
+                            aria-label="Back to Archive"
+                        >
+                            <Icon icon="mdi:arrow-left" />
+                            Back to Archive
+                        </button>
                         <h1>
                             <Icon icon="mdi:bookshelf" />
                             <span>Vault Library</span>

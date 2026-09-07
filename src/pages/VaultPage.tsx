@@ -44,19 +44,6 @@ const VaultPage: React.FC = () => {
 
   return (
     <div className="vault-page">
-      <div className="vault-page-header">
-        <button 
-          className="vault-back-button"
-          onClick={() => {
-            console.log('VaultPage - Going back to archive');
-            navigate('/archive');  
-          }}
-          aria-label="Back to archive" 
-        >
-          ← Back to Archive  
-        </button>
-        <h1>Vault</h1>
-      </div>
       <Suspense fallback={
         <div className="vault-loading-state">
           <div className="vault-loading-spinner" />

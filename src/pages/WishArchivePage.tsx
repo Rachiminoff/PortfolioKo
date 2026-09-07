@@ -1705,9 +1705,9 @@ const WishArchivePage: React.FC = () => {
 
         {/* Header */}
         <div className="wish-archive-header">
-          <button className="wish-back-button" onClick={() => navigate('/')}>
+          <button className="wish-back-button" onClick={() => navigate('/archive')}>
             <Icon icon="mdi:arrow-left" />
-            Back to Home
+            Back to Archive
           </button>
         </div>
 
