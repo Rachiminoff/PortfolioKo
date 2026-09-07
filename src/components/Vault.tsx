@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
@@ -26,7 +25,6 @@ type FilterChip = "all" | "pdf" | "epub";
 type DensityOption = "compact" | "comfortable" | "large";
 
 function Vault() {
-    const navigate = useNavigate();
     const [vaultItems, setVaultItems] = useState<VaultItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
@@ -554,14 +552,6 @@ function Vault() {
             <div className="vault-header">
                 <div className="vault-header-top">
                     <div className="vault-header-left">
-                        <button
-                            className="vault-back-btn vault-global-back"
-                            onClick={() => navigate('/archive')}
-                            aria-label="Back to Archive"
-                        >
-                            <Icon icon="mdi:arrow-left" />
-                            Back to Archive
-                        </button>
                         <h1>
                             <Icon icon="mdi:bookshelf" />
                             <span>Vault Library</span>
@@ -831,7 +821,7 @@ function Vault() {
                                 {groupedItems.standalone.length > 0 && (
                                     <div className={`vault-grid vault-grid-${viewMode}`}>
                                         {groupedItems.standalone.map((item, index) =>
-                                            renderCard(item, index === 0 && sortOption === "newest")
+                                            renderCard(item, index === 0 && !selectedCategory)
                                         )}
                                     </div>
                                 )}

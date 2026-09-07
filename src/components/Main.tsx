@@ -4,33 +4,82 @@ import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
 
 /* =========================
-   CONSTRUCTION GRID — picture frame
-   Blueprint-style annotation frame that wraps the
-   profile portrait: hairline thirds, corner crop
-   marks, and coordinate labels along the edges.
+   CONSTRUCTION GRID - ENHANCED
 ========================= */
 function ConstructionGrid() {
     return (
         <div className="construction-grid" aria-hidden="true">
-            <div className="grid-line vertical" style={{ left: '33.33%' }} />
-            <div className="grid-line vertical" style={{ left: '66.66%' }} />
-            <div className="grid-line horizontal" style={{ top: '33.33%' }} />
-            <div className="grid-line horizontal" style={{ top: '66.66%' }} />
-
+            {/* Major grid lines */}
+            <div className="grid-line vertical major" style={{ left: '25%' }} />
+            <div className="grid-line vertical major" style={{ left: '50%' }} />
+            <div className="grid-line vertical major" style={{ left: '75%' }} />
+            <div className="grid-line horizontal major" style={{ top: '25%' }} />
+            <div className="grid-line horizontal major" style={{ top: '50%' }} />
+            <div className="grid-line horizontal major" style={{ top: '75%' }} />
+            
+            {/* Minor grid lines */}
+            <div className="grid-line vertical minor" style={{ left: '12.5%' }} />
+            <div className="grid-line vertical minor" style={{ left: '37.5%' }} />
+            <div className="grid-line vertical minor" style={{ left: '62.5%' }} />
+            <div className="grid-line vertical minor" style={{ left: '87.5%' }} />
+            <div className="grid-line horizontal minor" style={{ top: '12.5%' }} />
+            <div className="grid-line horizontal minor" style={{ top: '37.5%' }} />
+            <div className="grid-line horizontal minor" style={{ top: '62.5%' }} />
+            <div className="grid-line horizontal minor" style={{ top: '87.5%' }} />
+            
+            {/* Diagonal connectors */}
+            <div className="grid-line connector" style={{ 
+                top: '50%', 
+                left: '25%', 
+                right: '50%',
+                transform: 'rotate(15deg)',
+                transformOrigin: 'left center'
+            }} />
+            <div className="grid-line connector" style={{ 
+                top: '50%', 
+                left: '50%', 
+                right: '25%',
+                transform: 'rotate(-15deg)',
+                transformOrigin: 'right center'
+            }} />
+            
+            {/* Vertical connectors */}
+            <div className="grid-line connector-vertical" style={{ 
+                top: '25%', 
+                bottom: '50%', 
+                left: '50%' 
+            }} />
+            <div className="grid-line connector-vertical" style={{ 
+                top: '50%', 
+                bottom: '25%', 
+                left: '50%' 
+            }} />
+            
+            {/* Grid labels */}
+            <span className="grid-label" style={{ bottom: '12px', left: '16px' }}>GRID 04</span>
+            <span className="grid-label" style={{ top: '12px', right: '16px' }}>BUILD v2.0</span>
+            
+            {/* Corner crop marks */}
             <div className="crop-mark tl" />
             <div className="crop-mark tr" />
             <div className="crop-mark bl" />
             <div className="crop-mark br" />
-
-            <span className="grid-label" style={{ bottom: '10px', left: '12px' }}>GRID 04</span>
-            <span className="grid-label" style={{ top: '10px', right: '12px' }}>BUILD v2.0</span>
-
-            <span className="coord-label" style={{ top: '10px', left: '25%' }}>X:360</span>
-            <span className="coord-label" style={{ top: '10px', left: '50%' }}>X:720</span>
-            <span className="coord-label" style={{ top: '10px', left: '75%' }}>X:1080</span>
-            <span className="coord-label vertical-label" style={{ left: '10px', top: '25%' }}>Y:180</span>
-            <span className="coord-label vertical-label" style={{ left: '10px', top: '50%' }}>Y:360</span>
-            <span className="coord-label vertical-label" style={{ left: '10px', top: '75%' }}>Y:540</span>
+            
+            {/* Coordinate labels */}
+            <span className="coord-label" style={{ top: '12px', left: '25%' }}>X:360</span>
+            <span className="coord-label" style={{ top: '12px', left: '50%' }}>X:720</span>
+            <span className="coord-label" style={{ top: '12px', left: '75%' }}>X:1080</span>
+            <span className="coord-label" style={{ left: '12px', top: '25%' }}>Y:180</span>
+            <span className="coord-label" style={{ left: '12px', top: '50%' }}>Y:360</span>
+            <span className="coord-label" style={{ left: '12px', top: '75%' }}>Y:540</span>
+            
+            {/* Center mark */}
+            <div className="grid-center-mark" />
+            
+            {/* Arc guides */}
+            <div className="grid-arc arc-1" />
+            <div className="grid-arc arc-2" />
+            <div className="grid-arc arc-3" />
         </div>
     );
 }
@@ -214,6 +263,7 @@ function Main() {
 
     return (
         <div className={`main-container ${isLoaded ? 'loaded' : ''}`}>
+            <ConstructionGrid />
             <GeometricShapes />
 
             <section className="hero-section">
@@ -287,10 +337,20 @@ function Main() {
 
                             {/* Module content - the framed portrait */}
                             <div className="module-content">
-                                {/* Construction frame around the portrait */}
+                                {/* Construction frame - SQUARE/RECTANGULAR */}
                                 <div className="profile-frame">
-                                    <ConstructionGrid />
-
+                                    {/* Outer square frame */}
+                                    <div className="frame-square outer" />
+                                    <div className="frame-square inner" />
+                                    
+                                    {/* Construction circles (now as guides inside square) */}
+                                    <div className="frame-circle primary" />
+                                    <div className="frame-circle secondary" />
+                                    
+                                    {/* Halftone background */}
+                                    <div className="profile-halftone" />
+                                    
+                                    {/* Portrait - now larger, filling the frame */}
                                     <div className="profile-image-wrapper">
                                         <div className="profile-image-container">
                                             <img
@@ -298,9 +358,45 @@ function Main() {
                                                 alt="Tanya Denise Yambao"
                                                 className="profile-image"
                                             />
+                                            <div className="profile-image-overlay" />
                                             <div className="profile-image-border" />
                                         </div>
                                     </div>
+                                    
+                                    {/* Construction brackets - larger */}
+                                    <div className="frame-bracket tl" />
+                                    <div className="frame-bracket tr" />
+                                    <div className="frame-bracket bl" />
+                                    <div className="frame-bracket br" />
+                                    
+                                    {/* Guide lines - extended */}
+                                    <div className="frame-guide vertical" />
+                                    <div className="frame-guide horizontal" />
+                                    <div className="frame-guide diagonal-1" />
+                                    <div className="frame-guide diagonal-2" />
+                                    
+                                    {/* Measurement ticks - larger */}
+                                    <div className="measurement-tick top" />
+                                    <div className="measurement-tick bottom" />
+                                    <div className="measurement-tick left" />
+                                    <div className="measurement-tick right" />
+                                    
+                                    {/* Coordinate labels */}
+                                    <span className="frame-coord" style={{ top: '-36px', right: '-24px' }}>
+                                        X:420
+                                    </span>
+                                    <span className="frame-coord" style={{ bottom: '-36px', left: '-24px' }}>
+                                        Y:180
+                                    </span>
+                                    <span className="frame-coord" style={{ top: '50%', right: '-56px', transform: 'translateY(-50%)' }}>
+                                        R=280
+                                    </span>
+                                    <span className="frame-coord" style={{ top: '-36px', left: '-24px' }}>
+                                        W:320
+                                    </span>
+                                    <span className="frame-coord" style={{ bottom: '-36px', right: '-24px' }}>
+                                        H:320
+                                    </span>
                                 </div>
                             </div>
 

@@ -57,7 +57,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     window.setTimeout(() => {
       document.documentElement.classList.remove("theme-transition");
       document.body.classList.remove("theme-transition");
-    }, 560);
+    }, 650);
   }, [theme]);
 
   const toggleTheme = useCallback(() => {
