@@ -2528,3 +2528,117 @@ body{background:#000!important}
 body[data-theme="light"]{background:#f2f0e8!important}
 html::-webkit-scrollbar,body::-webkit-scrollbar{width:10px;height:10px}html::-webkit-scrollbar-track,body::-webkit-scrollbar-track{background:#000}html::-webkit-scrollbar-thumb,body::-webkit-scrollbar-thumb{background:#e6392f;border:2px solid #000}html::-webkit-scrollbar-thumb:hover,body::-webkit-scrollbar-thumb:hover{background:#f2c230}
 body[data-theme="light"]::-webkit-scrollbar-track{background:#f2f0e8}body[data-theme="light"]::-webkit-scrollbar-thumb{background:#e6392f;border-color:#f2f0e8}
+
+/* ============================================================
+   FINAL THEME PASS — CONTACT AVAILABILITY + PROJECT DETAILS
+   Neutral surfaces intentionally use one light/dark canvas per
+   component. Accent colors remain graphic accents only.
+   ============================================================ */
+body[data-theme='light'] .contact-detail-item .detail-icon {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+  border-color: rgba(17,19,24,.24) !important;
+}
+body[data-theme='light'] .contact-detail-item .detail-icon svg { color: #e6392f !important; }
+body[data-theme='light'] .contact-detail-item .detail-label,
+body[data-theme='light'] .contact-detail-item .detail-value { color: #111318 !important; }
+body[data-theme='light'] .contact-detail-item .detail-badge {
+  background: #e6392f !important;
+  color: #fff !important;
+  border-color: #e6392f !important;
+}
+body[data-theme='light'] .direct-email-card,
+body[data-theme='light'] .contact-card {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+  border-color: rgba(17,19,24,.24) !important;
+  box-shadow: 10px 10px 0 #e6392f !important;
+}
+body[data-theme='light'] .contact-card-header,
+body[data-theme='light'] .direct-email-row { border-color: rgba(17,19,24,.18) !important; }
+body[data-theme='light'] .contact-card .card-title,
+body[data-theme='light'] .contact-card .card-subtitle,
+body[data-theme='light'] .direct-email-card * { color: #111318 !important; }
+body[data-theme='light'] .contact-card .card-subtitle { opacity: .68; }
+body[data-theme='light'] .form-field .MuiOutlinedInput-root,
+body[data-theme='light'] .form-field .MuiInputBase-input,
+body[data-theme='light'] .form-field textarea,
+body[data-theme='light'] .form-field fieldset {
+  color: #111318 !important;
+  border-color: rgba(17,19,24,.3) !important;
+  background: #f2f0e8 !important;
+}
+body[data-theme='light'] .form-field label { color: rgba(17,19,24,.68) !important; }
+body[data-theme='light'] .form-field .MuiInputBase-input::placeholder { color: rgba(17,19,24,.45) !important; }
+
+body[data-theme='light'] .project-details-page {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+  --line: rgba(17,19,24,.2);
+  --muted: rgba(17,19,24,.68);
+  --red: #e6392f;
+  --blue: #2457d6;
+  --yellow: #f2c230;
+}
+body[data-theme='light'] .project-details-page .back-button,
+body[data-theme='light'] .project-details-page .toc-item,
+body[data-theme='light'] .project-details-page .meta-tag,
+body[data-theme='light'] .project-details-page .action-secondary,
+body[data-theme='light'] .project-details-page .tech-chip,
+body[data-theme='light'] .project-details-page .highlight-card,
+body[data-theme='light'] .project-details-page .feature-group,
+body[data-theme='light'] .project-details-page .docs-callout,
+body[data-theme='light'] .project-details-page .arch-node,
+body[data-theme='light'] .project-details-page .resource-card,
+body[data-theme='light'] .project-details-page .thumb,
+body[data-theme='light'] .project-details-page .article-navigation,
+body[data-theme='light'] .project-details-page .docs-footer,
+body[data-theme='light'] .project-details-page .article-header,
+body[data-theme='light'] .project-details-page .documentation-layout {
+  background: #f2f0e8 !important;
+  color: #111318 !important;
+}
+body[data-theme='light'] .project-details-page .article-title,
+body[data-theme='light'] .project-details-page .section-title,
+body[data-theme='light'] .project-details-page .docs-subheading,
+body[data-theme='light'] .project-details-page .highlight-title,
+body[data-theme='light'] .project-details-page .feature-group-title,
+body[data-theme='light'] .project-details-page .nav-title,
+body[data-theme='light'] .project-details-page .footer-title,
+body[data-theme='light'] .project-details-page .action-secondary,
+body[data-theme='light'] .project-details-page .tech-chip,
+body[data-theme='light'] .project-details-page .resource-card,
+body[data-theme='light'] .project-details-page .arch-node { color: #111318 !important; }
+body[data-theme='light'] .project-details-page .article-subtitle,
+body[data-theme='light'] .project-details-page .article-excerpt,
+body[data-theme='light'] .project-details-page .docs-text,
+body[data-theme='light'] .project-details-page .highlight-description,
+body[data-theme='light'] .project-details-page .feature-group-list li,
+body[data-theme='light'] .project-details-page .callout-content,
+body[data-theme='light'] .project-details-page .figure-caption,
+body[data-theme='light'] .project-details-page .nav-label,
+body[data-theme='light'] .project-details-page .footer-description { color: rgba(17,19,24,.68) !important; }
+body[data-theme='light'] .project-details-page .article-subtitle { color: #111318 !important; }
+body[data-theme='light'] .project-details-page .toc-item { border-color: rgba(17,19,24,.2) !important; }
+body[data-theme='light'] .project-details-page .toc-item.active,
+body[data-theme='light'] .project-details-page .action-primary,
+body[data-theme='light'] .project-details-page .footer-primary { background: #e6392f !important; color: #fff !important; border-color: #e6392f !important; }
+body[data-theme='light'] .project-details-page .figure-main,
+body[data-theme='light'] .project-details-page .video-container { background: #111318 !important; border-color: rgba(17,19,24,.25) !important; }
+body[data-theme='light'] .project-details-page .highlights-grid,
+body[data-theme='light'] .project-details-page .resources-grid { background: rgba(17,19,24,.2) !important; }
+body[data-theme='light'] .project-details-page .highlight-card:nth-child(3n+1) { border-top-color: #e6392f !important; }
+body[data-theme='light'] .project-details-page .highlight-card:nth-child(3n+2) { border-top-color: #f2c230 !important; }
+body[data-theme='light'] .project-details-page .highlight-card:nth-child(3n) { border-top-color: #2457d6 !important; }
+body[data-theme='light'] .project-details-page .docs-callout { border-left-color: #f2c230 !important; }
+body[data-theme='light'] .project-details-page .callout-label { color: #a1650a !important; }
+body[data-theme='light'] .project-details-page .callout-tip { border-left-color: #2457d6 !important; }
+body[data-theme='light'] .project-details-page .callout-tip .callout-label { color: #2457d6 !important; }
+body[data-theme='light'] .project-details-page .callout-impl { border-left-color: #2457d6 !important; }
+body[data-theme='light'] .project-details-page .callout-impl .callout-label { color: #2457d6 !important; }
+body[data-theme='light'] .project-details-page .callout-future { border-left-color: #e6392f !important; }
+body[data-theme='light'] .project-details-page .callout-future .callout-label { color: #e6392f !important; }
+body[data-theme='light'] .project-details-page .resource-card:hover,
+body[data-theme='light'] .project-details-page .nav-link:hover { background: #e8e5dc !important; }
+body[data-theme='light'] .project-details-page .footer-link { background: #f2f0e8 !important; color: #111318 !important; border-color: rgba(17,19,24,.25) !important; }
+body[data-theme='light'] .project-details-page .footer-primary { background: #e6392f !important; color: #fff !important; }

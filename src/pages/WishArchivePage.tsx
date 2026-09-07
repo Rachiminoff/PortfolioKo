@@ -892,15 +892,17 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
+    // A pull is "guaranteed" only when the immediately preceding pull was
+    // a loss (Genshin's 50/50 pity rule). Everything else is a real 50/50,
+    // and only wins on those count toward fiftyFiftyWins.
     let fiftyFiftyWins = 0;
     let guaranteedChars = 0;
     sortedForStreak.forEach((c, index) => {
-      if (index === 0) {
-        if (c.outcome === 'won') fiftyFiftyWins++;
-        else guaranteedChars++;
-      } else {
-        if (c.outcome === 'won') fiftyFiftyWins++;
-        else guaranteedChars++;
+      const wasGuaranteed = index > 0 && sortedForStreak[index - 1].outcome === 'lost';
+      if (wasGuaranteed) {
+        guaranteedChars++;
+      } else if (c.outcome === 'won') {
+        fiftyFiftyWins++;
       }
     });
 
@@ -988,7 +990,7 @@ const WishArchivePage: React.FC = () => {
     if (first && latest) {
       funFacts.push(`Your collection spans from Version ${first.version} to ${latest.version}.`);
     }
-    funFacts.push(`You have collected characters across ${activeYears} major game version${activeYears > 1 ? 's' : ''}.`);
+    funFacts.push(`You have collected characters across ${activeYears} year${activeYears > 1 ? 's' : ''}.`);
     if (versionsParticipated > 0) {
       funFacts.push(`You've pulled in ${versionsParticipated} different game versions.`);
     }

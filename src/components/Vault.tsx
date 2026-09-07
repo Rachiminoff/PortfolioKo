@@ -821,7 +821,7 @@ function Vault() {
                                 {groupedItems.standalone.length > 0 && (
                                     <div className={`vault-grid vault-grid-${viewMode}`}>
                                         {groupedItems.standalone.map((item, index) =>
-                                            renderCard(item, index === 0 && !selectedCategory)
+                                            renderCard(item, index === 0 && sortOption === "newest")
                                         )}
                                     </div>
                                 )}

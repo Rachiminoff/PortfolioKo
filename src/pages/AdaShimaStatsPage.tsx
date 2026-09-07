@@ -475,7 +475,7 @@ const AdaShimaStatsPage: React.FC = () => {
   // ---- CALCULATIONS (before conditional return) ----
   const maxPagesValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.page_count));
   const maxDelayValue = Math.max(...volumes.filter(v => v.jp_en_gap_days > 0).map(v => v.jp_en_gap_days));
-  const maxChaptersValue = Math.max(...volumes.filter(v => v.page_count > 0).map(v => v.chapters));
+  const maxChaptersValue = Math.max(...volumes.filter(v => v.chapters > 0).map(v => v.chapters));
 
   const activeVolumes = volumes.filter(v => v.jp_en_gap_days > 0);
   const sortedVolumes = [...activeVolumes].sort((a, b) => {
