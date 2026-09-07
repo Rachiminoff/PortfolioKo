@@ -1,51 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-$red:#e6392f;$blue:#2457d6;$yellow:#f2c230;$cyan:#18aebe;
-
-/* Structural accents (red/blue/yellow/cyan) stay constant across themes and
-   are used ONLY for borders, shadows, and small highlights below — never as
-   a component's fill color, so every surface keeps a single, theme-aware
-   background (var(--ui-*), defined in index.scss). */
-
-.main-container{min-height:100vh;position:relative;overflow:hidden;isolation:isolate;color:var(--ui-text);background:var(--ui-bg);font-family:'Archivo',Arial,sans-serif}
-.main-container:before{content:'';position:absolute;inset:0;z-index:-2;background:linear-gradient(var(--ui-line) 1px,transparent 1px),linear-gradient(90deg,var(--ui-line) 1px,transparent 1px);background-size:25% 25%;opacity:.45}
-.main-container:after{content:'';position:absolute;z-index:-1;width:min(46vw,680px);height:min(46vw,680px);right:-11vw;top:8vh;background:$blue;clip-path:polygon(0 0,100% 0,100% 70%,70% 100%,0 100%);opacity:.32}
-.construction-grid,.geometric-shapes{display:none}
-.hero-section{min-height:100vh;box-sizing:border-box;padding:28px clamp(20px,4vw,72px) 34px;display:flex;align-items:center}
-.hero-content{width:100%;max-width:1480px;margin:auto;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(340px,.85fr);gap:clamp(30px,6vw,105px);align-items:center}
-.hero-meta,.hero-annotations,.module-header,.module-footer,.frame-coord,.footer-label,.footer-value{font-family:'IBM Plex Mono',monospace;text-transform:uppercase}
-.hero-meta{display:flex;gap:12px;align-items:center;margin-bottom:30px;font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--ui-text)}.meta-dot{color:$red;font-size:15px}
-.hero-title{margin:0;font-size:clamp(4.5rem,10.6vw,11.5rem);line-height:.78;letter-spacing:-.085em;font-weight:900;text-transform:uppercase;color:var(--ui-text)}.title-line{display:block;width:fit-content;cursor:pointer;transition:.2s}.title-line:hover{color:$red;transform:translateX(10px)}.title-line:nth-child(2){margin-left:8%}.title-line:nth-child(3){margin-left:1%}
-.hero-subtitle{display:flex;gap:20px;align-items:flex-start;margin:44px 0 34px;padding-left:8px;border-left:8px solid $red;font-size:clamp(1rem,1.5vw,1.35rem);line-height:1.15;font-weight:700;text-transform:uppercase}.hero-subtitle p{margin:0;color:var(--ui-text)}.subtitle-secondary{font-weight:400}
-.hero-actions{display:flex;flex-wrap:wrap;gap:9px}.action-link{display:inline-flex;align-items:center;justify-content:space-between;gap:38px;min-width:132px;padding:14px 16px;border:1px solid var(--ui-line);background:transparent;color:var(--ui-text)!important;font:600 12px 'IBM Plex Mono',monospace;text-transform:uppercase;cursor:pointer;transition:.2s}.action-link:hover{background:var(--ui-text);color:var(--ui-bg)!important;transform:translateY(-3px);border-color:var(--ui-text)}.action-link.primary{background:$red;border-color:$red;color:#fff!important}.action-link.primary:hover{background:$yellow;border-color:$yellow;color:#111!important}.action-arrow{font-size:20px;line-height:.6}.hero-annotations{display:flex;gap:24px;margin-top:42px;font-size:9px;letter-spacing:.1em;opacity:.65;color:var(--ui-text)}
-
-/* Profile module: header / content / footer are one component and share a
-   single background (--ui-surface). The photo frame is a distinct nested
-   widget and gets its own single flat tone (--ui-surface-2) — still neutral,
-   never an accent fill. */
-.profile-module{background:var(--ui-surface);border:1px solid var(--ui-line);padding:18px;box-shadow:14px 14px 0 $red;color:var(--ui-text)}
-.module-header,.module-footer{display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.06em;color:var(--ui-text)}
-.module-header{padding-bottom:16px;border-bottom:1px solid var(--ui-line)}
-.module-status{color:$red}
-.module-content{padding:clamp(24px,4vw,56px);background:var(--ui-surface)}
-.profile-frame{position:relative;aspect-ratio:1;border:1px solid var(--ui-line);background:var(--ui-surface-2);overflow:visible;display:grid;place-items:center}
-.profile-frame:before{content:'';position:absolute;inset:12%;border:1px solid var(--ui-line);border-radius:50%}
-.profile-frame:after{content:'';position:absolute;width:130%;height:1px;background:var(--ui-line);transform:rotate(-45deg);opacity:.7}
-.frame-square,.frame-circle,.profile-halftone,.frame-bracket,.frame-guide,.measurement-tick,.grid-center-mark,.golden-spiral,.fibonacci-rectangles,.point-marker,.dynamic-hexagon,.orbit-dots{display:none}
-.profile-image-wrapper{width:78%;height:78%;position:relative;z-index:2}
-.profile-image-container{width:100%;height:100%;overflow:hidden;border:1px solid var(--ui-line);background:var(--ui-surface)}
-.profile-image{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1) contrast(1.05);mix-blend-mode:luminosity;opacity:.94}
-.profile-image-overlay,.profile-image-border{display:none}
-.module-footer{padding-top:13px;margin-top:16px;border-top:1px solid var(--ui-line)}
-
-@media(max-width:850px){.hero-section{align-items:flex-start;padding-top:70px}.hero-content{grid-template-columns:1fr}.hero-title{font-size:clamp(4rem,16vw,8rem)}.hero-right{max-width:620px}.main-container:after{width:65vw;height:65vw;right:-25vw;top:55vh}}
-@media(max-width:520px){.hero-section{padding:60px 16px 24px}.hero-subtitle{display:block}.subtitle-secondary{display:block;margin-top:8px}.hero-actions{display:grid;grid-template-columns:1fr 1fr}.action-link{min-width:0}.hero-annotations{flex-wrap:wrap}.profile-module{box-shadow:9px 9px 0 $red}}
-
-/* Dark theme keeps the same structure — only the grid-line and corner-wedge
-   opacity are tuned per theme, everything else already follows --ui-*. */
-body[data-theme='dark'] {
-  .main-container:before {
-    background: linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
-  }
-  .main-container:after { opacity: .5; }
-}
+/* Bauhaus × Swiss — Main / Home */
+.hero-section{position:relative;min-height:calc(100vh - 72px);display:flex;align-items:center;overflow:hidden;background:#000;color:#fff;padding:clamp(32px,6vw,88px) clamp(20px,5vw,80px);isolation:isolate}
+.hero-section .construction-grid,.hero-section .geometric-shapes{display:none!important}
+.hero-section .hero-content{position:relative;z-index:2;width:min(1320px,100%);margin:auto;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:clamp(42px,8vw,140px);align-items:center}
+.hero-section .hero-left{min-width:0}
+.hero-section .hero-meta{display:flex;align-items:center;gap:12px;margin-bottom:24px;font:600 11px/1 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.12em;color:#fff}
+.hero-section .meta-dot{width:9px;height:9px;background:#e6392f;display:inline-block}
+.hero-section .hero-title{margin:0;display:flex;flex-direction:column;font:900 clamp(4.5rem,12vw,11rem)/.78 'Archivo',Arial,sans-serif;letter-spacing:-.08em;text-transform:uppercase}
+.hero-section .title-line{display:block;cursor:pointer;color:#fff!important}
+.hero-section .title-line:first-child{color:#e6392f!important}
+.hero-section .hero-subtitle{margin:38px 0 30px;display:grid;gap:4px}
+.hero-section .subtitle-primary,.hero-section .subtitle-secondary{margin:0!important;font:700 clamp(1.2rem,2.3vw,2rem)/1.05 'Archivo',Arial,sans-serif!important;color:#fff!important;letter-spacing:-.035em}
+.hero-section .subtitle-secondary{color:#f2c230!important}
+.hero-section .hero-actions{display:flex;flex-wrap:wrap;gap:0;border-top:1px solid rgba(255,255,255,.45);border-bottom:1px solid rgba(255,255,255,.45);width:max-content;max-width:100%}
+.hero-section .action-link{border:0;border-right:1px solid rgba(255,255,255,.45);border-radius:0;background:#000!important;color:#fff!important;padding:15px 20px;text-transform:uppercase;font:700 11px/1 'IBM Plex Mono',monospace;transition:.15s ease}
+.hero-section .action-link:last-child{border-right:0}
+.hero-section .action-link:hover,.hero-section .action-link.primary:hover{background:#e6392f!important;color:#fff!important}
+.hero-section .hero-annotations{display:flex;flex-wrap:wrap;gap:18px;margin-top:20px;font:500 9px/1.2 'IBM Plex Mono',monospace;color:rgba(255,255,255,.55);text-transform:uppercase}
+.hero-section .hero-right{min-width:0}
+.hero-section .profile-module{background:#000!important;border:1px solid rgba(255,255,255,.5);color:#fff!important}
+.hero-section .module-header,.hero-section .module-footer{background:#000!important;color:#fff!important;border-color:rgba(255,255,255,.35)!important}
+.hero-section .module-header{display:flex;justify-content:space-between;padding:13px 16px;border-bottom:1px solid rgba(255,255,255,.35);font:700 9px/1 'IBM Plex Mono',monospace;text-transform:uppercase}
+.hero-section .module-status{color:#e6392f!important}
+.hero-section .module-content{padding:clamp(18px,3vw,34px);background:#000!important}
+.hero-section .profile-frame{position:relative;width:min(100%,500px);aspect-ratio:1/1;margin:auto;display:grid;place-items:center}
+.hero-section .profile-frame>*:not(.profile-image-wrapper){display:none!important}
+.hero-section .profile-image-wrapper,.hero-section .profile-image-container{position:relative;width:100%;height:100%;display:block!important}
+.hero-section .profile-image{width:100%;height:100%;object-fit:cover;display:block;filter:none!important;mix-blend-mode:normal!important;opacity:1!important}
+.hero-section .profile-image-overlay{display:none!important}
+.hero-section .profile-image-border{position:absolute;inset:12px;border:1px solid #fff;pointer-events:none}
+.hero-section .module-footer{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.35);padding:0}
+.hero-section .footer-item{padding:13px 12px;min-width:0}
+.hero-section .footer-label{display:block;font:500 8px/1 'IBM Plex Mono',monospace;color:rgba(255,255,255,.5)!important;margin-bottom:6px}
+.hero-section .footer-value{display:block;font:700 9px/1 'IBM Plex Mono',monospace;color:#fff!important;white-space:nowrap}
+.hero-section .footer-divider{display:none}
+@media(max-width:900px){.hero-section .hero-content{grid-template-columns:1fr}.hero-section .hero-right{max-width:560px}.hero-section .hero-title{font-size:clamp(4rem,18vw,8rem)}.hero-section{align-items:flex-start;padding-top:80px}}
+@media(max-width:560px){.hero-section .hero-actions{width:100%;display:grid;grid-template-columns:1fr}.hero-section .action-link{border-right:0;border-bottom:1px solid rgba(255,255,255,.35);text-align:left}.hero-section .action-link:last-child{border-bottom:0}.hero-section .module-footer{grid-template-columns:repeat(2,1fr)}}
