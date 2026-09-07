@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import "../assets/styles/Vault.scss";
 import { supabase } from "../lib/supabase";
@@ -25,6 +26,7 @@ type FilterChip = "all" | "pdf" | "epub";
 type DensityOption = "compact" | "comfortable" | "large";
 
 function Vault() {
+    const navigate = useNavigate();
     const [vaultItems, setVaultItems] = useState<VaultItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);

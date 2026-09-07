@@ -2642,3 +2642,173 @@ body[data-theme='light'] .project-details-page .resource-card:hover,
 body[data-theme='light'] .project-details-page .nav-link:hover { background: #e8e5dc !important; }
 body[data-theme='light'] .project-details-page .footer-link { background: #f2f0e8 !important; color: #111318 !important; border-color: rgba(17,19,24,.25) !important; }
 body[data-theme='light'] .project-details-page .footer-primary { background: #e6392f !important; color: #fff !important; }
+
+
+/* ============================================================
+   LIGHT MODE — EDITORIAL PAPER SYSTEM
+   Keep the Bauhaus/Swiss geometry, but avoid "white cards on beige".
+   Surfaces use a restrained paper hierarchy and ink rules instead.
+   ============================================================ */
+body[data-theme='light'] {
+  --site-light-bg: #eeeae0;
+  --site-paper: #f7f4eb;
+  --site-paper-2: #e4dfd4;
+  --site-paper-3: #d8d2c6;
+  --site-ink: #171717;
+  --site-muted: #5d5a54;
+  --site-line: rgba(23,23,23,.22);
+  background: var(--site-light-bg) !important;
+  color: var(--site-ink) !important;
+}
+
+body[data-theme='light'] #root {
+  background: var(--site-light-bg) !important;
+}
+
+body[data-theme='light'] .fullscreen-layout,
+body[data-theme='light'] .archive-page,
+body[data-theme='light'] .vault-page,
+body[data-theme='light'] .insights-page,
+body[data-theme='light'] .wish-archive-page,
+body[data-theme='light'] .adashima-stats-page {
+  background:
+    linear-gradient(rgba(23,23,23,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(23,23,23,.025) 1px, transparent 1px),
+    var(--site-light-bg) !important;
+  background-size: 32px 32px, 32px 32px, auto !important;
+  color: var(--site-ink) !important;
+}
+
+/* Page-level paper surfaces become warm paper, not pure white. */
+body[data-theme='light'] .vault-page,
+body[data-theme='light'] .insights-page,
+body[data-theme='light'] .wish-archive-page,
+body[data-theme='light'] .adashima-stats-page {
+  --paper: var(--site-paper) !important;
+  --page-bg: var(--site-light-bg) !important;
+  --page-surface: var(--site-paper) !important;
+  --page-surface-2: var(--site-paper-2) !important;
+  --ink: var(--site-ink) !important;
+  --muted: var(--site-muted) !important;
+  --line: var(--site-line) !important;
+}
+
+body[data-theme='light'] .vault-page > *,
+body[data-theme='light'] .insights-page > *,
+body[data-theme='light'] .wish-archive-page > *,
+body[data-theme='light'] .adashima-stats-page > * {
+  --surface-paper: var(--site-paper);
+}
+
+/* Swiss rules should read as structure rather than card outlines. */
+body[data-theme='light'] .vault-page .vault-header,
+body[data-theme='light'] .insights-page .insights-header,
+body[data-theme='light'] .wish-archive-page .wish-archive-header,
+body[data-theme='light'] .adashima-stats-page .stats-header {
+  background: transparent !important;
+  border-color: var(--site-ink) !important;
+}
+
+/* Replace the most visually jarring pure-white surfaces. */
+body[data-theme='light'] .vault-page .vault-card,
+body[data-theme='light'] .vault-page .book-card,
+body[data-theme='light'] .vault-page .folder-card,
+body[data-theme='light'] .vault-page .vault-toolbar,
+body[data-theme='light'] .insights-page .insight-card,
+body[data-theme='light'] .insights-page .featured-insight,
+body[data-theme='light'] .wish-archive-page .wish-hero-stat,
+body[data-theme='light'] .wish-archive-page .wish-stat-premium,
+body[data-theme='light'] .wish-archive-page .wish-chart-card,
+body[data-theme='light'] .wish-archive-page .wish-yearly-card,
+body[data-theme='light'] .wish-archive-page .wish-card,
+body[data-theme='light'] .wish-archive-page .wish-card-content,
+body[data-theme='light'] .wish-archive-page .wish-modal-content,
+body[data-theme='light'] .adashima-stats-page .hero-stat,
+body[data-theme='light'] .adashima-stats-page .dashboard-card,
+body[data-theme='light'] .adashima-stats-page .volume-card,
+body[data-theme='light'] .adashima-stats-page .compare-stat {
+  background: var(--site-paper) !important;
+  color: var(--site-ink) !important;
+}
+
+/* Secondary zones are visibly different without becoming "white boxes". */
+body[data-theme='light'] .vault-page .vault-toolbar,
+body[data-theme='light'] .insights-page .insights-filters,
+body[data-theme='light'] .wish-archive-page .tab-nav,
+body[data-theme='light'] .adashima-stats-page .stats-nav {
+  background: var(--site-paper-2) !important;
+  border-color: var(--site-line) !important;
+}
+
+/* Preserve deliberate ink blocks, but make them feel printed rather than detached. */
+body[data-theme='light'] .wish-archive-page .wish-hero-highlight,
+body[data-theme='light'] .wish-archive-page .wish-timeline-entry-content,
+body[data-theme='light'] .adashima-stats-page .timeline-item,
+body[data-theme='light'] .adashima-stats-page .translation-item {
+  background: var(--site-ink) !important;
+  color: var(--site-paper) !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-hero-stat:nth-child(2),
+body[data-theme='light'] .wish-archive-page .wish-stat-premium:nth-child(3n+2),
+body[data-theme='light'] .wish-archive-page .wish-yearly-card:nth-child(3n),
+body[data-theme='light'] .adashima-stats-page .hero-stat:nth-child(2),
+body[data-theme='light'] .adashima-stats-page .dashboard-card:nth-child(3n+2) {
+  background: #e9c43a !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-hero-stat:nth-child(3),
+body[data-theme='light'] .adashima-stats-page .hero-stat:nth-child(3) {
+  background: #e34a40 !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-hero-stat:nth-child(4),
+body[data-theme='light'] .wish-archive-page .wish-yearly-card:nth-child(3n+2),
+body[data-theme='light'] .adashima-stats-page .hero-stat:nth-child(4) {
+  background: #3b64c9 !important;
+}
+
+body[data-theme='light'] .wish-archive-page .wish-card:hover,
+body[data-theme='light'] .adashima-stats-page .volume-card:hover,
+body[data-theme='light'] .insights-page .insight-card:hover,
+body[data-theme='light'] .vault-page .book-card:hover {
+  background: var(--site-paper-2) !important;
+}
+
+/* Sticky bars should belong to the paper canvas, not look like floating white UI. */
+body[data-theme='light'] .adashima-stats-page .stats-nav {
+  background: rgba(228,223,212,.94) !important;
+  backdrop-filter: blur(12px);
+}
+
+/* A little print texture gives light mode the same visual density as black mode. */
+body[data-theme='light'] .vault-page::after,
+body[data-theme='light'] .insights-page::after,
+body[data-theme='light'] .wish-archive-page::after,
+body[data-theme='light'] .adashima-stats-page::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: .035;
+  background-image: radial-gradient(rgba(0,0,0,.9) .5px, transparent .5px);
+  background-size: 5px 5px;
+}
+
+/* ============================================================
+   ROUTE TRANSITIONS — short editorial slide/fade
+   ============================================================ */
+.route-transition {
+  animation: route-enter .48s cubic-bezier(.22,1,.36,1) both;
+  transform-origin: 50% 18%;
+}
+
+@keyframes route-enter {
+  from { opacity: 0; transform: translateY(14px); filter: blur(2px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-transition { animation: none !important; }
+}

@@ -287,7 +287,7 @@ function AppContent() {
                             location.pathname === '/adashima-stats';
 
   return (
-    <div className={isFullscreenRoute ? '' : 'main-container dark-mode'}>
+    <div className={isFullscreenRoute ? 'route-transition' : 'main-container dark-mode route-transition'} key={location.pathname}>
       <Routes>
         <Route 
           path="/" 
