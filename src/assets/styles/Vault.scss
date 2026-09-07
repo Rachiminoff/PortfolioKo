@@ -8,9 +8,9 @@ $dark: #0F0F0F;
 $gray-dark: #1A1A1A;
 $gray: #232323;
 $white: #F5F5F5;
-$white-dim: rgba(255, 255, 255, 0.7);
-$white-faint: rgba(255, 255, 255, 0.3);
-$white-subtle: rgba(255, 255, 255, 0.04);
+$white-dim: rgba(var(--vault-tint), 0.7);
+$white-faint: rgba(var(--vault-tint), 0.3);
+$white-subtle: rgba(var(--vault-tint), 0.04);
 $cyan: #3BE9E5;
 $font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
@@ -18,28 +18,53 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 /* =========================
    ROOT VARIABLES
 ========================= */
+/* Dark is the default palette. --vault-tint is the RGB triplet used by every
+   rgba() wash/hairline in this file, so one variable flips ~100 translucent
+   surfaces at once. Card backgrounds are flat single colors (no gradients),
+   and radii are 0 to match the site's sharp-edged Bauhaus/Swiss language. */
 :root {
+  --vault-tint: 255, 255, 255;
   --vault-bg-primary: #070707;
   --vault-bg-secondary: #0F0F0F;
-  --vault-bg-card: linear-gradient(160deg, #0F0F0F 0%, #1A1A1A 45%, #0F0F0F 100%);
-  --vault-border: rgba(255, 255, 255, 0.04);
-  --vault-border-hover: rgba(255, 255, 255, 0.08);
+  --vault-bg-card: #0F0F0F;
+  --vault-border: rgba(var(--vault-tint), 0.04);
+  --vault-border-hover: rgba(var(--vault-tint), 0.08);
   --vault-text: #F5F5F5;
   --vault-text-primary: #F5F5F5;
-  --vault-text-secondary: rgba(255, 255, 255, 0.7);
-  --vault-text-muted: rgba(255, 255, 255, 0.3);
-  --vault-text-dim: rgba(255, 255, 255, 0.15);
+  --vault-text-secondary: rgba(var(--vault-tint), 0.7);
+  --vault-text-muted: rgba(var(--vault-tint), 0.3);
+  --vault-text-dim: rgba(var(--vault-tint), 0.15);
   --vault-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
   --vault-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.6);
   --vault-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.7);
   --vault-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.8);
-  --vault-radius-sm: 4px;
-  --vault-radius-md: 8px;
-  --vault-radius-lg: 12px;
-  --vault-radius-xl: 16px;
+  --vault-radius-sm: 0;
+  --vault-radius-md: 0;
+  --vault-radius-lg: 0;
+  --vault-radius-xl: 0;
   --vault-transition-fast: 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --vault-transition: 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --vault-transition-slow: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Light mode: same structure, paper/ink surfaces, ink-based tint so every
+   wash and hairline darkens instead of vanishing against a white page. */
+body[data-theme='light'] .vault-page {
+  --vault-tint: 17, 19, 24;
+  --vault-bg-primary: #f2f0e8;
+  --vault-bg-secondary: #ffffff;
+  --vault-bg-card: #ffffff;
+  --vault-border: rgba(var(--vault-tint), 0.14);
+  --vault-border-hover: rgba(var(--vault-tint), 0.28);
+  --vault-text: #111318;
+  --vault-text-primary: #111318;
+  --vault-text-secondary: rgba(var(--vault-tint), 0.72);
+  --vault-text-muted: rgba(var(--vault-tint), 0.55);
+  --vault-text-dim: rgba(var(--vault-tint), 0.38);
+  --vault-shadow-sm: 0 2px 8px rgba(17, 19, 24, 0.08);
+  --vault-shadow-md: 0 8px 24px rgba(17, 19, 24, 0.1);
+  --vault-shadow-lg: 0 16px 48px rgba(17, 19, 24, 0.12);
+  --vault-shadow-xl: 0 24px 64px rgba(17, 19, 24, 0.14);
 }
 
 /* =========================
@@ -52,9 +77,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   color: var(--vault-text);
   background: var(--vault-bg-primary);
   background-image: 
-    radial-gradient(ellipse at 20% 50%, rgba(255, 255, 255, 0.02) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(255, 255, 255, 0.015) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.01) 0%, transparent 40%);
+    radial-gradient(ellipse at 20% 50%, rgba(var(--vault-tint), 0.02) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(var(--vault-tint), 0.015) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 100%, rgba(var(--vault-tint), 0.01) 0%, transparent 40%);
 }
 
 /* =========================
@@ -98,7 +123,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   padding: 0.75rem 2rem 0.5rem;
   background: rgba(7, 7, 7, 0.95);
   backdrop-filter: blur(20px);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.02);
+  border-bottom: 0.5px solid rgba(var(--vault-tint), 0.02);
   transition: var(--vault-transition);
 
   @media (max-width: 768px) {
@@ -131,7 +156,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     font-size: clamp(1.1rem, 1.5vw, 1.4rem);
     font-weight: 500;
     letter-spacing: -0.02em;
-    color: #ffffff;
+    color: var(--vault-text-primary);
     font-family: $font-sans;
 
     svg {
@@ -162,8 +187,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   display: flex;
   gap: 2px;
   padding: 2px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
   flex-shrink: 0;
 }
 
@@ -195,13 +220,13 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    color: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.02);
+    color: rgba(var(--vault-tint), 0.5);
+    background: rgba(var(--vault-tint), 0.02);
   }
 
   &.active {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.04);
+    color: var(--vault-text-primary);
+    background: rgba(var(--vault-tint), 0.04);
   }
 }
 
@@ -224,8 +249,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   align-items: center;
   gap: 0.4rem;
   padding: 0.2rem 0.6rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   transition: var(--vault-transition);
   height: 28px;
 
@@ -236,8 +261,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.04);
   }
 }
 
@@ -260,7 +285,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-stat-value {
   font-size: 0.85rem;
   font-weight: 500;
-  color: #fff;
+  color: var(--vault-text-primary);
   letter-spacing: -0.01em;
   font-family: $font-mono;
 
@@ -327,9 +352,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-search-input {
   width: 100%;
   padding: 0.4rem 2rem 0.4rem 2.5rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
-  color: #fff;
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
+  color: var(--vault-text-primary);
   font-size: 0.8rem;
   transition: var(--vault-transition);
   outline: none;
@@ -342,8 +367,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:focus {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.06);
   }
 }
 
@@ -367,7 +392,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(var(--vault-tint), 0.6);
   }
 }
 
@@ -384,16 +409,16 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-sort-select,
 .vault-density-select {
   padding: 0.3rem 1.8rem 0.3rem 0.75rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.6);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
+  color: rgba(var(--vault-tint), 0.6);
   font-size: 0.7rem;
   cursor: pointer;
   transition: var(--vault-transition);
   outline: none;
   font-family: $font-mono;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.2)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(var(--vault-tint),0.2)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.6rem center;
   height: 32px;
@@ -409,13 +434,13 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
+    background-color: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.06);
   }
 
   option {
-    background: #0F0F0F;
-    color: #fff;
+    background: var(--vault-bg-secondary);
+    color: var(--vault-text-primary);
   }
 }
 
@@ -434,8 +459,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   align-items: center;
   gap: 0.3rem;
   padding: 0.2rem 0.6rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   color: var(--vault-text-muted);
   font-size: 0.55rem;
   font-weight: 400;
@@ -463,14 +488,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.6);
+    background: rgba(var(--vault-tint), 0.04);
+    color: rgba(var(--vault-tint), 0.6);
   }
 
   &.active {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.06);
+    color: var(--vault-text-primary);
   }
 }
 
@@ -530,8 +555,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-skeleton-card {
   border-radius: var(--vault-radius-lg);
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   animation: skeletonPulse 1.8s ease infinite;
 }
 
@@ -539,13 +564,13 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   width: 100%;
   aspect-ratio: 3/4.2;
   margin-bottom: 0.75rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--vault-tint), 0.03);
 }
 
 .vault-skeleton-line {
   height: 10px;
   margin-bottom: 0.5rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--vault-tint), 0.03);
 
   &.short {
     width: 60%;
@@ -562,8 +587,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   gap: 2px;
   padding: 0.5rem 0;
   animation: fadeSlideUp 0.3s ease forwards;
-  background: rgba(255, 255, 255, 0.01);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.01);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   padding: 2px;
 
   @media (max-width: 768px) {
@@ -585,7 +610,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   width: 100%;
   padding: 0;
   border: none;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(var(--vault-tint), 0.01);
   cursor: pointer;
   transition: var(--vault-transition);
   text-align: left;
@@ -597,7 +622,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(var(--vault-tint), 0.03);
   }
 }
 
@@ -605,7 +630,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   position: relative;
   width: 100%;
   aspect-ratio: 16/9;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -667,7 +692,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     margin: 0;
     font-size: 0.85rem;
     font-weight: 400;
-    color: #fff;
+    color: var(--vault-text-primary);
     letter-spacing: 0.02em;
     font-family: $font-sans;
 
@@ -701,7 +726,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 0.75rem;
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.02);
+  border-bottom: 0.5px solid rgba(var(--vault-tint), 0.02);
 
   @media (max-width: 768px) {
     padding: 0.75rem 0 0.5rem;
@@ -720,7 +745,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   width: 40px;
   height: 56px;
   object-fit: cover;
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
   filter: grayscale(0.2) contrast(1.05);
 
   @media (max-width: 768px) {
@@ -736,7 +761,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   margin: 0;
   font-size: clamp(1rem, 1.5vw, 1.3rem);
   font-weight: 400;
-  color: #fff;
+  color: var(--vault-text-primary);
   letter-spacing: 0.02em;
   font-family: $font-sans;
 
@@ -770,7 +795,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   gap: 0.4rem;
   border: none;
   padding: 0.3rem 0.8rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
   color: var(--vault-text-muted);
   cursor: pointer;
   transition: var(--vault-transition);
@@ -789,8 +814,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: #fff;
+    background: rgba(var(--vault-tint), 0.04);
+    color: var(--vault-text-primary);
   }
 }
 
@@ -802,7 +827,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   gap: 2px;
   align-items: start;
   animation: fadeSlideUp 0.3s ease forwards;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(var(--vault-tint), 0.01);
   padding: 2px;
 }
 
@@ -833,14 +858,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.01);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.01);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   transition: var(--vault-transition);
   height: 100%;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--vault-tint), 0.03);
+    border-color: rgba(var(--vault-tint), 0.04);
   }
 }
 
@@ -848,7 +873,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   position: absolute;
   inset: auto -20% -30% -20%;
   height: 150px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.03), transparent 70%);
+  background: radial-gradient(circle, rgba(var(--vault-tint), 0.03), transparent 70%);
   filter: blur(60px);
   z-index: 0;
   opacity: 0;
@@ -874,7 +899,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   width: 100%;
   aspect-ratio: 3 / 4.2;
   object-fit: cover;
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   transition: var(--vault-transition);
   cursor: pointer;
   display: block;
@@ -882,7 +907,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   &:hover {
     filter: grayscale(0) contrast(1.1);
-    border-color: rgba(255, 255, 255, 0.04);
+    border-color: rgba(var(--vault-tint), 0.04);
   }
 }
 
@@ -892,8 +917,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   color: var(--vault-text-dim);
   cursor: pointer;
   transition: var(--vault-transition);
@@ -910,8 +935,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.04);
   }
 }
 
@@ -935,7 +960,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   line-height: 1.3;
   font-weight: 400;
   letter-spacing: 0.02em;
-  color: #fff;
+  color: var(--vault-text-primary);
   font-family: $font-sans;
 
   @media (max-width: 480px) {
@@ -946,7 +971,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-book-title {
   background: none;
   border: none;
-  color: #fff;
+  color: var(--vault-text-primary);
   font: inherit;
   cursor: pointer;
   padding: 0;
@@ -979,8 +1004,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-series-badge {
   display: inline-flex;
   padding: 0.05rem 0.4rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   color: var(--vault-text-muted);
   font-size: 0.5rem;
   font-weight: 400;
@@ -997,7 +1022,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 /* Grid View - Description */
 .vault-book-card-grid .vault-description-dropdown {
   margin-top: 0.3rem;
-  border-top: 0.5px solid rgba(255, 255, 255, 0.02);
+  border-top: 0.5px solid rgba(var(--vault-tint), 0.02);
   padding-top: 0.3rem;
 }
 
@@ -1019,7 +1044,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   text-transform: uppercase;
 
   &:hover {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(var(--vault-tint), 0.6);
   }
 }
 
@@ -1088,9 +1113,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-read-btn {
   flex: 1;
   min-width: 50px;
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
-  background: rgba(255, 255, 255, 0.02);
-  color: #fff;
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
+  background: rgba(var(--vault-tint), 0.02);
+  color: var(--vault-text-primary);
   padding: 0.3rem 0.6rem;
   font-size: 0.65rem;
   font-weight: 400;
@@ -1111,8 +1136,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.06);
   }
 }
 
@@ -1123,8 +1148,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
-  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
+  background: rgba(var(--vault-tint), 0.01);
   color: var(--vault-text-muted);
   padding: 0.3rem 0.6rem;
   font-size: 0.6rem;
@@ -1160,8 +1185,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.7);
+    background: rgba(var(--vault-tint), 0.04);
+    color: rgba(var(--vault-tint), 0.7);
   }
 }
 
@@ -1174,8 +1199,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   align-items: stretch;
   min-height: 120px;
   padding: 0;
-  background: rgba(255, 255, 255, 0.01);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.01);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   transition: var(--vault-transition);
   overflow: hidden;
   position: relative;
@@ -1189,13 +1214,13 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--vault-tint), 0.02);
+    border-color: rgba(var(--vault-tint), 0.04);
   }
 
   .vault-card-glow {
     inset: auto -10% -20% -10%;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.02), transparent 70%);
+    background: radial-gradient(circle, rgba(var(--vault-tint), 0.02), transparent 70%);
     opacity: 0;
   }
 
@@ -1231,7 +1256,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   max-width: 78px;
   aspect-ratio: 3 / 4.2;
   object-fit: cover;
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   transition: var(--vault-transition);
   cursor: pointer;
   display: block;
@@ -1256,8 +1281,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   color: var(--vault-text-dim);
   cursor: pointer;
   transition: var(--vault-transition);
@@ -1282,8 +1307,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.04);
   }
 }
 
@@ -1309,7 +1334,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   line-height: 1.3;
   font-weight: 400;
   letter-spacing: 0.02em;
-  color: #fff;
+  color: var(--vault-text-primary);
   font-family: $font-sans;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -1363,9 +1388,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 }
 
 .vault-book-card-list .vault-list-read-btn {
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
-  background: rgba(255, 255, 255, 0.02);
-  color: #fff;
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
+  background: rgba(var(--vault-tint), 0.02);
+  color: var(--vault-text-primary);
   padding: 0.2rem 0.6rem;
   font-size: 0.6rem;
   font-weight: 400;
@@ -1384,14 +1409,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.06);
   }
 }
 
 .vault-book-card-list .vault-list-download-btn {
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
-  background: rgba(255, 255, 255, 0.01);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
+  background: rgba(var(--vault-tint), 0.01);
   color: var(--vault-text-muted);
   padding: 0.2rem 0.5rem;
   font-size: 0.6rem;
@@ -1421,8 +1446,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: rgba(255, 255, 255, 0.7);
+    background: rgba(var(--vault-tint), 0.04);
+    color: rgba(var(--vault-tint), 0.7);
   }
 }
 
@@ -1435,7 +1460,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   right: 0.5rem;
   z-index: 4;
   background: rgba(0, 0, 0, 0.3);
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
   width: 28px;
   height: 28px;
   display: flex;
@@ -1466,7 +1491,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   &:hover {
     background: rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(var(--vault-tint), 0.06);
   }
 
   svg[style*="fill: currentColor"] {
@@ -1517,11 +1542,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   justify-content: space-between;
   width: 100%;
   padding: 0.4rem 0.75rem;
-  background: rgba(255, 255, 255, 0.01);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.01);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   cursor: pointer;
   transition: var(--vault-transition);
-  color: #fff;
+  color: var(--vault-text-primary);
   font: inherit;
   text-align: left;
   font-family: $font-sans;
@@ -1531,8 +1556,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.02);
-    border-color: rgba(255, 255, 255, 0.04);
+    background: rgba(var(--vault-tint), 0.02);
+    border-color: rgba(var(--vault-tint), 0.04);
   }
 }
 
@@ -1551,7 +1576,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   width: 28px;
   height: 40px;
   object-fit: cover;
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   flex-shrink: 0;
   filter: grayscale(0.2) contrast(1.05);
 
@@ -1581,7 +1606,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   margin: 0;
   font-size: 0.85rem;
   font-weight: 400;
-  color: #fff;
+  color: var(--vault-text-primary);
   letter-spacing: 0.02em;
   white-space: nowrap;
   overflow: hidden;
@@ -1630,8 +1655,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-continue-reading {
   margin: 0 0 1rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.01);
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  background: rgba(var(--vault-tint), 0.01);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
 
   @media (max-width: 480px) {
     padding: 0.4rem 0.6rem;
@@ -1659,7 +1684,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   width: 40px;
   height: 56px;
   object-fit: cover;
-  border: 0.5px solid rgba(255, 255, 255, 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.02);
   flex-shrink: 0;
   filter: grayscale(0.2) contrast(1.05);
 
@@ -1680,7 +1705,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .vault-continue-info h4 {
   margin: 0;
   font-size: 0.8rem;
-  color: #fff;
+  color: var(--vault-text-primary);
   font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
@@ -1702,9 +1727,9 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 .vault-continue-btn {
   padding: 0.2rem 0.6rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
-  color: #fff;
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
+  color: var(--vault-text-primary);
   font-size: 0.6rem;
   font-weight: 400;
   cursor: pointer;
@@ -1723,8 +1748,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.06);
+    background: rgba(var(--vault-tint), 0.04);
+    border-color: rgba(var(--vault-tint), 0.06);
   }
 }
 
@@ -1807,8 +1832,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 .vault-empty-clear-btn {
   padding: 0.3rem 1rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 0.5px solid rgba(255, 255, 255, 0.03);
+  background: rgba(var(--vault-tint), 0.02);
+  border: 0.5px solid rgba(var(--vault-tint), 0.03);
   color: var(--vault-text-muted);
   cursor: pointer;
   transition: var(--vault-transition);
@@ -1820,8 +1845,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   letter-spacing: 0.04em;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.04);
-    color: #fff;
+    background: rgba(var(--vault-tint), 0.04);
+    color: var(--vault-text-primary);
   }
 }
 
@@ -1839,13 +1864,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   transform: translateY(0);
 }
 
-/* ===== Scoped to dark theme only (was unconditional) ===== */
-body[data-theme='dark'] {
-// Swiss dark system — integrated component treatment
-.vault-container { background:#0b0b0b; color:#f2f0e8; }
-.vault-book-card { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; box-shadow:8px 8px 0 #f2c94c; }
-.vault-book-card:hover { box-shadow:8px 8px 0 #e63946; }
-.vault-book-title { text-transform:uppercase; letter-spacing:-.04em; font-weight:900; }
-.vault-type-badge,.vault-series-badge { border-radius:0; }
-
-}
+/* Swiss system — integrated component treatment. Book card keeps a single
+   flat background (--vault-bg-card) in both themes; only the accent
+   shadow/hover color is theme-constant. */
+.vault-container { background: var(--vault-bg-primary); color: var(--vault-text); }
+.vault-book-card { border: 1px solid var(--vault-border-hover); border-radius: 0; background: var(--vault-bg-card); box-shadow: 8px 8px 0 #f2c94c; }
+.vault-book-card:hover { box-shadow: 8px 8px 0 #e63946; }
+.vault-book-title { text-transform: uppercase; letter-spacing: -.04em; font-weight: 900; }
+.vault-type-badge, .vault-series-badge { border-radius: 0; }

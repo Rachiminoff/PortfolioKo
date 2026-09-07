@@ -11,32 +11,20 @@
 @media(max-width:700px){.insights-page:before{display:none}}
 
 
-/* Final shell repair: do not recolor the article reader itself. */
+/* Shell layout rules that apply in BOTH themes (sizing/spacing only —
+   no colors here; colors live in the theme-scoped blocks below). */
 .insights-page {
   min-height:100vh !important;
-  background:#0a0a0a !important;
-  color:#f0f0f0 !important;
   overflow-x:hidden;
 }
-.insights-page:before { color:rgba(255,255,255,.32) !important; }
 .insights-page .insights-back-button-container {
   width:100%;
   padding:12px clamp(18px,4vw,48px) !important;
-  background:rgba(10,10,10,.94) !important;
-  border-bottom:1px solid rgba(255,255,255,.08) !important;
 }
 .insights-page .insights-back-button {
   display:inline-flex;
   align-items:center;
   gap:8px;
-  background:#111 !important;
-  color:#f0f0f0 !important;
-  border-color:rgba(255,255,255,.14) !important;
-}
-.insights-page .insights-back-button:hover { background:#fff !important; color:#000 !important; }
-.insights-page .insights-container {
-  background:transparent !important;
-  color:#f0f0f0 !important;
 }
 .insights-page .insights-container h1,
 .insights-page .insights-container h2,
@@ -55,4 +43,29 @@
 @media(max-width:700px){
   .insights-page .insights-back-button-container { padding:10px 14px !important; }
   .insights-page .insights-reader-content-inner { width:min(100% - 24px,680px); }
+}
+
+/* Dark theme: this used to be an unconditional "final shell repair" block
+   that forced the page black regardless of the active theme — which is why
+   light mode never actually showed up here. Scoping it fixes that. */
+body[data-theme='dark'] {
+  .insights-page {
+    background:#0a0a0a !important;
+    color:#f0f0f0 !important;
+  }
+  .insights-page:before { color:rgba(255,255,255,.32) !important; }
+  .insights-page .insights-back-button-container {
+    background:rgba(10,10,10,.94) !important;
+    border-bottom:1px solid rgba(255,255,255,.08) !important;
+  }
+  .insights-page .insights-back-button {
+    background:#111 !important;
+    color:#f0f0f0 !important;
+    border-color:rgba(255,255,255,.14) !important;
+  }
+  .insights-page .insights-back-button:hover { background:#fff !important; color:#000 !important; }
+  .insights-page .insights-container {
+    background:transparent !important;
+    color:#f0f0f0 !important;
+  }
 }
