@@ -1849,3 +1849,59 @@ body[data-theme='dark'] {
 .vault-type-badge,.vault-series-badge { border-radius:0; }
 
 }
+
+
+/* =========================================================
+   VAULT / FINAL SYSTEM PASS
+   Bauhaus × Swiss archive
+   ========================================================= */
+.vault-container{
+  --bg:#070707;--panel:#101010;--panel-2:#151515;--ink:#f3f0e8;--muted:#a7a39b;--line:#343431;
+  --red:#e43b32;--blue:#2f5be0;--yellow:#e8bd32;
+  background:var(--bg)!important;color:var(--ink)!important;font-family:'Inter',sans-serif!important;
+}
+.vault-container::after{display:none!important}
+.vault-main{width:min(1440px,100%);margin:auto;padding-inline:clamp(14px,4vw,64px)!important}
+.vault-header{border-bottom:2px solid var(--ink)!important;padding:18px 0 20px!important}
+.vault-header h1{letter-spacing:-.05em!important}
+.vault-header h1 svg{color:var(--red)!important}
+.vault-stats{display:grid!important;grid-template-columns:repeat(3,1fr);gap:1px!important;background:var(--line)!important;border:1px solid var(--line)!important}
+.vault-stat-item{background:var(--panel)!important;border-radius:0!important}
+.vault-stat-item:nth-child(2){background:var(--yellow)!important;color:#080808!important}
+.vault-stat-item:nth-child(3){background:var(--blue)!important}
+.vault-controls-bar{display:grid!important;grid-template-columns:minmax(240px,1fr) auto;gap:10px;padding:12px 0!important;border-bottom:1px solid var(--line)!important}
+.vault-search-wrapper,.vault-sort-select,.vault-density-select{border-radius:0!important;background:var(--panel)!important;border:1px solid var(--line)!important}
+.vault-search-input{min-height:42px!important;background:transparent!important;color:var(--ink)!important;border:0!important}
+.vault-filter-chip{border-radius:0!important;border:1px solid var(--line)!important;background:transparent!important;color:var(--muted)!important}
+.vault-filter-chip:hover{background:var(--yellow)!important;color:#080808!important}
+.vault-filter-chip.active{background:var(--red)!important;border-color:var(--red)!important;color:#fff!important}
+.vault-folder-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px!important;background:var(--line)!important;border:1px solid var(--line)!important}
+.vault-folder-card{border:0!important;border-radius:0!important;background:var(--panel)!important;color:var(--ink)!important;min-width:0}
+.vault-folder-card:hover{background:#151515!important}
+.vault-folder-cover-area{border-radius:0!important}
+.vault-grid{gap:1px!important;background:var(--line)!important;border:1px solid var(--line)!important}
+.vault-book-card{border:0!important;border-radius:0!important;background:var(--panel)!important;box-shadow:none!important;min-width:0}
+.vault-book-card:hover{background:#151515!important}
+.vault-book-image-wrapper,.vault-book-image{border-radius:0!important}
+.vault-type-badge,.vault-series-badge,.vault-new-badge{border-radius:0!important;font-family:'IBM Plex Mono',monospace!important}
+.vault-read-btn,.vault-download-btn,.vault-list-read-btn,.vault-list-download-btn,.vault-continue-btn{border-radius:0!important}
+.vault-read-btn{background:var(--red)!important}
+.vault-download-btn{background:var(--blue)!important}
+.vault-empty-state{border:1px dashed var(--line)!important;border-radius:0!important;background:var(--panel)!important}
+@media(max-width:1000px){
+  .vault-folder-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vault-controls-bar{grid-template-columns:1fr}
+}
+@media(max-width:650px){
+  .vault-main{padding-inline:14px!important}
+  .vault-header{padding-top:12px!important}
+  .vault-header-top{gap:12px}
+  .vault-stats{grid-template-columns:1fr 1fr!important}
+  .vault-folder-grid{grid-template-columns:1fr 1fr}
+  .vault-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .vault-book-content{padding:12px!important}
+}
+@media(max-width:420px){
+  .vault-folder-grid,.vault-grid{grid-template-columns:1fr!important}
+  .vault-stats{grid-template-columns:1fr!important}
+}

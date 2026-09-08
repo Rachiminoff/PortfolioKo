@@ -3543,3 +3543,56 @@ body[data-theme='dark'] {
 .insights-unlock-btn { border-radius:0; background:#0b8fd3; color:#0b0b0b; }
 
 }
+
+
+/* =========================================================
+   INSIGHTS / FINAL SYSTEM PASS
+   Bauhaus × Swiss editorial
+   ========================================================= */
+.insights-container{
+  --bg:#070707;--panel:#101010;--ink:#f3f0e8;--muted:#a7a39b;--line:#343431;
+  --red:#e43b32;--blue:#2f5be0;--yellow:#e8bd32;
+  background:var(--bg)!important;color:var(--ink)!important;
+  font-family:'Inter',sans-serif;
+}
+.insights-container::after{display:none!important}
+.insights-main{width:min(1440px,100%);margin:auto;padding:0 clamp(14px,4vw,64px) 80px}
+.insights-hero{border-bottom:2px solid var(--ink)!important;padding:55px 0 42px!important}
+.insights-hero-title{font-size:clamp(4rem,10vw,9rem)!important;line-height:.78!important;letter-spacing:-.08em!important}
+.insights-hero-subtitle{max-width:720px!important;color:var(--muted)!important;border-left:8px solid var(--red)!important;padding-left:16px!important}
+.insights-hero-eyebrow,.insights-category-badge,.insights-article-category,.insights-featured-badge{border-radius:0!important;font-family:'IBM Plex Mono',monospace!important;text-transform:uppercase;letter-spacing:.04em}
+.insights-controls-section{position:sticky;top:0;z-index:30;background:rgba(7,7,7,.96)!important;border-bottom:1px solid var(--line)!important}
+.insights-controls-bar{max-width:1440px;margin:auto;padding:12px 0!important;display:grid!important;grid-template-columns:minmax(220px,1fr) auto;gap:10px}
+.insights-search-wrapper{background:var(--panel)!important;border:1px solid var(--line)!important;border-radius:0!important}
+.insights-search-input,.insights-sort-select,.insights-category-select,.insights-year-select{min-height:42px!important;background:transparent!important;color:var(--ink)!important;border:0!important;border-radius:0!important}
+.insights-sort-select,.insights-category-select,.insights-year-select{border:1px solid var(--line)!important;background:var(--panel)!important;padding-inline:12px}
+.insights-filter-chip{border-radius:0!important;border:1px solid var(--line)!important;background:transparent!important;color:var(--muted)!important}
+.insights-filter-chip:hover{background:var(--yellow)!important;color:#080808!important}
+.insights-filter-chip.active{background:var(--red)!important;color:#fff!important;border-color:var(--red)!important}
+.insights-featured{margin:42px 0!important}
+.insights-featured-card{border:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important}
+.insights-featured-card:hover{border-color:var(--ink)!important}
+.insights-article-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px!important;background:var(--line)!important;border:1px solid var(--line)!important}
+.insights-article-card{min-width:0;background:var(--panel)!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.insights-article-card:hover{background:#151515!important}
+.insights-article-image-wrapper{border-radius:0!important}
+.insights-article-content{padding:18px!important}
+.insights-article-title{letter-spacing:-.035em!important}
+.insights-load-more-btn,.insights-reader-back-btn,.insights-new-post-button{border-radius:0!important;border:1px solid var(--ink)!important;background:transparent!important}
+.insights-load-more-btn:hover,.insights-reader-back-btn:hover,.insights-new-post-button:hover{background:var(--red)!important;border-color:var(--red)!important}
+.insights-lock-screen{min-height:100vh!important;background:var(--bg)!important}
+.insights-lock-form input,.insights-password-input{border-radius:0!important;border:1px solid var(--line)!important;background:var(--panel)!important;color:var(--ink)!important}
+.insights-reader-container{background:var(--bg)!important}
+.insights-reader-body{max-width:860px!important}
+@media(max-width:900px){
+  .insights-main{padding-inline:14px}
+  .insights-hero{padding:38px 0 30px!important}
+  .insights-hero-title{font-size:clamp(3.25rem,16vw,6.5rem)!important}
+  .insights-controls-bar{grid-template-columns:1fr!important}
+  .insights-article-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .insights-hero-subtitle{border-left-width:4px!important;padding-left:11px!important}
+  .insights-article-grid{grid-template-columns:1fr}
+  .insights-controls-section{position:relative}
+}

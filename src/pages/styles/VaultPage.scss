@@ -1,3 +1,1 @@
-/* Page shell is intentionally minimal; Vault.scss owns the full visual system. */
-.vault-page{min-height:100vh;}
-.vault-page .vault-loading-state{min-height:100vh;}
+.vault-page{min-height:100vh;background:#070707;color:#f3f0e8}.vault-page .vault-loading-state{min-height:100vh;background:#070707;color:#f3f0e8;display:grid;place-items:center}
