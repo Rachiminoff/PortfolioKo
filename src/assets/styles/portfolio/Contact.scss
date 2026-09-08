@@ -1,0 +1,1396 @@
+// ========== VARIABLES ==========
+$red: #e6392f;
+$yellow: #f2c230;
+$blue: #2457d6;
+$cyan: #18aebe;
+$cyan-dim: rgba(24, 174, 190, 0.08);
+$cyan-glow: rgba(24, 174, 190, 0.12);
+$black: #000;
+$dark: #111318;
+$gray-dark: #111318;
+$gray: #20242b;
+$gray-medium: #343941;
+$white: #f5f5f5;
+$white-dim: rgba(255, 255, 255, 0.85);
+$white-muted: rgba(255, 255, 255, 0.65);
+$white-faint: rgba(255, 255, 255, 0.4);
+$white-very-faint: rgba(255, 255, 255, 0.15);
+$border-solid: rgba(245, 245, 245, 0.22);
+$border-medium: rgba(245, 245, 245, 0.5);
+$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+// ============================================================
+// CONTACT SECTION
+// ============================================================
+
+.contact-container {
+  width: 100%;
+  min-height: 100vh;
+  padding: 7rem clamp(20px, 4vw, 72px) 5rem;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  position: relative;
+  background: $black;
+  max-width: 1480px;
+  margin: 0 auto;
+
+  @media (max-width: 1100px) {
+    padding: 5rem 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    padding: 4rem 1rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 3rem 0.75rem;
+  }
+}
+
+// ============================================================
+// GRID LAYOUT - TWO COLUMN
+// ============================================================
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 2.5rem;
+  align-items: stretch;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+// ============================================================
+// LEFT COLUMN - INFO
+// ============================================================
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 0;
+  padding-top: 0.5rem;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.contact-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  width: 100%;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-tag {
+    display: inline-block;
+    font-family: $font-mono;
+    font-size: 0.6rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(245, 245, 245, 0.58);
+    padding: 0.25rem 0;
+    margin-bottom: 0.9rem;
+    border-bottom: 2px solid $red;
+
+    @media (max-width: 768px) {
+      font-size: 0.5rem;
+      margin: 0 auto 0.75rem;
+    }
+  }
+
+  h2 {
+    margin: 0 0 0.5rem 0;
+    color: $white;
+    font-size: clamp(2.8rem, 5vw, 5.8rem);
+    line-height: .9;
+    font-weight: 900;
+    letter-spacing: -0.055em;
+    font-family: $font-sans;
+
+    @media (max-width: 768px) {
+      font-size: clamp(1.8rem, 5vw, 2.2rem);
+    }
+
+    @media (max-width: 480px) {
+      font-size: clamp(1.5rem, 6vw, 1.8rem);
+    }
+  }
+}
+
+.contact-divider {
+  width: 64px;
+  height: 6px;
+  background: $yellow;
+  margin: 0.5rem 0 1.25rem 0;
+
+  @media (max-width: 768px) {
+    width: 30px;
+    margin: 0.25rem auto 1rem;
+  }
+}
+
+.contact-subtitle {
+  color: $white-muted;
+  font-size: 1rem;
+  line-height: 1.55;
+  max-width: 560px;
+  font-weight: 400;
+  font-family: $font-sans;
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+}
+
+// ============================================================
+// DIRECT EMAIL
+// ============================================================
+
+.direct-email-card {
+  position: relative;
+  margin-top: 2.5rem;
+  padding: 1.15rem 1.25rem 1.25rem;
+  background: $dark;
+  border: 1px solid $border-medium;
+  box-shadow: 10px 10px 0 $red;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    right: -28px;
+    top: -28px;
+    background: $yellow;
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    right: 18px;
+    bottom: 18px;
+    background: $blue;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    max-width: 560px;
+    margin-top: 2rem;
+    box-shadow: 7px 7px 0 $red;
+    text-align: left;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+.direct-email-meta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: .9rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(245, 245, 245, .22);
+  color: rgba(245, 245, 245, .58);
+  font-family: $font-mono;
+  font-size: .58rem;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+
+  span:last-child {
+    text-align: right;
+  }
+
+  @media (max-width: 480px) {
+    font-size: .48rem;
+    gap: .75rem;
+  }
+}
+
+.direct-email-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.direct-email-address {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  color: $white;
+  font-family: $font-mono;
+  font-size: clamp(.88rem, 1.35vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+.direct-email-copy {
+  flex-shrink: 0;
+  min-height: 38px !important;
+  padding: 0 .9rem !important;
+  border: 1px solid rgba(245, 245, 245, .08) !important;
+  border-radius: 0 !important;
+  background: #202735 !important;
+  color: $white !important;
+  font-family: $font-mono !important;
+  font-size: .66rem !important;
+  font-weight: 600 !important;
+  letter-spacing: .06em !important;
+  transition: .2s ease !important;
+
+  .MuiButton-startIcon {
+    margin-right: .45rem !important;
+  }
+
+  svg {
+    font-size: 1rem !important;
+  }
+
+  &:hover {
+    background: $yellow !important;
+    color: $black !important;
+    border-color: $yellow !important;
+  }
+
+  @media (max-width: 480px) {
+    min-height: 34px !important;
+    padding: 0 .65rem !important;
+    font-size: .56rem !important;
+  }
+}
+
+// ============================================================
+// CONTACT DETAILS
+// ============================================================
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.875rem;
+    margin-top: 1.25rem;
+  }
+}
+
+.contact-detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.625rem;
+    max-width: 100%;
+  }
+
+  .detail-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid $border-medium;
+    background: $dark;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+
+    svg {
+      font-size: 1.1rem;
+      color: $yellow;
+      transition: color 0.3s ease;
+    }
+
+    &:hover {
+      border-color: $border-medium;
+      
+      svg {
+        color: rgba(255, 255, 255, 0.4);
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: 36px;
+      height: 36px;
+
+      svg {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  .detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex: 1;
+    min-width: 0;
+
+    @media (max-width: 768px) {
+      align-items: flex-start;
+    }
+
+    @media (max-width: 480px) {
+      gap: 0.05rem;
+    }
+  }
+
+  .detail-label {
+    font-family: $font-mono;
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.15);
+
+    @media (max-width: 480px) {
+      font-size: 0.45rem;
+    }
+  }
+
+  .detail-value-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    @media (max-width: 768px) {
+      justify-content: flex-start;
+    }
+  }
+
+  .detail-value {
+    font-family: $font-sans;
+    font-size: 0.9rem;
+    color: $white-muted;
+    font-weight: 300;
+
+    @media (max-width: 768px) {
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.8rem;
+    }
+  }
+
+  .detail-badge-wrapper {
+    margin-top: 0.1rem;
+  }
+
+  .detail-badge {
+    display: inline-block;
+    font-family: $font-mono;
+    font-size: 0.45rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: $cyan;
+    background: rgba(45, 212, 191, 0.08);
+    border: 1px solid rgba(45, 212, 191, 0.12);
+    padding: 0.1rem 0.5rem;
+    width: fit-content;
+
+    @media (max-width: 480px) {
+      font-size: 0.4rem;
+      padding: 0.05rem 0.4rem;
+    }
+  }
+
+  .copy-button {
+    padding: 0 !important;
+    color: rgba(255, 255, 255, 0.08) !important;
+    transition: all 0.3s ease !important;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.25) !important;
+    }
+
+    svg {
+      font-size: 0.85rem !important;
+    }
+
+    @media (max-width: 480px) {
+      svg {
+        font-size: 0.75rem !important;
+      }
+    }
+  }
+
+  .copy-success {
+    color: $cyan !important;
+  }
+}
+
+// ============================================================
+// RIGHT COLUMN - CONTACT CARD
+// ============================================================
+
+.contact-card {
+  width: 100%;
+  padding: 2.5rem !important;
+  border: 1px solid $border-solid;
+  background: $gray-dark !important;
+  color: $white;
+  box-sizing: border-box;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    border-color: $border-medium;
+    background: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  @media (min-width: 1200px) {
+    padding: 2.5rem 2.5rem !important;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 2rem !important;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1.5rem !important;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.25rem !important;
+  }
+}
+
+// ============================================================
+// CARD HEADER
+// ============================================================
+
+.contact-card-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 480px) {
+    margin-bottom: 1rem;
+  }
+}
+
+.card-title {
+  color: $white !important;
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.02em !important;
+  font-family: $font-sans !important;
+
+  @media (min-width: 1200px) {
+    font-size: 1.6rem !important;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1.3rem !important;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.15rem !important;
+  }
+}
+
+.card-subtitle {
+  color: $white-muted !important;
+  font-size: 0.85rem !important;
+  font-weight: 300 !important;
+  font-family: $font-sans !important;
+
+  @media (min-width: 1200px) {
+    font-size: 0.9rem !important;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem !important;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem !important;
+  }
+}
+
+.card-divider {
+  margin: 0 0 1.25rem 0 !important;
+  border-color: rgba(255, 255, 255, 0.04) !important;
+
+  @media (max-width: 480px) {
+    margin: 0 0 1rem 0 !important;
+  }
+}
+
+// ============================================================
+// ALERTS
+// ============================================================
+
+.alert-success,
+.alert-error {
+  border-radius: 0 !important;
+  padding: 0.75rem 1rem !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  margin-bottom: 1.25rem !important;
+  
+  .MuiAlert-icon {
+    font-size: 1.1rem !important;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.625rem 0.875rem !important;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.85rem !important;
+    
+    .MuiAlert-icon {
+      font-size: 0.95rem !important;
+    }
+  }
+}
+
+.alert-success {
+  background: rgba(45, 212, 191, 0.05) !important;
+  border-color: rgba(45, 212, 191, 0.12) !important;
+  color: $white-muted !important;
+  
+  .MuiAlert-icon {
+    color: $cyan !important;
+  }
+  
+  strong {
+    color: $white !important;
+  }
+}
+
+.alert-error {
+  background: rgba(255, 71, 87, 0.05) !important;
+  border-color: rgba(255, 71, 87, 0.12) !important;
+  color: $white-muted !important;
+  
+  .MuiAlert-icon {
+    color: #ff4757 !important;
+  }
+  
+  strong {
+    color: $white !important;
+  }
+}
+
+.alert-content {
+  line-height: 1.5;
+  font-family: $font-sans;
+  
+  strong {
+    font-weight: 500;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.85rem;
+  }
+}
+
+.alert-reference {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  font-family: $font-mono;
+
+  @media (max-width: 480px) {
+    font-size: 0.65rem;
+  }
+}
+
+.alert-thanks {
+  font-size: 0.8rem;
+  opacity: 0.5;
+  display: block;
+  margin-top: 0.15rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.7rem;
+  }
+}
+
+// ============================================================
+// CHIPS
+// ============================================================
+
+.chips-container {
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 480px) {
+    margin-bottom: 1rem;
+  }
+}
+
+.chips-label {
+  display: block;
+  color: $white-very-faint !important;
+  font-family: $font-mono !important;
+  font-size: 0.55rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+
+  @media (min-width: 1200px) {
+    font-size: 0.6rem !important;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.5rem !important;
+    margin-bottom: 0.4rem;
+  }
+}
+
+.chips-stack {
+  gap: 0.4rem !important;
+
+  @media (max-width: 480px) {
+    gap: 0.3rem !important;
+  }
+}
+
+.chip-item {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: $white-muted !important;
+  border: 1px solid $border-solid !important;
+  border-radius: 0 !important;
+  padding: 0 0.75rem !important;
+  height: 1.75rem !important;
+  font-size: 0.6rem !important;
+  font-weight: 400 !important;
+  font-family: $font-mono !important;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: $border-medium !important;
+    color: $white !important;
+  }
+  
+  .MuiChip-label {
+    padding: 0 !important;
+  }
+
+  @media (min-width: 1200px) {
+    height: 2rem !important;
+    padding: 0 1rem !important;
+    font-size: 0.65rem !important;
+  }
+
+  @media (max-width: 768px) {
+    height: 1.625rem !important;
+    font-size: 0.55rem !important;
+    padding: 0 0.625rem !important;
+  }
+
+  @media (max-width: 480px) {
+    height: 1.5rem !important;
+    font-size: 0.5rem !important;
+    padding: 0 0.5rem !important;
+  }
+}
+
+.chip-selected {
+  background: rgba(45, 212, 191, 0.08) !important;
+  border-color: rgba(45, 212, 191, 0.15) !important;
+  color: $white !important;
+}
+
+// ============================================================
+// FORM
+// ============================================================
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+
+  @media (min-width: 1200px) {
+    gap: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 0.625rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+  }
+}
+
+// ============================================================
+// TEXT FIELDS - MOBILE OPTIMIZED
+// ============================================================
+
+.form-field {
+  .MuiOutlinedInput-root {
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.07);
+      
+      .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+    
+    &.Mui-focused {
+      background: rgba(255, 255, 255, 0.07);
+      
+      .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(45, 212, 191, 0.3) !important;
+        border-width: 1px !important;
+      }
+    }
+    
+    &.Mui-error {
+      .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(255, 71, 87, 0.3) !important;
+      }
+      
+      &:hover .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(255, 71, 87, 0.4) !important;
+      }
+      
+      &.Mui-focused .MuiOutlinedInput-notchedOutline {
+        border-color: rgba(255, 71, 87, 0.4) !important;
+      }
+    }
+    
+    .MuiOutlinedInput-notchedOutline {
+      border-color: rgba(255, 255, 255, 0.1);
+      border-width: 1px;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+  
+  .MuiInputBase-input {
+    color: $white !important;
+    padding: 0.75rem 0.85rem !important;
+    font-size: 0.9rem !important;
+    font-family: $font-sans !important;
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.25);
+      opacity: 1;
+    }
+
+    @media (min-width: 1200px) {
+      padding: 0.85rem 1rem !important;
+      font-size: 0.95rem !important;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.65rem 0.75rem !important;
+      font-size: 0.85rem !important;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.55rem 0.65rem !important;
+      font-size: 0.8rem !important;
+    }
+  }
+
+  // Textarea specific
+  .MuiInputBase-root textarea {
+    padding: 0.75rem 0.85rem !important;
+    font-size: 0.9rem !important;
+    line-height: 1.6;
+
+    @media (min-width: 1200px) {
+      padding: 0.85rem 1rem !important;
+      font-size: 0.95rem !important;
+    }
+
+    @media (max-width: 768px) {
+      padding: 0.65rem 0.75rem !important;
+      font-size: 0.85rem !important;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.55rem 0.65rem !important;
+      font-size: 0.8rem !important;
+    }
+  }
+  
+  .MuiInputLabel-root {
+    color: rgba(255, 255, 255, 0.45) !important;
+    font-size: 0.85rem !important;
+    font-family: $font-sans !important;
+    transform: translate(14px, 12px) scale(1) !important;
+    font-weight: 400 !important;
+    
+    &.Mui-focused {
+      color: rgba(45, 212, 191, 0.6) !important;
+      transform: translate(14px, -9px) scale(0.75) !important;
+      font-weight: 400 !important;
+    }
+    
+    &.Mui-error {
+      color: rgba(255, 71, 87, 0.5) !important;
+    }
+
+    &.MuiInputLabel-shrink {
+      transform: translate(14px, -9px) scale(0.75) !important;
+      color: rgba(255, 255, 255, 0.35) !important;
+    }
+
+    @media (min-width: 1200px) {
+      font-size: 0.9rem !important;
+      transform: translate(16px, 14px) scale(1) !important;
+      
+      &.Mui-focused {
+        transform: translate(16px, -9px) scale(0.75) !important;
+      }
+
+      &.MuiInputLabel-shrink {
+        transform: translate(16px, -9px) scale(0.75) !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.8rem !important;
+      transform: translate(12px, 10px) scale(1) !important;
+      
+      &.Mui-focused {
+        transform: translate(12px, -8px) scale(0.7) !important;
+      }
+
+      &.MuiInputLabel-shrink {
+        transform: translate(12px, -8px) scale(0.7) !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.75rem !important;
+      transform: translate(10px, 10px) scale(1) !important;
+      
+      &.Mui-focused {
+        transform: translate(10px, -8px) scale(0.65) !important;
+      }
+
+      &.MuiInputLabel-shrink {
+        transform: translate(10px, -8px) scale(0.65) !important;
+      }
+    }
+  }
+  
+  .MuiFormHelperText-root {
+    color: rgba(255, 255, 255, 0.3) !important;
+    font-size: 0.7rem !important;
+    font-family: $font-sans !important;
+    margin: 4px 0 0 14px !important;
+    font-weight: 300 !important;
+    
+    &.Mui-error {
+      color: rgba(255, 71, 87, 0.5) !important;
+    }
+
+    @media (min-width: 1200px) {
+      font-size: 0.75rem !important;
+      margin: 6px 0 0 16px !important;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 0.65rem !important;
+      margin: 3px 0 0 12px !important;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.6rem !important;
+      margin: 2px 0 0 10px !important;
+    }
+  }
+  
+  // Remove autofill background
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus {
+    -webkit-text-fill-color: $white !important;
+    -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.05) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+}
+
+// ============================================================
+// FORM ACTIONS
+// ============================================================
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+
+  @media (min-width: 1200px) {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    align-items: stretch;
+    gap: 0.625rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
+    margin-top: 0.875rem;
+  }
+}
+
+// ============================================================
+// SEND BUTTON
+// ============================================================
+
+.send-button {
+  margin-top: 0 !important;
+  align-self: flex-start;
+
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: $white !important;
+  font-family: $font-mono !important;
+  font-weight: 400 !important;
+  text-transform: none !important;
+  padding: 0.6rem 1.25rem !important;
+  border: 1px solid $border-solid !important;
+  border-radius: 0 !important;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
+  min-height: 42px;
+  font-size: 0.85rem !important;
+
+  @media (min-width: 1200px) {
+    padding: 0.75rem 1.75rem !important;
+    min-width: 160px;
+    font-size: 0.9rem !important;
+    
+    .send-icon {
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12) !important;
+      border-color: rgba(45, 212, 191, 0.25) !important;
+      
+      .send-icon {
+        transform: translateX(4px);
+        color: $cyan;
+      }
+    }
+  }
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  &.Mui-disabled {
+    opacity: 0.3;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    justify-content: center;
+    padding: 0.55rem 1rem !important;
+    min-height: 38px;
+    font-size: 0.8rem !important;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem 0.875rem !important;
+    min-height: 36px;
+    font-size: 0.75rem !important;
+  }
+}
+
+.send-icon {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  font-size: 1rem !important;
+  opacity: 0.6;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem !important;
+  }
+}
+
+.button-spinner {
+  color: inherit !important;
+  
+  .MuiCircularProgress-svg {
+    animation-duration: 0.8s;
+  }
+
+  @media (max-width: 480px) {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+// ============================================================
+// TRUST INDICATOR
+// ============================================================
+
+.trust-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+  padding: 0.25rem 0;
+  font-family: $font-mono;
+
+  @media (min-width: 1200px) {
+    font-size: 0.7rem;
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    font-size: 0.6rem;
+    padding: 0.125rem 0;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.55rem;
+    gap: 0.3rem;
+  }
+}
+
+.trust-icon {
+  font-size: 0.75rem !important;
+  opacity: 0.3;
+
+  @media (min-width: 1200px) {
+    font-size: 0.85rem !important;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.65rem !important;
+  }
+}
+
+// ============================================================
+// FORM FOOTER
+// ============================================================
+
+.form-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    margin-top: 0.625rem;
+    padding-top: 0.625rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+  }
+}
+
+.form-footer-text {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: $font-mono;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.08);
+  letter-spacing: 0.02em;
+
+  .footer-icon {
+    font-size: 0.7rem !important;
+    opacity: 0.3;
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 0.6rem;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.45rem;
+    gap: 0.3rem;
+
+    .footer-icon {
+      font-size: 0.6rem !important;
+    }
+  }
+}
+
+// ============================================================
+// SCROLLBAR
+// ============================================================
+
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+// ============================================================
+// TOUCH DEVICE OPTIMIZATIONS
+// ============================================================
+
+@media (hover: none) and (pointer: coarse) {
+  .chip-item {
+    &:hover {
+      background: rgba(255, 255, 255, 0.03) !important;
+      border-color: $border-solid !important;
+      color: $white-muted !important;
+    }
+    
+    &:active {
+      background: rgba(255, 255, 255, 0.06) !important;
+      transform: scale(0.96);
+    }
+  }
+
+  .send-button {
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08) !important;
+      border-color: $border-solid !important;
+      
+      .send-icon {
+        transform: none !important;
+      }
+    }
+    
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+  }
+
+  .contact-detail-item {
+    .detail-icon {
+      &:hover {
+        border-color: $border-solid;
+        
+        svg {
+          color: $yellow;
+        }
+      }
+    }
+  }
+
+  .copy-button {
+    &:hover {
+      color: rgba(255, 255, 255, 0.08) !important;
+    }
+    
+    &:active {
+      transform: scale(0.9);
+    }
+  }
+}
+
+// ============================================================
+// REDUCED MOTION
+// ============================================================
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .chip-item {
+    transition: none !important;
+    
+    &:active {
+      transform: none !important;
+    }
+  }
+
+  .send-button {
+    transition: none !important;
+    
+    &:active:not(:disabled) {
+      transform: none !important;
+    }
+  }
+}
+
+// ============================================================
+// PRINT
+// ============================================================
+
+@media print {
+  .contact-container {
+    padding: 2rem !important;
+    background: white !important;
+  }
+
+  .contact-card {
+    border: 1px solid #ddd !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+
+  .send-button {
+    background: #f5f5f5 !important;
+    color: #333 !important;
+    border-color: #ddd !important;
+  }
+
+  .contact-details {
+    .detail-icon {
+      border-color: #ddd !important;
+      
+      svg {
+        color: #999 !important;
+      }
+    }
+    
+    .detail-value {
+      color: #666 !important;
+    }
+  }
+
+  .copy-button {
+    display: none !important;
+  }
+}
+
+/* ===== Scoped to dark theme only (was unconditional) ===== */
+body[data-theme='dark'] {
+// Swiss dark system — integrated component treatment
+.contact-container { background:#0b0b0b; color:#f2f0e8; }
+.contact-grid { gap:0; }
+.contact-info,.contact-form { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; }
+.contact-header,.header-tag { text-transform:uppercase; letter-spacing:.08em; }
+.contact-detail-item { border-bottom:1px solid rgba(242,240,232,.25); border-radius:0; }
+.copy-button,.contact-submit { border-radius:0; background:#e63946; color:#0b0b0b; }
+
+/* ============================================================
+   CONTACT — POSTER / FORM HYBRID
+   ============================================================ */
+.contact-container{max-width:1320px !important;margin:0 auto !important;padding:clamp(5rem,8vw,8rem) clamp(1rem,4vw,4rem) !important;background:#000 !important}
+.contact-grid{grid-template-columns:minmax(260px,.8fr) minmax(0,1.4fr) !important;gap:1px !important;background:rgba(255,255,255,.16) !important;border:1px solid rgba(255,255,255,.16) !important}
+.contact-info{background:#000 !important;padding:2.5rem !important}
+.contact-header .header-tag{color:var(--bau-red) !important;font-family:var(--mono) !important;font-weight:700 !important}
+.contact-header h2{font-family:'Archivo',sans-serif !important;font-size:clamp(3rem,6vw,6rem) !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:-.07em !important;line-height:.86 !important}
+.contact-divider{width:100% !important;height:5px !important;background:var(--bau-yellow) !important;margin:1.5rem 0 !important}
+.contact-subtitle{color:rgba(255,255,255,.62) !important;line-height:1.75 !important}
+.contact-details{border-top:1px solid rgba(255,255,255,.16);margin-top:2rem !important;padding-top:1rem}
+.contact-detail-item{border-bottom:1px solid rgba(255,255,255,.12);padding:1rem 0}
+.contact-detail-item .detail-icon{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:#080808 !important}
+.detail-label{font:700 9px var(--mono) !important;text-transform:uppercase !important;color:var(--bau-blue) !important}
+.detail-value{font-family:var(--mono) !important;font-size:12px !important;color:#fff !important}
+.detail-badge{border-radius:0 !important;background:var(--bau-red) !important;color:#fff !important;font:700 9px var(--mono) !important;text-transform:uppercase}
+.contact-card{background:#080808 !important;border:0 !important;border-radius:0 !important;padding:2.5rem !important}
+.contact-card-header{border-bottom:1px solid rgba(255,255,255,.16) !important;padding-bottom:1.25rem}
+.contact-card .card-title{font-family:'Archivo',sans-serif !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:-.035em !important}
+.contact-card .card-subtitle{color:rgba(255,255,255,.55) !important}
+.card-divider{background:rgba(255,255,255,.14) !important}
+.chips-label,.form-footer-text,.trust-indicator{font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important;color:rgba(255,255,255,.5) !important}
+.chip-item{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:#000 !important;color:#fff !important;font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important}
+.chip-selected{background:var(--bau-blue) !important;border-color:var(--bau-blue) !important;color:#fff !important}
+.form-field{border-radius:0 !important}
+.form-field input,.form-field textarea,.form-field .MuiInputBase-root{background:#000 !important;color:#fff !important;border-radius:0 !important}
+.send-button{border-radius:0 !important;background:var(--bau-red) !important;font-family:var(--mono) !important;font-weight:800 !important;text-transform:uppercase !important}
+.send-button:hover{background:#fff !important;color:#000 !important}
+.alert-success,.alert-error{border-radius:0 !important}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr !important}.contact-info,.contact-card{padding:1.35rem !important}.contact-header h2{font-size:clamp(3rem,16vw,5rem) !important}}
+
+}

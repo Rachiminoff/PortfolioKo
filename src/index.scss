@@ -982,6 +982,12 @@ p, a, h1, h2, h3, h4, h5, label, button {
 }
 
 .fullscreen-layout > * {
+  /*
+   * Fullscreen children can have horizontal padding. Without border-box,
+   * width: 100% + padding makes them wider than the viewport, which causes
+   * the "mystery margin" / clipped-right-edge effect on fullscreen pages.
+   */
+  box-sizing: border-box;
   min-height: 100vh;
   width: 100%;
   max-width: none !important;

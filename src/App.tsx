@@ -26,6 +26,7 @@ const VaultPage = lazy(() => import('./pages/VaultPage'));
 const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
 const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStatsPage'));
+const PersonaPage = lazy(() => import('./pages/PersonaPage'));
 
 // Boot Sequence Component - CRT TV Style
 function BootSequence({ onComplete }: { onComplete: () => void }) {
@@ -240,19 +241,13 @@ function AppContent() {
   const { isUnlocked: isArchiveUnlocked, isLoading: archiveLoading } = useArchive();
   const [isReady, setIsReady] = useState(false);
 
-  // Apply the persisted appearance before the routed page is displayed.
-  // Navigation owns the toggle itself; this keeps direct visits to fullscreen
-  // routes in the correct theme even when the navbar is not rendered there.
+  // Persona and the rest of the portfolio are dark-mode only.
+  // Keep the document explicitly dark even on direct visits to fullscreen routes.
   useEffect(() => {
-    let theme: "light" | "dark" = "dark";
-    try {
-      theme = localStorage.getItem("tdy-theme") === "light" ? "light" : "dark";
-    } catch {
-      // Use the default dark theme when storage is unavailable.
-    }
-
-    document.documentElement.dataset.theme = theme;
-    document.body.dataset.theme = theme;
+    document.documentElement.dataset.theme = "dark";
+    document.body.dataset.theme = "dark";
+    document.documentElement.style.colorScheme = "dark";
+    document.body.style.colorScheme = "dark";
   }, []);
 
   useEffect(() => {
@@ -261,6 +256,39 @@ function AppContent() {
       left: 0,
       behavior: "smooth"
     });
+  }, [location.pathname]);
+
+  // Anonymous site-wide visitor/page-view counter. The browser-generated ID is
+  // stored locally; no IP address or personal identity is sent to the API.
+  useEffect(() => {
+    const visitorKey = 'tdy-persona-visitor-id';
+    let visitorId = '';
+    try {
+      visitorId = window.localStorage.getItem(visitorKey) || '';
+      if (!visitorId) {
+        visitorId = window.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        window.localStorage.setItem(visitorKey, visitorId);
+      }
+    } catch {
+      visitorId = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    }
+
+    const controller = new AbortController();
+    fetch('/api/site-stats', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ visitorId, page: location.pathname }),
+      signal: controller.signal,
+    })
+      .then(response => response.ok ? response.json() : null)
+      .then(payload => {
+        if (payload?.data) {
+          window.dispatchEvent(new CustomEvent('site-stats-updated', { detail: payload.data }));
+        }
+      })
+      .catch(() => { /* analytics must never interrupt navigation */ });
+
+    return () => controller.abort();
   }, [location.pathname]);
 
   useEffect(() => {
@@ -352,6 +380,14 @@ function AppContent() {
               </ProtectedRoute>
             </FullscreenLayout>
           } 
+        />
+        <Route
+          path="/persona"
+          element={
+            <FullscreenLayout>
+              <PersonaPage />
+            </FullscreenLayout>
+          }
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

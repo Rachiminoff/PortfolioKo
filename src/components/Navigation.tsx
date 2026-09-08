@@ -31,14 +31,6 @@ function Navigation() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<Section>("main");
-  const [isLightMode, setIsLightMode] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem("tdy-theme") === "light";
-    } catch {
-      return false;
-    }
-  });
-
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -53,55 +45,7 @@ function Navigation() {
     setMobileOpen(false);
   };
 
-  // Keep the selected appearance on the document so every portfolio section
-  // follows the same theme, including routes where the navbar is hidden.
-  useEffect(() => {
-    document.documentElement.dataset.theme = isLightMode ? "light" : "dark";
-    document.body.dataset.theme = isLightMode ? "light" : "dark";
 
-    try {
-      localStorage.setItem("tdy-theme", isLightMode ? "light" : "dark");
-    } catch {
-      // Storage can be unavailable in restricted browser contexts.
-    }
-  }, [isLightMode]);
-
-  // Toggle the theme with a circular "wipe" animation expanding from the
-  // button that was pressed, using the View Transitions API. Browsers
-  // without support (Safari < 18, Firefox) fall back to an instant swap
-  // plus the CSS crossfade transition already defined in index.scss.
-  const toggleTheme = (event?: React.MouseEvent<HTMLElement>) => {
-    const applyTheme = () => setIsLightMode((prev) => !prev);
-
-    const supportsViewTransitions =
-      typeof document !== "undefined" &&
-      typeof (document as any).startViewTransition === "function";
-
-    const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (!supportsViewTransitions || prefersReducedMotion || !event) {
-      applyTheme();
-      return;
-    }
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    const radius = Math.hypot(
-      Math.max(x, window.innerWidth - x),
-      Math.max(y, window.innerHeight - y)
-    );
-
-    document.documentElement.style.setProperty("--theme-toggle-x", `${x}px`);
-    document.documentElement.style.setProperty("--theme-toggle-y", `${y}px`);
-    document.documentElement.style.setProperty("--theme-toggle-radius", `${radius}px`);
-
-    (document as any).startViewTransition(() => {
-      applyTheme();
-    });
-  };
 
   // Handle scroll events for navbar styling
   useEffect(() => {
@@ -190,16 +134,22 @@ function Navigation() {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding className="drawer-list-item">
+          <ListItemButton
+            className={`drawer-button ${location.pathname === "/persona" ? "active" : ""}`}
+            onClick={() => {
+              navigate("/persona");
+              handleDrawerClose();
+            }}
+            aria-current={location.pathname === "/persona" ? "page" : undefined}
+          >
+            <Icon icon="mdi:book-open-page-variant-outline" className="drawer-item-icon" />
+            <ListItemText primary="Persona" className="drawer-item-text" />
+            {location.pathname === "/persona" && <span className="drawer-item-indicator" />}
+          </ListItemButton>
+        </ListItem>
       </List>
       <Box className="drawer-footer">
-        <button
-          className="drawer-theme-toggle"
-          onClick={(event) => toggleTheme(event)}
-          type="button"
-        >
-          <Icon icon={isLightMode ? "mdi:weather-night" : "mdi:white-balance-sunny"} />
-          <span>{isLightMode ? "Dark mode" : "Light mode"}</span>
-        </button>
         <span className="drawer-footer-text">© 2026 TDY</span>
       </Box>
     </Box>
@@ -239,17 +189,16 @@ function Navigation() {
                 <span className="nav-button-label">{label}</span>
               </Button>
             ))}
+            <Button
+              onClick={() => navigate("/persona")}
+              className={`nav-button persona-nav-button ${location.pathname === "/persona" ? "active" : ""}`}
+              aria-current={location.pathname === "/persona" ? "page" : undefined}
+            >
+              <Icon icon="mdi:book-open-page-variant-outline" className="nav-button-icon" />
+              <span className="nav-button-label">Persona</span>
+            </Button>
           </Box>
 
-          <IconButton
-            className="theme-toggle-button"
-            onClick={(event) => toggleTheme(event)}
-            aria-label={isLightMode ? "Switch to dark mode" : "Switch to light mode"}
-            title={isLightMode ? "Dark mode" : "Light mode"}
-          >
-            <Icon icon={isLightMode ? "mdi:weather-night" : "mdi:white-balance-sunny"} />
-            <span>{isLightMode ? "DARK" : "LIGHT"}</span>
-          </IconButton>
 
           {/* Mobile Hamburger */}
           <IconButton
