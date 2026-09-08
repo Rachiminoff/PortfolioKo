@@ -1,1 +1,39 @@
-.vault-page{min-height:100vh;background:#070707;color:#f3f0e8}.vault-page .vault-loading-state{min-height:100vh;background:#070707;color:#f3f0e8;display:grid;place-items:center}
+@use "../../assets/styles/av-tokens" as *;
+
+/* Page shell is intentionally minimal; Vault.scss owns the full visual system. */
+.vault-page {
+  min-height: 100vh;
+  background: var(--av-bg);
+}
+
+.vault-page .vault-loading-state {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  justify-items: center;
+  gap: var(--av-space-4);
+  background: var(--av-bg);
+  color: var(--av-muted);
+  font-family: var(--av-font);
+  font-size: 0.9rem;
+}
+
+.vault-page .vault-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--av-line);
+  border-top-color: var(--av-cyan);
+  animation: vault-page-spin 0.7s linear infinite;
+}
+
+@keyframes vault-page-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vault-page .vault-loading-spinner {
+    animation-duration: 1.6s;
+  }
+}

@@ -27,6 +27,7 @@ type DensityOption = "compact" | "comfortable" | "large";
 function Vault() {
     const [vaultItems, setVaultItems] = useState<VaultItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(false);
     const [viewerUrl, setViewerUrl] = useState<string | null>(null);
     const [viewerType, setViewerType] = useState<"pdf" | "epub" | null>(null);
     const [activeCard, setActiveCard] = useState<number | null>(null);
@@ -85,6 +86,7 @@ function Vault() {
 
     const fetchVaultItems = async () => {
         setLoading(true);
+        setLoadError(false);
         const { data, error } = await supabase
             .from("vault_items")
             .select("*")
@@ -93,6 +95,7 @@ function Vault() {
 
         if (error) {
             console.error(error);
+            setLoadError(true);
         } else {
             setVaultItems(data || []);
         }
@@ -688,7 +691,20 @@ function Vault() {
 
             {/* MAIN CONTENT */}
             <div className="vault-main">
-                {loading ? (
+                {loadError ? (
+                    <div className="vault-error-state">
+                        <div className="vault-error-icon">
+                            <Icon icon="mdi:alert-octagon-outline" />
+                        </div>
+                        <p>The vault couldn't be reached.</p>
+                        <button
+                            className="vault-empty-clear-btn"
+                            onClick={() => fetchVaultItems()}
+                        >
+                            Try again
+                        </button>
+                    </div>
+                ) : loading ? (
                     <div className="vault-loading">
                         <div className="vault-loading-grid">
                             {[...Array(6)].map((_, index) => (
@@ -758,7 +774,7 @@ function Vault() {
                                                             />
                                                         ))}
                                                         {covers.length < 6 && Array.from({ length: 6 - covers.length }).map((_, idx) => (
-                                                            <div key={`empty-${idx}`} style={{ background: 'rgba(255,255,255,0.02)' }} />
+                                                            <div key={`empty-${idx}`} className="vault-folder-cover-empty" />
                                                         ))}
                                                     </div>
                                                 ) : (

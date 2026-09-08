@@ -1,0 +1,110 @@
+// =============================================================
+// AdashimaVerse shared design tokens — Bauhaus × Swiss system
+// Used by: Vault.scss, Insights.scss, WishArchivePage.scss,
+// AdaShimaStatsPage.scss
+//
+// Dark is the only theme these tokens define. Values are lifted
+// from the dark palette AdaShimaStatsPage/WishArchivePage already
+// established, so all four pages converge on one system instead
+// of four different ones.
+// =============================================================
+
+:root {
+  // Surfaces (darkest to lightest)
+  --av-bg: #0a0b0c;
+  --av-paper: #101214;
+  --av-surface: #16181b;
+  --av-surface-2: #1d2024;
+
+  // Text
+  --av-ink: #f4f2e8;
+  --av-muted: #9a978d;
+  --av-faint: #5f5d56;
+
+  // Structure
+  --av-line: rgba(244, 242, 232, 0.14);
+  --av-line-strong: rgba(244, 242, 232, 0.28);
+
+  // Accents — used deliberately, one per moment, never all at once
+  --av-red: #df3b31;
+  --av-blue: #2b58c9;
+  --av-yellow: #efc52d;
+  --av-cyan: #20a9b5;
+
+  // On-accent text (accents are light/mid-toned, so ink text goes dark)
+  --av-on-red: #fff6ef;
+  --av-on-blue: #fff6ef;
+  --av-on-yellow: #16181b;
+  --av-on-cyan: #101214;
+
+  // Feedback
+  --av-error: var(--av-red);
+  --av-success: var(--av-cyan);
+
+  // Geometry — Swiss grids are square, not rounded
+  --av-radius: 2px;
+  --av-border: 1px solid var(--av-line);
+  --av-border-strong: 1px solid var(--av-line-strong);
+
+  // Spacing scale (4px base)
+  --av-space-1: 4px;
+  --av-space-2: 8px;
+  --av-space-3: 12px;
+  --av-space-4: 16px;
+  --av-space-5: 24px;
+  --av-space-6: 32px;
+  --av-space-7: 48px;
+  --av-space-8: 64px;
+
+  // Type scale
+  --av-font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --av-font-mono: "Source Code Pro", Menlo, Monaco, Consolas, monospace;
+
+  // Motion
+  --av-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --av-fast: 120ms;
+  --av-mid: 220ms;
+}
+
+@mixin av-focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--av-cyan);
+    outline-offset: 2px;
+  }
+}
+
+@mixin av-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--av-line-strong) transparent;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--av-line-strong);
+    border-radius: 0;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--av-muted);
+  }
+}
+
+@mixin av-reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
