@@ -68,26 +68,31 @@ export const projectsData: Project[] = [
     features: [
       "Quest-based task management with experience points, levels, and achievements",
       "Interactive campus map featuring university landmarks and information cards",
+      "Leaderboard and cosmetic rewards system that turns consistent progress into visible, unlockable status",
+      "Admin dashboard for managing campus content, missions, and user data",
       "Secure email authentication powered by Supabase",
       "Real-time synchronization across devices",
       "Personalized onboarding and guided walkthroughs",
       "Dark-first interface optimized for mobile devices",
       "Student profile customization and achievement tracking",
-      "Productivity insights through quests and progression metrics"
+      "Automated, signed Android release builds published via CI/CD"
     ],
     tech: [
       "Flutter",
       "Dart",
       "Supabase",
-      "FlutterFlow"
+      "FlutterFlow",
+      "Firebase Crashlytics"
     ],
-    architecture: "Flutter UI → Application Logic → Supabase → PostgreSQL Database\n\nUniQuest follows a layered mobile architecture that separates presentation, business logic, and backend services.\n\nFlutter powers the user interface, delivering a responsive cross-platform experience optimized for mobile devices. The application is organized around key workflows including the dashboard, quest management, campus exploration, and user profiles.\n\nThe application layer manages progression systems such as missions, achievements, experience points, and user state while keeping gameplay mechanics independent from the interface. This separation makes the system easier to maintain and extend.\n\nSupabase provides authentication, cloud data storage, and real-time synchronization through PostgreSQL. User profiles, quests, achievements, and application data remain securely synchronized across sessions and devices.\n\nThis architecture keeps each layer focused on a specific responsibility, making future development, testing, and feature expansion significantly easier.",
+    architecture: "Flutter UI → Application Logic → Supabase → PostgreSQL Database\n\nUniQuest follows a layered mobile architecture that separates presentation, business logic, and backend services.\n\nFlutter powers the user interface, delivering a responsive cross-platform experience optimized for mobile devices. The application is organized around key workflows including the dashboard, quest management, campus exploration, leaderboard, cosmetics, and user profiles, alongside a dedicated admin dashboard for managing campus content.\n\nThe application layer manages progression systems such as missions, achievements, experience points, cosmetic rewards, and user state while keeping gameplay mechanics independent from the interface. This separation makes the system easier to maintain and extend.\n\nSupabase provides authentication, cloud data storage, and real-time synchronization through PostgreSQL. User profiles, quests, achievements, and application data remain securely synchronized across sessions and devices, while Firebase Crashlytics tracks app stability in production.\n\nThis architecture keeps each layer focused on a specific responsibility, making future development, testing, and feature expansion significantly easier.",
     devNotes: [
       "FlutterFlow accelerated UI development while retaining Flutter's flexibility through custom Dart code.",
       "Supabase simplified authentication, backend infrastructure, and real-time synchronization with minimal setup.",
-      "The quest and achievement systems were designed to remain modular for future gameplay expansions.",
+      "The quest, leaderboard, and cosmetics systems were designed to remain modular for future gameplay expansions.",
       "A dark-first design language was chosen to improve readability during extended mobile use.",
       "The campus map provides both navigation and contextual information about university facilities.",
+      "A GitHub Actions CI/CD pipeline automatically builds, signs, and publishes Android release APKs as GitHub Releases on every push to main.",
+      "Firebase Crashlytics runs alongside Supabase to monitor app stability in production.",
       "Future iterations could introduce push notifications, collaborative challenges, and social productivity features."
     ],
     highlights: [
@@ -102,14 +107,14 @@ export const projectsData: Project[] = [
         description: "Helps students explore university landmarks using interactive location pins with photos and contextual information."
       },
       {
-        icon: "mdi:sync",
-        title: "Real-time Synchronization",
-        description: "Keeps user progress, quests, and achievements securely synchronized across devices through Supabase."
+        icon: "mdi:trophy-variant",
+        title: "Leaderboard & Cosmetic Rewards",
+        description: "Turns sustained progress into visible status through competitive leaderboards and unlockable cosmetic customization."
       },
       {
-        icon: "mdi:account-check",
-        title: "Student-Centered Experience",
-        description: "Delivers a polished onboarding flow, customizable profiles, and an interface thoughtfully designed for university life."
+        icon: "mdi:cog-sync",
+        title: "Automated Release Pipeline",
+        description: "A GitHub Actions workflow builds, signs, and publishes Android release APKs automatically on every push to main."
       }
     ]
   },
@@ -144,7 +149,7 @@ export const projectsData: Project[] = [
       "Requests",
       "EbookLib",
       "WeasyPrint",
-      "PyPDF2"
+      "Rich"
     ],
     architecture: "Source Website → Downloader → HTML Cleaner → EPUB Builder → PDF Export\n\nThe application follows a modular pipeline architecture where each stage is responsible for a single part of the extraction process.\n\nThe Downloader retrieves chapter content using either Requests or Playwright depending on the website. Traditional HTTP requests are used for static pages, while Playwright renders JavaScript-driven websites before extraction.\n\nThe HTML Cleaner processes each chapter using BeautifulSoup, removing advertisements, translator notes, navigation elements, and unnecessary markup while preserving readable content. Multiple cleaning profiles allow the extractor to adapt to different website structures.\n\nThe Export stage compiles cleaned chapters into EPUB ebooks using EbookLib before optionally converting them into professionally formatted PDFs with WeasyPrint. This produces consistent layouts, proper pagination, and a significantly improved offline reading experience.\n\nBecause every stage is independent, additional website parsers, cleaning rules, or export formats can be introduced without requiring major architectural changes.",
     devNotes: [
@@ -152,6 +157,8 @@ export const projectsData: Project[] = [
       "BeautifulSoup powers HTML parsing, cleanup, and content normalization across supported sources.",
       "Cleaning profiles are modular, making it easy to support websites with different layouts.",
       "The export pipeline supports both EPUB generation and PDF conversion for multiple reading preferences.",
+      "A Rich-powered CLI handles first-run dependency checks, installing missing Python packages and verifying the Playwright Chromium install automatically.",
+      "Optional integrations with Calibre and Pandoc extend EPUB compilation beyond the built-in pipeline for users who have them installed.",
       "The project's modular architecture simplifies maintenance while making future platform support easier to implement.",
       "Future improvements could include additional ebook formats, metadata retrieval, and plugin-based website support."
     ],
@@ -269,14 +276,16 @@ export const projectsData: Project[] = [
       "React Native",
       "Expo",
       "TypeScript",
-      "React Navigation"
+      "React Navigation",
+      "MMKV"
     ],
-    architecture: "React Native UI → Context API → React Navigation → Local Storage\n\nWais Wallet follows a modular mobile architecture centered around simplicity, maintainability, and a smooth user experience.\n\nThe presentation layer is built with reusable React Native components organized around budgeting, savings, and financial dashboards. Consistent layouts and minimalist design choices keep financial information approachable without overwhelming users.\n\nApplication state is managed using React's Context API, providing a centralized source of truth for budget allocations, transactions, and savings goals while maintaining predictable data flow throughout the application.\n\nReact Navigation powers screen transitions and overall application flow, creating a structured navigation experience that remains scalable as new features are introduced.\n\nFinancial data is stored locally to support an offline-first experience, allowing users to continue managing their budgets without relying on constant internet connectivity. TypeScript provides end-to-end type safety, improving maintainability and reducing runtime errors as the application grows.",
+    architecture: "React Native UI → Context API → React Navigation → MMKV Storage\n\nWais Wallet follows a modular mobile architecture centered around simplicity, maintainability, and a smooth user experience.\n\nThe presentation layer is built with reusable React Native components organized around budgeting, savings, and financial dashboards. Consistent layouts and minimalist design choices keep financial information approachable without overwhelming users.\n\nApplication state is managed using React's Context API, providing a centralized source of truth for authentication, budget allocations, transactions, and savings goals while maintaining predictable data flow throughout the application.\n\nReact Navigation powers screen transitions and overall application flow, creating a structured navigation experience that remains scalable as new features are introduced.\n\nRather than relying on a backend, the app is fully offline-first: user accounts, balances, and financial records are persisted entirely on-device through MMKV, a fast key-value storage layer, letting users manage their budgets without any internet dependency. TypeScript provides end-to-end type safety, improving maintainability and reducing runtime errors as the application grows.",
     devNotes: [
       "React Native and Expo enabled rapid cross-platform development from a single codebase.",
       "The project adopts a modular component architecture to simplify maintenance and future expansion.",
       "TypeScript improves code quality through static type checking and stronger developer tooling.",
-      "Financial information is presented through concise visual summaries that prioritize clarity over complexity.",
+      "MMKV's synchronous, on-device storage kept the app fully functional offline, but also surfaced early lessons around balance-state integrity that directly shaped LedgerLeaf's server-side data model.",
+      "Financial information is presented through concise visual summaries, including a pie-chart breakdown on the dashboard, that prioritize clarity over complexity.",
       "The interface emphasizes accessibility, simplicity, and ease of use over feature-heavy dashboards.",
       "Although archived, Wais Wallet became the conceptual foundation for the development of LedgerLeaf."
     ],
@@ -336,7 +345,10 @@ export const projectsData: Project[] = [
     "Inertia.js",
     "Tailwind CSS",
     "MySQL",
-    "Vite"
+    "Vite",
+    "Chart.js",
+    "Dompdf",
+    "Pest"
   ],
   architecture: "Browser → React + Inertia.js → Laravel → MySQL\n\nLedgerLeaf follows a modern full-stack monolithic architecture that combines a reactive frontend with Laravel's server-driven backend.\n\nThe application is delivered through a responsive web interface powered by React, providing a fast and interactive user experience while maintaining a traditional server-backed architecture. Reusable components power dashboards, budgeting tools, reports, and transaction management throughout the application.\n\nInertia.js bridges React and Laravel, allowing the application to behave like a single-page application without introducing a separate REST or GraphQL API. Routing, data hydration, and page transitions remain seamless while keeping development within Laravel's ecosystem.\n\nLaravel serves as the application's backend, handling authentication, routing, business logic, financial calculations, report generation, and data validation. The budgeting engine processes pocket allocations, transactions, savings goals, and financial summaries while ensuring consistency across the platform.\n\nMySQL provides relational storage for users, pockets, transactions, savings goals, and financial records. The schema is structured to support efficient queries, reporting, and future feature expansion while maintaining data integrity.\n\nThe application is deployed on Render, with Railway providing managed database hosting for the production environment.",
   devNotes: [
@@ -344,7 +356,9 @@ export const projectsData: Project[] = [
     "The project follows a modular component structure that makes future features easier to develop and maintain.",
     "Financial dashboards prioritize clarity by presenting complex information through concise visual summaries.",
     "LedgerLeaf represents the evolution of Wais Wallet into a more comprehensive full-stack financial management platform.",
-    "Laravel handles business-critical financial calculations server-side to ensure accuracy and data consistency.",
+    "Laravel handles business-critical financial calculations server-side to ensure accuracy and data consistency, including guardrails that prevent a pocket with existing expense history from being permanently deleted.",
+    "Chart.js powers the dashboard and analytics visualizations, while Dompdf and Spatie Simple Excel generate PDF and Excel reports server-side.",
+    "Pest covers feature and unit tests on the Laravel backend, and the project is in the middle of migrating older controllers into a feature-oriented structure.",
     "Future iterations could introduce automated budgeting recommendations, recurring transactions, and integrations with external financial services."
   ],
   highlights: [
