@@ -116,3 +116,4 @@ $cyan: #18aebe;
   .persona-stat-card strong { font-size:clamp(3rem,15vw,5rem); }
   .persona-stat-copy { min-height:125px;padding:18px; }
 }
+.persona-now-playing .persona-now-artist{display:block;margin-top:10px;font:12px 'IBM Plex Mono',monospace}.persona-now-status{display:block;margin-top:18px;font:10px 'IBM Plex Mono',monospace;color:$red}.persona-now-link{position:absolute;right:17px;bottom:13px;color:inherit;font:10px 'IBM Plex Mono',monospace;text-decoration:none}.persona-now-playing strong{max-width:230px}
