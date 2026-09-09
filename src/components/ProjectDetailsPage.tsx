@@ -8,7 +8,9 @@ import '../assets/styles/ProjectDetailsPage.scss';
 // ============================================================
 // TABLE OF CONTENTS
 // ============================================================
-const TableOfContents: React.FC<{ sections: Array<{ id: string; label: string; number: string }> }> = ({ sections }) => {
+const TableOfContents: React.FC<{
+  sections: Array<{ id: string; label: string; number: string }>;
+}> = ({ sections }) => {
   const [activeId, setActiveId] = useState<string>('');
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const TableOfContents: React.FC<{ sections: Array<{ id: string; label: string; n
           }
         });
       },
-      { threshold: 0.3, rootMargin: '-20% 0px -20% 0px' }
+      { threshold: 0.3, rootMargin: '-20% 0px -20% 0px' },
     );
 
     sections.forEach(({ id }) => {
@@ -72,36 +74,42 @@ const ProjectFigure: React.FC<{ images: string[]; title: string }> = ({ images, 
 
   useEffect(() => {
     if (images.length <= 1) return;
-    
+
     const startTimer = () => {
       timerRef.current = setInterval(() => {
         setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
         setImageLoaded(false);
       }, 5000);
     };
-    
+
     if (isHovering) {
       if (timerRef.current) clearInterval(timerRef.current);
     } else {
       startTimer();
     }
-    
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [isHovering, images.length]);
 
-  const nextSlide = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrent((prev) => prev === images.length - 1 ? 0 : prev + 1);
-    setImageLoaded(false);
-  }, [images.length]);
+  const nextSlide = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+      setImageLoaded(false);
+    },
+    [images.length],
+  );
 
-  const prevSlide = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setCurrent((prev) => prev === 0 ? images.length - 1 : prev - 1);
-    setImageLoaded(false);
-  }, [images.length]);
+  const prevSlide = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+      setImageLoaded(false);
+    },
+    [images.length],
+  );
 
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -119,7 +127,7 @@ const ProjectFigure: React.FC<{ images: string[]; title: string }> = ({ images, 
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
-    
+
     if (isLeftSwipe && images.length > 1) {
       nextSlide({ stopPropagation: () => {} } as React.MouseEvent);
     }
@@ -132,14 +140,14 @@ const ProjectFigure: React.FC<{ images: string[]; title: string }> = ({ images, 
 
   return (
     <figure className="figure-wrapper">
-      <div 
+      <div
         className="figure-wrapper"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
         <div className={`figure-container ${isZoomed ? 'zoomed' : ''}`}>
-          <div 
-            className="figure-main" 
+          <div
+            className="figure-main"
             onClick={() => setIsZoomed(!isZoomed)}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -194,7 +202,9 @@ const ProjectFigure: React.FC<{ images: string[]; title: string }> = ({ images, 
         </div>
         {images.length > 1 && (
           <figcaption className="figure-caption">
-            <span className="figure-label">Figure {current + 1} / {images.length}</span>
+            <span className="figure-label">
+              Figure {current + 1} / {images.length}
+            </span>
             {title} — interface overview
           </figcaption>
         )}
@@ -208,43 +218,43 @@ const ProjectFigure: React.FC<{ images: string[]; title: string }> = ({ images, 
 // ============================================================
 const TechCategory: React.FC<{ category: string; items: string[] }> = ({ category, items }) => {
   const techIconMap: Record<string, string> = {
-    'React': 'mdi:react',
-    'TypeScript': 'mdi:language-typescript',
-    'JavaScript': 'mdi:language-javascript',
+    React: 'mdi:react',
+    TypeScript: 'mdi:language-typescript',
+    JavaScript: 'mdi:language-javascript',
     'Node.js': 'mdi:nodejs',
-    'Laravel': 'mdi:laravel',
-    'PostgreSQL': 'mdi:database',
-    'MySQL': 'mdi:database',
-    'Docker': 'mdi:docker',
+    Laravel: 'mdi:laravel',
+    PostgreSQL: 'mdi:database',
+    MySQL: 'mdi:database',
+    Docker: 'mdi:docker',
     'Tailwind CSS': 'mdi:tailwind',
-    'Firebase': 'mdi:firebase',
-    'WebSocket': 'mdi:api',
-    'Vite': 'mdi:lightning-bolt',
-    'SCSS': 'mdi:sass',
-    'Express': 'mdi:express',
-    'MongoDB': 'mdi:database',
-    'Redis': 'mdi:database',
-    'AWS': 'mdi:aws',
-    'Vercel': 'mdi:vercel',
-    'Netlify': 'mdi:netlify',
-    'PHP': 'mdi:language-php',
-    'Python': 'mdi:language-python',
-    'Dart': 'mdi:language-dart',
-    'Godot': 'mdi:gamepad-variant',
-    'GDScript': 'mdi:script',
-    'Blender': 'mdi:blender',
-    'FlutterFlow': 'mdi:google',
-    'Supabase': 'mdi:database',
-    'Playwright': 'mdi:playwright',
-    'BeautifulSoup': 'mdi:code-json',
+    Firebase: 'mdi:firebase',
+    WebSocket: 'mdi:api',
+    Vite: 'mdi:lightning-bolt',
+    SCSS: 'mdi:sass',
+    Express: 'mdi:express',
+    MongoDB: 'mdi:database',
+    Redis: 'mdi:database',
+    AWS: 'mdi:aws',
+    Vercel: 'mdi:vercel',
+    Netlify: 'mdi:netlify',
+    PHP: 'mdi:language-php',
+    Python: 'mdi:language-python',
+    Dart: 'mdi:language-dart',
+    Godot: 'mdi:gamepad-variant',
+    GDScript: 'mdi:script',
+    Blender: 'mdi:blender',
+    FlutterFlow: 'mdi:google',
+    Supabase: 'mdi:database',
+    Playwright: 'mdi:playwright',
+    BeautifulSoup: 'mdi:code-json',
     'Inertia.js': 'mdi:react',
-    'Zustand': 'mdi:react',
-    'PyPDF2': 'mdi:file-pdf-box',
-    'EbookLib': 'mdi:book',
-    'WeasyPrint': 'mdi:printer',
-    'Requests': 'mdi:web',
-    'Flutter': 'mdi:google',
-    'Expo': 'mdi:google',
+    Zustand: 'mdi:react',
+    PyPDF2: 'mdi:file-pdf-box',
+    EbookLib: 'mdi:book',
+    WeasyPrint: 'mdi:printer',
+    Requests: 'mdi:web',
+    Flutter: 'mdi:google',
+    Expo: 'mdi:google',
     'React Navigation': 'mdi:react',
   };
 
@@ -266,8 +276,10 @@ const TechCategory: React.FC<{ category: string; items: string[] }> = ({ categor
 // ============================================================
 // HIGHLIGHT CARD
 // ============================================================
-const HighlightCard: React.FC<{ icon: string; title: string; description: string }> = ({ 
-  icon, title, description 
+const HighlightCard: React.FC<{ icon: string; title: string; description: string }> = ({
+  icon,
+  title,
+  description,
 }) => (
   <div className="highlight-card">
     <div className="highlight-icon">
@@ -298,14 +310,15 @@ const FeatureGroup: React.FC<{ title: string; features: string[] }> = ({ title, 
 // ============================================================
 // DOCUMENTATION CALLOUT
 // ============================================================
-const DocsCallout: React.FC<{ type: 'note' | 'tip' | 'impl' | 'future'; children: React.ReactNode }> = ({ 
-  type, children 
-}) => {
+const DocsCallout: React.FC<{
+  type: 'note' | 'tip' | 'impl' | 'future';
+  children: React.ReactNode;
+}> = ({ type, children }) => {
   const labels = {
     note: 'Note',
     tip: 'Tip',
     impl: 'Implementation Detail',
-    future: 'Future Work'
+    future: 'Future Work',
   };
 
   return (
@@ -341,7 +354,7 @@ const ArchitectureFlow: React.FC<{ nodes: string[] }> = ({ nodes }) => {
           setVisible(true);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     if (ref.current) observer.observe(ref.current);
@@ -352,7 +365,9 @@ const ArchitectureFlow: React.FC<{ nodes: string[] }> = ({ nodes }) => {
     <div className="architecture-flow" ref={ref}>
       {nodes.map((node, i) => (
         <React.Fragment key={i}>
-          <div className={`arch-node ${i === Math.floor(nodes.length / 2) ? 'arch-highlight' : ''} ${visible ? 'visible' : ''}`}>
+          <div
+            className={`arch-node ${i === Math.floor(nodes.length / 2) ? 'arch-highlight' : ''} ${visible ? 'visible' : ''}`}
+          >
             {node}
           </div>
           {i < nodes.length - 1 && (
@@ -371,30 +386,32 @@ const ArchitectureFlow: React.FC<{ nodes: string[] }> = ({ nodes }) => {
 // ============================================================
 const renderTextWithParagraphs = (text: string) => {
   if (!text) return null;
-  
+
   // Split by double newline or newline followed by space (for formatting)
   const paragraphs = text.split(/\n\s*\n/);
-  
-  return paragraphs.map((paragraph, index) => {
-    // Trim whitespace and check if it's a heading-like line (ends with colon or is short)
-    const trimmed = paragraph.trim();
-    if (!trimmed) return null;
-    
-    // If it's a short line ending with colon, treat as a sub-heading
-    if (trimmed.length < 60 && trimmed.endsWith(':')) {
+
+  return paragraphs
+    .map((paragraph, index) => {
+      // Trim whitespace and check if it's a heading-like line (ends with colon or is short)
+      const trimmed = paragraph.trim();
+      if (!trimmed) return null;
+
+      // If it's a short line ending with colon, treat as a sub-heading
+      if (trimmed.length < 60 && trimmed.endsWith(':')) {
+        return (
+          <p key={index} className="docs-text docs-subheading">
+            <strong>{trimmed}</strong>
+          </p>
+        );
+      }
+
       return (
-        <p key={index} className="docs-text docs-subheading">
-          <strong>{trimmed}</strong>
+        <p key={index} className="docs-text">
+          {trimmed}
         </p>
       );
-    }
-    
-    return (
-      <p key={index} className="docs-text">
-        {trimmed}
-      </p>
-    );
-  }).filter(Boolean);
+    })
+    .filter(Boolean);
 };
 
 // ============================================================
@@ -405,28 +422,55 @@ const parseArchitecture = (architecture: string) => {
 
   // Split by double newline to separate flow from description
   const parts = architecture.split(/\n\s*\n/);
-  
+
   // First part might contain the flow diagram (e.g., "Flutter → FlutterFlow → Supabase → Database")
   const firstPart = parts[0] || '';
-  
+
   // Check if first part contains arrow indicators (→)
   if (firstPart.includes('→')) {
     // Extract flow nodes from the first line
     const flowLine = firstPart.split('\n')[0].trim();
-    const nodes = flowLine.split('→').map(node => node.trim());
-    
+    const nodes = flowLine.split('→').map((node) => node.trim());
+
     // The rest is the description
-    const description = parts.slice(1).join('\n\n') || firstPart.split('\n').slice(1).join('\n').trim();
-    
+    const description =
+      parts.slice(1).join('\n\n') || firstPart.split('\n').slice(1).join('\n').trim();
+
     return { flowNodes: nodes, description };
   }
-  
+
   // If no arrows, try to extract from architecture text
-  const lines = architecture.split('\n').filter(line => line.trim().length > 0);
-  const potentialNodes = lines.slice(0, 6).map(line => {
+  const lines = architecture.split('\n').filter((line) => line.trim().length > 0);
+  const potentialNodes = lines.slice(0, 6).map((line) => {
     const words = line.split(' ');
     if (words.length > 6) {
-      const keyTerms = ['Laravel', 'React', 'Inertia', 'Flutter', 'Supabase', 'Godot', 'Python', 'MySQL', 'PostgreSQL', 'MongoDB', 'Node.js', 'Express', 'Docker', 'AWS', 'Vercel', 'Netlify', 'Playwright', 'BeautifulSoup', 'FlutterFlow', 'GDScript', 'Blender', 'PHP', 'TypeScript', 'Expo', 'React Native'];
+      const keyTerms = [
+        'Laravel',
+        'React',
+        'Inertia',
+        'Flutter',
+        'Supabase',
+        'Godot',
+        'Python',
+        'MySQL',
+        'PostgreSQL',
+        'MongoDB',
+        'Node.js',
+        'Express',
+        'Docker',
+        'AWS',
+        'Vercel',
+        'Netlify',
+        'Playwright',
+        'BeautifulSoup',
+        'FlutterFlow',
+        'GDScript',
+        'Blender',
+        'PHP',
+        'TypeScript',
+        'Expo',
+        'React Native',
+      ];
       for (const term of keyTerms) {
         if (line.includes(term)) {
           return term;
@@ -436,10 +480,10 @@ const parseArchitecture = (architecture: string) => {
     }
     return line.trim().replace(/[.:]$/, '');
   });
-  
-  return { 
+
+  return {
     flowNodes: potentialNodes.length > 0 ? potentialNodes : ['Application', 'Services', 'Database'],
-    description: architecture 
+    description: architecture,
   };
 };
 
@@ -468,10 +512,10 @@ const ProjectDetailsPage: React.FC = () => {
 
   useEffect(() => {
     setMounted(true);
-    
+
     // Add class to body to hide navbar
     document.body.classList.add('hide-navbar');
-    
+
     return () => {
       document.body.classList.remove('hide-navbar');
     };
@@ -480,7 +524,7 @@ const ProjectDetailsPage: React.FC = () => {
   useEffect(() => {
     if (mounted) {
       const found = projectsData.find(
-        p => (p.slug || p.title.toLowerCase().replace(/\s+/g, '-')) === slug
+        (p) => (p.slug || p.title.toLowerCase().replace(/\s+/g, '-')) === slug,
       );
       if (found) {
         setProject(found);
@@ -505,7 +549,7 @@ const ProjectDetailsPage: React.FC = () => {
 
   // Find next and previous projects
   const getAdjacentProjects = (currentProject: Project) => {
-    const index = projectsData.findIndex(p => p.id === currentProject.id);
+    const index = projectsData.findIndex((p) => p.id === currentProject.id);
     const prev = index > 0 ? projectsData[index - 1] : null;
     const next = index < projectsData.length - 1 ? projectsData[index + 1] : null;
     return { prev, next };
@@ -522,32 +566,45 @@ const ProjectDetailsPage: React.FC = () => {
   if (!project) return null;
 
   const statusColor = {
-    'Active': '#2dd4bf',
-    'Completed': '#2dd4bf',
+    Active: '#2dd4bf',
+    Completed: '#2dd4bf',
     'In Development': '#2dd4bf',
-    'Archived': '#6b7280'
+    Archived: '#6b7280',
   };
 
   const techCategories: { [key: string]: string[] } = {
-    'Frontend': ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Inertia.js', 'Zustand'],
-    'Backend': ['Node.js', 'Express', 'Laravel', 'PHP', 'Python'],
-    'Database': ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Supabase', 'Firebase'],
-    'Mobile': ['Flutter', 'Dart', 'FlutterFlow', 'Expo', 'React Native'],
+    Frontend: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Inertia.js', 'Zustand'],
+    Backend: ['Node.js', 'Express', 'Laravel', 'PHP', 'Python'],
+    Database: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Supabase', 'Firebase'],
+    Mobile: ['Flutter', 'Dart', 'FlutterFlow', 'Expo', 'React Native'],
     'Game Development': ['Godot', 'GDScript', 'Blender'],
-    'DevOps': ['Docker', 'AWS', 'Vercel', 'Netlify'],
-    'Tools': ['Playwright', 'BeautifulSoup', 'PyPDF2', 'EbookLib', 'WeasyPrint', 'Requests', 'React Navigation']
+    DevOps: ['Docker', 'AWS', 'Vercel', 'Netlify'],
+    Tools: [
+      'Playwright',
+      'BeautifulSoup',
+      'PyPDF2',
+      'EbookLib',
+      'WeasyPrint',
+      'Requests',
+      'React Navigation',
+    ],
   };
 
-  const categorizedTech = Object.entries(techCategories).reduce((acc, [category, items]) => {
-    const filtered = items.filter(tech => project.tech.includes(tech));
-    if (filtered.length > 0) {
-      acc[category] = filtered;
-    }
-    return acc;
-  }, {} as { [key: string]: string[] });
+  const categorizedTech = Object.entries(techCategories).reduce(
+    (acc, [category, items]) => {
+      const filtered = items.filter((tech) => project.tech.includes(tech));
+      if (filtered.length > 0) {
+        acc[category] = filtered;
+      }
+      return acc;
+    },
+    {} as { [key: string]: string[] },
+  );
 
   // Parse architecture for flow nodes and description
-  const { flowNodes, description: architectureDescription } = parseArchitecture(project.architecture || '');
+  const { flowNodes, description: architectureDescription } = parseArchitecture(
+    project.architecture || '',
+  );
 
   const { prev, next } = getAdjacentProjects(project);
 
@@ -574,14 +631,17 @@ const ProjectDetailsPage: React.FC = () => {
 
           <div className="article-meta">
             <span className="meta-tag">{project.role}</span>
-            <span 
+            <span
               className="meta-tag meta-tag-status"
-              style={{ 
+              style={{
                 backgroundColor: `${statusColor[project.status as keyof typeof statusColor]}15`,
-                color: statusColor[project.status as keyof typeof statusColor]
+                color: statusColor[project.status as keyof typeof statusColor],
               }}
             >
-              <span className="status-dot" style={{ backgroundColor: statusColor[project.status as keyof typeof statusColor] }} />
+              <span
+                className="status-dot"
+                style={{ backgroundColor: statusColor[project.status as keyof typeof statusColor] }}
+              />
               {project.status}
             </span>
             <span className="meta-tag meta-tag-duration">
@@ -595,18 +655,33 @@ const ProjectDetailsPage: React.FC = () => {
           <p className="article-excerpt">{project.description}</p>
 
           <div className="article-actions">
-            <a href={project.link} target="_blank" rel="noreferrer" className="action-link action-primary">
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noreferrer"
+              className="action-link action-primary"
+            >
               <Icon icon="mdi:github" width={18} height={18} />
               Source Code
             </a>
             {project.liveDemo && (
-              <a href={project.liveDemo} target="_blank" rel="noreferrer" className="action-link action-secondary">
+              <a
+                href={project.liveDemo}
+                target="_blank"
+                rel="noreferrer"
+                className="action-link action-secondary"
+              >
                 <Icon icon="mdi:open-in-new" width={18} height={18} />
                 Live Demo
               </a>
             )}
             {project.itchLink && (
-              <a href={project.itchLink} target="_blank" rel="noreferrer" className="action-link action-secondary">
+              <a
+                href={project.itchLink}
+                target="_blank"
+                rel="noreferrer"
+                className="action-link action-secondary"
+              >
                 <Icon icon="mdi:download" width={18} height={18} />
                 Download
               </a>
@@ -647,7 +722,7 @@ const ProjectDetailsPage: React.FC = () => {
             <SectionHeader number="02" title="Highlights" />
             <div className="highlights-grid">
               {project.highlights.map((highlight, idx) => (
-                <HighlightCard 
+                <HighlightCard
                   key={idx}
                   icon={highlight.icon}
                   title={highlight.title}
@@ -683,11 +758,11 @@ const ProjectDetailsPage: React.FC = () => {
         <section className="docs-section" id="features">
           <SectionHeader number="04" title="Features" />
           <div className="features-grid">
-            <FeatureGroup 
+            <FeatureGroup
               title="Core Features"
               features={project.features.slice(0, Math.ceil(project.features.length / 2))}
             />
-            <FeatureGroup 
+            <FeatureGroup
               title="Additional Features"
               features={project.features.slice(Math.ceil(project.features.length / 2))}
             />
@@ -702,11 +777,22 @@ const ProjectDetailsPage: React.FC = () => {
               {project.devNotes.map((note, i) => {
                 // Determine callout type based on note content
                 let type: 'note' | 'tip' | 'impl' | 'future' = 'note';
-                if (note.toLowerCase().includes('future') || note.toLowerCase().includes('iterations') || note.toLowerCase().includes('improvements')) {
+                if (
+                  note.toLowerCase().includes('future') ||
+                  note.toLowerCase().includes('iterations') ||
+                  note.toLowerCase().includes('improvements')
+                ) {
                   type = 'future';
-                } else if (note.toLowerCase().includes('implement') || note.toLowerCase().includes('built') || note.toLowerCase().includes('selected')) {
+                } else if (
+                  note.toLowerCase().includes('implement') ||
+                  note.toLowerCase().includes('built') ||
+                  note.toLowerCase().includes('selected')
+                ) {
                   type = 'impl';
-                } else if (note.toLowerCase().includes('tip') || note.toLowerCase().includes('suggestion')) {
+                } else if (
+                  note.toLowerCase().includes('tip') ||
+                  note.toLowerCase().includes('suggestion')
+                ) {
                   type = 'tip';
                 }
                 return (
@@ -776,8 +862,8 @@ const ProjectDetailsPage: React.FC = () => {
         <nav className="article-navigation">
           <div className="nav-container">
             {prev ? (
-              <Link 
-                to={`/projects/${prev.slug || prev.title.toLowerCase().replace(/\s+/g, '-')}`} 
+              <Link
+                to={`/projects/${prev.slug || prev.title.toLowerCase().replace(/\s+/g, '-')}`}
                 className="nav-link nav-link-prev"
               >
                 <span className="nav-label">
@@ -789,19 +875,19 @@ const ProjectDetailsPage: React.FC = () => {
             ) : (
               <div className="nav-placeholder" />
             )}
-            
-            <button 
-              onClick={() => setIsModalOpen(true)} 
+
+            <button
+              onClick={() => setIsModalOpen(true)}
               className="nav-link nav-link-all"
               aria-label="Open project list"
             >
               <Icon icon="mdi:grid" width={18} height={18} />
               <span>All Projects</span>
             </button>
-            
+
             {next ? (
-              <Link 
-                to={`/projects/${next.slug || next.title.toLowerCase().replace(/\s+/g, '-')}`} 
+              <Link
+                to={`/projects/${next.slug || next.title.toLowerCase().replace(/\s+/g, '-')}`}
                 className="nav-link nav-link-next"
               >
                 <span className="nav-label">
@@ -821,10 +907,16 @@ const ProjectDetailsPage: React.FC = () => {
           <div className="footer-content">
             <h2 className="footer-title">Interested in this project?</h2>
             <p className="footer-description">
-              Explore the source code, try the live demo, or reach out to discuss how we can build something similar together.
+              Explore the source code, try the live demo, or reach out to discuss how we can build
+              something similar together.
             </p>
             <div className="footer-actions">
-              <a href={project.link} target="_blank" rel="noreferrer" className="footer-link footer-primary">
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noreferrer"
+                className="footer-link footer-primary"
+              >
                 <Icon icon="mdi:github" width={20} height={20} />
                 View Source
               </a>
@@ -832,10 +924,7 @@ const ProjectDetailsPage: React.FC = () => {
                 <Icon icon="mdi:email-outline" width={20} height={20} />
                 Let's Talk
               </a>
-              <button 
-                onClick={() => setIsModalOpen(true)} 
-                className="footer-link footer-tertiary"
-              >
+              <button onClick={() => setIsModalOpen(true)} className="footer-link footer-tertiary">
                 <Icon icon="mdi:grid" width={18} height={18} />
                 All Projects
               </button>
@@ -845,10 +934,7 @@ const ProjectDetailsPage: React.FC = () => {
       </div>
 
       {/* Project List Modal */}
-      <ProjectListModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-      />
+      <ProjectListModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 };

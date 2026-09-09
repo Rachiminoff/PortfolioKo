@@ -5,11 +5,7 @@ interface FullscreenLayoutProps {
 }
 
 const FullscreenLayout: React.FC<FullscreenLayoutProps> = ({ children }) => {
-  return (
-    <div className="fullscreen-layout">
-      {children}
-    </div>
-  );
+  return <div className="fullscreen-layout">{children}</div>;
 };
 
 export default FullscreenLayout;

@@ -7,22 +7,22 @@
 
 <p align="center">
 
-  ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)
-  ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-  ![SCSS](https://img.shields.io/badge/SCSS-C76494?style=for-the-badge&logo=sass&logoColor=white)
-  ![React Router](https://img.shields.io/badge/React_Router-7-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
-  ![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![SCSS](https://img.shields.io/badge/SCSS-C76494?style=for-the-badge&logo=sass&logoColor=white)
+![React Router](https://img.shields.io/badge/React_Router-7-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)
 
 </p>
 
 <p align="center">
 
-  <a href="#overview">Overview</a> •
-  <a href="#features">Features</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="#getting-started">Getting Started</a> •
-  <a href="#project-structure">Project Structure</a> •
-  <a href="#license">License</a>
+<a href="#overview">Overview</a> •
+<a href="#features">Features</a> •
+<a href="#tech-stack">Tech Stack</a> •
+<a href="#getting-started">Getting Started</a> •
+<a href="#project-structure">Project Structure</a> •
+<a href="#license">License</a>
 
 </p>
 
@@ -54,13 +54,13 @@ The application is fully responsive and optimised for both desktop and mobile de
 
 ## Tech Stack
 
-| Category | Technologies |
-|----------|--------------|
-| Frontend | React, TypeScript |
-| Styling | SCSS |
-| Routing | React Router |
-| Animation | Framer Motion |
-| Icons | React Icons |
+| Category  | Technologies      |
+| --------- | ----------------- |
+| Frontend  | React, TypeScript |
+| Styling   | SCSS              |
+| Routing   | React Router      |
+| Animation | Framer Motion     |
+| Icons     | React Icons       |
 
 ---
 

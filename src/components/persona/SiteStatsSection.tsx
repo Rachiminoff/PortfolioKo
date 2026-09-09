@@ -49,18 +49,25 @@ const SiteStatsSection: React.FC = () => {
       />
       <div className="persona-stats-grid">
         <article className="persona-stat-card persona-stat-card-primary">
-          <div className="persona-stat-label"><Icon icon="mdi:account-group-outline" width={19} /> VISITORS</div>
+          <div className="persona-stat-label">
+            <Icon icon="mdi:account-group-outline" width={19} /> VISITORS
+          </div>
           <strong>{stats ? stats.visitors.toLocaleString() : '—'}</strong>
           <span>UNIQUE BROWSERS</span>
         </article>
         <article className="persona-stat-card">
-          <div className="persona-stat-label"><Icon icon="mdi:eye-outline" width={19} /> PAGE VIEWS</div>
+          <div className="persona-stat-label">
+            <Icon icon="mdi:eye-outline" width={19} /> PAGE VIEWS
+          </div>
           <strong>{stats ? stats.visits.toLocaleString() : '—'}</strong>
           <span>ALL RECORDED VISITS</span>
         </article>
         <div className="persona-stat-copy">
           <span className="persona-index">NO BIG DEAL.</span>
-          <p>This is deliberately just a counter. No names, accounts, IP addresses, or detailed browsing profiles are collected.</p>
+          <p>
+            This is deliberately just a counter. No names, accounts, IP addresses, or detailed
+            browsing profiles are collected.
+          </p>
         </div>
       </div>
     </section>

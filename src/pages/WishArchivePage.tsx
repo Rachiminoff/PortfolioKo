@@ -88,7 +88,7 @@ const formatDate = (dateString: string) => {
   return date.toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
   });
 };
 
@@ -100,7 +100,7 @@ const getElementColor = (element: string): string => {
     Dendro: '#7eb870',
     Hydro: '#4a90d9',
     Pyro: '#e06040',
-    Cryo: '#7fc4e0'
+    Cryo: '#7fc4e0',
   };
   return colors[element] || '#ffffff';
 };
@@ -113,7 +113,7 @@ const getElementIcon = (element: string): string => {
     Dendro: 'mdi:leaf',
     Hydro: 'mdi:water',
     Pyro: 'mdi:fire',
-    Cryo: 'mdi:snowflake'
+    Cryo: 'mdi:snowflake',
   };
   return icons[element] || 'mdi:circle';
 };
@@ -144,14 +144,14 @@ const TabNav: React.FC<{
 };
 
 // Animated Counter
-const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: string; suffix?: string; prefix?: string; className?: string }> = ({
-  target,
-  duration = 1500,
-  label,
-  suffix = '',
-  prefix = '',
-  className = ''
-}) => {
+const AnimatedCounter: React.FC<{
+  target: number;
+  duration?: number;
+  label?: string;
+  suffix?: string;
+  prefix?: string;
+  className?: string;
+}> = ({ target, duration = 1500, label, suffix = '', prefix = '', className = '' }) => {
   const [count, setCount] = useState(0);
   const [hasAnimated, setHasAnimated] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -177,7 +177,7 @@ const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: str
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     if (ref.current) {
@@ -189,7 +189,11 @@ const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: str
 
   return (
     <div ref={ref} className={`animated-counter ${className}`}>
-      <span className="animated-counter-value">{prefix}{count}{suffix}</span>
+      <span className="animated-counter-value">
+        {prefix}
+        {count}
+        {suffix}
+      </span>
       {label && <span className="animated-counter-label">{label}</span>}
     </div>
   );
@@ -198,7 +202,7 @@ const AnimatedCounter: React.FC<{ target: number; duration?: number; label?: str
 // Donut Chart
 const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<string, string> }> = ({
   data,
-  colors
+  colors,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [hasDrawn, setHasDrawn] = useState(false);
@@ -230,7 +234,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
       Dendro: '#7eb870',
       Hydro: '#4a90d9',
       Pyro: '#e06040',
-      Cryo: '#7fc4e0'
+      Cryo: '#7fc4e0',
     };
 
     const entries = Object.entries(data);
@@ -265,7 +269,7 @@ const DonutChart: React.FC<{ data: Record<string, number>; colors?: Record<strin
           }
         });
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     if (ref.current) {
@@ -312,7 +316,7 @@ const BarChart: React.FC<{
           }
         });
       },
-      { threshold: 0.2 }
+      { threshold: 0.2 },
     );
 
     if (chartRef.current) {
@@ -322,7 +326,7 @@ const BarChart: React.FC<{
     return () => observer.disconnect();
   }, []);
 
-  const maxValue = Math.max(...data.map(d => d.value), 1);
+  const maxValue = Math.max(...data.map((d) => d.value), 1);
 
   return (
     <div ref={chartRef} className="bar-chart" style={{ height }}>
@@ -331,23 +335,18 @@ const BarChart: React.FC<{
         const delay = index * 0.05;
         return (
           <div key={index} className="bar-chart-item stagger-card">
-            <div
-              className="bar-chart-bar-wrapper"
-              style={{ height: '100%' }}
-            >
+            <div className="bar-chart-bar-wrapper" style={{ height: '100%' }}>
               <div
                 className="bar-chart-bar"
                 style={{
                   height: hasAnimated ? `${percentage}%` : '0%',
                   backgroundColor: item.color || '#8B5CF6',
                   transitionDelay: `${delay}s`,
-                  transition: 'height 0.8s cubic-bezier(0.4, 0, 0.2, 1)'
+                  transition: 'height 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
               />
             </div>
-            {showValues && (
-              <span className="bar-chart-value">{item.value}</span>
-            )}
+            {showValues && <span className="bar-chart-value">{item.value}</span>}
             <span className="bar-chart-label">{item.label}</span>
           </div>
         );
@@ -386,7 +385,7 @@ const HeatMap: React.FC<{
 
   const getCharactersForDate = (date: Date) => {
     const dateStr = date.toISOString().split('T')[0];
-    return characters.filter(c => c.date_obtained === dateStr);
+    return characters.filter((c) => c.date_obtained === dateStr);
   };
 
   const getIntensity = (chars: WishCharacter[]) => {
@@ -398,11 +397,16 @@ const HeatMap: React.FC<{
 
   const getIntensityColor = (intensity: number) => {
     switch (intensity) {
-      case 0: return 'rgba(255,255,255,0.03)';
-      case 1: return 'rgba(122, 224, 219, 0.3)';
-      case 2: return 'rgba(122, 224, 219, 0.6)';
-      case 3: return 'rgba(122, 224, 219, 0.9)';
-      default: return 'rgba(255,255,255,0.03)';
+      case 0:
+        return 'rgba(255,255,255,0.03)';
+      case 1:
+        return 'rgba(122, 224, 219, 0.3)';
+      case 2:
+        return 'rgba(122, 224, 219, 0.6)';
+      case 3:
+        return 'rgba(122, 224, 219, 0.9)';
+      default:
+        return 'rgba(255,255,255,0.03)';
     }
   };
 
@@ -415,7 +419,7 @@ const HeatMap: React.FC<{
     currentWeek.push(new Date(year, 0, 1 - firstDay + i));
   }
 
-  days.forEach(day => {
+  days.forEach((day) => {
     currentWeek.push(day);
     if (currentWeek.length === 7) {
       weeks.push(currentWeek);
@@ -448,13 +452,13 @@ const HeatMap: React.FC<{
                     opacity: isCurrentMonth ? 1 : 0.2,
                     transform: isHovered ? 'scale(1.3)' : 'scale(1)',
                     zIndex: isHovered ? 2 : 1,
-                    transition: 'transform 0.2s ease, background-color 0.3s ease'
+                    transition: 'transform 0.2s ease, background-color 0.3s ease',
                   }}
                   onMouseEnter={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     setTooltipPosition({
                       x: rect.left + rect.width / 2,
-                      y: rect.top - 10
+                      y: rect.top - 10,
                     });
                     setHoveredDate(dateStr);
                     setHoveredCharacters(chars);
@@ -478,19 +482,15 @@ const HeatMap: React.FC<{
           style={{
             left: tooltipPosition.x,
             top: tooltipPosition.y,
-            transform: 'translateX(-50%) translateY(-100%)'
+            transform: 'translateX(-50%) translateY(-100%)',
           }}
         >
           <div className="heatmap-tooltip-content">
             <span className="heatmap-tooltip-date">{formatDate(hoveredDate)}</span>
-            {hoveredCharacters.map(c => (
+            {hoveredCharacters.map((c) => (
               <div key={c.id} className="heatmap-tooltip-item">
                 {c.artwork && (
-                  <img
-                    src={c.artwork}
-                    alt={c.name}
-                    className="heatmap-tooltip-portrait"
-                  />
+                  <img src={c.artwork} alt={c.name} className="heatmap-tooltip-portrait" />
                 )}
                 <span className="heatmap-tooltip-name">{c.name}</span>
                 <span
@@ -512,10 +512,22 @@ const HeatMap: React.FC<{
       <div className="heatmap-legend">
         <span className="heatmap-legend-label">Less</span>
         <div className="heatmap-legend-cells">
-          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(255,255,255,0.03)' }} />
-          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.3)' }} />
-          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.6)' }} />
-          <div className="heatmap-legend-cell" style={{ backgroundColor: 'rgba(122, 224, 219, 0.9)' }} />
+          <div
+            className="heatmap-legend-cell"
+            style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
+          />
+          <div
+            className="heatmap-legend-cell"
+            style={{ backgroundColor: 'rgba(122, 224, 219, 0.3)' }}
+          />
+          <div
+            className="heatmap-legend-cell"
+            style={{ backgroundColor: 'rgba(122, 224, 219, 0.6)' }}
+          />
+          <div
+            className="heatmap-legend-cell"
+            style={{ backgroundColor: 'rgba(122, 224, 219, 0.9)' }}
+          />
         </div>
         <span className="heatmap-legend-label">More</span>
       </div>
@@ -543,7 +555,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (entryRef.current) {
@@ -611,7 +623,7 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
 
     if (cardRef.current) {
@@ -635,7 +647,10 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
           className="wish-card-image"
           loading="lazy"
         />
-        <div className="wish-card-glow" style={{ background: `radial-gradient(circle, ${elementColor}44, transparent 70%)` }} />
+        <div
+          className="wish-card-glow"
+          style={{ background: `radial-gradient(circle, ${elementColor}44, transparent 70%)` }}
+        />
         <div className="wish-card-element" style={{ backgroundColor: elementColor }}>
           <Icon icon={getElementIcon(character.element)} />
         </div>
@@ -696,12 +711,17 @@ const WishArchivePage: React.FC = () => {
   };
 
   const years = useMemo(() => {
-    const yearSet = new Set(characters.map(c => c.year));
-    return ['all', ...Array.from(yearSet).sort((a, b) => b - a).map(String)];
+    const yearSet = new Set(characters.map((c) => c.year));
+    return [
+      'all',
+      ...Array.from(yearSet)
+        .sort((a, b) => b - a)
+        .map(String),
+    ];
   }, [characters]);
 
   const elements = useMemo(() => {
-    const elementSet = new Set(characters.map(c => c.element));
+    const elementSet = new Set(characters.map((c) => c.element));
     return ['all', ...Array.from(elementSet)];
   }, [characters]);
 
@@ -711,29 +731,32 @@ const WishArchivePage: React.FC = () => {
     let filtered = [...characters];
 
     if (selectedYear !== 'all') {
-      filtered = filtered.filter(c => c.year === Number(selectedYear));
+      filtered = filtered.filter((c) => c.year === Number(selectedYear));
     }
 
     if (selectedElement !== 'all') {
-      filtered = filtered.filter(c => c.element === selectedElement);
+      filtered = filtered.filter((c) => c.element === selectedElement);
     }
 
     if (selectedOutcome !== 'all') {
-      filtered = filtered.filter(c => c.outcome === selectedOutcome);
+      filtered = filtered.filter((c) => c.outcome === selectedOutcome);
     }
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
-      filtered = filtered.filter(c =>
-        c.name.toLowerCase().includes(query) ||
-        c.element.toLowerCase().includes(query) ||
-        c.version.includes(query)
+      filtered = filtered.filter(
+        (c) =>
+          c.name.toLowerCase().includes(query) ||
+          c.element.toLowerCase().includes(query) ||
+          c.version.includes(query),
       );
     }
 
     switch (sortBy) {
       case 'date':
-        filtered.sort((a, b) => new Date(b.date_obtained).getTime() - new Date(a.date_obtained).getTime());
+        filtered.sort(
+          (a, b) => new Date(b.date_obtained).getTime() - new Date(a.date_obtained).getTime(),
+        );
         break;
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -748,7 +771,7 @@ const WishArchivePage: React.FC = () => {
 
   const groupedByYear = useMemo(() => {
     const groups: Record<number, WishCharacter[]> = {};
-    filteredCharacters.forEach(character => {
+    filteredCharacters.forEach((character) => {
       if (!groups[character.year]) {
         groups[character.year] = [];
       }
@@ -759,12 +782,12 @@ const WishArchivePage: React.FC = () => {
 
   const stats: Stats = useMemo(() => {
     const total = characters.length;
-    const wins = characters.filter(c => c.outcome === 'won').length;
-    const losses = characters.filter(c => c.outcome === 'lost').length;
+    const wins = characters.filter((c) => c.outcome === 'won').length;
+    const losses = characters.filter((c) => c.outcome === 'lost').length;
     const winRate = total > 0 ? (wins / total) * 100 : 0;
 
     const byYear: Record<number, YearData> = {};
-    characters.forEach(c => {
+    characters.forEach((c) => {
       if (!byYear[c.year]) {
         byYear[c.year] = {
           total: 0,
@@ -773,7 +796,7 @@ const WishArchivePage: React.FC = () => {
           rate: 0,
           avgGap: 0,
           bestStreak: 0,
-          characters: []
+          characters: [],
         };
       }
       byYear[c.year].total++;
@@ -782,16 +805,16 @@ const WishArchivePage: React.FC = () => {
       byYear[c.year].characters.push(c.name);
     });
 
-    Object.keys(byYear).forEach(year => {
+    Object.keys(byYear).forEach((year) => {
       const y = byYear[Number(year)];
       y.rate = y.total > 0 ? (y.wins / y.total) * 100 : 0;
 
       let streak = 0;
       let bestStreak = 0;
-      const yearChars = characters.filter(c => c.year === Number(year)).sort(
-        (a, b) => new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
-      );
-      yearChars.forEach(c => {
+      const yearChars = characters
+        .filter((c) => c.year === Number(year))
+        .sort((a, b) => new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime());
+      yearChars.forEach((c) => {
         if (c.outcome === 'won') {
           streak++;
           if (streak > bestStreak) bestStreak = streak;
@@ -801,16 +824,18 @@ const WishArchivePage: React.FC = () => {
       });
       y.bestStreak = bestStreak;
 
-      const dates = yearChars.map(c => new Date(c.date_obtained));
+      const dates = yearChars.map((c) => new Date(c.date_obtained));
       let gaps: number[] = [];
       for (let i = 1; i < dates.length; i++) {
-        gaps.push(Math.floor((dates[i].getTime() - dates[i - 1].getTime()) / (1000 * 60 * 60 * 24)));
+        gaps.push(
+          Math.floor((dates[i].getTime() - dates[i - 1].getTime()) / (1000 * 60 * 60 * 24)),
+        );
       }
       y.avgGap = gaps.length > 0 ? gaps.reduce((a, b) => a + b, 0) / gaps.length : 0;
     });
 
     const byElement: Record<string, number> = {};
-    characters.forEach(c => {
+    characters.forEach((c) => {
       if (!byElement[c.element]) byElement[c.element] = 0;
       byElement[c.element]++;
     });
@@ -833,7 +858,7 @@ const WishArchivePage: React.FC = () => {
     const elementDiversity = Object.keys(byElement).length;
 
     const byVersion: Record<string, number> = {};
-    characters.forEach(c => {
+    characters.forEach((c) => {
       if (!byVersion[c.version]) byVersion[c.version] = 0;
       byVersion[c.version]++;
     });
@@ -852,8 +877,8 @@ const WishArchivePage: React.FC = () => {
     const latestVersion = versions.length > 0 ? versions[versions.length - 1] : '';
     const versionsParticipated = versions.length;
 
-    const sortedByDate = [...characters].sort((a, b) =>
-      new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
+    const sortedByDate = [...characters].sort(
+      (a, b) => new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime(),
     );
     const first = sortedByDate[0] || null;
     const latest = sortedByDate[sortedByDate.length - 1] || null;
@@ -874,10 +899,10 @@ const WishArchivePage: React.FC = () => {
     let currentStreakType: 'won' | 'lost' | null = null;
 
     const sortedForStreak = [...characters].sort(
-      (a, b) => new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime()
+      (a, b) => new Date(a.date_obtained).getTime() - new Date(b.date_obtained).getTime(),
     );
 
-    sortedForStreak.forEach(c => {
+    sortedForStreak.forEach((c) => {
       if (c.outcome === currentStreakType) {
         currentStreak++;
       } else {
@@ -907,11 +932,11 @@ const WishArchivePage: React.FC = () => {
     });
 
     const dateCounts: Record<string, number> = {};
-    characters.forEach(c => {
+    characters.forEach((c) => {
       if (!dateCounts[c.date_obtained]) dateCounts[c.date_obtained] = 0;
       dateCounts[c.date_obtained]++;
     });
-    const doubleDays = Object.values(dateCounts).filter(count => count >= 2).length;
+    const doubleDays = Object.values(dateCounts).filter((count) => count >= 2).length;
 
     const activeYears = Object.keys(byYear).length;
 
@@ -924,18 +949,22 @@ const WishArchivePage: React.FC = () => {
       }
     });
 
-    const yearlyStats = Object.entries(byYear).map(([year, data]) => ({
-      year: Number(year),
-      total: data.total,
-      wins: data.wins,
-      losses: data.losses,
-      rate: data.rate
-    })).sort((a, b) => a.year - b.year);
+    const yearlyStats = Object.entries(byYear)
+      .map(([year, data]) => ({
+        year: Number(year),
+        total: data.total,
+        wins: data.wins,
+        losses: data.losses,
+        rate: data.rate,
+      }))
+      .sort((a, b) => a.year - b.year);
 
-    const versionStats = Object.entries(byVersion).map(([version, total]) => ({
-      version,
-      total
-    })).sort((a, b) => a.version.localeCompare(b.version));
+    const versionStats = Object.entries(byVersion)
+      .map(([version, total]) => ({
+        version,
+        total,
+      }))
+      .sort((a, b) => a.version.localeCompare(b.version));
 
     let luckiestYear: YearStat | null = null;
     let unluckiestYear: YearStat | null = null;
@@ -946,7 +975,7 @@ const WishArchivePage: React.FC = () => {
       let bestYear = 0;
       let worstYear = 0;
 
-      yearlyStats.forEach(stat => {
+      yearlyStats.forEach((stat) => {
         if (stat.rate > bestRate) {
           bestRate = stat.rate;
           bestYear = stat.year;
@@ -973,24 +1002,36 @@ const WishArchivePage: React.FC = () => {
 
     const funFacts: string[] = [];
     if (luckiestYear !== null) {
-      funFacts.push(`${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`);
+      funFacts.push(
+        `${luckiestYear.year} was your luckiest year with a ${luckiestYear.rate.toFixed(1)}% win rate.`,
+      );
     }
     if (unluckiestYear !== null) {
-      funFacts.push(`${unluckiestYear.year} was your unluckiest year with a ${unluckiestYear.rate.toFixed(1)}% win rate.`);
+      funFacts.push(
+        `${unluckiestYear.year} was your unluckiest year with a ${unluckiestYear.rate.toFixed(1)}% win rate.`,
+      );
     }
     if (mostCollectedElement) {
-      funFacts.push(`${mostCollectedElement} is your most collected element (${maxCount} characters).`);
+      funFacts.push(
+        `${mostCollectedElement} is your most collected element (${maxCount} characters).`,
+      );
     }
     if (doubleDays > 0) {
-      funFacts.push(`You obtained two or more limited characters on ${doubleDays} separate day${doubleDays > 1 ? 's' : ''}.`);
+      funFacts.push(
+        `You obtained two or more limited characters on ${doubleDays} separate day${doubleDays > 1 ? 's' : ''}.`,
+      );
     }
     if (longestWinStreak > 0) {
-      funFacts.push(`Your longest winning streak lasted ${longestWinStreak} banner${longestWinStreak > 1 ? 's' : ''}.`);
+      funFacts.push(
+        `Your longest winning streak lasted ${longestWinStreak} banner${longestWinStreak > 1 ? 's' : ''}.`,
+      );
     }
     if (first && latest) {
       funFacts.push(`Your collection spans from Version ${first.version} to ${latest.version}.`);
     }
-    funFacts.push(`You have collected characters across ${activeYears} year${activeYears > 1 ? 's' : ''}.`);
+    funFacts.push(
+      `You have collected characters across ${activeYears} year${activeYears > 1 ? 's' : ''}.`,
+    );
     if (versionsParticipated > 0) {
       funFacts.push(`You've pulled in ${versionsParticipated} different game versions.`);
     }
@@ -1003,50 +1044,50 @@ const WishArchivePage: React.FC = () => {
         icon: 'mdi:compass',
         title: 'First Steps',
         description: `Obtained your first limited 5★ character${first ? ` (${first.name})` : ''}.`,
-        unlocked: total >= 1
+        unlocked: total >= 1,
       },
       {
         icon: 'mdi:star-four-points',
         title: 'Lucky Streak',
         description: `Won ${Math.min(longestWinStreak, 5)} consecutive 50/50s.`,
-        unlocked: longestWinStreak >= 5
+        unlocked: longestWinStreak >= 5,
       },
       {
         icon: 'mdi:collection',
         title: 'Collector',
         description: `Reached ${total} limited characters.`,
-        unlocked: total >= 25
+        unlocked: total >= 25,
       },
       {
         icon: 'mdi:clock',
         title: 'Veteran Traveler',
         description: `Active since ${first ? `Version ${first.version}` : 'the beginning'}.`,
-        unlocked: activeYears >= 3
+        unlocked: activeYears >= 3,
       },
       {
         icon: 'mdi:snowflake',
         title: 'Cryo Enthusiast',
         description: `${mostCollectedElement} is your most collected element.`,
-        unlocked: mostCollectedElement === 'Cryo'
+        unlocked: mostCollectedElement === 'Cryo',
       },
       {
         icon: 'mdi:calendar',
         title: 'Double Acquisition',
         description: `Obtained two characters on the same day.`,
-        unlocked: doubleDays > 0
+        unlocked: doubleDays > 0,
       },
       {
         icon: 'mdi:trophy',
         title: 'Nine-Win Streak',
         description: `Won ${longestWinStreak} consecutive 50/50s.`,
-        unlocked: longestWinStreak >= 9
+        unlocked: longestWinStreak >= 9,
       },
       {
         icon: 'mdi:progress-star',
         title: 'Collection Milestone',
         description: `Reached ${Math.floor(total / 10) * 10} characters.`,
-        unlocked: total >= 10
-      }
+        unlocked: total >= 10,
+      },
     ];
 
     return {
@@ -1086,11 +1127,17 @@ const WishArchivePage: React.FC = () => {
       versionStats,
       outcomeDistribution: { won: wins, lost: losses },
       funFacts,
-      achievements
+      achievements,
     };
   }, [characters]);
 
-  const CharacterModal = ({ character, onClose }: { character: WishCharacter; onClose: () => void }) => {
+  const CharacterModal = ({
+    character,
+    onClose,
+  }: {
+    character: WishCharacter;
+    onClose: () => void;
+  }) => {
     const elementColor = getElementColor(character.element);
 
     useEffect(() => {
@@ -1133,7 +1180,9 @@ const WishArchivePage: React.FC = () => {
                 </div>
                 <div className="wish-modal-detail">
                   <span className="wish-modal-detail-label">Date Obtained</span>
-                  <span className="wish-modal-detail-value">{formatDate(character.date_obtained)}</span>
+                  <span className="wish-modal-detail-value">
+                    {formatDate(character.date_obtained)}
+                  </span>
                 </div>
                 <div className="wish-modal-detail">
                   <span className="wish-modal-detail-label">Outcome</span>
@@ -1163,12 +1212,12 @@ const WishArchivePage: React.FC = () => {
 
   if (loading) {
     return (
-        <div className="wish-archive-page">
-          <div className="wish-loading-state">
-            <div className="wish-loading-spinner" />
-            <p>Loading your journey...</p>
-          </div>
+      <div className="wish-archive-page">
+        <div className="wish-loading-state">
+          <div className="wish-loading-spinner" />
+          <p>Loading your journey...</p>
         </div>
+      </div>
     );
   }
 
@@ -1195,7 +1244,9 @@ const WishArchivePage: React.FC = () => {
       <div className="wish-hero-highlights">
         <div className="wish-hero-highlight">
           <Icon icon="mdi:calendar-range" />
-          <span>{stats.first?.year || 2022} — {stats.latest?.year || new Date().getFullYear()}</span>
+          <span>
+            {stats.first?.year || 2022} — {stats.latest?.year || new Date().getFullYear()}
+          </span>
         </div>
         {stats.latest && (
           <div className="wish-hero-highlight">
@@ -1330,11 +1381,11 @@ const WishArchivePage: React.FC = () => {
             <DonutChart
               data={{
                 Won: stats.wins,
-                Lost: stats.losses
+                Lost: stats.losses,
               }}
               colors={{
                 Won: '#7eb870',
-                Lost: '#e06040'
+                Lost: '#e06040',
               }}
             />
           </div>
@@ -1370,7 +1421,9 @@ const WishArchivePage: React.FC = () => {
                 </defs>
               </svg>
               <div className="wish-progress-ring-content">
-                <span className="wish-progress-ring-value">{Math.round(stats.collectionPercentage)}%</span>
+                <span className="wish-progress-ring-value">
+                  {Math.round(stats.collectionPercentage)}%
+                </span>
                 <span className="wish-progress-ring-label">Collected</span>
               </div>
             </div>
@@ -1378,10 +1431,10 @@ const WishArchivePage: React.FC = () => {
           <div className="wish-chart-card stagger-card">
             <h3 className="wish-chart-title">Characters by Year</h3>
             <BarChart
-              data={stats.yearlyStats.map(stat => ({
+              data={stats.yearlyStats.map((stat) => ({
                 label: stat.year.toString(),
                 value: stat.total,
-                color: `hsl(${200 + stat.year * 10}, 60%, 50%)`
+                color: `hsl(${200 + stat.year * 10}, 60%, 50%)`,
               }))}
               height={150}
             />
@@ -1390,12 +1443,16 @@ const WishArchivePage: React.FC = () => {
 
         {/* Yearly Performance */}
         <div className="wish-yearly-grid" style={{ marginTop: '3rem' }}>
-          {stats.yearlyStats.map(stat => {
+          {stats.yearlyStats.map((stat) => {
             const yearData = stats.byYear[stat.year];
-            const trend = stat.rate > (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'up' :
-              stat.rate < (stats.yearlyStats.find(s => s.year === stat.year - 1)?.rate || 0) ? 'down' : 'same';
-            const isBest = stat.rate === Math.max(...stats.yearlyStats.map(s => s.rate));
-            const isWorst = stat.rate === Math.min(...stats.yearlyStats.map(s => s.rate));
+            const trend =
+              stat.rate > (stats.yearlyStats.find((s) => s.year === stat.year - 1)?.rate || 0)
+                ? 'up'
+                : stat.rate < (stats.yearlyStats.find((s) => s.year === stat.year - 1)?.rate || 0)
+                  ? 'down'
+                  : 'same';
+            const isBest = stat.rate === Math.max(...stats.yearlyStats.map((s) => s.rate));
+            const isWorst = stat.rate === Math.min(...stats.yearlyStats.map((s) => s.rate));
 
             return (
               <div key={stat.year} className="wish-yearly-card stagger-card">
@@ -1448,15 +1505,17 @@ const WishArchivePage: React.FC = () => {
     <section className="wish-heatmap-tab section-reveal">
       <div className="wish-heatmap-controls">
         <div className="wish-heatmap-year-selector">
-          {years.filter(y => y !== 'all').map(year => (
-            <button
-              key={year}
-              className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
-              onClick={() => setHeatmapYear(Number(year))}
-            >
-              {year}
-            </button>
-          ))}
+          {years
+            .filter((y) => y !== 'all')
+            .map((year) => (
+              <button
+                key={year}
+                className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
+                onClick={() => setHeatmapYear(Number(year))}
+              >
+                {year}
+              </button>
+            ))}
         </div>
       </div>
       <HeatMap
@@ -1516,9 +1575,7 @@ const WishArchivePage: React.FC = () => {
               <h4>{achievement.title}</h4>
               <p>{achievement.description}</p>
             </div>
-            <div className="wish-achievement-premium-badge">
-              {achievement.unlocked ? '✓' : '?'}
-            </div>
+            <div className="wish-achievement-premium-badge">{achievement.unlocked ? '✓' : '?'}</div>
           </div>
         ))}
       </div>
@@ -1568,7 +1625,7 @@ const WishArchivePage: React.FC = () => {
         <div className="wish-controls-bottom">
           <div className="wish-filter-chips">
             <span className="wish-filter-label">Year</span>
-            {years.map(year => (
+            {years.map((year) => (
               <button
                 key={year}
                 className={`wish-chip ${selectedYear === year ? 'active' : ''}`}
@@ -1581,14 +1638,21 @@ const WishArchivePage: React.FC = () => {
 
           <div className="wish-filter-chips">
             <span className="wish-filter-label">Element</span>
-            {elements.map(element => (
+            {elements.map((element) => (
               <button
                 key={element}
                 className={`wish-chip ${selectedElement === element ? 'active' : ''}`}
                 onClick={() => setSelectedElement(element)}
-                style={element !== 'all' ? {
-                  borderColor: selectedElement === element ? getElementColor(element) : 'rgba(255,255,255,0.06)'
-                } : {}}
+                style={
+                  element !== 'all'
+                    ? {
+                        borderColor:
+                          selectedElement === element
+                            ? getElementColor(element)
+                            : 'rgba(255,255,255,0.06)',
+                      }
+                    : {}
+                }
               >
                 {element === 'all' ? 'All' : element}
               </button>
@@ -1597,7 +1661,7 @@ const WishArchivePage: React.FC = () => {
 
           <div className="wish-filter-chips">
             <span className="wish-filter-label">Outcome</span>
-            {outcomes.map(outcome => (
+            {outcomes.map((outcome) => (
               <button
                 key={outcome}
                 className={`wish-chip ${selectedOutcome === outcome ? 'active' : ''}`}
@@ -1629,12 +1693,15 @@ const WishArchivePage: React.FC = () => {
           <div className="wish-empty">
             <Icon icon="mdi:emoticon-sad-outline" />
             <p>No characters match your current filters.</p>
-            <button className="wish-empty-clear" onClick={() => {
-              setSelectedYear('all');
-              setSelectedElement('all');
-              setSelectedOutcome('all');
-              setSearchQuery('');
-            }}>
+            <button
+              className="wish-empty-clear"
+              onClick={() => {
+                setSelectedYear('all');
+                setSelectedElement('all');
+                setSelectedOutcome('all');
+                setSearchQuery('');
+              }}
+            >
               Clear Filters
             </button>
           </div>
@@ -1649,7 +1716,11 @@ const WishArchivePage: React.FC = () => {
                     <span>{characters.length} Characters</span>
                     <span>•</span>
                     <span>
-                      {Math.round((characters.filter(c => c.outcome === 'won').length / characters.length) * 100)}% Win Rate
+                      {Math.round(
+                        (characters.filter((c) => c.outcome === 'won').length / characters.length) *
+                          100,
+                      )}
+                      % Win Rate
                     </span>
                   </div>
                 </div>
@@ -1683,70 +1754,66 @@ const WishArchivePage: React.FC = () => {
 
   return (
     <div className="wish-archive-page">
-        {/* Premium Background */}
-        <div className="wish-bg">
-          <div className="wish-bg-gradient" />
-          <div className="wish-bg-particles">
-            {[...Array(30)].map((_, i) => (
-              <div
-                key={i}
-                className="wish-bg-particle"
-                style={{
+      {/* Premium Background */}
+      <div className="wish-bg">
+        <div className="wish-bg-gradient" />
+        <div className="wish-bg-particles">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="wish-bg-particle"
+              style={
+                {
                   '--delay': `${i * 0.3}s`,
                   '--x': `${10 + Math.random() * 80}%`,
                   '--y': `${10 + Math.random() * 80}%`,
                   '--size': `${1 + Math.random() * 3}px`,
-                  '--duration': `${20 + Math.random() * 30}s`
-                } as React.CSSProperties}
-              />
-            ))}
-          </div>
+                  '--duration': `${20 + Math.random() * 30}s`,
+                } as React.CSSProperties
+              }
+            />
+          ))}
         </div>
-
-        {/* Header */}
-        <div className="wish-archive-header">
-          <button className="wish-back-button" onClick={() => navigate('/archive')}>
-            <Icon icon="mdi:arrow-left" />
-            Back to Archive
-          </button>
-        </div>
-
-        {/* Hero Section */}
-        <section className="wish-hero section-reveal">
-          <div className="wish-hero-content">
-            <div className="wish-hero-badge">✦ Collection</div>
-            <h1 className="wish-hero-title">Wish Archive</h1>
-            <p className="wish-hero-subtitle">
-              A personal archive of every limited 5★ character I've obtained in Genshin Impact since 2022.
-            </p>
-          </div>
-        </section>
-
-        {/* Tab Navigation */}
-        <TabNav
-          tabs={tabs}
-          activeTab={activeTab}
-          onSelect={setActiveTab}
-        />
-
-        {/* Tab Content */}
-        <div className="wish-tab-content">
-          {activeTab === 'overview' && renderOverview()}
-          {activeTab === 'analytics' && renderAnalytics()}
-          {activeTab === 'heatmap' && renderHeatmap()}
-          {activeTab === 'funfacts' && renderFunFacts()}
-          {activeTab === 'achievements' && renderAchievements()}
-          {activeTab === 'archive' && renderArchive()}
-        </div>
-
-        {/* Character Modal */}
-        {selectedCharacter && (
-          <CharacterModal
-            character={selectedCharacter}
-            onClose={() => setSelectedCharacter(null)}
-          />
-        )}
       </div>
+
+      {/* Header */}
+      <div className="wish-archive-header">
+        <button className="wish-back-button" onClick={() => navigate('/archive')}>
+          <Icon icon="mdi:arrow-left" />
+          Back to Archive
+        </button>
+      </div>
+
+      {/* Hero Section */}
+      <section className="wish-hero section-reveal">
+        <div className="wish-hero-content">
+          <div className="wish-hero-badge">✦ Collection</div>
+          <h1 className="wish-hero-title">Wish Archive</h1>
+          <p className="wish-hero-subtitle">
+            A personal archive of every limited 5★ character I've obtained in Genshin Impact since
+            2022.
+          </p>
+        </div>
+      </section>
+
+      {/* Tab Navigation */}
+      <TabNav tabs={tabs} activeTab={activeTab} onSelect={setActiveTab} />
+
+      {/* Tab Content */}
+      <div className="wish-tab-content">
+        {activeTab === 'overview' && renderOverview()}
+        {activeTab === 'analytics' && renderAnalytics()}
+        {activeTab === 'heatmap' && renderHeatmap()}
+        {activeTab === 'funfacts' && renderFunFacts()}
+        {activeTab === 'achievements' && renderAchievements()}
+        {activeTab === 'archive' && renderArchive()}
+      </div>
+
+      {/* Character Modal */}
+      {selectedCharacter && (
+        <CharacterModal character={selectedCharacter} onClose={() => setSelectedCharacter(null)} />
+      )}
+    </div>
   );
 };
 

@@ -14,75 +14,84 @@ $white-faint: rgba(255, 255, 255, 0.35);
 $white-very-faint: rgba(255, 255, 255, 0.12);
 $border-solid: rgba(255, 255, 255, 0.06);
 $border-medium: rgba(255, 255, 255, 0.1);
-$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-sans:
+  'Space Grotesk',
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 // Card color variants
 $cert-colors: (
-    'blue': (
-        bg: rgba(59, 130, 246, 0.04),
-        border: rgba(59, 130, 246, 0.08),
-        hover-bg: rgba(59, 130, 246, 0.06),
-        hover-border: rgba(59, 130, 246, 0.15),
-        accent: rgba(59, 130, 246, 0.15),
-        icon-color: rgba(59, 130, 246, 0.3),
-    ),
-    'purple': (
-        bg: rgba(139, 92, 246, 0.04),
-        border: rgba(139, 92, 246, 0.08),
-        hover-bg: rgba(139, 92, 246, 0.06),
-        hover-border: rgba(139, 92, 246, 0.15),
-        accent: rgba(139, 92, 246, 0.15),
-        icon-color: rgba(139, 92, 246, 0.3),
-    ),
-    'teal': (
-        bg: rgba(45, 212, 191, 0.04),
-        border: rgba(45, 212, 191, 0.08),
-        hover-bg: rgba(45, 212, 191, 0.06),
-        hover-border: rgba(45, 212, 191, 0.15),
-        accent: rgba(45, 212, 191, 0.15),
-        icon-color: rgba(45, 212, 191, 0.3),
-    ),
-    'rose': (
-        bg: rgba(244, 63, 94, 0.04),
-        border: rgba(244, 63, 94, 0.08),
-        hover-bg: rgba(244, 63, 94, 0.06),
-        hover-border: rgba(244, 63, 94, 0.15),
-        accent: rgba(244, 63, 94, 0.15),
-        icon-color: rgba(244, 63, 94, 0.3),
-    ),
-    'amber': (
-        bg: rgba(245, 158, 11, 0.04),
-        border: rgba(245, 158, 11, 0.08),
-        hover-bg: rgba(245, 158, 11, 0.06),
-        hover-border: rgba(245, 158, 11, 0.15),
-        accent: rgba(245, 158, 11, 0.15),
-        icon-color: rgba(245, 158, 11, 0.3),
-    ),
-    'emerald': (
-        bg: rgba(16, 185, 129, 0.04),
-        border: rgba(16, 185, 129, 0.08),
-        hover-bg: rgba(16, 185, 129, 0.06),
-        hover-border: rgba(16, 185, 129, 0.15),
-        accent: rgba(16, 185, 129, 0.15),
-        icon-color: rgba(16, 185, 129, 0.3),
-    ),
-    'indigo': (
-        bg: rgba(99, 102, 241, 0.04),
-        border: rgba(99, 102, 241, 0.08),
-        hover-bg: rgba(99, 102, 241, 0.06),
-        hover-border: rgba(99, 102, 241, 0.15),
-        accent: rgba(99, 102, 241, 0.15),
-        icon-color: rgba(99, 102, 241, 0.3),
-    ),
-    'slate': (
-        bg: rgba(148, 163, 184, 0.04),
-        border: rgba(148, 163, 184, 0.08),
-        hover-bg: rgba(148, 163, 184, 0.06),
-        hover-border: rgba(148, 163, 184, 0.15),
-        accent: rgba(148, 163, 184, 0.15),
-        icon-color: rgba(148, 163, 184, 0.3),
-    ),
+  'blue': (
+    bg: rgba(59, 130, 246, 0.04),
+    border: rgba(59, 130, 246, 0.08),
+    hover-bg: rgba(59, 130, 246, 0.06),
+    hover-border: rgba(59, 130, 246, 0.15),
+    accent: rgba(59, 130, 246, 0.15),
+    icon-color: rgba(59, 130, 246, 0.3),
+  ),
+  'purple': (
+    bg: rgba(139, 92, 246, 0.04),
+    border: rgba(139, 92, 246, 0.08),
+    hover-bg: rgba(139, 92, 246, 0.06),
+    hover-border: rgba(139, 92, 246, 0.15),
+    accent: rgba(139, 92, 246, 0.15),
+    icon-color: rgba(139, 92, 246, 0.3),
+  ),
+  'teal': (
+    bg: rgba(45, 212, 191, 0.04),
+    border: rgba(45, 212, 191, 0.08),
+    hover-bg: rgba(45, 212, 191, 0.06),
+    hover-border: rgba(45, 212, 191, 0.15),
+    accent: rgba(45, 212, 191, 0.15),
+    icon-color: rgba(45, 212, 191, 0.3),
+  ),
+  'rose': (
+    bg: rgba(244, 63, 94, 0.04),
+    border: rgba(244, 63, 94, 0.08),
+    hover-bg: rgba(244, 63, 94, 0.06),
+    hover-border: rgba(244, 63, 94, 0.15),
+    accent: rgba(244, 63, 94, 0.15),
+    icon-color: rgba(244, 63, 94, 0.3),
+  ),
+  'amber': (
+    bg: rgba(245, 158, 11, 0.04),
+    border: rgba(245, 158, 11, 0.08),
+    hover-bg: rgba(245, 158, 11, 0.06),
+    hover-border: rgba(245, 158, 11, 0.15),
+    accent: rgba(245, 158, 11, 0.15),
+    icon-color: rgba(245, 158, 11, 0.3),
+  ),
+  'emerald': (
+    bg: rgba(16, 185, 129, 0.04),
+    border: rgba(16, 185, 129, 0.08),
+    hover-bg: rgba(16, 185, 129, 0.06),
+    hover-border: rgba(16, 185, 129, 0.15),
+    accent: rgba(16, 185, 129, 0.15),
+    icon-color: rgba(16, 185, 129, 0.3),
+  ),
+  'indigo': (
+    bg: rgba(99, 102, 241, 0.04),
+    border: rgba(99, 102, 241, 0.08),
+    hover-bg: rgba(99, 102, 241, 0.06),
+    hover-border: rgba(99, 102, 241, 0.15),
+    accent: rgba(99, 102, 241, 0.15),
+    icon-color: rgba(99, 102, 241, 0.3),
+  ),
+  'slate': (
+    bg: rgba(148, 163, 184, 0.04),
+    border: rgba(148, 163, 184, 0.08),
+    hover-bg: rgba(148, 163, 184, 0.06),
+    hover-border: rgba(148, 163, 184, 0.15),
+    accent: rgba(148, 163, 184, 0.15),
+    icon-color: rgba(148, 163, 184, 0.3),
+  ),
 );
 
 // ========== SECTION ==========
@@ -255,22 +264,22 @@ $cert-colors: (
   .certificates__card--#{$name} {
     background: map-get($colors, bg);
     border-color: map-get($colors, border);
-    
+
     &::before {
       background: linear-gradient(90deg, transparent, map-get($colors, accent), transparent);
     }
-    
+
     .certificates__card-icon {
       border-color: map-get($colors, border);
       color: map-get($colors, icon-color);
     }
-    
+
     .certificates__card-title {
       .certificates__card:hover & {
         color: $cyan;
       }
     }
-    
+
     &:hover {
       background: map-get($colors, hover-bg);
       border-color: map-get($colors, hover-border);
@@ -562,15 +571,15 @@ $cert-colors: (
   .certificates__card {
     &:hover {
       transform: none;
-      
+
       .certificates__card-title {
         color: $white;
       }
     }
-    
+
     &:active {
       transform: scale(0.98);
-      
+
       .certificates__card-title {
         color: $cyan;
       }
@@ -627,47 +636,47 @@ $cert-colors: (
     transform: none !important;
     break-inside: avoid;
     page-break-inside: avoid;
-    
+
     &::before {
       display: none !important;
     }
-    
+
     .certificates__card-title {
       color: #333 !important;
     }
-    
+
     .certificates__card-org {
       color: #666 !important;
     }
-    
+
     .certificates__card-year {
       color: #999 !important;
       border-color: #ddd !important;
     }
-    
+
     .certificates__card-tag {
       color: #999 !important;
       border-color: #eee !important;
     }
   }
-  
+
   .certificates__tag {
     color: #999 !important;
     border-bottom-color: #ddd !important;
   }
-  
+
   .certificates__title {
     color: #333 !important;
   }
-  
+
   .certificates__subtitle {
     color: #666 !important;
   }
-  
+
   .certificates__card-action {
     border-color: #ddd !important;
     color: #666 !important;
-    
+
     &--verify {
       border-color: #2ecc71 !important;
     }
@@ -676,32 +685,128 @@ $cert-colors: (
 
 /* ===== Scoped to dark theme only (was unconditional) ===== */
 body[data-theme='dark'] {
-// Swiss dark system — integrated component treatment
-.certificates { background:#0b0b0b; color:#f2f0e8; }
-.certificates__title { text-transform:uppercase; letter-spacing:-.06em; font-weight:900; }
-.certificates__card { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; box-shadow:6px 6px 0 #0b8fd3; }
-.certificates__card:hover { border-color:#e63946; box-shadow:6px 6px 0 #e63946; }
-.certificates__card-tag { border-radius:0; background:#f2f0e8; color:#0b0b0b; }
+  // Swiss dark system — integrated component treatment
+  .certificates {
+    background: #0b0b0b;
+    color: #f2f0e8;
+  }
+  .certificates__title {
+    text-transform: uppercase;
+    letter-spacing: -0.06em;
+    font-weight: 900;
+  }
+  .certificates__card {
+    border: 1px solid rgba(242, 240, 232, 0.4);
+    border-radius: 0;
+    background: #151515;
+    box-shadow: 6px 6px 0 #0b8fd3;
+  }
+  .certificates__card:hover {
+    border-color: #e63946;
+    box-shadow: 6px 6px 0 #e63946;
+  }
+  .certificates__card-tag {
+    border-radius: 0;
+    background: #f2f0e8;
+    color: #0b0b0b;
+  }
 
-/* ============================================================
+  /* ============================================================
    CERTIFICATES — CREDENTIAL INDEX
    ============================================================ */
-.certificates{background:#000 !important;max-width:1320px !important;margin:0 auto !important;padding:clamp(5rem,8vw,8rem) clamp(1rem,4vw,4rem) !important}
-.certificates__header{border-bottom:1px solid rgba(255,255,255,.2) !important;padding-bottom:2rem !important;margin-bottom:2rem !important}
-.certificates__tag{color:var(--bau-yellow) !important;font-family:var(--mono) !important;font-weight:700 !important}
-.certificates__title{font-family:'Archivo',sans-serif !important;font-weight:900 !important;font-size:clamp(3rem,7vw,7rem) !important;line-height:.86 !important;letter-spacing:-.07em !important;text-transform:uppercase !important}
-.certificates__subtitle{color:rgba(255,255,255,.62) !important}
-.certificates__grid{display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px !important;background:rgba(255,255,255,.16) !important;border:1px solid rgba(255,255,255,.16) !important}
-.certificates__card{background:#080808 !important;border:0 !important;border-radius:0 !important;box-shadow:none !important;padding:1.75rem !important}
-.certificates__card:nth-child(3n+1){border-top:5px solid var(--bau-red) !important}
-.certificates__card:nth-child(3n+2){border-top:5px solid var(--bau-yellow) !important}
-.certificates__card:nth-child(3n){border-top:5px solid var(--bau-blue) !important}
-.certificates__card-icon{border-radius:0 !important;background:#000 !important;border:1px solid rgba(255,255,255,.2) !important}
-.certificates__card-title{font-family:'Archivo',sans-serif !important;font-weight:800 !important;text-transform:uppercase;letter-spacing:-.025em !important}
-.certificates__card-org,.certificates__card-year,.certificates__card-tag{font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important}
-.certificates__card-tag{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:transparent !important}
-.certificates__card-action,.certificates__view-all-btn{border-radius:0 !important;border:1px solid rgba(255,255,255,.24) !important;background:#000 !important;font-family:var(--mono) !important;text-transform:uppercase !important}
-.certificates__card-action:hover,.certificates__view-all-btn:hover{background:var(--bau-red) !important;border-color:var(--bau-red) !important;color:#fff !important}
-@media(max-width:760px){.certificates__grid{grid-template-columns:1fr}.certificates__card{padding:1.25rem !important}}
-
+  .certificates {
+    background: #000 !important;
+    max-width: 1320px !important;
+    margin: 0 auto !important;
+    padding: clamp(5rem, 8vw, 8rem) clamp(1rem, 4vw, 4rem) !important;
+  }
+  .certificates__header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+    padding-bottom: 2rem !important;
+    margin-bottom: 2rem !important;
+  }
+  .certificates__tag {
+    color: var(--bau-yellow) !important;
+    font-family: var(--mono) !important;
+    font-weight: 700 !important;
+  }
+  .certificates__title {
+    font-family: 'Archivo', sans-serif !important;
+    font-weight: 900 !important;
+    font-size: clamp(3rem, 7vw, 7rem) !important;
+    line-height: 0.86 !important;
+    letter-spacing: -0.07em !important;
+    text-transform: uppercase !important;
+  }
+  .certificates__subtitle {
+    color: rgba(255, 255, 255, 0.62) !important;
+  }
+  .certificates__grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px !important;
+    background: rgba(255, 255, 255, 0.16) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  }
+  .certificates__card {
+    background: #080808 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 1.75rem !important;
+  }
+  .certificates__card:nth-child(3n + 1) {
+    border-top: 5px solid var(--bau-red) !important;
+  }
+  .certificates__card:nth-child(3n + 2) {
+    border-top: 5px solid var(--bau-yellow) !important;
+  }
+  .certificates__card:nth-child(3n) {
+    border-top: 5px solid var(--bau-blue) !important;
+  }
+  .certificates__card-icon {
+    border-radius: 0 !important;
+    background: #000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  }
+  .certificates__card-title {
+    font-family: 'Archivo', sans-serif !important;
+    font-weight: 800 !important;
+    text-transform: uppercase;
+    letter-spacing: -0.025em !important;
+  }
+  .certificates__card-org,
+  .certificates__card-year,
+  .certificates__card-tag {
+    font-family: var(--mono) !important;
+    text-transform: uppercase !important;
+    font-size: 9px !important;
+  }
+  .certificates__card-tag {
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: transparent !important;
+  }
+  .certificates__card-action,
+  .certificates__view-all-btn {
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.24) !important;
+    background: #000 !important;
+    font-family: var(--mono) !important;
+    text-transform: uppercase !important;
+  }
+  .certificates__card-action:hover,
+  .certificates__view-all-btn:hover {
+    background: var(--bau-red) !important;
+    border-color: var(--bau-red) !important;
+    color: #fff !important;
+  }
+  @media (max-width: 760px) {
+    .certificates__grid {
+      grid-template-columns: 1fr;
+    }
+    .certificates__card {
+      padding: 1.25rem !important;
+    }
+  }
 }

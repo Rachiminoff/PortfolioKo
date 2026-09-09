@@ -1,4 +1,4 @@
-@use "./av-tokens" as *;
+@use './av-tokens' as *;
 
 // =============================================================
 // VAULT — reading-room archive
@@ -17,7 +17,9 @@
   padding: var(--av-space-6) var(--av-space-6) var(--av-space-8);
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity var(--av-mid) var(--av-ease), transform var(--av-mid) var(--av-ease);
+  transition:
+    opacity var(--av-mid) var(--av-ease),
+    transform var(--av-mid) var(--av-ease);
 
   &.vault-visible {
     opacity: 1;
@@ -112,7 +114,9 @@
   border-left: var(--av-border);
   color: var(--av-muted);
   cursor: pointer;
-  transition: background var(--av-fast) var(--av-ease), color var(--av-fast) var(--av-ease);
+  transition:
+    background var(--av-fast) var(--av-ease),
+    color var(--av-fast) var(--av-ease);
 
   &:first-child {
     border-left: none;
@@ -300,10 +304,15 @@
   font-size: 0.9rem;
   cursor: pointer;
   appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--av-muted) 50%),
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--av-muted) 50%),
     linear-gradient(135deg, var(--av-muted) 50%, transparent 50%);
-  background-position: calc(100% - 18px) center, calc(100% - 13px) center;
-  background-size: 5px 5px, 5px 5px;
+  background-position:
+    calc(100% - 18px) center,
+    calc(100% - 13px) center;
+  background-size:
+    5px 5px,
+    5px 5px;
   background-repeat: no-repeat;
   padding-right: var(--av-space-6);
 
@@ -336,7 +345,10 @@
   font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--av-fast) var(--av-ease), color var(--av-fast) var(--av-ease), border-color var(--av-fast) var(--av-ease);
+  transition:
+    background var(--av-fast) var(--av-ease),
+    color var(--av-fast) var(--av-ease),
+    border-color var(--av-fast) var(--av-ease);
 
   svg {
     width: 14px;
@@ -461,7 +473,7 @@
   overflow: hidden;
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     background: linear-gradient(90deg, transparent, rgba(244, 242, 232, 0.06), transparent);
@@ -850,7 +862,9 @@
   position: relative;
   background: var(--av-paper);
   border: var(--av-border);
-  transition: border-color var(--av-fast) var(--av-ease), background var(--av-fast) var(--av-ease);
+  transition:
+    border-color var(--av-fast) var(--av-ease),
+    background var(--av-fast) var(--av-ease);
 
   &:hover {
     border-color: var(--av-line-strong);

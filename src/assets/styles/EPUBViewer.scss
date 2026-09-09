@@ -3,43 +3,39 @@
 ======================================== */
 
 .epub-viewer {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(
-        circle at top,
-        rgba(120, 80, 120, 0.22),
-        rgba(0, 0, 0, 0.93)
-    );
-    backdrop-filter: blur(14px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    padding: 1rem;
-    animation: viewerFade 0.2s ease;
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(120, 80, 120, 0.22), rgba(0, 0, 0, 0.93));
+  backdrop-filter: blur(14px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: viewerFade 0.2s ease;
 }
 
 .epub-window {
-    position: relative;
-    width: min(1500px, 100%);
-    height: 94%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-radius: 16px;
-    background: rgba(24, 24, 24, 0.88);
-    backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.72);
-    animation: windowPop 0.22s ease;
+  position: relative;
+  width: min(1500px, 100%);
+  height: 94%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  background: rgba(24, 24, 24, 0.88);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.72);
+  animation: windowPop 0.22s ease;
 
-    &::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        pointer-events: none;
-    }
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    pointer-events: none;
+  }
 }
 
 /* ========================================
@@ -47,88 +43,88 @@
 ======================================== */
 
 .epub-window-topbar {
-    height: 54px;
-    background: linear-gradient(to bottom, #363636, #252525);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1rem;
-    flex-shrink: 0;
+  height: 54px;
+  background: linear-gradient(to bottom, #363636, #252525);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  flex-shrink: 0;
 }
 
 .window-left {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .window-controls {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 
-    span {
-        width: 13px;
-        height: 13px;
-        border-radius: 50%;
-    }
+  span {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+  }
 
-    .red {
-        background: #ff5f57;
-    }
-    .yellow {
-        background: #febc2e;
-    }
-    .green {
-        background: #28c840;
-    }
+  .red {
+    background: #ff5f57;
+  }
+  .yellow {
+    background: #febc2e;
+  }
+  .green {
+    background: #28c840;
+  }
 }
 
 .window-title {
-    color: rgba(255, 255, 255, 0.88);
-    font-size: 0.94rem;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 320px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.94rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 320px;
 }
 
 .window-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .window-btn {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.85);
-    padding: 0.5rem 0.9rem;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s ease;
-    font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-size: 0.9rem;
 
-    &:hover {
-        background: rgba(255, 255, 255, 0.12);
-    }
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
 }
 
 .window-close {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: 0.2s ease;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.2s ease;
 
-    &:hover {
-        background: #ff5f57;
-    }
+  &:hover {
+    background: #ff5f57;
+  }
 }
 
 /* ========================================
@@ -136,32 +132,32 @@
 ======================================== */
 
 .epub-frame-wrapper {
-    position: relative;
-    flex: 1;
-    background: #f5f0e8; /* Warm paper-like background */
-    overflow: hidden;
+  position: relative;
+  flex: 1;
+  background: #f5f0e8; /* Warm paper-like background */
+  overflow: hidden;
 }
 
 .epub-rendition {
-    width: 100%;
-    height: 100%;
-    background: #f5f0e8;
+  width: 100%;
+  height: 100%;
+  background: #f5f0e8;
 
-    :global(.epub-container) {
-        height: 100% !important;
-    }
+  :global(.epub-container) {
+    height: 100% !important;
+  }
 
-    :global(.epub-view) {
-        height: 100% !important;
-        padding: 2rem !important;
-    }
+  :global(.epub-view) {
+    height: 100% !important;
+    padding: 2rem !important;
+  }
 
-    :global(.epub-view iframe) {
-        width: 100% !important;
-        height: 100% !important;
-        border: none !important;
-        background: #f5f0e8 !important;
-    }
+  :global(.epub-view iframe) {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    background: #f5f0e8 !important;
+  }
 }
 
 /* ========================================
@@ -169,31 +165,35 @@
 ======================================== */
 
 .viewer-loading {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    font-size: 1rem;
-    z-index: 5;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 1rem;
+  z-index: 5;
 }
 
 .loading-spinner {
-    width: 48px;
-    height: 48px;
-    border: 4px solid rgba(255, 255, 255, 0.1);
-    border-top: 4px solid #6c30eb;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top: 4px solid #6c30eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ========================================
@@ -201,36 +201,36 @@
 ======================================== */
 
 .viewer-error {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 2rem;
-    z-index: 5;
-    text-align: center;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2rem;
+  z-index: 5;
+  text-align: center;
 
-    .error-icon {
-        font-size: 3rem;
-    }
+  .error-icon {
+    font-size: 3rem;
+  }
 
-    p {
-        max-width: 400px;
-        font-size: 1.1rem;
-        color: rgba(255, 255, 255, 0.8);
-        line-height: 1.6;
-    }
+  p {
+    max-width: 400px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+  }
 
-    .window-btn {
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 0.75rem 1.5rem;
-        font-size: 1rem;
-    }
+  .window-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
 }
 
 /* ========================================
@@ -238,13 +238,23 @@
 ======================================== */
 
 @keyframes viewerFade {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes windowPop {
-    from { transform: scale(0.96); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /* ========================================
@@ -252,44 +262,44 @@
 ======================================== */
 
 @media screen and (max-width: 700px) {
-    .epub-viewer {
-        padding: 0;
-    }
+  .epub-viewer {
+    padding: 0;
+  }
 
-    .epub-window {
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-    }
+  .epub-window {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
 
-    .epub-window-topbar {
-        height: 56px;
-        padding: 0 0.8rem;
-    }
+  .epub-window-topbar {
+    height: 56px;
+    padding: 0 0.8rem;
+  }
 
-    .window-title {
-        max-width: 140px;
-        font-size: 0.84rem;
-    }
+  .window-title {
+    max-width: 140px;
+    font-size: 0.84rem;
+  }
 
-    .window-actions {
-        gap: 0.4rem;
-    }
+  .window-actions {
+    gap: 0.4rem;
+  }
 
-    .window-btn {
-        display: none;
-    }
+  .window-btn {
+    display: none;
+  }
 
-    .window-close {
-        width: 34px;
-        height: 34px;
-    }
+  .window-close {
+    width: 34px;
+    height: 34px;
+  }
 
-    .epub-rendition {
-        :global(.epub-view) {
-            padding: 1rem !important;
-        }
+  .epub-rendition {
+    :global(.epub-view) {
+      padding: 1rem !important;
     }
+  }
 }
 
 /* ========================================
@@ -297,62 +307,78 @@
 ======================================== */
 
 .vault-actions-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .vault-download-btn {
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    background: rgba(46, 204, 113, 0.2);
-    color: white;
-    padding: 0.85rem 1.4rem;
-    font-size: 1rem;
-    font-weight: 650;
-    cursor: pointer;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-    transition: background 0.25s ease, transform 0.25s ease, border 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(46, 204, 113, 0.2);
+  color: white;
+  padding: 0.85rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 650;
+  cursor: pointer;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    border 0.25s ease,
+    box-shadow 0.25s ease;
 
-    &:hover {
-        background: rgba(46, 204, 113, 0.35);
-        border: 1px solid rgba(46, 204, 113, 0.4);
-        transform: translateY(-2px);
-        box-shadow: 0 10px 24px rgba(46, 204, 113, 0.15);
-    }
+  &:hover {
+    background: rgba(46, 204, 113, 0.35);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(46, 204, 113, 0.15);
+  }
 }
 
 .vault-download-note {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.75rem;
-    line-height: 1.4;
-    text-align: center;
-    padding: 0.5rem 0.25rem;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.04);
-    margin-top: 0.25rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0.5rem 0.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  margin-top: 0.25rem;
 }
 
 /* Mobile adjustments */
 @media screen and (max-width: 700px) {
-    .vault-actions-container {
-        gap: 0.5rem;
-    }
-    
-    .vault-download-btn {
-        padding: 0.75rem 1.2rem;
-        font-size: 0.95rem;
-    }
-    
-    .vault-download-note {
-        font-size: 0.7rem;
-        padding: 0.4rem 0.2rem;
-    }
+  .vault-actions-container {
+    gap: 0.5rem;
+  }
+
+  .vault-download-btn {
+    padding: 0.75rem 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .vault-download-note {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.2rem;
+  }
 }
 // Swiss dark system — integrated component treatment
-.epub-viewer,.epub-window { background:#0b0b0b; color:#f2f0e8; }
-.epub-window { border:2px solid #f2f0e8; border-radius:0; box-shadow:10px 10px 0 #0b8fd3; }
-.epub-window-topbar { border-bottom:1px solid rgba(242,240,232,.4); }
-.window-btn { border-radius:0; }
+.epub-viewer,
+.epub-window {
+  background: #0b0b0b;
+  color: #f2f0e8;
+}
+.epub-window {
+  border: 2px solid #f2f0e8;
+  border-radius: 0;
+  box-shadow: 10px 10px 0 #0b8fd3;
+}
+.epub-window-topbar {
+  border-bottom: 1px solid rgba(242, 240, 232, 0.4);
+}
+.window-btn {
+  border-radius: 0;
+}

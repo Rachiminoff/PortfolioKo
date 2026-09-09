@@ -1,67 +1,64 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-    process.env.REACT_APP_SUPABASE_URL,
-    process.env.REACT_APP_SUPABASE_ANON_KEY
+  process.env.REACT_APP_SUPABASE_URL,
+  process.env.REACT_APP_SUPABASE_ANON_KEY,
 );
 
 export default async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cookie');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cookie');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  try {
+    if (req.method !== 'GET') {
+      return res.status(405).json({
+        valid: false,
+        error: 'Method not allowed',
+      });
     }
 
-    try {
-        if (req.method !== "GET") {
-            return res.status(405).json({
-                valid: false,
-                error: "Method not allowed",
-            });
-        }
+    // Get token from cookie
+    const cookies = req.headers.cookie || '';
+    const sessionToken = cookies
+      .split(';')
+      .find((c) => c.trim().startsWith('vault_session='))
+      ?.split('=')[1];
 
-        // Get token from cookie
-        const cookies = req.headers.cookie || '';
-        const sessionToken = cookies
-            .split(';')
-            .find(c => c.trim().startsWith('vault_session='))
-            ?.split('=')[1];
-
-        if (!sessionToken) {
-            return res.status(200).json({ valid: false });
-        }
-
-        // Look up session by token
-        const { data: session, error } = await supabase
-            .from("vault_sessions")
-            .select("*")
-            .eq("session_token", sessionToken)
-            .maybeSingle();
-
-        if (error) {
-            console.error("Session lookup error:", error);
-            return res.status(200).json({ valid: false });
-        }
-
-        if (!session) {
-            return res.status(200).json({ valid: false });
-        }
-
-        // Check if expired
-        if (new Date(session.expires_at) < new Date()) {
-            await supabase
-                .from("vault_sessions")
-                .delete()
-                .eq("session_token", sessionToken);
-            return res.status(200).json({ valid: false });
-        }
-
-        return res.status(200).json({ valid: true });
-    } catch (error) {
-        console.error("Session verification error:", error);
-        return res.status(200).json({ valid: false });
+    if (!sessionToken) {
+      return res.status(200).json({ valid: false });
     }
+
+    // Look up session by token
+    const { data: session, error } = await supabase
+      .from('vault_sessions')
+      .select('*')
+      .eq('session_token', sessionToken)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Session lookup error:', error);
+      return res.status(200).json({ valid: false });
+    }
+
+    if (!session) {
+      return res.status(200).json({ valid: false });
+    }
+
+    // Check if expired
+    if (new Date(session.expires_at) < new Date()) {
+      await supabase.from('vault_sessions').delete().eq('session_token', sessionToken);
+      return res.status(200).json({ valid: false });
+    }
+
+    return res.status(200).json({ valid: true });
+  } catch (error) {
+    console.error('Session verification error:', error);
+    return res.status(200).json({ valid: false });
+  }
 }

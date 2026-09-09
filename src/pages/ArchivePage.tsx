@@ -31,12 +31,12 @@ function AmbientShapes() {
 /* =========================
    AUTHENTICATION SCREEN
 ========================= */
-function AuthScreen({ 
-  onUnlock, 
-  loading, 
-  error, 
-  remainingAttempts, 
-  isLocked 
+function AuthScreen({
+  onUnlock,
+  loading,
+  error,
+  remainingAttempts,
+  isLocked,
 }: {
   onUnlock: (password: string) => void;
   loading: boolean;
@@ -149,7 +149,9 @@ function AuthScreen({
 ========================= */
 function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<'home' | 'vault' | 'insights' | 'wish' | 'adashima'>('home');
+  const [activeSection, setActiveSection] = useState<
+    'home' | 'vault' | 'insights' | 'wish' | 'adashima'
+  >('home');
 
   const cards = [
     {
@@ -190,10 +192,7 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
   if (activeSection === 'vault') {
     return (
       <div className="archive-section">
-        <button
-          className="archive-section-back"
-          onClick={() => setActiveSection('home')}
-        >
+        <button className="archive-section-back" onClick={() => setActiveSection('home')}>
           <Icon icon="mdi:arrow-left" />
           Back
         </button>
@@ -207,10 +206,7 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
   if (activeSection === 'insights') {
     return (
       <div className="archive-section">
-        <button
-          className="archive-section-back"
-          onClick={() => setActiveSection('home')}
-        >
+        <button className="archive-section-back" onClick={() => setActiveSection('home')}>
           <Icon icon="mdi:arrow-left" />
           Back
         </button>
@@ -225,10 +221,7 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
     const WishArchivePage = lazy(() => import('../pages/WishArchivePage'));
     return (
       <div className="archive-section">
-        <button
-          className="archive-section-back"
-          onClick={() => setActiveSection('home')}
-        >
+        <button className="archive-section-back" onClick={() => setActiveSection('home')}>
           <Icon icon="mdi:arrow-left" />
           Back
         </button>
@@ -243,10 +236,7 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
     const AdaShimaStatsPage = lazy(() => import('../pages/AdaShimaStatsPage'));
     return (
       <div className="archive-section">
-        <button
-          className="archive-section-back"
-          onClick={() => setActiveSection('home')}
-        >
+        <button className="archive-section-back" onClick={() => setActiveSection('home')}>
           <Icon icon="mdi:arrow-left" />
           Back
         </button>
@@ -288,7 +278,9 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       <section className="archive-collections">
         <div className="archive-collections-header">
           <h2 className="archive-collections-title">Explore the archive</h2>
-          <p className="archive-collections-subtitle">Choose a space to continue where you left off</p>
+          <p className="archive-collections-subtitle">
+            Choose a space to continue where you left off
+          </p>
         </div>
 
         <div className="archive-dashboard-grid">
@@ -311,10 +303,12 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
                   onNavigate('/adashima-stats');
                 }
               }}
-              style={{ 
-                '--card-color': card.color,
-                '--card-index': index
-              } as React.CSSProperties}
+              style={
+                {
+                  '--card-color': card.color,
+                  '--card-index': index,
+                } as React.CSSProperties
+              }
             >
               <div className="archive-card-brackets">
                 <span className="bracket tl" />
@@ -333,7 +327,12 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
                   <Icon icon="mdi:arrow-right" />
                 </span>
               </div>
-              <div className="archive-card-glow" style={{ background: `radial-gradient(circle at 50% 0%, ${card.color}30, transparent 70%)` }} />
+              <div
+                className="archive-card-glow"
+                style={{
+                  background: `radial-gradient(circle at 50% 0%, ${card.color}30, transparent 70%)`,
+                }}
+              />
             </button>
           ))}
         </div>

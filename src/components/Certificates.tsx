@@ -1,52 +1,43 @@
-import React, { useState } from "react";
-import { Icon } from "@iconify/react";
-import { useInView } from "react-intersection-observer";
+import React, { useState } from 'react';
+import { Icon } from '@iconify/react';
+import { useInView } from 'react-intersection-observer';
 
-import "../assets/styles/Certificates.scss";
-import { certificatesData } from "../types/certificates.data";
-import PDFViewer from "./PDFViewer";
+import '../assets/styles/Certificates.scss';
+import { certificatesData } from '../types/certificates.data';
+import PDFViewer from './PDFViewer';
 
 const INITIAL_DISPLAY = 3;
 
 // Color variants for cards
-const colorVariants = [
-    'blue',
-    'purple',
-    'teal',
-    'rose',
-    'amber',
-    'emerald',
-    'indigo',
-    'slate'
-];
+const colorVariants = ['blue', 'purple', 'teal', 'rose', 'amber', 'emerald', 'indigo', 'slate'];
 
 const getColorVariant = (index: number): string => {
-    return colorVariants[index % colorVariants.length];
+  return colorVariants[index % colorVariants.length];
 };
 
 // Icon mapping based on organization
 const getOrganizationIcon = (org: string) => {
   const orgLower = org.toLowerCase();
 
-  if (orgLower.includes("cisco")) {
+  if (orgLower.includes('cisco')) {
     return <Icon icon="simple-icons:cisco" />;
   }
-  if (orgLower.includes("microsoft")) {
+  if (orgLower.includes('microsoft')) {
     return <Icon icon="simple-icons:microsoft" />;
   }
-  if (orgLower.includes("google")) {
+  if (orgLower.includes('google')) {
     return <Icon icon="simple-icons:google" />;
   }
-  if (orgLower.includes("meta") || orgLower.includes("facebook")) {
+  if (orgLower.includes('meta') || orgLower.includes('facebook')) {
     return <Icon icon="simple-icons:meta" />;
   }
-  if (orgLower.includes("aws") || orgLower.includes("amazon")) {
+  if (orgLower.includes('aws') || orgLower.includes('amazon')) {
     return <Icon icon="simple-icons:amazonaws" />;
   }
-  if (orgLower.includes("ibm")) {
+  if (orgLower.includes('ibm')) {
     return <Icon icon="simple-icons:ibm" />;
   }
-  if (orgLower.includes("freecodecamp")) {
+  if (orgLower.includes('freecodecamp')) {
     return <Icon icon="simple-icons:freecodecamp" />;
   }
 
@@ -90,17 +81,13 @@ function Certificates() {
     e.stopPropagation();
 
     if (url) {
-      window.open(url, "_blank");
+      window.open(url, '_blank');
     }
   };
 
   return (
     <>
-      <section
-        className={`certificates ${inView ? "visible" : ""}`}
-        id="certificates"
-        ref={ref}
-      >
+      <section className={`certificates ${inView ? 'visible' : ''}`} id="certificates" ref={ref}>
         <div className="certificates__header">
           <span className="certificates__tag">CERTIFICATIONS</span>
           <h2 className="certificates__title">Certificates</h2>
@@ -113,10 +100,8 @@ function Certificates() {
             return (
               <div
                 key={cert.id}
-                className={`certificates__card certificates__card--${colorVariant} ${inView ? "animate-in" : ""}`}
-                style={
-                  { animationDelay: `${index * 80}ms` } as React.CSSProperties
-                }
+                className={`certificates__card certificates__card--${colorVariant} ${inView ? 'animate-in' : ''}`}
+                style={{ animationDelay: `${index * 80}ms` } as React.CSSProperties}
               >
                 <div className="certificates__card-icon">
                   {getOrganizationIcon(cert.organization)}
@@ -126,12 +111,8 @@ function Certificates() {
                   <h3 className="certificates__card-title">{cert.title}</h3>
 
                   <div className="certificates__card-meta">
-                    <span className="certificates__card-org">
-                      {cert.organization}
-                    </span>
-                    <span className="certificates__card-year">
-                      {cert.year}
-                    </span>
+                    <span className="certificates__card-org">{cert.organization}</span>
+                    <span className="certificates__card-year">{cert.year}</span>
                   </div>
 
                   <div className="certificates__card-tags">
@@ -173,10 +154,7 @@ function Certificates() {
 
         {hasMore && !showAll && (
           <div className="certificates__view-all">
-            <button
-              className="certificates__view-all-btn"
-              onClick={handleViewAll}
-            >
+            <button className="certificates__view-all-btn" onClick={handleViewAll}>
               <span>View All Certificates</span>
               <Icon icon="mdi:arrow-right" />
             </button>

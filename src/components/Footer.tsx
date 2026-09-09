@@ -1,18 +1,18 @@
-import React, { useState, useRef, useCallback } from "react";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import YouTubeIcon from "@mui/icons-material/YouTube";
-import LockIcon from "@mui/icons-material/Lock";
-import CloseIcon from "@mui/icons-material/Close";
-import { supabase } from "../lib/supabase";
-import logo from "../assets/images/logo.jpg";
-import "../assets/styles/Footer.scss";
+import React, { useState, useRef, useCallback } from 'react';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import LockIcon from '@mui/icons-material/Lock';
+import CloseIcon from '@mui/icons-material/Close';
+import { supabase } from '../lib/supabase';
+import logo from '../assets/images/logo.jpg';
+import '../assets/styles/Footer.scss';
 
 type Art = { id: string; image_url: string; title: string };
 
 function Footer() {
   const [showModal, setShowModal] = useState(false);
-  const [passcode, setPasscode] = useState("");
+  const [passcode, setPasscode] = useState('');
   const [arts, setArts] = useState<Art[]>([]);
   const [index, setIndex] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
@@ -23,9 +23,9 @@ function Footer() {
 
   const fetchArts = async () => {
     const { data, error } = await supabase
-      .from("arts")
-      .select("*")
-      .order("created_at", { ascending: true });
+      .from('arts')
+      .select('*')
+      .order('created_at', { ascending: true });
     if (!error && data) {
       setArts(data);
       setIndex(0);
@@ -33,11 +33,11 @@ function Footer() {
   };
 
   const handleSubmit = async () => {
-    if (passcode === "sining") {
+    if (passcode === 'sining') {
       setUnlocked(true);
       await fetchArts();
     } else {
-      alert("Incorrect Passcode");
+      alert('Incorrect Passcode');
     }
   };
 
@@ -66,31 +66,31 @@ function Footer() {
   const closeModal = useCallback(() => {
     setShowModal(false);
     setUnlocked(false);
-    setPasscode("");
+    setPasscode('');
     setZoom(1);
   }, []);
 
   React.useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (!showModal || !unlocked) return;
-      if (e.key === "ArrowLeft") {
+      if (e.key === 'ArrowLeft') {
         e.preventDefault();
         prevArt();
-      } else if (e.key === "ArrowRight") {
+      } else if (e.key === 'ArrowRight') {
         e.preventDefault();
         nextArt();
-      } else if (e.key === "Escape") {
+      } else if (e.key === 'Escape') {
         closeModal();
-      } else if (e.key === "=" || e.key === "+") {
+      } else if (e.key === '=' || e.key === '+') {
         e.preventDefault();
         zoomIn();
-      } else if (e.key === "-") {
+      } else if (e.key === '-') {
         e.preventDefault();
         zoomOut();
       }
     };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
   }, [showModal, unlocked, nextArt, prevArt, closeModal, zoomIn, zoomOut]);
 
   const [touchStartX, setTouchStartX] = useState(0);
@@ -106,7 +106,7 @@ function Footer() {
         diff > 0 ? nextArt() : prevArt();
       }
     },
-    [unlocked, touchStartX, nextArt, prevArt]
+    [unlocked, touchStartX, nextArt, prevArt],
   );
 
   return (
@@ -155,10 +155,7 @@ function Footer() {
                 <YouTubeIcon />
                 <span>YouTube</span>
               </a>
-              <button
-                className="footer-card admin-card"
-                onClick={() => setShowModal(true)}
-              >
+              <button className="footer-card admin-card" onClick={() => setShowModal(true)}>
                 <LockIcon />
                 <span>Admin</span>
               </button>
@@ -179,7 +176,7 @@ function Footer() {
 
       {showModal && (
         <div className="admin-modal-overlay">
-          <div className={`admin-modal ${unlocked ? "" : "locked"}`}>
+          <div className={`admin-modal ${unlocked ? '' : 'locked'}`}>
             <button className="close-btn" onClick={closeModal}>
               <CloseIcon />
             </button>
@@ -194,7 +191,7 @@ function Footer() {
                   placeholder="Enter Passcode"
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                   autoFocus
                 />
                 <button className="submit-btn" onClick={handleSubmit}>
@@ -210,17 +207,13 @@ function Footer() {
                       <span className="yellow"></span>
                       <span className="green"></span>
                     </div>
-                    <div className="viewer-file-title">
-                      {arts[index]?.title || "No artwork"}
-                    </div>
+                    <div className="viewer-file-title">{arts[index]?.title || 'No artwork'}</div>
                   </div>
                   <div className="viewer-actions">
                     <button className="viewer-btn" onClick={zoomOut}>
                       −
                     </button>
-                    <span className="zoom-label">
-                      {Math.round(zoom * 100)}%
-                    </span>
+                    <span className="zoom-label">{Math.round(zoom * 100)}%</span>
                     <button className="viewer-btn" onClick={zoomIn}>
                       +
                     </button>
@@ -233,9 +226,7 @@ function Footer() {
                       {arts.map((art, i) => (
                         <button
                           key={art.id}
-                          className={`art-item ${
-                            i === index ? "active" : ""
-                          }`}
+                          className={`art-item ${i === index ? 'active' : ''}`}
                           onClick={() => {
                             setIndex(i);
                             setZoom(1);
@@ -263,9 +254,7 @@ function Footer() {
                       </div>
                       <div className="viewer-toolbar-right">
                         <span className="toolbar-page">
-                          {arts.length > 0
-                            ? `${index + 1}/${arts.length}`
-                            : "0/0"}
+                          {arts.length > 0 ? `${index + 1}/${arts.length}` : '0/0'}
                         </span>
                       </div>
                     </div>
@@ -285,7 +274,15 @@ function Footer() {
                             style={{ transform: `scale(${zoom})` }}
                           />
                         ) : (
-                          <div style={{ color: "rgba(255,255,255,0.04)", padding: "2rem", fontFamily: "'SF Mono', monospace", fontSize: "0.7rem", letterSpacing: "0.08em" }}>
+                          <div
+                            style={{
+                              color: 'rgba(255,255,255,0.04)',
+                              padding: '2rem',
+                              fontFamily: "'SF Mono', monospace",
+                              fontSize: '0.7rem',
+                              letterSpacing: '0.08em',
+                            }}
+                          >
                             No artwork available
                           </div>
                         )}

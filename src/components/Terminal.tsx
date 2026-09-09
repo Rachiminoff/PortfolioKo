@@ -1,5 +1,5 @@
-import React from "react";
-import "../assets/styles/Terminal.scss";
+import React from 'react';
+import '../assets/styles/Terminal.scss';
 
 function Terminal() {
   return (
@@ -34,25 +34,20 @@ function Terminal() {
             </div>
 
             <div className="line">
-              <span className="blue">import</span>{" "}
-              <span className="white">creativity</span>
-              <span className="comma">,</span>{" "}
-              <span className="white">engineering</span>
-              <span className="comma">,</span>{" "}
-              <span className="white">growth</span>
+              <span className="blue">import</span> <span className="white">creativity</span>
+              <span className="comma">,</span> <span className="white">engineering</span>
+              <span className="comma">,</span> <span className="white">growth</span>
             </div>
 
             <div className="line-separator thin"></div>
 
             <div className="line">
-              <span className="purple">class</span>{" "}
-              <span className="yellow-text">AboutMe</span>
+              <span className="purple">class</span> <span className="yellow-text">AboutMe</span>
               <span className="colon">:</span>
             </div>
 
             <div className="indent">
-              <span className="purple">def</span>{" "}
-              <span className="yellow-text">__init__</span>
+              <span className="purple">def</span> <span className="yellow-text">__init__</span>
               <span className="parens">(</span>
               <span className="white">self</span>
               <span className="parens">)</span>
@@ -63,7 +58,8 @@ function Terminal() {
               <span className="white">self.identity</span>
               <span className="operator"> = </span>
               <span className="green-text">
-                <span className="quote">"</span>developer focused on building meaningful systems<span className="quote">"</span>
+                <span className="quote">"</span>developer focused on building meaningful systems
+                <span className="quote">"</span>
               </span>
             </div>
 
@@ -71,7 +67,8 @@ function Terminal() {
               <span className="white">self.interests</span>
               <span className="operator"> = </span>
               <span className="green-text">
-                <span className="quote">"</span>web apps, automation, UI/UX, scalable products<span className="quote">"</span>
+                <span className="quote">"</span>web apps, automation, UI/UX, scalable products
+                <span className="quote">"</span>
               </span>
             </div>
 
@@ -79,15 +76,15 @@ function Terminal() {
               <span className="white">self.mindset</span>
               <span className="operator"> = </span>
               <span className="green-text">
-                <span className="quote">"</span>continuous learning through practical creation<span className="quote">"</span>
+                <span className="quote">"</span>continuous learning through practical creation
+                <span className="quote">"</span>
               </span>
             </div>
 
             <div className="line-separator thin"></div>
 
             <div className="indent">
-              <span className="purple">def</span>{" "}
-              <span className="yellow-text">philosophy</span>
+              <span className="purple">def</span> <span className="yellow-text">philosophy</span>
               <span className="parens">(</span>
               <span className="white">self</span>
               <span className="parens">)</span>
@@ -95,9 +92,10 @@ function Terminal() {
             </div>
 
             <div className="indent2">
-              <span className="purple">return</span>{" "}
+              <span className="purple">return</span>{' '}
               <span className="green-text">
-                <span className="quote">"</span>build with purpose, improve with consistency<span className="quote">"</span>
+                <span className="quote">"</span>build with purpose, improve with consistency
+                <span className="quote">"</span>
               </span>
             </div>
 
@@ -133,7 +131,10 @@ function Terminal() {
 
         <div className="about-text-wrapper">
           <p className="about-text">
-            I enjoy the process of testing and debugging, even when it gets frustrating. There is something satisfying about going through broken logic, tracing issues, and gradually seeing a feature finally work the way it was intended. Ironically, that struggle is often the part I find most engaging in development.
+            I enjoy the process of testing and debugging, even when it gets frustrating. There is
+            something satisfying about going through broken logic, tracing issues, and gradually
+            seeing a feature finally work the way it was intended. Ironically, that struggle is
+            often the part I find most engaging in development.
           </p>
         </div>
 
@@ -141,7 +142,9 @@ function Terminal() {
 
         <div className="about-text-wrapper">
           <p className="about-text">
-            I feel the most proud when a project is completed and I get to demo it to others. Seeing everything come together into a working system gives a strong sense of closure, especially after all the iterations and fixes along the way.
+            I feel the most proud when a project is completed and I get to demo it to others. Seeing
+            everything come together into a working system gives a strong sense of closure,
+            especially after all the iterations and fixes along the way.
           </p>
         </div>
 

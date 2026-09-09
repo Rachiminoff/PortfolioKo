@@ -45,8 +45,7 @@ function Contact() {
   const [copySuccess, setCopySuccess] = useState(false);
   const [charCount, setCharCount] = useState(0);
 
-  const validateEmail = (value: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
   const getBrowserName = () => {
     const ua = navigator.userAgent;
@@ -59,7 +58,7 @@ function Contact() {
 
   const isFormValid = useMemo(
     () => name.trim() && validateEmail(email) && subject.trim() && message.trim(),
-    [name, email, subject, message]
+    [name, email, subject, message],
   );
 
   useEffect(() => {
@@ -145,7 +144,7 @@ function Contact() {
           ip,
           location,
         },
-        'GJD7pIhFsXAEGwQpV'
+        'GJD7pIhFsXAEGwQpV',
       );
 
       setSuccess(true);
@@ -186,7 +185,8 @@ function Contact() {
             <div className="contact-divider" />
             <p className="contact-subtitle">
               Have a project in mind, a question, or just want to say hello?
-              <br /><br/>
+              <br />
+              <br />
               I'd love to hear from you.
             </p>
           </div>
@@ -241,11 +241,7 @@ function Contact() {
           <Fade in={success} timeout={400}>
             <Box>
               {success && (
-                <Alert
-                  icon={<CheckCircleIcon />}
-                  severity="success"
-                  className="alert-success"
-                >
+                <Alert icon={<CheckCircleIcon />} severity="success" className="alert-success">
                   <div className="alert-content">
                     <strong>Message sent successfully!</strong>
                     <br />
@@ -265,11 +261,7 @@ function Contact() {
           <Fade in={sendError} timeout={400}>
             <Box>
               {sendError && (
-                <Alert
-                  icon={<ErrorIcon />}
-                  severity="error"
-                  className="alert-error"
-                >
+                <Alert icon={<ErrorIcon />} severity="error" className="alert-error">
                   <div className="alert-content">
                     <strong>Failed to send message.</strong>
                     <br />
@@ -285,7 +277,13 @@ function Contact() {
               Quick subject suggestions
             </Typography>
             <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap className="chips-stack">
-              {['Project Inquiry', 'Collaboration', 'General Question', 'Bug Report', 'Feedback'].map((label) => (
+              {[
+                'Project Inquiry',
+                'Collaboration',
+                'General Question',
+                'Bug Report',
+                'Feedback',
+              ].map((label) => (
                 <Chip
                   key={label}
                   label={label}
@@ -370,8 +368,8 @@ function Contact() {
               }}
               error={error.message}
               helperText={
-                error.message 
-                  ? 'Message is required' 
+                error.message
+                  ? 'Message is required'
                   : `${charCount}/1000 characters${charCount > 800 ? ' (almost there!)' : ''}`
               }
               multiline

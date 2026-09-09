@@ -1,36 +1,36 @@
-import React, { useEffect, useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import CloseIcon from "@mui/icons-material/Close";
-import Toolbar from "@mui/material/Toolbar";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Icon } from "@iconify/react";
-import "../assets/styles/Navigation.scss";
+import React, { useEffect, useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import CloseIcon from '@mui/icons-material/Close';
+import Toolbar from '@mui/material/Toolbar';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Icon } from '@iconify/react';
+import '../assets/styles/Navigation.scss';
 
-type Section = "main" | "expertise" | "history" | "projects" | "contact" | "vault" | "certificates";
+type Section = 'main' | 'expertise' | 'history' | 'projects' | 'contact' | 'vault' | 'certificates';
 
 const navItems: [string, Section, string][] = [
-  ["Main", "main", "mdi:account-circle"],
-  ["History", "history", "mdi:history"],
-  ["Projects", "projects", "mdi:rocket-launch"],
-  ["Expertise", "expertise", "mdi:lightning-bolt"],
-  ["Certificates", "certificates", "mdi:trophy"],
-  ["Contact", "contact", "mdi:email-outline"]
+  ['Main', 'main', 'mdi:account-circle'],
+  ['History', 'history', 'mdi:history'],
+  ['Projects', 'projects', 'mdi:rocket-launch'],
+  ['Expertise', 'expertise', 'mdi:lightning-bolt'],
+  ['Certificates', 'certificates', 'mdi:trophy'],
+  ['Contact', 'contact', 'mdi:email-outline'],
 ];
 
 function Navigation() {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const [activeSection, setActiveSection] = useState<Section>("main");
+  const [activeSection, setActiveSection] = useState<Section>('main');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -45,12 +45,10 @@ function Navigation() {
     setMobileOpen(false);
   };
 
-
-
   // Handle scroll events for navbar styling
   useEffect(() => {
     const handleScroll = () => {
-      const navbar = document.getElementById("navigation");
+      const navbar = document.getElementById('navigation');
       if (navbar) {
         setScrolled(window.scrollY > 48);
       }
@@ -58,8 +56,8 @@ function Navigation() {
       // Only detect active section if not on fullscreen route
       if (!isFullscreenRoute) {
         const sections = navItems.map(([, section]) => section);
-        let currentSection: Section = "main";
-        
+        let currentSection: Section = 'main';
+
         for (const section of sections) {
           const element = document.getElementById(section);
           if (element) {
@@ -69,13 +67,13 @@ function Navigation() {
             }
           }
         }
-        
+
         setActiveSection(currentSection);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [isFullscreenRoute]);
 
   // Prevent body scroll when drawer is open
@@ -91,15 +89,15 @@ function Navigation() {
   }, [mobileOpen]);
 
   const scrollToSection = (section: Section) => {
-    if (section === "vault") {
-      navigate("/vault");
+    if (section === 'vault') {
+      navigate('/vault');
       handleDrawerClose();
       return;
     }
 
     const element = document.getElementById(section);
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      element.scrollIntoView({ behavior: 'smooth' });
       setActiveSection(section);
       handleDrawerClose();
     }
@@ -124,9 +122,9 @@ function Navigation() {
         {navItems.map(([label, section, icon]) => (
           <ListItem key={label} disablePadding className="drawer-list-item">
             <ListItemButton
-              className={`drawer-button ${activeSection === section ? "active" : ""}`}
+              className={`drawer-button ${activeSection === section ? 'active' : ''}`}
               onClick={() => scrollToSection(section)}
-              aria-current={activeSection === section ? "page" : undefined}
+              aria-current={activeSection === section ? 'page' : undefined}
             >
               <Icon icon={icon} className="drawer-item-icon" />
               <ListItemText primary={label} className="drawer-item-text" />
@@ -136,16 +134,16 @@ function Navigation() {
         ))}
         <ListItem disablePadding className="drawer-list-item">
           <ListItemButton
-            className={`drawer-button ${location.pathname === "/persona" ? "active" : ""}`}
+            className={`drawer-button ${location.pathname === '/persona' ? 'active' : ''}`}
             onClick={() => {
-              navigate("/persona");
+              navigate('/persona');
               handleDrawerClose();
             }}
-            aria-current={location.pathname === "/persona" ? "page" : undefined}
+            aria-current={location.pathname === '/persona' ? 'page' : undefined}
           >
             <Icon icon="mdi:book-open-page-variant-outline" className="drawer-item-icon" />
             <ListItemText primary="Persona" className="drawer-item-text" />
-            {location.pathname === "/persona" && <span className="drawer-item-indicator" />}
+            {location.pathname === '/persona' && <span className="drawer-item-indicator" />}
           </ListItemButton>
         </ListItem>
       </List>
@@ -167,7 +165,7 @@ function Navigation() {
       <AppBar
         component="nav"
         id="navigation"
-        className={`navbar ${scrolled ? "scrolled" : ""}`}
+        className={`navbar ${scrolled ? 'scrolled' : ''}`}
         elevation={0}
       >
         <Toolbar className="navbar-toolbar">
@@ -182,29 +180,28 @@ function Navigation() {
               <Button
                 key={label}
                 onClick={() => scrollToSection(section)}
-                className={`nav-button ${activeSection === section ? "active" : ""}`}
-                aria-current={activeSection === section ? "page" : undefined}
+                className={`nav-button ${activeSection === section ? 'active' : ''}`}
+                aria-current={activeSection === section ? 'page' : undefined}
               >
                 <Icon icon={icon} className="nav-button-icon" />
                 <span className="nav-button-label">{label}</span>
               </Button>
             ))}
             <Button
-              onClick={() => navigate("/persona")}
-              className={`nav-button persona-nav-button ${location.pathname === "/persona" ? "active" : ""}`}
-              aria-current={location.pathname === "/persona" ? "page" : undefined}
+              onClick={() => navigate('/persona')}
+              className={`nav-button persona-nav-button ${location.pathname === '/persona' ? 'active' : ''}`}
+              aria-current={location.pathname === '/persona' ? 'page' : undefined}
             >
               <Icon icon="mdi:book-open-page-variant-outline" className="nav-button-icon" />
               <span className="nav-button-label">Persona</span>
             </Button>
           </Box>
 
-
           {/* Mobile Hamburger */}
           <IconButton
-            className={`mobile-menu-button ${mobileOpen ? "open" : ""}`}
+            className={`mobile-menu-button ${mobileOpen ? 'open' : ''}`}
             onClick={handleDrawerToggle}
-            aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileOpen}
             aria-controls="mobile-navigation-drawer"
           >
@@ -225,7 +222,7 @@ function Navigation() {
           disableScrollLock: true,
         }}
         classes={{
-          paper: "drawer-paper"
+          paper: 'drawer-paper',
         }}
         className="mobile-drawer"
         id="mobile-navigation-drawer"
@@ -236,11 +233,7 @@ function Navigation() {
 
       {/* Overlay for drawer */}
       {mobileOpen && (
-        <Box
-          className="drawer-overlay"
-          onClick={handleDrawerClose}
-          aria-hidden="true"
-        />
+        <Box className="drawer-overlay" onClick={handleDrawerClose} aria-hidden="true" />
       )}
     </Box>
   );

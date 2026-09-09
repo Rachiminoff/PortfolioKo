@@ -23,7 +23,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2022,
     artwork: '/images/characters/kazuha.webp',
     obtainedOrder: 1,
-    description: 'The first limited 5★ I ever pulled.'
+    description: 'The first limited 5★ I ever pulled.',
   },
   {
     id: '2',
@@ -35,7 +35,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2022,
     artwork: '/images/characters/cyno.webp',
     obtainedOrder: 2,
-    description: 'The General Mahamatra.'
+    description: 'The General Mahamatra.',
   },
   {
     id: '3',
@@ -47,7 +47,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2022,
     artwork: '/images/characters/tartaglia.webp',
     obtainedOrder: 3,
-    description: 'The 11th Harbinger.'
+    description: 'The 11th Harbinger.',
   },
   {
     id: '4',
@@ -59,7 +59,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2022,
     artwork: '/images/characters/wanderer.webp',
     obtainedOrder: 4,
-    description: 'The wanderer of Inazuma.'
+    description: 'The wanderer of Inazuma.',
   },
   {
     id: '5',
@@ -71,7 +71,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2022,
     artwork: '/images/characters/raiden.webp',
     obtainedOrder: 5,
-    description: 'The Electro Archon.'
+    description: 'The Electro Archon.',
   },
   // 2023
   {
@@ -84,7 +84,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2023,
     artwork: '/images/characters/hutao.webp',
     obtainedOrder: 6,
-    description: 'The Director of the Wangsheng Funeral Parlor.'
+    description: 'The Director of the Wangsheng Funeral Parlor.',
   },
   {
     id: '7',
@@ -96,7 +96,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2023,
     artwork: '/images/characters/ganyu.webp',
     obtainedOrder: 7,
-    description: 'The half-Qilin Adeptus.'
+    description: 'The half-Qilin Adeptus.',
   },
   {
     id: '8',
@@ -108,7 +108,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2023,
     artwork: '/images/characters/yaemiko.webp',
     obtainedOrder: 8,
-    description: 'The Guuji of the Grand Narukami Shrine.'
+    description: 'The Guuji of the Grand Narukami Shrine.',
   },
   {
     id: '9',
@@ -120,7 +120,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2023,
     artwork: '/images/characters/yoimiya.webp',
     obtainedOrder: 9,
-    description: 'The Queen of the Summer Festival.'
+    description: 'The Queen of the Summer Festival.',
   },
   {
     id: '10',
@@ -132,7 +132,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2023,
     artwork: '/images/characters/zhongli.webp',
     obtainedOrder: 10,
-    description: 'The Geo Archon.'
+    description: 'The Geo Archon.',
   },
   {
     id: '11',
@@ -144,7 +144,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2023,
     artwork: '/images/characters/furina.webp',
     obtainedOrder: 11,
-    description: 'The Hydro Archon.'
+    description: 'The Hydro Archon.',
   },
   {
     id: '12',
@@ -156,7 +156,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2023,
     artwork: '/images/characters/navia.webp',
     obtainedOrder: 12,
-    description: 'The President of the Spina di Rosula.'
+    description: 'The President of the Spina di Rosula.',
   },
   // 2024
   {
@@ -169,7 +169,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/nahida.webp',
     obtainedOrder: 13,
-    description: 'The Dendro Archon.'
+    description: 'The Dendro Archon.',
   },
   {
     id: '14',
@@ -181,7 +181,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/xianyun.webp',
     obtainedOrder: 14,
-    description: 'The Cloud Retainer.'
+    description: 'The Cloud Retainer.',
   },
   {
     id: '15',
@@ -193,7 +193,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/arlecchino.webp',
     obtainedOrder: 15,
-    description: 'The Knave, 4th Harbinger.'
+    description: 'The Knave, 4th Harbinger.',
   },
   {
     id: '16',
@@ -205,7 +205,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/clorinde.webp',
     obtainedOrder: 16,
-    description: 'The Champion Duelist.'
+    description: 'The Champion Duelist.',
   },
   {
     id: '17',
@@ -217,7 +217,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/alhaitham.webp',
     obtainedOrder: 17,
-    description: 'The Scribe of the Akademiya.'
+    description: 'The Scribe of the Akademiya.',
   },
   {
     id: '18',
@@ -229,7 +229,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/kinich.webp',
     obtainedOrder: 18,
-    description: 'The Mural Artist.'
+    description: 'The Mural Artist.',
   },
   {
     id: '19',
@@ -241,7 +241,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/xilonen.webp',
     obtainedOrder: 19,
-    description: 'The Blacksmith of the Night.'
+    description: 'The Blacksmith of the Night.',
   },
   {
     id: '20',
@@ -253,7 +253,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/chiori.webp',
     obtainedOrder: 20,
-    description: 'The Fashion Designer.'
+    description: 'The Fashion Designer.',
   },
   {
     id: '21',
@@ -265,7 +265,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2024,
     artwork: '/images/characters/neuvillette.webp',
     obtainedOrder: 21,
-    description: 'The Chief Justice of Fontaine.'
+    description: 'The Chief Justice of Fontaine.',
   },
   // 2025
   {
@@ -278,7 +278,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/mavuika.webp',
     obtainedOrder: 22,
-    description: 'The Pyro Archon.'
+    description: 'The Pyro Archon.',
   },
   {
     id: '23',
@@ -290,7 +290,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/citlali.webp',
     obtainedOrder: 23,
-    description: 'The Sage of the Night Wind.'
+    description: 'The Sage of the Night Wind.',
   },
   {
     id: '24',
@@ -302,7 +302,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/wriothesley.webp',
     obtainedOrder: 24,
-    description: 'The Duke of the Meropide Fortress.'
+    description: 'The Duke of the Meropide Fortress.',
   },
   {
     id: '25',
@@ -314,7 +314,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/venti.webp',
     obtainedOrder: 25,
-    description: 'The Anemo Archon.'
+    description: 'The Anemo Archon.',
   },
   {
     id: '26',
@@ -326,7 +326,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/escoffier.webp',
     obtainedOrder: 26,
-    description: 'The Chef of the Cloud.'
+    description: 'The Chef of the Cloud.',
   },
   {
     id: '27',
@@ -338,7 +338,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/skirk.webp',
     obtainedOrder: 27,
-    description: 'The Abyss\'s Disciple.'
+    description: "The Abyss's Disciple.",
   },
   {
     id: '28',
@@ -350,7 +350,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/shenhe.webp',
     obtainedOrder: 28,
-    description: 'The Adeptus Disciple of Cloud Retainer.'
+    description: 'The Adeptus Disciple of Cloud Retainer.',
   },
   {
     id: '29',
@@ -362,7 +362,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/flins.webp',
     obtainedOrder: 29,
-    description: 'The Thunderer.'
+    description: 'The Thunderer.',
   },
   {
     id: '30',
@@ -374,7 +374,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/yelan.webp',
     obtainedOrder: 30,
-    description: 'The mysterious spy.'
+    description: 'The mysterious spy.',
   },
   {
     id: '31',
@@ -386,7 +386,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/durin.webp',
     obtainedOrder: 31,
-    description: 'The Dragon of the Abyss.'
+    description: 'The Dragon of the Abyss.',
   },
   {
     id: '32',
@@ -398,7 +398,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2025,
     artwork: '/images/characters/varesa.webp',
     obtainedOrder: 32,
-    description: 'The Lightning\'s Shadow.'
+    description: "The Lightning's Shadow.",
   },
   // 2026
   {
@@ -411,7 +411,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2026,
     artwork: '/images/characters/columbina.webp',
     obtainedOrder: 33,
-    description: 'The 3rd Harbinger.'
+    description: 'The 3rd Harbinger.',
   },
   {
     id: '34',
@@ -423,7 +423,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2026,
     artwork: '/images/characters/ineffa.webp',
     obtainedOrder: 34,
-    description: 'The Untamed.'
+    description: 'The Untamed.',
   },
   {
     id: '35',
@@ -435,7 +435,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2026,
     artwork: '/images/characters/zibai.webp',
     obtainedOrder: 35,
-    description: 'The Immortal.'
+    description: 'The Immortal.',
   },
   {
     id: '36',
@@ -447,7 +447,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2026,
     artwork: '/images/characters/linnea.webp',
     obtainedOrder: 36,
-    description: 'The Architect of the Abyss.'
+    description: 'The Architect of the Abyss.',
   },
   {
     id: '37',
@@ -459,7 +459,7 @@ export const wishCharacters: WishCharacter[] = [
     year: 2026,
     artwork: '/images/characters/nicole.webp',
     obtainedOrder: 37,
-    description: 'The Flame\'s Embrace.'
+    description: "The Flame's Embrace.",
   },
   {
     id: '38',
@@ -471,6 +471,6 @@ export const wishCharacters: WishCharacter[] = [
     year: 2026,
     artwork: '/images/characters/sandrone.webp',
     obtainedOrder: 38,
-    description: 'The Puppeteer, 7th Harbinger.'
-  }
+    description: 'The Puppeteer, 7th Harbinger.',
+  },
 ];

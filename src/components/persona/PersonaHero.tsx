@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 const PersonaHero: React.FC = () => (
   <header className="persona-hero">
     <div className="persona-kicker">
@@ -13,12 +13,11 @@ const PersonaHero: React.FC = () => (
           PERSONA<span>.</span>
         </h1>
         <p className="persona-intro">
-          The part of the website that has absolutely nothing to do with being
-          employable.
+          The part of the website that has absolutely nothing to do with being employable.
         </p>
         <p className="persona-subintro">
-          Books. Manga. Movies. Games. Songs. Half-formed thoughts. Things I'm
-          into right now and things I will probably be into again in six months.
+          Books. Manga. Movies. Games. Songs. Half-formed thoughts. Things I'm into right now and
+          things I will probably be into again in six months.
         </p>
       </div>
       <aside className="persona-stamp">

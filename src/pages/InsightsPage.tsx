@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { useArchive } from '../hooks/useArchive';
 
-import "./styles/InsightsPage.scss";
+import './styles/InsightsPage.scss';
 
 const Insights = lazy(() => import('../components/Insights'));
 
@@ -14,14 +14,14 @@ const InsightsPage: React.FC = () => {
 
   useEffect(() => {
     console.log('InsightsPage - State:', { isLoading, isUnlocked, hasRedirected });
-    
+
     // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
       console.log('InsightsPage - Not unlocked, redirecting to archive');
       setHasRedirected(true);
       navigate('/archive', { replace: true });
     }
-    
+
     if (isUnlocked && hasRedirected) {
       setHasRedirected(false);
     }
@@ -47,7 +47,7 @@ const InsightsPage: React.FC = () => {
     <div className="insights-page">
       {/* Sticky Back Button */}
       <div className="insights-back-button-container">
-        <button 
+        <button
           className="insights-back-button"
           onClick={() => {
             console.log('InsightsPage - Going back to archive');
@@ -60,12 +60,14 @@ const InsightsPage: React.FC = () => {
         </button>
       </div>
 
-      <Suspense fallback={
-        <div className="insights-loading-state">
-          <div className="insights-loading-spinner" />
-          <p>Loading articles...</p>
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="insights-loading-state">
+            <div className="insights-loading-spinner" />
+            <p>Loading articles...</p>
+          </div>
+        }
+      >
         <Insights />
       </Suspense>
     </div>

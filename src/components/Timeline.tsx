@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGraduationCap, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
@@ -30,21 +30,21 @@ function Timeline() {
         entries.forEach((entry) => {
           const element = entry.target as HTMLElement;
           const index = parseInt(element.dataset.index || '0');
-          
+
           if (entry.isIntersecting) {
             setActiveIndex(index);
-            
+
             const icon = element.querySelector('.vertical-timeline-element-icon');
             const card = element.querySelector('.vertical-timeline-element-content');
-            
+
             element.classList.add('visible');
-            
+
             if (icon) {
               setTimeout(() => {
                 icon.classList.add('icon-visible');
               }, 200);
             }
-            
+
             if (card) {
               setTimeout(() => {
                 card.classList.add('card-visible');
@@ -53,10 +53,10 @@ function Timeline() {
           }
         });
       },
-      { 
-        threshold: 0.25, 
-        rootMargin: '0px 0px -30px 0px'
-      }
+      {
+        threshold: 0.25,
+        rootMargin: '0px 0px -30px 0px',
+      },
     );
 
     const elements = document.querySelectorAll('.vertical-timeline-element');
@@ -67,11 +67,11 @@ function Timeline() {
 
     const handleScroll = () => {
       if (!progressRef.current) return;
-      
+
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (scrollTop / docHeight) * 100;
-      
+
       progressRef.current.style.height = `${Math.min(progress, 100)}%`;
     };
 
@@ -126,7 +126,9 @@ function Timeline() {
           <div className="section-header-content">
             <span className="section-label">JOURNEY</span>
             <h1 className="section-title">Timeline</h1>
-            <p className="section-subtitle">Key milestones and achievements throughout my development career</p>
+            <p className="section-subtitle">
+              Key milestones and achievements throughout my development career
+            </p>
           </div>
         </div>
 
@@ -140,7 +142,7 @@ function Timeline() {
               <VerticalTimelineElement
                 key={milestone.id}
                 className="vertical-timeline-element--work milestone-card"
-                contentStyle={{ 
+                contentStyle={{
                   background: '#181818',
                   color: '#f5f5f5',
                   borderRadius: '0',
@@ -148,12 +150,12 @@ function Timeline() {
                   boxShadow: 'none',
                   padding: '1.8rem 2rem',
                 }}
-                contentArrowStyle={{ 
+                contentArrowStyle={{
                   borderRight: '7px solid #181818',
                 }}
                 date={milestone.year}
                 dateClassName="custom-date"
-                iconStyle={{ 
+                iconStyle={{
                   background: '#222222',
                   color: '#f5f5f5',
                   boxShadow: 'none',
@@ -171,11 +173,11 @@ function Timeline() {
                       {milestone.status}
                     </span>
                   </div>
-                  
+
                   <h4 className="milestone-subtitle">{milestone.subtitle}</h4>
-                  
+
                   {renderTerminal(milestone.terminal)}
-                  
+
                   <p className="milestone-description">{milestone.description}</p>
                 </div>
               </VerticalTimelineElement>

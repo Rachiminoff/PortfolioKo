@@ -19,10 +19,11 @@ const ProjectListModal: React.FC<ProjectListModalProps> = ({ isOpen, onClose }) 
 
   // Filter projects based on search term
   useEffect(() => {
-    const filtered = projectsData.filter(project =>
-      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.tech.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()))
+    const filtered = projectsData.filter(
+      (project) =>
+        project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        project.subtitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        project.tech.some((tech) => tech.toLowerCase().includes(searchTerm.toLowerCase())),
     );
     setFilteredProjects(filtered);
     setSelectedIndex(filtered.length > 0 ? 0 : -1);
@@ -49,14 +50,12 @@ const ProjectListModal: React.FC<ProjectListModalProps> = ({ isOpen, onClose }) 
 
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setSelectedIndex(prev => 
-          prev < filteredProjects.length - 1 ? prev + 1 : prev
-        );
+        setSelectedIndex((prev) => (prev < filteredProjects.length - 1 ? prev + 1 : prev));
       }
 
       if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setSelectedIndex(prev => prev > 0 ? prev - 1 : 0);
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : 0));
       }
 
       if (e.key === 'Enter' && selectedIndex >= 0 && filteredProjects[selectedIndex]) {
@@ -107,11 +106,16 @@ const ProjectListModal: React.FC<ProjectListModalProps> = ({ isOpen, onClose }) 
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Active': return '#2dd4bf';
-      case 'Completed': return '#2dd4bf';
-      case 'In Development': return '#fbbf24';
-      case 'Archived': return '#6b7280';
-      default: return '#6b7280';
+      case 'Active':
+        return '#2dd4bf';
+      case 'Completed':
+        return '#2dd4bf';
+      case 'In Development':
+        return '#fbbf24';
+      case 'Archived':
+        return '#6b7280';
+      default:
+        return '#6b7280';
     }
   };
 
@@ -121,18 +125,18 @@ const ProjectListModal: React.FC<ProjectListModalProps> = ({ isOpen, onClose }) 
         {/* Terminal Header */}
         <div className="modal-header">
           <div className="modal-header-controls">
-            <button 
-              className="modal-control-btn modal-control-close" 
+            <button
+              className="modal-control-btn modal-control-close"
               onClick={onClose}
               aria-label="Close"
             />
-            <button 
-              className="modal-control-btn modal-control-minimize" 
+            <button
+              className="modal-control-btn modal-control-minimize"
               onClick={onClose}
               aria-label="Minimize"
             />
-            <button 
-              className="modal-control-btn modal-control-maximize" 
+            <button
+              className="modal-control-btn modal-control-maximize"
               onClick={onClose}
               aria-label="Maximize"
             />
@@ -194,16 +198,11 @@ const ProjectListModal: React.FC<ProjectListModalProps> = ({ isOpen, onClose }) 
                       <span className="modal-project-item-number">
                         {String(index + 1).padStart(2, '0')}
                       </span>
-                      <span className="modal-project-item-title">
-                        {project.title}
-                      </span>
+                      <span className="modal-project-item-title">{project.title}</span>
                     </div>
                     <div className="modal-project-item-right">
-                      <span 
-                        className="modal-project-item-status"
-                        style={{ color: statusColor }}
-                      >
-                        <span 
+                      <span className="modal-project-item-status" style={{ color: statusColor }}>
+                        <span
                           className="modal-project-item-status-dot"
                           style={{ backgroundColor: statusColor }}
                         />

@@ -5,8 +5,8 @@ $red: #ed3424;
 $yellow: #f5b91b;
 $blue: #174b80;
 $green: #3d704e;
-$line: rgba(241, 231, 210, .28);
-$muted: rgba(241, 231, 210, .66);
+$line: rgba(241, 231, 210, 0.28);
+$muted: rgba(241, 231, 210, 0.66);
 $nav-height: 76px;
 
 .navigation-container {
@@ -25,7 +25,10 @@ $nav-height: 76px;
   box-shadow: none !important;
   pointer-events: none;
   transform: translateY(-110%);
-  transition: transform .35s cubic-bezier(.22, 1, .36, 1), background .25s ease, border-color .25s ease;
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.25s ease,
+    border-color 0.25s ease;
   overflow: hidden;
 
   &::before,
@@ -43,7 +46,7 @@ $nav-height: 76px;
     top: -110px;
     background: $red;
     transform: rotate(45deg);
-    opacity: .95;
+    opacity: 0.95;
   }
 
   &::after {
@@ -88,7 +91,7 @@ $nav-height: 76px;
     font-family: 'Arial Black', 'Helvetica Neue', sans-serif;
     font-size: 1.15rem;
     font-weight: 900;
-    letter-spacing: -.06em;
+    letter-spacing: -0.06em;
     text-transform: uppercase;
 
     &::before {
@@ -133,11 +136,13 @@ $nav-height: 76px;
     justify-content: center;
     gap: 5px;
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: .67rem;
+    font-size: 0.67rem;
     font-weight: 700;
-    letter-spacing: .08em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    transition: color .2s ease, background .2s ease;
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
 
     .nav-button-icon {
       display: none;
@@ -153,7 +158,9 @@ $nav-height: 76px;
       width: 18px;
       height: 3px;
       background: $muted;
-      transition: width .2s ease, background .2s ease;
+      transition:
+        width 0.2s ease,
+        background 0.2s ease;
     }
 
     &:hover,
@@ -206,13 +213,21 @@ $nav-height: 76px;
       width: 22px;
       height: 2px;
       background: $paper;
-      transition: transform .2s ease, opacity .2s ease;
+      transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
     }
 
     &.open {
-      .hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-      .hamburger-line:nth-child(2) { opacity: 0; }
-      .hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .hamburger-line:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .hamburger-line:nth-child(2) {
+        opacity: 0;
+      }
+      .hamburger-line:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
     }
   }
 }
@@ -230,9 +245,7 @@ $nav-height: 76px;
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  background:
-    linear-gradient(135deg, transparent 0 78%, $yellow 78% 86%, transparent 86%),
-    $paper;
+  background: linear-gradient(135deg, transparent 0 78%, $yellow 78% 86%, transparent 86%), $paper;
 
   .drawer-header {
     display: flex;
@@ -245,7 +258,7 @@ $nav-height: 76px;
   .drawer-brand-name {
     font-family: 'Arial Black', sans-serif;
     font-size: 1.35rem;
-    letter-spacing: -.07em;
+    letter-spacing: -0.07em;
     text-transform: uppercase;
   }
 
@@ -255,14 +268,18 @@ $nav-height: 76px;
     color: $ink;
   }
 
-  .drawer-divider { display: none; }
+  .drawer-divider {
+    display: none;
+  }
 
   .drawer-list {
     padding: 0;
     margin: 0;
   }
 
-  .drawer-list-item { border-bottom: 1px solid rgba(7, 21, 29, .2); }
+  .drawer-list-item {
+    border-bottom: 1px solid rgba(7, 21, 29, 0.2);
+  }
 
   .drawer-button {
     position: relative;
@@ -274,16 +291,22 @@ $nav-height: 76px;
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: .06em;
+    letter-spacing: 0.06em;
 
-    .drawer-item-icon { color: $blue; }
-    .drawer-item-text { margin: 0; }
+    .drawer-item-icon {
+      color: $blue;
+    }
+    .drawer-item-text {
+      margin: 0;
+    }
 
     &:hover,
     &.active {
       background: $blue;
       color: $paper;
-      .drawer-item-icon { color: $yellow; }
+      .drawer-item-icon {
+        color: $yellow;
+      }
     }
   }
 
@@ -299,9 +322,9 @@ $nav-height: 76px;
     margin-top: auto;
     padding: 20px 22px;
     border-top: 2px solid $ink;
-    font-size: .65rem;
+    font-size: 0.65rem;
     font-weight: 700;
-    letter-spacing: .08em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 }
@@ -310,51 +333,89 @@ $nav-height: 76px;
   position: fixed;
   inset: 0;
   z-index: 1099;
-  background: rgba(7, 21, 29, .72);
+  background: rgba(7, 21, 29, 0.72);
   pointer-events: auto;
 }
 
 @media (max-width: 700px) {
   .navbar {
     height: 64px;
-    .navbar-toolbar { height: 64px; min-height: 64px; }
-    .navbar-brand { min-width: 0; font-size: 1rem; }
+    .navbar-toolbar {
+      height: 64px;
+      min-height: 64px;
+    }
+    .navbar-brand {
+      min-width: 0;
+      font-size: 1rem;
+    }
   }
 }
 
 /* Bauhaus × Swiss navbar: readable contrast and clear hierarchy */
-.navbar { background:#07151d; color:#f4ead4; border-bottom:2px solid #f4ead4; }
-.navbar a, .navbar button, .navbar-brand, .navbar-link { color:#f4ead4 !important; }
-.navbar a:hover, .navbar button:hover, .navbar-link:hover { color:#07151d !important; background:#f5b719; }
-.navbar .active, .navbar .active-link { color:#07151d !important; background:#f4ead4; }
+.navbar {
+  background: #07151d;
+  color: #f4ead4;
+  border-bottom: 2px solid #f4ead4;
+}
+.navbar a,
+.navbar button,
+.navbar-brand,
+.navbar-link {
+  color: #f4ead4 !important;
+}
+.navbar a:hover,
+.navbar button:hover,
+.navbar-link:hover {
+  color: #07151d !important;
+  background: #f5b719;
+}
+.navbar .active,
+.navbar .active-link {
+  color: #07151d !important;
+  background: #f4ead4;
+}
 
 /* ============================================================
    NAVBAR MOTION + THEME CONTROL
    ============================================================ */
 .navbar.scrolled {
   .navbar-brand {
-    animation: navBrandIn .55s cubic-bezier(.22, 1, .36, 1) both;
+    animation: navBrandIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   .nav-button,
   .theme-toggle-button {
-    animation: navItemIn .45s cubic-bezier(.22, 1, .36, 1) both;
+    animation: navItemIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .nav-button:nth-child(1) { animation-delay: .04s; }
-  .nav-button:nth-child(2) { animation-delay: .08s; }
-  .nav-button:nth-child(3) { animation-delay: .12s; }
-  .nav-button:nth-child(4) { animation-delay: .16s; }
-  .nav-button:nth-child(5) { animation-delay: .20s; }
-  .nav-button:nth-child(6) { animation-delay: .24s; }
-  .theme-toggle-button { animation-delay: .28s; }
+  .nav-button:nth-child(1) {
+    animation-delay: 0.04s;
+  }
+  .nav-button:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .nav-button:nth-child(3) {
+    animation-delay: 0.12s;
+  }
+  .nav-button:nth-child(4) {
+    animation-delay: 0.16s;
+  }
+  .nav-button:nth-child(5) {
+    animation-delay: 0.2s;
+  }
+  .nav-button:nth-child(6) {
+    animation-delay: 0.24s;
+  }
+  .theme-toggle-button {
+    animation-delay: 0.28s;
+  }
 
   &::before {
-    animation: navShapeIn .7s cubic-bezier(.22, 1, .36, 1) both;
+    animation: navShapeIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
   &::after {
-    animation: navDotIn .5s cubic-bezier(.22, 1, .36, 1) .12s both;
+    animation: navDotIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
   }
 }
 
@@ -362,12 +423,14 @@ $nav-height: 76px;
   overflow: hidden;
 
   &::after {
-    transition: transform .25s cubic-bezier(.22, 1, .36, 1), opacity .2s ease;
+    transition:
+      transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.2s ease;
   }
 
   &:hover {
     .nav-button-label {
-      animation: navLabelNudge .25s ease both;
+      animation: navLabelNudge 0.25s ease both;
     }
   }
 }
@@ -387,22 +450,27 @@ $nav-height: 76px;
   justify-content: center;
   gap: 5px;
   font-family: 'Helvetica Neue', Arial, sans-serif !important;
-  font-size: .58rem !important;
+  font-size: 0.58rem !important;
   font-weight: 800 !important;
-  letter-spacing: .08em;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: color .2s ease, background .2s ease, transform .2s ease;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
 
   svg {
     font-size: 17px;
-    transition: transform .35s cubic-bezier(.22, 1, .36, 1);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &:hover {
     color: $ink !important;
     background: $yellow !important;
 
-    svg { transform: rotate(18deg) scale(1.08); }
+    svg {
+      transform: rotate(18deg) scale(1.08);
+    }
   }
 
   &:focus-visible {
@@ -412,27 +480,53 @@ $nav-height: 76px;
 }
 
 @keyframes navBrandIn {
-  from { opacity: 0; transform: translateX(-14px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes navItemIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes navShapeIn {
-  from { opacity: 0; transform: translate(28px, -18px) rotate(45deg); }
-  to { opacity: .95; transform: translate(0, 0) rotate(45deg); }
+  from {
+    opacity: 0;
+    transform: translate(28px, -18px) rotate(45deg);
+  }
+  to {
+    opacity: 0.95;
+    transform: translate(0, 0) rotate(45deg);
+  }
 }
 
 @keyframes navDotIn {
-  from { opacity: 0; transform: translate(18px, 18px) scale(.5); }
-  to { opacity: 1; transform: translate(0, 0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translate(18px, 18px) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
 }
 
 @keyframes navLabelNudge {
-  50% { transform: translateX(3px); }
+  50% {
+    transform: translateX(3px);
+  }
 }
 
 .drawer-theme-toggle {
@@ -442,17 +536,25 @@ $nav-height: 76px;
   gap: 10px;
   margin: 0 0 16px;
   padding: 10px 12px;
-  border: 1px solid rgba(7,21,29,.35);
+  border: 1px solid rgba(7, 21, 29, 0.35);
   border-radius: 0;
   background: transparent;
   color: $ink;
-  font: 700 .65rem/1.2 'Helvetica Neue', Arial, sans-serif;
-  letter-spacing: .08em;
+  font:
+    700 0.65rem/1.2 'Helvetica Neue',
+    Arial,
+    sans-serif;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background .2s ease, color .2s ease, transform .2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
 
-  svg { font-size: 17px; }
+  svg {
+    font-size: 17px;
+  }
 
   &:hover {
     background: $blue;
@@ -462,13 +564,19 @@ $nav-height: 76px;
 }
 
 @media (max-width: 900px) {
-  .theme-toggle-button { display: none !important; }
+  .theme-toggle-button {
+    display: none !important;
+  }
 }
 
 @media (max-width: 700px) {
   .navbar.scrolled {
-    .navbar-brand { animation-duration: .45s; }
-    .mobile-menu-button { animation: navItemIn .45s cubic-bezier(.22, 1, .36, 1) .08s both; }
+    .navbar-brand {
+      animation-duration: 0.45s;
+    }
+    .mobile-menu-button {
+      animation: navItemIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+    }
   }
 }
 

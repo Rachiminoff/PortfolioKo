@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-    process.env.REACT_APP_SUPABASE_URL,
-    process.env.REACT_APP_SUPABASE_ANON_KEY
+  process.env.REACT_APP_SUPABASE_URL,
+  process.env.REACT_APP_SUPABASE_ANON_KEY,
 );
 
 export default async function handler(req, res) {
@@ -17,7 +17,11 @@ export default async function handler(req, res) {
         .single();
       if (error) throw error;
       return res.status(200).json({
-        data: { visitors: Number(data.unique_visitors || 0), visits: Number(data.total_visits || 0), updatedAt: data.updated_at }
+        data: {
+          visitors: Number(data.unique_visitors || 0),
+          visits: Number(data.total_visits || 0),
+          updatedAt: data.updated_at,
+        },
       });
     } catch (error) {
       console.error('Site stats read error:', error);

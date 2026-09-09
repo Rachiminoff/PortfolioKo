@@ -9,9 +9,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
   return (
     <div className="default-layout">
       <Navigation />
-      <main className="default-layout-main">
-        {children}
-      </main>
+      <main className="default-layout-main">{children}</main>
     </div>
   );
 };

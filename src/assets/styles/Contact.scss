@@ -17,7 +17,16 @@ $white-faint: rgba(255, 255, 255, 0.4);
 $white-very-faint: rgba(255, 255, 255, 0.15);
 $border-solid: rgba(245, 245, 245, 0.22);
 $border-medium: rgba(245, 245, 245, 0.5);
-$font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+$font-sans:
+  'Space Grotesk',
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif;
 $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 // ============================================================
@@ -122,7 +131,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     margin: 0 0 0.5rem 0;
     color: $white;
     font-size: clamp(2.8rem, 5vw, 5.8rem);
-    line-height: .9;
+    line-height: 0.9;
     font-weight: 900;
     letter-spacing: -0.055em;
     font-family: $font-sans;
@@ -224,13 +233,13 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding-bottom: .9rem;
+  padding-bottom: 0.9rem;
   margin-bottom: 1rem;
-  border-bottom: 1px solid rgba(245, 245, 245, .22);
-  color: rgba(245, 245, 245, .58);
+  border-bottom: 1px solid rgba(245, 245, 245, 0.22);
+  color: rgba(245, 245, 245, 0.58);
   font-family: $font-mono;
-  font-size: .58rem;
-  letter-spacing: .13em;
+  font-size: 0.58rem;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
 
   span:last-child {
@@ -238,8 +247,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   }
 
   @media (max-width: 480px) {
-    font-size: .48rem;
-    gap: .75rem;
+    font-size: 0.48rem;
+    gap: 0.75rem;
   }
 }
 
@@ -257,27 +266,27 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   overflow-wrap: anywhere;
   color: $white;
   font-family: $font-mono;
-  font-size: clamp(.88rem, 1.35vw, 1.05rem);
+  font-size: clamp(0.88rem, 1.35vw, 1.05rem);
   font-weight: 600;
-  letter-spacing: -.02em;
+  letter-spacing: -0.02em;
 }
 
 .direct-email-copy {
   flex-shrink: 0;
   min-height: 38px !important;
-  padding: 0 .9rem !important;
-  border: 1px solid rgba(245, 245, 245, .08) !important;
+  padding: 0 0.9rem !important;
+  border: 1px solid rgba(245, 245, 245, 0.08) !important;
   border-radius: 0 !important;
   background: #202735 !important;
   color: $white !important;
   font-family: $font-mono !important;
-  font-size: .66rem !important;
+  font-size: 0.66rem !important;
   font-weight: 600 !important;
-  letter-spacing: .06em !important;
-  transition: .2s ease !important;
+  letter-spacing: 0.06em !important;
+  transition: 0.2s ease !important;
 
   .MuiButton-startIcon {
-    margin-right: .45rem !important;
+    margin-right: 0.45rem !important;
   }
 
   svg {
@@ -292,8 +301,8 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
   @media (max-width: 480px) {
     min-height: 34px !important;
-    padding: 0 .65rem !important;
-    font-size: .56rem !important;
+    padding: 0 0.65rem !important;
+    font-size: 0.56rem !important;
   }
 }
 
@@ -357,7 +366,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
     &:hover {
       border-color: $border-medium;
-      
+
       svg {
         color: rgba(255, 255, 255, 0.4);
       }
@@ -595,7 +604,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   border-width: 1px !important;
   border-style: solid !important;
   margin-bottom: 1.25rem !important;
-  
+
   .MuiAlert-icon {
     font-size: 1.1rem !important;
   }
@@ -607,7 +616,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   @media (max-width: 480px) {
     padding: 0.5rem 0.75rem !important;
     font-size: 0.85rem !important;
-    
+
     .MuiAlert-icon {
       font-size: 0.95rem !important;
     }
@@ -618,11 +627,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   background: rgba(45, 212, 191, 0.05) !important;
   border-color: rgba(45, 212, 191, 0.12) !important;
   color: $white-muted !important;
-  
+
   .MuiAlert-icon {
     color: $cyan !important;
   }
-  
+
   strong {
     color: $white !important;
   }
@@ -632,11 +641,11 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   background: rgba(255, 71, 87, 0.05) !important;
   border-color: rgba(255, 71, 87, 0.12) !important;
   color: $white-muted !important;
-  
+
   .MuiAlert-icon {
     color: #ff4757 !important;
   }
-  
+
   strong {
     color: $white !important;
   }
@@ -645,7 +654,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 .alert-content {
   line-height: 1.5;
   font-family: $font-sans;
-  
+
   strong {
     font-weight: 500;
   }
@@ -727,13 +736,13 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
   font-family: $font-mono !important;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
   cursor: pointer;
-  
+
   &:hover {
     background: rgba(255, 255, 255, 0.06) !important;
     border-color: $border-medium !important;
     color: $white !important;
   }
-  
+
   .MuiChip-label {
     padding: 0 !important;
   }
@@ -801,51 +810,51 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     border-radius: 0;
     background: rgba(255, 255, 255, 0.05);
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    
+
     &:hover {
       background: rgba(255, 255, 255, 0.07);
-      
+
       .MuiOutlinedInput-notchedOutline {
         border-color: rgba(255, 255, 255, 0.2);
       }
     }
-    
+
     &.Mui-focused {
       background: rgba(255, 255, 255, 0.07);
-      
+
       .MuiOutlinedInput-notchedOutline {
         border-color: rgba(45, 212, 191, 0.3) !important;
         border-width: 1px !important;
       }
     }
-    
+
     &.Mui-error {
       .MuiOutlinedInput-notchedOutline {
         border-color: rgba(255, 71, 87, 0.3) !important;
       }
-      
+
       &:hover .MuiOutlinedInput-notchedOutline {
         border-color: rgba(255, 71, 87, 0.4) !important;
       }
-      
+
       &.Mui-focused .MuiOutlinedInput-notchedOutline {
         border-color: rgba(255, 71, 87, 0.4) !important;
       }
     }
-    
+
     .MuiOutlinedInput-notchedOutline {
       border-color: rgba(255, 255, 255, 0.1);
       border-width: 1px;
       transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
   }
-  
+
   .MuiInputBase-input {
     color: $white !important;
     padding: 0.75rem 0.85rem !important;
     font-size: 0.9rem !important;
     font-family: $font-sans !important;
-    
+
     &::placeholder {
       color: rgba(255, 255, 255, 0.25);
       opacity: 1;
@@ -888,20 +897,20 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       font-size: 0.8rem !important;
     }
   }
-  
+
   .MuiInputLabel-root {
     color: rgba(255, 255, 255, 0.45) !important;
     font-size: 0.85rem !important;
     font-family: $font-sans !important;
     transform: translate(14px, 12px) scale(1) !important;
     font-weight: 400 !important;
-    
+
     &.Mui-focused {
       color: rgba(45, 212, 191, 0.6) !important;
       transform: translate(14px, -9px) scale(0.75) !important;
       font-weight: 400 !important;
     }
-    
+
     &.Mui-error {
       color: rgba(255, 71, 87, 0.5) !important;
     }
@@ -914,7 +923,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     @media (min-width: 1200px) {
       font-size: 0.9rem !important;
       transform: translate(16px, 14px) scale(1) !important;
-      
+
       &.Mui-focused {
         transform: translate(16px, -9px) scale(0.75) !important;
       }
@@ -927,7 +936,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     @media (max-width: 768px) {
       font-size: 0.8rem !important;
       transform: translate(12px, 10px) scale(1) !important;
-      
+
       &.Mui-focused {
         transform: translate(12px, -8px) scale(0.7) !important;
       }
@@ -940,7 +949,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     @media (max-width: 480px) {
       font-size: 0.75rem !important;
       transform: translate(10px, 10px) scale(1) !important;
-      
+
       &.Mui-focused {
         transform: translate(10px, -8px) scale(0.65) !important;
       }
@@ -950,14 +959,14 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       }
     }
   }
-  
+
   .MuiFormHelperText-root {
     color: rgba(255, 255, 255, 0.3) !important;
     font-size: 0.7rem !important;
     font-family: $font-sans !important;
     margin: 4px 0 0 14px !important;
     font-weight: 300 !important;
-    
+
     &.Mui-error {
       color: rgba(255, 71, 87, 0.5) !important;
     }
@@ -977,7 +986,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
       margin: 2px 0 0 10px !important;
     }
   }
-  
+
   // Remove autofill background
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
@@ -1046,15 +1055,15 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
     padding: 0.75rem 1.75rem !important;
     min-width: 160px;
     font-size: 0.9rem !important;
-    
+
     .send-icon {
       transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    
+
     &:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.12) !important;
       border-color: rgba(45, 212, 191, 0.25) !important;
-      
+
       .send-icon {
         transform: translateX(4px);
         color: $cyan;
@@ -1097,7 +1106,7 @@ $font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
 
 .button-spinner {
   color: inherit !important;
-  
+
   .MuiCircularProgress-svg {
     animation-duration: 0.8s;
   }
@@ -1238,7 +1247,7 @@ textarea::-webkit-scrollbar-thumb:hover {
       border-color: $border-solid !important;
       color: $white-muted !important;
     }
-    
+
     &:active {
       background: rgba(255, 255, 255, 0.06) !important;
       transform: scale(0.96);
@@ -1249,12 +1258,12 @@ textarea::-webkit-scrollbar-thumb:hover {
     &:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.08) !important;
       border-color: $border-solid !important;
-      
+
       .send-icon {
         transform: none !important;
       }
     }
-    
+
     &:active:not(:disabled) {
       transform: scale(0.97);
     }
@@ -1264,7 +1273,7 @@ textarea::-webkit-scrollbar-thumb:hover {
     .detail-icon {
       &:hover {
         border-color: $border-solid;
-        
+
         svg {
           color: $yellow;
         }
@@ -1276,7 +1285,7 @@ textarea::-webkit-scrollbar-thumb:hover {
     &:hover {
       color: rgba(255, 255, 255, 0.08) !important;
     }
-    
+
     &:active {
       transform: scale(0.9);
     }
@@ -1296,7 +1305,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 
   .chip-item {
     transition: none !important;
-    
+
     &:active {
       transform: none !important;
     }
@@ -1304,7 +1313,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 
   .send-button {
     transition: none !important;
-    
+
     &:active:not(:disabled) {
       transform: none !important;
     }
@@ -1336,12 +1345,12 @@ textarea::-webkit-scrollbar-thumb:hover {
   .contact-details {
     .detail-icon {
       border-color: #ddd !important;
-      
+
       svg {
         color: #999 !important;
       }
     }
-    
+
     .detail-value {
       color: #666 !important;
     }
@@ -1354,43 +1363,188 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 /* ===== Scoped to dark theme only (was unconditional) ===== */
 body[data-theme='dark'] {
-// Swiss dark system — integrated component treatment
-.contact-container { background:#0b0b0b; color:#f2f0e8; }
-.contact-grid { gap:0; }
-.contact-info,.contact-form { border:1px solid rgba(242,240,232,.4); border-radius:0; background:#151515; }
-.contact-header,.header-tag { text-transform:uppercase; letter-spacing:.08em; }
-.contact-detail-item { border-bottom:1px solid rgba(242,240,232,.25); border-radius:0; }
-.copy-button,.contact-submit { border-radius:0; background:#e63946; color:#0b0b0b; }
+  // Swiss dark system — integrated component treatment
+  .contact-container {
+    background: #0b0b0b;
+    color: #f2f0e8;
+  }
+  .contact-grid {
+    gap: 0;
+  }
+  .contact-info,
+  .contact-form {
+    border: 1px solid rgba(242, 240, 232, 0.4);
+    border-radius: 0;
+    background: #151515;
+  }
+  .contact-header,
+  .header-tag {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .contact-detail-item {
+    border-bottom: 1px solid rgba(242, 240, 232, 0.25);
+    border-radius: 0;
+  }
+  .copy-button,
+  .contact-submit {
+    border-radius: 0;
+    background: #e63946;
+    color: #0b0b0b;
+  }
 
-/* ============================================================
+  /* ============================================================
    CONTACT — POSTER / FORM HYBRID
    ============================================================ */
-.contact-container{max-width:1320px !important;margin:0 auto !important;padding:clamp(5rem,8vw,8rem) clamp(1rem,4vw,4rem) !important;background:#000 !important}
-.contact-grid{grid-template-columns:minmax(260px,.8fr) minmax(0,1.4fr) !important;gap:1px !important;background:rgba(255,255,255,.16) !important;border:1px solid rgba(255,255,255,.16) !important}
-.contact-info{background:#000 !important;padding:2.5rem !important}
-.contact-header .header-tag{color:var(--bau-red) !important;font-family:var(--mono) !important;font-weight:700 !important}
-.contact-header h2{font-family:'Archivo',sans-serif !important;font-size:clamp(3rem,6vw,6rem) !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:-.07em !important;line-height:.86 !important}
-.contact-divider{width:100% !important;height:5px !important;background:var(--bau-yellow) !important;margin:1.5rem 0 !important}
-.contact-subtitle{color:rgba(255,255,255,.62) !important;line-height:1.75 !important}
-.contact-details{border-top:1px solid rgba(255,255,255,.16);margin-top:2rem !important;padding-top:1rem}
-.contact-detail-item{border-bottom:1px solid rgba(255,255,255,.12);padding:1rem 0}
-.contact-detail-item .detail-icon{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:#080808 !important}
-.detail-label{font:700 9px var(--mono) !important;text-transform:uppercase !important;color:var(--bau-blue) !important}
-.detail-value{font-family:var(--mono) !important;font-size:12px !important;color:#fff !important}
-.detail-badge{border-radius:0 !important;background:var(--bau-red) !important;color:#fff !important;font:700 9px var(--mono) !important;text-transform:uppercase}
-.contact-card{background:#080808 !important;border:0 !important;border-radius:0 !important;padding:2.5rem !important}
-.contact-card-header{border-bottom:1px solid rgba(255,255,255,.16) !important;padding-bottom:1.25rem}
-.contact-card .card-title{font-family:'Archivo',sans-serif !important;font-weight:900 !important;text-transform:uppercase !important;letter-spacing:-.035em !important}
-.contact-card .card-subtitle{color:rgba(255,255,255,.55) !important}
-.card-divider{background:rgba(255,255,255,.14) !important}
-.chips-label,.form-footer-text,.trust-indicator{font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important;color:rgba(255,255,255,.5) !important}
-.chip-item{border-radius:0 !important;border:1px solid rgba(255,255,255,.2) !important;background:#000 !important;color:#fff !important;font-family:var(--mono) !important;text-transform:uppercase !important;font-size:9px !important}
-.chip-selected{background:var(--bau-blue) !important;border-color:var(--bau-blue) !important;color:#fff !important}
-.form-field{border-radius:0 !important}
-.form-field input,.form-field textarea,.form-field .MuiInputBase-root{background:#000 !important;color:#fff !important;border-radius:0 !important}
-.send-button{border-radius:0 !important;background:var(--bau-red) !important;font-family:var(--mono) !important;font-weight:800 !important;text-transform:uppercase !important}
-.send-button:hover{background:#fff !important;color:#000 !important}
-.alert-success,.alert-error{border-radius:0 !important}
-@media(max-width:768px){.contact-grid{grid-template-columns:1fr !important}.contact-info,.contact-card{padding:1.35rem !important}.contact-header h2{font-size:clamp(3rem,16vw,5rem) !important}}
-
+  .contact-container {
+    max-width: 1320px !important;
+    margin: 0 auto !important;
+    padding: clamp(5rem, 8vw, 8rem) clamp(1rem, 4vw, 4rem) !important;
+    background: #000 !important;
+  }
+  .contact-grid {
+    grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.4fr) !important;
+    gap: 1px !important;
+    background: rgba(255, 255, 255, 0.16) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  }
+  .contact-info {
+    background: #000 !important;
+    padding: 2.5rem !important;
+  }
+  .contact-header .header-tag {
+    color: var(--bau-red) !important;
+    font-family: var(--mono) !important;
+    font-weight: 700 !important;
+  }
+  .contact-header h2 {
+    font-family: 'Archivo', sans-serif !important;
+    font-size: clamp(3rem, 6vw, 6rem) !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: -0.07em !important;
+    line-height: 0.86 !important;
+  }
+  .contact-divider {
+    width: 100% !important;
+    height: 5px !important;
+    background: var(--bau-yellow) !important;
+    margin: 1.5rem 0 !important;
+  }
+  .contact-subtitle {
+    color: rgba(255, 255, 255, 0.62) !important;
+    line-height: 1.75 !important;
+  }
+  .contact-details {
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    margin-top: 2rem !important;
+    padding-top: 1rem;
+  }
+  .contact-detail-item {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 1rem 0;
+  }
+  .contact-detail-item .detail-icon {
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: #080808 !important;
+  }
+  .detail-label {
+    font: 700 9px var(--mono) !important;
+    text-transform: uppercase !important;
+    color: var(--bau-blue) !important;
+  }
+  .detail-value {
+    font-family: var(--mono) !important;
+    font-size: 12px !important;
+    color: #fff !important;
+  }
+  .detail-badge {
+    border-radius: 0 !important;
+    background: var(--bau-red) !important;
+    color: #fff !important;
+    font: 700 9px var(--mono) !important;
+    text-transform: uppercase;
+  }
+  .contact-card {
+    background: #080808 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 2.5rem !important;
+  }
+  .contact-card-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16) !important;
+    padding-bottom: 1.25rem;
+  }
+  .contact-card .card-title {
+    font-family: 'Archivo', sans-serif !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
+    letter-spacing: -0.035em !important;
+  }
+  .contact-card .card-subtitle {
+    color: rgba(255, 255, 255, 0.55) !important;
+  }
+  .card-divider {
+    background: rgba(255, 255, 255, 0.14) !important;
+  }
+  .chips-label,
+  .form-footer-text,
+  .trust-indicator {
+    font-family: var(--mono) !important;
+    text-transform: uppercase !important;
+    font-size: 9px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+  .chip-item {
+    border-radius: 0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: #000 !important;
+    color: #fff !important;
+    font-family: var(--mono) !important;
+    text-transform: uppercase !important;
+    font-size: 9px !important;
+  }
+  .chip-selected {
+    background: var(--bau-blue) !important;
+    border-color: var(--bau-blue) !important;
+    color: #fff !important;
+  }
+  .form-field {
+    border-radius: 0 !important;
+  }
+  .form-field input,
+  .form-field textarea,
+  .form-field .MuiInputBase-root {
+    background: #000 !important;
+    color: #fff !important;
+    border-radius: 0 !important;
+  }
+  .send-button {
+    border-radius: 0 !important;
+    background: var(--bau-red) !important;
+    font-family: var(--mono) !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+  }
+  .send-button:hover {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .alert-success,
+  .alert-error {
+    border-radius: 0 !important;
+  }
+  @media (max-width: 768px) {
+    .contact-grid {
+      grid-template-columns: 1fr !important;
+    }
+    .contact-info,
+    .contact-card {
+      padding: 1.35rem !important;
+    }
+    .contact-header h2 {
+      font-size: clamp(3rem, 16vw, 5rem) !important;
+    }
+  }
 }

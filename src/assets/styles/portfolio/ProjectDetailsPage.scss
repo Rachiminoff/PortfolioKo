@@ -45,7 +45,9 @@
   animation: pdp-spin 0.8s linear infinite;
 }
 @keyframes pdp-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ---------- back button ---------- */
@@ -61,7 +63,9 @@
   letter-spacing: 0.03em;
   padding: 10px 14px;
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 .project-details-page .back-button:hover {
   background: #fff;
@@ -75,7 +79,9 @@
   opacity: 0;
   transform: translateY(-8px);
   pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 .project-details-page .back-button-container.visible {
   opacity: 1;
@@ -113,7 +119,9 @@
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 .project-details-page .toc-item .toc-number {
   color: var(--red);
@@ -206,7 +214,10 @@
   text-decoration: none;
   color: #fff;
   background: transparent;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
 }
 .project-details-page .action-primary {
   background: var(--red);
@@ -249,8 +260,12 @@
   animation: pdp-skeleton 1.4s ease infinite;
 }
 @keyframes pdp-skeleton {
-  0% { background-position: 100% 0; }
-  100% { background-position: 0 0; }
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
 }
 .project-details-page .figure-image {
   position: absolute;
@@ -301,14 +316,20 @@
   color: #fff;
   cursor: pointer;
   z-index: 2;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 .project-details-page .figure-nav:hover {
   background: var(--red);
   border-color: var(--red);
 }
-.project-details-page .figure-nav.prev { left: 14px; }
-.project-details-page .figure-nav.next { right: 14px; }
+.project-details-page .figure-nav.prev {
+  left: 14px;
+}
+.project-details-page .figure-nav.next {
+  right: 14px;
+}
 .project-details-page .figure-counter {
   position: absolute;
   bottom: 14px;
@@ -335,7 +356,9 @@
   opacity: 0.5;
   cursor: pointer;
   overflow: hidden;
-  transition: opacity 0.2s, border-color 0.2s;
+  transition:
+    opacity 0.2s,
+    border-color 0.2s;
 }
 .project-details-page .thumb img {
   width: 100%;
@@ -489,9 +512,15 @@
   background: #0a0a0a;
   padding: 28px;
 }
-.project-details-page .highlight-card:nth-child(3n+1) { border-top: 4px solid var(--red); }
-.project-details-page .highlight-card:nth-child(3n+2) { border-top: 4px solid var(--yellow); }
-.project-details-page .highlight-card:nth-child(3n) { border-top: 4px solid var(--blue); }
+.project-details-page .highlight-card:nth-child(3n + 1) {
+  border-top: 4px solid var(--red);
+}
+.project-details-page .highlight-card:nth-child(3n + 2) {
+  border-top: 4px solid var(--yellow);
+}
+.project-details-page .highlight-card:nth-child(3n) {
+  border-top: 4px solid var(--blue);
+}
 .project-details-page .highlight-icon {
   width: 38px;
   height: 38px;
@@ -612,12 +641,24 @@
   line-height: 1.7;
   color: var(--muted);
 }
-.project-details-page .callout-tip { border-left-color: var(--cyan); }
-.project-details-page .callout-tip .callout-label { color: var(--cyan); }
-.project-details-page .callout-impl { border-left-color: var(--blue); }
-.project-details-page .callout-impl .callout-label { color: var(--blue); }
-.project-details-page .callout-future { border-left-color: var(--red); }
-.project-details-page .callout-future .callout-label { color: var(--red); }
+.project-details-page .callout-tip {
+  border-left-color: var(--cyan);
+}
+.project-details-page .callout-tip .callout-label {
+  color: var(--cyan);
+}
+.project-details-page .callout-impl {
+  border-left-color: var(--blue);
+}
+.project-details-page .callout-impl .callout-label {
+  color: var(--blue);
+}
+.project-details-page .callout-future {
+  border-left-color: var(--red);
+}
+.project-details-page .callout-future .callout-label {
+  color: var(--red);
+}
 
 /* ---------- architecture flow ---------- */
 .project-details-page .architecture-flow {
@@ -640,7 +681,9 @@
   letter-spacing: 0.02em;
   opacity: 0;
   transform: translateY(12px);
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 .project-details-page .arch-node.visible {
   opacity: 1;
@@ -798,7 +841,9 @@
   text-decoration: none;
   cursor: pointer;
   font-family: var(--mono);
-  transition: background 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 .project-details-page .footer-link:hover {
   background: #fff;
