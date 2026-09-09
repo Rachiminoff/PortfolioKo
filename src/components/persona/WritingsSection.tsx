@@ -17,6 +17,9 @@ interface BlogPost {
   published: boolean;
   featured: boolean;
   created_at: string;
+  thumbnail?: string;
+  cover_image?: string;
+  updated_at?: string;
 }
 
 type SortOption = "newest" | "oldest" | "az" | "za";
@@ -36,7 +39,7 @@ const WritingsSection: React.FC = () => {
       const { data, error } = await supabase
         .from("blog_posts")
         .select(
-          "id,title,slug,excerpt,content,category,tags,reading_time,published,featured,created_at",
+          "id,title,slug,excerpt,content,category,tags,reading_time,published,featured,created_at,thumbnail,cover_image,updated_at",
         )
         .eq("published", true)
         .order("created_at", { ascending: false });
@@ -218,43 +221,34 @@ const WritingsSection: React.FC = () => {
       </div>
 
       {selectedPost && (
-        <div
-          className="persona-writing-modal-backdrop"
-          onMouseDown={() => setSelectedPost(null)}
-        >
-          <article
-            className="persona-writing-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="persona-writing-title"
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            <button
-              className="persona-modal-close"
-              type="button"
-              onClick={() => setSelectedPost(null)}
-              aria-label="Close"
-            >
+        <div className="persona-writing-reader-backdrop" onClick={(event) => {
+          if (event.target === event.currentTarget) setSelectedPost(null);
+        }}>
+          <div className="persona-writing-reader" role="dialog" aria-modal="true" onMouseDown={(e) => e.stopPropagation()}>
+            <button className="persona-reader-close" type="button" onClick={() => setSelectedPost(null)} aria-label="Close">
               <Icon icon="mdi:close" width={24} />
             </button>
-            <header>
-              <span className="persona-meta">
-                {selectedPost.category || "THOUGHT"}
-              </span>
-              <h2 id="persona-writing-title">{selectedPost.title}</h2>
-              <div className="persona-writing-byline">
-                {formatDate(selectedPost.created_at)}{" "}
-                {selectedPost.reading_time
-                  ? ` / ${selectedPost.reading_time}`
-                  : ""}
+            <header className="persona-reader-hero">
+              {(selectedPost.cover_image || selectedPost.thumbnail) && <img src={selectedPost.cover_image || selectedPost.thumbnail} alt="" />}
+              <div className="persona-reader-hero-overlay" />
+              <div className="persona-reader-hero-content">
+                <div className="persona-reader-badges">
+                  <span>{selectedPost.category || "THOUGHT"}</span>
+                  {selectedPost.tags?.slice(0, 3).map(tag => <span key={tag}>{tag}</span>)}
+                </div>
+                <h1>{selectedPost.title}</h1>
+                <div className="persona-reader-meta">
+                  <span><Icon icon="mdi:clock-outline" width={16} /> {selectedPost.reading_time || ""}</span>
+                  <span><Icon icon="mdi:calendar-outline" width={16} /> {formatDate(selectedPost.created_at)}</span>
+                </div>
               </div>
             </header>
-            <div className="persona-writing-content">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {selectedPost.content}
-              </ReactMarkdown>
-            </div>
-          </article>
+            <main className="persona-reader-main">
+              <button className="persona-reader-back" onClick={() => setSelectedPost(null)}><Icon icon="mdi:arrow-left" width={18} /> Back to Writings</button>
+              {selectedPost.excerpt && <div className="persona-reader-excerpt">{selectedPost.excerpt}</div>}
+              <div className="persona-writing-content persona-reader-body"><ReactMarkdown remarkPlugins={[remarkGfm]}>{selectedPost.content}</ReactMarkdown></div>
+            </main>
+          </div>
         </div>
       )}
     </section>
