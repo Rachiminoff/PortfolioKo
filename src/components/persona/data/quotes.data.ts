@@ -14,4 +14,10 @@ export const personaQuotes: PersonaQuote[] = [
     attribution: 'Reginal Skulinski',
     source: 'Monster House',
   },
+  {
+    qoute:
+      'Adachi, and my memories. Attempting to view them both at the same time, all I was able to focus my eyes on was the former. I pulled my hand forward and held it over her face. I could only pray that one day, this image would become part of the sea. “Let’s hope so.',
+    attribution: 'Shimamura',
+    source: 'Adachi to Shimamura',
+  },
 ];
