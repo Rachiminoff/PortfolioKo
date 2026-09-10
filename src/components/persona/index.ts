@@ -8,3 +8,4 @@ export { default as PersonaFooterCard } from './PersonaFooterCard';
 export { default as SiteStatsSection } from './SiteStatsSection';
 
 export { default as PersonaToolsSection } from './PersonaToolsSection';
+export { default as PersonaNavbar } from './PersonaNavbar';

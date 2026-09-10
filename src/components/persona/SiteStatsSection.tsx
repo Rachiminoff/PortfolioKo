@@ -40,7 +40,11 @@ const SiteStatsSection: React.FC = () => {
   }, []);
 
   return (
-    <section className="persona-site-stats" aria-labelledby="persona-site-stats-title">
+    <section
+      className="persona-site-stats"
+      id="site-stats"
+      aria-labelledby="persona-site-stats-title"
+    >
       <PersonaSectionHeader
         index="02 / NUMBERS"
         title="SITE STATS"

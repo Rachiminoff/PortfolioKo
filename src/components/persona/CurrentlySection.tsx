@@ -31,7 +31,7 @@ const CurrentlySection: React.FC = () => {
   }, []);
   const staticItems = currently.filter((item) => item.label !== 'LISTENING');
   return (
-    <section className="persona-now" aria-labelledby="persona-now-title">
+    <section className="persona-now" id="currently" aria-labelledby="persona-now-title">
       <PersonaSectionHeader
         index="01 / NOW"
         title="CURRENTLY"

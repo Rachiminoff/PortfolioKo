@@ -120,7 +120,7 @@ const WritingsSection: React.FC = () => {
     });
 
   return (
-    <section className="persona-notes" aria-labelledby="persona-notes-title">
+    <section className="persona-notes" id="writings" aria-labelledby="persona-notes-title">
       <PersonaSectionHeader
         index="03 / SCRAPS"
         title="WRITINGS"

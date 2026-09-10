@@ -7,7 +7,7 @@ const PersonaToolsSection: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="persona-tools" aria-labelledby="persona-tools-title">
+    <section className="persona-tools" id="common-tools" aria-labelledby="persona-tools-title">
       <PersonaSectionHeader
         index="05 / COMMON TOOLS"
         title="COMMON TOOLS"

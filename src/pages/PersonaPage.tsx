@@ -8,11 +8,13 @@ import {
   PersonaFooterCard,
   SiteStatsSection,
   PersonaToolsSection,
+  PersonaNavbar,
 } from '../components/persona';
 import '../assets/styles/persona/PersonaPage.scss';
 
 const PersonaPage: React.FC = () => (
   <div className="persona-page">
+    <PersonaNavbar />
     <div className="persona-grid" aria-hidden="true" />
     <div className="persona-shape persona-shape-blue" aria-hidden="true" />
     <div className="persona-shape persona-shape-red" aria-hidden="true" />

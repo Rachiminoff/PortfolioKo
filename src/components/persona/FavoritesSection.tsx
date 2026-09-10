@@ -69,7 +69,7 @@ const FavoritesSection: React.FC = () => {
     item.malQuery ? resolvedImages[item.title] : item.image;
 
   return (
-    <section className="persona-media" aria-labelledby="persona-media-title">
+    <section className="persona-media" id="favorites" aria-labelledby="persona-media-title">
       <PersonaSectionHeader
         index="02 / TASTE"
         title="FAVOURITES"

@@ -804,3 +804,519 @@
     transition: none !important;
   }
 }
+
+/* =========================================================
+   ARCHIVE INTERACTION REPAIR
+   The archive controls/timeline use dedicated layout rules so
+   the view cannot collapse into unstyled browser controls.
+   ========================================================= */
+.wish-archive-page .wish-archive-tab {
+  min-width: 0;
+}
+
+.wish-archive-page .wish-controls {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 28px;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.wish-archive-page .wish-controls-top {
+  display: grid;
+  grid-template-columns: auto minmax(260px, 1fr);
+  align-items: stretch;
+  border-bottom: 1px solid var(--line);
+}
+
+.wish-archive-page .wish-view-controls {
+  display: flex;
+  min-width: 0;
+}
+
+.wish-archive-page .wish-view-controls .wish-view-btn {
+  min-width: 118px;
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 15px;
+  border: 0 !important;
+  border-right: 1px solid var(--line) !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  font: 800 9px 'IBM Plex Mono' !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.wish-archive-page .wish-view-controls .wish-view-btn:hover {
+  background: rgba(242, 194, 48, 0.12) !important;
+  color: var(--ink) !important;
+}
+
+.wish-archive-page .wish-view-controls .wish-view-btn.active {
+  background: var(--red) !important;
+  color: #fff !important;
+}
+
+.wish-archive-page .wish-search-wrapper {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  background: var(--surface-2) !important;
+}
+
+.wish-archive-page .wish-search-icon {
+  position: absolute;
+  left: 15px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.wish-archive-page .wish-search-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 42px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 500 11px 'IBM Plex Mono';
+}
+
+.wish-archive-page .wish-search-input::placeholder {
+  color: rgba(244, 242, 232, 0.38);
+}
+
+.wish-archive-page .wish-search-clear {
+  position: absolute;
+  right: 9px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.wish-archive-page .wish-controls-bottom {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.wish-archive-page .wish-filter-chips,
+.wish-archive-page .wish-sort {
+  flex: 0 0 auto;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 9px 11px;
+  border-right: 1px solid var(--line);
+}
+
+.wish-archive-page .wish-filter-label {
+  flex: 0 0 auto;
+  margin-right: 4px;
+  color: var(--muted);
+  font: 800 8px 'IBM Plex Mono';
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-chip {
+  min-height: 34px;
+  flex: 0 0 auto;
+  padding: 0 10px;
+  border: 1px solid rgba(244, 242, 232, 0.2);
+  border-radius: 0;
+  background: transparent;
+  color: var(--muted);
+  font: 800 8px 'IBM Plex Mono';
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.wish-archive-page .wish-chip:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.wish-archive-page .wish-chip.active {
+  border-color: var(--red);
+  background: var(--red);
+  color: #fff;
+}
+
+.wish-archive-page .wish-sort {
+  margin-left: auto;
+  border-right: 0;
+}
+
+.wish-archive-page .wish-sort-select {
+  min-width: 105px;
+  height: 34px;
+  padding: 0 30px 0 10px;
+  appearance: auto;
+  border: 1px solid rgba(244, 242, 232, 0.2) !important;
+  border-radius: 0 !important;
+  background: #111318 !important;
+  color: var(--ink) !important;
+  font: 800 8px 'IBM Plex Mono' !important;
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-sort-select option {
+  background: #111318;
+  color: #f4f2e8;
+}
+
+/* Timeline */
+.wish-archive-page .wish-timeline {
+  position: relative;
+  margin: 0;
+  padding: 0 0 40px 42px;
+  border-left: 1px solid rgba(244, 242, 232, 0.3);
+}
+
+.wish-archive-page .wish-timeline-year {
+  position: relative;
+  margin: 0 0 42px;
+}
+
+.wish-archive-page .wish-timeline-year-divider {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  margin-left: -42px;
+  margin-bottom: 16px;
+}
+
+.wish-archive-page .wish-timeline-year-label {
+  margin: 0;
+  padding: 8px 12px;
+  background: var(--ink);
+  color: #050505;
+  font:
+    900 clamp(1.6rem, 4vw, 3.4rem)/1 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.07em;
+}
+
+.wish-archive-page .wish-timeline-year-line {
+  height: 1px;
+  background: var(--line);
+}
+
+.wish-archive-page .wish-timeline-year-stats {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  color: var(--muted);
+  font: 800 8px 'IBM Plex Mono';
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.wish-archive-page .wish-timeline-entries {
+  display: grid;
+  gap: 10px;
+}
+
+.wish-archive-page .wish-timeline-entry-premium {
+  position: relative;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s ease;
+  cursor: pointer;
+}
+
+.wish-archive-page .wish-timeline-entry-premium.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wish-archive-page .wish-timeline-entry-connector {
+  position: absolute;
+  left: -48px;
+  top: 25px;
+  width: 13px;
+  height: 13px;
+  display: grid;
+  place-items: center;
+}
+
+.wish-archive-page .wish-timeline-entry-dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid #050505 !important;
+  box-shadow: 0 0 0 1px rgba(244, 242, 232, 0.35);
+}
+
+.wish-archive-page .wish-timeline-entry-content {
+  min-width: 0;
+  padding: 15px 17px;
+  border: 1px solid var(--line) !important;
+  background: var(--surface) !important;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+
+.wish-archive-page .wish-timeline-entry-premium:hover .wish-timeline-entry-content {
+  transform: translateX(4px);
+  border-color: var(--ink) !important;
+  background: #17191e !important;
+}
+
+.wish-archive-page .wish-timeline-entry-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.wish-archive-page .wish-timeline-entry-name {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wish-archive-page .wish-timeline-entry-name h4 {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: var(--ink);
+  font:
+    900 17px/1.1 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.04em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wish-archive-page .wish-timeline-entry-portrait {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+}
+
+.wish-archive-page .wish-timeline-entry-version {
+  flex: 0 0 auto;
+  padding: 4px 6px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font: 800 7px 'IBM Plex Mono';
+}
+
+.wish-archive-page .wish-timeline-entry-outcome {
+  flex: 0 0 auto;
+  padding: 6px 8px;
+  border: 1px solid var(--line);
+  font: 800 8px 'IBM Plex Mono';
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-timeline-entry-outcome.won {
+  border-color: #6dbf72;
+  color: #8cdb91;
+}
+
+.wish-archive-page .wish-timeline-entry-outcome.lost {
+  border-color: var(--red);
+  color: #ff817a;
+}
+
+.wish-archive-page .wish-timeline-entry-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 11px;
+  font: 800 8px 'IBM Plex Mono';
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-timeline-entry-element {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Gallery / grid */
+.wish-archive-page .wish-gallery {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px !important;
+  align-items: stretch;
+  border: 1px solid var(--ink) !important;
+  background: var(--ink) !important;
+}
+
+.wish-archive-page .wish-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 0 !important;
+  background: var(--surface) !important;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.wish-archive-page .wish-card-image-wrapper {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: #17191e;
+}
+
+.wish-archive-page .wish-card-image {
+  transition:
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+.wish-archive-page .wish-card:hover .wish-card-image {
+  transform: scale(1.035);
+  filter: saturate(1) contrast(1.03);
+}
+
+.wish-archive-page .wish-card-content {
+  flex: 1;
+  min-width: 0;
+  padding: 13px !important;
+  background: var(--surface) !important;
+}
+
+.wish-archive-page .wish-card-content h3 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 950px) {
+  .wish-archive-page .wish-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .wish-archive-page .wish-controls-top {
+    grid-template-columns: 1fr;
+  }
+
+  .wish-archive-page .wish-view-controls {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .wish-archive-page .wish-view-controls .wish-view-btn {
+    flex: 1;
+  }
+
+  .wish-archive-page .wish-controls-bottom {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .wish-archive-page .wish-filter-chips,
+  .wish-archive-page .wish-sort {
+    width: 100%;
+    min-height: 54px;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    scrollbar-width: none;
+  }
+
+  .wish-archive-page .wish-filter-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wish-archive-page .wish-sort {
+    margin-left: 0;
+    border-bottom: 0;
+  }
+
+  .wish-archive-page .wish-timeline {
+    padding-left: 28px;
+  }
+
+  .wish-archive-page .wish-timeline-year-divider {
+    grid-template-columns: auto 1fr;
+    gap: 9px;
+    margin-left: -28px;
+  }
+
+  .wish-archive-page .wish-timeline-year-stats {
+    grid-column: 1 / -1;
+    margin-left: 28px;
+  }
+
+  .wish-archive-page .wish-timeline-entry-connector {
+    left: -34px;
+  }
+
+  .wish-archive-page .wish-timeline-entry-header {
+    align-items: flex-start;
+  }
+
+  .wish-archive-page .wish-timeline-entry-name h4 {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 520px) {
+  .wish-archive-page .wish-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wish-archive-page .wish-timeline-entry-content {
+    padding: 12px;
+  }
+
+  .wish-archive-page .wish-timeline-entry-portrait {
+    width: 34px;
+    height: 34px;
+    flex-basis: 34px;
+  }
+
+  .wish-archive-page .wish-timeline-entry-version {
+    display: none;
+  }
+
+  .wish-archive-page .wish-timeline-entry-outcome {
+    padding: 5px 6px;
+    font-size: 7px;
+  }
+}

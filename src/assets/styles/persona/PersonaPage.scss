@@ -1814,3 +1814,418 @@ $cyan: #18aebe;
     height: 50px;
   }
 }
+
+/* Quote pagination / one-page notebook interaction */
+.persona-quote-stage {
+  position: relative;
+  z-index: 1;
+  min-height: clamp(330px, 38vw, 470px);
+  display: flex;
+  align-items: center;
+  padding: 28px 8% 24px 78px;
+  overflow: hidden;
+}
+
+.persona-quote-card {
+  width: 100%;
+  min-height: 0;
+  padding: 0 0 8px;
+  border: 0 !important;
+  animation-duration: 0.48s;
+  animation-timing-function: cubic-bezier(0.22, 0.75, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+.persona-quote-card--next {
+  animation-name: personaQuoteNext;
+}
+
+.persona-quote-card--prev {
+  animation-name: personaQuotePrev;
+}
+
+.persona-quote-card blockquote {
+  max-width: 900px;
+  font-size: clamp(1.7rem, 4vw, 3.5rem);
+  line-height: 1.12;
+}
+
+.persona-quote-pagination {
+  position: relative;
+  z-index: 1;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 100px 1fr 100px;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 22px 10px 78px;
+  border-top: 1px solid rgba(23, 25, 29, 0.18);
+}
+
+.persona-quote-page-button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid rgba(23, 25, 29, 0.35);
+  background: rgba(255, 255, 255, 0.18);
+  color: #17191d;
+  font:
+    800 8px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.persona-quote-page-button:last-child {
+  justify-self: end;
+}
+
+.persona-quote-page-button:hover:not(:disabled) {
+  background: #f1c72e;
+  transform: translateY(-2px);
+}
+
+.persona-quote-page-button:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.persona-quote-page-dots {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.persona-quote-page-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 1px solid #17191d;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+.persona-quote-page-dot:hover {
+  transform: scale(1.3);
+}
+
+.persona-quote-page-dot.active {
+  width: 24px;
+  background: #e1433a;
+}
+
+@keyframes personaQuoteNext {
+  from {
+    opacity: 0;
+    transform: translateX(28px) rotate(0.2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes personaQuotePrev {
+  from {
+    opacity: 0;
+    transform: translateX(-28px) rotate(-0.2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .persona-quote-stage {
+    min-height: 390px;
+    padding: 28px 18px 24px 51px;
+  }
+
+  .persona-quote-card blockquote {
+    font-size: clamp(1.5rem, 7vw, 2.25rem);
+  }
+
+  .persona-quote-pagination {
+    grid-template-columns: 1fr 1fr;
+    padding: 9px 12px 9px 51px;
+  }
+
+  .persona-quote-page-dots {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-content: flex-start;
+    padding-left: 1px;
+  }
+
+  .persona-quote-page-button {
+    grid-row: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .persona-quote-card,
+  .persona-quote-page-button,
+  .persona-quote-page-dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Persona navigation: intentionally separate from the site's main desktop nav. */
+.persona-navbar {
+  position: fixed;
+  top: 16px;
+  left: clamp(16px, 3vw, 44px);
+  right: clamp(16px, 3vw, 44px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 0 8px 0 14px;
+  border: 1px solid rgba(242, 240, 232, 0.28);
+  background: rgba(11, 13, 16, 0.92);
+  box-shadow: 7px 7px 0 rgba(49, 91, 216, 0.8);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.persona-navbar-home,
+.persona-navbar-toggle,
+.persona-menu-link {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.persona-navbar-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 38px;
+  padding: 0 10px;
+  background: transparent;
+  color: $ink;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.persona-navbar-home-mark {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  background: $red;
+  color: $ink;
+  font-size: 8px;
+}
+.persona-navbar-home svg {
+  font-size: 15px;
+  transition: transform 0.2s ease;
+}
+.persona-navbar-home:hover svg {
+  transform: translateX(-3px);
+}
+.persona-navbar-index {
+  margin-left: auto;
+  margin-right: 18px;
+  color: $muted;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+.persona-navbar-toggle {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  width: 74px;
+  min-height: 44px;
+  padding: 8px 11px;
+  border: 1px solid rgba(242, 240, 232, 0.38);
+  background: $red;
+  color: $ink;
+}
+.persona-navbar-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform-origin: center;
+  transition:
+    transform 0.22s ease,
+    opacity 0.18s ease;
+}
+.persona-navbar-toggle b {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 6px;
+  letter-spacing: 0.1em;
+}
+.persona-navbar.is-open .persona-navbar-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.persona-navbar.is-open .persona-navbar-toggle span:nth-child(2) {
+  opacity: 0;
+}
+.persona-navbar.is-open .persona-navbar-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.persona-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  display: grid;
+  place-items: start end;
+  padding: 86px clamp(16px, 3vw, 44px) 30px;
+  background: rgba(5, 6, 8, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    visibility 0s linear 0.24s;
+}
+.persona-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.persona-menu-inner {
+  width: min(440px, 100%);
+  max-height: calc(100vh - 116px);
+  overflow: auto;
+  padding: 22px;
+  border: 1px solid rgba(242, 240, 232, 0.3);
+  background: $panel;
+  box-shadow: 12px 12px 0 $yellow;
+  transform: translateY(-14px);
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.persona-menu.is-open .persona-menu-inner {
+  transform: translateY(0);
+}
+.persona-menu-kicker,
+.persona-menu-footer {
+  color: $muted;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.persona-menu-kicker {
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(242, 240, 232, 0.2);
+}
+.persona-menu-links {
+  display: grid;
+}
+.persona-menu-link {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 4px;
+  border-bottom: 1px solid rgba(242, 240, 232, 0.15);
+  background: transparent;
+  color: $ink;
+  text-align: left;
+  font-family: 'Archivo', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  transition:
+    padding 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
+}
+.persona-menu-link:hover {
+  padding-left: 11px;
+  color: #111318;
+  background: $cyan;
+}
+.persona-menu-link svg {
+  font-size: 20px;
+}
+.persona-menu-number {
+  color: $red;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+.persona-menu-link:hover .persona-menu-number {
+  color: #111318;
+}
+.persona-menu-home-link {
+  color: $yellow;
+}
+.persona-menu-footer {
+  padding-top: 16px;
+}
+
+@media (max-width: 700px) {
+  .persona-navbar {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    min-height: 50px;
+    box-shadow: 5px 5px 0 rgba(49, 91, 216, 0.8);
+  }
+  .persona-navbar-index {
+    display: none;
+  }
+  .persona-navbar-home-label {
+    display: none;
+  }
+  .persona-navbar-home {
+    padding: 0 6px;
+  }
+  .persona-navbar-toggle {
+    width: 68px;
+    min-height: 40px;
+  }
+  .persona-menu {
+    padding: 74px 10px 20px;
+  }
+  .persona-menu-inner {
+    width: 100%;
+    padding: 17px;
+    box-shadow: 7px 7px 0 $yellow;
+  }
+  .persona-menu-link {
+    padding: 14px 2px;
+    font-size: 1.18rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .persona-navbar,
+  .persona-navbar-home svg,
+  .persona-navbar-toggle span,
+  .persona-menu,
+  .persona-menu-inner,
+  .persona-menu-link {
+    transition: none;
+  }
+}
