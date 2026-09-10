@@ -2,7 +2,7 @@ import React from 'react';
 const PersonaFooterCard: React.FC = () => (
   <section className="persona-footer-card">
     <div>
-      <span className="persona-index">04 / DISCLAIMER</span>
+      <span className="persona-index">06 / DISCLAIMER</span>
       <h2>THIS IS THE FUN PART.</h2>
     </div>
     <p>

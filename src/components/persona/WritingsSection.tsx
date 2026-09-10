@@ -24,6 +24,8 @@ interface BlogPost {
 
 type SortOption = 'newest' | 'oldest' | 'az' | 'za';
 
+const POSTS_PER_PAGE = 5;
+
 const WritingsSection: React.FC = () => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,7 @@ const WritingsSection: React.FC = () => {
   const [category, setCategory] = useState('all');
   const [sort, setSort] = useState<SortOption>('newest');
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     let active = true;
@@ -94,6 +97,20 @@ const WritingsSection: React.FC = () => {
       return sort === 'oldest' ? diff : -diff;
     });
   }, [posts, query, category, sort]);
+
+  const totalPages = Math.max(1, Math.ceil(visiblePosts.length / POSTS_PER_PAGE));
+  const paginatedPosts = useMemo(
+    () => visiblePosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE),
+    [visiblePosts, currentPage],
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query, category, sort]);
+
+  useEffect(() => {
+    setCurrentPage((page) => Math.min(page, totalPages));
+  }, [totalPages]);
 
   const formatDate = (date: string) =>
     new Date(date).toLocaleDateString('en-US', {
@@ -171,7 +188,7 @@ const WritingsSection: React.FC = () => {
           ) : visiblePosts.length === 0 ? (
             <div className="persona-writing-empty">NOTHING MATCHED. TRY ANOTHER SEARCH.</div>
           ) : (
-            visiblePosts.map((post) => (
+            paginatedPosts.map((post) => (
               <button
                 className="persona-note"
                 key={post.id}
@@ -199,6 +216,48 @@ const WritingsSection: React.FC = () => {
                 <Icon className="persona-note-arrow" icon="mdi:arrow-top-right" width={22} />
               </button>
             ))
+          )}
+
+          {!loading && visiblePosts.length > 0 && totalPages > 1 && (
+            <nav className="persona-writing-pagination" aria-label="Writings pagination">
+              <button
+                type="button"
+                className="persona-writing-page-control"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={currentPage === 1}
+                aria-label="Previous page"
+              >
+                <Icon icon="mdi:arrow-left" width={18} />
+              </button>
+
+              <div className="persona-writing-page-numbers">
+                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                  <button
+                    key={page}
+                    type="button"
+                    className={currentPage === page ? 'active' : ''}
+                    onClick={() => setCurrentPage(page)}
+                    aria-current={currentPage === page ? 'page' : undefined}
+                  >
+                    {String(page).padStart(2, '0')}
+                  </button>
+                ))}
+              </div>
+
+              <button
+                type="button"
+                className="persona-writing-page-control"
+                onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                disabled={currentPage === totalPages}
+                aria-label="Next page"
+              >
+                <Icon icon="mdi:arrow-right" width={18} />
+              </button>
+
+              <span className="persona-writing-page-status">
+                PAGE {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
+              </span>
+            </nav>
           )}
         </div>
       </div>

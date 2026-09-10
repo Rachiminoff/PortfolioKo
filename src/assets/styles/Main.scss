@@ -443,3 +443,145 @@ body[data-theme='dark'] {
     background: #ffd21f !important;
   }
 }
+
+/* ============================================================
+   MOBILE RECOMPOSITION
+   Keep the desktop poster language, but give the small viewport
+   its own hierarchy instead of simply shrinking the desktop grid.
+   ============================================================ */
+@media (max-width: 700px) {
+  .hero-section {
+    min-height: auto;
+    padding: 82px 16px 48px;
+  }
+
+  .hero-content {
+    gap: 48px;
+  }
+
+  .hero-meta {
+    margin-bottom: 22px;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    flex-wrap: wrap;
+  }
+
+  .hero-title {
+    font-size: clamp(4.2rem, 18.5vw, 7.2rem);
+    line-height: 0.76;
+    letter-spacing: -0.09em;
+    max-width: 100%;
+  }
+
+  .title-line:nth-child(2) {
+    margin-left: 7%;
+  }
+
+  .title-line:nth-child(3) {
+    margin-left: 0;
+  }
+
+  .hero-subtitle {
+    margin: 30px 0 24px;
+    padding-left: 12px;
+    border-left-width: 6px;
+  }
+
+  .subtitle-primary,
+  .subtitle-secondary {
+    font-size: 1rem;
+    line-height: 1.08;
+  }
+
+  .hero-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .action-link {
+    min-height: 54px;
+    padding: 12px 13px;
+    gap: 10px;
+    font-size: 10px;
+  }
+
+  .hero-actions .action-link:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .hero-annotations {
+    margin-top: 25px;
+    gap: 10px 18px;
+    font-size: 8px;
+  }
+
+  .profile-module {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    box-shadow: 8px 8px 0 $red;
+  }
+
+  .module-header,
+  .module-footer {
+    font-size: 8px;
+  }
+
+  .module-content {
+    padding: 18px;
+  }
+
+  .profile-frame {
+    aspect-ratio: 0.92;
+  }
+
+  .profile-image-wrapper {
+    width: 76%;
+    height: 76%;
+  }
+
+  .main-container:after {
+    width: 72vw;
+    height: 72vw;
+    right: -38vw;
+    top: 52%;
+  }
+}
+
+@media (max-width: 420px) {
+  .hero-section {
+    padding-inline: 13px;
+  }
+
+  .hero-title {
+    font-size: clamp(3.65rem, 17.8vw, 5.5rem);
+  }
+
+  .hero-meta {
+    font-size: 8px;
+  }
+
+  .hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-actions .action-link:last-child {
+    grid-column: auto;
+  }
+
+  .action-link {
+    min-height: 50px;
+  }
+
+  .profile-module {
+    padding: 10px;
+  }
+
+  .module-content {
+    padding: 14px;
+  }
+
+  .profile-frame {
+    aspect-ratio: 0.9;
+  }
+}

@@ -99,6 +99,23 @@ http://localhost:3000
 npm run build
 ```
 
+### CI / CD
+
+The repository uses GitHub Actions for continuous integration. Pull requests and pushes to `main` run linting, formatting checks, tests, and a production build. Vercel handles production deployment automatically from the connected Git repository.
+
+#### GitHub Actions secrets
+
+Add these repository secrets under **GitHub → Settings → Secrets and variables → Actions**:
+
+- `REACT_APP_SUPABASE_URL`
+- `REACT_APP_SUPABASE_ANON_KEY`
+
+#### Vercel environment variables
+
+Configure the runtime secrets in the Vercel project itself for the environments where they are needed. Keep server-only values out of `REACT_APP_*` variables. Existing API/server variables include values such as `SUPABASE_SERVICE_ROLE_KEY`, `BLOG_PASSWORD`, `BLOG_SESSION_SECRET`, `VAULT_PASSWORD`, `LASTFM_USERNAME`, and `LASTFM_API_KEY`.
+
+Vercel remains responsible for deployment; GitHub Actions only verifies that changes pass the project checks before they are merged or pushed to `main`.
+
 ---
 
 ## Live Website

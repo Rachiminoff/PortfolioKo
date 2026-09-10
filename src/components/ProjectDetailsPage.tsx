@@ -219,6 +219,7 @@ const ProjectFigure: React.FC<{ images: string[]; title: string }> = ({ images, 
 const TechCategory: React.FC<{ category: string; items: string[] }> = ({ category, items }) => {
   const techIconMap: Record<string, string> = {
     React: 'mdi:react',
+    'React 19': 'mdi:react',
     TypeScript: 'mdi:language-typescript',
     JavaScript: 'mdi:language-javascript',
     'Node.js': 'mdi:nodejs',
@@ -241,6 +242,7 @@ const TechCategory: React.FC<{ category: string; items: string[] }> = ({ categor
     Python: 'mdi:language-python',
     Dart: 'mdi:language-dart',
     Godot: 'mdi:gamepad-variant',
+    'Godot 4': 'mdi:gamepad-variant',
     GDScript: 'mdi:script',
     Blender: 'mdi:blender',
     FlutterFlow: 'mdi:google',
@@ -256,6 +258,16 @@ const TechCategory: React.FC<{ category: string; items: string[] }> = ({ categor
     Flutter: 'mdi:google',
     Expo: 'mdi:google',
     'React Navigation': 'mdi:react',
+    'Firebase Crashlytics': 'mdi:firebase',
+    Rich: 'mdi:console',
+    MMKV: 'mdi:database',
+    'Chart.js': 'mdi:chart-line',
+    Dompdf: 'mdi:file-pdf-box',
+    Pest: 'mdi:test-tube',
+    HTML5: 'mdi:language-html5',
+    CSS3: 'mdi:language-css3',
+    ESLint: 'mdi:eslint',
+    Prettier: 'mdi:format-align-left',
   };
 
   return (
@@ -572,34 +584,56 @@ const ProjectDetailsPage: React.FC = () => {
     Archived: '#6b7280',
   };
 
+  // Keep the category order intentional, but assign each technology exactly once.
+  // The old implementation used overlapping category arrays, which could duplicate
+  // technologies (e.g. GDScript/Blender) and silently omit newly added stack items.
   const techCategories: { [key: string]: string[] } = {
-    Frontend: ['React', 'TypeScript', 'Tailwind CSS', 'Vite', 'Inertia.js', 'Zustand'],
-    Backend: ['Node.js', 'Express', 'Laravel', 'PHP', 'Python'],
-    Database: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Supabase', 'Firebase'],
-    Mobile: ['Flutter', 'Dart', 'FlutterFlow', 'Expo', 'React Native'],
-    'Game Development': ['Godot', 'GDScript', 'Blender'],
-    DevOps: ['Docker', 'AWS', 'Vercel', 'Netlify'],
-    Tools: [
-      'Playwright',
-      'BeautifulSoup',
-      'PyPDF2',
-      'EbookLib',
-      'WeasyPrint',
-      'Requests',
-      'React Navigation',
+    'Languages & Core': [
+      'JavaScript',
+      'TypeScript',
+      'Python',
+      'PHP',
+      'Dart',
+      'GDScript',
+      'HTML5',
+      'CSS3',
     ],
+    Frontend: ['React 19', 'React', 'Tailwind CSS', 'Vite', 'Inertia.js'],
+    Backend: ['Laravel', 'Node.js'],
+    'Data & Services': [
+      'Supabase',
+      'Firebase',
+      'MySQL',
+      'PostgreSQL',
+      'MongoDB',
+      'Redis',
+      'MMKV',
+      'Firebase Crashlytics',
+    ],
+    Mobile: ['Flutter', 'FlutterFlow', 'React Native', 'Expo', 'React Navigation'],
+    'Game & 3D': ['Godot 4', 'Godot', 'Blender'],
+    DevOps: ['Docker', 'AWS', 'Vercel'],
+    WebSockets: ['WebSocket'],
+    Analytics: ['Chart.js'],
+    'Document Generation': ['Dompdf', 'PyPDF2', 'EbookLib', 'WeasyPrint'],
+    Tooling: ['Playwright', 'BeautifulSoup', 'Requests', 'Rich', 'ESLint', 'Prettier', 'Pest'],
   };
 
+  const projectTech = new Set(project.tech);
+  const assigned = new Set<string>();
   const categorizedTech = Object.entries(techCategories).reduce(
     (acc, [category, items]) => {
-      const filtered = items.filter((tech) => project.tech.includes(tech));
-      if (filtered.length > 0) {
-        acc[category] = filtered;
-      }
+      const filtered = items.filter((tech) => projectTech.has(tech) && !assigned.has(tech));
+      filtered.forEach((tech) => assigned.add(tech));
+      if (filtered.length > 0) acc[category] = filtered;
       return acc;
     },
     {} as { [key: string]: string[] },
   );
+
+  // Never hide a technology just because it has not been assigned to a category.
+  const uncategorizedTech = project.tech.filter((tech) => !assigned.has(tech));
+  if (uncategorizedTech.length > 0) categorizedTech['Other'] = uncategorizedTech;
 
   // Parse architecture for flow nodes and description
   const { flowNodes, description: architectureDescription } = parseArchitecture(

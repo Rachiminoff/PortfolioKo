@@ -749,12 +749,6 @@ body[data-theme='dark'] {
     color: #0b0b0b;
     border: 0;
   }
-  .tech-item:nth-child(3n) {
-    background: #e63946;
-  }
-  .tech-item:nth-child(4n) {
-    background: #f2c94c;
-  }
 
   /* ============================================================
    EXPERTISE — SWISS TECHNICAL INDEX
@@ -816,12 +810,16 @@ body[data-theme='dark'] {
     border: 0 !important;
     border-radius: 0 !important;
     min-height: 145px !important;
+    box-shadow: inset 0 3px 0 var(--category-color, rgba(255, 255, 255, 0.18));
   }
-  .tech-item:nth-child(3n) {
-    background: #0b0b0b !important;
+  .tech-item:hover,
+  .tech-item:focus-visible {
+    box-shadow:
+      inset 0 3px 0 var(--category-color, rgba(255, 255, 255, 0.18)),
+      0 0 0 1px var(--category-color, rgba(255, 255, 255, 0.22));
   }
   .tech-icon-wrapper {
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid var(--category-color, rgba(255, 255, 255, 0.18)) !important;
     border-radius: 0 !important;
     background: #000 !important;
   }

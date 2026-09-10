@@ -590,3 +590,51 @@ $nav-height: 76px;
     animation: none !important;
   }
 }
+
+/* ============================================================
+   NAVBAR ENTER / EXIT MOTION
+   The navigation slides completely off-canvas when the page is
+   at the top, then returns with a short poster-like reveal.
+   ============================================================ */
+.navbar {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, -115%, 0);
+  transition:
+    transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease,
+    visibility 0s linear 0.48s,
+    background 0.25s ease,
+    border-color 0.25s ease;
+  will-change: transform, opacity;
+}
+
+.navbar.scrolled {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 0.48s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.28s ease,
+    visibility 0s linear 0s,
+    background 0.25s ease,
+    border-color 0.25s ease;
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    transform: translate3d(0, -125%, 0) scale(0.985);
+    transform-origin: top center;
+  }
+
+  .navbar.scrolled {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navbar,
+  .navbar.scrolled {
+    transition: none;
+  }
+}

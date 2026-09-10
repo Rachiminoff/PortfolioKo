@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, Suspense, lazy } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useCallback, Suspense, lazy } from 'react';
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
 
@@ -230,57 +229,8 @@ const PDFViewer = lazy(() => import('./PDFViewer'));
    MAIN COMPONENT
 ========================= */
 function Main() {
-  const navigate = useNavigate();
-  const [isLoaded, setIsLoaded] = useState(false);
   const [viewerUrl, setViewerUrl] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
-  const [clickCount, setClickCount] = useState(0);
-  const [ripples, setRipples] = useState<Array<{ id: number; x: number; y: number }>>([]);
-  const rippleIdRef = useRef(0);
-  const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 200);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleSecretClick = useCallback(
-    (e: React.MouseEvent) => {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      if (clickTimerRef.current) {
-        clearTimeout(clickTimerRef.current);
-        clickTimerRef.current = null;
-      }
-
-      const newCount = clickCount + 1;
-      setClickCount(newCount);
-
-      const newRipple = { id: rippleIdRef.current++, x, y };
-      setRipples((prev) => [...prev, newRipple]);
-      setTimeout(() => {
-        setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));
-      }, 800);
-
-      if (newCount >= 5) {
-        setClickCount(0);
-        if (clickTimerRef.current) {
-          clearTimeout(clickTimerRef.current);
-          clickTimerRef.current = null;
-        }
-        navigate('/archive');
-      } else {
-        clickTimerRef.current = setTimeout(() => {
-          setClickCount(0);
-          clickTimerRef.current = null;
-        }, 2000);
-      }
-    },
-    [clickCount, navigate],
-  );
-
   const openCVViewer = useCallback(() => {
     setPdfLoading(true);
     setViewerUrl('/YambaoResume.pdf');
@@ -293,7 +243,7 @@ function Main() {
   }, []);
 
   return (
-    <div className={`main-container ${isLoaded ? 'loaded' : ''}`}>
+    <div className="main-container">
       <ConstructionGrid />
       <GeometricShapes />
 
@@ -308,15 +258,9 @@ function Main() {
             </div>
 
             <h1 className="hero-title">
-              <span className="title-line" onClick={handleSecretClick}>
-                TANYA
-              </span>
-              <span className="title-line" onClick={handleSecretClick}>
-                DENISE
-              </span>
-              <span className="title-line" onClick={handleSecretClick}>
-                YAMBAO
-              </span>
+              <span className="title-line">TANYA</span>
+              <span className="title-line">DENISE</span>
+              <span className="title-line">YAMBAO</span>
             </h1>
 
             <div className="hero-subtitle">
@@ -451,11 +395,6 @@ function Main() {
             </div>
           </div>
         </div>
-
-        {/* Secret click ripples */}
-        {ripples.map((ripple) => (
-          <div key={ripple.id} className="click-ripple" style={{ left: ripple.x, top: ripple.y }} />
-        ))}
       </section>
 
       <Suspense fallback={null}>

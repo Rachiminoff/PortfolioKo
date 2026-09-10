@@ -132,9 +132,9 @@ function Terminal() {
         <div className="about-text-wrapper">
           <p className="about-text">
             I enjoy the process of testing and debugging, even when it gets frustrating. There is
-            something satisfying about going through broken logic, tracing issues, and gradually
-            seeing a feature finally work the way it was intended. Ironically, that struggle is
-            often the part I find most engaging in development.
+            something satisfying about taking a broken piece of logic, tracing where it went wrong,
+            and gradually getting it to work the way it was meant to. That process of figuring out
+            what is happening and why is often one of the parts of development I enjoy most.
           </p>
         </div>
 
@@ -142,9 +142,10 @@ function Terminal() {
 
         <div className="about-text-wrapper">
           <p className="about-text">
-            I feel the most proud when a project is completed and I get to demo it to others. Seeing
-            everything come together into a working system gives a strong sense of closure,
-            especially after all the iterations and fixes along the way.
+            I feel most proud when a project is finished and I get to show it to someone else.
+            Seeing all the pieces come together into something that actually works is genuinely
+            satisfying, especially after going through all the iterations, mistakes, and fixes that
+            got it there.
           </p>
         </div>
 

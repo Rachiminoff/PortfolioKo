@@ -540,69 +540,27 @@
 }
 
 /* =========================================================
-   UI SYSTEM OVERRIDE — collection/archive interface
+   FINAL DARK / RESPONSIVE PASS
+   Keep Wish Archive aligned with the site's dark Bauhaus field.
    ========================================================= */
 .wish-archive-page {
-  --paper: #f3efe5;
-  --surface: #e9e3d6;
-  --surface-2: #ddd6c8;
-  --ink: #111318;
-  --muted: #62615b;
-  --line: rgba(17, 19, 24, 0.22);
-  --red: #e33b31;
-  --blue: #2457d6;
-  --yellow: #efc52d;
-  --cyan: #18aebe;
+  --paper: #050505;
+  --surface: #111318;
+  --surface-2: #191b20;
+  --surface2: #191b20;
+  --ink: #f4f2e8;
+  --muted: rgba(244, 242, 232, 0.58);
+  --line: rgba(244, 242, 232, 0.22);
   background: var(--paper) !important;
   color: var(--ink) !important;
 }
-.wish-archive-page .wish-bg {
-  opacity: 0.18 !important;
-}
-.wish-archive-page .wish-bg-gradient {
-  display: none !important;
-}
-.wish-archive-page .wish-bg-particles {
-  display: none !important;
-}
+
 .wish-archive-page .wish-content,
 .wish-archive-page .wish-tab-content {
   background: transparent !important;
 }
-.wish-archive-page .wish-archive-header {
-  border-bottom: 2px solid var(--ink) !important;
-  background: var(--paper) !important;
-}
-.wish-archive-page .wish-back-button {
-  border-color: var(--ink) !important;
-  color: var(--ink) !important;
-  background: transparent !important;
-}
-.wish-archive-page .wish-back-button:hover {
-  background: var(--red) !important;
-  color: #fff !important;
-  border-color: var(--red) !important;
-}
-.wish-archive-page .wish-hero {
-  border-bottom: 2px solid var(--ink) !important;
-}
-.wish-archive-page .wish-hero-title {
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-hero-subtitle {
-  color: var(--muted) !important;
-}
-.wish-archive-page .wish-hero-stats,
-.wish-archive-page .wish-stats-dashboard-grid,
-.wish-archive-page .wish-charts-row,
-.wish-archive-page .wish-yearly-grid,
-.wish-archive-page .wish-gallery,
-.wish-archive-page .wish-fun-facts-grid,
-.wish-archive-page .wish-achievements-grid {
-  background: var(--ink) !important;
-  border-color: var(--ink) !important;
-}
-.wish-archive-page .wish-hero-stat,
+
+.wish-archive-page .wish-hero-stat:first-child,
 .wish-archive-page .wish-stat-premium,
 .wish-archive-page .wish-chart-card,
 .wish-archive-page .wish-yearly-card,
@@ -612,402 +570,237 @@
   background: var(--surface) !important;
   color: var(--ink) !important;
 }
-.wish-archive-page .wish-hero-stat:nth-child(2),
-.wish-archive-page .wish-stat-premium:nth-child(3n + 2),
-.wish-archive-page .wish-yearly-card:nth-child(3n + 2) {
-  background: var(--yellow) !important;
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-hero-stat:nth-child(3) {
-  background: var(--red) !important;
-  color: #fff !important;
-}
-.wish-archive-page .wish-hero-stat:nth-child(4) {
-  background: var(--blue) !important;
-  color: #fff !important;
-}
-.wish-archive-page .wish-stat-premium:nth-child(3n) {
-  background: var(--surface-2) !important;
-}
-.wish-archive-page .wish-tab-content {
-  border-top: 0 !important;
-}
-.wish-archive-page .tab-nav {
-  background: var(--paper) !important;
-  border-bottom: 2px solid var(--ink) !important;
-}
-.wish-archive-page .tab-nav-item {
-  color: var(--ink) !important;
-  border-right: 1px solid var(--line) !important;
-}
-.wish-archive-page .tab-nav-item.active {
-  background: var(--ink) !important;
-  color: var(--paper) !important;
-}
-.wish-archive-page .tab-nav-item:hover {
-  background: var(--yellow) !important;
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-stats-group-title,
-.wish-archive-page .wish-chart-title,
-.wish-archive-page .wish-timeline-year {
-  color: var(--ink) !important;
-}
+
 .wish-archive-page .wish-stat-premium-label,
 .wish-archive-page .wish-card-date,
 .wish-archive-page .wish-card-element,
 .wish-archive-page .wish-card-version-badge,
 .wish-archive-page .wish-yearly-stat-label,
-.wish-archive-page .wish-yearly-characters {
-  color: var(--muted) !important;
-}
-.wish-archive-page .wish-chart-card {
-  min-height: 320px;
-}
-.wish-archive-page .bar-chart-bar-wrapper {
-  background: var(--surface-2) !important;
-}
-.wish-archive-page .bar-chart-bar {
-  background: var(--red) !important;
-}
-.wish-archive-page .wish-yearly-details {
-  border-top: 1px solid var(--line);
-  margin-top: 14px;
-  padding-top: 12px;
-  color: var(--muted);
-}
-.wish-archive-page .wish-gallery .wish-card:hover {
-  background: var(--yellow) !important;
-  color: var(--ink) !important;
-  transform: translateY(-3px);
-  z-index: 2;
-}
-.wish-archive-page .wish-card-content {
-  background: inherit !important;
-}
-.wish-archive-page .wish-card-content h3 {
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-timeline {
-  border-color: var(--ink) !important;
-}
-.wish-archive-page .wish-timeline-entry-content {
-  background: var(--surface) !important;
-  color: var(--ink) !important;
-  border-color: var(--line) !important;
-}
+.wish-archive-page .wish-yearly-characters,
 .wish-archive-page .wish-timeline-entry-meta {
   color: var(--muted) !important;
 }
-.wish-archive-page .wish-timeline-entry-dot {
-  border-color: var(--paper) !important;
+
+.wish-archive-page .wish-card-content {
+  background: var(--surface) !important;
 }
-.wish-archive-page .wish-heatmap-controls,
-.wish-archive-page .wish-controls {
-  background: transparent !important;
+
+.wish-archive-page .wish-controls,
+.wish-archive-page .wish-heatmap-controls {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
 }
-.wish-archive-page .wish-heatmap-year-selector button,
+
+.wish-archive-page .wish-search-wrapper {
+  background: var(--surface-2) !important;
+  border-color: var(--line) !important;
+}
+
+.wish-archive-page .wish-search-input,
 .wish-archive-page .wish-sort-select,
 .wish-archive-page .wish-filter-chip,
-.wish-archive-page .wish-view-controls button {
-  background: var(--surface) !important;
+.wish-archive-page .wish-view-controls button,
+.wish-archive-page .wish-heatmap-year-selector button {
   color: var(--ink) !important;
-  border-color: var(--ink) !important;
 }
-.wish-archive-page .wish-filter-chip.active,
-.wish-archive-page .wish-heatmap-year-selector button.active {
-  background: var(--red) !important;
-  color: #fff !important;
-  border-color: var(--red) !important;
-}
-.wish-archive-page .wish-search-wrapper {
-  background: var(--surface) !important;
-  border-color: var(--ink) !important;
-}
-.wish-archive-page .wish-search-input {
+
+.wish-archive-page .wish-sort-select,
+.wish-archive-page .wish-filter-chip,
+.wish-archive-page .wish-view-controls button,
+.wish-archive-page .wish-heatmap-year-selector button {
   background: transparent !important;
-  color: var(--ink) !important;
+  border-color: var(--line) !important;
 }
-.wish-archive-page .wish-search-input::placeholder {
-  color: var(--muted) !important;
-}
-.wish-archive-page .wish-sort-select:focus,
-.wish-archive-page .wish-search-input:focus {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-.wish-archive-page .heatmap-grid {
+
+.wish-archive-page .wish-gallery,
+.wish-archive-page .wish-stats-dashboard-grid,
+.wish-archive-page .wish-charts-row,
+.wish-archive-page .wish-yearly-grid,
+.wish-archive-page .wish-fun-facts-grid,
+.wish-archive-page .wish-achievements-grid {
   background: var(--ink) !important;
   border-color: var(--ink) !important;
 }
-.wish-archive-page .heatmap-legend {
-  color: var(--muted) !important;
-}
-.wish-archive-page .wish-fun-fact-featured {
+
+.wish-archive-page .wish-card:hover,
+.wish-archive-page .wish-card:focus-visible {
   background: var(--yellow) !important;
-  color: var(--ink) !important;
+  color: #111318 !important;
+  transform: translateY(-3px);
+  outline: none;
 }
-.wish-archive-page .wish-achievement-premium-content:nth-child(3n + 2) {
-  background: var(--blue) !important;
-  color: #fff !important;
-}
-.wish-archive-page .wish-modal-overlay {
-  background: rgba(17, 19, 24, 0.72) !important;
-}
-.wish-archive-page .wish-modal-content {
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border-color: var(--ink) !important;
-  box-shadow: 10px 10px 0 var(--red) !important;
-}
-.wish-archive-page .wish-modal-close {
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-modal-detail {
-  border-top: 1px solid var(--line);
-  padding-top: 10px;
-}
-.wish-archive-page .wish-modal-detail-label {
-  color: var(--muted) !important;
-}
-.wish-archive-page .section-reveal {
-  animation: wishReveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@keyframes wishReveal {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-body[data-theme='dark'] .wish-archive-page {
-  --paper: #080808;
-  --surface: #111318;
-  --surface-2: #191b20;
-  --ink: #f4f2e8;
-  --muted: #a6a49c;
-  --line: rgba(244, 242, 232, 0.22);
-}
-body[data-theme='dark'] .wish-archive-page .wish-hero-stat:nth-child(2),
-body[data-theme='dark'] .wish-archive-page .wish-stat-premium:nth-child(3n + 2),
-body[data-theme='dark'] .wish-archive-page .wish-yearly-card:nth-child(3n + 2) {
+
+.wish-archive-page .wish-card:hover .wish-card-content,
+.wish-archive-page .wish-card:focus-visible .wish-card-content,
+.wish-archive-page .wish-card:hover .wish-card-content h3,
+.wish-archive-page .wish-card:focus-visible .wish-card-content h3 {
+  background: transparent !important;
   color: #111318 !important;
 }
+
+.wish-archive-page .wish-card:hover .wish-card-date,
+.wish-archive-page .wish-card:focus-visible .wish-card-date,
+.wish-archive-page .wish-card:hover .wish-card-element,
+.wish-archive-page .wish-card:focus-visible .wish-card-element,
+.wish-archive-page .wish-card:hover .wish-card-version-badge,
+.wish-archive-page .wish-card:focus-visible .wish-card-version-badge {
+  color: rgba(17, 19, 24, 0.62) !important;
+}
+
+.wish-archive-page .wish-timeline-entry-content {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+}
+
+.wish-archive-page .wish-modal-content {
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border-color: var(--ink) !important;
+}
+
+.wish-archive-page .wish-bg {
+  opacity: 0.12;
+}
+
 @media (max-width: 900px) {
-  .wish-archive-page .wish-hero-stats {
-    grid-template-columns: repeat(2, 1fr);
+  .wish-archive-page {
+    padding: 16px 18px 70px;
   }
-  .wish-archive-page .wish-gallery {
-    grid-template-columns: repeat(2, 1fr);
+
+  .wish-archive-page .wish-hero {
+    padding-top: 34px;
+  }
+
+  .wish-archive-page .wish-hero-title {
+    font-size: clamp(4rem, 15vw, 8rem) !important;
+  }
+
+  .wish-archive-page .wish-hero-highlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wish-archive-page .wish-controls-top {
+    grid-template-columns: 1fr 1fr;
   }
 }
+
 @media (max-width: 620px) {
+  .wish-archive-page {
+    padding: 12px 12px 56px;
+  }
+
+  .wish-archive-page .wish-archive-header {
+    padding-bottom: 12px;
+  }
+
+  .wish-archive-page .wish-hero {
+    padding: 30px 0 28px;
+  }
+
+  .wish-archive-page .wish-hero-title {
+    font-size: clamp(3.2rem, 19vw, 6rem) !important;
+    line-height: 0.8;
+  }
+
+  .wish-archive-page .wish-hero-subtitle {
+    margin-top: 18px !important;
+    padding-left: 12px;
+    border-left-width: 5px;
+    font-size: 10px !important;
+  }
+
   .wish-archive-page .wish-hero-stats,
-  .wish-archive-page .wish-gallery,
   .wish-archive-page .wish-stats-dashboard-grid,
   .wish-archive-page .wish-yearly-grid,
   .wish-archive-page .wish-fun-facts-grid,
   .wish-archive-page .wish-achievements-grid {
     grid-template-columns: 1fr;
   }
+
+  .wish-archive-page .wish-hero-stat {
+    min-height: 110px;
+    padding: 16px !important;
+  }
+
+  .wish-archive-page .animated-counter-value {
+    font-size: 3rem;
+  }
+
+  .wish-archive-page .wish-hero-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .wish-archive-page .tab-nav {
+    margin-top: 20px;
+  }
+
+  .wish-archive-page .tab-nav-inner {
+    scrollbar-width: none;
+  }
+
+  .wish-archive-page .tab-nav-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wish-archive-page .tab-nav-item {
+    min-height: 44px !important;
+    padding: 0 13px !important;
+  }
+
+  .wish-archive-page .wish-controls-top {
+    grid-template-columns: 1fr;
+  }
+
+  .wish-archive-page .wish-controls-bottom {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wish-archive-page .wish-filter-chips {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 3px;
+    scrollbar-width: none;
+  }
+
+  .wish-archive-page .wish-filter-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .wish-archive-page .wish-filter-chip {
+    flex: 0 0 auto;
+  }
+
+  .wish-archive-page .wish-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wish-archive-page .wish-card-content {
+    padding: 10px;
+  }
+
+  .wish-archive-page .wish-card-content h3 {
+    font-size: 15px;
+  }
+
+  .wish-archive-page .wish-timeline {
+    padding-left: 14px;
+    margin-left: 5px;
+  }
+
+  .wish-archive-page .wish-timeline-year {
+    font-size: 24px;
+  }
+
+  .wish-archive-page .wish-fun-fact-featured {
+    grid-column: auto;
+  }
 }
 
-/* FINAL COMPONENT-LEVEL UI PASS */
-.wish-archive-page {
-  --paper: #f4f0e6;
-  --surface: #ebe5d8;
-  --surface2: #ddd6c7;
-  --ink: #111318;
-  --muted: #67645e;
-  --line: rgba(17, 19, 24, 0.18);
-  --red: #df3b31;
-  --blue: #2b58c9;
-  --yellow: #efc52d;
-}
-.wish-archive-page .wish-content {
-  max-width: 1440px;
-}
-.wish-archive-page .wish-archive-header {
-  padding-bottom: 20px;
-}
-.wish-archive-page .wish-hero {
-  padding-bottom: 50px;
-}
-.wish-archive-page .wish-hero-stats {
-  gap: 1px !important;
-}
-.wish-archive-page .wish-hero-stat {
-  min-height: 160px;
-  padding: 22px !important;
-  background: var(--surface) !important;
-}
-.wish-archive-page .wish-hero-stat:first-child {
-  background: var(--surface) !important;
-}
-.wish-archive-page .wish-hero-highlights {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 18px;
-}
-.wish-archive-page .wish-hero-highlight {
-  padding: 15px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-.wish-archive-page .tab-nav {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  padding: 0 !important;
-}
-.wish-archive-page .tab-nav-inner {
-  max-width: 1440px;
-  margin: auto;
-  display: flex;
-  overflow: auto;
-}
-.wish-archive-page .tab-nav-item {
-  min-height: 48px !important;
-  padding: 0 15px !important;
-}
-.wish-archive-page .wish-stats-group {
-  margin-top: 42px;
-}
-.wish-archive-page .wish-stat-premium {
-  min-height: 170px;
-  padding: 20px !important;
-}
-.wish-archive-page .wish-stat-premium-icon {
-  width: 38px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  background: var(--ink);
-  color: var(--paper);
-}
-.wish-archive-page .wish-chart-card {
-  padding: 22px !important;
-  background: var(--surface) !important;
-}
-.wish-archive-page .wish-charts-row {
-  gap: 1px !important;
-  background: var(--ink);
-  border: 1px solid var(--ink);
-}
-.wish-archive-page .wish-yearly-card {
-  min-height: 190px;
-  padding: 20px !important;
-}
-.wish-archive-page .wish-controls {
-  display: grid;
-  gap: 12px;
-  padding: 16px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-.wish-archive-page .wish-controls-top {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 8px;
-}
-.wish-archive-page .wish-controls-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.wish-archive-page .wish-search-wrapper {
-  min-height: 44px;
-}
-.wish-archive-page .wish-filter-chips {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-.wish-archive-page .wish-filter-chip {
-  min-height: 38px !important;
-}
-.wish-archive-page .wish-gallery {
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px !important;
-}
-.wish-archive-page .wish-card {
-  transition:
-    transform 0.18s ease,
-    background 0.18s ease;
-}
-.wish-archive-page .wish-card-image-wrapper {
-  background: var(--surface2);
-}
-.wish-archive-page .wish-timeline-entry-content {
-  padding: 18px !important;
-}
-.wish-archive-page .wish-fun-fact-featured,
-.wish-archive-page .wish-fun-fact-premium,
-.wish-archive-page .wish-achievement-premium-content {
-  min-height: 200px !important;
-  padding: 22px !important;
-}
-.wish-archive-page .wish-heatmap-controls {
-  padding: 14px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-}
-.wish-archive-page .heatmap-grid {
-  padding: 18px !important;
-}
-.wish-archive-page .wish-modal {
-  padding: 18px;
-}
-.wish-archive-page .wish-modal-content {
-  max-height: 88vh;
-  overflow: auto;
-}
-.wish-archive-page .wish-modal-image-wrapper {
-  background: var(--surface2);
-}
-body[data-theme='dark'] .wish-archive-page {
-  --paper: #08090a;
-  --surface: #12151a;
-  --surface2: #1b1e24;
-  --ink: #f4f2e8;
-  --muted: #aaa79f;
-  --line: rgba(244, 242, 232, 0.2);
-}
-body[data-theme='dark'] .wish-archive-page .wish-tab-content {
-  background: transparent !important;
-}
-body[data-theme='dark'] .wish-archive-page .wish-hero-stat:first-child,
-body[data-theme='dark'] .wish-archive-page .wish-stat-premium,
-body[data-theme='dark'] .wish-archive-page .wish-chart-card,
-body[data-theme='dark'] .wish-archive-page .wish-yearly-card,
-body[data-theme='dark'] .wish-archive-page .wish-card,
-body[data-theme='dark'] .wish-archive-page .wish-fun-fact-premium,
-body[data-theme='dark'] .wish-archive-page .wish-achievement-premium-content {
-  background: var(--surface) !important;
-  color: var(--ink) !important;
-}
-@media (max-width: 850px) {
-  .wish-archive-page .wish-hero-highlights {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .wish-archive-page .wish-controls-top {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@media (max-width: 620px) {
-  .wish-archive-page .wish-hero-highlights {
-    grid-template-columns: 1fr;
-  }
-  .wish-archive-page .wish-controls-top {
-    grid-template-columns: 1fr;
-  }
-  .wish-archive-page .wish-gallery {
-    grid-template-columns: repeat(2, 1fr);
+@media (prefers-reduced-motion: reduce) {
+  .wish-archive-page .section-reveal,
+  .wish-archive-page .wish-card {
+    animation: none !important;
+    transition: none !important;
   }
 }

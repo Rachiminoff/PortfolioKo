@@ -4,8 +4,10 @@ import {
   CurrentlySection,
   FavoritesSection,
   WritingsSection,
+  QuotesSection,
   PersonaFooterCard,
   SiteStatsSection,
+  PersonaToolsSection,
 } from '../components/persona';
 import '../assets/styles/persona/PersonaPage.scss';
 
@@ -21,6 +23,8 @@ const PersonaPage: React.FC = () => (
       <SiteStatsSection />
       <FavoritesSection />
       <WritingsSection />
+      <QuotesSection />
+      <PersonaToolsSection />
       <PersonaFooterCard />
     </main>
   </div>
