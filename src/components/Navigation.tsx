@@ -14,6 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Toolbar from '@mui/material/Toolbar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
+import CommandPalette, { CommandPaletteCommand } from './CommandPalette';
 import '../assets/styles/Navigation.scss';
 
 type Section = 'main' | 'expertise' | 'history' | 'projects' | 'contact' | 'vault' | 'certificates';
@@ -102,6 +103,45 @@ function Navigation() {
       handleDrawerClose();
     }
   };
+
+  const commandPaletteCommands: CommandPaletteCommand[] = [
+    ...navItems.map(([label, section, icon]) => ({
+      id: `main-${section}`,
+      label,
+      description: `Jump to ${label.toLowerCase()}`,
+      icon,
+      group: 'SITE',
+      keywords: [section],
+      action: () => scrollToSection(section),
+    })),
+    {
+      id: 'main-persona',
+      label: 'Persona',
+      description: 'Open the personal archive',
+      icon: 'mdi:book-open-page-variant-outline',
+      group: 'PAGE',
+      keywords: ['personal', 'archive'],
+      action: () => navigate('/persona'),
+    },
+    {
+      id: 'main-wish-archive',
+      label: 'Wish Archive',
+      description: 'Open the wish and pull archive',
+      icon: 'mdi:archive-outline',
+      group: 'ARCHIVE',
+      keywords: ['wish', 'gacha', 'pulls'],
+      action: () => navigate('/wish-archive'),
+    },
+    {
+      id: 'main-insights',
+      label: 'Insights',
+      description: 'Open the analytics and insights page',
+      icon: 'mdi:chart-line',
+      group: 'PAGE',
+      keywords: ['analytics', 'data'],
+      action: () => navigate('/insights'),
+    },
+  ];
 
   const drawer = (
     <Box className="navigation-drawer" role="navigation" aria-label="Mobile navigation">
@@ -197,18 +237,26 @@ function Navigation() {
             </Button>
           </Box>
 
-          {/* Mobile Hamburger */}
-          <IconButton
-            className={`mobile-menu-button ${mobileOpen ? 'open' : ''}`}
-            onClick={handleDrawerToggle}
-            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
-            aria-expanded={mobileOpen}
-            aria-controls="mobile-navigation-drawer"
-          >
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-            <span className="hamburger-line"></span>
-          </IconButton>
+          <CommandPalette
+            commands={commandPaletteCommands}
+            contextLabel="SITE COMMANDS"
+            onOpen={handleDrawerClose}
+          />
+
+          {/* Mobile Actions */}
+          <Box className="mobile-nav-actions">
+            <IconButton
+              className={`mobile-menu-button ${mobileOpen ? 'open' : ''}`}
+              onClick={handleDrawerToggle}
+              aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-navigation-drawer"
+            >
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+              <span className="hamburger-line"></span>
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 

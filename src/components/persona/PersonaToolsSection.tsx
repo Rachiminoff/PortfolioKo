@@ -19,16 +19,16 @@ const PersonaToolsSection: React.FC = () => {
         <button
           type="button"
           className="persona-tool-card"
-          onClick={() => navigate('/wish-archive')}
-          aria-label="Open Wish Archive"
+          onClick={() => navigate('/wish-archive?tab=analytics')}
+          aria-label="Open Wish Stats"
         >
           <span className="persona-tool-icon" aria-hidden="true">
             <Icon icon="mdi:archive-star-outline" width={38} height={38} />
           </span>
           <span className="persona-tool-copy">
             <span className="persona-meta">ARCHIVE TOOL</span>
-            <strong>Wish Archive</strong>
-            <small>Track pulls, luck, characters, and collection history.</small>
+            <strong>Wish Stats</strong>
+            <small>Track pulls, luck, characters, and collection statistics.</small>
           </span>
           <Icon className="persona-tool-arrow" icon="mdi:arrow-top-right" width={22} />
         </button>

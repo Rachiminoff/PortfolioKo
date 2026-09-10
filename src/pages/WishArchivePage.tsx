@@ -1,7 +1,7 @@
 // WishArchivePage.tsx - Tab-based navigation with no collapsible sections
 
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { supabase } from '../lib/supabase';
 import './styles/WishArchivePage.scss';
@@ -544,7 +544,7 @@ interface TimelineEntryProps {
 
 const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick }) => {
   const elementColor = getElementColor(character.element);
-  const entryRef = useRef<HTMLDivElement>(null);
+  const entryRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -566,11 +566,13 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
   }, []);
 
   return (
-    <div
+    <button
       ref={entryRef}
+      type="button"
       className="wish-timeline-entry-premium stagger-card"
       style={{ animationDelay: `${index * 0.05}s` }}
       onClick={onClick}
+      aria-label={`View details for ${character.name}`}
     >
       <div className="wish-timeline-entry-connector">
         <div className="wish-timeline-entry-dot" style={{ backgroundColor: elementColor }} />
@@ -600,7 +602,7 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
           </span>
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 
@@ -670,9 +672,17 @@ const CharacterCard: React.FC<CharacterCardProps> = ({ character, onClick }) => 
 // Main Component
 const WishArchivePage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [characters, setCharacters] = useState<WishCharacter[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
+  const initialTab = new URLSearchParams(location.search).get('tab');
+  const [activeTab, setActiveTab] = useState(
+    ['overview', 'analytics', 'heatmap', 'funfacts', 'achievements', 'archive'].includes(
+      initialTab || '',
+    )
+      ? initialTab || 'overview'
+      : 'overview',
+  );
   const [viewMode, setViewMode] = useState<'timeline' | 'gallery'>('timeline');
   const [selectedYear, setSelectedYear] = useState<string>('all');
   const [selectedElement, setSelectedElement] = useState<string>('all');
@@ -694,6 +704,16 @@ const WishArchivePage: React.FC = () => {
   useEffect(() => {
     fetchCharacters();
   }, []);
+
+  useEffect(() => {
+    const tab = new URLSearchParams(location.search).get('tab');
+    if (
+      tab &&
+      ['overview', 'analytics', 'heatmap', 'funfacts', 'achievements', 'archive'].includes(tab)
+    ) {
+      setActiveTab(tab);
+    }
+  }, [location.search]);
 
   const fetchCharacters = async () => {
     setLoading(true);

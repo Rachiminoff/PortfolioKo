@@ -638,3 +638,21 @@ $nav-height: 76px;
     transition: none;
   }
 }
+
+/* Command palette placement */
+.navbar .command-palette-trigger {
+  margin-left: 10px;
+  flex: 0 0 auto;
+}
+
+.mobile-nav-actions {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 900px) {
+  .mobile-nav-actions {
+    display: flex;
+  }
+}

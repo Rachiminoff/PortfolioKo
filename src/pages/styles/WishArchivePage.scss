@@ -1320,3 +1320,244 @@
     font-size: 7px;
   }
 }
+
+/* =========================================================
+   FINAL INTERACTION / SCROLL REPAIR
+   ========================================================= */
+.wish-archive-page {
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+.wish-archive-page .wish-tab-content,
+.wish-archive-page .wish-archive-tab,
+.wish-archive-page .wish-content {
+  width: 100%;
+  min-width: 0;
+  overflow: visible;
+}
+
+/* Clickable timeline entries should retain button semantics without browser chrome. */
+.wish-archive-page .wish-timeline-entry-premium {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.wish-archive-page .wish-timeline-entry-premium:focus-visible .wish-timeline-entry-content {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
+/* Gallery is a page grid, never a constrained scrolling viewport. */
+.wish-archive-page .wish-gallery {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 1px !important;
+  align-items: stretch;
+  overflow: visible !important;
+  background: var(--line) !important;
+  border: 1px solid var(--line) !important;
+}
+.wish-archive-page .wish-card {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border: 0 !important;
+  background: var(--surface) !important;
+}
+.wish-archive-page .wish-card-image-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+}
+.wish-archive-page .wish-card-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.wish-archive-page .wish-card-content {
+  min-height: 72px;
+}
+
+/* Fully restore the modal; the previous pass only styled its inner content. */
+.wish-archive-page .wish-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 20px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background: rgba(0, 0, 0, 0.82) !important;
+  backdrop-filter: blur(5px);
+}
+.wish-archive-page .wish-modal {
+  position: relative;
+  width: min(920px, 100%);
+  max-height: min(860px, calc(100dvh - 40px));
+  min-height: 0;
+  overflow: auto;
+  margin: auto;
+  overscroll-behavior: contain;
+}
+.wish-archive-page .wish-modal-content {
+  width: 100% !important;
+  max-height: none !important;
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(0, 1.1fr);
+  gap: 0;
+  overflow: hidden;
+  background: var(--surface) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--ink) !important;
+  box-shadow: 12px 12px 0 var(--red);
+}
+.wish-archive-page .wish-modal-close {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink) !important;
+  background: rgba(5, 5, 5, 0.86) !important;
+  color: var(--ink) !important;
+}
+.wish-archive-page .wish-modal-image-wrapper {
+  position: relative;
+  min-width: 0;
+  min-height: 360px;
+  background: #090a0c;
+  overflow: hidden;
+}
+.wish-archive-page .wish-modal-image {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  display: block;
+  object-fit: cover;
+}
+.wish-archive-page .wish-modal-info {
+  min-width: 0;
+  padding: clamp(22px, 4vw, 38px);
+  overflow: auto;
+}
+.wish-archive-page .wish-modal-info h2 {
+  margin: 0 0 24px;
+  padding-right: 42px;
+  color: var(--ink);
+  font:
+    900 clamp(2rem, 5vw, 4rem)/0.9 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.06em;
+  text-transform: uppercase;
+}
+.wish-archive-page .wish-modal-details {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.wish-archive-page .wish-modal-detail {
+  display: grid;
+  grid-template-columns: minmax(90px, 0.45fr) minmax(0, 1fr);
+  gap: 15px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.wish-archive-page .wish-modal-detail-label {
+  color: var(--muted);
+  font: 800 8px 'IBM Plex Mono';
+  text-transform: uppercase;
+}
+.wish-archive-page .wish-modal-detail-value {
+  min-width: 0;
+  color: var(--ink);
+  font: 700 11px/1.5 'IBM Plex Mono';
+  overflow-wrap: anywhere;
+}
+.wish-archive-page .wish-modal-description {
+  white-space: pre-wrap;
+}
+
+@media (max-width: 950px) {
+  .wish-archive-page .wish-gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 720px) {
+  .wish-archive-page .wish-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .wish-archive-page .wish-modal-overlay {
+    place-items: start center !important;
+    padding: 12px !important;
+  }
+  .wish-archive-page .wish-modal {
+    width: 100%;
+    max-height: calc(100dvh - 24px);
+  }
+  .wish-archive-page .wish-modal-content {
+    grid-template-columns: 1fr;
+  }
+  .wish-archive-page .wish-modal-image-wrapper {
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+  .wish-archive-page .wish-modal-image {
+    min-height: 0;
+  }
+  .wish-archive-page .wish-modal-info {
+    overflow: visible;
+  }
+  .wish-archive-page .wish-modal-close {
+    top: 8px;
+    right: 8px;
+  }
+}
+@media (max-width: 430px) {
+  .wish-archive-page .wish-gallery {
+    grid-template-columns: 1fr !important;
+  }
+  .wish-archive-page .wish-card-image-wrapper {
+    aspect-ratio: 16 / 10;
+  }
+  .wish-archive-page .wish-timeline-entry-header {
+    gap: 8px;
+  }
+  .wish-archive-page .wish-timeline-entry-name {
+    min-width: 0;
+  }
+  .wish-archive-page .wish-timeline-entry-name h4 {
+    font-size: 14px;
+  }
+  .wish-archive-page .wish-timeline-entry-outcome {
+    font-size: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wish-archive-page .wish-timeline-entry-premium,
+  .wish-archive-page .wish-card,
+  .wish-archive-page .wish-modal-overlay,
+  .wish-archive-page .wish-modal {
+    transition: none !important;
+    animation: none !important;
+  }
+}

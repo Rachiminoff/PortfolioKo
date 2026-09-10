@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
+import CommandPalette, { CommandPaletteCommand } from '../CommandPalette';
 
 const links = [
   ['Currently', 'currently'],
@@ -34,6 +35,46 @@ const PersonaNavbar: React.FC = () => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const commandPaletteCommands: CommandPaletteCommand[] = [
+    {
+      id: 'persona-home',
+      label: 'Back to Home',
+      description: 'Return to the main portfolio',
+      icon: 'mdi:arrow-left',
+      group: 'PAGE',
+      keywords: ['home', 'portfolio', 'main'],
+      action: goHome,
+    },
+    ...links.map(([label, id], index) => ({
+      id: `persona-${id}`,
+      label,
+      description: `Jump to ${label.toLowerCase()}`,
+      icon: [
+        'mdi:account-outline',
+        'mdi:chart-box-outline',
+        'mdi:heart-outline',
+        'mdi:note-text-outline',
+        'mdi:format-quote-close',
+        'mdi:toolbox-outline',
+      ][index],
+      group: 'PERSONA',
+      keywords: [id],
+      action: () => goTo(id),
+    })),
+    {
+      id: 'persona-wish-stats',
+      label: 'Wish Stats',
+      description: 'Open wish statistics and analytics',
+      icon: 'mdi:archive-outline',
+      group: 'ARCHIVE',
+      keywords: ['wish', 'archive', 'gacha', 'pulls'],
+      action: () => {
+        close();
+        navigate('/wish-archive?tab=analytics');
+      },
+    },
+  ];
+
   return (
     <>
       <nav className={`persona-navbar ${open ? 'is-open' : ''}`} aria-label="Persona navigation">
@@ -49,6 +90,12 @@ const PersonaNavbar: React.FC = () => {
         </button>
 
         <span className="persona-navbar-index">PERSONA / 001</span>
+
+        <CommandPalette
+          commands={commandPaletteCommands}
+          contextLabel="PERSONA COMMANDS"
+          onOpen={close}
+        />
 
         <button
           type="button"
