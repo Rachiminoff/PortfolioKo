@@ -30,6 +30,9 @@ const FavoritesSection: React.FC = () => {
     null,
   );
   const [resolvedImages, setResolvedImages] = useState<ResolvedImages>({});
+  const [pages, setPages] = useState<Record<string, number>>({});
+
+  const ITEMS_PER_PAGE = 4;
 
   useEffect(() => {
     const mangaItems = favorites.Manga ?? [];
@@ -80,49 +83,114 @@ const FavoritesSection: React.FC = () => {
       <div className="persona-media-sections">
         {Object.entries(favorites).map(([category, items]) => (
           <section className="persona-media-group" key={category}>
-            <div className="persona-group-title">
-              <span>{category}</span>
-              <i />
-            </div>
-            <div className="persona-media-list">
-              {items.map((item, index) => {
-                const image = imageFor(item);
-                return (
-                  <button
-                    className="persona-media-card"
-                    key={`${category}-${item.title}-${index}`}
-                    type="button"
-                    onClick={() => setSelected({ category, item })}
-                    aria-label={`Open ${item.title}`}
-                  >
-                    <div className="persona-media-image-wrap">
-                      {image ? (
-                        <img
-                          src={image}
-                          alt=""
-                          className="persona-media-image"
-                          loading="lazy"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      ) : (
-                        <div className="persona-media-image-placeholder" />
-                      )}
-                    </div>
-                    <div className="persona-media-copy">
-                      <span className="persona-meta">{item.meta}</span>
-                      <h3>{item.title}</h3>
-                      <p>{item.note}</p>
-                    </div>
-                    <span className="persona-card-number">
-                      #{String(index + 1).padStart(2, '0')}
+            {(() => {
+              const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+              const currentPage = Math.min(pages[category] ?? 1, totalPages);
+              const start = (currentPage - 1) * ITEMS_PER_PAGE;
+              const visibleItems = items.slice(start, start + ITEMS_PER_PAGE);
+
+              return (
+                <>
+                  <div className="persona-group-title">
+                    <span>{category}</span>
+                    <span className="persona-group-count">
+                      {String(items.length).padStart(2, '0')} ENTRIES
                     </span>
-                    <Icon className="persona-media-arrow" icon="mdi:arrow-top-right" width={19} />
-                  </button>
-                );
-              })}
-            </div>
+                    <i />
+                  </div>
+                  <div className="persona-media-list">
+                    {visibleItems.map((item, index) => {
+                      const absoluteIndex = start + index;
+                      const image = imageFor(item);
+                      return (
+                        <button
+                          className="persona-media-card"
+                          key={`${category}-${item.title}-${absoluteIndex}`}
+                          type="button"
+                          onClick={() => setSelected({ category, item })}
+                          aria-label={`Open ${item.title}`}
+                        >
+                          <div className="persona-media-image-wrap">
+                            {image ? (
+                              <img
+                                src={image}
+                                alt=""
+                                className="persona-media-image"
+                                loading="lazy"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                }}
+                              />
+                            ) : (
+                              <div className="persona-media-image-placeholder" />
+                            )}
+                          </div>
+                          <div className="persona-media-copy">
+                            <span className="persona-meta">{item.meta}</span>
+                            <h3>{item.title}</h3>
+                            <p>{item.note}</p>
+                          </div>
+                          <span className="persona-card-number">
+                            #{String(absoluteIndex + 1).padStart(2, '0')}
+                          </span>
+                          <Icon
+                            className="persona-media-arrow"
+                            icon="mdi:arrow-top-right"
+                            width={19}
+                          />
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {totalPages > 1 && (
+                    <div className="persona-media-pagination" aria-label={`${category} pagination`}>
+                      <button
+                        type="button"
+                        className="persona-media-page-control"
+                        disabled={currentPage === 1}
+                        onClick={() =>
+                          setPages((prev) => ({ ...prev, [category]: currentPage - 1 }))
+                        }
+                        aria-label={`Previous ${category} page`}
+                      >
+                        <Icon icon="mdi:arrow-left" width={16} />
+                      </button>
+                      <div className="persona-media-page-numbers">
+                        {Array.from({ length: totalPages }, (_, pageIndex) => {
+                          const page = pageIndex + 1;
+                          return (
+                            <button
+                              key={page}
+                              type="button"
+                              className={page === currentPage ? 'active' : ''}
+                              aria-current={page === currentPage ? 'page' : undefined}
+                              onClick={() => setPages((prev) => ({ ...prev, [category]: page }))}
+                            >
+                              {String(page).padStart(2, '0')}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <span className="persona-media-page-status">
+                        {String(currentPage).padStart(2, '0')} /{' '}
+                        {String(totalPages).padStart(2, '0')}
+                      </span>
+                      <button
+                        type="button"
+                        className="persona-media-page-control"
+                        disabled={currentPage === totalPages}
+                        onClick={() =>
+                          setPages((prev) => ({ ...prev, [category]: currentPage + 1 }))
+                        }
+                        aria-label={`Next ${category} page`}
+                      >
+                        <Icon icon="mdi:arrow-right" width={16} />
+                      </button>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </section>
         ))}
       </div>

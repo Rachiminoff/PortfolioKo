@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
-import './CommandPalette.scss';
+import '../assets/styles/CommandPalette.scss';
 
 export interface CommandPaletteCommand {
   id: string;
@@ -100,7 +100,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [execute, filteredCommands, onOpen, open, selectedIndex]);
+  }, [close, execute, filteredCommands, onOpen, open, selectedIndex]);
 
   useEffect(() => {
     if (!open) return;
