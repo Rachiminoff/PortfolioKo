@@ -4,8 +4,6 @@ export interface PersonaQuote {
   source?: string;
   note?: string;
 }
-
-// Add the quotes you want to keep here.
 // Keep each quote short enough to read comfortably as a card.
 export const personaQuotes: PersonaQuote[] = [
   {
@@ -15,8 +13,8 @@ export const personaQuotes: PersonaQuote[] = [
     source: 'Monster House',
   },
   {
-    qoute:
-      'Adachi, and my memories. Attempting to view them both at the same time, all I was able to focus my eyes on was the former. I pulled my hand forward and held it over her face. I could only pray that one day, this image would become part of the sea. “Let’s hope so.',
+    quote:
+      'Adachi, and my memories. Attempting to view them both at the same time, all I was able to focus my eyes on was the former. I pulled my hand forward and held it over her face. I could only pray that one day, this image would become part of the sea. “Let’s hope so”',
     attribution: 'Shimamura',
     source: 'Adachi to Shimamura',
   },
