@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Icon } from '@iconify/react';
 import '../assets/styles/Vault.scss';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import PDFViewer from './PDFViewer';
 import EPUBViewer from './EPUBViewer';
 

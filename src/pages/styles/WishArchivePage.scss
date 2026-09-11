@@ -1561,3 +1561,237 @@
     animation: none !important;
   }
 }
+
+/* =========================================================
+   MOBILE-FIRST POLISH
+   ========================================================= */
+@media (max-width: 720px) {
+  .wish-archive-page {
+    padding-inline: 10px;
+    padding-bottom: 40px;
+  }
+
+  .wish-archive-page .wish-content {
+    width: 100%;
+  }
+
+  .wish-archive-page .wish-back-button {
+    min-height: 42px;
+    padding: 9px 11px;
+  }
+
+  .wish-archive-page .wish-hero {
+    padding-block: 28px 24px;
+  }
+
+  .wish-archive-page .wish-hero-title {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: clamp(2.75rem, 18vw, 5.2rem) !important;
+  }
+
+  .wish-archive-page .wish-hero-subtitle {
+    max-width: none;
+    font-size: 9px !important;
+    line-height: 1.65 !important;
+  }
+
+  .wish-archive-page .wish-hero-highlights {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .wish-archive-page .wish-hero-highlight {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .wish-archive-page .tab-nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin-inline: -10px;
+    padding-inline: 10px;
+    background: rgba(5, 5, 5, 0.96) !important;
+    backdrop-filter: blur(10px);
+  }
+
+  .wish-archive-page .tab-nav-inner {
+    width: 100%;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wish-archive-page .tab-nav-item {
+    min-height: 48px !important;
+    padding-inline: 14px !important;
+    font-size: 8px;
+  }
+
+  .wish-archive-page .wish-tab-content {
+    overflow: visible;
+  }
+
+  .wish-archive-page .wish-overview-tab,
+  .wish-archive-page .wish-analytics-tab,
+  .wish-archive-page .wish-heatmap-tab,
+  .wish-archive-page .wish-funfacts-tab,
+  .wish-archive-page .wish-achievements-tab,
+  .wish-archive-page .wish-archive-tab {
+    padding-top: 24px;
+  }
+
+  .wish-archive-page .wish-stats-group {
+    margin-bottom: 30px;
+  }
+
+  .wish-archive-page .wish-stats-group-title,
+  .wish-archive-page .wish-chart-title {
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .wish-archive-page .wish-stat-premium {
+    min-height: 112px;
+    padding: 14px;
+  }
+
+  .wish-archive-page .wish-stat-premium-value {
+    font-size: clamp(1.7rem, 9vw, 2.7rem);
+    overflow-wrap: anywhere;
+  }
+
+  .wish-archive-page .wish-chart-container,
+  .wish-archive-page .wish-chart,
+  .wish-archive-page .heatmap-container {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .wish-archive-page .heatmap-container {
+    overflow-x: auto;
+    overflow-y: visible;
+    padding-bottom: 8px;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .wish-archive-page .heatmap-grid {
+    width: max-content;
+    min-width: 620px;
+  }
+
+  .wish-archive-page .heatmap-cell {
+    width: 11px !important;
+    height: 11px !important;
+  }
+
+  .wish-archive-page .wish-controls-top,
+  .wish-archive-page .wish-controls-bottom {
+    min-width: 0;
+  }
+
+  .wish-archive-page .wish-search,
+  .wish-archive-page .wish-select,
+  .wish-archive-page .wish-sort select {
+    max-width: 100%;
+  }
+
+  .wish-archive-page .wish-timeline {
+    padding-left: 22px;
+  }
+
+  .wish-archive-page .wish-timeline-entry-content {
+    min-width: 0;
+  }
+
+  .wish-archive-page .wish-timeline-entry-header {
+    flex-wrap: wrap;
+  }
+
+  .wish-archive-page .wish-timeline-entry-name h4 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .wish-archive-page .wish-gallery {
+    gap: 1px !important;
+  }
+
+  .wish-archive-page .wish-card-content h3 {
+    font-size: 11px;
+  }
+
+  .wish-archive-page .wish-modal-overlay {
+    padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .wish-archive-page .wish-modal {
+    width: 100%;
+    max-height: calc(100dvh - max(16px, env(safe-area-inset-top) + env(safe-area-inset-bottom)));
+  }
+
+  .wish-archive-page .wish-modal-content {
+    box-shadow: 6px 6px 0 var(--red);
+  }
+
+  .wish-archive-page .wish-modal-image-wrapper {
+    aspect-ratio: 16 / 10;
+  }
+
+  .wish-archive-page .wish-modal-info {
+    padding: 20px 16px 24px;
+  }
+
+  .wish-archive-page .wish-modal-info h2 {
+    margin-bottom: 18px;
+    font-size: clamp(1.75rem, 10vw, 3rem);
+  }
+
+  .wish-archive-page .wish-modal-detail {
+    grid-template-columns: minmax(72px, 0.35fr) minmax(0, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (max-width: 430px) {
+  .wish-archive-page {
+    padding-inline: 8px;
+  }
+
+  .wish-archive-page .tab-nav {
+    margin-inline: -8px;
+    padding-inline: 8px;
+  }
+
+  .wish-archive-page .wish-hero-title {
+    font-size: clamp(2.45rem, 17vw, 4.5rem) !important;
+  }
+
+  .wish-archive-page .wish-hero-stat {
+    min-height: 96px;
+  }
+
+  .wish-archive-page .animated-counter-value {
+    font-size: 2.55rem;
+  }
+
+  .wish-archive-page .wish-stat-premium {
+    min-height: 104px;
+  }
+
+  .wish-archive-page .wish-stat-premium-icon {
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
+  }
+
+  .wish-archive-page .wish-yearly-stat {
+    min-width: 0;
+  }
+
+  .wish-archive-page .wish-modal-detail {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}

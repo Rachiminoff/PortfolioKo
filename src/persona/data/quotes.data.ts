@@ -8,6 +8,12 @@ export interface PersonaQuote {
 export const personaQuotes: PersonaQuote[] = [
   {
     quote:
+      'And soon, another color would arrive. Every time we met, everything would be painted over once again. The world would take on her color. I would keep walking straight through that world. Toward the dawn, bathed in bronze light. As the shadows receded with the coming of daybreak, a figure emerged. I ran toward her. "Adachi." "Shimamura." We would go on chasing "and" forever. Pouring every feeling in the world into that single word.',
+    attribution: 'Shimamura',
+    source: 'Adachi to Shimamura',
+  },
+  {
+    quote:
       'In my travels at the video stores and comic book conventions, I’ve heard of tales of a man made structured becoming possessed by a human soul so that the spirit could merge with wood and brick creating some rare form of monster known as Domus Mactibilis',
     attribution: 'Reginal Skulinski',
     source: 'Monster House',

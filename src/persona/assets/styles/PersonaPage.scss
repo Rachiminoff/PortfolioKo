@@ -2363,3 +2363,151 @@ $cyan: #18aebe;
     min-height: 40px;
   }
 }
+
+/* Final mobile layout pass: keep media cards readable on narrow screens. */
+@media (max-width: 520px) {
+  .persona-page {
+    overflow-x: clip;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .persona-hero,
+  .persona-content {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .persona-media-sections {
+    display: block;
+    border-width: 1px;
+  }
+
+  .persona-media-group {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+  }
+
+  .persona-media-list {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    min-height: 0;
+  }
+
+  .persona-media-card {
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 13px;
+    min-height: 118px;
+    padding: 11px;
+  }
+
+  .persona-media-image-wrap {
+    width: 82px;
+    min-width: 82px;
+    height: 108px;
+  }
+
+  .persona-media-copy {
+    padding-right: 22px;
+  }
+
+  .persona-media-copy h3 {
+    margin-top: 4px;
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+    line-height: 0.95;
+    overflow-wrap: break-word;
+  }
+
+  .persona-media-copy p {
+    font-size: 10px;
+    line-height: 1.45;
+  }
+
+  .persona-meta {
+    font-size: 7px;
+  }
+
+  .persona-card-number {
+    display: block;
+    right: 10px;
+    top: 9px;
+  }
+
+  .persona-media-pagination {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .persona-media-pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .persona-media-page-numbers {
+    flex-shrink: 0;
+  }
+
+  .persona-media-page-status {
+    flex-shrink: 0;
+  }
+
+  .persona-media-page-control,
+  .persona-media-page-numbers button {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .persona-group-title {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .persona-group-title i {
+    min-width: 40px;
+  }
+
+  .persona-now-grid,
+  .persona-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .persona-now-card {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .persona-page {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .persona-media-group {
+    padding: 13px;
+  }
+
+  .persona-media-card {
+    grid-template-columns: 68px minmax(0, 1fr);
+    gap: 10px;
+    padding: 9px;
+  }
+
+  .persona-media-image-wrap {
+    width: 68px;
+    min-width: 68px;
+    height: 92px;
+  }
+
+  .persona-media-copy h3 {
+    font-size: 1rem;
+  }
+
+  .persona-media-copy p {
+    font-size: 9px;
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigation } from '../components';
+import { Navigation } from '../portfolio/components';
 
 interface DefaultLayoutProps {
   children: React.ReactNode;

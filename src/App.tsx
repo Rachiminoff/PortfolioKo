@@ -1,8 +1,8 @@
 import React, { Suspense, lazy, useState, useEffect, useRef, useMemo } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { Timeline, Expertise, Terminal, Project, Contact, Footer } from './components';
-import FadeIn from './components/FadeIn';
-import Certificates from './components/Certificates';
+import { Timeline, Expertise, Terminal, Project, Contact, Footer } from './portfolio/components';
+import FadeIn from './portfolio/components/FadeIn';
+import Certificates from './portfolio/components/Certificates';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { useArchive } from './hooks/useArchive';
 import { DefaultLayout, FullscreenLayout } from './layouts';
@@ -10,7 +10,7 @@ import { DefaultLayout, FullscreenLayout } from './layouts';
 import './index.scss';
 
 // Import the new Project components - ONLY ProjectDetailsPage
-import ProjectDetailsPage from './components/ProjectDetailsPage';
+import ProjectDetailsPage from './portfolio/components/ProjectDetailsPage';
 
 // Lazy load pages
 const MainPage = lazy(() => import('./pages/MainPage'));

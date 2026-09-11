@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { projectsData, Project as ProjectType } from '../types/projects.data';
+import { projectsData, Project as ProjectType } from '../data/projects.data';
 import '../assets/styles/Project.scss';
 
 /* =========================

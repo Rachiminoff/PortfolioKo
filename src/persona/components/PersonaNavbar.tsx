@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
-import CommandPalette, { CommandPaletteCommand } from '../CommandPalette';
+import CommandPalette, { CommandPaletteCommand } from '../../portfolio/components/CommandPalette';
 
 const links = [
   ['Currently', 'currently'],

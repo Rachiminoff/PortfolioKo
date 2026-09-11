@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import PersonaSectionHeader from './PersonaSectionHeader';
-import { currently } from './data/persona.data';
+import { currently } from '../data/persona.data';
 
 type NowPlaying = {
   configured?: boolean;

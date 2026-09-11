@@ -5,7 +5,7 @@ import { useArchive } from '../hooks/useArchive';
 
 import './styles/InsightsPage.scss';
 
-const Insights = lazy(() => import('../components/Insights'));
+const Insights = lazy(() => import('../portfolio/components/Insights'));
 
 const InsightsPage: React.FC = () => {
   const navigate = useNavigate();

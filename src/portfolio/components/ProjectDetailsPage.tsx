@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-import { projectsData, Project } from '../types/projects.data';
+import { projectsData, Project } from '../data/projects.data';
 import ProjectListModal from './ProjectListModal';
 import '../assets/styles/ProjectDetailsPage.scss';
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '@iconify/react';
-import '../assets/styles/CommandPalette.scss';
+import './CommandPalette.scss';
 
 export interface CommandPaletteCommand {
   id: string;

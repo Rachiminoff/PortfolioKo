@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import PersonaSectionHeader from './PersonaSectionHeader';
-import { favorites, PersonaMediaItem } from './data/persona.data';
+import { favorites, PersonaMediaItem } from '../data/persona.data';
 
 type ResolvedImages = Record<string, string>;
 

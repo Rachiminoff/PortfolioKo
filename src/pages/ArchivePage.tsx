@@ -5,8 +5,8 @@ import { useArchive } from '../hooks/useArchive';
 import './styles/ArchivePage.scss';
 
 // Lazy load components
-const Vault = lazy(() => import('../components/Vault'));
-const Insights = lazy(() => import('../components/Insights'));
+const Vault = lazy(() => import('../portfolio/components/Vault'));
+const Insights = lazy(() => import('../portfolio/components/Insights'));
 
 /* =========================
    AMBIENT SHAPES - ARCHITECTURAL

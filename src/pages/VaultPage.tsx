@@ -4,7 +4,7 @@ import { useArchive } from '../hooks/useArchive'; // ✅ Fixed import
 
 import './styles/VaultPage.scss';
 
-const Vault = lazy(() => import('../components/Vault'));
+const Vault = lazy(() => import('../portfolio/components/Vault'));
 
 const VaultPage: React.FC = () => {
   const navigate = useNavigate();

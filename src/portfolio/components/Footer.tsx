@@ -4,7 +4,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import LockIcon from '@mui/icons-material/Lock';
 import CloseIcon from '@mui/icons-material/Close';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../lib/supabase';
 import logo from '../assets/images/logo.jpg';
 import '../assets/styles/Footer.scss';
 

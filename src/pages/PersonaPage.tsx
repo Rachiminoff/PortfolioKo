@@ -9,8 +9,8 @@ import {
   SiteStatsSection,
   PersonaToolsSection,
   PersonaNavbar,
-} from '../components/persona';
-import '../assets/styles/persona/PersonaPage.scss';
+} from '../persona/components';
+import '../persona/assets/styles/PersonaPage.scss';
 
 const PersonaPage: React.FC = () => (
   <div className="persona-page">

@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import { useInView } from 'react-intersection-observer';
 
 import '../assets/styles/Certificates.scss';
-import { certificatesData } from '../types/certificates.data';
+import { certificatesData } from '../data/certificates.data';
 import PDFViewer from './PDFViewer';
 
 const INITIAL_DISPLAY = 3;
