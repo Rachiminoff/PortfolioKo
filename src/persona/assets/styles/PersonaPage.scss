@@ -7,6 +7,11 @@ $blue: #315bd8;
 $yellow: #f2c230;
 $cyan: #18aebe;
 
+// Stronger secondary text for readability on dark Persona surfaces.
+$muted-strong: #c7c9ce;
+// Dark secondary text for the light paper/document surfaces used by the reader.
+$paper-muted: #55585d;
+
 .persona-page {
   /* Keep padding inside the viewport width. */
   box-sizing: border-box;
@@ -562,7 +567,7 @@ $cyan: #18aebe;
   font:
     700 8px 'IBM Plex Mono',
     monospace;
-  color: $muted;
+  color: $muted-strong;
 }
 .persona-writing-sort select {
   padding: 0;
@@ -582,7 +587,7 @@ $cyan: #18aebe;
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: $muted;
+  color: $muted-strong;
 }
 .persona-note-list {
   border-left: 1px solid $ink;
@@ -629,14 +634,14 @@ $cyan: #18aebe;
 .persona-note-body p {
   max-width: 720px;
   margin: 0;
-  color: $muted;
+  color: $muted-strong;
   font-size: 12px;
   line-height: 1.6;
 }
 .persona-note-body small {
   display: block;
   margin-top: 10px;
-  color: $muted;
+  color: $muted-strong;
   font:
     700 8px 'IBM Plex Mono',
     monospace;
@@ -650,7 +655,7 @@ $cyan: #18aebe;
 }
 .persona-writing-empty {
   padding: 42px 20px;
-  color: $muted;
+  color: $muted-strong;
   font:
     700 9px 'IBM Plex Mono',
     monospace;
@@ -697,7 +702,7 @@ $cyan: #18aebe;
 }
 .persona-writing-page-status {
   margin-left: 8px;
-  color: $muted;
+  color: $muted-strong;
   font:
     700 8px 'IBM Plex Mono',
     monospace;
@@ -744,7 +749,7 @@ $cyan: #18aebe;
   padding: 18px 20px;
   border-bottom: 1px solid rgba(242, 240, 232, 0.2);
   font-size: 8px;
-  color: $muted;
+  color: $muted-strong;
   letter-spacing: 0.12em;
 }
 .persona-modal-layout {
@@ -817,7 +822,7 @@ $cyan: #18aebe;
 }
 .persona-writing-byline {
   font-size: 8px;
-  color: $muted;
+  color: $muted-strong;
   letter-spacing: 0.08em;
 }
 .persona-writing-content {
@@ -1321,6 +1326,14 @@ $cyan: #18aebe;
   margin-bottom: 0;
 }
 
+/* Never let legacy/global muted text bleed into article prose. */
+.persona-writing-content p,
+.persona-writing-content li,
+.persona-writing-content td,
+.persona-writing-content dd {
+  color: $ink;
+}
+
 .persona-writing-content p {
   margin: 0 0 1.35rem;
 }
@@ -1334,9 +1347,10 @@ $cyan: #18aebe;
 }
 
 .persona-writing-content del {
+  color: #4f5258;
   text-decoration-thickness: 1px;
   text-decoration-color: $red;
-  opacity: 0.7;
+  opacity: 1;
 }
 
 .persona-writing-content h1,
@@ -1472,7 +1486,7 @@ $cyan: #18aebe;
 
 .persona-md-figure figcaption {
   margin-top: 9px;
-  color: $muted;
+  color: $paper-muted;
   font:
     700 8px/1.5 'IBM Plex Mono',
     monospace;
@@ -1664,6 +1678,7 @@ $cyan: #18aebe;
 
 .persona-md-summary {
   cursor: pointer;
+  color: $ink;
   list-style: none;
   padding: 14px 16px;
   font:
@@ -1739,7 +1754,7 @@ $cyan: #18aebe;
 .persona-writing-content .footnotes ol {
   margin-bottom: 0;
   padding-left: 1.25rem;
-  color: $muted;
+  color: $paper-muted;
   font-size: 0.84em;
   line-height: 1.6;
 }
@@ -2169,11 +2184,20 @@ $cyan: #18aebe;
 .persona-quote-card blockquote {
   max-width: 620px;
   margin: 0;
+  color: #17191d;
+  opacity: 1;
+  font-family: 'Anthropic Serif', 'Tiempos Text', Georgia, serif;
   font-size: clamp(1.55rem, 3vw, 2.35rem);
   line-height: 1.17;
   letter-spacing: -0.02em;
   font-weight: 400;
   font-style: normal;
+  text-shadow: none;
+}
+
+.persona-quote-card blockquote::before,
+.persona-quote-card blockquote::after {
+  color: #17191d;
 }
 
 .persona-quote-card footer {
@@ -2189,11 +2213,12 @@ $cyan: #18aebe;
 }
 
 .persona-quote-card footer strong {
+  color: #17191d;
   font-weight: 700;
 }
 
 .persona-quote-card footer span {
-  color: #65676b;
+  color: #55585d;
 }
 
 .persona-quote-note {
@@ -2449,8 +2474,23 @@ $cyan: #18aebe;
 
 .persona-quote-card blockquote {
   max-width: 900px;
+  color: #17191d;
+  opacity: 1;
   font-size: clamp(1.7rem, 4vw, 3.5rem);
   line-height: 1.12;
+  font-style: normal;
+}
+
+.persona-quote-card footer {
+  color: #17191d;
+}
+
+.persona-quote-card footer strong {
+  color: #17191d;
+}
+
+.persona-quote-card footer span {
+  color: #55585d;
 }
 
 .persona-quote-pagination {
