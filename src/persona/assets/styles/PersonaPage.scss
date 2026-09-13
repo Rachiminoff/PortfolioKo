@@ -1294,6 +1294,500 @@ $cyan: #18aebe;
 .persona-reader-body code {
   background: $panel;
 }
+
+/* ============================================================
+   PERSONA MARKDOWN READER
+   The writing body is deliberately treated as a document rather
+   than a generic text block. It supports the full writing guide:
+   headings, emphasis, lists, tasks, code, links, images, tables,
+   rules, footnotes, and raw HTML details/summary sections.
+   ============================================================ */
+.persona-writing-content {
+  max-width: 760px;
+  margin-inline: auto;
+  padding-top: 0;
+  font-family: 'Anthropic Sans', 'Styrene B', Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.82;
+  letter-spacing: -0.008em;
+  color: $ink;
+}
+
+.persona-writing-content > *:first-child {
+  margin-top: 0;
+}
+
+.persona-writing-content > *:last-child {
+  margin-bottom: 0;
+}
+
+.persona-writing-content p {
+  margin: 0 0 1.35rem;
+}
+
+.persona-writing-content strong {
+  font-weight: 800;
+}
+
+.persona-writing-content em {
+  font-style: italic;
+}
+
+.persona-writing-content del {
+  text-decoration-thickness: 1px;
+  text-decoration-color: $red;
+  opacity: 0.7;
+}
+
+.persona-writing-content h1,
+.persona-writing-content h2,
+.persona-writing-content h3,
+.persona-writing-content h4,
+.persona-writing-content h5,
+.persona-writing-content h6 {
+  color: $ink;
+  scroll-margin-top: 32px;
+  font-family: 'Anthropic Sans', 'Styrene B', Arial, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.055em;
+}
+
+.persona-writing-content h1 {
+  margin: 3.5rem 0 1.25rem;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  line-height: 0.98;
+}
+
+.persona-writing-content h2 {
+  position: relative;
+  margin: 3rem 0 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(23, 25, 29, 0.16);
+  font-size: clamp(1.65rem, 3vw, 2.45rem);
+  line-height: 1.05;
+}
+
+.persona-writing-content h2::before {
+  content: '';
+  display: block;
+  width: 34px;
+  height: 4px;
+  margin-bottom: 12px;
+  background: $red;
+}
+
+.persona-writing-content h3 {
+  margin: 2.2rem 0 0.8rem;
+  font-size: clamp(1.3rem, 2.5vw, 1.7rem);
+  line-height: 1.1;
+}
+
+.persona-writing-content h4 {
+  margin: 1.8rem 0 0.65rem;
+  font-size: 1.15rem;
+  line-height: 1.2;
+}
+
+.persona-writing-content h5,
+.persona-writing-content h6 {
+  margin: 1.5rem 0 0.55rem;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+
+.persona-writing-content ul,
+.persona-writing-content ol {
+  margin: 0 0 1.5rem;
+  padding-left: 1.65rem;
+}
+
+.persona-writing-content li {
+  margin: 0.45rem 0;
+  padding-left: 0.3rem;
+}
+
+.persona-writing-content li::marker {
+  color: $red;
+  font-weight: 800;
+}
+
+.persona-writing-content ul ul,
+.persona-writing-content ul ol,
+.persona-writing-content ol ul,
+.persona-writing-content ol ol {
+  margin-top: 0.35rem;
+  margin-bottom: 0.45rem;
+}
+
+.persona-writing-content ul.contains-task-list {
+  padding-left: 0;
+  list-style: none;
+}
+
+.persona-writing-content li.task-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding-left: 0;
+}
+
+.persona-writing-content li.task-list-item::marker {
+  content: '';
+}
+
+.persona-md-task-checkbox {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 0.42em;
+  accent-color: $red;
+}
+
+.persona-writing-content a.persona-md-link {
+  color: $blue;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.persona-writing-content a.persona-md-link:hover {
+  color: $red;
+}
+
+.persona-md-figure {
+  margin: 2.25rem 0;
+}
+
+.persona-md-image {
+  display: block;
+  width: 100%;
+  max-height: 680px;
+  object-fit: contain;
+  border: 1px solid rgba(23, 25, 29, 0.18);
+  background: #fff;
+  box-shadow: 8px 8px 0 rgba(225, 67, 58, 0.2);
+}
+
+.persona-md-figure figcaption {
+  margin-top: 9px;
+  color: $muted;
+  font:
+    700 8px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.persona-md-table-wrap {
+  width: 100%;
+  margin: 2rem 0;
+  overflow-x: auto;
+  border: 1px solid rgba(23, 25, 29, 0.18);
+  background: rgba(23, 25, 29, 0.025);
+  -webkit-overflow-scrolling: touch;
+}
+
+.persona-writing-content table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+  font-size: 0.82em;
+  line-height: 1.5;
+}
+
+.persona-writing-content th,
+.persona-writing-content td {
+  padding: 12px 14px;
+  border-right: 1px solid rgba(23, 25, 29, 0.12);
+  border-bottom: 1px solid rgba(23, 25, 29, 0.12);
+  text-align: left;
+  vertical-align: top;
+}
+
+.persona-writing-content th:last-child,
+.persona-writing-content td:last-child {
+  border-right: 0;
+}
+
+.persona-writing-content tr:last-child td {
+  border-bottom: 0;
+}
+
+.persona-writing-content thead th {
+  background: #17191d;
+  color: #f2f0e8;
+  font:
+    700 9px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.persona-writing-content tbody tr:nth-child(even) {
+  background: rgba(23, 25, 29, 0.035);
+}
+
+.persona-writing-content tbody tr:hover {
+  background: rgba(49, 91, 216, 0.08);
+}
+
+.persona-writing-content th[align='center'],
+.persona-writing-content td[align='center'] {
+  text-align: center;
+}
+
+.persona-writing-content th[align='right'],
+.persona-writing-content td[align='right'] {
+  text-align: right;
+}
+
+.persona-md-code-block {
+  position: relative;
+  margin: 1.8rem 0;
+  border: 1px solid #2d3035;
+  background: #0d0f12;
+  box-shadow: 8px 8px 0 rgba(23, 25, 29, 0.16);
+}
+
+.persona-md-code-block pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 18px 20px;
+  background: transparent;
+  color: #e8e9eb;
+  font:
+    500 13px/1.7 'IBM Plex Mono',
+    monospace;
+  tab-size: 2;
+  -webkit-overflow-scrolling: touch;
+}
+
+.persona-writing-content :not(pre) > code {
+  padding: 0.18em 0.4em;
+  border: 1px solid rgba(23, 25, 29, 0.12);
+  border-radius: 2px;
+  background: rgba(23, 25, 29, 0.07);
+  color: #202228;
+  font:
+    600 0.84em/1.3 'IBM Plex Mono',
+    monospace;
+}
+
+.persona-writing-content pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+/* A small, readable highlight palette for rehype-highlight / highlight.js. */
+.persona-md-code-block .hljs-comment,
+.persona-md-code-block .hljs-quote {
+  color: #858b95;
+}
+.persona-md-code-block .hljs-keyword,
+.persona-md-code-block .hljs-selector-tag,
+.persona-md-code-block .hljs-literal {
+  color: #ffcf70;
+}
+.persona-md-code-block .hljs-string,
+.persona-md-code-block .hljs-regexp,
+.persona-md-code-block .hljs-addition {
+  color: #9bd58c;
+}
+.persona-md-code-block .hljs-number,
+.persona-md-code-block .hljs-built_in,
+.persona-md-code-block .hljs-type {
+  color: #86c7ff;
+}
+.persona-md-code-block .hljs-title,
+.persona-md-code-block .hljs-function,
+.persona-md-code-block .hljs-title.function_ {
+  color: #e4a7ff;
+}
+
+.persona-writing-content blockquote {
+  position: relative;
+  margin: 2.6rem 0;
+  padding: 28px 30px 24px 31px;
+  border: 1px solid rgba(23, 25, 29, 0.16);
+  border-left: 5px solid $red;
+  background: #ebe8dd;
+  color: #17191d;
+  box-shadow: 7px 7px 0 rgba(225, 67, 58, 0.2);
+  font-family: 'Anthropic Serif', 'Tiempos Text', Georgia, serif;
+  font-style: italic;
+}
+
+.persona-writing-content blockquote::before {
+  content: '“';
+  position: absolute;
+  top: -0.7rem;
+  left: 14px;
+  padding: 0 7px;
+  background: #ebe8dd;
+  color: $red;
+  font:
+    400 3.6rem/1 Georgia,
+    serif;
+  font-style: normal;
+}
+
+.persona-writing-content blockquote p {
+  margin: 0 0 0.9rem;
+}
+
+.persona-writing-content blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.persona-writing-content blockquote strong,
+.persona-writing-content blockquote em {
+  font-weight: inherit;
+}
+
+.persona-writing-content hr.persona-md-hr {
+  height: 1px;
+  margin: 3rem 0;
+  border: 0;
+  background: linear-gradient(90deg, $red 0 64px, rgba(23, 25, 29, 0.16) 64px 100%);
+}
+
+.persona-md-details {
+  margin: 2rem 0;
+  border: 1px solid rgba(23, 25, 29, 0.18);
+  background: rgba(23, 25, 29, 0.025);
+}
+
+.persona-md-summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 14px 16px;
+  font:
+    800 10px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.persona-md-summary::-webkit-details-marker {
+  display: none;
+}
+
+.persona-md-summary::before {
+  content: '＋';
+  display: inline-block;
+  margin-right: 9px;
+  color: $red;
+  transition: transform 0.2s ease;
+}
+
+.persona-md-details[open] .persona-md-summary {
+  border-bottom: 1px solid rgba(23, 25, 29, 0.12);
+}
+
+.persona-md-details[open] .persona-md-summary::before {
+  transform: rotate(45deg);
+}
+
+.persona-md-details > :not(summary) {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+.persona-md-details > :last-child {
+  margin-bottom: 18px;
+}
+
+/* GitHub-style footnotes emitted by remark-gfm. */
+.persona-writing-content .data-footnote-ref {
+  color: $red;
+  font:
+    800 0.72em/1 'IBM Plex Mono',
+    monospace;
+  text-decoration: none;
+}
+
+.persona-writing-content .data-footnote-ref:hover {
+  text-decoration: underline;
+}
+
+.persona-writing-content .footnotes {
+  margin-top: 4rem;
+  padding-top: 1.4rem;
+  border-top: 2px solid #17191d;
+}
+
+.persona-writing-content .footnotes h2 {
+  margin: 0 0 1rem;
+  padding: 0;
+  border: 0;
+  font:
+    800 10px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.persona-writing-content .footnotes h2::before {
+  display: none;
+}
+
+.persona-writing-content .footnotes ol {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+  color: $muted;
+  font-size: 0.84em;
+  line-height: 1.6;
+}
+
+.persona-writing-content .footnote-backref {
+  margin-left: 0.3rem;
+  color: $red;
+  text-decoration: none;
+}
+
+@media (max-width: 700px) {
+  .persona-writing-content {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  .persona-writing-content h2 {
+    margin-top: 2.5rem;
+  }
+
+  .persona-md-table-wrap {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .persona-writing-content blockquote {
+    margin: 2rem 0;
+    padding: 25px 19px 21px 22px;
+    box-shadow: 5px 5px 0 rgba(225, 67, 58, 0.18);
+  }
+
+  .persona-writing-content blockquote::before {
+    left: 9px;
+    font-size: 3rem;
+  }
+
+  .persona-md-code-block {
+    margin-left: -2px;
+    margin-right: -2px;
+    box-shadow: 5px 5px 0 rgba(23, 25, 29, 0.13);
+  }
+
+  .persona-md-code-block pre {
+    padding: 15px;
+    font-size: 12px;
+  }
+}
+
 @media (max-width: 600px) {
   .persona-writing-pagination {
     justify-content: space-between;

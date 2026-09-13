@@ -1,19 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { personaQuotes } from '../data/quotes.data';
 import PersonaSectionHeader from './PersonaSectionHeader';
 
+const getTodayKey = () => {
+  const today = new Date();
+  return `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+};
+
+const getDailyQuoteIndex = (total: number, key: string) => {
+  if (total <= 1) return 0;
+  let hash = 2166136261;
+  for (let index = 0; index < key.length; index += 1) {
+    hash ^= key.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0) % total;
+};
+
 const QuotesSection: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [direction, setDirection] = useState<'next' | 'prev'>('next');
-  const hasQuotes = personaQuotes.length > 0;
   const total = personaQuotes.length;
+  const [todayKey, setTodayKey] = useState(getTodayKey);
+  const dailyIndex = useMemo(() => getDailyQuoteIndex(total, todayKey), [total, todayKey]);
+  const [activeIndex, setActiveIndex] = useState(dailyIndex);
+  const [direction, setDirection] = useState<'next' | 'prev'>('next');
+  const hasQuotes = total > 0;
 
   useEffect(() => {
-    if (activeIndex >= total && total > 0) {
-      setActiveIndex(total - 1);
-    }
-  }, [activeIndex, total]);
+    setActiveIndex(dailyIndex);
+  }, [dailyIndex]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setTodayKey((current) => {
+        const next = getTodayKey();
+        return current === next ? current : next;
+      });
+    }, 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   const goToQuote = (nextIndex: number, nextDirection: 'next' | 'prev') => {
     if (!hasQuotes || total <= 1) return;
@@ -28,16 +53,17 @@ const QuotesSection: React.FC = () => {
       <PersonaSectionHeader
         index="04 / QUOTATIONS"
         title="WORDS I KEEP"
-        note="LINES WORTH SAVING"
+        note="A DIFFERENT LINE, EVERY DAY"
         id="persona-quotes-title"
       />
 
       <div className="persona-quote-paper">
         <div className="persona-quote-paper-top" aria-hidden="true">
-          <span>PERSONAL NOTEBOOK</span>
+          <span>TODAY'S QUOTE</span>
           <span>
-            PAGE {hasQuotes ? String(activeIndex + 1).padStart(2, '0') : '01'}
-            {hasQuotes && ` / ${String(total).padStart(2, '0')}`}
+            {hasQuotes
+              ? `ENTRY ${String(activeIndex + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`
+              : 'ENTRY 01'}
           </span>
         </div>
 
@@ -72,13 +98,12 @@ const QuotesSection: React.FC = () => {
           </div>
         )}
 
-        {hasQuotes && (
+        {hasQuotes && total > 1 && (
           <div className="persona-quote-pagination" aria-label="Quote pagination">
             <button
               type="button"
               className="persona-quote-page-button"
               onClick={() => goToQuote(activeIndex - 1, 'prev')}
-              disabled={total <= 1}
               aria-label="Previous quote"
             >
               <Icon icon="mdi:arrow-left" />
@@ -106,7 +131,6 @@ const QuotesSection: React.FC = () => {
               type="button"
               className="persona-quote-page-button"
               onClick={() => goToQuote(activeIndex + 1, 'next')}
-              disabled={total <= 1}
               aria-label="Next quote"
             >
               <span>NEXT</span>

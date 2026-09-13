@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
+import rehypeRaw from 'rehype-raw';
 import { Icon } from '@iconify/react';
 import PersonaSectionHeader from './PersonaSectionHeader';
 import { supabase } from '../../lib/supabase';
@@ -319,7 +322,94 @@ const WritingsSection: React.FC = () => {
                 <div className="persona-reader-excerpt">{selectedPost.excerpt}</div>
               )}
               <div className="persona-writing-content persona-reader-body">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{selectedPost.content}</ReactMarkdown>
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
+                  components={{
+                    h1: ({ children, ...props }: any) => (
+                      <h1 className="persona-md-h1" {...props}>
+                        {children}
+                      </h1>
+                    ),
+                    h2: ({ children, ...props }: any) => (
+                      <h2 className="persona-md-h2" {...props}>
+                        {children}
+                      </h2>
+                    ),
+                    h3: ({ children, ...props }: any) => (
+                      <h3 className="persona-md-h3" {...props}>
+                        {children}
+                      </h3>
+                    ),
+                    h4: ({ children, ...props }: any) => (
+                      <h4 className="persona-md-h4" {...props}>
+                        {children}
+                      </h4>
+                    ),
+                    h5: ({ children, ...props }: any) => (
+                      <h5 className="persona-md-h5" {...props}>
+                        {children}
+                      </h5>
+                    ),
+                    h6: ({ children, ...props }: any) => (
+                      <h6 className="persona-md-h6" {...props}>
+                        {children}
+                      </h6>
+                    ),
+                    table: ({ children, ...props }: any) => (
+                      <div className="persona-md-table-wrap">
+                        <table {...props}>{children}</table>
+                      </div>
+                    ),
+                    a: ({ href, children, ...props }: any) => {
+                      const external = /^https?:\/\//i.test(href || '');
+                      return (
+                        <a
+                          href={href}
+                          className="persona-md-link"
+                          target={external ? '_blank' : undefined}
+                          rel={external ? 'noopener noreferrer' : undefined}
+                          {...props}
+                        >
+                          {children}
+                        </a>
+                      );
+                    },
+                    img: ({ alt, ...props }: any) => (
+                      <figure className="persona-md-figure">
+                        <img className="persona-md-image" alt={alt || ''} {...props} />
+                        {alt && <figcaption>{alt}</figcaption>}
+                      </figure>
+                    ),
+                    pre: ({ children, ...props }: any) => (
+                      <div className="persona-md-code-block">
+                        <pre {...props}>{children}</pre>
+                      </div>
+                    ),
+                    input: ({ checked, ...props }: any) => (
+                      <input
+                        type="checkbox"
+                        checked={checked || false}
+                        readOnly
+                        className="persona-md-task-checkbox"
+                        {...props}
+                      />
+                    ),
+                    details: ({ children, ...props }: any) => (
+                      <details className="persona-md-details" {...props}>
+                        {children}
+                      </details>
+                    ),
+                    summary: ({ children, ...props }: any) => (
+                      <summary className="persona-md-summary" {...props}>
+                        {children}
+                      </summary>
+                    ),
+                    hr: (props: any) => <hr className="persona-md-hr" {...props} />,
+                  }}
+                >
+                  {selectedPost.content}
+                </ReactMarkdown>
               </div>
             </main>
           </div>
