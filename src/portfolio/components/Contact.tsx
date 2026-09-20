@@ -190,7 +190,6 @@ function Contact() {
               <p className="contact-subtitle">
                 Have a project in mind, a question, or just want to say hello?
                 <br />
-                <br />
                 I'd love to hear from you.
               </p>
             </div>
@@ -355,7 +354,7 @@ function Contact() {
               fullWidth
               className="form-field"
               variant="outlined"
-              sx={{ mt: 2 }}
+              sx={{ mt: { xs: 1.25, sm: 2 } }}
               required
               InputLabelProps={{
                 shrink: true,
@@ -378,11 +377,12 @@ function Contact() {
                   : `${charCount}/1000 characters${charCount > 800 ? ' (almost there!)' : ''}`
               }
               multiline
-              rows={5}
+              minRows={3}
+              maxRows={10}
               fullWidth
               className="form-field"
               variant="outlined"
-              sx={{ mt: 2 }}
+              sx={{ mt: { xs: 1.25, sm: 2 } }}
               inputProps={{ maxLength: 1000 }}
               required
               InputLabelProps={{

@@ -199,13 +199,34 @@ $sans:
   opacity: 1;
   transform: none;
 }
-.project-card:hover,
+// Hover-only accents are gated to devices that actually have hover (mouse/
+// trackpad). Without this, a tap on a touchscreen can leave the ":hover"
+// state visually "stuck" on the card — which is what turned the arrow into
+// a solid red block after tapping.
+@media (hover: hover) {
+  .project-card:hover {
+    background: color-mix(in srgb, var(--card-bg) 82%, var(--accent) 18%);
+    border-color: var(--accent);
+  }
+  .project-card:hover::after {
+    transform: scale(1.25);
+    opacity: 0.28;
+  }
+  .project-card:hover .project-arrow {
+    transform: translate(3px, -3px) rotate(4deg);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #111;
+  }
+}
 .project-card:focus-visible {
   background: color-mix(in srgb, var(--card-bg) 82%, var(--accent) 18%);
   border-color: var(--accent);
-}
-.project-card:focus-visible {
   box-shadow: inset 0 0 0 2px $ink;
+}
+.project-card:focus-visible::after {
+  transform: scale(1.25);
+  opacity: 0.28;
 }
 
 .project-card::before {
@@ -242,12 +263,6 @@ $sans:
   transition:
     transform 0.35s ease,
     opacity 0.35s ease;
-}
-
-.project-card:hover::after,
-.project-card:focus-visible::after {
-  transform: scale(1.25);
-  opacity: 0.28;
 }
 
 // Featured changes emphasis, not geometry. The grid remains balanced.
@@ -386,14 +401,6 @@ $sans:
     border-color 0.25s ease;
 }
 
-.project-card:hover .project-arrow,
-.project-card:focus-visible .project-arrow {
-  transform: translate(3px, -3px) rotate(4deg);
-  background: var(--accent);
-  border-color: var(--accent);
-  color: #111;
-}
-
 .project-subtitle {
   max-width: 680px;
   margin: 22px 0 28px;
@@ -525,7 +532,16 @@ $sans:
   }
 }
 
+// ============================================================
+// MOBILE — compact row list, not a grid of tall cards.
+// Decorative elements (grid overlay, art shapes, glow, footer strip)
+// are dropped here on purpose: they read as clutter once cards are
+// stacked single-file, and each row needs to be scannable in a glance.
+// ============================================================
 @media (max-width: 760px) {
+  .projects-container::before {
+    opacity: 0.08;
+  }
   .projects-heading-grid {
     grid-template-columns: 1fr;
     gap: 24px;
@@ -537,33 +553,102 @@ $sans:
   .projects-subtitle {
     font-size: 12px;
   }
+
   .projects-grid {
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
     gap: 8px;
   }
+
+  .project-card,
+  .project-card-featured,
   .project-card:nth-child(n),
-  .project-card-featured {
-    grid-column: span 1 !important;
-    min-height: 360px;
-  }
   .project-card:last-child:nth-child(odd) {
-    grid-column: 1 / -1 !important;
+    grid-column: auto !important;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 14px 14px 16px;
+    background: $panel;
+    border: 1px solid $line;
+    border-left: 3px solid var(--accent);
   }
-  .project-card {
-    padding: 22px;
+
+  // Drop the decorative geometry, index number, glow circle and ruled
+  // lines — they add visual weight without adding information here.
+  .project-card-index,
+  .project-card-art,
+  .project-card::before,
+  .project-card::after {
+    display: none;
   }
-  .project-card-art {
-    margin-bottom: 38px;
+
+  .project-card-content {
+    max-width: none;
+    min-height: 0;
+    height: auto;
+    padding-bottom: 0;
+    flex: 1;
+    min-width: 0;
   }
-  .project-card-footer {
-    left: 22px;
-    right: 22px;
+
+  .project-title-row {
+    gap: 10px;
+  }
+  .project-kicker {
+    margin-bottom: 3px;
+    font-size: 8px;
   }
   .project-title {
-    font-size: clamp(1.65rem, 6vw, 2.3rem);
+    font-size: 1.05rem;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
   }
+  .project-arrow {
+    width: 30px;
+    height: 30px;
+  }
+
   .project-subtitle {
-    font-size: 12px;
+    margin: 6px 0 8px;
+    font-size: 11.5px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  // Keep only role + status; the middle "duration" span is hidden and
+  // the dot separator still lines up cleanly against the next sibling.
+  .project-meta {
+    margin-bottom: 8px;
+    font-size: 9px;
+  }
+  .project-meta span:nth-child(2) {
+    display: none;
+  }
+
+  .tech-tags {
+    gap: 5px;
+  }
+  .tech-tag {
+    padding: 4px 6px;
+    font-size: 8.5px;
+  }
+
+  // The footer "CASE STUDY ↗" strip duplicates the arrow already shown
+  // in the title row — one affordance is enough at this size.
+  .project-card-footer {
+    display: none;
+  }
+  // Featured cards get emphasis via desktop's larger min-height, but that
+  // fixed 420px (set with !important, non-responsive) is exactly what's
+  // fighting the compact mobile row — force it back to auto here.
+  .project-card-featured {
+    min-height: 0 !important;
   }
 }
 
@@ -580,20 +665,14 @@ $sans:
   .toolbar-rule {
     flex: 1;
   }
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-  .project-card:nth-child(n),
-  .project-card-featured {
-    grid-column: span 1 !important;
-    min-height: 340px;
-  }
   .project-title {
-    font-size: 2rem;
+    font-size: 1rem;
   }
-  .project-card-art {
-    margin-bottom: 42px;
+  .project-subtitle {
+    -webkit-line-clamp: 1;
+  }
+  .project-meta {
+    display: none;
   }
   .pagination-page,
   .pagination-arrow {

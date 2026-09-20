@@ -45,7 +45,9 @@ function ProjectCard({ project, index, absoluteIndex, isFeatured = false }: Proj
     }
   };
 
-  const displayTech = project.tech.slice(0, 4);
+  // Fewer tags shown by default keeps the compact mobile row tidy;
+  // desktop has room via the ".more" badge and hover states.
+  const displayTech = project.tech.slice(0, 3);
   const remainingTech = project.tech.length - displayTech.length;
   const colorVariant = getColorVariant(absoluteIndex);
 

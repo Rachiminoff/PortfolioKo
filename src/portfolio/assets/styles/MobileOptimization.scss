@@ -119,37 +119,11 @@
     margin-top: 10px !important;
   }
 
-  /* Projects: two compact columns where the viewport permits; no giant cards. */
+  /* Projects: full compact-row treatment lives in Project.scss's own
+     mobile breakpoint, so it stays in one place instead of split
+     across two files with competing !important rules. */
   .projects-container {
     padding: 44px 12px 48px !important;
-  }
-  .projects-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-  .project-card,
-  .project-card-featured,
-  .project-card:nth-child(n) {
-    grid-column: auto !important;
-    min-height: 0 !important;
-  }
-  .project-card {
-    padding: 14px !important;
-  }
-  .project-card-art {
-    height: 110px !important;
-    margin-bottom: 14px !important;
-  }
-  .project-title {
-    font-size: 1.05rem !important;
-  }
-  .project-subtitle {
-    font-size: 0.72rem !important;
-    line-height: 1.35;
-  }
-  .project-card-footer {
-    position: static !important;
-    margin-top: 12px !important;
   }
   .projects-pagination {
     margin-top: 14px !important;
@@ -176,21 +150,21 @@
 
   /* Contact: remove full-screen behavior and keep fields compact. */
   .contact-container {
-    padding: 44px 12px 48px !important;
+    padding: 34px 12px 34px !important;
   }
   .contact-grid {
     grid-template-columns: 1fr !important;
-    gap: 14px !important;
+    gap: 10px !important;
   }
   .contact-card {
-    padding: 16px !important;
+    padding: 14px !important;
   }
   .direct-email-card {
-    padding: 12px !important;
+    padding: 10px !important;
   }
   .form-grid-2 {
     grid-template-columns: 1fr !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
 
   /* Certificates: compact two-up cards when possible. */
@@ -211,29 +185,59 @@
 
   /* Footer + tech stack: no oversized footer whitespace. */
   .footer {
-    padding: 28px 14px 18px !important;
+    padding: 20px 14px 16px !important;
   }
   .footer-container {
     grid-template-columns: 1fr !important;
-    gap: 18px !important;
+    gap: 12px !important;
+  }
+  // Logo becomes a small inline mark next to its label instead of a big
+  // centered square with the label stacked underneath — that stacked
+  // treatment alone was costing well over 100px of height on phones.
+  .footer-logo {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    text-align: left !important;
   }
   .footer-logo .logo-wrapper {
     margin: 0 !important;
-    width: 76px;
-    height: 76px;
+    width: 40px !important;
+    height: 40px !important;
+    padding: 3px !important;
+    box-shadow: 4px 4px 0 var(--red) !important;
+  }
+  .footer-logo .logo-label {
+    margin-top: 0 !important;
+  }
+  .footer-header {
+    padding-bottom: 7px;
+    margin-bottom: 9px;
   }
   .footer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
   .footer-card {
-    min-height: 54px !important;
-    padding: 9px !important;
+    min-height: 44px !important;
+    padding: 8px !important;
+    gap: 7px !important;
+  }
+  .footer-card svg {
+    font-size: 17px !important;
+  }
+  .footer-stack {
+    margin-top: 10px !important;
+  }
+  .footer-stack-toggle {
+    min-height: 38px !important;
+    padding: 7px 10px !important;
   }
   .footer-stack-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
   }
   .footer-stack-grid > span {
     min-width: 0;
+    min-height: 0 !important;
     padding: 11px !important;
   }
   .footer-stack-grid > span svg {
@@ -246,7 +250,8 @@
     overflow-wrap: anywhere;
   }
   .footer-bottom {
-    margin-top: 16px !important;
+    margin-top: 12px !important;
+    padding-top: 10px !important;
   }
 
   /* Prevent fixed viewers/modals from creating page-level overflow. */
@@ -266,12 +271,8 @@
 }
 
 @media (max-width: 520px) {
-  .projects-grid,
   .certificates__grid {
     grid-template-columns: 1fr !important;
-  }
-  .project-card-art {
-    height: 96px !important;
   }
   .hero-actions {
     grid-template-columns: 1fr 1fr !important;
@@ -289,9 +290,6 @@
     font-size: 2.9rem !important;
   }
   .hero-specs {
-    grid-template-columns: 1fr !important;
-  }
-  .footer-grid {
     grid-template-columns: 1fr !important;
   }
 }

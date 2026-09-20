@@ -530,17 +530,36 @@ $display: 'Archivo', Arial, sans-serif;
     top: 16px;
     font-size: 7px;
   }
+  // The decorative corner shapes are sized off viewport width/height and
+  // aren't aware of the taller, single-column mobile layout — they end up
+  // drifting into the middle of the text instead of sitting in empty
+  // space. They're pure flourish, so simplest fix is to drop them here.
+  .main-container::before,
+  .main-container::after {
+    display: none;
+  }
   .hero-section {
     min-height: auto;
     padding-top: 70px;
   }
   .hero-content {
     grid-template-columns: 1fr;
-    gap: 52px;
+    gap: 34px;
+  }
+  .hero-kicker {
+    margin-bottom: 20px;
+  }
+  .hero-intro {
+    margin-top: 20px;
+    margin-bottom: 18px;
+  }
+  .hero-specs {
+    margin-top: 22px;
   }
   .hero-right {
-    max-width: 620px;
+    max-width: 300px;
     width: 100%;
+    margin: 0 auto;
   }
   .hero-title {
     font-size: clamp(4rem, 17vw, 7.5rem);
@@ -561,6 +580,25 @@ $display: 'Archivo', Arial, sans-serif;
   }
   .hero-specs > div:nth-child(2) {
     padding-left: 8px;
+  }
+
+  // The portrait module is decorative branding, not primary content — it
+  // doesn't need to run the full width of the phone. Capping it (above,
+  // via .hero-right) and trimming its internal chrome keeps it present
+  // without it dominating the scroll.
+  .profile-module {
+    padding: 10px;
+    box-shadow: 8px 8px 0 $red;
+  }
+  .module-content {
+    padding: 12px;
+  }
+  .module-header,
+  .module-footer {
+    font-size: 7px;
+  }
+  .hero-coordinate {
+    display: none;
   }
 }
 

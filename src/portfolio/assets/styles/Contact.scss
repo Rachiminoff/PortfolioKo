@@ -593,7 +593,7 @@ textarea::-webkit-scrollbar-thumb {
 
 @media (max-width: 620px) {
   .contact-container {
-    padding: 3.5rem 0.8rem 3rem;
+    padding: 2.5rem 0.8rem 2.5rem;
     background-size: 36px 36px;
     &::after {
       top: 1.1rem;
@@ -607,18 +607,26 @@ textarea::-webkit-scrollbar-thumb {
   .contact-header h2 {
     font-size: clamp(2.6rem, 15vw, 4.2rem);
   }
+  .contact-subtitle {
+    margin-top: 0.5rem;
+  }
   .contact-divider {
     width: 72px;
     height: 7px;
+    margin: 1rem 0;
     box-shadow: 12px 0 0 $blue;
   }
   .direct-email-card {
+    margin-top: 1.25rem;
+    padding: 0.9rem;
     box-shadow: 6px 6px 0 $blue;
   }
   .direct-email-meta {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.35rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.6rem;
   }
   .direct-email-meta span:last-child {
     text-align: left;
@@ -626,23 +634,54 @@ textarea::-webkit-scrollbar-thumb {
   .direct-email-row {
     align-items: flex-start;
     flex-direction: column;
+    gap: 0.6rem;
   }
   .direct-email-copy {
     width: 100%;
   }
+  .contact-details {
+    margin-top: 1rem;
+  }
   .form-grid-2 {
     grid-template-columns: 1fr;
   }
+  .contact-card {
+    padding: 1.1rem !important;
+    box-shadow: 6px 6px 0 $red !important;
+  }
   .contact-card-header {
     padding-right: 4rem;
+    margin-bottom: 0.85rem;
+  }
+  .card-title {
+    font-size: 1.35rem !important;
+  }
+  .card-divider {
+    margin: 0 0 0.85rem !important;
   }
   .contact-card::after {
     right: 1rem;
     bottom: 1rem;
+    width: 40px;
+    height: 40px;
+  }
+  .chips-container {
+    margin-bottom: 0.85rem;
+  }
+  .chips-label {
+    margin-bottom: 0.4rem;
+  }
+  .chip-item {
+    height: 26px !important;
+  }
+  .form-field .MuiInputBase-input {
+    padding: 0.7rem !important;
   }
   .form-actions {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
   }
   .send-button {
     width: 100%;
@@ -653,6 +692,8 @@ textarea::-webkit-scrollbar-thumb {
   }
   .form-footer {
     justify-content: center;
+    margin-top: 0.8rem;
+    padding-top: 0.55rem;
   }
 }
 
