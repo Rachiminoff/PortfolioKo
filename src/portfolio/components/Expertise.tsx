@@ -9,7 +9,6 @@ interface Tech {
   icon: string;
   color: string;
   category: string;
-  proficiency: number;
   description: string;
 }
 
@@ -29,7 +28,6 @@ const techStack: Tech[] = [
     icon: 'logos:react',
     color: '#61DAFB',
     category: 'Frontend',
-    proficiency: 95,
     description: 'Building interactive UIs with hooks and context',
   },
   {
@@ -37,7 +35,6 @@ const techStack: Tech[] = [
     icon: 'logos:typescript-icon',
     color: '#3178C6',
     category: 'Frontend',
-    proficiency: 90,
     description: 'Type-safe JavaScript for scalable applications',
   },
   {
@@ -45,7 +42,6 @@ const techStack: Tech[] = [
     icon: 'logos:tailwindcss-icon',
     color: '#06B6D4',
     category: 'Frontend',
-    proficiency: 92,
     description: 'Utility-first CSS framework for rapid UI development',
   },
   {
@@ -53,7 +49,6 @@ const techStack: Tech[] = [
     icon: 'logos:react',
     color: '#61DAFB',
     category: 'Frontend',
-    proficiency: 85,
     description: 'Cross-platform mobile development',
   },
   {
@@ -61,7 +56,6 @@ const techStack: Tech[] = [
     icon: 'logos:flutter',
     color: '#02569B',
     category: 'Frontend',
-    proficiency: 75,
     description: 'Low-code Flutter development',
   },
   {
@@ -69,7 +63,6 @@ const techStack: Tech[] = [
     icon: 'logos:html-5',
     color: '#E34F26',
     category: 'Frontend',
-    proficiency: 95,
     description: 'Semantic markup and web standards',
   },
   {
@@ -77,7 +70,6 @@ const techStack: Tech[] = [
     icon: 'logos:css-3',
     color: '#1572B6',
     category: 'Frontend',
-    proficiency: 90,
     description: 'Modern styling and animations',
   },
   {
@@ -85,7 +77,6 @@ const techStack: Tech[] = [
     icon: 'logos:javascript',
     color: '#F7DF1E',
     category: 'Frontend',
-    proficiency: 92,
     description: 'Core web development language',
   },
 
@@ -95,7 +86,6 @@ const techStack: Tech[] = [
     icon: 'logos:laravel',
     color: '#FF2D20',
     category: 'Backend',
-    proficiency: 82,
     description: 'PHP framework for building modern web applications',
   },
   {
@@ -103,7 +93,6 @@ const techStack: Tech[] = [
     icon: 'logos:php',
     color: '#777BB4',
     category: 'Backend',
-    proficiency: 78,
     description: 'Server-side scripting language',
   },
   {
@@ -111,7 +100,6 @@ const techStack: Tech[] = [
     icon: 'logos:nodejs',
     color: '#339933',
     category: 'Backend',
-    proficiency: 80,
     description: 'JavaScript runtime for server-side applications',
   },
   {
@@ -119,7 +107,6 @@ const techStack: Tech[] = [
     icon: 'logos:postgresql',
     color: '#4169E1',
     category: 'Backend',
-    proficiency: 85,
     description: 'Advanced relational database management',
   },
   {
@@ -127,7 +114,6 @@ const techStack: Tech[] = [
     icon: 'logos:supabase-icon',
     color: '#3ECF8E',
     category: 'Backend',
-    proficiency: 88,
     description: 'PostgreSQL with real-time capabilities',
   },
   {
@@ -135,7 +121,6 @@ const techStack: Tech[] = [
     icon: 'logos:sqlite',
     color: '#003B57',
     category: 'Backend',
-    proficiency: 80,
     description: 'Lightweight embedded database',
   },
   {
@@ -143,7 +128,6 @@ const techStack: Tech[] = [
     icon: 'logos:mysql',
     color: '#4479A1',
     category: 'Backend',
-    proficiency: 85,
     description: 'Relational database management',
   },
 
@@ -153,7 +137,6 @@ const techStack: Tech[] = [
     icon: 'logos:godot-icon',
     color: '#478CBF',
     category: 'Game Dev',
-    proficiency: 85,
     description: 'Open-source game engine',
   },
   {
@@ -161,7 +144,6 @@ const techStack: Tech[] = [
     icon: 'logos:godot-icon',
     color: '#478CBF',
     category: 'Game Dev',
-    proficiency: 80,
     description: 'Python-like game scripting',
   },
   {
@@ -169,7 +151,6 @@ const techStack: Tech[] = [
     icon: 'logos:blender',
     color: '#F5792A',
     category: 'Game Dev',
-    proficiency: 70,
     description: '3D modeling and animation',
   },
 
@@ -179,7 +160,6 @@ const techStack: Tech[] = [
     icon: 'logos:python',
     color: '#3776AB',
     category: 'Automation',
-    proficiency: 90,
     description: 'Versatile scripting and automation',
   },
   {
@@ -187,7 +167,6 @@ const techStack: Tech[] = [
     icon: 'logos:playwright',
     color: '#2EAD33',
     category: 'Automation',
-    proficiency: 75,
     description: 'Automated browser testing',
   },
   {
@@ -195,7 +174,6 @@ const techStack: Tech[] = [
     icon: 'logos:python',
     color: '#4B8BBE',
     category: 'Automation',
-    proficiency: 70,
     description: 'Web scraping and parsing',
   },
 
@@ -205,7 +183,6 @@ const techStack: Tech[] = [
     icon: 'logos:vitejs',
     color: '#646CFF',
     category: 'Tools',
-    proficiency: 85,
     description: 'Next-generation frontend build tool',
   },
   {
@@ -213,7 +190,6 @@ const techStack: Tech[] = [
     icon: 'logos:visual-studio-code',
     color: '#007ACC',
     category: 'Tools',
-    proficiency: 95,
     description: 'Lightweight but powerful source code editor',
   },
   {
@@ -221,15 +197,13 @@ const techStack: Tech[] = [
     icon: 'logos:git-icon',
     color: '#F05032',
     category: 'Tools',
-    proficiency: 95,
     description: 'Version control system',
   },
   {
     name: 'GitHub',
-    icon: 'logos:github-icon',
+    icon: 'mdi:github',
     color: '#FFFFFF',
     category: 'Tools',
-    proficiency: 90,
     description: 'Collaborative development platform',
   },
   {
@@ -237,7 +211,6 @@ const techStack: Tech[] = [
     icon: 'logos:dart',
     color: '#00B4AB',
     category: 'Tools',
-    proficiency: 80,
     description: 'Optimized for UI development',
   },
   {
@@ -245,7 +218,6 @@ const techStack: Tech[] = [
     icon: 'logos:flutter',
     color: '#02569B',
     category: 'Tools',
-    proficiency: 78,
     description: 'Cross-platform UI framework',
   },
   {
@@ -253,15 +225,13 @@ const techStack: Tech[] = [
     icon: 'logos:pandoc',
     color: '#2C3E50',
     category: 'Tools',
-    proficiency: 70,
     description: 'Universal document converter',
   },
   {
     name: 'Vercel',
-    icon: 'logos:vercel-icon',
+    icon: 'simple-icons:vercel',
     color: '#FFFFFF',
     category: 'Tools',
-    proficiency: 85,
     description: 'Deployment and hosting platform',
   },
 
@@ -271,7 +241,6 @@ const techStack: Tech[] = [
     icon: 'mdi:brain',
     color: '#8B5CF6',
     category: 'AI',
-    proficiency: 80,
     description: 'Working with language models and AI tools',
   },
   {
@@ -279,187 +248,139 @@ const techStack: Tech[] = [
     icon: 'mdi:robot-outline',
     color: '#8B5CF6',
     category: 'AI',
-    proficiency: 80,
     description: 'Crafting structured prompts for LLMs',
   },
 ];
 
 const categories = [
-  { name: 'Frontend', color: '#61DAFB' },
-  { name: 'Backend', color: '#FF2D20' },
-  { name: 'Game Dev', color: '#478CBF' },
-  { name: 'Automation', color: '#3776AB' },
-  { name: 'Tools', color: '#F05032' },
-  { name: 'AI', color: '#8B5CF6' },
+  { name: 'Frontend', color: '#35C2FF', code: '01' },
+  { name: 'Backend', color: '#F04438', code: '02' },
+  { name: 'Game Dev', color: '#F2C94C', code: '03' },
+  { name: 'Automation', color: '#4D8DFF', code: '04' },
+  { name: 'Tools', color: '#FF7A45', code: '05' },
+  { name: 'AI', color: '#A66BFF', code: '06' },
 ];
 
 function Expertise() {
   const [selectedTech, setSelectedTech] = useState<Tech | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-
-  const { ref, inView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
-
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
-    if (wrapperRef.current) {
-      const rect = wrapperRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      setMousePosition({ x, y });
-    }
-  };
+  const [hoveredTech, setHoveredTech] = useState<Tech | null>(null);
+  const { ref, inView } = useInView({ threshold: 0.08, triggerOnce: true });
 
   const handleTechClick = (tech: Tech) => {
-    setSelectedTech(selectedTech === tech ? null : tech);
+    setSelectedTech((current) => (current?.name === tech.name ? null : tech));
   };
 
-  const getCategoryColor = (category: string): string => {
-    return categoryColors[category] || '#ffffff';
-  };
+  const rows = [
+    techStack.filter((_, index) => index % 2 === 0),
+    techStack.filter((_, index) => index % 2 !== 0),
+  ];
 
   return (
-    <div className={`expertise-container ${inView ? 'visible' : ''}`} id="expertise" ref={ref}>
-      {/* Header */}
-      <div className={`expertise-header ${inView ? 'animate-in' : ''}`}>
-        <div className="header-top">
+    <section
+      className={`expertise-container ${inView ? 'visible' : ''}`}
+      id="expertise"
+      ref={ref}
+      aria-labelledby="expertise-title"
+    >
+      <header className="expertise-header">
+        <div className="expertise-kicker-row">
+          <span className="header-tag">SECTION 03 / EXPERTISE</span>
+          <span className="header-index">TECH / INDEX</span>
+        </div>
+
+        <div className="expertise-title-grid">
           <div>
-            <span className="header-tag">EXPERTISE</span>
-            <h1>Tools &amp; Technologies</h1>
+            <p className="expertise-overline">TOOLS / SYSTEMS / STACK</p>
+            <h1 id="expertise-title">Expertise</h1>
             <p className="expertise-subtitle">
-              Technologies I work with — scroll through the stack
+              A moving index of the technologies I use to design, build, automate, and ship.
             </p>
           </div>
-          <div className="expertise-stats">
-            <div className="stat-badge">
-              <Icon icon="mdi:code-tags" />
-              <span>{techStack.length} Technologies</span>
-            </div>
-            <div className="stat-badge">
-              <Icon icon="mdi:layers" />
-              <span>{categories.length} Categories</span>
-            </div>
-          </div>
         </div>
 
-        {/* Legend */}
-        <div className="legend">
-          {categories.map((cat) => (
-            <div key={cat.name} className="legend-item">
-              <span
-                className="legend-color"
-                style={
-                  {
-                    '--legend-color': cat.color,
-                    backgroundColor: cat.color,
-                  } as React.CSSProperties
-                }
-                aria-hidden="true"
-              />
-              <span className="legend-label">{cat.name}</span>
-              <span className="legend-code">{cat.color}</span>
+        <div className="expertise-rule" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+      </header>
+
+      <div className="expertise-scroll-label">
+        <span>TECHNOLOGY INDEX</span>
+        <span>CONTINUOUS / 02 ROWS</span>
+      </div>
+
+      <div className="expertise-marquee" aria-label="Technology index">
+        {rows.map((row, rowIndex) => {
+          const repeated = [...row, ...row];
+          return (
+            <div className={`expertise-track ${rowIndex === 1 ? 'is-reverse' : ''}`} key={rowIndex}>
+              {repeated.map((tech, index) => {
+                const category = categories.find((item) => item.name === tech.category);
+                const selected = selectedTech?.name === tech.name;
+                const isMonochrome = tech.icon.includes('github') || tech.icon.includes('vercel');
+                return (
+                  <button
+                    type="button"
+                    key={`${tech.name}-${index}`}
+                    className={`tech-item ${selected ? 'is-selected' : ''}`}
+                    style={{ '--tech-color': category?.color || tech.color } as React.CSSProperties}
+                    onClick={() => handleTechClick(tech)}
+                    onMouseEnter={() => setHoveredTech(tech)}
+                    onMouseLeave={() => setHoveredTech(null)}
+                    onFocus={() => setHoveredTech(tech)}
+                    onBlur={() => setHoveredTech(null)}
+                    aria-expanded={selected}
+                    aria-label={`${tech.name}: ${tech.description}`}
+                  >
+                    <span className="tech-icon-wrapper">
+                      <Icon
+                        icon={tech.icon}
+                        className={`tech-icon ${isMonochrome ? 'is-monochrome' : ''}`}
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span className="tech-copy">
+                      <span className="tech-name">{tech.name}</span>
+                      <span className="tech-category">{tech.category}</span>
+                    </span>
+                    <span className="tech-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+          );
+        })}
+      </div>
+
+      <div
+        className={`expertise-context ${hoveredTech || selectedTech ? 'is-visible' : ''}`}
+        aria-live="polite"
+      >
+        {(hoveredTech || selectedTech) && (
+          <>
+            <span className="context-label">{(hoveredTech || selectedTech)?.category}</span>
+            <strong>{(hoveredTech || selectedTech)?.name}</strong>
+            <span className="context-description">
+              {(hoveredTech || selectedTech)?.description}
+            </span>
+          </>
+        )}
+      </div>
+
+      <footer className="expertise-footer">
+        <div className="legend">
+          {categories.map((category) => (
+            <span className="legend-item" key={category.name}>
+              <i style={{ backgroundColor: category.color }} />
+              {category.name}
+            </span>
           ))}
         </div>
-      </div>
-
-      {/* Tech Stack Scroll - Dual Direction */}
-      <div
-        className="tech-stack-wrapper"
-        ref={wrapperRef}
-        onMouseMove={handleMouseMove}
-        style={
-          {
-            '--mouse-x': `${mousePosition.x}%`,
-            '--mouse-y': `${mousePosition.y}%`,
-          } as React.CSSProperties
-        }
-      >
-        {/* Row 1 - Left to Right */}
-        <div className="tech-stack-scroll scroll-left" ref={scrollRef}>
-          {[...techStack, ...techStack, ...techStack].map((tech, index) => {
-            const categoryColor = getCategoryColor(tech.category);
-            return (
-              <div
-                key={`${tech.name}-left-${index}`}
-                className="tech-item"
-                style={
-                  {
-                    '--tech-color': tech.color,
-                    '--category-color': categoryColor,
-                  } as React.CSSProperties
-                }
-                onClick={() => handleTechClick(tech)}
-                role="button"
-                tabIndex={0}
-                aria-label={tech.name}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleTechClick(tech);
-                  }
-                }}
-              >
-                <div className="tech-icon-wrapper">
-                  <Icon icon={tech.icon} className="tech-icon" />
-                </div>
-                <span className="tech-name">{tech.name}</span>
-                {selectedTech === tech && (
-                  <div className="tech-tooltip" role="tooltip">
-                    <p>{tech.description}</p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Row 2 - Right to Left */}
-        <div className="tech-stack-scroll scroll-right">
-          {[...techStack, ...techStack, ...techStack].map((tech, index) => {
-            const categoryColor = getCategoryColor(tech.category);
-            return (
-              <div
-                key={`${tech.name}-right-${index}`}
-                className="tech-item"
-                style={
-                  {
-                    '--tech-color': tech.color,
-                    '--category-color': categoryColor,
-                  } as React.CSSProperties
-                }
-                onClick={() => handleTechClick(tech)}
-                role="button"
-                tabIndex={0}
-                aria-label={tech.name}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleTechClick(tech);
-                  }
-                }}
-              >
-                <div className="tech-icon-wrapper">
-                  <Icon icon={tech.icon} className="tech-icon" />
-                </div>
-                <span className="tech-name">{tech.name}</span>
-                {selectedTech === tech && (
-                  <div className="tech-tooltip" role="tooltip">
-                    <p>{tech.description}</p>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="scroll-gradient left" aria-hidden="true" />
-        <div className="scroll-gradient right" aria-hidden="true" />
-      </div>
-    </div>
+      </footer>
+    </section>
   );
 }
 

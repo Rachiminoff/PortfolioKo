@@ -133,7 +133,7 @@ export const projectsData: Project[] = [
     subtitle:
       'An automation toolkit that transforms online web novels into clean, offline-ready ebooks with minimal manual effort.',
     role: 'Sole Developer',
-    featured: false,
+    featured: true,
     status: 'Completed',
     category: 'Automation Tool',
     duration: '2 months',
@@ -200,7 +200,7 @@ export const projectsData: Project[] = [
     subtitle:
       'A narrative-driven psychological desktop simulation inspired by the internet culture, software piracy, and digital anxieties of the mid-2000s.',
     role: 'Co-Developer',
-    featured: true,
+    featured: false,
     status: 'Active',
     category: 'Game',
     duration: '2 months',
@@ -413,7 +413,7 @@ export const projectsData: Project[] = [
     subtitle:
       'A multilingual, data-driven archive and reference platform for cataloguing a slice-of-life media franchise across novels, manga, music, and community translations.',
     role: 'Sole Developer',
-    featured: false,
+    featured: true,
     status: 'Active',
     category: 'Web Platform',
     duration: 'Ongoing',

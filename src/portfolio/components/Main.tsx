@@ -1,6 +1,7 @@
 import React, { useState, useCallback, Suspense, lazy } from 'react';
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
+import GitHubActivity from './GitHubActivity';
 
 const PDFViewer = lazy(() => import('./PDFViewer'));
 
@@ -156,6 +157,8 @@ function Main() {
           </div>
         </div>
       </section>
+
+      <GitHubActivity />
 
       <Suspense fallback={null}>
         <PDFViewer url={viewerUrl} onClose={closeViewer} />

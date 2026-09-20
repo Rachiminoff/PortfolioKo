@@ -1,0 +1,329 @@
+.github-activity {
+  --gha-bg: #080808;
+  --gha-panel: #101010;
+  --gha-black: #050505;
+  --gha-white: #f4f1e8;
+  --gha-muted: #8f8f8a;
+  --gha-line: rgba(244, 241, 232, 0.24);
+  --gha-grid: rgba(244, 241, 232, 0.075);
+  --gha-red: #ef3d32;
+  --gha-yellow: #f2c230;
+  --gha-blue: #4f73e8;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(72px, 9vw, 132px) clamp(20px, 6vw, 96px);
+  background: var(--gha-bg);
+  color: var(--gha-white);
+  font-family: 'Archivo', Arial, sans-serif;
+  border-top: 1px solid var(--gha-white);
+}
+
+.github-activity__grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.65;
+  background-image:
+    linear-gradient(to right, var(--gha-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--gha-grid) 1px, transparent 1px);
+  background-size: 12.5% 25%;
+  pointer-events: none;
+}
+
+.github-activity::before {
+  content: '';
+  position: absolute;
+  width: clamp(70px, 8vw, 130px);
+  aspect-ratio: 1;
+  top: 0;
+  right: 7%;
+  background: var(--gha-red);
+  z-index: -1;
+}
+
+.github-activity__header {
+  max-width: 1320px;
+  margin: 0 auto clamp(36px, 5vw, 64px);
+}
+.github-activity__eyebrow {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  border-bottom: 2px solid var(--gha-white);
+  padding-bottom: 12px;
+  font:
+    600 10px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.13em;
+}
+.github-activity__eyebrow > span:first-child {
+  background: var(--gha-white);
+  color: var(--gha-black);
+  padding: 5px 7px;
+}
+.github-activity__status {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.github-activity__status i {
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  background: var(--gha-blue);
+}
+.github-activity__heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 28px;
+  padding-top: 28px;
+}
+.github-activity__index {
+  margin: 0 0 8px;
+  font:
+    600 10px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.14em;
+  color: var(--gha-muted);
+}
+.github-activity h2 {
+  margin: 0;
+  font-size: clamp(44px, 8vw, 112px);
+  line-height: 0.84;
+  letter-spacing: -0.055em;
+  font-weight: 900;
+}
+.github-activity h2 em {
+  font-style: normal;
+  margin-left: clamp(20px, 6vw, 90px);
+}
+.github-activity__link {
+  min-width: 180px;
+  padding: 13px 15px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  border: 2px solid var(--gha-white);
+  color: var(--gha-white);
+  text-decoration: none;
+  font:
+    600 11px/1 'IBM Plex Mono',
+    monospace;
+  text-transform: uppercase;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.github-activity__link:hover {
+  transform: translate(-4px, -4px);
+  background: var(--gha-white);
+  color: var(--gha-black);
+}
+.github-activity__panel {
+  max-width: 1320px;
+  margin: 0 auto;
+  border: 2px solid var(--gha-white);
+  background: var(--gha-panel);
+  box-shadow: 10px 10px 0 var(--gha-red);
+}
+.github-activity__panel-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  padding: 22px;
+  border-bottom: 2px solid var(--gha-white);
+}
+.github-activity__panel-top > div:first-child {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 10px;
+  align-items: baseline;
+}
+.github-activity__panel-top span,
+.github-activity__panel-top small {
+  font:
+    600 9px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.11em;
+  color: var(--gha-muted);
+}
+.github-activity__panel-top strong {
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+}
+.github-activity__legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font:
+    600 8px/1 'IBM Plex Mono',
+    monospace;
+  color: var(--gha-muted);
+}
+.github-activity__legend i,
+.github-day {
+  width: 12px;
+  height: 12px;
+  display: block;
+  border: 1px solid rgba(244, 241, 232, 0.5);
+  box-sizing: border-box;
+}
+.github-activity__legend .level-0,
+.github-day.level-0 {
+  background: #181818;
+}
+.github-activity__legend .level-1,
+.github-day.level-1 {
+  background: #3b3b3b;
+}
+.github-activity__legend .level-2,
+.github-day.level-2 {
+  background: var(--gha-blue);
+}
+.github-activity__legend .level-3,
+.github-day.level-3 {
+  background: var(--gha-yellow);
+}
+.github-activity__legend .level-4,
+.github-day.level-4 {
+  background: var(--gha-red);
+}
+.github-activity__calendar-wrap {
+  overflow-x: auto;
+  padding: 20px 22px 24px;
+}
+.github-activity__calendar {
+  min-width: 720px;
+}
+.github-activity__months {
+  display: flex;
+  gap: 4px;
+  margin-left: 34px;
+  margin-bottom: 9px;
+}
+.github-activity__months span {
+  flex: 1 0 0;
+  min-width: 9px;
+  height: 14px;
+  font:
+    600 8px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.06em;
+  color: var(--gha-muted);
+}
+.github-activity__months span.is-visible {
+  color: var(--gha-white);
+}
+.github-activity__calendar-body {
+  display: flex;
+  gap: 0;
+}
+.github-activity__weekdays {
+  width: 30px;
+  flex: 0 0 30px;
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 4px;
+  font:
+    600 7px/1 'IBM Plex Mono',
+    monospace;
+  color: var(--gha-muted);
+}
+.github-activity__weekdays span {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.github-activity__weeks {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+}
+.github-activity__week {
+  flex: 1 0 0;
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  gap: 4px;
+  min-width: 9px;
+}
+.github-day {
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 9px;
+}
+.github-activity__state {
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--gha-line);
+  color: var(--gha-muted);
+  font:
+    600 10px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.github-activity__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 22px;
+  border-top: 1px solid var(--gha-line);
+  color: var(--gha-muted);
+  font:
+    600 8px/1.3 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 720px) {
+  .github-activity {
+    padding: 64px 16px;
+  }
+  .github-activity__heading-row {
+    display: block;
+  }
+  .github-activity__link {
+    margin-top: 24px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .github-activity__panel {
+    box-shadow: 6px 6px 0 var(--gha-red);
+  }
+  .github-activity__panel-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .github-activity__panel-top > div:first-child {
+    grid-template-columns: auto auto;
+  }
+  .github-activity__panel-top small {
+    grid-column: 2;
+  }
+  .github-activity__legend {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .github-activity__calendar-wrap {
+    padding: 18px 12px 18px;
+  }
+  .github-activity__calendar {
+    min-width: 680px;
+  }
+  .github-activity__footer {
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .github-activity__link {
+    transition: none;
+  }
+}

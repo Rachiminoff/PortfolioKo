@@ -1,29 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import { projectsData, Project as ProjectType } from '../data/projects.data';
 import '../assets/styles/Project.scss';
 
-/* =========================
-   COLOR VARIANTS FOR CARDS
-========================= */
-const colorVariants = ['blue', 'purple', 'teal', 'rose', 'amber', 'emerald', 'indigo', 'slate'];
+const colorVariants = ['red', 'blue', 'yellow', 'cream', 'green', 'violet'];
+const PROJECTS_PER_PAGE = 6;
 
-const getColorVariant = (index: number): string => {
-  return colorVariants[index % colorVariants.length];
-};
-
-/* =========================
-   PROJECT CARD COMPONENT 
-========================= */
+const getColorVariant = (index: number): string => colorVariants[index % colorVariants.length];
 
 type ProjectCardProps = {
   project: ProjectType;
   index: number;
+  absoluteIndex: number;
   isFeatured?: boolean;
 };
 
-function ProjectCard({ project, index, isFeatured = false }: ProjectCardProps) {
+function ProjectCard({ project, index, absoluteIndex, isFeatured = false }: ProjectCardProps) {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -36,20 +29,14 @@ function ProjectCard({ project, index, isFeatured = false }: ProjectCardProps) {
           observer.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: '0px 0px -20px 0px' },
+      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' },
     );
 
-    if (cardRef.current) {
-      observer.observe(cardRef.current);
-    }
-
+    if (cardRef.current) observer.observe(cardRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const handleCardClick = () => {
-    const slug = project.title.toLowerCase().replace(/\s+/g, '-');
-    navigate(`/projects/${slug}`);
-  };
+  const handleCardClick = () => navigate(`/projects/${project.slug}`);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -58,112 +45,183 @@ function ProjectCard({ project, index, isFeatured = false }: ProjectCardProps) {
     }
   };
 
-  const displayTech = project.tech.slice(0, 5);
-  const remainingTech = project.tech.length - 5;
-
-  // Get color variant for this card
-  const colorVariant = getColorVariant(index);
-
-  // Determine card class based on featured status and color
-  const cardClass = `project-card ${isFeatured ? 'project-card-featured' : ''} project-card-color-${colorVariant} ${isVisible ? 'visible' : ''}`;
+  const displayTech = project.tech.slice(0, 4);
+  const remainingTech = project.tech.length - displayTech.length;
+  const colorVariant = getColorVariant(absoluteIndex);
 
   return (
-    <div
+    <article
       ref={cardRef}
-      className={cardClass}
-      style={{ transitionDelay: `${index * 0.04}s` }}
+      className={`project-card project-card-color-${colorVariant} ${isFeatured ? 'project-card-featured' : ''} ${isVisible ? 'visible' : ''}`}
+      style={{ transitionDelay: `${index * 45}ms` }}
       onClick={handleCardClick}
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={0}
       aria-label={`View ${project.title} case study`}
     >
-      <div className="project-card-content">
-        <span className="project-number">{String(index + 1).padStart(2, '0')}</span>
+      <div className="project-card-index">{String(absoluteIndex + 1).padStart(2, '0')}</div>
+      <div className="project-card-art" aria-hidden="true">
+        <span className="art-circle" />
+        <span className="art-square" />
+        <span className="art-bar" />
+      </div>
 
-        <div className="project-title-wrapper">
-          <h3 className="project-title">{project.title}</h3>
-          <div className="arrow-icon-wrapper">
-            <Icon icon="mdi:arrow-right" className="arrow-icon" width={20} height={20} />
+      <div className="project-card-content">
+        <div className="project-title-row">
+          <div>
+            <span className="project-kicker">{project.category || 'PROJECT'}</span>
+            <h3 className="project-title">{project.title}</h3>
           </div>
+          <span className="project-arrow" aria-hidden="true">
+            <Icon icon="mdi:arrow-top-right" width={22} height={22} />
+          </span>
         </div>
 
         <p className="project-subtitle">{project.subtitle}</p>
 
-        {/* Metadata */}
-        <div className="project-meta">
-          <span className="project-meta-item">{project.role}</span>
-          <span className="project-meta-item">
-            <span className="meta-dot">·</span>
-            {project.duration}
-          </span>
-          <span className="project-meta-item">
-            <span className="meta-dot">·</span>
-            {project.status}
-          </span>
-          {project.featured && (
-            <span className="project-meta-item">
-              <span className="meta-dot">·</span>
-              Featured
-            </span>
-          )}
+        <div className="project-meta" aria-label="Project metadata">
+          <span>{project.role}</span>
+          <span>{project.duration}</span>
+          <span className="project-status">{project.status}</span>
         </div>
 
-        {/* Tech tags */}
-        <div className="tech-tags">
-          {displayTech.map((tech, i) => (
-            <span key={i} className="tech-tag">
+        <div className="tech-tags" aria-label="Technologies">
+          {displayTech.map((tech) => (
+            <span key={tech} className="tech-tag">
               {tech}
             </span>
           ))}
           {remainingTech > 0 && <span className="tech-tag more">+{remainingTech}</span>}
         </div>
       </div>
-    </div>
+
+      <div className="project-card-footer">
+        <span>CASE STUDY</span>
+        <span aria-hidden="true">↗</span>
+      </div>
+    </article>
   );
 }
 
-/* =========================
-   MAIN COMPONENT
-========================= */
-
 function Projects() {
   const [mounted, setMounted] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => setMounted(true), []);
+
+  const orderedProjects = useMemo(() => {
+    const featured = projectsData.filter((project) => project.featured);
+    const regular = projectsData.filter((project) => !project.featured);
+    return [...featured, ...regular];
+  }, []);
+
+  const totalPages = Math.max(1, Math.ceil(orderedProjects.length / PROJECTS_PER_PAGE));
+  const startIndex = (currentPage - 1) * PROJECTS_PER_PAGE;
+  const visibleProjects = orderedProjects.slice(startIndex, startIndex + PROJECTS_PER_PAGE);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
+
+  const changePage = (page: number) => {
+    const nextPage = Math.min(Math.max(page, 1), totalPages);
+    setCurrentPage(nextPage);
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   if (!mounted) return null;
 
-  // Featured projects: first two are featured (or you can customize)
-  const featuredProjects = projectsData.filter((p) => p.featured);
-  const regularProjects = projectsData.filter((p) => !p.featured);
-
-  // Order: featured projects first, then regular
-  const orderedProjects = [...featuredProjects, ...regularProjects];
-
   return (
-    <div className="projects-container" id="projects">
+    <section className="projects-container" id="projects" aria-labelledby="projects-title">
       <div className="projects-header">
-        <span className="header-tag">Portfolio</span>
-        <h1>Selected Work</h1>
-        <p className="projects-subtitle">
-          A curated collection of software engineering projects, technical explorations, and
-          documentation detailing my approach to building reliable, maintainable applications.
-        </p>
+        <div className="projects-header-top">
+          <span className="header-tag">
+            WORK / {String(orderedProjects.length).padStart(2, '0')}
+          </span>
+          <span className="header-index">
+            ARCHIVE {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
+          </span>
+        </div>
+
+        <div className="projects-heading-grid">
+          <h1 id="projects-title">
+            Selected
+            <br />
+            Work<span className="heading-dot">.</span>
+          </h1>
+          <p className="projects-subtitle">
+            A working archive of software, systems, and experiments — built through iteration,
+            debugging, and practical problem solving.
+          </p>
+        </div>
       </div>
 
-      <div className="projects-grid">
-        {orderedProjects.map((project, index) => {
-          // First two projects are featured (or only the first if there's only one featured)
-          const isFeatured = index < 2 && project.featured;
-          return (
-            <ProjectCard key={project.id} project={project} index={index} isFeatured={isFeatured} />
-          );
-        })}
+      <div className="projects-toolbar">
+        <span>
+          <b>{String(startIndex + 1).padStart(2, '0')}</b>—
+          <b>
+            {String(Math.min(startIndex + visibleProjects.length, orderedProjects.length)).padStart(
+              2,
+              '0',
+            )}
+          </b>{' '}
+          OF {String(orderedProjects.length).padStart(2, '0')}
+        </span>
+        <span className="toolbar-rule" />
+        <span>SELECTED PROJECTS</span>
       </div>
-    </div>
+
+      <div className="projects-grid" key={currentPage}>
+        {visibleProjects.map((project, index) => (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            index={index}
+            absoluteIndex={startIndex + index}
+            isFeatured={project.featured}
+          />
+        ))}
+      </div>
+
+      {totalPages > 1 && (
+        <nav className="projects-pagination" aria-label="Project pagination">
+          <button
+            type="button"
+            className="pagination-arrow"
+            onClick={() => changePage(currentPage - 1)}
+            disabled={currentPage === 1}
+            aria-label="Previous projects"
+          >
+            <Icon icon="mdi:arrow-left" width={20} />
+          </button>
+
+          <div className="pagination-pages">
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+              <button
+                key={page}
+                type="button"
+                className={`pagination-page ${page === currentPage ? 'active' : ''}`}
+                onClick={() => changePage(page)}
+                aria-current={page === currentPage ? 'page' : undefined}
+              >
+                {String(page).padStart(2, '0')}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="pagination-arrow"
+            onClick={() => changePage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            aria-label="Next projects"
+          >
+            <Icon icon="mdi:arrow-right" width={20} />
+          </button>
+        </nav>
+      )}
+    </section>
   );
 }
 
