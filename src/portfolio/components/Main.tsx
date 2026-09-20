@@ -2,239 +2,16 @@ import React, { useState, useCallback, Suspense, lazy } from 'react';
 import profilePic from '../assets/images/profile.jpeg';
 import '../assets/styles/Main.scss';
 
-/* =========================
-   CONSTRUCTION GRID - ENHANCED
-========================= */
-function ConstructionGrid() {
-  return (
-    <div className="construction-grid" aria-hidden="true">
-      {/* Major grid lines */}
-      <div className="grid-line vertical major" style={{ left: '25%' }} />
-      <div className="grid-line vertical major" style={{ left: '50%' }} />
-      <div className="grid-line vertical major" style={{ left: '75%' }} />
-      <div className="grid-line horizontal major" style={{ top: '25%' }} />
-      <div className="grid-line horizontal major" style={{ top: '50%' }} />
-      <div className="grid-line horizontal major" style={{ top: '75%' }} />
-
-      {/* Minor grid lines */}
-      <div className="grid-line vertical minor" style={{ left: '12.5%' }} />
-      <div className="grid-line vertical minor" style={{ left: '37.5%' }} />
-      <div className="grid-line vertical minor" style={{ left: '62.5%' }} />
-      <div className="grid-line vertical minor" style={{ left: '87.5%' }} />
-      <div className="grid-line horizontal minor" style={{ top: '12.5%' }} />
-      <div className="grid-line horizontal minor" style={{ top: '37.5%' }} />
-      <div className="grid-line horizontal minor" style={{ top: '62.5%' }} />
-      <div className="grid-line horizontal minor" style={{ top: '87.5%' }} />
-
-      {/* Diagonal connectors */}
-      <div
-        className="grid-line connector"
-        style={{
-          top: '50%',
-          left: '25%',
-          right: '50%',
-          transform: 'rotate(15deg)',
-          transformOrigin: 'left center',
-        }}
-      />
-      <div
-        className="grid-line connector"
-        style={{
-          top: '50%',
-          left: '50%',
-          right: '25%',
-          transform: 'rotate(-15deg)',
-          transformOrigin: 'right center',
-        }}
-      />
-
-      {/* Vertical connectors */}
-      <div
-        className="grid-line connector-vertical"
-        style={{
-          top: '25%',
-          bottom: '50%',
-          left: '50%',
-        }}
-      />
-      <div
-        className="grid-line connector-vertical"
-        style={{
-          top: '50%',
-          bottom: '25%',
-          left: '50%',
-        }}
-      />
-
-      {/* Grid labels */}
-      <span className="grid-label" style={{ bottom: '12px', left: '16px' }}>
-        GRID 04
-      </span>
-      <span className="grid-label" style={{ top: '12px', right: '16px' }}>
-        BUILD v2.0
-      </span>
-
-      {/* Corner crop marks */}
-      <div className="crop-mark tl" />
-      <div className="crop-mark tr" />
-      <div className="crop-mark bl" />
-      <div className="crop-mark br" />
-
-      {/* Coordinate labels */}
-      <span className="coord-label" style={{ top: '12px', left: '25%' }}>
-        X:360
-      </span>
-      <span className="coord-label" style={{ top: '12px', left: '50%' }}>
-        X:720
-      </span>
-      <span className="coord-label" style={{ top: '12px', left: '75%' }}>
-        X:1080
-      </span>
-      <span className="coord-label" style={{ left: '12px', top: '25%' }}>
-        Y:180
-      </span>
-      <span className="coord-label" style={{ left: '12px', top: '50%' }}>
-        Y:360
-      </span>
-      <span className="coord-label" style={{ left: '12px', top: '75%' }}>
-        Y:540
-      </span>
-
-      {/* Center mark */}
-      <div className="grid-center-mark" />
-
-      {/* Arc guides */}
-      <div className="grid-arc arc-1" />
-      <div className="grid-arc arc-2" />
-      <div className="grid-arc arc-3" />
-    </div>
-  );
-}
-
-/* =========================
-   GEOMETRIC SHAPES - UNIFIED SYSTEM
-========================= */
-function GeometricShapes() {
-  return (
-    <div className="geometric-shapes" aria-hidden="true">
-      {/* === LAYER 1: Foundation Grid === */}
-      <div className="shape layer-foundation">
-        {/* Concentric rings - centered */}
-        <div className="concentric-ring ring-1" />
-        <div className="concentric-ring ring-2" />
-        <div className="concentric-ring ring-3" />
-        <div className="concentric-ring ring-4" />
-
-        {/* Cross hairs */}
-        <div className="cross-hair horizontal" />
-        <div className="cross-hair vertical" />
-
-        {/* Diagonal cross */}
-        <div className="cross-hair diagonal-1" />
-        <div className="cross-hair diagonal-2" />
-      </div>
-
-      {/* === LAYER 2: Secondary Structure === */}
-      <div className="shape layer-structure">
-        {/* Top-left quadrant grid */}
-        <div className="quadrant-grid tl">
-          <div className="grid-line h" style={{ top: '33.33%' }} />
-          <div className="grid-line h" style={{ top: '66.66%' }} />
-          <div className="grid-line v" style={{ left: '33.33%' }} />
-          <div className="grid-line v" style={{ left: '66.66%' }} />
-        </div>
-
-        {/* Bottom-right quadrant grid */}
-        <div className="quadrant-grid br">
-          <div className="grid-line h" style={{ top: '33.33%' }} />
-          <div className="grid-line h" style={{ top: '66.66%' }} />
-          <div className="grid-line v" style={{ left: '33.33%' }} />
-          <div className="grid-line v" style={{ left: '66.66%' }} />
-        </div>
-      </div>
-
-      {/* === LAYER 3: Dynamic Elements === */}
-      <div className="shape layer-dynamic">
-        {/* Rotating hexagon */}
-        <div className="dynamic-hexagon">
-          <svg viewBox="0 0 100 100" fill="none">
-            <polygon
-              points="50,5 90,27 90,73 50,95 10,73 10,27"
-              stroke="rgba(45, 212, 191, 0.06)"
-              strokeWidth="0.5"
-            />
-            <polygon
-              points="50,15 80,32 80,68 50,85 20,68 20,32"
-              stroke="rgba(255,255,255,0.03)"
-              strokeWidth="0.3"
-            />
-          </svg>
-        </div>
-
-        {/* Orbiting dots */}
-        <div className="orbit-dots">
-          <div className="orbit-dot dot-1" />
-          <div className="orbit-dot dot-2" />
-          <div className="orbit-dot dot-3" />
-          <div className="orbit-dot dot-4" />
-          <div className="orbit-dot dot-5" />
-          <div className="orbit-dot dot-6" />
-        </div>
-      </div>
-
-      {/* === LAYER 4: Accent Geometry === */}
-      <div className="shape layer-accent">
-        {/* Golden spiral approximation */}
-        <div className="golden-spiral">
-          <svg viewBox="0 0 200 200" fill="none">
-            <path
-              d="M100 100 L100 50 A50 50 0 0 1 150 100 L150 150 A50 50 0 0 1 100 200 L50 200 A50 50 0 0 1 0 150 L0 100 A50 50 0 0 1 50 50 L75 50 A25 25 0 0 1 100 75 L100 100"
-              stroke="rgba(255,255,255,0.03)"
-              strokeWidth="0.5"
-              fill="none"
-            />
-          </svg>
-        </div>
-
-        {/* Fibonacci rectangles - subtle */}
-        <div className="fibonacci-rectangles">
-          <div className="fib-rect r1" />
-          <div className="fib-rect r2" />
-          <div className="fib-rect r3" />
-          <div className="fib-rect r4" />
-        </div>
-      </div>
-
-      {/* === LAYER 5: Points & Markers === */}
-      <div className="shape layer-points">
-        <div className="point-marker p1" />
-        <div className="point-marker p2" />
-        <div className="point-marker p3" />
-        <div className="point-marker p4" />
-        <div className="point-marker p5" />
-        <div className="point-marker p6" />
-        <div className="point-marker p7" />
-        <div className="point-marker p8" />
-      </div>
-    </div>
-  );
-}
-
-/* =========================
-   PDF VIEWER LAZY LOAD
-========================= */
 const PDFViewer = lazy(() => import('./PDFViewer'));
 
-/* =========================
-   MAIN COMPONENT
-========================= */
 function Main() {
   const [viewerUrl, setViewerUrl] = useState<string | null>(null);
   const [pdfLoading, setPdfLoading] = useState(false);
+
   const openCVViewer = useCallback(() => {
     setPdfLoading(true);
     setViewerUrl('/YambaoResume.pdf');
-    setTimeout(() => setPdfLoading(false), 500);
+    window.setTimeout(() => setPdfLoading(false), 500);
   }, []);
 
   const closeViewer = useCallback(() => {
@@ -243,34 +20,53 @@ function Main() {
   }, []);
 
   return (
-    <div className="main-container">
-      <ConstructionGrid />
-      <GeometricShapes />
+    <main className="main-container" id="home">
+      <div className="main-grid" aria-hidden="true" />
+      <div className="main-registration" aria-hidden="true">
+        <span>TDY—001</span>
+        <span>PORTFOLIO / 2026</span>
+      </div>
 
-      <section className="hero-section">
+      <section className="hero-section" aria-labelledby="hero-title">
         <div className="hero-content">
-          {/* Left Column - Typography */}
           <div className="hero-left">
-            <div className="hero-meta">
-              <span className="meta-label">FULL-STACK ARCHITECT</span>
-              <span className="meta-dot">●</span>
-              <span className="meta-label">TDY.dev</span>
+            <div className="hero-kicker">
+              <span className="kicker-index">01</span>
+              <span>FULL-STACK DEVELOPER</span>
+              <span className="kicker-status">
+                <i /> AVAILABLE
+              </span>
             </div>
 
-            <h1 className="hero-title">
-              <span className="title-line">TANYA</span>
-              <span className="title-line">DENISE</span>
-              <span className="title-line">YAMBAO</span>
-            </h1>
-
-            <div className="hero-subtitle">
-              <p className="subtitle-primary">Computer Science Student</p>
-              <p className="subtitle-secondary">Full-Stack Developer</p>
+            <div className="hero-title-wrap">
+              <span className="hero-side-note">
+                COMPUTER
+                <br />
+                SCIENCE / PH
+              </span>
+              <h1 className="hero-title" id="hero-title">
+                <span className="title-line">TANYA</span>
+                <span className="title-line title-offset">DENISE</span>
+                <span className="title-line">YAMBAO</span>
+              </h1>
             </div>
 
-            <div className="hero-actions">
-              <button className="action-link primary" onClick={openCVViewer} disabled={pdfLoading}>
-                <span className="action-text">Resume→</span>
+            <div className="hero-intro">
+              <span className="intro-mark" aria-hidden="true" />
+              <div>
+                <p className="subtitle-primary">Computer Science Student</p>
+                <p className="subtitle-secondary">Full-Stack Developer</p>
+              </div>
+            </div>
+
+            <div className="hero-actions" aria-label="Profile links">
+              <button
+                className="action-link action-primary"
+                onClick={openCVViewer}
+                disabled={pdfLoading}
+              >
+                <span>{pdfLoading ? 'Opening…' : 'Resume'}</span>
+                <b>↗</b>
               </button>
               <a
                 href="https://github.com/Rachiminoff"
@@ -278,7 +74,8 @@ function Main() {
                 rel="noreferrer"
                 className="action-link"
               >
-                <span className="action-text">GitHub→</span>
+                <span>GitHub</span>
+                <b>↗</b>
               </a>
               <a
                 href="https://www.linkedin.com/in/tanya-denise-yambao-9677223b9/"
@@ -286,112 +83,75 @@ function Main() {
                 rel="noreferrer"
                 className="action-link"
               >
-                <span className="action-text">LinkedIn→</span>
+                <span>LinkedIn</span>
+                <b>↗</b>
               </a>
             </div>
 
-            <div className="hero-annotations">
-              <span className="annotation">SECTION A</span>
-              <span className="annotation">ALIGNMENT LOCK</span>
-              <span className="annotation">ID: TDY-001</span>
+            <div className="hero-specs">
+              <div>
+                <span>DISCIPLINE</span>
+                <strong>SOFTWARE / UI</strong>
+              </div>
+              <div>
+                <span>FOCUS</span>
+                <strong>WEB / SYSTEMS</strong>
+              </div>
+              <div>
+                <span>BASED IN</span>
+                <strong>PHILIPPINES</strong>
+              </div>
             </div>
           </div>
 
-          {/* Right Column - Profile Module */}
           <div className="hero-right">
             <div className="profile-module">
-              {/* Module header */}
               <div className="module-header">
-                <span className="module-label">PROFILE 01</span>
-                <span className="module-status">● AVAILABLE</span>
+                <span>PROFILE 01</span>
+                <span className="module-status">
+                  <i /> AVAILABLE
+                </span>
               </div>
 
-              {/* Module content - the framed portrait */}
               <div className="module-content">
-                {/* Construction frame - SQUARE/RECTANGULAR */}
                 <div className="profile-frame">
-                  {/* Outer square frame */}
-                  <div className="frame-square outer" />
-                  <div className="frame-square inner" />
-
-                  {/* Construction circles (now as guides inside square) */}
-                  <div className="frame-circle primary" />
-                  <div className="frame-circle secondary" />
-
-                  {/* Halftone background */}
-                  <div className="profile-halftone" />
-
-                  {/* Portrait - now larger, filling the frame */}
+                  <div className="frame-label frame-label-top">PORTRAIT / A</div>
+                  <div className="frame-label frame-label-bottom">W: 320 / H: 320</div>
+                  <div className="frame-corner frame-corner-tl" />
+                  <div className="frame-corner frame-corner-tr" />
+                  <div className="frame-corner frame-corner-bl" />
+                  <div className="frame-corner frame-corner-br" />
+                  <div className="frame-crosshair" />
                   <div className="profile-image-wrapper">
                     <div className="profile-image-container">
                       <img src={profilePic} alt="Tanya Denise Yambao" className="profile-image" />
-                      <div className="profile-image-overlay" />
-                      <div className="profile-image-border" />
                     </div>
                   </div>
-
-                  {/* Construction brackets - larger */}
-                  <div className="frame-bracket tl" />
-                  <div className="frame-bracket tr" />
-                  <div className="frame-bracket bl" />
-                  <div className="frame-bracket br" />
-
-                  {/* Guide lines - extended */}
-                  <div className="frame-guide vertical" />
-                  <div className="frame-guide horizontal" />
-                  <div className="frame-guide diagonal-1" />
-                  <div className="frame-guide diagonal-2" />
-
-                  {/* Measurement ticks - larger */}
-                  <div className="measurement-tick top" />
-                  <div className="measurement-tick bottom" />
-                  <div className="measurement-tick left" />
-                  <div className="measurement-tick right" />
-
-                  {/* Coordinate labels */}
-                  <span className="frame-coord" style={{ top: '-36px', right: '-24px' }}>
-                    X:420
-                  </span>
-                  <span className="frame-coord" style={{ bottom: '-36px', left: '-24px' }}>
-                    Y:180
-                  </span>
-                  <span
-                    className="frame-coord"
-                    style={{ top: '50%', right: '-56px', transform: 'translateY(-50%)' }}
-                  >
-                    R=280
-                  </span>
-                  <span className="frame-coord" style={{ top: '-36px', left: '-24px' }}>
-                    W:320
-                  </span>
-                  <span className="frame-coord" style={{ bottom: '-36px', right: '-24px' }}>
-                    H:320
-                  </span>
+                  <div className="frame-slice" />
+                  <span className="frame-dot" />
                 </div>
               </div>
 
-              {/* Module footer - metadata */}
               <div className="module-footer">
-                <div className="footer-item">
-                  <span className="footer-label">STATUS</span>
-                  <span className="footer-value">ACTIVE</span>
+                <div>
+                  <span>STATUS</span>
+                  <strong>ACTIVE</strong>
                 </div>
-                <div className="footer-divider" />
-                <div className="footer-item">
-                  <span className="footer-label">ROLE</span>
-                  <span className="footer-value">FULL-STACK</span>
+                <div>
+                  <span>ROLE</span>
+                  <strong>FULL-STACK</strong>
                 </div>
-                <div className="footer-divider" />
-                <div className="footer-item">
-                  <span className="footer-label">LOCATION</span>
-                  <span className="footer-value">PHILIPPINES</span>
-                </div>
-                <div className="footer-divider" />
-                <div className="footer-item">
-                  <span className="footer-label">VERSION</span>
-                  <span className="footer-value">2026</span>
+                <div>
+                  <span>VERSION</span>
+                  <strong>2026.01</strong>
                 </div>
               </div>
+            </div>
+
+            <div className="hero-coordinate" aria-hidden="true">
+              <span>AXIS / 00</span>
+              <span>◼</span>
+              <span>BUILD WITH PURPOSE</span>
             </div>
           </div>
         </div>
@@ -400,7 +160,7 @@ function Main() {
       <Suspense fallback={null}>
         <PDFViewer url={viewerUrl} onClose={closeViewer} />
       </Suspense>
-    </div>
+    </main>
   );
 }
 

@@ -1,191 +1,183 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGraduationCap, faRocket } from '@fortawesome/free-solid-svg-icons';
+import { faBriefcase, faGraduationCap, faRocket } from '@fortawesome/free-solid-svg-icons';
 import { faPython } from '@fortawesome/free-brands-svg-icons';
-import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
-import 'react-vertical-timeline-component/style.min.css';
 import '../assets/styles/Timeline.scss';
 import timelineData from '../data/timelineData.json';
 
 const iconMap = {
   python: faPython,
   graduation: faGraduationCap,
+  briefcase: faBriefcase,
   rocket: faRocket,
 };
 
 const statusClassMap = {
   current: 'milestone-status-current',
+  completed: 'milestone-status-completed',
+  beginning: 'milestone-status-beginning',
   future: 'milestone-status-future',
+  upcoming: 'milestone-status-future',
   default: '',
 };
 
 function Timeline() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const root = timelineRef.current;
+    if (!root) return;
+
+    const elements = Array.from(root.querySelectorAll<HTMLElement>('.milestone-card'));
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
           const element = entry.target as HTMLElement;
-          const index = parseInt(element.dataset.index || '0');
-
-          if (entry.isIntersecting) {
-            setActiveIndex(index);
-
-            const icon = element.querySelector('.vertical-timeline-element-icon');
-            const card = element.querySelector('.vertical-timeline-element-content');
-
-            element.classList.add('visible');
-
-            if (icon) {
-              setTimeout(() => {
-                icon.classList.add('icon-visible');
-              }, 200);
-            }
-
-            if (card) {
-              setTimeout(() => {
-                card.classList.add('card-visible');
-              }, 400);
-            }
-          }
+          element.classList.add('visible');
+          element.querySelector('.milestone-marker')?.classList.add('icon-visible');
+          element.querySelector('.milestone-card-inner')?.classList.add('card-visible');
+          observer.unobserve(element);
         });
       },
-      {
-        threshold: 0.25,
-        rootMargin: '0px 0px -30px 0px',
-      },
+      { threshold: 0.18, rootMargin: '0px 0px -8% 0px' },
     );
 
-    const elements = document.querySelectorAll('.vertical-timeline-element');
-    elements.forEach((el, index) => {
-      (el as HTMLElement).dataset.index = String(index);
-      observer.observe(el);
+    elements.forEach((element, index) => {
+      element.style.setProperty('--item-index', String(index));
+      observer.observe(element);
     });
 
-    const handleScroll = () => {
+    const updateProgress = () => {
       if (!progressRef.current) return;
-
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (scrollTop / docHeight) * 100;
-
-      progressRef.current.style.height = `${Math.min(progress, 100)}%`;
+      const rect = root.getBoundingClientRect();
+      const viewport = window.innerHeight;
+      const start = viewport * 0.72;
+      const end = rect.height - viewport * 0.28;
+      const travelled = Math.min(Math.max(start - rect.top, 0), Math.max(end, 1));
+      const progress = Math.min(Math.max((travelled / Math.max(end, 1)) * 100, 0), 100);
+      progressRef.current.style.height = `${progress}%`;
     };
 
-    window.addEventListener('scroll', handleScroll);
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
 
     return () => {
       observer.disconnect();
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
     };
-  }, [activeIndex]);
+  }, []);
+
+  const getIcon = (iconName: string) => iconMap[iconName as keyof typeof iconMap] || faRocket;
+
+  const getStatusClass = (status: string) =>
+    statusClassMap[status.toLowerCase() as keyof typeof statusClassMap] || '';
 
   const renderTerminal = (terminal: any) => {
     if (!terminal) return null;
 
     return (
-      <div className="terminal-window">
-        <div className="terminal-header">
-          <div className="terminal-controls">
-            <span className="terminal-dot terminal-dot-red"></span>
-            <span className="terminal-dot terminal-dot-yellow"></span>
-            <span className="terminal-dot terminal-dot-green"></span>
-          </div>
-          <span className="terminal-title">{terminal.title}</span>
+      <div className="timeline-code-strip" aria-label={`${terminal.title} code example`}>
+        <div className="timeline-code-label">
+          <span className="timeline-code-mark" />
+          <span>{terminal.title}</span>
         </div>
-        <div className="terminal-body">
-          <code className="terminal-code">
-            {terminal.code.map((segment: any, index: number) => (
-              <span key={index} className={`terminal-${segment.type}`}>
-                {segment.value}
-              </span>
-            ))}
-            <span className="terminal-cursor"></span>
-          </code>
-        </div>
+        <code className="timeline-code">
+          {terminal.code.map((segment: any, index: number) => (
+            <span key={index} className={`timeline-code-${segment.type}`}>
+              {segment.value}
+            </span>
+          ))}
+          <span className="timeline-code-cursor" aria-hidden="true" />
+        </code>
       </div>
     );
   };
 
-  const getIcon = (iconName: string) => {
-    return iconMap[iconName as keyof typeof iconMap] || faRocket;
-  };
-
-  const getStatusClass = (status: string) => {
-    const type = status.toLowerCase();
-    return statusClassMap[type as keyof typeof statusClassMap] || '';
-  };
-
   return (
-    <div id="history" ref={timelineRef} className="timeline-section">
+    <section
+      id="history"
+      ref={timelineRef}
+      className="timeline-section"
+      aria-labelledby="history-title"
+    >
       <div className="timeline-container">
-        <div className="section-header">
-          <div className="section-header-content">
-            <span className="section-label">JOURNEY</span>
-            <h1 className="section-title">Timeline</h1>
+        <header className="timeline-intro">
+          <div className="timeline-intro-index" aria-hidden="true">
+            <span>04</span>
+            <span>HISTORY</span>
+          </div>
+          <div className="timeline-intro-main">
+            <div className="section-label">JOURNEY / 2022—PRESENT</div>
+            <h2 id="history-title" className="section-title">
+              Timeline
+            </h2>
             <p className="section-subtitle">
-              Key milestones and achievements throughout my development career
+              A compact record of the milestones, work, and experiments that shaped my development
+              path.
             </p>
           </div>
-        </div>
+          <div className="timeline-intro-meta" aria-hidden="true">
+            <span>SELECTED</span>
+            <span>{String(timelineData.milestones.length).padStart(2, '0')} EVENTS</span>
+          </div>
+        </header>
 
         <div className="timeline-wrapper">
-          <div className="timeline-progress-track">
-            <div ref={progressRef} className="timeline-progress-fill"></div>
+          <div className="timeline-rail" aria-hidden="true">
+            <div className="timeline-rail-track" />
+            <div ref={progressRef} className="timeline-rail-progress" />
           </div>
 
-          <VerticalTimeline lineColor="rgba(255,255,255,0.04)">
-            {timelineData.milestones.map((milestone) => (
-              <VerticalTimelineElement
-                key={milestone.id}
-                className="vertical-timeline-element--work milestone-card"
-                contentStyle={{
-                  background: '#181818',
-                  color: '#f5f5f5',
-                  borderRadius: '0',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  boxShadow: 'none',
-                  padding: '1.8rem 2rem',
-                }}
-                contentArrowStyle={{
-                  borderRight: '7px solid #181818',
-                }}
-                date={milestone.year}
-                dateClassName="custom-date"
-                iconStyle={{
-                  background: '#222222',
-                  color: '#f5f5f5',
-                  boxShadow: 'none',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                }}
-                icon={<FontAwesomeIcon icon={getIcon(milestone.icon)} />}
-              >
-                <div className="milestone-content">
-                  <div className="milestone-header">
-                    <div className="milestone-title-group">
-                      <h3 className="milestone-title">{milestone.title}</h3>
-                      <span className="milestone-year">{milestone.year}</span>
-                    </div>
-                    <span className={`milestone-status ${getStatusClass(milestone.status)}`}>
-                      {milestone.status}
-                    </span>
+          <div className="timeline-list">
+            {timelineData.milestones.map((milestone, index) => (
+              <article key={milestone.id} className={`milestone-card milestone-card-${index % 3}`}>
+                <div className="milestone-marker" aria-hidden="true">
+                  <FontAwesomeIcon icon={getIcon(milestone.icon)} />
+                </div>
+
+                <div className="milestone-card-inner">
+                  <div className="milestone-index" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
                   </div>
 
-                  <h4 className="milestone-subtitle">{milestone.subtitle}</h4>
+                  <div className="milestone-year-block">
+                    <span className="milestone-year">{milestone.year}</span>
+                    <span className="milestone-rule" />
+                  </div>
 
-                  {renderTerminal(milestone.terminal)}
+                  <div className="milestone-content">
+                    <div className="milestone-header">
+                      <div className="milestone-heading">
+                        <span className="milestone-kicker">MILESTONE</span>
+                        <h3 className="milestone-title">{milestone.title}</h3>
+                      </div>
+                      <span className={`milestone-status ${getStatusClass(milestone.status)}`}>
+                        {milestone.status}
+                      </span>
+                    </div>
 
-                  <p className="milestone-description">{milestone.description}</p>
+                    <h4 className="milestone-subtitle">{milestone.subtitle}</h4>
+                    {renderTerminal(milestone.terminal)}
+                    <p className="milestone-description">{milestone.description}</p>
+                  </div>
                 </div>
-              </VerticalTimelineElement>
+              </article>
             ))}
-          </VerticalTimeline>
+          </div>
         </div>
+
+        <footer className="timeline-footer">
+          <span>END OF CURRENT RECORD</span>
+          <span className="timeline-footer-line" />
+          <span>MORE TO COME</span>
+        </footer>
       </div>
-    </div>
+    </section>
   );
 }
 
