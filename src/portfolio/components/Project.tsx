@@ -134,28 +134,26 @@ function Projects() {
 
   return (
     <section className="projects-container" id="projects" aria-labelledby="projects-title">
-      <div className="projects-header">
-        <div className="projects-header-top">
-          <span className="header-tag">
-            WORK / {String(orderedProjects.length).padStart(2, '0')}
-          </span>
-          <span className="header-index">
-            ARCHIVE {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
-          </span>
+      <header className="projects-header section-header">
+        <div className="section-header__number">05</div>
+        <div className="section-header__label">SELECTED WORK</div>
+        <div className="section-header__rule" aria-hidden="true" />
+        <div className="section-header__meta">
+          WORK / {String(orderedProjects.length).padStart(2, '0')}
         </div>
-
-        <div className="projects-heading-grid">
+        <div className="section-header__status">
+          PAGE {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
+        </div>
+        <div className="section-header__title-group">
           <h1 id="projects-title">
-            Selected
-            <br />
-            Work<span className="heading-dot">.</span>
+            Selected Work<span className="heading-dot">.</span>
           </h1>
           <p className="projects-subtitle">
             A working archive of software, systems, and experiments — built through iteration,
             debugging, and practical problem solving.
           </p>
         </div>
-      </div>
+      </header>
 
       <div className="projects-toolbar">
         <span>

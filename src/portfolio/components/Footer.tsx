@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import { Icon } from '@iconify/react';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import LockIcon from '@mui/icons-material/Lock';
@@ -17,6 +18,7 @@ function Footer() {
   const [index, setIndex] = useState(0);
   const [unlocked, setUnlocked] = useState(false);
   const [zoom, setZoom] = useState(1);
+  const [showTechStack, setShowTechStack] = useState(false);
 
   const artsLengthRef = useRef(0);
   artsLengthRef.current = arts.length;
@@ -159,6 +161,78 @@ function Footer() {
                 <LockIcon />
                 <span>Admin</span>
               </button>
+            </div>
+
+            <div className="footer-stack">
+              <button
+                type="button"
+                className="footer-stack-toggle"
+                onClick={() => setShowTechStack((current) => !current)}
+                aria-expanded={showTechStack}
+                aria-controls="portfolio-tech-stack"
+              >
+                <span className="stack-toggle-mark" aria-hidden="true">
+                  {showTechStack ? '−' : '+'}
+                </span>
+                <span>TECH STACK / THIS PORTFOLIO</span>
+                <span className="stack-toggle-arrow" aria-hidden="true">
+                  {showTechStack ? '↙' : '↗'}
+                </span>
+              </button>
+
+              <div
+                id="portfolio-tech-stack"
+                className={`footer-stack-panel ${showTechStack ? 'is-open' : ''}`}
+                hidden={!showTechStack}
+              >
+                <div className="footer-stack-grid">
+                  <span>
+                    <Icon icon="simple-icons:react" aria-hidden="true" />
+                    <b>REACT</b>
+                    <small>UI / COMPONENTS</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:typescript" aria-hidden="true" />
+                    <b>TYPESCRIPT</b>
+                    <small>TYPE SAFETY</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:sass" aria-hidden="true" />
+                    <b>SCSS</b>
+                    <small>STYLING / MOTION</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:reactrouter" aria-hidden="true" />
+                    <b>REACT ROUTER</b>
+                    <small>ROUTING</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:iconify" aria-hidden="true" />
+                    <b>ICONIFY</b>
+                    <small>ICON SYSTEM</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:mui" aria-hidden="true" />
+                    <b>MUI</b>
+                    <small>UI UTILITIES</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:supabase" aria-hidden="true" />
+                    <b>SUPABASE</b>
+                    <small>DATA / STORAGE</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:emailjs" aria-hidden="true" />
+                    <b>EMAILJS</b>
+                    <small>CONTACT FORM</small>
+                  </span>
+                  <span>
+                    <Icon icon="simple-icons:github" aria-hidden="true" />
+                    <b>GITHUB</b>
+                    <small>VERSION CONTROL</small>
+                  </span>
+                </div>
+              </div>
             </div>
 
             <div className="footer-bottom">

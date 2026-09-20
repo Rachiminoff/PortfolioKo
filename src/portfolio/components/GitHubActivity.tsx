@@ -94,33 +94,23 @@ function GitHubActivity() {
     >
       <div className="github-activity__grid" aria-hidden="true" />
 
-      <header className="github-activity__header">
-        <div className="github-activity__eyebrow">
-          <span>02</span>
-          <span>ACTIVITY / GITHUB</span>
-          <span className="github-activity__status">
-            <i /> LIVE DATA
-          </span>
-        </div>
-        <div className="github-activity__heading-row">
-          <div>
-            <p className="github-activity__index">GITHUB / 01</p>
-            <h2 id="github-activity-title">
-              COMMIT
-              <br />
-              <em>HEAT MAP</em>
-            </h2>
-          </div>
-          <a
-            className="github-activity__link"
-            href={`https://github.com/${GITHUB_USERNAME}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <span>@{GITHUB_USERNAME}</span>
-            <b>↗</b>
-          </a>
-        </div>
+      <header className="github-activity__header section-header">
+        <div className="section-header__number">02</div>
+        <div className="section-header__label">CONTRIBUTION MAP</div>
+        <div className="section-header__rule" aria-hidden="true" />
+        <div className="section-header__meta">ACTIVITY / LAST 12 MONTHS</div>
+        <span className="section-header__status">
+          <i /> LIVE DATA
+        </span>
+        <a
+          className="github-activity__link section-header__action"
+          href={`https://github.com/${GITHUB_USERNAME}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>@{GITHUB_USERNAME}</span>
+          <b>↗</b>
+        </a>
       </header>
 
       <div className="github-activity__panel">

@@ -8,6 +8,7 @@ import { useArchive } from './hooks/useArchive';
 import { DefaultLayout, FullscreenLayout } from './layouts';
 
 import './index.scss';
+import './portfolio/assets/styles/MobileOptimization.scss';
 
 // Import the new Project components - ONLY ProjectDetailsPage
 import ProjectDetailsPage from './portfolio/components/ProjectDetailsPage';

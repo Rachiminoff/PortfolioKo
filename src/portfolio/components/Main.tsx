@@ -31,12 +31,14 @@ function Main() {
       <section className="hero-section" aria-labelledby="hero-title">
         <div className="hero-content">
           <div className="hero-left">
-            <div className="hero-kicker">
-              <span className="kicker-index">01</span>
-              <span>FULL-STACK DEVELOPER</span>
-              <span className="kicker-status">
+            <div className="hero-kicker section-header">
+              <div className="section-header__number">01</div>
+              <div className="section-header__label">PROFILE</div>
+              <div className="section-header__rule" aria-hidden="true" />
+              <div className="section-header__meta">FULL-STACK DEVELOPER</div>
+              <div className="section-header__status">
                 <i /> AVAILABLE
-              </span>
+              </div>
             </div>
 
             <div className="hero-title-wrap">

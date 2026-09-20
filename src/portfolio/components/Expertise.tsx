@@ -1,4 +1,4 @@
-import React, { useState, useRef, MouseEvent } from 'react';
+import React, { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useInView } from 'react-intersection-observer';
 
@@ -11,15 +11,6 @@ interface Tech {
   category: string;
   description: string;
 }
-
-const categoryColors: Record<string, string> = {
-  Frontend: '#61DAFB',
-  Backend: '#FF2D20',
-  'Game Dev': '#478CBF',
-  Automation: '#3776AB',
-  Tools: '#F05032',
-  AI: '#8B5CF6',
-};
 
 const techStack: Tech[] = [
   // Frontend & Mobile

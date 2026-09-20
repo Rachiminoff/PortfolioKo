@@ -106,13 +106,15 @@ function Timeline() {
       aria-labelledby="history-title"
     >
       <div className="timeline-container">
-        <header className="timeline-intro">
-          <div className="timeline-intro-index" aria-hidden="true">
-            <span>04</span>
-            <span>HISTORY</span>
+        <header className="timeline-intro section-header">
+          <div className="section-header__number">04</div>
+          <div className="section-header__label">JOURNEY</div>
+          <div className="section-header__rule" aria-hidden="true" />
+          <div className="section-header__meta">JOURNEY / 2022—PRESENT</div>
+          <div className="section-header__status">
+            {String(timelineData.milestones.length).padStart(2, '0')} EVENTS
           </div>
-          <div className="timeline-intro-main">
-            <div className="section-label">JOURNEY / 2022—PRESENT</div>
+          <div className="section-header__title-group">
             <h2 id="history-title" className="section-title">
               Timeline
             </h2>
@@ -120,10 +122,6 @@ function Timeline() {
               A compact record of the milestones, work, and experiments that shaped my development
               path.
             </p>
-          </div>
-          <div className="timeline-intro-meta" aria-hidden="true">
-            <span>SELECTED</span>
-            <span>{String(timelineData.milestones.length).padStart(2, '0')} EVENTS</span>
           </div>
         </header>
 

@@ -7,13 +7,12 @@ function Terminal() {
       <div className="about-section-grid" aria-hidden="true" />
 
       <div className="about-inner">
-        <header className="about-section-heading">
-          <div className="about-heading-index">
-            <span>02</span>
-            <span>PROFILE / NOTE</span>
-          </div>
-          <div className="about-heading-rule" />
-          <p>PROCESS OVER POLISH</p>
+        <header className="about-section-heading section-header">
+          <div className="section-header__number">03</div>
+          <div className="section-header__label">ABOUT / PROCESS</div>
+          <div className="section-header__rule" aria-hidden="true" />
+          <div className="section-header__meta">PROFILE / PROCESS</div>
+          <div className="section-header__status">PROCESS OVER POLISH</div>
         </header>
 
         <div className="about-layout">
@@ -127,7 +126,7 @@ function Terminal() {
               <span className="about-copy-mark" aria-hidden="true">
                 ●
               </span>
-              <span>ABOUT / 01</span>
+              <span>MORE ABOUT / 03</span>
               <span className="about-copy-year">2026</span>
             </div>
 

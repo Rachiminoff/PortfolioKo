@@ -88,11 +88,17 @@ function Certificates() {
   return (
     <>
       <section className={`certificates ${inView ? 'visible' : ''}`} id="certificates" ref={ref}>
-        <div className="certificates__header">
-          <span className="certificates__tag">CERTIFICATIONS</span>
-          <h2 className="certificates__title">Certificates</h2>
-          <p className="certificates__subtitle">Professional certifications and credentials</p>
-        </div>
+        <header className="certificates__header section-header">
+          <div className="section-header__number">07</div>
+          <div className="section-header__label">CREDENTIALS</div>
+          <div className="section-header__rule" aria-hidden="true" />
+          <div className="section-header__meta">CREDENTIALS / VERIFIED</div>
+          <div className="section-header__status">CERTIFICATIONS</div>
+          <div className="section-header__title-group">
+            <h2 className="certificates__title">Certificates</h2>
+            <p className="certificates__subtitle">Professional certifications and credentials</p>
+          </div>
+        </header>
 
         <div className="certificates__grid">
           {displayedCertificates.map((cert, index) => {

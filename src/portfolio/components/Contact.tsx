@@ -179,17 +179,22 @@ function Contact() {
       <div className="contact-grid">
         {/* LEFT COLUMN - Info */}
         <div className="contact-info">
-          <div className="contact-header">
-            <span className="header-tag">CONTACT</span>
-            <h2>Let's Work Together</h2>
-            <div className="contact-divider" />
-            <p className="contact-subtitle">
-              Have a project in mind, a question, or just want to say hello?
-              <br />
-              <br />
-              I'd love to hear from you.
-            </p>
-          </div>
+          <header className="contact-header section-header">
+            <div className="section-header__number">08</div>
+            <div className="section-header__label">LET'S CONNECT</div>
+            <div className="section-header__rule" aria-hidden="true" />
+            <div className="section-header__meta">LET'S CONNECT / TDY</div>
+            <div className="section-header__status">OPEN TO OPPORTUNITIES</div>
+            <div className="section-header__title-group">
+              <h2>Let's Work Together</h2>
+              <p className="contact-subtitle">
+                Have a project in mind, a question, or just want to say hello?
+                <br />
+                <br />
+                I'd love to hear from you.
+              </p>
+            </div>
+          </header>
 
           <div className="direct-email-card">
             <div className="direct-email-meta">

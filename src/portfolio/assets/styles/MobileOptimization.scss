@@ -1,0 +1,306 @@
+/* MOBILE UX — recomposition, not desktop shrink. */
+@media (max-width: 760px) {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    overflow-x: hidden;
+  }
+  main,
+  section,
+  footer {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  /* Remove desktop-sized viewport sections: mobile should flow naturally. */
+  .hero-section,
+  .about-section,
+  .github-activity,
+  .timeline-section,
+  .projects-container,
+  .expertise-container,
+  .contact-container,
+  .certificates {
+    min-height: auto !important;
+    height: auto !important;
+    scroll-margin-top: 58px;
+  }
+
+  .hero-section {
+    padding: 54px 14px 30px !important;
+  }
+  .hero-content {
+    gap: 28px !important;
+  }
+  .hero-title {
+    font-size: clamp(3rem, 15.5vw, 5.3rem) !important;
+    line-height: 0.86 !important;
+  }
+  .hero-right {
+    width: min(100%, 430px);
+    margin-inline: auto;
+  }
+  .profile-module {
+    padding: 8px !important;
+  }
+  .profile-image-container {
+    aspect-ratio: 1 / 1;
+  }
+  .hero-actions {
+    margin-top: 18px !important;
+  }
+  .hero-specs {
+    margin-top: 18px !important;
+  }
+
+  /* About: compact terminal, then a readable story. */
+  .about-section {
+    padding: 44px 14px 48px !important;
+  }
+  .about-layout {
+    gap: 22px !important;
+  }
+  .terminal-content {
+    max-height: 250px !important;
+    overflow: auto;
+    font-size: 0.62rem;
+  }
+  .about-copy {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .about-copy-topline {
+    margin-bottom: 12px;
+  }
+
+  /* Contribution map: only the wide calendar scrolls, not the whole page. */
+  .github-activity {
+    padding: 44px 12px 48px !important;
+  }
+  .github-activity__calendar-wrap {
+    overflow-x: auto;
+    max-width: 100%;
+    padding-bottom: 6px;
+  }
+  .github-activity__calendar {
+    min-width: 620px;
+  }
+  .github-activity__panel {
+    box-shadow: 5px 5px 0 var(--gha-red);
+  }
+
+  /* Timeline: one-column cards with short gaps. */
+  .timeline-section {
+    padding: 44px 0 48px !important;
+  }
+  .timeline-container {
+    width: calc(100% - 24px);
+  }
+  .timeline-wrapper {
+    padding-top: 1.25rem !important;
+  }
+  .timeline-list {
+    gap: 0.9rem !important;
+  }
+  .milestone-card,
+  .milestone-card:nth-child(even),
+  .milestone-card:nth-child(odd) {
+    padding-left: 30px !important;
+  }
+  .milestone-card-inner,
+  .milestone-card:nth-child(even) .milestone-card-inner,
+  .milestone-card:nth-child(odd) .milestone-card-inner {
+    grid-template-columns: 1fr !important;
+    gap: 7px !important;
+    padding: 12px !important;
+  }
+  .timeline-code-strip {
+    margin-top: 10px !important;
+  }
+
+  /* Projects: two compact columns where the viewport permits; no giant cards. */
+  .projects-container {
+    padding: 44px 12px 48px !important;
+  }
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .project-card,
+  .project-card-featured,
+  .project-card:nth-child(n) {
+    grid-column: auto !important;
+    min-height: 0 !important;
+  }
+  .project-card {
+    padding: 14px !important;
+  }
+  .project-card-art {
+    height: 110px !important;
+    margin-bottom: 14px !important;
+  }
+  .project-title {
+    font-size: 1.05rem !important;
+  }
+  .project-subtitle {
+    font-size: 0.72rem !important;
+    line-height: 1.35;
+  }
+  .project-card-footer {
+    position: static !important;
+    margin-top: 12px !important;
+  }
+  .projects-pagination {
+    margin-top: 14px !important;
+  }
+
+  /* Expertise: preserve the marquee, but reduce vertical framing. */
+  .expertise-container {
+    padding: 44px 12px 48px !important;
+  }
+  .expertise-title-grid {
+    margin-top: 16px !important;
+  }
+  .expertise-marquee {
+    margin-top: 18px !important;
+  }
+  .tech-item {
+    min-width: 145px !important;
+    padding: 0.65rem 0.7rem !important;
+  }
+  .expertise-context {
+    min-height: 58px !important;
+    margin-top: 10px !important;
+  }
+
+  /* Contact: remove full-screen behavior and keep fields compact. */
+  .contact-container {
+    padding: 44px 12px 48px !important;
+  }
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+  .contact-card {
+    padding: 16px !important;
+  }
+  .direct-email-card {
+    padding: 12px !important;
+  }
+  .form-grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Certificates: compact two-up cards when possible. */
+  .certificates {
+    padding: 44px 12px 48px !important;
+  }
+  .certificates__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .certificates__card {
+    min-height: 0 !important;
+    padding: 14px !important;
+  }
+  .certificates__card-title {
+    font-size: 0.9rem !important;
+  }
+
+  /* Footer + tech stack: no oversized footer whitespace. */
+  .footer {
+    padding: 28px 14px 18px !important;
+  }
+  .footer-container {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+  .footer-logo .logo-wrapper {
+    margin: 0 !important;
+    width: 76px;
+    height: 76px;
+  }
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .footer-card {
+    min-height: 54px !important;
+    padding: 9px !important;
+  }
+  .footer-stack-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .footer-stack-grid > span {
+    min-width: 0;
+    padding: 11px !important;
+  }
+  .footer-stack-grid > span svg {
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
+  }
+  .footer-stack-grid b,
+  .footer-stack-grid small {
+    overflow-wrap: anywhere;
+  }
+  .footer-bottom {
+    margin-top: 16px !important;
+  }
+
+  /* Prevent fixed viewers/modals from creating page-level overflow. */
+  .admin-modal-overlay {
+    padding: 10px !important;
+  }
+  .admin-modal {
+    max-height: calc(100dvh - 20px) !important;
+  }
+  .art-viewer {
+    height: calc(100dvh - 120px) !important;
+    grid-template-columns: 1fr !important;
+  }
+  .art-sidebar {
+    display: none !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .projects-grid,
+  .certificates__grid {
+    grid-template-columns: 1fr !important;
+  }
+  .project-card-art {
+    height: 96px !important;
+  }
+  .hero-actions {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .action-primary {
+    grid-column: 1 / -1;
+  }
+  .footer-stack-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-title {
+    font-size: 2.9rem !important;
+  }
+  .hero-specs {
+    grid-template-columns: 1fr !important;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
