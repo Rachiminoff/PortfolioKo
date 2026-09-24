@@ -424,6 +424,15 @@ $display: 'Archivo', Arial, sans-serif;
   }
 }
 
+@media (max-width: 700px) {
+  // Pure flourish stats at the very end of the section — on mobile this
+  // sits right at the seam with the next section, where its dim, low-
+  // contrast text reads as broken/overlapping copy rather than content.
+  .about-footer {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cursor {
     animation: none;

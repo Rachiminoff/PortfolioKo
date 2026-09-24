@@ -361,9 +361,23 @@ $sans: 'Archivo', 'Space Grotesk', 'Inter', sans-serif;
 }
 
 @media (max-width: 760px) {
+  .expertise-container {
+    padding-top: 2.75rem;
+    padding-bottom: 3rem;
+  }
+  .expertise-header {
+    margin-bottom: 1.1rem;
+  }
   .expertise-header .expertise-title-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    padding: 1rem 0 1.1rem;
+  }
+  .expertise-subtitle {
+    margin-top: 0.85rem;
+  }
+  .expertise-scroll-label {
+    padding: 0.5rem 0;
   }
 
   .expertise-header h1 {
@@ -376,6 +390,7 @@ $sans: 'Archivo', 'Space Grotesk', 'Inter', sans-serif;
   .expertise-footer {
     align-items: flex-start;
     flex-direction: column;
+    padding-top: 0.75rem;
   }
   .expertise-context {
     grid-template-columns: max-content minmax(0, 1fr);

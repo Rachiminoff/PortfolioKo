@@ -764,6 +764,14 @@ body[data-theme='dark'] {
   .certificates__card:nth-child(3n) {
     border-top: 5px solid var(--bau-blue) !important;
   }
+  // The grid is always 2 columns here, so an odd count (3 cards by
+  // default) leaves a trailing empty cell. That cell isn't blank —
+  // the grid's gap color fills it as a solid gray block since there's
+  // no card there to mask it. Spanning the last odd-one-out across
+  // both columns removes the gap entirely instead of leaving it bare.
+  .certificates__card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
   .certificates__card-icon {
     border-radius: 0 !important;
     background: #000 !important;
