@@ -3137,3 +3137,361 @@ $paper-muted: #55585d;
     min-width: 34px;
   }
 }
+
+/* ============================================================
+   WRITING READER / EDITORIAL + TOC PASS
+   ============================================================ */
+.persona-writing-reader-backdrop {
+  background: #0b0d10;
+  color: $ink;
+}
+
+.persona-reader-close {
+  border-color: rgba(242, 240, 232, 0.8);
+  background: #0b0d10;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.persona-reader-close:hover {
+  background: $red;
+  color: $ink;
+  transform: translateY(-2px);
+}
+
+.persona-reader-hero {
+  min-height: min(62vh, 620px);
+  border-bottom: 1px solid rgba(242, 240, 232, 0.12);
+}
+
+.persona-reader-hero img {
+  filter: saturate(0.75) contrast(1.04);
+  opacity: 0.48;
+}
+
+.persona-reader-hero-overlay {
+  background:
+    linear-gradient(180deg, rgba(5, 6, 8, 0.05) 20%, rgba(5, 6, 8, 0.94) 100%),
+    linear-gradient(90deg, rgba(5, 6, 8, 0.24), transparent 65%);
+}
+
+.persona-reader-hero-content {
+  max-width: 1180px;
+  padding: clamp(220px, 34vh, 360px) 5vw 58px;
+}
+
+.persona-reader-hero h1 {
+  max-width: 1000px;
+  font-size: clamp(3rem, 7.5vw, 7.2rem);
+  line-height: 0.9;
+  text-wrap: balance;
+}
+
+.persona-reader-layout {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 760px);
+  gap: clamp(34px, 6vw, 88px);
+  align-items: start;
+}
+
+.persona-reader-main {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
+  padding: 38px 0 100px;
+}
+
+.persona-reader-toc {
+  position: sticky;
+  top: 30px;
+  min-width: 0;
+  padding-top: 40px;
+}
+
+.persona-reader-toc-inner {
+  padding: 16px 12px;
+  border: 1px solid rgba(242, 240, 232, 0.14);
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(12px);
+}
+
+.persona-reader-toc-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: $muted-strong;
+  font: 800 8px 'IBM Plex Mono';
+  letter-spacing: 0.13em;
+}
+
+.persona-reader-toc-label::before {
+  content: '';
+  width: 17px;
+  height: 3px;
+  background: $red;
+}
+
+.persona-reader-toc nav,
+.persona-reader-toc-mobile nav {
+  display: grid;
+  gap: 2px;
+}
+
+.persona-reader-toc-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  min-width: 0;
+  padding: 7px 8px;
+  border-left: 2px solid transparent;
+  color: rgba(242, 240, 232, 0.46);
+  text-decoration: none;
+  font: 600 9px/1.45 'IBM Plex Mono';
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.persona-reader-toc-item:hover,
+.persona-reader-toc-item.active {
+  border-left-color: $red;
+  background: rgba(255, 255, 255, 0.055);
+  color: $ink;
+}
+
+.persona-reader-toc-item.level-3 {
+  padding-left: 18px;
+  font-size: 8px;
+}
+
+.persona-reader-toc-item.level-4,
+.persona-reader-toc-item.level-5,
+.persona-reader-toc-item.level-6 {
+  padding-left: 28px;
+  font-size: 8px;
+}
+
+.persona-reader-toc-dot {
+  width: 4px;
+  height: 4px;
+  margin-top: 5px;
+  flex: 0 0 auto;
+  background: rgba(242, 240, 232, 0.25);
+}
+
+.persona-reader-toc-item.active .persona-reader-toc-dot {
+  background: $red;
+}
+
+.persona-reader-toc-mobile {
+  display: none;
+}
+
+.persona-reader-back {
+  color: rgba(242, 240, 232, 0.72);
+  cursor: pointer;
+  transition:
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.persona-reader-back:hover {
+  color: $ink;
+  transform: translateX(-3px);
+}
+
+.persona-reader-excerpt {
+  margin-bottom: 34px;
+  padding: 0 0 28px 18px;
+  border-left: 5px solid $red;
+  border-bottom: 1px solid rgba(242, 240, 232, 0.12);
+  color: #c9cbd0;
+  font-size: clamp(1.12rem, 2vw, 1.4rem);
+  line-height: 1.7;
+}
+
+.persona-writing-content {
+  max-width: none;
+  font-size: clamp(16px, 1.35vw, 18px);
+  line-height: 1.86;
+}
+
+.persona-writing-content h1,
+.persona-writing-content h2,
+.persona-writing-content h3,
+.persona-writing-content h4,
+.persona-writing-content h5,
+.persona-writing-content h6 {
+  scroll-margin-top: 28px;
+  text-wrap: balance;
+}
+
+.persona-writing-content h2 {
+  padding-top: 18px;
+}
+
+.persona-writing-content blockquote {
+  position: relative;
+  margin: 2.9rem -60px;
+  padding: 34px 42px 34px 62px;
+  border: 1px solid rgba(23, 25, 29, 0.16);
+  border-left: 7px solid $red;
+  background: #ebe8dd;
+  color: #17191d;
+  box-shadow: 12px 12px 0 rgba(225, 67, 58, 0.18);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-style: italic;
+}
+
+.persona-writing-content blockquote::before {
+  content: '“';
+  position: absolute;
+  top: 20px;
+  left: 17px;
+  padding: 0;
+  background: transparent;
+  color: $red;
+  font:
+    900 4.7rem/0.8 Georgia,
+    serif;
+}
+
+.persona-writing-content blockquote::after {
+  content: 'PULL QUOTE';
+  position: absolute;
+  top: 13px;
+  right: 18px;
+  color: #777a80;
+  font: 800 7px 'IBM Plex Mono';
+  letter-spacing: 0.16em;
+}
+
+.persona-writing-content blockquote p {
+  margin: 0 0 0.9rem;
+  max-width: none;
+  color: #17191d;
+  font-size: clamp(1.2rem, 2.25vw, 1.75rem);
+  line-height: 1.48;
+}
+
+.persona-writing-content blockquote strong,
+.persona-writing-content blockquote em {
+  color: inherit;
+}
+
+@media (max-width: 1024px) {
+  .persona-reader-layout {
+    display: block;
+    width: min(820px, calc(100% - 36px));
+  }
+
+  .persona-reader-toc {
+    display: none;
+  }
+
+  .persona-reader-main {
+    padding-top: 26px;
+  }
+
+  .persona-reader-toc-mobile {
+    display: block;
+    margin-bottom: 22px;
+    border: 1px solid rgba(242, 240, 232, 0.14);
+    background: rgba(255, 255, 255, 0.025);
+  }
+
+  .persona-reader-toc-mobile summary {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+    cursor: pointer;
+    color: $ink;
+    list-style: none;
+    font: 800 9px 'IBM Plex Mono';
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .persona-reader-toc-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .persona-reader-toc-mobile nav {
+    padding: 0 8px 10px;
+  }
+
+  .persona-reader-toc-mobile .persona-reader-toc-item {
+    min-height: 40px;
+  }
+
+  .persona-writing-content blockquote {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .persona-reader-hero {
+    min-height: 410px;
+  }
+
+  .persona-reader-hero-content {
+    padding: 235px 18px 30px;
+  }
+
+  .persona-reader-hero h1 {
+    font-size: clamp(2.35rem, 12vw, 4.2rem);
+  }
+
+  .persona-reader-layout {
+    width: min(100% - 24px, 720px);
+  }
+
+  .persona-reader-main {
+    padding-bottom: 62px;
+  }
+
+  .persona-writing-content {
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .persona-writing-content blockquote {
+    margin: 2.2rem 0;
+    padding: 42px 20px 22px 46px;
+    border-left-width: 5px;
+    box-shadow: 7px 7px 0 rgba(225, 67, 58, 0.16);
+  }
+
+  .persona-writing-content blockquote::before {
+    top: 18px;
+    left: 13px;
+    font-size: 3.5rem;
+  }
+
+  .persona-writing-content blockquote::after {
+    top: 12px;
+    right: 12px;
+  }
+
+  .persona-writing-content blockquote p {
+    font-size: 1.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .persona-reader-close,
+  .persona-reader-back,
+  .persona-reader-toc-item {
+    transition: none !important;
+  }
+}

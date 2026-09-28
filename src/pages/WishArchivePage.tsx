@@ -1244,6 +1244,17 @@ const WishArchivePage: React.FC = () => {
   // Render Overview Tab
   const renderOverview = () => (
     <section className="wish-overview-tab section-reveal">
+      <div className="wish-tab-intro">
+        <div>
+          <span className="wish-tab-kicker">01 / Snapshot</span>
+          <h2>Collection at a glance</h2>
+        </div>
+        <p>
+          A compact read of the collection: how many characters you've secured, how often the 50/50
+          has gone your way, and how long the journey has been running.
+        </p>
+      </div>
+
       {/* Hero Stats */}
       <div className="wish-hero-stats">
         <div className="wish-hero-stat stagger-card">
@@ -1289,6 +1300,29 @@ const WishArchivePage: React.FC = () => {
   // Render Analytics Tab
   const renderAnalytics = () => (
     <section className="wish-analytics-tab section-reveal">
+      <div className="wish-tab-intro">
+        <div>
+          <span className="wish-tab-kicker">02 / Analytics</span>
+          <h2>Patterns behind the pulls</h2>
+        </div>
+        <p>
+          Luck, collection depth, and pacing are separated into small panels so the numbers stay
+          easy to scan on desktop and phone.
+        </p>
+      </div>
+
+      <div className="wish-analytics-lead">
+        <div>
+          <span>Current read</span>
+          <strong>{Math.round(stats.winRate)}% win rate</strong>
+        </div>
+        <p>
+          {stats.longestWinStreak > 0
+            ? `Your longest winning streak is ${stats.longestWinStreak} banner${stats.longestWinStreak === 1 ? '' : 's'}.`
+            : 'The archive is still building its first winning streak.'}
+        </p>
+      </div>
+
       <div className="wish-stats-dashboard">
         {/* Stats Grid - Grouped by category */}
         <div className="wish-stats-group">
@@ -1521,36 +1555,82 @@ const WishArchivePage: React.FC = () => {
   );
 
   // Render Heatmap Tab
-  const renderHeatmap = () => (
-    <section className="wish-heatmap-tab section-reveal">
-      <div className="wish-heatmap-controls">
-        <div className="wish-heatmap-year-selector">
-          {years
-            .filter((y) => y !== 'all')
-            .map((year) => (
-              <button
-                key={year}
-                className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
-                onClick={() => setHeatmapYear(Number(year))}
-              >
-                {year}
-              </button>
-            ))}
+  const renderHeatmap = () => {
+    const activeDays = new Set(characters.map((character) => character.date_obtained.slice(0, 10)))
+      .size;
+
+    return (
+      <section className="wish-heatmap-tab section-reveal">
+        <div className="wish-tab-intro">
+          <div>
+            <span className="wish-tab-kicker">03 / Activity map</span>
+            <h2>When the collection happened</h2>
+          </div>
+          <p>
+            Each square is a day in the selected year. Hover a marked day to see exactly which
+            characters landed there.
+          </p>
         </div>
-      </div>
-      <HeatMap
-        characters={characters}
-        year={heatmapYear}
-        onCellHover={(date) => {
-          // Optional: update a tooltip or info display
-        }}
-      />
-    </section>
-  );
+
+        <div className="wish-heatmap-summary">
+          <div>
+            <span>Active days</span>
+            <strong>{activeDays}</strong>
+          </div>
+          <div>
+            <span>Busiest year</span>
+            <strong>{stats.busiestYear || '—'}</strong>
+          </div>
+          <div>
+            <span>Double-pull days</span>
+            <strong>{stats.doubleDays}</strong>
+          </div>
+          <div>
+            <span>Longest gap</span>
+            <strong>{Math.round(stats.longestGap)}d</strong>
+          </div>
+        </div>
+
+        <div className="wish-heatmap-controls">
+          <div className="wish-heatmap-year-selector">
+            {years
+              .filter((y) => y !== 'all')
+              .map((year) => (
+                <button
+                  key={year}
+                  className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
+                  onClick={() => setHeatmapYear(Number(year))}
+                >
+                  {year}
+                </button>
+              ))}
+          </div>
+        </div>
+        <HeatMap
+          characters={characters}
+          year={heatmapYear}
+          onCellHover={(date) => {
+            // Optional: update a tooltip or info display
+          }}
+        />
+      </section>
+    );
+  };
 
   // Render Fun Facts Tab
   const renderFunFacts = () => (
     <section className="wish-funfacts-tab section-reveal">
+      <div className="wish-tab-intro">
+        <div>
+          <span className="wish-tab-kicker">04 / Fun facts</span>
+          <h2>The little patterns</h2>
+        </div>
+        <p>
+          Small observations generated from the archive. No filler—just things that are actually
+          present in the data.
+        </p>
+      </div>
+
       {stats.funFacts.length > 0 && (
         <div className="wish-fun-fact-featured stagger-card">
           <div className="wish-fun-fact-featured-icon">
@@ -1575,32 +1655,67 @@ const WishArchivePage: React.FC = () => {
   );
 
   // Render Achievements Tab
-  const renderAchievements = () => (
-    <section className="wish-achievements-tab section-reveal">
-      <div className="wish-achievements-grid">
-        {stats.achievements.map((achievement, index) => (
-          <div
-            key={index}
-            className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
-          >
-            <div className="wish-achievement-premium-icon">
-              <Icon icon={achievement.icon} />
-              {!achievement.unlocked && (
-                <div className="wish-achievement-lock">
-                  <Icon icon="mdi:lock" />
-                </div>
-              )}
-            </div>
-            <div className="wish-achievement-premium-content">
-              <h4>{achievement.title}</h4>
-              <p>{achievement.description}</p>
-            </div>
-            <div className="wish-achievement-premium-badge">{achievement.unlocked ? '✓' : '?'}</div>
+  const renderAchievements = () => {
+    const unlockedAchievements = stats.achievements.filter(
+      (achievement) => achievement.unlocked,
+    ).length;
+    const achievementPercentage = stats.achievements.length
+      ? Math.round((unlockedAchievements / stats.achievements.length) * 100)
+      : 0;
+
+    return (
+      <section className="wish-achievements-tab section-reveal">
+        <div className="wish-tab-intro">
+          <div>
+            <span className="wish-tab-kicker">05 / Milestones</span>
+            <h2>Collection achievements</h2>
           </div>
-        ))}
-      </div>
-    </section>
-  );
+          <p>
+            Milestones are based on the same collection data above. Locked cards stay visible so the
+            next target is always clear.
+          </p>
+        </div>
+
+        <div className="wish-achievements-progress">
+          <div>
+            <span>Progress</span>
+            <strong>
+              {unlockedAchievements} / {stats.achievements.length}
+            </strong>
+          </div>
+          <div className="wish-achievements-progress-track">
+            <span style={{ width: `${achievementPercentage}%` }} />
+          </div>
+          <em>{achievementPercentage}% unlocked</em>
+        </div>
+
+        <div className="wish-achievements-grid">
+          {stats.achievements.map((achievement, index) => (
+            <div
+              key={index}
+              className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
+            >
+              <div className="wish-achievement-premium-icon">
+                <Icon icon={achievement.icon} />
+                {!achievement.unlocked && (
+                  <div className="wish-achievement-lock">
+                    <Icon icon="mdi:lock" />
+                  </div>
+                )}
+              </div>
+              <div className="wish-achievement-premium-content">
+                <h4>{achievement.title}</h4>
+                <p>{achievement.description}</p>
+              </div>
+              <div className="wish-achievement-premium-badge">
+                {achievement.unlocked ? '✓' : '?'}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  };
 
   // Render Archive Tab
   const renderArchive = () => (

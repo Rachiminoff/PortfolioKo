@@ -20,6 +20,8 @@ export function useArchive() {
   });
 
   const checkAuthStatus = useCallback(async () => {
+    setState((prev) => ({ ...prev, isLoading: true }));
+
     try {
       const response = await fetch('/api/vault/verify', {
         credentials: 'include',
@@ -43,7 +45,16 @@ export function useArchive() {
   // Check authentication status on mount
   useEffect(() => {
     checkAuthStatus();
-  }, [checkAuthStatus]); // ✅ Added dependency
+  }, [checkAuthStatus]);
+
+  // Multiple protected pages use this hook independently. Keep them in sync
+  // when the archive is unlocked/locked elsewhere in the app so navigating
+  // directly from Archive -> Wish/Insights does not race the stale guard.
+  useEffect(() => {
+    const handleAuthChange = () => checkAuthStatus();
+    window.addEventListener('archive-auth-changed', handleAuthChange);
+    return () => window.removeEventListener('archive-auth-changed', handleAuthChange);
+  }, [checkAuthStatus]);
 
   const unlockArchive = useCallback(async (password: string) => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
@@ -69,6 +80,7 @@ export function useArchive() {
           isLocked: false,
           lockedUntil: undefined,
         });
+        window.dispatchEvent(new Event('archive-auth-changed'));
         return { success: true };
       } else if (data.locked) {
         setState((prev) => ({
@@ -119,6 +131,7 @@ export function useArchive() {
         isLocked: false,
         lockedUntil: undefined,
       });
+      window.dispatchEvent(new Event('archive-auth-changed'));
     } catch (error) {
       console.error('Logout error:', error);
     }

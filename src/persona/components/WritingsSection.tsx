@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -7,6 +7,12 @@ import rehypeRaw from 'rehype-raw';
 import { Icon } from '@iconify/react';
 import PersonaSectionHeader from './PersonaSectionHeader';
 import { supabase } from '../../lib/supabase';
+
+interface TocItem {
+  id: string;
+  text: string;
+  level: number;
+}
 
 interface BlogPost {
   id: number;
@@ -36,6 +42,9 @@ const WritingsSection: React.FC = () => {
   const [category, setCategory] = useState('all');
   const [sort, setSort] = useState<SortOption>('newest');
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [activeTocId, setActiveTocId] = useState('');
+  const headingIdsRef = useRef<string[]>([]);
+  const headingRenderIndexRef = useRef(0);
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -94,6 +103,59 @@ const WritingsSection: React.FC = () => {
     window.addEventListener('popstate', syncPostFromUrl);
     return () => window.removeEventListener('popstate', syncPostFromUrl);
   }, [posts]);
+
+  const toc = useMemo<TocItem[]>(() => {
+    if (!selectedPost) {
+      headingIdsRef.current = [];
+      return [];
+    }
+
+    const headingRegex = /^(#{1,6})\s+(.+)$/gm;
+    const usedIds = new Map<string, number>();
+    const items = Array.from(selectedPost.content.matchAll(headingRegex)).map((match) => {
+      const text = match[2].trim().replace(/[#*`_]/g, '');
+      const baseId =
+        text
+          .toLowerCase()
+          .normalize('NFKD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '') || 'section';
+      const count = usedIds.get(baseId) || 0;
+      usedIds.set(baseId, count + 1);
+      return {
+        id: count ? `${baseId}-${count + 1}` : baseId,
+        text,
+        level: match[1].length,
+      };
+    });
+
+    headingIdsRef.current = items.map((item) => item.id);
+    return items;
+  }, [selectedPost]);
+
+  useEffect(() => {
+    setActiveTocId(toc[0]?.id || '');
+    if (!selectedPost || toc.length === 0) return;
+
+    const headings = toc
+      .map((item) => document.getElementById(item.id))
+      .filter((element): element is HTMLElement => Boolean(element));
+    if (!headings.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]?.target.id) setActiveTocId(visible[0].target.id);
+      },
+      { rootMargin: '-10% 0px -72% 0px', threshold: [0, 0.1, 1] },
+    );
+
+    headings.forEach((heading) => observer.observe(heading));
+    return () => observer.disconnect();
+  }, [selectedPost, toc]);
 
   useEffect(() => {
     if (!selectedPost) return;
@@ -156,6 +218,52 @@ const WritingsSection: React.FC = () => {
       month: 'short',
       day: 'numeric',
     });
+
+  const renderReaderHeading = (
+    level: 1 | 2 | 3 | 4 | 5 | 6,
+    children: React.ReactNode,
+    props: Record<string, any>,
+  ) => {
+    const id = headingIdsRef.current[headingRenderIndexRef.current] || props.id;
+    headingRenderIndexRef.current += 1;
+    const className = `persona-md-h${level}`;
+
+    if (level === 1)
+      return (
+        <h1 {...props} id={id} className={className}>
+          {children}
+        </h1>
+      );
+    if (level === 2)
+      return (
+        <h2 {...props} id={id} className={className}>
+          {children}
+        </h2>
+      );
+    if (level === 3)
+      return (
+        <h3 {...props} id={id} className={className}>
+          {children}
+        </h3>
+      );
+    if (level === 4)
+      return (
+        <h4 {...props} id={id} className={className}>
+          {children}
+        </h4>
+      );
+    if (level === 5)
+      return (
+        <h5 {...props} id={id} className={className}>
+          {children}
+        </h5>
+      );
+    return (
+      <h6 {...props} id={id} className={className}>
+        {children}
+      </h6>
+    );
+  };
 
   return (
     <section className="persona-notes" id="writings" aria-labelledby="persona-notes-title">
@@ -359,104 +467,139 @@ const WritingsSection: React.FC = () => {
                 </div>
               </div>
             </header>
-            <main className="persona-reader-main">
-              <button className="persona-reader-back" onClick={closePost}>
-                <Icon icon="mdi:arrow-left" width={18} /> Back to Writings
-              </button>
-              {selectedPost.excerpt && (
-                <div className="persona-reader-excerpt">{selectedPost.excerpt}</div>
-              )}
-              <div className="persona-writing-content persona-reader-body">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
-                  components={{
-                    h1: ({ children, ...props }: any) => (
-                      <h1 className="persona-md-h1" {...props}>
-                        {children}
-                      </h1>
-                    ),
-                    h2: ({ children, ...props }: any) => (
-                      <h2 className="persona-md-h2" {...props}>
-                        {children}
-                      </h2>
-                    ),
-                    h3: ({ children, ...props }: any) => (
-                      <h3 className="persona-md-h3" {...props}>
-                        {children}
-                      </h3>
-                    ),
-                    h4: ({ children, ...props }: any) => (
-                      <h4 className="persona-md-h4" {...props}>
-                        {children}
-                      </h4>
-                    ),
-                    h5: ({ children, ...props }: any) => (
-                      <h5 className="persona-md-h5" {...props}>
-                        {children}
-                      </h5>
-                    ),
-                    h6: ({ children, ...props }: any) => (
-                      <h6 className="persona-md-h6" {...props}>
-                        {children}
-                      </h6>
-                    ),
-                    table: ({ children, ...props }: any) => (
-                      <div className="persona-md-table-wrap">
-                        <table {...props}>{children}</table>
-                      </div>
-                    ),
-                    a: ({ href, children, ...props }: any) => {
-                      const external = /^https?:\/\//i.test(href || '');
-                      return (
+            <div className="persona-reader-layout">
+              {toc.length > 0 && (
+                <aside className="persona-reader-toc" aria-label="Table of contents">
+                  <div className="persona-reader-toc-inner">
+                    <span className="persona-reader-toc-label">ON THIS PAGE</span>
+                    <nav>
+                      {toc.map((item) => (
                         <a
-                          href={href}
-                          className="persona-md-link"
-                          target={external ? '_blank' : undefined}
-                          rel={external ? 'noopener noreferrer' : undefined}
-                          {...props}
+                          key={item.id}
+                          href={`#${item.id}`}
+                          className={`persona-reader-toc-item level-${item.level} ${activeTocId === item.id ? 'active' : ''}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            document
+                              .getElementById(item.id)
+                              ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }}
                         >
-                          {children}
+                          <span className="persona-reader-toc-dot" />
+                          <span>{item.text}</span>
                         </a>
-                      );
-                    },
-                    img: ({ alt, ...props }: any) => (
-                      <figure className="persona-md-figure">
-                        <img className="persona-md-image" alt={alt || ''} {...props} />
-                        {alt && <figcaption>{alt}</figcaption>}
-                      </figure>
-                    ),
-                    pre: ({ children, ...props }: any) => (
-                      <div className="persona-md-code-block">
-                        <pre {...props}>{children}</pre>
-                      </div>
-                    ),
-                    input: ({ checked, ...props }: any) => (
-                      <input
-                        type="checkbox"
-                        checked={checked || false}
-                        readOnly
-                        className="persona-md-task-checkbox"
-                        {...props}
-                      />
-                    ),
-                    details: ({ children, ...props }: any) => (
-                      <details className="persona-md-details" {...props}>
-                        {children}
-                      </details>
-                    ),
-                    summary: ({ children, ...props }: any) => (
-                      <summary className="persona-md-summary" {...props}>
-                        {children}
-                      </summary>
-                    ),
-                    hr: (props: any) => <hr className="persona-md-hr" {...props} />,
-                  }}
-                >
-                  {selectedPost.content}
-                </ReactMarkdown>
-              </div>
-            </main>
+                      ))}
+                    </nav>
+                  </div>
+                </aside>
+              )}
+
+              <main className="persona-reader-main">
+                {toc.length > 0 && (
+                  <details className="persona-reader-toc-mobile">
+                    <summary>
+                      <span>Contents</span>
+                      <Icon icon="mdi:chevron-down" width={18} />
+                    </summary>
+                    <nav>
+                      {toc.map((item) => (
+                        <a
+                          key={item.id}
+                          href={`#${item.id}`}
+                          className={`persona-reader-toc-item level-${item.level} ${activeTocId === item.id ? 'active' : ''}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            document
+                              .getElementById(item.id)
+                              ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }}
+                        >
+                          <span className="persona-reader-toc-dot" />
+                          <span>{item.text}</span>
+                        </a>
+                      ))}
+                    </nav>
+                  </details>
+                )}
+
+                <button className="persona-reader-back" onClick={closePost}>
+                  <Icon icon="mdi:arrow-left" width={18} /> Back to Writings
+                </button>
+                {selectedPost.excerpt && (
+                  <div className="persona-reader-excerpt">{selectedPost.excerpt}</div>
+                )}
+                <div className="persona-writing-content persona-reader-body">
+                  {(() => {
+                    headingRenderIndexRef.current = 0;
+                    return null;
+                  })()}
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
+                    components={{
+                      h1: ({ children, ...props }: any) => renderReaderHeading(1, children, props),
+                      h2: ({ children, ...props }: any) => renderReaderHeading(2, children, props),
+                      h3: ({ children, ...props }: any) => renderReaderHeading(3, children, props),
+                      h4: ({ children, ...props }: any) => renderReaderHeading(4, children, props),
+                      h5: ({ children, ...props }: any) => renderReaderHeading(5, children, props),
+                      h6: ({ children, ...props }: any) => renderReaderHeading(6, children, props),
+                      table: ({ children, ...props }: any) => (
+                        <div className="persona-md-table-wrap">
+                          <table {...props}>{children}</table>
+                        </div>
+                      ),
+                      a: ({ href, children, ...props }: any) => {
+                        const external = /^https?:\/\//i.test(href || '');
+                        return (
+                          <a
+                            href={href}
+                            className="persona-md-link"
+                            target={external ? '_blank' : undefined}
+                            rel={external ? 'noopener noreferrer' : undefined}
+                            {...props}
+                          >
+                            {children}
+                          </a>
+                        );
+                      },
+                      img: ({ alt, ...props }: any) => (
+                        <figure className="persona-md-figure">
+                          <img className="persona-md-image" alt={alt || ''} {...props} />
+                          {alt && <figcaption>{alt}</figcaption>}
+                        </figure>
+                      ),
+                      pre: ({ children, ...props }: any) => (
+                        <div className="persona-md-code-block">
+                          <pre {...props}>{children}</pre>
+                        </div>
+                      ),
+                      input: ({ checked, ...props }: any) => (
+                        <input
+                          type="checkbox"
+                          checked={checked || false}
+                          readOnly
+                          className="persona-md-task-checkbox"
+                          {...props}
+                        />
+                      ),
+                      details: ({ children, ...props }: any) => (
+                        <details className="persona-md-details" {...props}>
+                          {children}
+                        </details>
+                      ),
+                      summary: ({ children, ...props }: any) => (
+                        <summary className="persona-md-summary" {...props}>
+                          {children}
+                        </summary>
+                      ),
+                      hr: (props: any) => <hr className="persona-md-hr" {...props} />,
+                    }}
+                  >
+                    {selectedPost.content}
+                  </ReactMarkdown>
+                </div>
+              </main>
+            </div>
           </div>
         </div>
       )}

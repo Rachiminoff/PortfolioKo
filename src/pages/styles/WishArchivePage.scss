@@ -1795,3 +1795,444 @@
     gap: 4px;
   }
 }
+
+/* =========================================================
+   WISH PLUS / INFORMATION ARCHITECTURE PASS
+   ========================================================= */
+.wish-archive-page .wish-tab-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 32px;
+  align-items: end;
+  margin: 0 0 28px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.wish-archive-page .wish-tab-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--red);
+  font: 800 9px/1 'IBM Plex Mono';
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-tab-intro h2 {
+  margin: 0;
+  color: var(--ink);
+  font:
+    900 clamp(2.1rem, 4.5vw, 4.8rem)/0.9 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-tab-intro p {
+  margin: 0;
+  max-width: 540px;
+  color: var(--muted);
+  font: 500 12px/1.7 'IBM Plex Mono';
+}
+
+.wish-archive-page .wish-analytics-lead {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.55fr) 1fr;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 34px;
+  padding: 18px 20px;
+  border: 1px solid var(--ink);
+  background: var(--yellow);
+  color: #101010;
+}
+
+.wish-archive-page .wish-analytics-lead div {
+  display: grid;
+  gap: 7px;
+}
+
+.wish-archive-page .wish-analytics-lead span,
+.wish-archive-page .wish-analytics-lead p {
+  margin: 0;
+  font: 800 9px/1.5 'IBM Plex Mono';
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-analytics-lead strong {
+  font:
+    900 clamp(2rem, 5vw, 4.2rem)/0.85 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.07em;
+}
+
+.wish-archive-page .wish-analytics-lead p {
+  max-width: 560px;
+  font-size: 10px;
+}
+
+.wish-archive-page .wish-heatmap-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-bottom: 18px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+}
+
+.wish-archive-page .wish-heatmap-summary > div {
+  min-height: 105px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px;
+  background: var(--surface);
+}
+
+.wish-archive-page .wish-heatmap-summary span,
+.wish-archive-page .wish-heatmap-summary strong {
+  text-transform: uppercase;
+}
+
+.wish-archive-page .wish-heatmap-summary span {
+  color: var(--muted);
+  font: 800 8px 'IBM Plex Mono';
+}
+
+.wish-archive-page .wish-heatmap-summary strong {
+  color: var(--ink);
+  font:
+    900 clamp(1.8rem, 3.5vw, 3rem)/0.9 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.06em;
+}
+
+.wish-archive-page .wish-heatmap-controls {
+  align-items: center;
+  padding: 12px;
+  border: 1px solid var(--line);
+}
+
+.wish-archive-page .wish-heatmap-year-selector {
+  width: 100%;
+}
+
+.wish-archive-page .wish-heatmap-year-selector button {
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.wish-archive-page .wish-heatmap-year-selector button:hover {
+  transform: translateY(-2px);
+  background: var(--yellow) !important;
+  color: #111 !important;
+}
+
+.wish-archive-page .wish-heatmap-year-selector button.active:hover {
+  background: var(--red) !important;
+  color: var(--ink) !important;
+}
+
+.wish-archive-page .heatmap-container {
+  min-width: 0;
+  padding: 18px 0 0;
+}
+
+.wish-archive-page .heatmap-grid {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.wish-archive-page .heatmap-tooltip {
+  max-width: min(360px, calc(100vw - 32px));
+  z-index: 20;
+}
+
+.wish-archive-page .wish-funfacts-tab .wish-tab-intro,
+.wish-archive-page .wish-achievements-tab .wish-tab-intro {
+  margin-bottom: 30px;
+}
+
+.wish-archive-page .wish-fun-fact-featured {
+  min-height: 0 !important;
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 1px;
+  padding: 28px !important;
+}
+
+.wish-archive-page .wish-fun-fact-featured-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #111;
+  background: #111;
+  color: var(--yellow);
+  font-size: 27px;
+}
+
+.wish-archive-page .wish-fun-fact-featured-label {
+  display: block;
+  margin-bottom: 7px;
+  font: 800 9px 'IBM Plex Mono';
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #111;
+}
+
+.wish-archive-page .wish-fun-fact-featured-content p {
+  margin: 0;
+  max-width: 780px;
+  font:
+    900 clamp(1.5rem, 3vw, 2.7rem)/1.05 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.055em;
+  color: #111;
+}
+
+.wish-archive-page .wish-fun-facts-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wish-archive-page .wish-fun-fact-premium {
+  min-height: 150px !important;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.wish-archive-page .wish-fun-fact-premium-icon {
+  flex: 0 0 auto;
+  color: var(--red) !important;
+  font-size: 20px;
+}
+
+.wish-archive-page .wish-fun-fact-premium span {
+  color: var(--ink);
+  font: 700 12px/1.6 'IBM Plex Mono';
+}
+
+.wish-archive-page .wish-achievements-progress {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--ink);
+  background: var(--surface);
+}
+
+.wish-archive-page .wish-achievements-progress > div:first-child {
+  display: grid;
+  gap: 4px;
+}
+
+.wish-archive-page .wish-achievements-progress span,
+.wish-archive-page .wish-achievements-progress em {
+  font: 800 8px 'IBM Plex Mono';
+  text-transform: uppercase;
+  color: var(--muted);
+  font-style: normal;
+}
+
+.wish-archive-page .wish-achievements-progress strong {
+  font:
+    900 24px/1 'Archivo',
+    Arial,
+    sans-serif;
+  color: var(--ink);
+}
+
+.wish-archive-page .wish-achievements-progress-track {
+  height: 8px;
+  overflow: hidden;
+  background: rgba(244, 242, 232, 0.08);
+}
+
+.wish-archive-page .wish-achievements-progress-track span {
+  display: block;
+  height: 100%;
+  background: var(--red);
+}
+
+.wish-archive-page .wish-achievements-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wish-archive-page .wish-achievement-premium {
+  position: relative;
+  min-width: 0;
+  min-height: 205px;
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  gap: 15px;
+  align-items: start;
+  padding: 18px;
+  background: var(--surface);
+}
+
+.wish-archive-page .wish-achievement-premium.unlocked {
+  background: var(--paper);
+}
+
+.wish-archive-page .wish-achievement-premium.locked {
+  background: #0a0a0a;
+}
+
+.wish-archive-page .wish-achievement-premium-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border: 1px solid var(--line);
+  color: var(--yellow);
+  font-size: 24px;
+}
+
+.wish-archive-page .wish-achievement-premium.locked .wish-achievement-premium-icon {
+  color: var(--muted);
+}
+
+.wish-archive-page .wish-achievement-premium-content {
+  min-height: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.wish-archive-page .wish-achievement-premium-content h4 {
+  margin: 0 0 7px;
+  color: var(--ink);
+  font:
+    900 18px/1.05 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.045em;
+}
+
+.wish-archive-page .wish-achievement-premium-content p {
+  margin: 0;
+  color: var(--muted);
+  font: 500 10px/1.6 'IBM Plex Mono';
+}
+
+.wish-archive-page .wish-achievement-premium-badge {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font: 900 12px 'IBM Plex Mono';
+}
+
+.wish-archive-page .wish-achievement-premium.unlocked .wish-achievement-premium-badge {
+  border-color: var(--yellow);
+  background: var(--yellow);
+  color: #111;
+}
+
+.wish-archive-page .wish-achievement-lock {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #111;
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+@media (max-width: 950px) {
+  .wish-archive-page .wish-tab-intro {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .wish-archive-page .wish-heatmap-summary,
+  .wish-archive-page .wish-achievements-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .wish-archive-page .wish-tab-intro {
+    padding-bottom: 17px;
+    margin-bottom: 20px;
+  }
+
+  .wish-archive-page .wish-tab-intro h2 {
+    font-size: clamp(2.1rem, 12vw, 3.7rem);
+  }
+
+  .wish-archive-page .wish-tab-intro p {
+    font-size: 10px;
+    line-height: 1.65;
+  }
+
+  .wish-archive-page .wish-analytics-lead {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .wish-archive-page .wish-heatmap-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wish-archive-page .wish-heatmap-summary > div {
+    min-height: 90px;
+    padding: 12px;
+  }
+
+  .wish-archive-page .wish-fun-fact-featured {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 20px !important;
+  }
+
+  .wish-archive-page .wish-fun-facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wish-archive-page .wish-achievements-progress {
+    grid-template-columns: 1fr auto;
+  }
+
+  .wish-archive-page .wish-achievements-progress-track {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .wish-archive-page .wish-achievements-progress em {
+    text-align: right;
+  }
+
+  .wish-archive-page .wish-achievement-premium {
+    grid-template-columns: 48px 1fr auto;
+    min-height: 170px;
+    padding: 14px;
+  }
+
+  .wish-archive-page .wish-achievement-premium-icon {
+    width: 46px;
+    height: 46px;
+  }
+
+  .wish-archive-page .wish-achievement-premium-content h4 {
+    font-size: 16px;
+  }
+}
