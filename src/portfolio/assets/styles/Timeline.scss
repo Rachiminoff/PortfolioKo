@@ -134,15 +134,16 @@
 
 .timeline-wrapper {
   position: relative;
-  padding: clamp(3.5rem, 7vw, 6.5rem) 0 2rem;
+  padding: clamp(3.5rem, 7vw, 6rem) 0 2rem;
 }
 
 .timeline-rail {
   position: absolute;
+  z-index: 0;
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 2px;
+  width: 1px;
   transform: translateX(-50%);
   pointer-events: none;
 }
@@ -156,27 +157,31 @@
 
 .timeline-rail-track {
   height: 100%;
-  background: rgba(244, 242, 232, 0.13);
+  background: rgba(244, 242, 232, 0.18);
 }
 
 .timeline-rail-progress {
   height: 0;
   background: var(--timeline-red);
-  box-shadow: 0 0 18px rgba(223, 59, 49, 0.2);
+  box-shadow: 0 0 14px rgba(223, 59, 49, 0.2);
   transition: height 120ms linear;
 }
 
 .timeline-list {
+  --timeline-gap: clamp(4rem, 7vw, 7rem);
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: clamp(3.5rem, 8vw, 7.5rem);
+  gap: var(--timeline-gap);
 }
 
 .milestone-card {
   --accent: var(--timeline-red);
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: block;
+  width: 92%;
+  margin: 0 auto;
   min-width: 0;
   opacity: 0;
   transform: translateY(28px);
@@ -192,12 +197,12 @@
     --accent: var(--timeline-blue);
   }
 
-  &:nth-child(even) .milestone-card-inner {
-    grid-column: 2;
+  &:nth-child(even) {
+    width: 94%;
   }
 
-  &:nth-child(odd) .milestone-card-inner {
-    grid-column: 1;
+  &:nth-child(odd) {
+    width: 90%;
   }
 
   &.visible {
@@ -209,10 +214,10 @@
 .milestone-card-inner {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(70px, 0.18fr) minmax(0, 1fr);
-  gap: clamp(1rem, 2.5vw, 2.5rem);
+  grid-template-columns: minmax(72px, 0.16fr) minmax(0, 1fr);
+  gap: clamp(1.25rem, 3vw, 3rem);
   min-width: 0;
-  padding: clamp(1.35rem, 2.4vw, 2.25rem);
+  padding: clamp(1.5rem, 2.8vw, 2.5rem) clamp(1.5rem, 3.2vw, 3.25rem);
   background: #090a0b;
   border: 1px solid var(--timeline-line);
   border-top: 5px solid var(--accent);
@@ -228,7 +233,6 @@
     transform: translateY(-3px);
   }
 
-  // Small geometric corner mark — deliberate, not decorative noise.
   &::after {
     content: '';
     position: absolute;
@@ -244,7 +248,7 @@
 .milestone-index {
   position: absolute;
   top: -0.75rem;
-  right: 1rem;
+  right: 1.25rem;
   padding: 0 0.45rem;
   background: #090a0b;
   color: var(--timeline-faint);
@@ -351,7 +355,7 @@
 }
 
 .milestone-description {
-  max-width: 62ch;
+  max-width: 75ch;
   margin: 1rem 0 0;
   color: rgba(244, 242, 232, 0.72);
   font:
@@ -361,15 +365,15 @@
 
 .milestone-marker {
   position: absolute;
-  z-index: 3;
-  top: 50%;
+  z-index: 4;
+  top: calc(-1 * var(--timeline-gap) / 2);
   left: 50%;
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   display: grid;
   place-items: center;
   transform: translate(-50%, -50%) scale(0.55);
-  border: 2px solid var(--timeline-paper);
+  border: 1px solid var(--accent);
   background: #000;
   color: var(--accent);
   opacity: 0;
@@ -385,6 +389,10 @@
   svg {
     font-size: 0.9rem;
   }
+}
+
+.milestone-card:first-child .milestone-marker {
+  display: none;
 }
 
 // The code sample is treated as an editorial "artifact strip", not a generic terminal.
@@ -504,13 +512,14 @@
   }
 
   .timeline-list {
-    gap: 2.25rem;
+    --timeline-gap: 2.75rem;
   }
 
   .milestone-card,
   .milestone-card:nth-child(even),
   .milestone-card:nth-child(odd) {
     display: block;
+    width: 100%;
     padding-left: 48px;
   }
 
@@ -526,6 +535,11 @@
   .milestone-marker {
     left: 16px;
     top: 1.75rem;
+    transform: translate(-50%, -50%) scale(0.55);
+  }
+
+  .milestone-marker.icon-visible {
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .milestone-year {
@@ -603,6 +617,10 @@
     width: 22px;
     height: 22px;
     border-width: 1px;
+  }
+
+  .milestone-marker.icon-visible {
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .milestone-marker svg {
