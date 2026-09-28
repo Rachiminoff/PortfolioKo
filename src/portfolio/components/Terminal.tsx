@@ -135,42 +135,33 @@ function Terminal() {
               <br />
               <em>iteration.</em>
             </h1>
-
             <p className="about-lead">
-              I enjoy the process of testing and debugging, even when it gets frustrating. There is
-              something satisfying about taking a broken piece of logic, tracing where it went
-              wrong, and gradually getting it to work the way it was meant to.
+              I enjoy building software that eventually finds its way into someone else's hands.
+              There is something especially rewarding about seeing people use something I made,
+              whether that means receiving a quick thank-you, hearing how they use a feature, or
+              getting a bug report that gives me something new to work on.
             </p>
 
             <div className="about-story-grid">
               <span className="story-number">01</span>
               <p>
-                Figuring out what is happening and why is one of the parts of development I enjoy
-                most. The work is not always clean on the first pass, but every bug, experiment, and
-                revision leaves the system a little clearer.
+                A project rarely comes together exactly as planned. I like figuring things out as I
+                go—testing ideas, changing what doesn't work, and gradually turning scattered pieces
+                into something coherent. Feedback makes that process even more meaningful because it
+                gives the software a life beyond my own development environment.
               </p>
             </div>
 
             <div className="about-story-grid story-second">
               <span className="story-number">02</span>
               <p>
-                I feel most proud when a project is finished and I get to show it to someone else.
-                Seeing all the pieces come together into something that actually works is genuinely
-                satisfying, especially after all the iterations, mistakes, and fixes that got it
-                there.
+                One of my favorite parts comes near the end of a project, when most of the features
+                are finally in place and I can look through the documentation. Seeing the decisions,
+                features, and moving parts laid out together gives me a sense of how far the project
+                has come. It's satisfying to see something that started as an idea become a
+                complete, usable system.
               </p>
             </div>
-
-            <footer className="about-footer">
-              <div>
-                <span>APPROACH</span>
-                <strong>MAKE → TEST → REFINE</strong>
-              </div>
-              <div>
-                <span>IDENTITY</span>
-                <strong>TDY / 01</strong>
-              </div>
-            </footer>
           </article>
         </div>
       </div>
