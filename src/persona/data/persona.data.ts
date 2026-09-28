@@ -36,9 +36,9 @@ export const currently: PersonaCurrentlyItem[] = [
   },
   {
     label: 'PLAYING',
-    value: 'The current time sink',
+    value: 'Genshin Impact',
     icon: 'mdi:gamepad-variant',
-    image: 'https://placehold.co/800x1000/11151a/eeeeee?text=PLAYING',
+    image: 'https://images.igdb.com/igdb/image/upload/t_cover_big_2x/coa9dy.jpg',
   },
   {
     label: 'LISTENING',
