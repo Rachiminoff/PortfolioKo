@@ -1,25 +1,46 @@
-/* =========================================================
-   WISH ARCHIVE / COLLECTION ATLAS REWORK
-   ========================================================= */
+/* ================================================================
+   WISH ARCHIVE — BAUHAUS × SWISS DATA VIEWS
+   Five new data surfaces use only wish-v4-* selectors.
+   The archive/timeline block below is preserved verbatim.
+   ================================================================ */
+
 .wish-archive-page,
 .wish-archive-page * {
   box-sizing: border-box;
 }
+
 .wish-archive-page {
-  --paper: #050505;
-  --ink: #f4f2e8;
-  --muted: rgba(244, 242, 232, 0.58);
-  --line: rgba(244, 242, 232, 0.22);
-  --red: #e6392f;
-  --blue: #2457d6;
-  --yellow: #f2c230;
-  --cyan: #18aebe;
+  --wish-bg: #0a0b0e;
+  --wish-surface: #111318;
+  --wish-surface-2: #181b21;
+  --wish-ink: #f4f0e6;
+  --wish-muted: #9a9da5;
+  --wish-faint: #6d727b;
+  --wish-line: rgba(244, 240, 230, 0.14);
+  --wish-line-strong: rgba(244, 240, 230, 0.24);
+  --wish-red: #e53935;
+  --wish-blue: #2457d6;
+  --wish-yellow: #f4c430;
+  --wish-paper: #f2efe5;
+  --wish-black: #111318;
+  --paper: var(--wish-bg);
+  --ink: var(--wish-ink);
+  --muted: var(--wish-muted);
+  --line: var(--wish-line);
+  --red: var(--wish-red);
+  --blue: var(--wish-blue);
+  --yellow: var(--wish-yellow);
+  --surface: var(--wish-surface);
+  --surface-2: var(--wish-surface-2);
   min-height: 100vh;
-  padding: 22px clamp(18px, 4vw, 64px) 90px;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
+  width: 100%;
+  padding: 22px clamp(14px, 4vw, 64px) 96px;
+  overflow-x: clip;
+  background: var(--wish-bg) !important;
+  color: var(--wish-ink) !important;
   font-family: 'Archivo', Arial, sans-serif !important;
 }
+
 .wish-archive-page .wish-bg {
   display: none !important;
 }
@@ -27,779 +48,1402 @@
   width: min(1480px, 100%);
   margin: auto;
 }
+
 .wish-archive-page .wish-archive-header {
-  padding: 0 0 18px;
-  border-bottom: 2px solid var(--ink);
+  width: min(1480px, 100%);
+  margin: 0 auto;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--wish-line-strong);
 }
 .wish-archive-page .wish-back-button {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  padding: 10px 13px;
-  border: 1px solid var(--ink) !important;
+  min-height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--wish-line-strong) !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: var(--ink) !important;
-  font: 800 10px 'IBM Plex Mono' !important;
+  color: var(--wish-muted) !important;
+  font:
+    800 9px/1 'IBM Plex Mono',
+    monospace !important;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
 }
-.wish-archive-page .wish-back-button:hover {
-  background: var(--red) !important;
-  border-color: var(--red) !important;
-  color: var(--ink) !important;
+.wish-archive-page .wish-back-button:hover,
+.wish-archive-page .wish-back-button:focus-visible {
+  color: var(--wish-ink) !important;
+  border-color: var(--wish-yellow) !important;
+  background: rgba(244, 196, 48, 0.08) !important;
+  outline: none;
 }
+
 .wish-archive-page .wish-hero {
-  padding: 50px 0 40px;
-  border-bottom: 1px solid var(--line);
+  width: min(1480px, 100%);
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 105px) 0 44px;
+  border-bottom: 1px solid var(--wish-line);
 }
 .wish-archive-page .wish-hero-content {
   max-width: 1050px;
 }
 .wish-archive-page .wish-hero-badge {
-  display: inline-block;
-  padding: 6px 8px;
-  border: 1px solid var(--ink);
-  background: var(--yellow);
-  font: 800 9px 'IBM Plex Mono';
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--wish-red);
+  background: var(--wish-red);
+  color: #fff;
+  font:
+    900 8px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 .wish-archive-page .wish-hero-title {
-  margin: 20px 0 0 !important;
-  color: var(--ink) !important;
-  font: 900 clamp(4.5rem, 12vw, 11rem)/0.76 'Archivo' !important;
-  letter-spacing: -0.09em !important;
+  margin: 18px 0 0 !important;
+  color: var(--wish-ink) !important;
+  font: 900 clamp(3.8rem, 11vw, 10rem)/0.78 'Archivo' !important;
+  letter-spacing: -0.095em !important;
   text-transform: uppercase !important;
 }
 .wish-archive-page .wish-hero-subtitle {
   max-width: 700px;
-  margin: 25px 0 0 !important;
-  padding-left: 16px;
-  border-left: 8px solid var(--red);
-  color: var(--muted) !important;
-  font: 500 13px/1.6 'IBM Plex Mono' !important;
+  margin: 24px 0 0 !important;
+  padding-left: 14px;
+  border-left: 4px solid var(--wish-yellow);
+  color: var(--wish-muted) !important;
+  font: 500 11px/1.75 'IBM Plex Mono' !important;
 }
-.wish-archive-page .wish-hero-stats {
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1px !important;
-  margin-top: 30px;
-  background: var(--ink) !important;
-  border: 1px solid var(--ink) !important;
-}
-.wish-archive-page .wish-hero-stat {
-  min-height: 150px;
-  padding: 20px;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-.wish-archive-page .wish-hero-stat:nth-child(2) {
-  background: var(--yellow) !important;
-}
-.wish-archive-page .wish-hero-stat:nth-child(3) {
-  background: var(--red) !important;
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-hero-stat:nth-child(4) {
-  background: var(--blue) !important;
-  color: var(--ink) !important;
-}
-.wish-archive-page .animated-counter {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.wish-archive-page .animated-counter-value {
-  font-size: clamp(2.4rem, 5vw, 5rem);
-  line-height: 0.85;
-  font-weight: 900;
-  letter-spacing: -0.07em;
-  color: inherit !important;
-}
-.wish-archive-page .animated-counter-label {
-  font: 800 9px 'IBM Plex Mono';
-  text-transform: uppercase;
-  color: inherit !important;
-}
-.wish-archive-page .wish-hero-highlights {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1px;
-  margin-top: 20px;
-  background: var(--ink);
-  border: 1px solid var(--ink);
-}
-.wish-archive-page .wish-hero-highlight {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  background: #0c0c0c;
-  color: var(--ink);
-  font: 800 9px 'IBM Plex Mono';
-  text-transform: uppercase;
-}
+
 .wish-archive-page .tab-nav {
-  margin-top: 28px;
-  border-bottom: 2px solid var(--ink);
-  background: var(--paper) !important;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: min(1480px, 100%);
+  margin: 0 auto;
+  border-bottom: 2px solid var(--wish-ink);
+  background: rgba(10, 11, 14, 0.96) !important;
+  backdrop-filter: blur(12px);
 }
 .wish-archive-page .tab-nav-inner {
   display: flex;
-  overflow: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.wish-archive-page .tab-nav-inner::-webkit-scrollbar {
+  display: none;
 }
 .wish-archive-page .tab-nav-item {
+  position: relative;
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 13px 16px;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 15px;
   border: 0;
-  border-right: 1px solid var(--line);
+  border-right: 1px solid var(--wish-line);
   background: transparent;
-  color: var(--ink);
-  font: 800 9px 'IBM Plex Mono';
+  color: var(--wish-faint);
+  font:
+    800 9px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
 }
+.wish-archive-page .tab-nav-item svg {
+  color: currentColor;
+}
+.wish-archive-page .tab-nav-item::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  right: 13px;
+  bottom: -2px;
+  height: 3px;
+  background: var(--wish-yellow);
+  transform: scaleX(0);
+  transition: transform 0.18s ease;
+}
 .wish-archive-page .tab-nav-item:hover {
-  background: var(--yellow);
+  color: var(--wish-ink);
+  background: rgba(255, 255, 255, 0.025);
 }
 .wish-archive-page .tab-nav-item.active {
-  background: var(--red);
-  color: var(--ink);
+  color: var(--wish-ink);
+}
+.wish-archive-page .tab-nav-item.active::after {
+  transform: scaleX(1);
 }
 .wish-archive-page .wish-tab-content {
-  background: var(--paper) !important;
+  width: min(1480px, 100%);
+  margin: 0 auto;
 }
-.wish-archive-page .wish-overview-tab,
-.wish-archive-page .wish-analytics-tab,
-.wish-archive-page .wish-heatmap-tab,
-.wish-archive-page .wish-funfacts-tab,
-.wish-archive-page .wish-achievements-tab,
-.wish-archive-page .wish-archive-tab {
-  padding-top: 35px;
+
+/* ================================================================
+   V4 shared layout
+   ================================================================ */
+.wish-v4-tab {
+  --v4-paper: var(--wish-paper);
+  --v4-ink: var(--wish-black);
+  --v4-muted: #5d6066;
+  --v4-red: var(--wish-red);
+  --v4-blue: var(--wish-blue);
+  --v4-yellow: var(--wish-yellow);
+  --v4-line: rgba(17, 19, 24, 0.18);
+  position: relative;
+  padding: clamp(30px, 5vw, 72px) 0 10px;
+  color: var(--v4-ink);
 }
-.wish-archive-page .wish-stats-group {
-  margin-bottom: 42px;
-}
-.wish-archive-page .wish-stats-group-title,
-.wish-archive-page .wish-chart-title {
-  margin: 0 0 12px;
-  color: var(--ink) !important;
-  font-size: clamp(1.3rem, 2.5vw, 2.1rem);
-  font-weight: 900;
-  letter-spacing: -0.06em;
-  text-transform: uppercase;
-}
-.wish-archive-page .wish-stats-dashboard-grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px !important;
-  background: var(--ink) !important;
-  border: 1px solid var(--ink) !important;
-}
-.wish-archive-page .wish-stat-premium {
-  min-height: 150px;
-  padding: 18px;
-  display: flex;
-  gap: 15px;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-.wish-archive-page .wish-stat-premium:nth-child(3n + 2) {
-  background: var(--yellow) !important;
-}
-.wish-archive-page .wish-stat-premium:nth-child(3n) {
-  background: #0c0c0c !important;
-}
-.wish-archive-page .wish-stat-premium-icon {
-  font-size: 24px;
-}
-.wish-archive-page .wish-stat-premium-value {
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-stat-premium-label {
+.wish-v4-tab::before {
+  content: '';
   display: block;
-  margin-top: 7px;
-  color: var(--muted);
-  font: 800 9px 'IBM Plex Mono';
+  width: 54px;
+  height: 6px;
+  margin-bottom: 26px;
+  background: var(--v4-red);
+}
+.wish-v4-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 28px;
+  padding: 0 0 28px;
+  border-bottom: 2px solid var(--v4-ink);
+}
+.wish-v4-intro > div:first-child {
+  max-width: 840px;
+}
+.wish-v4-kicker {
+  display: block;
+  color: var(--v4-red);
+  font:
+    900 8px/1.2 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
 }
-.wish-archive-page .wish-charts-row {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px !important;
-  background: var(--ink) !important;
-  border: 1px solid var(--ink) !important;
+.wish-v4-intro h2 {
+  margin: 10px 0 12px;
+  font:
+    900 clamp(2.4rem, 5.6vw, 6.8rem)/0.86 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.085em;
 }
-.wish-archive-page .wish-chart-card {
-  padding: 20px;
-  min-height: 330px;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
+.wish-v4-intro p {
+  max-width: 700px;
+  margin: 0;
+  color: var(--v4-muted);
+  font:
+    500 11px/1.75 'IBM Plex Mono',
+    monospace;
 }
-.wish-archive-page .bar-chart {
-  display: flex;
-  align-items: stretch;
-  gap: 8px;
-  padding-top: 15px;
+.wish-v4-index {
+  min-width: 170px;
+  padding: 14px 16px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-yellow);
+  box-shadow: 7px 7px 0 var(--v4-ink);
 }
-.wish-archive-page .bar-chart-item {
-  min-width: 0;
-  flex: 1;
+.wish-v4-index strong {
+  display: block;
+  font:
+    900 clamp(2rem, 4vw, 3.5rem)/0.85 'Archivo',
+    sans-serif;
+  letter-spacing: -0.08em;
+}
+.wish-v4-index span {
+  display: block;
+  margin-top: 8px;
+  font:
+    900 7px/1.2 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.12em;
+}
+.wish-v4-index-blue {
+  background: var(--v4-blue);
+  color: #fff;
+}
+.wish-v4-index-yellow {
+  background: var(--v4-yellow);
+}
+
+/* Overview */
+.wish-v4-overview-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(360px, 0.72fr);
+  gap: 1px;
+  margin-top: 24px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
+}
+.wish-v4-hero-stat {
+  min-height: 360px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
+  padding: clamp(22px, 4vw, 46px);
+  background: var(--v4-paper);
 }
-.wish-archive-page .bar-chart-bar-wrapper {
-  width: 100%;
-  max-width: 35px;
-  display: flex;
-  align-items: flex-end;
-  background: rgba(17, 19, 24, 0.07);
-}
-.wish-archive-page .bar-chart-bar {
-  width: 100%;
-  background: var(--red) !important;
-  border-radius: 0 !important;
-}
-.wish-archive-page .bar-chart-value,
-.wish-archive-page .bar-chart-label {
-  font: 800 8px 'IBM Plex Mono';
-  text-transform: uppercase;
-  color: var(--ink);
-}
-.wish-archive-page .bar-chart-label {
-  margin-top: 7px;
-  white-space: nowrap;
-}
-.wish-archive-page .wish-yearly-grid {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px !important;
-  background: var(--ink) !important;
-  border: 1px solid var(--ink) !important;
-}
-.wish-archive-page .wish-yearly-card {
-  padding: 18px;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-}
-.wish-archive-page .wish-yearly-card:nth-child(3n + 2) {
-  background: var(--blue) !important;
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-yearly-card:nth-child(3n + 2) * {
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-yearly-card:nth-child(3n) {
-  background: var(--yellow) !important;
-}
-.wish-archive-page .wish-yearly-header {
+.wish-v4-hero-stat-head {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: 20px;
+  font:
+    900 9px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.13em;
 }
-.wish-archive-page .wish-yearly-stat-value {
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: -0.06em;
+.wish-v4-hero-stat-head strong {
+  font:
+    900 clamp(4.8rem, 10vw, 9.5rem)/0.72 'Archivo',
+    sans-serif;
+  letter-spacing: -0.1em;
 }
-.wish-archive-page .wish-yearly-stat-label,
-.wish-archive-page .wish-yearly-characters {
-  font: 700 9px/1.5 'IBM Plex Mono';
+.wish-v4-hero-stat-head small {
+  font-size: 0.18em;
+  letter-spacing: 0.02em;
+}
+.wish-v4-big-progress {
+  height: 22px;
+  margin-top: auto;
+  overflow: hidden;
+  border: 2px solid var(--v4-ink);
+  background: #d8d4c8;
+}
+.wish-v4-big-progress span {
+  display: block;
+  height: 100%;
+  background: var(--v4-red);
+}
+.wish-v4-hero-stat-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 11px;
+  font:
+    800 8px/1.3 'IBM Plex Mono',
+    monospace;
   text-transform: uppercase;
 }
-.wish-archive-page .wish-gallery {
+.wish-v4-kpi-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--v4-ink);
+}
+.wish-v4-kpi {
+  min-height: 180px;
+  padding: 21px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  background: var(--v4-ink);
+  color: #fff;
+}
+.wish-v4-kpi span {
+  font:
+    900 8px/1.2 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.1em;
+}
+.wish-v4-kpi strong {
+  margin-top: 22px;
+  font:
+    900 clamp(3rem, 6vw, 5.3rem)/0.8 'Archivo',
+    sans-serif;
+  letter-spacing: -0.09em;
+}
+.wish-v4-kpi small {
+  color: rgba(255, 255, 255, 0.7);
+  font:
+    500 8px/1.45 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-kpi.wish-v4-red {
+  background: var(--v4-red);
+}
+.wish-v4-kpi.wish-v4-blue {
+  background: var(--v4-blue);
+}
+.wish-v4-kpi.wish-v4-yellow {
+  background: var(--v4-yellow);
+  color: var(--v4-ink);
+}
+.wish-v4-kpi.wish-v4-yellow small {
+  color: rgba(17, 19, 24, 0.72);
+}
+.wish-v4-kpi.wish-v4-paper {
+  background: var(--v4-paper);
+  color: var(--v4-ink);
+}
+.wish-v4-kpi.wish-v4-paper small {
+  color: var(--v4-muted);
+}
+
+.wish-v4-two-col,
+.wish-v4-analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  margin-top: 24px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
+}
+.wish-v4-paper-card {
+  min-width: 0;
+  padding: 24px;
+  background: var(--v4-paper);
+}
+.wish-v4-card-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--v4-line);
+  font:
+    900 8px/1.3 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.12em;
+}
+.wish-v4-card-label span {
+  color: var(--v4-muted);
+}
+.wish-v4-span {
+  min-height: 170px;
+  display: grid;
+  grid-template-columns: 1fr 36px 1fr;
+  align-items: center;
+  gap: 15px;
+}
+.wish-v4-span div span {
+  display: block;
+  color: var(--v4-red);
+  font:
+    900 7px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.12em;
+}
+.wish-v4-span strong {
+  display: block;
+  margin: 9px 0 5px;
+  font:
+    900 clamp(1.45rem, 3vw, 2.5rem)/0.92 'Archivo',
+    sans-serif;
+  letter-spacing: -0.055em;
+}
+.wish-v4-span small {
+  color: var(--v4-muted);
+  font:
+    500 8px/1.5 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-span > svg {
+  color: var(--v4-blue);
+  font-size: 28px;
+}
+.wish-v4-element-list {
+  margin-top: 17px;
+  display: grid;
+  gap: 11px;
+}
+.wish-v4-element-row > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wish-v4-element-dot {
+  width: 9px;
+  height: 9px;
+  display: inline-block;
+}
+.wish-v4-element-row strong {
+  font:
+    800 9px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-element-row small {
+  margin-left: auto;
+  font:
+    900 9px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-mini-track {
+  display: block;
+  height: 7px;
+  margin-top: 6px;
+  background: #d8d4c8;
+}
+.wish-v4-mini-track i {
+  display: block;
+  height: 100%;
+}
+
+/* Analytics */
+.wish-v4-analytics-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 1px;
+  margin-top: 24px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
+}
+.wish-v4-outcome-board {
+  padding: 26px;
+  background: var(--v4-paper);
+}
+.wish-v4-board-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: flex-start;
+}
+.wish-v4-board-head h3,
+.wish-v4-cadence-board h3 {
+  margin: 8px 0 0;
+  font:
+    900 clamp(1.45rem, 3vw, 2.5rem)/0.95 'Archivo',
+    sans-serif;
+  letter-spacing: -0.06em;
+}
+.wish-v4-board-head > strong {
+  font:
+    900 clamp(3.2rem, 6vw, 5.5rem)/0.75 'Archivo',
+    sans-serif;
+  letter-spacing: -0.09em;
+}
+.wish-v4-board-head > strong small {
+  font-size: 0.25em;
+  letter-spacing: 0;
+}
+.wish-v4-outcome-bar {
+  height: 26px;
+  margin: 32px 0 22px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-red);
+}
+.wish-v4-outcome-bar span {
+  display: block;
+  height: 100%;
+  background: var(--v4-blue);
+}
+.wish-v4-outcome-legend {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  background: var(--ink);
-  border: 1px solid var(--ink);
+  border: 1px solid var(--v4-ink);
+  background: var(--v4-ink);
 }
-.wish-archive-page .wish-card {
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  overflow: hidden;
-  cursor: pointer;
+.wish-v4-outcome-legend div {
+  min-height: 84px;
+  padding: 12px;
+  background: var(--v4-paper);
 }
-.wish-archive-page .wish-card:hover {
-  background: #0c0c0c !important;
-  transform: translateY(-2px);
-}
-.wish-archive-page .wish-card-image-wrapper {
-  aspect-ratio: 3/4;
-  background: var(--cyan);
-  overflow: hidden;
-}
-.wish-archive-page .wish-card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.wish-v4-outcome-legend i {
+  width: 8px;
+  height: 8px;
   display: block;
-  filter: saturate(0.75);
+  margin-bottom: 12px;
+  background: var(--v4-blue);
 }
-.wish-archive-page .wish-card-content {
-  padding: 13px;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
+.wish-v4-outcome-legend i.loss {
+  background: var(--v4-red);
 }
-.wish-archive-page .wish-card-date,
-.wish-archive-page .wish-card-element,
-.wish-archive-page .wish-card-version-badge {
-  font: 800 8px 'IBM Plex Mono';
-  text-transform: uppercase;
-  color: var(--muted) !important;
+.wish-v4-outcome-legend i.neutral {
+  background: var(--v4-yellow);
 }
-.wish-archive-page .wish-card-content h3 {
-  margin: 7px 0;
-  color: var(--ink);
-  font-size: 20px;
-  letter-spacing: -0.05em;
+.wish-v4-outcome-legend i.guaranteed {
+  background: var(--v4-ink);
 }
-.wish-archive-page .wish-timeline {
-  border-left: 2px solid var(--ink);
-  padding-left: 24px;
-  margin-left: 12px;
+.wish-v4-outcome-legend span {
+  display: block;
+  color: var(--v4-muted);
+  font:
+    800 7px/1.2 'IBM Plex Mono',
+    monospace;
 }
-.wish-archive-page .wish-timeline-year {
-  margin: 30px 0 12px;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.06em;
+.wish-v4-outcome-legend strong {
+  display: block;
+  margin-top: 6px;
+  font:
+    900 22px/0.8 'Archivo',
+    sans-serif;
 }
-.wish-archive-page .wish-timeline-entry-content {
-  background: #0c0c0c !important;
-  border: 1px solid var(--ink) !important;
-  border-radius: 0 !important;
-  color: var(--ink) !important;
+.wish-v4-cadence-board {
+  padding: 26px;
+  background: var(--v4-blue);
+  color: #fff;
 }
-.wish-archive-page .wish-timeline-entry-dot {
-  background: var(--red) !important;
-  border: 2px solid var(--paper);
+.wish-v4-cadence-board .wish-v4-kicker {
+  color: #fff;
 }
-.wish-archive-page .wish-progress-ring {
-  border-color: var(--red) !important;
+.wish-v4-cadence-board h3 {
+  max-width: 290px;
 }
-.wish-archive-page .wish-fun-facts-grid,
-.wish-archive-page .wish-achievements-grid {
-  display: grid !important;
+.wish-v4-cadence-board > strong {
+  display: block;
+  margin-top: 52px;
+  font:
+    900 clamp(4rem, 8vw, 7rem)/0.72 'Archivo',
+    sans-serif;
+  letter-spacing: -0.1em;
+}
+.wish-v4-cadence-board > strong small {
+  font:
+    800 9px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0;
+}
+.wish-v4-cadence-stats {
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px !important;
-  background: var(--ink) !important;
-  border: 1px solid var(--ink) !important;
+  margin-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
 }
-.wish-archive-page .wish-fun-fact-featured,
-.wish-archive-page .wish-fun-fact-premium,
-.wish-archive-page .wish-achievement-premium-content {
-  min-height: 180px;
-  padding: 20px;
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-.wish-archive-page .wish-fun-fact-featured {
-  grid-column: span 2;
-  background: var(--yellow) !important;
-}
-.wish-archive-page .wish-achievement-premium-content:nth-child(3n + 2) {
-  background: var(--blue) !important;
-  color: var(--ink) !important;
-}
-.wish-archive-page .wish-heatmap-controls {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 15px;
-}
-.wish-archive-page .wish-heatmap-year-selector {
-  display: flex;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-.wish-archive-page .wish-heatmap-year-selector button,
-.wish-archive-page .wish-sort-select,
-.wish-archive-page .wish-filter-chip,
-.wish-archive-page .wish-view-controls button {
-  min-height: 40px;
-  padding: 0 11px;
-  border: 1px solid var(--ink) !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  color: var(--ink) !important;
-  font: 800 9px 'IBM Plex Mono' !important;
+.wish-v4-cadence-stats span {
+  padding: 13px 8px 0;
+  color: rgba(255, 255, 255, 0.78);
+  font:
+    800 7px/1.4 'IBM Plex Mono',
+    monospace;
   text-transform: uppercase;
-  cursor: pointer;
 }
-.wish-archive-page .wish-heatmap-year-selector button.active,
-.wish-archive-page .wish-filter-chip.active {
-  background: var(--red) !important;
-  color: var(--ink) !important;
+.wish-v4-cadence-stats b {
+  display: block;
+  color: #fff;
+  font:
+    900 21px/0.8 'Archivo',
+    sans-serif;
 }
-.wish-archive-page .heatmap-grid {
+.wish-v4-elements-board,
+.wish-v4-year-board {
+  min-height: 390px;
+}
+.wish-v4-element-analytics {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
+.wish-v4-element-analytics-row {
+  display: grid;
+  grid-template-columns: 20px 30px minmax(75px, 1fr) minmax(80px, 1.4fr) 28px 35px;
+  align-items: center;
+  gap: 9px;
+}
+.wish-v4-element-index {
+  color: #999;
+  font:
+    700 7px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-element-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+}
+.wish-v4-element-analytics-row strong {
+  font:
+    900 9px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-element-wide-track {
+  height: 8px;
+  background: #d8d4c8;
+}
+.wish-v4-element-wide-track i {
+  display: block;
+  height: 100%;
+}
+.wish-v4-element-analytics-row b {
+  text-align: right;
+  font:
+    900 12px/1 'Archivo',
+    sans-serif;
+}
+.wish-v4-element-analytics-row small {
+  text-align: right;
+  color: var(--v4-muted);
+  font:
+    700 7px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-year-bars {
+  height: 285px;
   display: flex;
-  gap: 3px;
-  overflow: auto;
-  padding: 15px;
-  border: 1px solid var(--ink);
-  background: #050505;
+  align-items: flex-end;
+  justify-content: space-around;
+  gap: 14px;
+  margin-top: 22px;
+  border-bottom: 1px solid var(--v4-line);
 }
-.wish-archive-page .heatmap-week {
+.wish-v4-year-bar {
+  flex: 1;
+  max-width: 86px;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-}
-.wish-archive-page .heatmap-cell {
-  width: 11px;
-  height: 11px;
-  border-radius: 0 !important;
-}
-.wish-archive-page .heatmap-legend {
-  display: flex;
-  gap: 8px;
+  justify-content: flex-end;
   align-items: center;
-  margin-top: 10px;
-  font: 800 8px 'IBM Plex Mono';
-  text-transform: uppercase;
+  gap: 7px;
 }
-.wish-archive-page .wish-modal-overlay {
-  background: rgba(17, 19, 24, 0.82) !important;
+.wish-v4-year-bar strong {
+  font:
+    900 14px/1 'Archivo',
+    sans-serif;
 }
-.wish-archive-page .wish-modal-content {
-  width: min(720px, calc(100vw - 30px));
-  background: var(--paper) !important;
-  color: var(--ink) !important;
-  border: 1px solid var(--ink) !important;
-  border-radius: 0 !important;
-  box-shadow: 12px 12px 0 var(--red);
+.wish-v4-year-bar > div {
+  width: 100%;
+  height: 205px;
+  display: flex;
+  align-items: flex-end;
+  background: #e2ded3;
 }
-.wish-archive-page .wish-modal-close {
+.wish-v4-year-bar > div i {
+  display: block;
+  width: 100%;
+  background: var(--v4-red);
+}
+.wish-v4-year-bar:nth-child(2n) > div i {
+  background: var(--v4-blue);
+}
+.wish-v4-year-bar:nth-child(3n) > div i {
+  background: var(--v4-yellow);
+}
+.wish-v4-year-bar span {
+  font:
+    900 8px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-year-bar small {
+  color: var(--v4-muted);
+  font:
+    700 7px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-year-ledger {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  margin-top: 24px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
+}
+.wish-v4-year-ledger article {
+  min-height: 105px;
+  padding: 15px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-content: space-between;
+  gap: 6px 12px;
+  background: var(--v4-paper);
+  border-right: 1px solid var(--v4-line);
+}
+.wish-v4-year-ledger strong {
+  font:
+    900 27px/0.8 'Archivo',
+    sans-serif;
+}
+.wish-v4-year-ledger span {
+  color: var(--v4-muted);
+  font:
+    700 7px/1.3 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-year-ledger b {
+  color: var(--v4-red);
+  font:
+    900 17px/0.8 'Archivo',
+    sans-serif;
+}
+
+/* Heat map */
+.wish-v4-year-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  align-self: end;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
+}
+.wish-v4-year-tabs button {
+  min-width: 58px;
+  min-height: 38px;
+  padding: 0 10px;
   border: 0;
-  background: transparent;
-  color: var(--ink);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  background: var(--v4-paper);
+  color: var(--v4-ink);
+  font:
+    900 8px/1 'IBM Plex Mono',
+    monospace;
   cursor: pointer;
 }
-@media (max-width: 950px) {
-  .wish-archive-page .wish-hero-stats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .wish-archive-page .wish-stats-dashboard-grid,
-  .wish-archive-page .wish-yearly-grid,
-  .wish-archive-page .wish-fun-facts-grid,
-  .wish-archive-page .wish-achievements-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .wish-archive-page .wish-gallery {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .wish-archive-page .wish-charts-row {
-    grid-template-columns: 1fr;
-  }
+.wish-v4-year-tabs button:last-child {
+  border-right: 0;
 }
-@media (max-width: 620px) {
-  .wish-archive-page {
-    padding-inline: 14px;
-  }
-  .wish-archive-page .wish-hero-title {
-    font-size: clamp(4rem, 21vw, 7rem) !important;
-  }
-  .wish-archive-page .wish-hero-stats,
-  .wish-archive-page .wish-stats-dashboard-grid,
-  .wish-archive-page .wish-yearly-grid,
-  .wish-archive-page .wish-fun-facts-grid,
-  .wish-archive-page .wish-achievements-grid,
-  .wish-archive-page .wish-gallery {
-    grid-template-columns: 1fr;
-  }
-  .wish-archive-page .wish-fun-fact-featured {
-    grid-column: auto;
-  }
+.wish-v4-year-tabs button:hover {
+  background: #fff;
 }
-
-/* =========================================================
-   FINAL DARK / RESPONSIVE PASS
-   Keep Wish Archive aligned with the site's dark Bauhaus field.
-   ========================================================= */
-.wish-archive-page {
-  --paper: #050505;
-  --surface: #111318;
-  --surface-2: #191b20;
-  --surface2: #191b20;
-  --ink: #f4f2e8;
-  --muted: rgba(244, 242, 232, 0.58);
-  --line: rgba(244, 242, 232, 0.22);
-  background: var(--paper) !important;
-  color: var(--ink) !important;
+.wish-v4-year-tabs button.active {
+  background: var(--v4-red);
+  color: #fff;
 }
-
-.wish-archive-page .wish-content,
-.wish-archive-page .wish-tab-content {
-  background: transparent !important;
+.wish-v4-heat-summary {
+  display: grid;
+  grid-template-columns: 1.35fr repeat(3, 1fr);
+  margin-top: 24px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
 }
-
-.wish-archive-page .wish-hero-stat:first-child,
-.wish-archive-page .wish-stat-premium,
-.wish-archive-page .wish-chart-card,
-.wish-archive-page .wish-yearly-card,
-.wish-archive-page .wish-card,
-.wish-archive-page .wish-fun-fact-premium,
-.wish-archive-page .wish-achievement-premium-content {
-  background: var(--surface) !important;
-  color: var(--ink) !important;
+.wish-v4-heat-summary > div {
+  min-height: 145px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--v4-paper);
+  border-right: 1px solid var(--v4-ink);
 }
-
-.wish-archive-page .wish-stat-premium-label,
-.wish-archive-page .wish-card-date,
-.wish-archive-page .wish-card-element,
-.wish-archive-page .wish-card-version-badge,
-.wish-archive-page .wish-yearly-stat-label,
-.wish-archive-page .wish-yearly-characters,
-.wish-archive-page .wish-timeline-entry-meta {
-  color: var(--muted) !important;
+.wish-v4-heat-summary > div:last-child {
+  border-right: 0;
 }
-
-.wish-archive-page .wish-card-content {
-  background: var(--surface) !important;
+.wish-v4-heat-summary strong {
+  font:
+    900 clamp(2.5rem, 5vw, 4.7rem)/0.75 'Archivo',
+    sans-serif;
+  letter-spacing: -0.08em;
 }
-
-.wish-archive-page .wish-controls,
-.wish-archive-page .wish-heatmap-controls {
-  background: var(--surface) !important;
-  border-color: var(--line) !important;
+.wish-v4-heat-summary span:last-child {
+  color: var(--v4-muted);
+  font:
+    600 8px/1.45 'IBM Plex Mono',
+    monospace;
 }
-
-.wish-archive-page .wish-search-wrapper {
-  background: var(--surface-2) !important;
-  border-color: var(--line) !important;
+.wish-v4-heat-lead {
+  background: var(--v4-yellow) !important;
 }
-
-.wish-archive-page .wish-search-input,
-.wish-archive-page .wish-sort-select,
-.wish-archive-page .wish-filter-chip,
-.wish-archive-page .wish-view-controls button,
-.wish-archive-page .wish-heatmap-year-selector button {
-  color: var(--ink) !important;
+.wish-v4-heat-board {
+  position: relative;
+  margin-top: 24px;
+  padding: 26px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-paper);
 }
-
-.wish-archive-page .wish-sort-select,
-.wish-archive-page .wish-filter-chip,
-.wish-archive-page .wish-view-controls button,
-.wish-archive-page .wish-heatmap-year-selector button {
-  background: transparent !important;
-  border-color: var(--line) !important;
+.wish-v4-panel-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--v4-line);
 }
-
-.wish-archive-page .wish-gallery,
-.wish-archive-page .wish-stats-dashboard-grid,
-.wish-archive-page .wish-charts-row,
-.wish-archive-page .wish-yearly-grid,
-.wish-archive-page .wish-fun-facts-grid,
-.wish-archive-page .wish-achievements-grid {
-  background: var(--ink) !important;
-  border-color: var(--ink) !important;
+.wish-v4-panel-head h3 {
+  margin: 7px 0 0;
+  font:
+    900 clamp(1.6rem, 3vw, 2.6rem)/0.9 'Archivo',
+    sans-serif;
+  letter-spacing: -0.06em;
 }
-
-.wish-archive-page .wish-card:hover,
-.wish-archive-page .wish-card:focus-visible {
-  background: var(--yellow) !important;
-  color: #111318 !important;
-  transform: translateY(-3px);
+.wish-v4-panel-head p {
+  margin: 0;
+  color: var(--v4-muted);
+  font:
+    700 8px/1.4 'IBM Plex Mono',
+    monospace;
+  text-align: right;
+}
+.wish-v4-calendar-scroll {
+  overflow-x: auto;
+  padding: 24px 0 8px;
+  -webkit-overflow-scrolling: touch;
+}
+.wish-v4-calendar {
+  min-width: 760px;
+}
+.wish-v4-months {
+  margin-left: 36px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  color: var(--v4-muted);
+  font:
+    800 7px/1 'IBM Plex Mono',
+    monospace;
+  text-transform: uppercase;
+}
+.wish-v4-calendar-body {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 8px;
+  margin-top: 7px;
+}
+.wish-v4-weekdays {
+  display: grid;
+  grid-template-rows: repeat(7, 14px);
+  gap: 4px;
+  color: #8a8c92;
+  font:
+    800 7px/14px 'IBM Plex Mono',
+    monospace;
+  text-align: center;
+}
+.wish-v4-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 12px);
+  grid-auto-flow: column;
+  grid-template-rows: repeat(7, 14px);
+  gap: 4px;
+  min-width: 700px;
+}
+.wish-v4-week {
+  display: contents;
+}
+.wish-v4-cell {
+  width: 12px;
+  height: 14px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 0;
+  background: #d8d4c8;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease,
+    filter 0.12s ease;
+}
+.wish-v4-cell.level-0 {
+  background: #d8d4c8;
+}
+.wish-v4-cell.level-1 {
+  background: #9fb5e8;
+}
+.wish-v4-cell.level-2 {
+  background: var(--v4-blue);
+}
+.wish-v4-cell.level-3 {
+  background: var(--v4-red);
+}
+.wish-v4-cell.level-4 {
+  background: var(--v4-yellow);
+}
+.wish-v4-cell.outside {
+  opacity: 0;
+  pointer-events: none;
+}
+.wish-v4-cell:hover,
+.wish-v4-cell.active,
+.wish-v4-cell:focus-visible {
+  transform: scale(1.35);
+  border-color: var(--v4-ink);
   outline: none;
+  filter: brightness(1.06);
+  z-index: 4;
+}
+.wish-v4-heat-tooltip {
+  position: fixed;
+  z-index: 2500;
+  width: min(330px, calc(100vw - 28px));
+  transform: translate(-50%, -100%);
+  padding: 14px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-paper);
+  color: var(--v4-ink);
+  box-shadow: 8px 8px 0 var(--v4-blue);
+  pointer-events: none;
+}
+.wish-v4-tooltip-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: baseline;
+  border-bottom: 1px solid var(--v4-line);
+  padding-bottom: 9px;
+}
+.wish-v4-tooltip-top strong {
+  font:
+    900 14px/1 'Archivo',
+    sans-serif;
+}
+.wish-v4-tooltip-top span {
+  color: var(--v4-red);
+  font:
+    900 7px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+}
+.wish-v4-tooltip-list {
+  display: grid;
+  gap: 7px;
+  padding-top: 9px;
+}
+.wish-v4-tooltip-row {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+.wish-v4-tooltip-element {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+}
+.wish-v4-tooltip-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font:
+    800 9px/1.2 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-tooltip-outcome {
+  font:
+    900 7px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-tooltip-outcome.won {
+  color: #287a3e;
+}
+.wish-v4-tooltip-outcome.lost {
+  color: var(--v4-red);
+}
+.wish-v4-heat-footer {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 14px;
+  color: var(--v4-muted);
+  font:
+    800 7px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-legend {
+  display: flex;
+  gap: 4px;
+}
+.wish-v4-legend .wish-v4-cell {
+  width: 11px;
+  height: 11px;
+  cursor: default;
+  transform: none !important;
+}
+.wish-v4-heat-footnote {
+  margin-left: auto;
 }
 
-.wish-archive-page .wish-card:hover .wish-card-content,
-.wish-archive-page .wish-card:focus-visible .wish-card-content,
-.wish-archive-page .wish-card:hover .wish-card-content h3,
-.wish-archive-page .wish-card:focus-visible .wish-card-content h3 {
-  background: transparent !important;
-  color: #111318 !important;
+/* Facts */
+.wish-v4-fact-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 24px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
+}
+.wish-v4-fact-card {
+  position: relative;
+  min-height: 210px;
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  padding: 22px;
+  background: var(--v4-paper);
+  overflow: hidden;
+}
+.wish-v4-fact-card:nth-child(3n + 2) {
+  background: var(--v4-blue);
+  color: #fff;
+}
+.wish-v4-fact-card:nth-child(3n + 2) .wish-v4-fact-top,
+.wish-v4-fact-card:nth-child(3n + 2) p,
+.wish-v4-fact-card:nth-child(3n + 2) small {
+  color: #fff;
+}
+.wish-v4-fact-card:nth-child(3n + 3) {
+  background: var(--v4-yellow);
+}
+.wish-v4-fact-card.featured {
+  grid-column: span 8;
+  min-height: 270px;
+  background: var(--v4-red);
+  color: #fff;
+}
+.wish-v4-fact-top {
+  display: flex;
+  justify-content: space-between;
+  color: var(--v4-red);
+}
+.wish-v4-fact-top span {
+  font:
+    900 10px/1 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-fact-top svg {
+  font-size: 26px;
+}
+.wish-v4-fact-card p {
+  max-width: 720px;
+  margin: auto 0 0;
+  font:
+    900 clamp(1.35rem, 2.5vw, 2.7rem)/0.98 'Archivo',
+    sans-serif;
+  letter-spacing: -0.055em;
+}
+.wish-v4-fact-card.featured p {
+  font-size: clamp(2rem, 4vw, 4.5rem);
+}
+.wish-v4-fact-rule {
+  width: 48px;
+  height: 5px;
+  margin: 16px 0 10px;
+  background: var(--v4-ink);
+}
+.wish-v4-fact-card.featured .wish-v4-fact-rule {
+  background: #fff;
+}
+.wish-v4-fact-card small {
+  font:
+    900 7px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.13em;
 }
 
-.wish-archive-page .wish-card:hover .wish-card-date,
-.wish-archive-page .wish-card:focus-visible .wish-card-date,
-.wish-archive-page .wish-card:hover .wish-card-element,
-.wish-archive-page .wish-card:focus-visible .wish-card-element,
-.wish-archive-page .wish-card:hover .wish-card-version-badge,
-.wish-archive-page .wish-card:focus-visible .wish-card-version-badge {
-  color: rgba(17, 19, 24, 0.62) !important;
+/* Achievements */
+.wish-v4-achievement-score {
+  min-width: 220px;
+  padding: 16px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-paper);
+  box-shadow: 7px 7px 0 var(--v4-red);
+}
+.wish-v4-achievement-score strong {
+  display: block;
+  font:
+    900 48px/0.8 'Archivo',
+    sans-serif;
+  letter-spacing: -0.08em;
+}
+.wish-v4-achievement-score strong small {
+  font-size: 0.45em;
+}
+.wish-v4-achievement-score > span {
+  display: block;
+  margin-top: 7px;
+  font:
+    900 7px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.1em;
+}
+.wish-v4-achievement-score > div {
+  height: 8px;
+  margin-top: 15px;
+  background: #d8d4c8;
+  border: 1px solid var(--v4-ink);
+}
+.wish-v4-achievement-score i {
+  display: block;
+  height: 100%;
+  background: var(--v4-red);
+}
+.wish-v4-achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: 24px;
+  border: 2px solid var(--v4-ink);
+  background: var(--v4-ink);
+}
+.wish-v4-achievement-card {
+  position: relative;
+  min-height: 180px;
+  display: grid;
+  grid-template-columns: 52px 1fr 24px;
+  gap: 16px;
+  padding: 22px;
+  background: var(--v4-paper);
+}
+.wish-v4-achievement-card.unlocked {
+  background: var(--v4-blue);
+  color: #fff;
+}
+.wish-v4-achievement-card.locked {
+  color: var(--v4-ink);
+}
+.wish-v4-achievement-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border: 2px solid currentColor;
+  font-size: 24px;
+}
+.wish-v4-achievement-card.unlocked .wish-v4-achievement-icon {
+  background: var(--v4-yellow);
+  color: var(--v4-ink);
+  border-color: var(--v4-ink);
+}
+.wish-v4-achievement-index {
+  position: absolute;
+  top: 13px;
+  right: 46px;
+  opacity: 0.2;
+  font:
+    900 24px/0.8 'Archivo',
+    sans-serif;
+}
+.wish-v4-achievement-copy > span {
+  font:
+    900 7px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.13em;
+}
+.wish-v4-achievement-copy h3 {
+  margin: 9px 0 7px;
+  font:
+    900 clamp(1.2rem, 2.3vw, 2rem)/0.92 'Archivo',
+    sans-serif;
+  letter-spacing: -0.05em;
+}
+.wish-v4-achievement-copy p {
+  max-width: 430px;
+  margin: 0;
+  color: var(--v4-muted);
+  font:
+    500 9px/1.55 'IBM Plex Mono',
+    monospace;
+}
+.wish-v4-achievement-card.unlocked .wish-v4-achievement-copy p {
+  color: rgba(255, 255, 255, 0.78);
+}
+.wish-v4-achievement-state {
+  align-self: start;
+  font-size: 19px;
+}
+.wish-v4-achievement-card.unlocked .wish-v4-achievement-state {
+  color: var(--v4-yellow);
 }
 
-.wish-archive-page .wish-timeline-entry-content {
-  background: var(--surface) !important;
-  border-color: var(--line) !important;
+/* Motion */
+.wish-v4-tab .wish-v4-kpi,
+.wish-v4-paper-card,
+.wish-v4-fact-card,
+.wish-v4-achievement-card {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+.wish-v4-paper-card:hover,
+.wish-v4-fact-card:hover,
+.wish-v4-achievement-card:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 7px 7px 0 var(--v4-ink);
+  z-index: 2;
+}
+.wish-v4-kpi:hover {
+  filter: brightness(1.06);
+}
+.wish-v4-heat.is-animating .wish-v4-cell {
+  animation: wish-v4-cell-in 0.28s ease both;
+}
+@keyframes wish-v4-cell-in {
+  from {
+    opacity: 0;
+    transform: scale(0.65);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-.wish-archive-page .wish-modal-content {
-  background: var(--surface) !important;
-  color: var(--ink) !important;
-  border-color: var(--ink) !important;
+@media (max-width: 1050px) {
+  .wish-v4-overview-grid,
+  .wish-v4-analytics-hero {
+    grid-template-columns: 1fr;
+  }
+  .wish-v4-kpi {
+    min-height: 145px;
+  }
+  .wish-v4-two-col,
+  .wish-v4-analytics-grid {
+    grid-template-columns: 1fr;
+  }
+  .wish-v4-fact-card,
+  .wish-v4-fact-card.featured {
+    grid-column: span 6;
+  }
+  .wish-v4-achievement-grid {
+    grid-template-columns: 1fr;
+  }
 }
-
-.wish-archive-page .wish-bg {
-  opacity: 0.12;
-}
-
-@media (max-width: 900px) {
+@media (max-width: 720px) {
   .wish-archive-page {
-    padding: 16px 18px 70px;
+    padding-inline: 10px;
+    padding-bottom: 50px;
   }
-
   .wish-archive-page .wish-hero {
-    padding-top: 34px;
+    padding-top: 48px;
   }
-
   .wish-archive-page .wish-hero-title {
-    font-size: clamp(4rem, 15vw, 8rem) !important;
+    font-size: clamp(3.5rem, 18vw, 6.4rem) !important;
   }
-
-  .wish-archive-page .wish-hero-highlights {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .wish-v4-tab {
+    padding-top: 30px;
   }
-
-  .wish-archive-page .wish-controls-top {
+  .wish-v4-intro {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .wish-v4-index,
+  .wish-v4-achievement-score {
+    width: 100%;
+    min-width: 0;
+  }
+  .wish-v4-overview-grid {
+    grid-template-columns: 1fr;
+  }
+  .wish-v4-hero-stat {
+    min-height: 280px;
+  }
+  .wish-v4-hero-stat-head strong {
+    font-size: clamp(4rem, 20vw, 7rem);
+  }
+  .wish-v4-kpi-grid {
     grid-template-columns: 1fr 1fr;
   }
-}
-
-@media (max-width: 620px) {
-  .wish-archive-page {
-    padding: 12px 12px 56px;
+  .wish-v4-kpi {
+    min-height: 145px;
+    padding: 15px;
   }
-
-  .wish-archive-page .wish-archive-header {
-    padding-bottom: 12px;
+  .wish-v4-kpi strong {
+    font-size: clamp(2.6rem, 13vw, 4.4rem);
   }
-
-  .wish-archive-page .wish-hero {
-    padding: 30px 0 28px;
+  .wish-v4-paper-card,
+  .wish-v4-outcome-board,
+  .wish-v4-cadence-board,
+  .wish-v4-heat-board {
+    padding: 18px;
   }
-
-  .wish-archive-page .wish-hero-title {
-    font-size: clamp(3.2rem, 19vw, 6rem) !important;
-    line-height: 0.8;
-  }
-
-  .wish-archive-page .wish-hero-subtitle {
-    margin-top: 18px !important;
-    padding-left: 12px;
-    border-left-width: 5px;
-    font-size: 10px !important;
-  }
-
-  .wish-archive-page .wish-hero-stats,
-  .wish-archive-page .wish-stats-dashboard-grid,
-  .wish-archive-page .wish-yearly-grid,
-  .wish-archive-page .wish-fun-facts-grid,
-  .wish-archive-page .wish-achievements-grid {
+  .wish-v4-span {
     grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px 0;
   }
-
-  .wish-archive-page .wish-hero-stat {
-    min-height: 110px;
-    padding: 16px !important;
+  .wish-v4-span > svg {
+    transform: rotate(90deg);
+    justify-self: start;
   }
-
-  .wish-archive-page .animated-counter-value {
-    font-size: 3rem;
+  .wish-v4-outcome-legend {
+    grid-template-columns: 1fr 1fr;
   }
-
-  .wish-archive-page .wish-hero-highlights {
-    grid-template-columns: 1fr;
+  .wish-v4-cadence-board > strong {
+    margin-top: 38px;
   }
-
-  .wish-archive-page .tab-nav {
-    margin-top: 20px;
+  .wish-v4-cadence-stats {
+    grid-template-columns: 1fr 1fr;
   }
-
-  .wish-archive-page .tab-nav-inner {
-    scrollbar-width: none;
+  .wish-v4-cadence-stats span:last-child {
+    grid-column: span 2;
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
   }
-
-  .wish-archive-page .tab-nav-inner::-webkit-scrollbar {
+  .wish-v4-element-analytics-row {
+    grid-template-columns: 18px 28px minmax(70px, 1fr) 80px 22px;
+  }
+  .wish-v4-element-analytics-row small {
     display: none;
   }
-
-  .wish-archive-page .tab-nav-item {
-    min-height: 44px !important;
-    padding: 0 13px !important;
+  .wish-v4-year-bars {
+    height: 235px;
   }
-
-  .wish-archive-page .wish-controls-top {
-    grid-template-columns: 1fr;
+  .wish-v4-year-bar > div {
+    height: 160px;
   }
-
-  .wish-archive-page .wish-controls-bottom {
-    align-items: stretch;
+  .wish-v4-year-ledger {
+    grid-template-columns: 1fr 1fr;
+  }
+  .wish-v4-heat-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+  .wish-v4-heat-summary > div {
+    min-height: 120px;
+  }
+  .wish-v4-panel-head {
+    align-items: flex-start;
     flex-direction: column;
   }
-
-  .wish-archive-page .wish-filter-chips {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 3px;
-    scrollbar-width: none;
+  .wish-v4-panel-head p {
+    text-align: left;
   }
-
-  .wish-archive-page .wish-filter-chips::-webkit-scrollbar {
-    display: none;
+  .wish-v4-calendar {
+    min-width: 650px;
   }
-
-  .wish-archive-page .wish-filter-chip {
-    flex: 0 0 auto;
+  .wish-v4-grid {
+    min-width: 600px;
   }
-
-  .wish-archive-page .wish-gallery {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .wish-v4-fact-grid {
+    grid-template-columns: 1fr;
   }
-
-  .wish-archive-page .wish-card-content {
-    padding: 10px;
-  }
-
-  .wish-archive-page .wish-card-content h3 {
-    font-size: 15px;
-  }
-
-  .wish-archive-page .wish-timeline {
-    padding-left: 14px;
-    margin-left: 5px;
-  }
-
-  .wish-archive-page .wish-timeline-year {
-    font-size: 24px;
-  }
-
-  .wish-archive-page .wish-fun-fact-featured {
+  .wish-v4-fact-card,
+  .wish-v4-fact-card.featured {
     grid-column: auto;
+    min-height: 190px;
+  }
+  .wish-v4-fact-card.featured {
+    min-height: 250px;
+  }
+  .wish-v4-achievement-card {
+    grid-template-columns: 44px 1fr 20px;
+    padding: 16px;
+  }
+  .wish-v4-achievement-icon {
+    width: 44px;
+    height: 44px;
+  }
+  .wish-v4-heat-tooltip {
+    width: min(300px, calc(100vw - 22px));
   }
 }
-
+@media (max-width: 460px) {
+  .wish-v4-kpi-grid,
+  .wish-v4-heat-summary,
+  .wish-v4-year-ledger {
+    grid-template-columns: 1fr;
+  }
+  .wish-v4-heat-summary > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--v4-ink);
+  }
+  .wish-v4-heat-summary > div:last-child {
+    border-bottom: 0;
+  }
+  .wish-v4-outcome-legend {
+    grid-template-columns: 1fr 1fr;
+  }
+  .wish-v4-year-bars {
+    gap: 7px;
+  }
+  .wish-v4-year-bar:nth-child(n + 5) {
+    display: none;
+  }
+  .wish-v4-heat-footnote {
+    display: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
-  .wish-archive-page .section-reveal,
-  .wish-archive-page .wish-card {
+  .wish-v4-tab *,
+  .wish-v4-tab *::before,
+  .wish-v4-tab *::after {
     animation: none !important;
     transition: none !important;
   }
@@ -1793,446 +2437,5 @@
   .wish-archive-page .wish-modal-detail {
     grid-template-columns: 1fr;
     gap: 4px;
-  }
-}
-
-/* =========================================================
-   WISH PLUS / INFORMATION ARCHITECTURE PASS
-   ========================================================= */
-.wish-archive-page .wish-tab-intro {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
-  gap: 32px;
-  align-items: end;
-  margin: 0 0 28px;
-  padding-bottom: 22px;
-  border-bottom: 1px solid var(--line);
-}
-
-.wish-archive-page .wish-tab-kicker {
-  display: block;
-  margin-bottom: 8px;
-  color: var(--red);
-  font: 800 9px/1 'IBM Plex Mono';
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.wish-archive-page .wish-tab-intro h2 {
-  margin: 0;
-  color: var(--ink);
-  font:
-    900 clamp(2.1rem, 4.5vw, 4.8rem)/0.9 'Archivo',
-    Arial,
-    sans-serif;
-  letter-spacing: -0.075em;
-  text-transform: uppercase;
-}
-
-.wish-archive-page .wish-tab-intro p {
-  margin: 0;
-  max-width: 540px;
-  color: var(--muted);
-  font: 500 12px/1.7 'IBM Plex Mono';
-}
-
-.wish-archive-page .wish-analytics-lead {
-  display: grid;
-  grid-template-columns: minmax(190px, 0.55fr) 1fr;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 34px;
-  padding: 18px 20px;
-  border: 1px solid var(--ink);
-  background: var(--yellow);
-  color: #101010;
-}
-
-.wish-archive-page .wish-analytics-lead div {
-  display: grid;
-  gap: 7px;
-}
-
-.wish-archive-page .wish-analytics-lead span,
-.wish-archive-page .wish-analytics-lead p {
-  margin: 0;
-  font: 800 9px/1.5 'IBM Plex Mono';
-  text-transform: uppercase;
-}
-
-.wish-archive-page .wish-analytics-lead strong {
-  font:
-    900 clamp(2rem, 5vw, 4.2rem)/0.85 'Archivo',
-    Arial,
-    sans-serif;
-  letter-spacing: -0.07em;
-}
-
-.wish-archive-page .wish-analytics-lead p {
-  max-width: 560px;
-  font-size: 10px;
-}
-
-.wish-archive-page .wish-heatmap-summary {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1px;
-  margin-bottom: 18px;
-  border: 1px solid var(--ink);
-  background: var(--ink);
-}
-
-.wish-archive-page .wish-heatmap-summary > div {
-  min-height: 105px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 15px;
-  background: var(--surface);
-}
-
-.wish-archive-page .wish-heatmap-summary span,
-.wish-archive-page .wish-heatmap-summary strong {
-  text-transform: uppercase;
-}
-
-.wish-archive-page .wish-heatmap-summary span {
-  color: var(--muted);
-  font: 800 8px 'IBM Plex Mono';
-}
-
-.wish-archive-page .wish-heatmap-summary strong {
-  color: var(--ink);
-  font:
-    900 clamp(1.8rem, 3.5vw, 3rem)/0.9 'Archivo',
-    Arial,
-    sans-serif;
-  letter-spacing: -0.06em;
-}
-
-.wish-archive-page .wish-heatmap-controls {
-  align-items: center;
-  padding: 12px;
-  border: 1px solid var(--line);
-}
-
-.wish-archive-page .wish-heatmap-year-selector {
-  width: 100%;
-}
-
-.wish-archive-page .wish-heatmap-year-selector button {
-  transition:
-    transform 0.18s ease,
-    background 0.18s ease,
-    color 0.18s ease;
-}
-
-.wish-archive-page .wish-heatmap-year-selector button:hover {
-  transform: translateY(-2px);
-  background: var(--yellow) !important;
-  color: #111 !important;
-}
-
-.wish-archive-page .wish-heatmap-year-selector button.active:hover {
-  background: var(--red) !important;
-  color: var(--ink) !important;
-}
-
-.wish-archive-page .heatmap-container {
-  min-width: 0;
-  padding: 18px 0 0;
-}
-
-.wish-archive-page .heatmap-grid {
-  scrollbar-width: thin;
-  scrollbar-color: var(--line) transparent;
-}
-
-.wish-archive-page .heatmap-tooltip {
-  max-width: min(360px, calc(100vw - 32px));
-  z-index: 20;
-}
-
-.wish-archive-page .wish-funfacts-tab .wish-tab-intro,
-.wish-archive-page .wish-achievements-tab .wish-tab-intro {
-  margin-bottom: 30px;
-}
-
-.wish-archive-page .wish-fun-fact-featured {
-  min-height: 0 !important;
-  display: grid;
-  grid-template-columns: 70px 1fr;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 1px;
-  padding: 28px !important;
-}
-
-.wish-archive-page .wish-fun-fact-featured-icon {
-  width: 58px;
-  height: 58px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #111;
-  background: #111;
-  color: var(--yellow);
-  font-size: 27px;
-}
-
-.wish-archive-page .wish-fun-fact-featured-label {
-  display: block;
-  margin-bottom: 7px;
-  font: 800 9px 'IBM Plex Mono';
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #111;
-}
-
-.wish-archive-page .wish-fun-fact-featured-content p {
-  margin: 0;
-  max-width: 780px;
-  font:
-    900 clamp(1.5rem, 3vw, 2.7rem)/1.05 'Archivo',
-    Arial,
-    sans-serif;
-  letter-spacing: -0.055em;
-  color: #111;
-}
-
-.wish-archive-page .wish-fun-facts-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.wish-archive-page .wish-fun-fact-premium {
-  min-height: 150px !important;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-
-.wish-archive-page .wish-fun-fact-premium-icon {
-  flex: 0 0 auto;
-  color: var(--red) !important;
-  font-size: 20px;
-}
-
-.wish-archive-page .wish-fun-fact-premium span {
-  color: var(--ink);
-  font: 700 12px/1.6 'IBM Plex Mono';
-}
-
-.wish-archive-page .wish-achievements-progress {
-  display: grid;
-  grid-template-columns: auto minmax(120px, 1fr) auto;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 18px;
-  padding: 14px 16px;
-  border: 1px solid var(--ink);
-  background: var(--surface);
-}
-
-.wish-archive-page .wish-achievements-progress > div:first-child {
-  display: grid;
-  gap: 4px;
-}
-
-.wish-archive-page .wish-achievements-progress span,
-.wish-archive-page .wish-achievements-progress em {
-  font: 800 8px 'IBM Plex Mono';
-  text-transform: uppercase;
-  color: var(--muted);
-  font-style: normal;
-}
-
-.wish-archive-page .wish-achievements-progress strong {
-  font:
-    900 24px/1 'Archivo',
-    Arial,
-    sans-serif;
-  color: var(--ink);
-}
-
-.wish-archive-page .wish-achievements-progress-track {
-  height: 8px;
-  overflow: hidden;
-  background: rgba(244, 242, 232, 0.08);
-}
-
-.wish-archive-page .wish-achievements-progress-track span {
-  display: block;
-  height: 100%;
-  background: var(--red);
-}
-
-.wish-archive-page .wish-achievements-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.wish-archive-page .wish-achievement-premium {
-  position: relative;
-  min-width: 0;
-  min-height: 205px;
-  display: grid;
-  grid-template-columns: 54px 1fr auto;
-  gap: 15px;
-  align-items: start;
-  padding: 18px;
-  background: var(--surface);
-}
-
-.wish-archive-page .wish-achievement-premium.unlocked {
-  background: var(--paper);
-}
-
-.wish-archive-page .wish-achievement-premium.locked {
-  background: #0a0a0a;
-}
-
-.wish-archive-page .wish-achievement-premium-icon {
-  width: 52px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  position: relative;
-  border: 1px solid var(--line);
-  color: var(--yellow);
-  font-size: 24px;
-}
-
-.wish-archive-page .wish-achievement-premium.locked .wish-achievement-premium-icon {
-  color: var(--muted);
-}
-
-.wish-archive-page .wish-achievement-premium-content {
-  min-height: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-}
-
-.wish-archive-page .wish-achievement-premium-content h4 {
-  margin: 0 0 7px;
-  color: var(--ink);
-  font:
-    900 18px/1.05 'Archivo',
-    Arial,
-    sans-serif;
-  letter-spacing: -0.045em;
-}
-
-.wish-archive-page .wish-achievement-premium-content p {
-  margin: 0;
-  color: var(--muted);
-  font: 500 10px/1.6 'IBM Plex Mono';
-}
-
-.wish-archive-page .wish-achievement-premium-badge {
-  width: 27px;
-  height: 27px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--line);
-  color: var(--ink);
-  font: 900 12px 'IBM Plex Mono';
-}
-
-.wish-archive-page .wish-achievement-premium.unlocked .wish-achievement-premium-badge {
-  border-color: var(--yellow);
-  background: var(--yellow);
-  color: #111;
-}
-
-.wish-archive-page .wish-achievement-lock {
-  position: absolute;
-  right: -6px;
-  bottom: -6px;
-  width: 20px;
-  height: 20px;
-  display: grid;
-  place-items: center;
-  border: 1px solid #111;
-  background: var(--paper);
-  color: var(--muted);
-  font-size: 11px;
-}
-
-@media (max-width: 950px) {
-  .wish-archive-page .wish-tab-intro {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-
-  .wish-archive-page .wish-heatmap-summary,
-  .wish-archive-page .wish-achievements-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 620px) {
-  .wish-archive-page .wish-tab-intro {
-    padding-bottom: 17px;
-    margin-bottom: 20px;
-  }
-
-  .wish-archive-page .wish-tab-intro h2 {
-    font-size: clamp(2.1rem, 12vw, 3.7rem);
-  }
-
-  .wish-archive-page .wish-tab-intro p {
-    font-size: 10px;
-    line-height: 1.65;
-  }
-
-  .wish-archive-page .wish-analytics-lead {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 15px;
-  }
-
-  .wish-archive-page .wish-heatmap-summary {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .wish-archive-page .wish-heatmap-summary > div {
-    min-height: 90px;
-    padding: 12px;
-  }
-
-  .wish-archive-page .wish-fun-fact-featured {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    padding: 20px !important;
-  }
-
-  .wish-archive-page .wish-fun-facts-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .wish-archive-page .wish-achievements-progress {
-    grid-template-columns: 1fr auto;
-  }
-
-  .wish-archive-page .wish-achievements-progress-track {
-    grid-column: 1 / -1;
-    grid-row: 2;
-  }
-
-  .wish-archive-page .wish-achievements-progress em {
-    text-align: right;
-  }
-
-  .wish-archive-page .wish-achievement-premium {
-    grid-template-columns: 48px 1fr auto;
-    min-height: 170px;
-    padding: 14px;
-  }
-
-  .wish-archive-page .wish-achievement-premium-icon {
-    width: 46px;
-    height: 46px;
-  }
-
-  .wish-archive-page .wish-achievement-premium-content h4 {
-    font-size: 16px;
   }
 }

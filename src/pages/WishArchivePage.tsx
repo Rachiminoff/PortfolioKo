@@ -355,181 +355,241 @@ const BarChart: React.FC<{
   );
 };
 
-// Heat Map
+// Heat Map — deliberately data-only. Artwork is never rendered in this view or its tooltip.
 const HeatMap: React.FC<{
   characters: WishCharacter[];
   year: number;
-  onCellHover?: (date: string | null) => void;
-}> = ({ characters, year, onCellHover }) => {
+}> = ({ characters, year }) => {
   const [hoveredDate, setHoveredDate] = useState<string | null>(null);
-  const [hoveredCharacters, setHoveredCharacters] = useState<WishCharacter[]>([]);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const [isAnimating, setIsAnimating] = useState(false);
-  const gridRef = useRef<HTMLDivElement>(null);
+
+  const toDateKey = (date: Date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  };
+
+  const getCharactersForDate = (dateKey: string) =>
+    characters.filter((character) => character.date_obtained === dateKey);
 
   useEffect(() => {
     setIsAnimating(true);
-    const timer = setTimeout(() => setIsAnimating(false), 300);
-    return () => clearTimeout(timer);
+    const timer = window.setTimeout(() => setIsAnimating(false), 320);
+    return () => window.clearTimeout(timer);
   }, [year]);
 
-  const getDaysInYear = (year: number) => {
-    const date = new Date(year, 0, 1);
-    const days = [];
-    while (date.getFullYear() === year) {
-      days.push(new Date(date));
-      date.setDate(date.getDate() + 1);
+  const days = useMemo(() => {
+    const result: Date[] = [];
+    const cursor = new Date(year, 0, 1);
+    while (cursor.getFullYear() === year) {
+      result.push(new Date(cursor));
+      cursor.setDate(cursor.getDate() + 1);
     }
-    return days;
-  };
+    return result;
+  }, [year]);
 
-  const getCharactersForDate = (date: Date) => {
-    const dateStr = date.toISOString().split('T')[0];
-    return characters.filter((c) => c.date_obtained === dateStr);
-  };
+  const weeks = useMemo(() => {
+    const result: Date[][] = [];
+    let currentWeek: Date[] = [];
+    const firstDay = new Date(year, 0, 1).getDay();
 
-  const getIntensity = (chars: WishCharacter[]) => {
-    if (chars.length === 0) return 0;
-    if (chars.length === 1) return 1;
-    if (chars.length === 2) return 2;
-    return 3;
-  };
-
-  const getIntensityColor = (intensity: number) => {
-    switch (intensity) {
-      case 0:
-        return 'rgba(255,255,255,0.03)';
-      case 1:
-        return 'rgba(122, 224, 219, 0.3)';
-      case 2:
-        return 'rgba(122, 224, 219, 0.6)';
-      case 3:
-        return 'rgba(122, 224, 219, 0.9)';
-      default:
-        return 'rgba(255,255,255,0.03)';
+    for (let i = firstDay; i > 0; i -= 1) {
+      currentWeek.push(new Date(year, 0, -i + 1));
     }
+
+    days.forEach((day) => {
+      currentWeek.push(day);
+      if (currentWeek.length === 7) {
+        result.push(currentWeek);
+        currentWeek = [];
+      }
+    });
+
+    if (currentWeek.length) result.push(currentWeek);
+    return result;
+  }, [days, year]);
+
+  const yearCharacters = useMemo(
+    () => characters.filter((character) => character.year === year),
+    [characters, year],
+  );
+
+  const dateCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    yearCharacters.forEach((character) => {
+      counts[character.date_obtained] = (counts[character.date_obtained] || 0) + 1;
+    });
+    return counts;
+  }, [yearCharacters]);
+
+  const activeDays = Object.keys(dateCounts).length;
+  const wins = yearCharacters.filter((character) => character.outcome === 'won').length;
+  const losses = yearCharacters.length - wins;
+  const busiest = Object.entries(dateCounts).sort((a, b) => b[1] - a[1])[0];
+  const hoveredCharacters = hoveredDate ? getCharactersForDate(hoveredDate) : [];
+
+  const monthLabels = Array.from({ length: 12 }, (_, index) => ({
+    label: new Date(year, index, 1).toLocaleString('en-US', { month: 'short' }),
+    start: new Date(year, index, 1),
+  }));
+
+  const setHover = (
+    event: React.MouseEvent<HTMLButtonElement> | React.FocusEvent<HTMLButtonElement>,
+    dateKey: string,
+  ) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setTooltipPosition({
+      x: Math.min(window.innerWidth - 18, Math.max(18, rect.left + rect.width / 2)),
+      y: Math.max(18, rect.top - 10),
+    });
+    setHoveredDate(dateKey);
   };
-
-  const days = getDaysInYear(year);
-  const weeks: Date[][] = [];
-  let currentWeek: Date[] = [];
-  const firstDay = new Date(year, 0, 1).getDay();
-
-  for (let i = 0; i < firstDay; i++) {
-    currentWeek.push(new Date(year, 0, 1 - firstDay + i));
-  }
-
-  days.forEach((day) => {
-    currentWeek.push(day);
-    if (currentWeek.length === 7) {
-      weeks.push(currentWeek);
-      currentWeek = [];
-    }
-  });
-
-  if (currentWeek.length > 0) {
-    weeks.push(currentWeek);
-  }
 
   return (
-    <div className={`heatmap-container ${isAnimating ? 'heatmap-animating' : ''}`}>
-      <div className="heatmap-grid" ref={gridRef}>
-        {weeks.map((week, weekIndex) => (
-          <div key={weekIndex} className="heatmap-week">
-            {week.map((day, dayIndex) => {
-              const chars = getCharactersForDate(day);
-              const intensity = getIntensity(chars);
-              const isCurrentMonth = day.getFullYear() === year;
-              const dateStr = day.toISOString().split('T')[0];
-              const isHovered = hoveredDate === dateStr;
-
-              return (
-                <div
-                  key={`${weekIndex}-${dayIndex}`}
-                  className="heatmap-cell"
-                  style={{
-                    backgroundColor: isCurrentMonth ? getIntensityColor(intensity) : 'transparent',
-                    opacity: isCurrentMonth ? 1 : 0.2,
-                    transform: isHovered ? 'scale(1.3)' : 'scale(1)',
-                    zIndex: isHovered ? 2 : 1,
-                    transition: 'transform 0.2s ease, background-color 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    setTooltipPosition({
-                      x: rect.left + rect.width / 2,
-                      y: rect.top - 10,
-                    });
-                    setHoveredDate(dateStr);
-                    setHoveredCharacters(chars);
-                    if (onCellHover) onCellHover(dateStr);
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredDate(null);
-                    setHoveredCharacters([]);
-                    if (onCellHover) onCellHover(null);
-                  }}
-                />
-              );
-            })}
-          </div>
-        ))}
+    <div className={`wish-v4-heat ${isAnimating ? 'is-animating' : ''}`}>
+      <div className="wish-v4-heat-summary">
+        <div className="wish-v4-heat-lead">
+          <span className="wish-v4-kicker">ACTIVITY INDEX</span>
+          <strong>{yearCharacters.length}</strong>
+          <span>limited 5★ records in {year}</span>
+        </div>
+        <div>
+          <span className="wish-v4-kicker">ACTIVE DAYS</span>
+          <strong>{activeDays}</strong>
+          <span>days with at least one record</span>
+        </div>
+        <div>
+          <span className="wish-v4-kicker">WIN RATE</span>
+          <strong>
+            {yearCharacters.length ? `${Math.round((wins / yearCharacters.length) * 100)}%` : '—'}
+          </strong>
+          <span>
+            {wins} wins · {losses} losses
+          </span>
+        </div>
+        <div>
+          <span className="wish-v4-kicker">BUSIEST DAY</span>
+          <strong>{busiest?.[1] || 0}</strong>
+          <span>{busiest ? formatDate(busiest[0]) : 'No records'}</span>
+        </div>
       </div>
 
-      {hoveredDate && hoveredCharacters.length > 0 && (
-        <div
-          className="heatmap-tooltip"
-          style={{
-            left: tooltipPosition.x,
-            top: tooltipPosition.y,
-            transform: 'translateX(-50%) translateY(-100%)',
-          }}
-        >
-          <div className="heatmap-tooltip-content">
-            <span className="heatmap-tooltip-date">{formatDate(hoveredDate)}</span>
-            {hoveredCharacters.map((c) => (
-              <div key={c.id} className="heatmap-tooltip-item">
-                {c.artwork && (
-                  <img src={c.artwork} alt={c.name} className="heatmap-tooltip-portrait" />
-                )}
-                <span className="heatmap-tooltip-name">{c.name}</span>
-                <span
-                  className="heatmap-tooltip-element"
-                  style={{ color: getElementColor(c.element) }}
-                >
-                  <Icon icon={getElementIcon(c.element)} />
-                </span>
-                <span className={`heatmap-tooltip-outcome ${c.outcome}`}>
-                  {c.outcome === 'won' ? '✓' : '✗'}
-                </span>
-                <span className="heatmap-tooltip-version">v{c.version}</span>
+      <div className="wish-v4-heat-board">
+        <div className="wish-v4-panel-head">
+          <div>
+            <span className="wish-v4-kicker">DAILY RECORD</span>
+            <h3>Pull rhythm by date</h3>
+          </div>
+          <p>Hover or focus a square. Details stay text-only.</p>
+        </div>
+
+        <div className="wish-v4-calendar-scroll">
+          <div className="wish-v4-calendar">
+            <div className="wish-v4-months">
+              {monthLabels.map((month) => (
+                <span key={month.label}>{month.label}</span>
+              ))}
+            </div>
+            <div className="wish-v4-calendar-body">
+              <div className="wish-v4-weekdays" aria-hidden="true">
+                <span>S</span>
+                <span>M</span>
+                <span>T</span>
+                <span>W</span>
+                <span>T</span>
+                <span>F</span>
+                <span>S</span>
               </div>
-            ))}
+              <div className="wish-v4-grid" aria-label={`${year} pull activity heat map`}>
+                {weeks.map((week, weekIndex) => (
+                  <div className="wish-v4-week" key={weekIndex}>
+                    {week.map((day, dayIndex) => {
+                      const dateKey = toDateKey(day);
+                      const isCurrentYear = day.getFullYear() === year;
+                      const count = isCurrentYear ? dateCounts[dateKey] || 0 : 0;
+                      const level = Math.min(count, 4);
+                      const active = hoveredDate === dateKey;
+
+                      return (
+                        <button
+                          key={`${weekIndex}-${dayIndex}`}
+                          type="button"
+                          className={`wish-v4-cell level-${level} ${isCurrentYear ? '' : 'outside'} ${active ? 'active' : ''}`}
+                          disabled={!isCurrentYear}
+                          aria-label={
+                            isCurrentYear
+                              ? `${formatDate(dateKey)}: ${count} character${count === 1 ? '' : 's'} obtained`
+                              : undefined
+                          }
+                          onMouseEnter={(event) => isCurrentYear && setHover(event, dateKey)}
+                          onFocus={(event) => isCurrentYear && setHover(event, dateKey)}
+                          onMouseLeave={() => setHoveredDate(null)}
+                          onBlur={() => setHoveredDate(null)}
+                          onClick={(event) => {
+                            if (!isCurrentYear) return;
+                            if (hoveredDate === dateKey) setHoveredDate(null);
+                            else setHover(event, dateKey);
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      )}
 
-      <div className="heatmap-legend">
-        <span className="heatmap-legend-label">Less</span>
-        <div className="heatmap-legend-cells">
+        {hoveredDate && (
           <div
-            className="heatmap-legend-cell"
-            style={{ backgroundColor: 'rgba(255,255,255,0.03)' }}
-          />
-          <div
-            className="heatmap-legend-cell"
-            style={{ backgroundColor: 'rgba(122, 224, 219, 0.3)' }}
-          />
-          <div
-            className="heatmap-legend-cell"
-            style={{ backgroundColor: 'rgba(122, 224, 219, 0.6)' }}
-          />
-          <div
-            className="heatmap-legend-cell"
-            style={{ backgroundColor: 'rgba(122, 224, 219, 0.9)' }}
-          />
+            className="wish-v4-heat-tooltip"
+            style={{ left: tooltipPosition.x, top: tooltipPosition.y }}
+            role="status"
+            aria-live="polite"
+          >
+            <div className="wish-v4-tooltip-top">
+              <strong>{formatDate(hoveredDate)}</strong>
+              <span>
+                {hoveredCharacters.length
+                  ? `${hoveredCharacters.length} RECORD${hoveredCharacters.length === 1 ? '' : 'S'}`
+                  : 'NO RECORDS'}
+              </span>
+            </div>
+            {hoveredCharacters.length > 0 && (
+              <div className="wish-v4-tooltip-list">
+                {hoveredCharacters.map((character) => (
+                  <div className="wish-v4-tooltip-row" key={character.id}>
+                    <span
+                      className="wish-v4-tooltip-element"
+                      style={{ color: getElementColor(character.element) }}
+                    >
+                      <Icon icon={getElementIcon(character.element)} />
+                    </span>
+                    <span className="wish-v4-tooltip-name">{character.name}</span>
+                    <span className={`wish-v4-tooltip-outcome ${character.outcome}`}>
+                      {character.outcome === 'won' ? 'WIN' : 'LOSS'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="wish-v4-heat-footer">
+          <span>FEWER</span>
+          <div className="wish-v4-legend">
+            {[0, 1, 2, 3, 4].map((level) => (
+              <i key={level} className={`wish-v4-cell level-${level}`} />
+            ))}
+          </div>
+          <span>MORE</span>
+          <span className="wish-v4-heat-footnote">
+            {yearCharacters.length} records · {activeDays} active days
+          </span>
         </div>
-        <span className="heatmap-legend-label">More</span>
       </div>
     </div>
   );
@@ -744,6 +804,13 @@ const WishArchivePage: React.FC = () => {
     const elementSet = new Set(characters.map((c) => c.element));
     return ['all', ...Array.from(elementSet)];
   }, [characters]);
+
+  useEffect(() => {
+    const availableYears = years.filter((year) => year !== 'all').map(Number);
+    if (availableYears.length && !availableYears.includes(heatmapYear)) {
+      setHeatmapYear(availableYears[0]);
+    }
+  }, [years, heatmapYear]);
 
   const outcomes = ['all', 'won', 'lost'];
 
@@ -1061,51 +1128,53 @@ const WishArchivePage: React.FC = () => {
 
     const achievements: Achievement[] = [
       {
-        icon: 'mdi:compass',
+        icon: 'mdi:compass-outline',
         title: 'First Steps',
-        description: `Obtained your first limited 5★ character${first ? ` (${first.name})` : ''}.`,
+        description: first
+          ? `Obtained ${first.name}, your first recorded limited 5★.`
+          : 'Obtain your first recorded limited 5★.',
         unlocked: total >= 1,
       },
       {
-        icon: 'mdi:star-four-points',
+        icon: 'mdi:lightning-bolt',
         title: 'Lucky Streak',
-        description: `Won ${Math.min(longestWinStreak, 5)} consecutive 50/50s.`,
+        description: 'Reach a five-win streak across consecutive banners.',
         unlocked: longestWinStreak >= 5,
       },
       {
-        icon: 'mdi:collection',
+        icon: 'mdi:layers-triple-outline',
         title: 'Collector',
-        description: `Reached ${total} limited characters.`,
+        description: 'Build a collection of at least 25 limited 5★ characters.',
         unlocked: total >= 25,
       },
       {
-        icon: 'mdi:clock',
+        icon: 'mdi:calendar-multiple',
         title: 'Veteran Traveler',
-        description: `Active since ${first ? `Version ${first.version}` : 'the beginning'}.`,
+        description: 'Have recorded pulls across three or more active years.',
         unlocked: activeYears >= 3,
       },
       {
-        icon: 'mdi:snowflake',
-        title: 'Cryo Enthusiast',
-        description: `${mostCollectedElement} is your most collected element.`,
+        icon: 'mdi:shape-outline',
+        title: 'Element Specialist',
+        description: 'Make Cryo your most collected element.',
         unlocked: mostCollectedElement === 'Cryo',
       },
       {
-        icon: 'mdi:calendar',
+        icon: 'mdi:calendar-star',
         title: 'Double Acquisition',
-        description: `Obtained two characters on the same day.`,
+        description: 'Obtain two or more limited characters on one day.',
         unlocked: doubleDays > 0,
       },
       {
-        icon: 'mdi:trophy',
+        icon: 'mdi:trophy-outline',
         title: 'Nine-Win Streak',
-        description: `Won ${longestWinStreak} consecutive 50/50s.`,
+        description: 'Reach a nine-win streak across consecutive banners.',
         unlocked: longestWinStreak >= 9,
       },
       {
         icon: 'mdi:progress-star',
-        title: 'Collection Milestone',
-        description: `Reached ${Math.floor(total / 10) * 10} characters.`,
+        title: 'Ten on Record',
+        description: 'Record at least ten limited 5★ characters.',
         unlocked: total >= 10,
       },
     ];
@@ -1241,476 +1310,414 @@ const WishArchivePage: React.FC = () => {
     );
   }
 
-  // Render Overview Tab
-  const renderOverview = () => (
-    <section className="wish-overview-tab section-reveal">
-      <div className="wish-tab-intro">
-        <div>
-          <span className="wish-tab-kicker">01 / Snapshot</span>
-          <h2>Collection at a glance</h2>
-        </div>
-        <p>
-          A compact read of the collection: how many characters you've secured, how often the 50/50
-          has gone your way, and how long the journey has been running.
-        </p>
-      </div>
-
-      {/* Hero Stats */}
-      <div className="wish-hero-stats">
-        <div className="wish-hero-stat stagger-card">
-          <AnimatedCounter target={stats.total} label="Characters" />
-        </div>
-        <div className="wish-hero-stat stagger-card">
-          <AnimatedCounter target={Math.round(stats.winRate)} suffix="%" label="Win Rate" />
-        </div>
-        <div className="wish-hero-stat stagger-card">
-          <AnimatedCounter target={stats.wins} label="Wins" />
-        </div>
-        <div className="wish-hero-stat stagger-card">
-          <AnimatedCounter target={stats.activeYears} label="Active Years" />
-        </div>
-      </div>
-
-      {/* Quick Highlights */}
-      <div className="wish-hero-highlights">
-        <div className="wish-hero-highlight">
-          <Icon icon="mdi:calendar-range" />
-          <span>
-            {stats.first?.year || 2022} — {stats.latest?.year || new Date().getFullYear()}
-          </span>
-        </div>
-        {stats.latest && (
-          <div className="wish-hero-highlight">
-            <Icon icon="mdi:star" />
-            <span>Latest: {stats.latest.name}</span>
-          </div>
-        )}
-        <div className="wish-hero-highlight">
-          <Icon icon="mdi:percent" />
-          <span>{Math.round(stats.winRate)}% Win Rate</span>
-        </div>
-        <div className="wish-hero-highlight">
-          <Icon icon="mdi:chart-pie" />
-          <span>{stats.elementDiversity} Elements</span>
-        </div>
-      </div>
-    </section>
-  );
-
-  // Render Analytics Tab
-  const renderAnalytics = () => (
-    <section className="wish-analytics-tab section-reveal">
-      <div className="wish-tab-intro">
-        <div>
-          <span className="wish-tab-kicker">02 / Analytics</span>
-          <h2>Patterns behind the pulls</h2>
-        </div>
-        <p>
-          Luck, collection depth, and pacing are separated into small panels so the numbers stay
-          easy to scan on desktop and phone.
-        </p>
-      </div>
-
-      <div className="wish-analytics-lead">
-        <div>
-          <span>Current read</span>
-          <strong>{Math.round(stats.winRate)}% win rate</strong>
-        </div>
-        <p>
-          {stats.longestWinStreak > 0
-            ? `Your longest winning streak is ${stats.longestWinStreak} banner${stats.longestWinStreak === 1 ? '' : 's'}.`
-            : 'The archive is still building its first winning streak.'}
-        </p>
-      </div>
-
-      <div className="wish-stats-dashboard">
-        {/* Stats Grid - Grouped by category */}
-        <div className="wish-stats-group">
-          <h4 className="wish-stats-group-title">Luck</h4>
-          <div className="wish-stats-dashboard-grid">
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:target" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{stats.longestWinStreak}</span>
-                <span className="wish-stat-premium-label">Longest Win Streak</span>
-              </div>
-            </div>
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:star-circle" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{stats.fiftyFiftyWins}</span>
-                <span className="wish-stat-premium-label">50/50 Wins</span>
-              </div>
-            </div>
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:chart-arc" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{Math.round(stats.winRate)}%</span>
-                <span className="wish-stat-premium-label">Overall Win Rate</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="wish-stats-group">
-          <h4 className="wish-stats-group-title">Collection</h4>
-          <div className="wish-stats-dashboard-grid">
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:crystal-ball" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{stats.mostCollectedElement || '-'}</span>
-                <span className="wish-stat-premium-label">Most Collected Element</span>
-              </div>
-            </div>
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:chart-pie" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{stats.elementDiversity}</span>
-                <span className="wish-stat-premium-label">Elements Collected</span>
-              </div>
-            </div>
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:gamepad-variant" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{stats.versionsParticipated}</span>
-                <span className="wish-stat-premium-label">Versions Played</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="wish-stats-group">
-          <h4 className="wish-stats-group-title">Journey</h4>
-          <div className="wish-stats-dashboard-grid">
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:clock-outline" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{Math.round(stats.avgGap)} days</span>
-                <span className="wish-stat-premium-label">Avg Between Pulls</span>
-              </div>
-            </div>
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:calendar" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{stats.busiestYear || '-'}</span>
-                <span className="wish-stat-premium-label">Busiest Year</span>
-              </div>
-            </div>
-            <div className="wish-stat-premium stagger-card">
-              <div className="wish-stat-premium-icon">
-                <Icon icon="mdi:chart-line" />
-              </div>
-              <div className="wish-stat-premium-content">
-                <span className="wish-stat-premium-value">{stats.doubleDays}</span>
-                <span className="wish-stat-premium-label">Double Pull Days</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Charts Row */}
-        <div className="wish-charts-row">
-          <div className="wish-chart-card stagger-card">
-            <h3 className="wish-chart-title">Element Distribution</h3>
-            <DonutChart data={stats.byElement} />
-          </div>
-          <div className="wish-chart-card stagger-card">
-            <h3 className="wish-chart-title">Outcome Distribution</h3>
-            <DonutChart
-              data={{
-                Won: stats.wins,
-                Lost: stats.losses,
-              }}
-              colors={{
-                Won: '#7eb870',
-                Lost: '#e06040',
-              }}
-            />
-          </div>
-          <div className="wish-chart-card stagger-card">
-            <h3 className="wish-chart-title">Collection Progress</h3>
-            <div className="wish-progress-ring">
-              <svg viewBox="0 0 120 120">
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="rgba(255,255,255,0.04)"
-                  strokeWidth="6"
-                />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="url(#progressGradient)"
-                  strokeWidth="6"
-                  strokeDasharray={`${stats.collectionPercentage * 3.14} 314`}
-                  strokeLinecap="round"
-                  transform="rotate(-90 60 60)"
-                />
-                <defs>
-                  <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#7ae0db" />
-                    <stop offset="50%" stopColor="#8B5CF6" />
-                    <stop offset="100%" stopColor="#f9b55d" />
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div className="wish-progress-ring-content">
-                <span className="wish-progress-ring-value">
-                  {Math.round(stats.collectionPercentage)}%
-                </span>
-                <span className="wish-progress-ring-label">Collected</span>
-              </div>
-            </div>
-          </div>
-          <div className="wish-chart-card stagger-card">
-            <h3 className="wish-chart-title">Characters by Year</h3>
-            <BarChart
-              data={stats.yearlyStats.map((stat) => ({
-                label: stat.year.toString(),
-                value: stat.total,
-                color: `hsl(${200 + stat.year * 10}, 60%, 50%)`,
-              }))}
-              height={150}
-            />
-          </div>
-        </div>
-
-        {/* Yearly Performance */}
-        <div className="wish-yearly-grid" style={{ marginTop: '3rem' }}>
-          {stats.yearlyStats.map((stat) => {
-            const yearData = stats.byYear[stat.year];
-            const trend =
-              stat.rate > (stats.yearlyStats.find((s) => s.year === stat.year - 1)?.rate || 0)
-                ? 'up'
-                : stat.rate < (stats.yearlyStats.find((s) => s.year === stat.year - 1)?.rate || 0)
-                  ? 'down'
-                  : 'same';
-            const isBest = stat.rate === Math.max(...stats.yearlyStats.map((s) => s.rate));
-            const isWorst = stat.rate === Math.min(...stats.yearlyStats.map((s) => s.rate));
-
-            return (
-              <div key={stat.year} className="wish-yearly-card stagger-card">
-                <div className="wish-yearly-header">
-                  <h3>{stat.year}</h3>
-                  <span className={`wish-yearly-trend ${trend}`}>
-                    {trend === 'up' ? '▲' : trend === 'down' ? '▼' : '—'}
-                    {isBest && ' (Best)'}
-                    {isWorst && ' (Worst)'}
-                  </span>
-                </div>
-                <div className="wish-yearly-stats">
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{stat.total}</span>
-                    <span className="wish-yearly-stat-label">Characters</span>
-                  </div>
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{stat.wins}</span>
-                    <span className="wish-yearly-stat-label">Wins</span>
-                  </div>
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{stat.losses}</span>
-                    <span className="wish-yearly-stat-label">Losses</span>
-                  </div>
-                  <div className="wish-yearly-stat">
-                    <span className="wish-yearly-stat-value">{Math.round(stat.rate)}%</span>
-                    <span className="wish-yearly-stat-label">Win Rate</span>
-                  </div>
-                </div>
-                {yearData && (
-                  <div className="wish-yearly-details">
-                    <span>Avg {Math.round(yearData.avgGap)} days between pulls</span>
-                    <span>Best streak: {yearData.bestStreak}</span>
-                    <span className="wish-yearly-characters">
-                      {yearData.characters.slice(0, 3).join(', ')}
-                      {yearData.characters.length > 3 && ` +${yearData.characters.length - 3} more`}
-                    </span>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-
-  // Render Heatmap Tab
-  const renderHeatmap = () => {
-    const activeDays = new Set(characters.map((character) => character.date_obtained.slice(0, 10)))
-      .size;
+  // The first five tabs use an isolated Bauhaus × Swiss system.
+  // Timeline/archive markup and styles below are intentionally unchanged.
+  const renderOverview = () => {
+    const progress = Math.min(100, Math.max(0, stats.collectionPercentage));
+    const elementEntries = Object.entries(stats.byElement).sort(([, a], [, b]) => b - a);
+    const remaining = Math.max(0, 80 - stats.total);
 
     return (
-      <section className="wish-heatmap-tab section-reveal">
-        <div className="wish-tab-intro">
+      <section className="wish-v4-tab wish-v4-overview section-reveal">
+        <header className="wish-v4-intro">
           <div>
-            <span className="wish-tab-kicker">03 / Activity map</span>
-            <h2>When the collection happened</h2>
+            <span className="wish-v4-kicker">01 / OVERVIEW</span>
+            <h2>The collection at a glance.</h2>
+            <p>
+              One page for the numbers that actually matter: collection size, outcomes, range, and
+              the shape of the archive.
+            </p>
           </div>
-          <p>
-            Each square is a day in the selected year. Hover a marked day to see exactly which
-            characters landed there.
-          </p>
+          <div className="wish-v4-index">
+            <strong>W01</strong>
+            <span>COLLECTION INDEX</span>
+          </div>
+        </header>
+
+        <div className="wish-v4-overview-grid">
+          <article className="wish-v4-hero-stat">
+            <div className="wish-v4-hero-stat-head">
+              <span>COLLECTED</span>
+              <strong>
+                {stats.total}
+                <small>/ 80</small>
+              </strong>
+            </div>
+            <div className="wish-v4-big-progress">
+              <span style={{ width: `${progress}%` }} />
+            </div>
+            <div className="wish-v4-hero-stat-foot">
+              <span>{Math.round(progress)}% complete</span>
+              <span>{remaining} remaining</span>
+            </div>
+          </article>
+
+          <div className="wish-v4-kpi-grid">
+            <article className="wish-v4-kpi wish-v4-red">
+              <span>WIN RATE</span>
+              <strong>{Math.round(stats.winRate)}%</strong>
+              <small>
+                {stats.wins} wins / {stats.losses} losses
+              </small>
+            </article>
+            <article className="wish-v4-kpi wish-v4-blue">
+              <span>ACTIVE YEARS</span>
+              <strong>{stats.activeYears}</strong>
+              <small>{stats.avgCharsPerYear.toFixed(1)} records / year</small>
+            </article>
+            <article className="wish-v4-kpi wish-v4-yellow">
+              <span>VERSIONS</span>
+              <strong>{stats.versionsParticipated}</strong>
+              <small>
+                v{stats.earliestVersion || '—'} → v{stats.latestVersion || '—'}
+              </small>
+            </article>
+            <article className="wish-v4-kpi wish-v4-paper">
+              <span>WIN STREAK</span>
+              <strong>{stats.longestWinStreak}</strong>
+              <small>consecutive wins</small>
+            </article>
+          </div>
         </div>
 
-        <div className="wish-heatmap-summary">
-          <div>
-            <span>Active days</span>
-            <strong>{activeDays}</strong>
-          </div>
-          <div>
-            <span>Busiest year</span>
-            <strong>{stats.busiestYear || '—'}</strong>
-          </div>
-          <div>
-            <span>Double-pull days</span>
-            <strong>{stats.doubleDays}</strong>
-          </div>
-          <div>
-            <span>Longest gap</span>
-            <strong>{Math.round(stats.longestGap)}d</strong>
-          </div>
-        </div>
+        <div className="wish-v4-two-col">
+          <article className="wish-v4-paper-card wish-v4-record-strip">
+            <div className="wish-v4-card-label">ARCHIVE SPAN</div>
+            <div className="wish-v4-span">
+              <div>
+                <span>FIRST</span>
+                <strong>{stats.first?.name || '—'}</strong>
+                <small>
+                  {stats.first
+                    ? `${formatDate(stats.first.date_obtained)} · v${stats.first.version}`
+                    : 'No record'}
+                </small>
+              </div>
+              <Icon icon="mdi:arrow-right" />
+              <div>
+                <span>LATEST</span>
+                <strong>{stats.latest?.name || '—'}</strong>
+                <small>
+                  {stats.latest
+                    ? `${formatDate(stats.latest.date_obtained)} · v${stats.latest.version}`
+                    : 'No record'}
+                </small>
+              </div>
+            </div>
+          </article>
 
-        <div className="wish-heatmap-controls">
-          <div className="wish-heatmap-year-selector">
-            {years
-              .filter((y) => y !== 'all')
-              .map((year) => (
-                <button
-                  key={year}
-                  className={`wish-heatmap-year-btn ${heatmapYear === Number(year) ? 'active' : ''}`}
-                  onClick={() => setHeatmapYear(Number(year))}
-                >
-                  {year}
-                </button>
+          <article className="wish-v4-paper-card">
+            <div className="wish-v4-card-label">
+              ELEMENT MIX <span>{stats.elementDiversity}/7</span>
+            </div>
+            <div className="wish-v4-element-list">
+              {elementEntries.map(([element, count]) => (
+                <div className="wish-v4-element-row" key={element}>
+                  <div>
+                    <span
+                      className="wish-v4-element-dot"
+                      style={{ background: getElementColor(element) }}
+                    />
+                    <strong>{element}</strong>
+                    <small>{count}</small>
+                  </div>
+                  <span className="wish-v4-mini-track">
+                    <i
+                      style={{
+                        width: `${(count / Math.max(stats.total, 1)) * 100}%`,
+                        background: getElementColor(element),
+                      }}
+                    />
+                  </span>
+                </div>
               ))}
-          </div>
+            </div>
+          </article>
         </div>
-        <HeatMap
-          characters={characters}
-          year={heatmapYear}
-          onCellHover={(date) => {
-            // Optional: update a tooltip or info display
-          }}
-        />
       </section>
     );
   };
 
-  // Render Fun Facts Tab
-  const renderFunFacts = () => (
-    <section className="wish-funfacts-tab section-reveal">
-      <div className="wish-tab-intro">
+  const renderAnalytics = () => {
+    const maxYearTotal = Math.max(...stats.yearlyStats.map((item) => item.total), 1);
+    return (
+      <section className="wish-v4-tab wish-v4-analytics section-reveal">
+        <header className="wish-v4-intro">
+          <div>
+            <span className="wish-v4-kicker">02 / ANALYTICS</span>
+            <h2>Read the pattern, not the spreadsheet.</h2>
+            <p>
+              Outcome, cadence, elements, and yearly volume are separated into visual units so the
+              story is visible before the numbers are.
+            </p>
+          </div>
+          <div className="wish-v4-index wish-v4-index-blue">
+            <strong>{stats.longestWinStreak}</strong>
+            <span>LONGEST WIN STREAK</span>
+          </div>
+        </header>
+
+        <div className="wish-v4-analytics-hero">
+          <article className="wish-v4-outcome-board">
+            <div className="wish-v4-board-head">
+              <div>
+                <span className="wish-v4-kicker">OUTCOME</span>
+                <h3>Wins versus losses</h3>
+              </div>
+              <strong>
+                {Math.round(stats.winRate)}
+                <small>%</small>
+              </strong>
+            </div>
+            <div className="wish-v4-outcome-bar">
+              <span style={{ width: `${stats.winRate}%` }} />
+            </div>
+            <div className="wish-v4-outcome-legend">
+              <div>
+                <i className="win" />
+                <span>WINS</span>
+                <strong>{stats.wins}</strong>
+              </div>
+              <div>
+                <i className="loss" />
+                <span>LOSSES</span>
+                <strong>{stats.losses}</strong>
+              </div>
+              <div>
+                <i className="neutral" />
+                <span>50/50 WINS</span>
+                <strong>{stats.fiftyFiftyWins}</strong>
+              </div>
+              <div>
+                <i className="guaranteed" />
+                <span>GUARANTEED</span>
+                <strong>{stats.guaranteedChars}</strong>
+              </div>
+            </div>
+          </article>
+
+          <article className="wish-v4-cadence-board">
+            <span className="wish-v4-kicker">CADENCE</span>
+            <h3>Time between records</h3>
+            <strong>
+              {Math.round(stats.avgGap)}
+              <small> days avg.</small>
+            </strong>
+            <div className="wish-v4-cadence-stats">
+              <span>
+                <b>{stats.shortestGap || 0}</b> shortest
+              </span>
+              <span>
+                <b>{stats.longestGap || 0}</b> longest
+              </span>
+              <span>
+                <b>{stats.doubleDays}</b> double days
+              </span>
+            </div>
+          </article>
+        </div>
+
+        <div className="wish-v4-analytics-grid">
+          <article className="wish-v4-paper-card wish-v4-elements-board">
+            <div className="wish-v4-card-label">
+              ELEMENT COMPOSITION <span>{stats.total} TOTAL</span>
+            </div>
+            <div className="wish-v4-element-analytics">
+              {Object.entries(stats.byElement)
+                .sort(([, a], [, b]) => b - a)
+                .map(([element, count], index) => {
+                  const percentage = Math.round((count / Math.max(stats.total, 1)) * 100);
+                  return (
+                    <div className="wish-v4-element-analytics-row" key={element}>
+                      <span className="wish-v4-element-index">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <span
+                        className="wish-v4-element-icon"
+                        style={{
+                          color: getElementColor(element),
+                          borderColor: getElementColor(element),
+                        }}
+                      >
+                        <Icon icon={getElementIcon(element)} />
+                      </span>
+                      <strong>{element}</strong>
+                      <div className="wish-v4-element-wide-track">
+                        <i
+                          style={{ width: `${percentage}%`, background: getElementColor(element) }}
+                        />
+                      </div>
+                      <b>{count}</b>
+                      <small>{percentage}%</small>
+                    </div>
+                  );
+                })}
+            </div>
+          </article>
+
+          <article className="wish-v4-paper-card wish-v4-year-board">
+            <div className="wish-v4-card-label">
+              YEARLY VOLUME <span>{stats.busiestYear || '—'} PEAK</span>
+            </div>
+            <div className="wish-v4-year-bars">
+              {stats.yearlyStats.map((item) => (
+                <div className="wish-v4-year-bar" key={item.year}>
+                  <strong>{item.total}</strong>
+                  <div>
+                    <i style={{ height: `${(item.total / maxYearTotal) * 100}%` }} />
+                  </div>
+                  <span>{item.year}</span>
+                  <small>{Math.round(item.rate)}% win</small>
+                </div>
+              ))}
+            </div>
+          </article>
+        </div>
+
+        <div className="wish-v4-year-ledger">
+          {stats.yearlyStats.map((item) => (
+            <article key={item.year}>
+              <strong>{item.year}</strong>
+              <span>{item.total} records</span>
+              <span>
+                {item.wins}W / {item.losses}L
+              </span>
+              <b>{Math.round(item.rate)}%</b>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  };
+
+  const renderHeatmap = () => (
+    <section className="wish-v4-tab wish-v4-heat-tab section-reveal">
+      <header className="wish-v4-intro">
         <div>
-          <span className="wish-tab-kicker">04 / Fun facts</span>
-          <h2>The little patterns</h2>
+          <span className="wish-v4-kicker">03 / HEAT MAP</span>
+          <h2>Find the rhythm in the calendar.</h2>
+          <p>
+            Activity only. No character artwork appears in the grid or its hover card, so the heat
+            map stays fast and readable.
+          </p>
         </div>
-        <p>
-          Small observations generated from the archive. No filler—just things that are actually
-          present in the data.
-        </p>
-      </div>
-
-      {stats.funFacts.length > 0 && (
-        <div className="wish-fun-fact-featured stagger-card">
-          <div className="wish-fun-fact-featured-icon">
-            <Icon icon="mdi:sparkle" />
-          </div>
-          <div className="wish-fun-fact-featured-content">
-            <span className="wish-fun-fact-featured-label">Did You Know?</span>
-            <p>{stats.funFacts[0]}</p>
-          </div>
+        <div className="wish-v4-year-tabs" role="tablist" aria-label="Heat map year">
+          {years
+            .filter((year) => year !== 'all')
+            .map((year) => (
+              <button
+                key={year}
+                type="button"
+                role="tab"
+                aria-selected={heatmapYear === Number(year)}
+                className={heatmapYear === Number(year) ? 'active' : ''}
+                onClick={() => setHeatmapYear(Number(year))}
+              >
+                {year}
+              </button>
+            ))}
         </div>
-      )}
-
-      <div className="wish-fun-facts-grid">
-        {stats.funFacts.slice(1).map((fact, index) => (
-          <div key={index} className="wish-fun-fact-premium stagger-card">
-            <Icon icon="mdi:star" className="wish-fun-fact-premium-icon" />
-            <span>{fact}</span>
-          </div>
-        ))}
-      </div>
+      </header>
+      <HeatMap characters={characters} year={heatmapYear} />
     </section>
   );
 
-  // Render Achievements Tab
+  const renderFunFacts = () => {
+    const icons = [
+      'mdi:calendar-star-outline',
+      'mdi:chart-timeline-variant',
+      'mdi:shape-outline',
+      'mdi:calendar-multiple-check',
+      'mdi:lightning-bolt-outline',
+      'mdi:layers-triple-outline',
+      'mdi:timer-outline',
+      'mdi:gamepad-variant-outline',
+      'mdi:clock-fast',
+    ];
+    return (
+      <section className="wish-v4-tab wish-v4-facts section-reveal">
+        <header className="wish-v4-intro">
+          <div>
+            <span className="wish-v4-kicker">04 / FUN FACTS</span>
+            <h2>The archive has a few odd little stories.</h2>
+            <p>
+              Small observations derived from the same records. No scoring—just the details that
+              make the collection feel like yours.
+            </p>
+          </div>
+          <div className="wish-v4-index wish-v4-index-yellow">
+            <strong>{stats.funFacts.length}</strong>
+            <span>OBSERVATIONS</span>
+          </div>
+        </header>
+
+        <div className="wish-v4-fact-grid">
+          {stats.funFacts.map((fact, index) => (
+            <article
+              key={`${fact}-${index}`}
+              className={`wish-v4-fact-card ${index === 0 ? 'featured' : ''}`}
+            >
+              <div className="wish-v4-fact-top">
+                <span>{String(index + 1).padStart(2, '0')}</span>
+                <Icon icon={icons[index % icons.length]} />
+              </div>
+              <p>{fact}</p>
+              <div className="wish-v4-fact-rule" />
+              <small>ARCHIVE NOTE</small>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  };
+
   const renderAchievements = () => {
-    const unlockedAchievements = stats.achievements.filter(
-      (achievement) => achievement.unlocked,
-    ).length;
-    const achievementPercentage = stats.achievements.length
-      ? Math.round((unlockedAchievements / stats.achievements.length) * 100)
-      : 0;
+    const unlocked = stats.achievements.filter((achievement) => achievement.unlocked).length;
+    const totalAchievements = stats.achievements.length;
+    const completion = (unlocked / Math.max(totalAchievements, 1)) * 100;
 
     return (
-      <section className="wish-achievements-tab section-reveal">
-        <div className="wish-tab-intro">
+      <section className="wish-v4-tab wish-v4-achievements section-reveal">
+        <header className="wish-v4-intro">
           <div>
-            <span className="wish-tab-kicker">05 / Milestones</span>
-            <h2>Collection achievements</h2>
+            <span className="wish-v4-kicker">05 / ACHIEVEMENTS</span>
+            <h2>Milestones, made explicit.</h2>
+            <p>
+              Unlocked records get a clear signal. Locked records tell you what the archive still
+              needs—without hiding anything behind a mystery badge.
+            </p>
           </div>
-          <p>
-            Milestones are based on the same collection data above. Locked cards stay visible so the
-            next target is always clear.
-          </p>
-        </div>
-
-        <div className="wish-achievements-progress">
-          <div>
-            <span>Progress</span>
+          <div className="wish-v4-achievement-score">
             <strong>
-              {unlockedAchievements} / {stats.achievements.length}
+              {unlocked}
+              <small> / {totalAchievements}</small>
             </strong>
+            <span>UNLOCKED</span>
+            <div>
+              <i style={{ width: `${completion}%` }} />
+            </div>
           </div>
-          <div className="wish-achievements-progress-track">
-            <span style={{ width: `${achievementPercentage}%` }} />
-          </div>
-          <em>{achievementPercentage}% unlocked</em>
-        </div>
+        </header>
 
-        <div className="wish-achievements-grid">
+        <div className="wish-v4-achievement-grid">
           {stats.achievements.map((achievement, index) => (
-            <div
-              key={index}
-              className={`wish-achievement-premium stagger-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
+            <article
+              key={`${achievement.title}-${index}`}
+              className={`wish-v4-achievement-card ${achievement.unlocked ? 'unlocked' : 'locked'}`}
             >
-              <div className="wish-achievement-premium-icon">
+              <div className="wish-v4-achievement-index">{String(index + 1).padStart(2, '0')}</div>
+              <div className="wish-v4-achievement-icon">
                 <Icon icon={achievement.icon} />
-                {!achievement.unlocked && (
-                  <div className="wish-achievement-lock">
-                    <Icon icon="mdi:lock" />
-                  </div>
-                )}
               </div>
-              <div className="wish-achievement-premium-content">
-                <h4>{achievement.title}</h4>
+              <div className="wish-v4-achievement-copy">
+                <span>{achievement.unlocked ? 'UNLOCKED' : 'LOCKED'}</span>
+                <h3>{achievement.title}</h3>
                 <p>{achievement.description}</p>
               </div>
-              <div className="wish-achievement-premium-badge">
-                {achievement.unlocked ? '✓' : '?'}
+              <div className="wish-v4-achievement-state">
+                <Icon icon={achievement.unlocked ? 'mdi:check-bold' : 'mdi:lock-outline'} />
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </section>

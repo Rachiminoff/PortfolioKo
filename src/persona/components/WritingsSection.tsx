@@ -8,12 +8,6 @@ import { Icon } from '@iconify/react';
 import PersonaSectionHeader from './PersonaSectionHeader';
 import { supabase } from '../../lib/supabase';
 
-interface TocItem {
-  id: string;
-  text: string;
-  level: number;
-}
-
 interface BlogPost {
   id: number;
   title: string;
@@ -33,6 +27,12 @@ interface BlogPost {
 
 type SortOption = 'newest' | 'oldest' | 'az' | 'za';
 
+interface TocItem {
+  id: string;
+  label: string;
+  level: number;
+}
+
 const POSTS_PER_PAGE = 5;
 
 const WritingsSection: React.FC = () => {
@@ -42,10 +42,13 @@ const WritingsSection: React.FC = () => {
   const [category, setCategory] = useState('all');
   const [sort, setSort] = useState<SortOption>('newest');
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
-  const [activeTocId, setActiveTocId] = useState('');
-  const headingIdsRef = useRef<string[]>([]);
-  const headingRenderIndexRef = useRef(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [tocItems, setTocItems] = useState<TocItem[]>([]);
+  const [activeTocId, setActiveTocId] = useState('');
+  const [tocOpen, setTocOpen] = useState(false);
+  const [readerProgress, setReaderProgress] = useState(0);
+  const readerRef = useRef<HTMLDivElement>(null);
+  const articleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let active = true;
@@ -79,6 +82,7 @@ const WritingsSection: React.FC = () => {
   const openPost = (post: BlogPost) => {
     window.history.pushState({ personaPost: post.slug }, '', getPostHref(post.slug));
     setSelectedPost(post);
+    setTocOpen(false);
   };
 
   const closePost = useCallback(() => {
@@ -89,10 +93,10 @@ const WritingsSection: React.FC = () => {
       window.history.pushState({}, '', `${url.pathname}${url.search}${url.hash}`);
     }
     setSelectedPost(null);
+    setTocItems([]);
+    setActiveTocId('');
   }, []);
 
-  // Direct links such as /persona?post=some-slug open the article on arrival.
-  // Keep the reader synchronized with browser Back/Forward navigation as well.
   useEffect(() => {
     const syncPostFromUrl = () => {
       const slug = new URLSearchParams(window.location.search).get('post');
@@ -104,59 +108,6 @@ const WritingsSection: React.FC = () => {
     return () => window.removeEventListener('popstate', syncPostFromUrl);
   }, [posts]);
 
-  const toc = useMemo<TocItem[]>(() => {
-    if (!selectedPost) {
-      headingIdsRef.current = [];
-      return [];
-    }
-
-    const headingRegex = /^(#{1,6})\s+(.+)$/gm;
-    const usedIds = new Map<string, number>();
-    const items = Array.from(selectedPost.content.matchAll(headingRegex)).map((match) => {
-      const text = match[2].trim().replace(/[#*`_]/g, '');
-      const baseId =
-        text
-          .toLowerCase()
-          .normalize('NFKD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/^-+|-+$/g, '') || 'section';
-      const count = usedIds.get(baseId) || 0;
-      usedIds.set(baseId, count + 1);
-      return {
-        id: count ? `${baseId}-${count + 1}` : baseId,
-        text,
-        level: match[1].length,
-      };
-    });
-
-    headingIdsRef.current = items.map((item) => item.id);
-    return items;
-  }, [selectedPost]);
-
-  useEffect(() => {
-    setActiveTocId(toc[0]?.id || '');
-    if (!selectedPost || toc.length === 0) return;
-
-    const headings = toc
-      .map((item) => document.getElementById(item.id))
-      .filter((element): element is HTMLElement => Boolean(element));
-    if (!headings.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]?.target.id) setActiveTocId(visible[0].target.id);
-      },
-      { rootMargin: '-10% 0px -72% 0px', threshold: [0, 0.1, 1] },
-    );
-
-    headings.forEach((heading) => observer.observe(heading));
-    return () => observer.disconnect();
-  }, [selectedPost, toc]);
-
   useEffect(() => {
     if (!selectedPost) return;
     const onKeyDown = (event: KeyboardEvent) => {
@@ -165,11 +116,81 @@ const WritingsSection: React.FC = () => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKeyDown);
+    setReaderProgress(0);
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
+      setReaderProgress(0);
     };
   }, [selectedPost, closePost]);
+
+  useEffect(() => {
+    if (!selectedPost || !articleRef.current || !readerRef.current) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const headings = Array.from(
+        articleRef.current.querySelectorAll<HTMLElement>('h2[id], h3[id], h4[id]'),
+      );
+      const items = headings.map((heading) => ({
+        id: heading.id,
+        label: heading.textContent?.trim() || 'Section',
+        level: heading.tagName === 'H4' ? 4 : heading.tagName === 'H3' ? 3 : 2,
+      }));
+
+      setTocItems(items);
+      setActiveTocId(items[0]?.id || '');
+
+      const root = readerRef.current;
+      if (!root || headings.length === 0) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (visible[0]?.target instanceof HTMLElement) {
+            setActiveTocId(visible[0].target.id);
+          }
+        },
+        {
+          root,
+          rootMargin: '-12% 0px -70% 0px',
+          threshold: [0, 1],
+        },
+      );
+
+      headings.forEach((heading) => observer.observe(heading));
+      return () => observer.disconnect();
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [selectedPost]);
+
+  useEffect(() => {
+    const root = readerRef.current;
+    if (!selectedPost || !root) return;
+
+    const updateProgress = () => {
+      const max = root.scrollHeight - root.clientHeight;
+      setReaderProgress(max > 0 ? Math.min(100, Math.max(0, (root.scrollTop / max) * 100)) : 0);
+    };
+
+    updateProgress();
+    root.addEventListener('scroll', updateProgress, { passive: true });
+    return () => root.removeEventListener('scroll', updateProgress);
+  }, [selectedPost]);
+
+  const scrollToHeading = useCallback((id: string) => {
+    const root = readerRef.current;
+    const target = articleRef.current?.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
+    if (!root || !target) return;
+
+    const top =
+      target.getBoundingClientRect().top - root.getBoundingClientRect().top + root.scrollTop - 28;
+    root.scrollTo({ top, behavior: 'smooth' });
+    setActiveTocId(id);
+    setTocOpen(false);
+  }, []);
 
   const categories = useMemo(
     () => Array.from(new Set(posts.map((post) => post.category).filter(Boolean))).sort(),
@@ -204,13 +225,8 @@ const WritingsSection: React.FC = () => {
     [visiblePosts, currentPage],
   );
 
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [query, category, sort]);
-
-  useEffect(() => {
-    setCurrentPage((page) => Math.min(page, totalPages));
-  }, [totalPages]);
+  useEffect(() => setCurrentPage(1), [query, category, sort]);
+  useEffect(() => setCurrentPage((page) => Math.min(page, totalPages)), [totalPages]);
 
   const formatDate = (date: string) =>
     new Date(date).toLocaleDateString('en-US', {
@@ -218,52 +234,6 @@ const WritingsSection: React.FC = () => {
       month: 'short',
       day: 'numeric',
     });
-
-  const renderReaderHeading = (
-    level: 1 | 2 | 3 | 4 | 5 | 6,
-    children: React.ReactNode,
-    props: Record<string, any>,
-  ) => {
-    const id = headingIdsRef.current[headingRenderIndexRef.current] || props.id;
-    headingRenderIndexRef.current += 1;
-    const className = `persona-md-h${level}`;
-
-    if (level === 1)
-      return (
-        <h1 {...props} id={id} className={className}>
-          {children}
-        </h1>
-      );
-    if (level === 2)
-      return (
-        <h2 {...props} id={id} className={className}>
-          {children}
-        </h2>
-      );
-    if (level === 3)
-      return (
-        <h3 {...props} id={id} className={className}>
-          {children}
-        </h3>
-      );
-    if (level === 4)
-      return (
-        <h4 {...props} id={id} className={className}>
-          {children}
-        </h4>
-      );
-    if (level === 5)
-      return (
-        <h5 {...props} id={id} className={className}>
-          {children}
-        </h5>
-      );
-    return (
-      <h6 {...props} id={id} className={className}>
-        {children}
-      </h6>
-    );
-  };
 
   return (
     <section className="persona-notes" id="writings" aria-labelledby="persona-notes-title">
@@ -353,7 +323,7 @@ const WritingsSection: React.FC = () => {
                     <h3>{post.title}</h3>
                     <p>
                       {post.excerpt ||
-                        post.content.replace(/[#>*_`\u005B\u005D()]/g, ' ').slice(0, 180)}
+                        post.content.replace(/[#>*_`\u005B\]()]/g, ' ').slice(0, 180)}
                     </p>
                     <small>
                       {post.reading_time || ''}
@@ -385,7 +355,6 @@ const WritingsSection: React.FC = () => {
               >
                 <Icon icon="mdi:arrow-left" width={18} />
               </button>
-
               <div className="persona-writing-page-numbers">
                 {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
                   <button
@@ -399,7 +368,6 @@ const WritingsSection: React.FC = () => {
                   </button>
                 ))}
               </div>
-
               <button
                 type="button"
                 className="persona-writing-page-control"
@@ -409,7 +377,6 @@ const WritingsSection: React.FC = () => {
               >
                 <Icon icon="mdi:arrow-right" width={18} />
               </button>
-
               <span className="persona-writing-page-status">
                 PAGE {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
               </span>
@@ -422,19 +389,19 @@ const WritingsSection: React.FC = () => {
         <div
           className="persona-writing-reader-backdrop"
           onMouseDown={(event) => {
-            // Close only when the actual backdrop is clicked. In particular,
-            // clicking/dragging the overlay scrollbar must not close the reader.
-            const target = event.currentTarget;
-            const isScrollbar = event.clientX >= target.clientWidth;
-            if (event.target === target && !isScrollbar) closePost();
+            if (event.target === event.currentTarget) closePost();
           }}
         >
           <div
             className="persona-writing-reader"
+            ref={readerRef}
             role="dialog"
             aria-modal="true"
-            onMouseDown={(e) => e.stopPropagation()}
+            aria-label={selectedPost.title}
           >
+            <div className="persona-reader-progress" aria-hidden="true">
+              <span style={{ width: `${readerProgress}%` }} />
+            </div>
             <button
               className="persona-reader-close"
               type="button"
@@ -443,6 +410,7 @@ const WritingsSection: React.FC = () => {
             >
               <Icon icon="mdi:close" width={24} />
             </button>
+
             <header className="persona-reader-hero">
               {(selectedPost.cover_image || selectedPost.thumbnail) && (
                 <img src={selectedPost.cover_image || selectedPost.thumbnail} alt="" />
@@ -458,91 +426,124 @@ const WritingsSection: React.FC = () => {
                 <h1>{selectedPost.title}</h1>
                 <div className="persona-reader-meta">
                   <span>
-                    <Icon icon="mdi:clock-outline" width={16} /> {selectedPost.reading_time || ''}
+                    <Icon icon="mdi:clock-outline" width={16} />{' '}
+                    {selectedPost.reading_time || 'Reading time unavailable'}
                   </span>
                   <span>
                     <Icon icon="mdi:calendar-outline" width={16} />{' '}
                     {formatDate(selectedPost.created_at)}
                   </span>
+                  {selectedPost.updated_at && (
+                    <span>
+                      <Icon icon="mdi:update" width={16} /> Updated{' '}
+                      {formatDate(selectedPost.updated_at)}
+                    </span>
+                  )}
                 </div>
               </div>
             </header>
-            <div className="persona-reader-layout">
-              {toc.length > 0 && (
-                <aside className="persona-reader-toc" aria-label="Table of contents">
-                  <div className="persona-reader-toc-inner">
-                    <span className="persona-reader-toc-label">ON THIS PAGE</span>
-                    <nav>
-                      {toc.map((item) => (
-                        <a
-                          key={item.id}
-                          href={`#${item.id}`}
-                          className={`persona-reader-toc-item level-${item.level} ${activeTocId === item.id ? 'active' : ''}`}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            document
-                              .getElementById(item.id)
-                              ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          }}
-                        >
-                          <span className="persona-reader-toc-dot" />
-                          <span>{item.text}</span>
-                        </a>
-                      ))}
-                    </nav>
-                  </div>
-                </aside>
-              )}
 
-              <main className="persona-reader-main">
-                {toc.length > 0 && (
-                  <details className="persona-reader-toc-mobile">
-                    <summary>
-                      <span>Contents</span>
-                      <Icon icon="mdi:chevron-down" width={18} />
-                    </summary>
-                    <nav>
-                      {toc.map((item) => (
-                        <a
-                          key={item.id}
-                          href={`#${item.id}`}
-                          className={`persona-reader-toc-item level-${item.level} ${activeTocId === item.id ? 'active' : ''}`}
-                          onClick={(event) => {
-                            event.preventDefault();
-                            document
-                              .getElementById(item.id)
-                              ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          }}
-                        >
-                          <span className="persona-reader-toc-dot" />
-                          <span>{item.text}</span>
-                        </a>
-                      ))}
-                    </nav>
-                  </details>
-                )}
-
-                <button className="persona-reader-back" onClick={closePost}>
+            <main className="persona-reader-main">
+              <div className="persona-reader-topbar">
+                <button className="persona-reader-back" type="button" onClick={closePost}>
                   <Icon icon="mdi:arrow-left" width={18} /> Back to Writings
                 </button>
-                {selectedPost.excerpt && (
-                  <div className="persona-reader-excerpt">{selectedPost.excerpt}</div>
+                <button
+                  className="persona-reader-copy"
+                  type="button"
+                  onClick={() => navigator.clipboard?.writeText(window.location.href)}
+                >
+                  <Icon icon="mdi:link-variant" width={17} /> Copy link
+                </button>
+              </div>
+
+              {selectedPost.excerpt && (
+                <div className="persona-reader-excerpt">{selectedPost.excerpt}</div>
+              )}
+
+              {tocItems.length > 0 && (
+                <div className="persona-reader-toc-mobile">
+                  <button
+                    type="button"
+                    onClick={() => setTocOpen((open) => !open)}
+                    aria-expanded={tocOpen}
+                  >
+                    <span>
+                      <Icon icon="mdi:format-list-bulleted" /> In this article
+                    </span>
+                    <Icon icon={tocOpen ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
+                  </button>
+                  {tocOpen && (
+                    <nav aria-label="Table of contents">
+                      {tocItems.map((item) => (
+                        <button
+                          key={item.id}
+                          className={activeTocId === item.id ? 'active' : ''}
+                          onClick={() => scrollToHeading(item.id)}
+                          type="button"
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </nav>
+                  )}
+                </div>
+              )}
+
+              <div className="persona-reader-layout">
+                {tocItems.length > 0 && (
+                  <aside className="persona-reader-toc" aria-label="Table of contents">
+                    <div className="persona-reader-toc-label">ON THIS PAGE</div>
+                    <nav>
+                      {tocItems.map((item) => (
+                        <button
+                          key={item.id}
+                          className={`${activeTocId === item.id ? 'active' : ''} level-${item.level}`}
+                          onClick={() => scrollToHeading(item.id)}
+                          type="button"
+                        >
+                          <span>{item.label}</span>
+                        </button>
+                      ))}
+                    </nav>
+                  </aside>
                 )}
-                <div className="persona-writing-content persona-reader-body">
-                  {(() => {
-                    headingRenderIndexRef.current = 0;
-                    return null;
-                  })()}
+
+                <article className="persona-writing-content persona-reader-body" ref={articleRef}>
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
                     components={{
-                      h1: ({ children, ...props }: any) => renderReaderHeading(1, children, props),
-                      h2: ({ children, ...props }: any) => renderReaderHeading(2, children, props),
-                      h3: ({ children, ...props }: any) => renderReaderHeading(3, children, props),
-                      h4: ({ children, ...props }: any) => renderReaderHeading(4, children, props),
-                      h5: ({ children, ...props }: any) => renderReaderHeading(5, children, props),
-                      h6: ({ children, ...props }: any) => renderReaderHeading(6, children, props),
+                      h1: ({ children, ...props }: any) => (
+                        <h1 className="persona-md-h1" {...props}>
+                          {children}
+                        </h1>
+                      ),
+                      h2: ({ children, ...props }: any) => (
+                        <h2 className="persona-md-h2" {...props}>
+                          {children}
+                        </h2>
+                      ),
+                      h3: ({ children, ...props }: any) => (
+                        <h3 className="persona-md-h3" {...props}>
+                          {children}
+                        </h3>
+                      ),
+                      h4: ({ children, ...props }: any) => (
+                        <h4 className="persona-md-h4" {...props}>
+                          {children}
+                        </h4>
+                      ),
+                      h5: ({ children, ...props }: any) => (
+                        <h5 className="persona-md-h5" {...props}>
+                          {children}
+                        </h5>
+                      ),
+                      h6: ({ children, ...props }: any) => (
+                        <h6 className="persona-md-h6" {...props}>
+                          {children}
+                        </h6>
+                      ),
                       table: ({ children, ...props }: any) => (
                         <div className="persona-md-table-wrap">
                           <table {...props}>{children}</table>
@@ -592,14 +593,23 @@ const WritingsSection: React.FC = () => {
                           {children}
                         </summary>
                       ),
+                      blockquote: ({ children, ...props }: any) => (
+                        <blockquote className="persona-md-quote" {...props}>
+                          <span className="persona-md-quote-kicker">FIELD NOTE</span>
+                          <span className="persona-md-quote-mark" aria-hidden="true">
+                            “
+                          </span>
+                          <div className="persona-md-quote-content">{children}</div>
+                        </blockquote>
+                      ),
                       hr: (props: any) => <hr className="persona-md-hr" {...props} />,
                     }}
                   >
                     {selectedPost.content}
                   </ReactMarkdown>
-                </div>
-              </main>
-            </div>
+                </article>
+              </div>
+            </main>
           </div>
         </div>
       )}
