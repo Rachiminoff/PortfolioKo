@@ -108,13 +108,6 @@ const techStack: Tech[] = [
     description: 'PostgreSQL with real-time capabilities',
   },
   {
-    name: 'SQLite',
-    icon: 'logos:sqlite',
-    color: '#003B57',
-    category: 'Backend',
-    description: 'Lightweight embedded database',
-  },
-  {
     name: 'MySQL',
     icon: 'logos:mysql',
     color: '#4479A1',
@@ -226,20 +219,34 @@ const techStack: Tech[] = [
     description: 'Deployment and hosting platform',
   },
 
-  // AI & LLMs
+  // AI workflows
   {
-    name: 'AI & LLMs',
-    icon: 'mdi:brain',
-    color: '#8B5CF6',
-    category: 'AI',
-    description: 'Working with language models and AI tools',
+    name: 'Claude',
+    icon: 'simple-icons:claude',
+    color: '#D97757',
+    category: 'AI Workflows',
+    description: 'Working through technical problems, code review, and refactoring',
+  },
+  {
+    name: 'ChatGPT',
+    icon: 'simple-icons:openai',
+    color: '#74AA9C',
+    category: 'AI Workflows',
+    description: 'Research, debugging support, documentation, and problem-solving',
+  },
+  {
+    name: 'GitHub Copilot',
+    icon: 'simple-icons:githubcopilot',
+    color: '#FFFFFF',
+    category: 'AI Workflows',
+    description: 'In-editor code suggestions and iterative implementation',
   },
   {
     name: 'Prompt Engineering',
     icon: 'mdi:robot-outline',
     color: '#8B5CF6',
-    category: 'AI',
-    description: 'Crafting structured prompts for LLMs',
+    category: 'AI Workflows',
+    description: 'Writing clear, structured prompts and refining results',
   },
 ];
 
@@ -249,7 +256,7 @@ const categories = [
   { name: 'Game Dev', color: '#F2C94C', code: '03' },
   { name: 'Automation', color: '#4D8DFF', code: '04' },
   { name: 'Tools', color: '#FF7A45', code: '05' },
-  { name: 'AI', color: '#A66BFF', code: '06' },
+  { name: 'AI Workflows', color: '#A66BFF', code: '06' },
 ];
 
 function Expertise() {

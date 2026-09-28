@@ -594,23 +594,48 @@ $paper-muted: #55585d;
 }
 .persona-note {
   display: grid;
-  grid-template-columns: 110px 1fr 24px;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  border-bottom: 1px solid rgba(242, 240, 232, 0.2);
+  background: transparent;
+  transition: background 0.2s ease;
+}
+.persona-note:hover,
+.persona-note:focus-within {
+  background: rgba(49, 91, 216, 0.14);
+}
+.persona-note-open {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr) 24px;
+  align-items: start;
   gap: 22px;
   width: 100%;
   padding: 28px 20px;
   border: 0;
-  border-bottom: 1px solid rgba(242, 240, 232, 0.2);
   background: transparent;
   color: $ink;
   text-align: left;
   font: inherit;
   cursor: pointer;
-  transition: background 0.2s ease;
 }
-.persona-note:hover,
-.persona-note:focus-visible {
-  background: rgba(49, 91, 216, 0.14);
-  outline: none;
+.persona-note-open:focus-visible,
+.persona-note-permalink:focus-visible {
+  outline: 2px solid $yellow;
+  outline-offset: -3px;
+}
+.persona-note-permalink {
+  display: grid;
+  place-items: center;
+  align-self: stretch;
+  margin: 12px 0;
+  border-left: 1px solid rgba(242, 240, 232, 0.16);
+  color: $muted;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease;
+}
+.persona-note-permalink:hover {
+  color: $yellow;
+  background: rgba(242, 194, 48, 0.08);
 }
 .persona-note-date {
   display: flex;
@@ -650,7 +675,8 @@ $paper-muted: #55585d;
 .persona-note-arrow {
   transition: transform 0.2s ease;
 }
-.persona-note:hover .persona-note-arrow {
+.persona-note-open:hover .persona-note-arrow,
+.persona-note-open:focus-visible .persona-note-arrow {
   transform: translate(4px, -4px);
 }
 .persona-writing-empty {
@@ -1980,9 +2006,13 @@ $paper-muted: #55585d;
   }
 
   .persona-note {
-    grid-template-columns: 1fr 22px;
+    grid-template-columns: minmax(0, 1fr) 34px;
+  }
+
+  .persona-note-open {
+    grid-template-columns: minmax(0, 1fr) 22px;
     gap: 8px;
-    padding: 22px 2px;
+    padding: 22px 8px 22px 2px;
   }
 
   .persona-note-date {
@@ -3044,5 +3074,66 @@ $paper-muted: #55585d;
 
   .persona-media-copy p {
     font-size: 9px;
+  }
+}
+
+/* Mobile Persona navigation mirrors the main site: brand + hamburger only. */
+@media (max-width: 700px) {
+  .persona-navbar {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    min-height: 48px;
+    padding: 0 6px 0 10px;
+    border-color: rgba(242, 240, 232, 0.2);
+    box-shadow: none;
+  }
+
+  .persona-navbar-index,
+  .persona-navbar-home-label,
+  .persona-navbar-home > svg,
+  .persona-navbar .command-palette-trigger,
+  .persona-navbar-toggle b {
+    display: none !important;
+  }
+
+  .persona-navbar-home {
+    margin-right: auto;
+    padding: 0 4px;
+  }
+
+  .persona-navbar-toggle,
+  .persona-navbar-toggle:hover,
+  .persona-navbar-toggle:focus-visible {
+    display: flex;
+    flex: 0 0 44px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $ink;
+    box-shadow: none;
+  }
+
+  .persona-navbar-toggle span {
+    width: 23px;
+    height: 2px;
+  }
+
+  .persona-menu {
+    padding: 66px 8px 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  .persona-note-permalink {
+    margin: 8px 0;
+    min-width: 34px;
   }
 }

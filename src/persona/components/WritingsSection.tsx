@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -60,10 +60,45 @@ const WritingsSection: React.FC = () => {
     };
   }, []);
 
+  const getPostHref = (slug: string) => {
+    const url = new URL('/persona', window.location.origin);
+    url.searchParams.set('post', slug);
+    url.hash = 'writings';
+    return `${url.pathname}${url.search}${url.hash}`;
+  };
+
+  const openPost = (post: BlogPost) => {
+    window.history.pushState({ personaPost: post.slug }, '', getPostHref(post.slug));
+    setSelectedPost(post);
+  };
+
+  const closePost = useCallback(() => {
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('post')) {
+      url.searchParams.delete('post');
+      url.hash = 'writings';
+      window.history.pushState({}, '', `${url.pathname}${url.search}${url.hash}`);
+    }
+    setSelectedPost(null);
+  }, []);
+
+  // Direct links such as /persona?post=some-slug open the article on arrival.
+  // Keep the reader synchronized with browser Back/Forward navigation as well.
+  useEffect(() => {
+    const syncPostFromUrl = () => {
+      const slug = new URLSearchParams(window.location.search).get('post');
+      setSelectedPost(slug ? posts.find((post) => post.slug === slug) || null : null);
+    };
+
+    syncPostFromUrl();
+    window.addEventListener('popstate', syncPostFromUrl);
+    return () => window.removeEventListener('popstate', syncPostFromUrl);
+  }, [posts]);
+
   useEffect(() => {
     if (!selectedPost) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setSelectedPost(null);
+      if (event.key === 'Escape') closePost();
     };
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -72,7 +107,7 @@ const WritingsSection: React.FC = () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [selectedPost]);
+  }, [selectedPost, closePost]);
 
   const categories = useMemo(
     () => Array.from(new Set(posts.map((post) => post.category).filter(Boolean))).sort(),
@@ -192,32 +227,42 @@ const WritingsSection: React.FC = () => {
             <div className="persona-writing-empty">NOTHING MATCHED. TRY ANOTHER SEARCH.</div>
           ) : (
             paginatedPosts.map((post) => (
-              <button
-                className="persona-note"
-                key={post.id}
-                type="button"
-                onClick={() => setSelectedPost(post)}
-              >
-                <div className="persona-note-date">
-                  <span>{formatDate(post.created_at)}</span>
-                  <i />
-                </div>
-                <div className="persona-note-body">
-                  <span className="persona-meta">
-                    {post.category || 'THOUGHT'} {post.featured ? ' / FEATURED' : ''}
-                  </span>
-                  <h3>{post.title}</h3>
-                  <p>
-                    {post.excerpt ||
-                      post.content.replace(/[#>*_`\u005B\u005D()]/g, ' ').slice(0, 180)}
-                  </p>
-                  <small>
-                    {post.reading_time || ''}
-                    {post.tags?.length ? `  /  ${post.tags.join(' · ')}` : ''}
-                  </small>
-                </div>
-                <Icon className="persona-note-arrow" icon="mdi:arrow-top-right" width={22} />
-              </button>
+              <article className="persona-note" key={post.id}>
+                <button
+                  className="persona-note-open"
+                  type="button"
+                  onClick={() => openPost(post)}
+                  aria-label={`Read ${post.title}`}
+                >
+                  <div className="persona-note-date">
+                    <span>{formatDate(post.created_at)}</span>
+                    <i />
+                  </div>
+                  <div className="persona-note-body">
+                    <span className="persona-meta">
+                      {post.category || 'THOUGHT'} {post.featured ? ' / FEATURED' : ''}
+                    </span>
+                    <h3>{post.title}</h3>
+                    <p>
+                      {post.excerpt ||
+                        post.content.replace(/[#>*_`\u005B\u005D()]/g, ' ').slice(0, 180)}
+                    </p>
+                    <small>
+                      {post.reading_time || ''}
+                      {post.tags?.length ? `  /  ${post.tags.join(' · ')}` : ''}
+                    </small>
+                  </div>
+                  <Icon className="persona-note-arrow" icon="mdi:arrow-top-right" width={22} />
+                </button>
+                <a
+                  className="persona-note-permalink"
+                  href={getPostHref(post.slug)}
+                  aria-label={`Direct link to ${post.title}`}
+                  title="Open direct link"
+                >
+                  <Icon icon="mdi:link-variant" width={17} aria-hidden="true" />
+                </a>
+              </article>
             ))
           )}
 
@@ -273,7 +318,7 @@ const WritingsSection: React.FC = () => {
             // clicking/dragging the overlay scrollbar must not close the reader.
             const target = event.currentTarget;
             const isScrollbar = event.clientX >= target.clientWidth;
-            if (event.target === target && !isScrollbar) setSelectedPost(null);
+            if (event.target === target && !isScrollbar) closePost();
           }}
         >
           <div
@@ -285,7 +330,7 @@ const WritingsSection: React.FC = () => {
             <button
               className="persona-reader-close"
               type="button"
-              onClick={() => setSelectedPost(null)}
+              onClick={closePost}
               aria-label="Close"
             >
               <Icon icon="mdi:close" width={24} />
@@ -315,7 +360,7 @@ const WritingsSection: React.FC = () => {
               </div>
             </header>
             <main className="persona-reader-main">
-              <button className="persona-reader-back" onClick={() => setSelectedPost(null)}>
+              <button className="persona-reader-back" onClick={closePost}>
                 <Icon icon="mdi:arrow-left" width={18} /> Back to Writings
               </button>
               {selectedPost.excerpt && (

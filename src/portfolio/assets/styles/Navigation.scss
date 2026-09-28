@@ -207,19 +207,21 @@ $nav-height: 76px;
 
     @media (max-width: 900px) {
       display: flex !important;
-      // Smaller and toned down to match the search trigger's weight —
-      // a solid 46px red block next to the decorative red/yellow corner
-      // shapes was turning the whole right side of the bar into a single
-      // loud red mass.
-      width: 38px;
-      height: 38px;
-      background: rgba(7, 21, 29, 0.82);
-      border-color: rgba(241, 231, 210, 0.34);
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border-color: transparent;
     }
 
+    &:hover,
     &.open {
-      background: $red;
-      border-color: $red;
+      background: transparent;
+      border-color: transparent;
+    }
+
+    &:focus-visible {
+      outline: 2px solid $yellow;
+      outline-offset: -2px;
     }
 
     .hamburger-line {
@@ -231,7 +233,7 @@ $nav-height: 76px;
         opacity 0.2s ease;
 
       @media (max-width: 900px) {
-        width: 16px;
+        width: 20px;
       }
     }
 
@@ -252,6 +254,8 @@ $nav-height: 76px;
   // the 64px mobile bar it just crowds the hamburger button with more
   // red/yellow. Purely decorative, so it's simplest to drop it here.
   @media (max-width: 900px) {
+    border-bottom-width: 1px;
+
     &::before,
     &::after {
       display: none;
@@ -681,5 +685,16 @@ $nav-height: 76px;
 @media (max-width: 900px) {
   .mobile-nav-actions {
     display: flex;
+  }
+}
+
+/* Mobile navigation stays focused: brand + hamburger only. */
+@media (max-width: 900px) {
+  .navbar .command-palette-trigger {
+    display: none !important;
+  }
+
+  .navbar .mobile-nav-actions {
+    margin-left: auto;
   }
 }

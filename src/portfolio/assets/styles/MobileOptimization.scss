@@ -302,3 +302,52 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Mobile navigation: keep the header to the brand and a clear hamburger.
+   These rules live in the mobile override sheet so they win over older
+   navbar/button styling elsewhere in the stylesheet stack. */
+@media (max-width: 900px) {
+  .navbar .nav-items-desktop,
+  .navbar .command-palette-trigger {
+    display: none !important;
+  }
+
+  .navbar .navbar-toolbar {
+    justify-content: space-between !important;
+  }
+
+  .navbar .mobile-nav-actions {
+    display: flex !important;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  .navbar .mobile-menu-button,
+  .navbar .mobile-menu-button:hover,
+  .navbar .mobile-menu-button:focus-visible {
+    display: flex !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: #f1e7d2 !important;
+    box-shadow: none !important;
+    gap: 5px !important;
+  }
+
+  .navbar .mobile-menu-button .hamburger-line {
+    display: block;
+    width: 23px !important;
+    height: 2px;
+    background: currentColor;
+  }
+
+  .navbar .mobile-menu-button.open,
+  .navbar .mobile-menu-button.open:hover {
+    background: transparent !important;
+    color: #f1e7d2 !important;
+  }
+}

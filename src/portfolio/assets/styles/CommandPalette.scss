@@ -279,6 +279,14 @@
   }
 }
 
+// On compact screens, keep the navbar focused on the brand and menu button.
+// The command palette remains available through its keyboard shortcut.
+@media (max-width: 900px) {
+  .command-palette-trigger {
+    display: none !important;
+  }
+}
+
 @media (max-width: 700px) {
   .command-palette-trigger {
     min-width: 40px;
