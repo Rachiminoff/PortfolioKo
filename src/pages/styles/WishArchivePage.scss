@@ -21,8 +21,8 @@
   --wish-red: #e53935;
   --wish-blue: #2457d6;
   --wish-yellow: #f4c430;
-  --wish-paper: #f2efe5;
-  --wish-black: #111318;
+  --wish-paper: #17191e;
+  --wish-black: #f4f0e6;
   --paper: var(--wish-bg);
   --ink: var(--wish-ink);
   --muted: var(--wish-muted);
@@ -191,11 +191,11 @@
 .wish-v4-tab {
   --v4-paper: var(--wish-paper);
   --v4-ink: var(--wish-black);
-  --v4-muted: #5d6066;
+  --v4-muted: #a8abb2;
   --v4-red: var(--wish-red);
   --v4-blue: var(--wish-blue);
   --v4-yellow: var(--wish-yellow);
-  --v4-line: rgba(17, 19, 24, 0.18);
+  --v4-line: rgba(244, 240, 230, 0.16);
   position: relative;
   padding: clamp(30px, 5vw, 72px) 0 10px;
   color: var(--v4-ink);
@@ -658,7 +658,7 @@
 }
 .wish-v4-element-wide-track {
   height: 8px;
-  background: #d8d4c8;
+  background: #262930;
 }
 .wish-v4-element-wide-track i {
   display: block;
@@ -706,7 +706,7 @@
   height: 205px;
   display: flex;
   align-items: flex-end;
-  background: #e2ded3;
+  background: #202329;
 }
 .wish-v4-year-bar > div i {
   display: block;
@@ -791,7 +791,7 @@
   border-right: 0;
 }
 .wish-v4-year-tabs button:hover {
-  background: #fff;
+  background: #1d2026;
 }
 .wish-v4-year-tabs button.active {
   background: var(--v4-red);
@@ -913,7 +913,7 @@
   padding: 0;
   border: 1px solid transparent;
   border-radius: 0;
-  background: #d8d4c8;
+  background: #262930;
   cursor: pointer;
   transition:
     transform 0.12s ease,
@@ -921,7 +921,7 @@
     filter 0.12s ease;
 }
 .wish-v4-cell.level-0 {
-  background: #d8d4c8;
+  background: #262930;
 }
 .wish-v4-cell.level-1 {
   background: #9fb5e8;
@@ -1109,7 +1109,7 @@
   background: var(--v4-ink);
 }
 .wish-v4-fact-card.featured .wish-v4-fact-rule {
-  background: #fff;
+  background: #1d2026;
 }
 .wish-v4-fact-card small {
   font:
@@ -1147,7 +1147,7 @@
 .wish-v4-achievement-score > div {
   height: 8px;
   margin-top: 15px;
-  background: #d8d4c8;
+  background: #262930;
   border: 1px solid var(--v4-ink);
 }
 .wish-v4-achievement-score i {

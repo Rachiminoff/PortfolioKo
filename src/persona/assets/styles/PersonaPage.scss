@@ -1249,12 +1249,6 @@ $paper-muted: #55585d;
 .persona-now-playing strong {
   max-width: 230px;
 }
-
-/* ================================================================
-   WRITING READER — BAUHAUS × SWISS
-   One reader system only. The previous duplicate reader rules are
-   intentionally removed so the modal has a single source of truth.
-   ================================================================ */
 .persona-writing-reader-backdrop {
   position: fixed;
   inset: 0;
@@ -1985,5 +1979,1055 @@ $paper-muted: #55585d;
   .persona-writing-reader *::after {
     transition: none !important;
     animation: none !important;
+  }
+}
+
+/* Small hooks used by the redesigned writing markdown renderer. */
+.persona-writing-content.persona-reader-body .persona-md-h1,
+.persona-writing-content.persona-reader-body .persona-md-h2,
+.persona-writing-content.persona-reader-body .persona-md-h3,
+.persona-writing-content.persona-reader-body .persona-md-h4,
+.persona-writing-content.persona-reader-body .persona-md-h5,
+.persona-writing-content.persona-reader-body .persona-md-h6 {
+  scroll-margin-top: 90px;
+}
+.persona-writing-content.persona-reader-body .persona-md-h5,
+.persona-writing-content.persona-reader-body .persona-md-h6 {
+  margin: 1.6rem 0 0.6rem;
+  color: #f4f1e8;
+  line-height: 1.05;
+}
+.persona-modal-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 18px;
+  color: $yellow;
+  font:
+    800 8px/1 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.persona-modal-source:hover {
+  color: $ink;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Quotes / notebook section */
+.persona-quotes {
+  padding-bottom: 82px;
+}
+
+.persona-quote-paper {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(242, 240, 232, 0.3);
+  background:
+    linear-gradient(90deg, transparent 0 58px, rgba(225, 67, 58, 0.28) 58px 59px, transparent 59px),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(49, 91, 216, 0.11) 0,
+      rgba(49, 91, 216, 0.11) 1px,
+      transparent 1px,
+      transparent 39px
+    ),
+    #f2f0e8;
+  color: #17191d;
+  box-shadow: 12px 12px 0 $red;
+  transform: rotate(-0.25deg);
+}
+
+.persona-quote-paper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.55), transparent 22%),
+    radial-gradient(circle at 82% 74%, rgba(0, 0, 0, 0.035), transparent 28%);
+  mix-blend-mode: multiply;
+}
+
+.persona-quote-paper-top,
+.persona-quote-paper-foot {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 22px 16px 78px;
+  font:
+    700 8px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5b5d60;
+}
+
+.persona-quote-paper-top {
+  border-bottom: 1px solid rgba(23, 25, 29, 0.18);
+}
+
+.persona-quote-list {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: 12px 28px 18px 78px;
+}
+
+.persona-quote-card {
+  position: relative;
+  min-height: 245px;
+  padding: 32px 34px 28px;
+  border-bottom: 1px solid rgba(23, 25, 29, 0.15);
+  border-right: 1px solid rgba(23, 25, 29, 0.15);
+  font-family: 'Anthropic Serif', 'Tiempos Text', Georgia, serif;
+}
+
+.persona-quote-card:nth-child(2n) {
+  border-right: 0;
+}
+
+.persona-quote-card:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.persona-quote-mark {
+  display: block;
+  margin-bottom: 3px;
+  color: $red;
+  font:
+    400 5rem/0.55 Georgia,
+    serif;
+}
+
+.persona-quote-card blockquote {
+  max-width: 620px;
+  margin: 0;
+  color: #17191d;
+  opacity: 1;
+  font-family: 'Anthropic Serif', 'Tiempos Text', Georgia, serif;
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  line-height: 1.17;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+  font-style: normal;
+  text-shadow: none;
+}
+
+.persona-quote-card blockquote::before,
+.persona-quote-card blockquote::after {
+  color: #17191d;
+}
+
+.persona-quote-card footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 25px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  line-height: 1.45;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.persona-quote-card footer strong {
+  color: #17191d;
+  font-weight: 700;
+}
+
+.persona-quote-card footer span {
+  color: #55585d;
+}
+
+.persona-quote-note {
+  max-width: 560px;
+  margin: 16px 0 0;
+  color: #65676b;
+  font-family: 'Anthropic Sans', 'Styrene B', Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.persona-quote-empty {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  min-height: 220px;
+  padding: 54px 34px 54px 78px;
+  color: #292b30;
+  font-family: 'Anthropic Serif', 'Tiempos Text', Georgia, serif;
+}
+
+.persona-quote-empty strong {
+  display: block;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 400;
+}
+
+.persona-quote-empty p {
+  margin: 9px 0 0;
+  color: #696b70;
+  font:
+    500 10px/1.6 'IBM Plex Mono',
+    monospace;
+}
+
+.persona-quote-empty code {
+  padding: 2px 4px;
+  background: rgba(23, 25, 29, 0.08);
+  font: inherit;
+}
+
+.persona-quote-paper-foot {
+  border-top: 1px solid rgba(23, 25, 29, 0.18);
+}
+
+@media (max-width: 850px) {
+  .persona-quote-list {
+    grid-template-columns: 1fr;
+    padding-right: 20px;
+  }
+
+  .persona-quote-card,
+  .persona-quote-card:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .persona-quote-card:nth-last-child(-n + 2) {
+    border-bottom: 1px solid rgba(23, 25, 29, 0.15);
+  }
+
+  .persona-quote-card:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .persona-quotes {
+    padding-bottom: 58px;
+  }
+
+  .persona-quote-paper {
+    box-shadow: 7px 7px 0 $red;
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0 36px,
+        rgba(225, 67, 58, 0.28) 36px 37px,
+        transparent 37px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(49, 91, 216, 0.11) 0,
+        rgba(49, 91, 216, 0.11) 1px,
+        transparent 1px,
+        transparent 34px
+      ),
+      #f2f0e8;
+  }
+
+  .persona-quote-paper-top,
+  .persona-quote-paper-foot {
+    padding-left: 51px;
+    padding-right: 14px;
+    font-size: 7px;
+  }
+
+  .persona-quote-list {
+    padding: 8px 12px 10px 51px;
+  }
+
+  .persona-quote-card {
+    min-height: 0;
+    padding: 28px 14px 25px;
+  }
+
+  .persona-quote-mark {
+    font-size: 4rem;
+  }
+
+  .persona-quote-card blockquote {
+    font-size: clamp(1.35rem, 7vw, 1.8rem);
+    line-height: 1.2;
+  }
+
+  .persona-quote-empty {
+    min-height: 180px;
+    padding: 42px 16px 42px 51px;
+  }
+}
+
+/* Common tools / archive shortcuts */
+.persona-tools {
+  padding-bottom: 82px;
+}
+.persona-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  background: $ink;
+  border: 1px solid $ink;
+}
+.persona-tool-card {
+  position: relative;
+  min-height: 174px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px;
+  border: 0;
+  background: $panel;
+  color: $ink;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+.persona-tool-card:hover,
+.persona-tool-card:focus-visible {
+  z-index: 2;
+  background: $yellow;
+  color: #111318;
+  transform: translateY(-3px);
+  outline: none;
+  box-shadow: 6px 6px 0 $ink;
+}
+.persona-tool-icon {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  background: rgba(255, 255, 255, 0.035);
+}
+.persona-tool-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-right: 28px;
+}
+.persona-tool-copy strong {
+  font-size: 1.25rem;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+.persona-tool-copy small {
+  max-width: 270px;
+  color: $muted;
+  font-size: 10px;
+  line-height: 1.45;
+}
+.persona-tool-card:hover .persona-tool-copy small,
+.persona-tool-card:focus-visible .persona-tool-copy small {
+  color: rgba(17, 19, 24, 0.68);
+}
+.persona-tool-arrow {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  transition: transform 0.2s ease;
+}
+.persona-tool-card:hover .persona-tool-arrow,
+.persona-tool-card:focus-visible .persona-tool-arrow {
+  transform: translate(4px, -4px);
+}
+
+@media (max-width: 850px) {
+  .persona-tools-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .persona-tools {
+    padding-bottom: 56px;
+  }
+  .persona-tools-grid {
+    grid-template-columns: 1fr;
+  }
+  .persona-tool-card {
+    min-height: 145px;
+    padding: 16px;
+  }
+  .persona-tool-icon {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Quote pagination / one-page notebook interaction */
+.persona-quote-stage {
+  position: relative;
+  z-index: 1;
+  min-height: clamp(330px, 38vw, 470px);
+  display: flex;
+  align-items: center;
+  padding: 28px 8% 24px 78px;
+  overflow: hidden;
+}
+
+.persona-quote-card {
+  width: 100%;
+  min-height: 0;
+  padding: 0 0 8px;
+  border: 0 !important;
+  animation-duration: 0.48s;
+  animation-timing-function: cubic-bezier(0.22, 0.75, 0.2, 1);
+  animation-fill-mode: both;
+}
+
+.persona-quote-card--next {
+  animation-name: personaQuoteNext;
+}
+
+.persona-quote-card--prev {
+  animation-name: personaQuotePrev;
+}
+
+.persona-quote-card blockquote {
+  max-width: 900px;
+  color: #17191d;
+  opacity: 1;
+  font-size: clamp(1.7rem, 4vw, 3.5rem);
+  line-height: 1.12;
+  font-style: normal;
+}
+
+.persona-quote-card footer {
+  color: #17191d;
+}
+
+.persona-quote-card footer strong {
+  color: #17191d;
+}
+
+.persona-quote-card footer span {
+  color: #55585d;
+}
+
+.persona-quote-pagination {
+  position: relative;
+  z-index: 1;
+  min-height: 62px;
+  display: grid;
+  grid-template-columns: 100px 1fr 100px;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 22px 10px 78px;
+  border-top: 1px solid rgba(23, 25, 29, 0.18);
+}
+
+.persona-quote-page-button {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid rgba(23, 25, 29, 0.35);
+  background: rgba(255, 255, 255, 0.18);
+  color: #17191d;
+  font:
+    800 8px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.persona-quote-page-button:last-child {
+  justify-self: end;
+}
+
+.persona-quote-page-button:hover:not(:disabled) {
+  background: #f1c72e;
+  transform: translateY(-2px);
+}
+
+.persona-quote-page-button:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.persona-quote-page-dots {
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.persona-quote-page-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 1px solid #17191d;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+
+.persona-quote-page-dot:hover {
+  transform: scale(1.3);
+}
+
+.persona-quote-page-dot.active {
+  width: 24px;
+  background: #e1433a;
+}
+
+@keyframes personaQuoteNext {
+  from {
+    opacity: 0;
+    transform: translateX(28px) rotate(0.2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes personaQuotePrev {
+  from {
+    opacity: 0;
+    transform: translateX(-28px) rotate(-0.2deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@media (max-width: 520px) {
+  .persona-quote-stage {
+    min-height: 390px;
+    padding: 28px 18px 24px 51px;
+  }
+
+  .persona-quote-card blockquote {
+    font-size: clamp(1.5rem, 7vw, 2.25rem);
+  }
+
+  .persona-quote-pagination {
+    grid-template-columns: 1fr 1fr;
+    padding: 9px 12px 9px 51px;
+  }
+
+  .persona-quote-page-dots {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    justify-content: flex-start;
+    padding-left: 1px;
+  }
+
+  .persona-quote-page-button {
+    grid-row: 2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .persona-quote-card,
+  .persona-quote-page-button,
+  .persona-quote-page-dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Persona navigation: intentionally separate from the site's main desktop nav. */
+.persona-navbar {
+  position: fixed;
+  top: 16px;
+  left: clamp(16px, 3vw, 44px);
+  right: clamp(16px, 3vw, 44px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 54px;
+  padding: 0 8px 0 14px;
+  border: 1px solid rgba(242, 240, 232, 0.28);
+  background: rgba(11, 13, 16, 0.92);
+  box-shadow: 7px 7px 0 rgba(49, 91, 216, 0.8);
+  backdrop-filter: blur(12px);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+.persona-navbar-home,
+.persona-navbar-toggle,
+.persona-menu-link {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+.persona-navbar-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 38px;
+  padding: 0 10px;
+  background: transparent;
+  color: $ink;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.persona-navbar-home-mark {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  background: $red;
+  color: $ink;
+  font-size: 8px;
+}
+.persona-navbar-home svg {
+  font-size: 15px;
+  transition: transform 0.2s ease;
+}
+.persona-navbar-home:hover svg {
+  transform: translateX(-3px);
+}
+.persona-navbar-index {
+  margin-left: auto;
+  margin-right: 18px;
+  color: $muted;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+.persona-navbar-toggle {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  width: 74px;
+  min-height: 44px;
+  padding: 8px 11px;
+  border: 1px solid rgba(242, 240, 232, 0.38);
+  background: $red;
+  color: $ink;
+}
+.persona-navbar-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform-origin: center;
+  transition:
+    transform 0.22s ease,
+    opacity 0.18s ease;
+}
+.persona-navbar-toggle b {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 6px;
+  letter-spacing: 0.1em;
+}
+.persona-navbar.is-open .persona-navbar-toggle span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.persona-navbar.is-open .persona-navbar-toggle span:nth-child(2) {
+  opacity: 0;
+}
+.persona-navbar.is-open .persona-navbar-toggle span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.persona-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 49;
+  display: grid;
+  place-items: start end;
+  padding: 86px clamp(16px, 3vw, 44px) 30px;
+  background: rgba(5, 6, 8, 0.7);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    visibility 0s linear 0.24s;
+}
+.persona-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.persona-menu-inner {
+  width: min(440px, 100%);
+  max-height: calc(100vh - 116px);
+  overflow: auto;
+  padding: 22px;
+  border: 1px solid rgba(242, 240, 232, 0.3);
+  background: $panel;
+  box-shadow: 12px 12px 0 $yellow;
+  transform: translateY(-14px);
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.persona-menu.is-open .persona-menu-inner {
+  transform: translateY(0);
+}
+.persona-menu-kicker,
+.persona-menu-footer {
+  color: $muted;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.persona-menu-kicker {
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(242, 240, 232, 0.2);
+}
+.persona-menu-links {
+  display: grid;
+}
+.persona-menu-link {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 4px;
+  border-bottom: 1px solid rgba(242, 240, 232, 0.15);
+  background: transparent;
+  color: $ink;
+  text-align: left;
+  font-family: 'Archivo', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  transition:
+    padding 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
+}
+.persona-menu-link:hover {
+  padding-left: 11px;
+  color: #111318;
+  background: $cyan;
+}
+.persona-menu-link svg {
+  font-size: 20px;
+}
+.persona-menu-number {
+  color: $red;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+}
+.persona-menu-link:hover .persona-menu-number {
+  color: #111318;
+}
+.persona-menu-home-link {
+  color: $yellow;
+}
+.persona-menu-footer {
+  padding-top: 16px;
+}
+
+@media (max-width: 700px) {
+  .persona-navbar {
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    min-height: 50px;
+    box-shadow: 5px 5px 0 rgba(49, 91, 216, 0.8);
+  }
+  .persona-navbar-index {
+    display: none;
+  }
+  .persona-navbar-home-label {
+    display: none;
+  }
+  .persona-navbar-home {
+    padding: 0 6px;
+  }
+  .persona-navbar-toggle {
+    width: 68px;
+    min-height: 40px;
+  }
+  .persona-menu {
+    padding: 74px 10px 20px;
+  }
+  .persona-menu-inner {
+    width: 100%;
+    padding: 17px;
+    box-shadow: 7px 7px 0 $yellow;
+  }
+  .persona-menu-link {
+    padding: 14px 2px;
+    font-size: 1.18rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .persona-navbar,
+  .persona-navbar-home svg,
+  .persona-navbar-toggle span,
+  .persona-menu,
+  .persona-menu-inner,
+  .persona-menu-link {
+    transition: none;
+  }
+}
+
+/* Command palette inside the Persona index bar */
+.persona-navbar .command-palette-trigger {
+  margin-left: auto;
+  margin-right: 8px;
+  min-height: 40px;
+  border-color: rgba(242, 240, 232, 0.28);
+  background: transparent;
+  color: $ink;
+}
+
+.persona-navbar .command-palette-trigger:hover,
+.persona-navbar .command-palette-trigger:focus-visible {
+  background: $cyan;
+  border-color: $cyan;
+  color: #111318;
+}
+
+@media (max-width: 700px) {
+  .persona-navbar .command-palette-trigger {
+    margin-right: 4px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+/* Final mobile layout pass: keep media cards readable on narrow screens. */
+@media (max-width: 520px) {
+  .persona-page {
+    overflow-x: clip;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .persona-hero,
+  .persona-content {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .persona-media-sections {
+    display: block;
+    border-width: 1px;
+  }
+
+  .persona-media-group {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+  }
+
+  .persona-media-list {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    min-height: 0;
+  }
+
+  .persona-media-card {
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 13px;
+    min-height: 118px;
+    padding: 11px;
+  }
+
+  .persona-media-image-wrap {
+    width: 82px;
+    min-width: 82px;
+    height: 108px;
+  }
+
+  .persona-media-copy {
+    padding-right: 22px;
+  }
+
+  .persona-media-copy h3 {
+    margin-top: 4px;
+    font-size: clamp(1.05rem, 5vw, 1.35rem);
+    line-height: 0.95;
+    overflow-wrap: break-word;
+  }
+
+  .persona-media-copy p {
+    font-size: 10px;
+    line-height: 1.45;
+  }
+
+  .persona-meta {
+    font-size: 7px;
+  }
+
+  .persona-card-number {
+    display: block;
+    right: 10px;
+    top: 9px;
+  }
+
+  .persona-media-pagination {
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .persona-media-pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .persona-media-page-numbers {
+    flex-shrink: 0;
+  }
+
+  .persona-media-page-status {
+    flex-shrink: 0;
+  }
+
+  .persona-media-page-control,
+  .persona-media-page-numbers button {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .persona-group-title {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .persona-group-title i {
+    min-width: 40px;
+  }
+
+  .persona-now-grid,
+  .persona-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .persona-now-card {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .persona-page {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .persona-media-group {
+    padding: 13px;
+  }
+
+  .persona-media-card {
+    grid-template-columns: 68px minmax(0, 1fr);
+    gap: 10px;
+    padding: 9px;
+  }
+
+  .persona-media-image-wrap {
+    width: 68px;
+    min-width: 68px;
+    height: 92px;
+  }
+
+  .persona-media-copy h3 {
+    font-size: 1rem;
+  }
+
+  .persona-media-copy p {
+    font-size: 9px;
+  }
+}
+
+/* Mobile Persona navigation mirrors the main site: brand + hamburger only. */
+@media (max-width: 700px) {
+  .persona-navbar {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    min-height: 48px;
+    padding: 0 6px 0 10px;
+    border-color: rgba(242, 240, 232, 0.2);
+    box-shadow: none;
+  }
+
+  .persona-navbar-index,
+  .persona-navbar-home-label,
+  .persona-navbar-home > svg,
+  .persona-navbar .command-palette-trigger,
+  .persona-navbar-toggle b {
+    display: none !important;
+  }
+
+  .persona-navbar-home {
+    margin-right: auto;
+    padding: 0 4px;
+  }
+
+  .persona-navbar-toggle,
+  .persona-navbar-toggle:hover,
+  .persona-navbar-toggle:focus-visible {
+    display: flex;
+    flex: 0 0 44px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+    width: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: $ink;
+    box-shadow: none;
+  }
+
+  .persona-navbar-toggle span {
+    width: 23px;
+    height: 2px;
+  }
+
+  .persona-menu {
+    padding: 66px 8px 16px;
+  }
+}
+
+@media (max-width: 700px) {
+  .persona-note-permalink {
+    margin: 8px 0;
+    min-width: 34px;
   }
 }
