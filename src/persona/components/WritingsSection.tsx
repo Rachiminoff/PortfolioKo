@@ -125,12 +125,14 @@ const WritingsSection: React.FC = () => {
   }, [selectedPost, closePost]);
 
   useEffect(() => {
-    if (!selectedPost || !articleRef.current || !readerRef.current) return;
+    const article = articleRef.current;
+    const root = readerRef.current;
+    if (!selectedPost || !article || !root) return;
+
+    let observer: IntersectionObserver | null = null;
 
     const frame = window.requestAnimationFrame(() => {
-      const headings = Array.from(
-        articleRef.current.querySelectorAll<HTMLElement>('h2[id], h3[id], h4[id]'),
-      );
+      const headings = Array.from(article.querySelectorAll<HTMLElement>('h2[id], h3[id], h4[id]'));
       const items = headings.map((heading) => ({
         id: heading.id,
         label: heading.textContent?.trim() || 'Section',
@@ -140,10 +142,9 @@ const WritingsSection: React.FC = () => {
       setTocItems(items);
       setActiveTocId(items[0]?.id || '');
 
-      const root = readerRef.current;
-      if (!root || headings.length === 0) return;
+      if (headings.length === 0) return;
 
-      const observer = new IntersectionObserver(
+      observer = new IntersectionObserver(
         (entries) => {
           const visible = entries
             .filter((entry) => entry.isIntersecting)
@@ -159,11 +160,13 @@ const WritingsSection: React.FC = () => {
         },
       );
 
-      headings.forEach((heading) => observer.observe(heading));
-      return () => observer.disconnect();
+      headings.forEach((heading) => observer?.observe(heading));
     });
 
-    return () => window.cancelAnimationFrame(frame);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      observer?.disconnect();
+    };
   }, [selectedPost]);
 
   useEffect(() => {
