@@ -5,7 +5,6 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeRaw from 'rehype-raw';
 import { Icon } from '@iconify/react';
-import PersonaSectionHeader from './PersonaSectionHeader';
 import { supabase } from '../../lib/supabase';
 
 interface BlogPost {
@@ -117,6 +116,12 @@ const WritingsSection: React.FC = () => {
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', onKeyDown);
     setReaderProgress(0);
+    // Always start a newly opened article at the top. Mobile browsers can
+    // otherwise retain the previous reader scroll position when the dialog
+    // content is replaced.
+    requestAnimationFrame(() => {
+      if (readerRef.current) readerRef.current.scrollTop = 0;
+    });
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKeyDown);
@@ -129,43 +134,89 @@ const WritingsSection: React.FC = () => {
     const root = readerRef.current;
     if (!selectedPost || !article || !root) return;
 
-    let observer: IntersectionObserver | null = null;
+    let frame = 0;
+    let cleanupResize: (() => void) | undefined;
 
-    const frame = window.requestAnimationFrame(() => {
-      const headings = Array.from(article.querySelectorAll<HTMLElement>('h2[id], h3[id], h4[id]'));
-      const items = headings.map((heading) => ({
-        id: heading.id,
-        label: heading.textContent?.trim() || 'Section',
-        level: heading.tagName === 'H4' ? 4 : heading.tagName === 'H3' ? 3 : 2,
-      }));
+    const getHeadings = () =>
+      Array.from(article.querySelectorAll<HTMLElement>('h2[id], h3[id], h4[id]'));
 
-      setTocItems(items);
-      setActiveTocId(items[0]?.id || '');
+    const updateActive = () => {
+      const headings = getHeadings();
+      if (!headings.length) {
+        setActiveTocId('');
+        return;
+      }
 
-      if (headings.length === 0) return;
+      const rootRect = root.getBoundingClientRect();
+      const activationOffset = Math.min(180, Math.max(96, root.clientHeight * 0.22));
+      const activationY = rootRect.top + activationOffset;
+      let active = headings[0].id;
 
-      observer = new IntersectionObserver(
-        (entries) => {
-          const visible = entries
-            .filter((entry) => entry.isIntersecting)
-            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-          if (visible[0]?.target instanceof HTMLElement) {
-            setActiveTocId(visible[0].target.id);
-          }
-        },
-        {
-          root,
-          rootMargin: '-12% 0px -70% 0px',
-          threshold: [0, 1],
-        },
+      // The active item is the last heading that has crossed the reading line.
+      // Do not special-case the bottom of the container: that was causing the
+      // final heading to become active during the initial render.
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top <= activationY) {
+          active = heading.id;
+        } else {
+          break;
+        }
+      }
+
+      // If the reader is genuinely at the bottom, the last visible section is
+      // the current section. This is deliberately checked only after layout is
+      // established and only within a small bottom threshold.
+      const maxScrollTop = Math.max(0, root.scrollHeight - root.clientHeight);
+      if (maxScrollTop > 0 && root.scrollTop >= maxScrollTop - 12) {
+        const lastHeading = headings[headings.length - 1];
+        const lastTop = lastHeading.getBoundingClientRect().top;
+        if (lastTop < rootRect.bottom) active = lastHeading.id;
+      }
+
+      setActiveTocId((current) => (current === active ? current : active));
+    };
+
+    const publishToc = () => {
+      const headings = getHeadings();
+      setTocItems(
+        headings.map((heading) => ({
+          id: heading.id,
+          label: heading.textContent?.trim() || 'Section',
+          level: heading.tagName === 'H4' ? 4 : heading.tagName === 'H3' ? 3 : 2,
+        })),
       );
+      updateActive();
+    };
 
-      headings.forEach((heading) => observer?.observe(heading));
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(updateActive);
+    };
+
+    root.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
+    // Markdown/images can change article height after the first paint. Re-run
+    // the TOC after those layout changes instead of freezing the initial state.
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(publishToc);
+    });
+    observer.observe(article);
+
+    const renderFrame = requestAnimationFrame(() => {
+      publishToc();
+      requestAnimationFrame(updateActive);
     });
 
+    cleanupResize = () => observer.disconnect();
+
     return () => {
-      window.cancelAnimationFrame(frame);
-      observer?.disconnect();
+      cancelAnimationFrame(renderFrame);
+      cancelAnimationFrame(frame);
+      root.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cleanupResize?.();
     };
   }, [selectedPost]);
 
@@ -222,10 +273,20 @@ const WritingsSection: React.FC = () => {
     });
   }, [posts, query, category, sort]);
 
-  const totalPages = Math.max(1, Math.ceil(visiblePosts.length / POSTS_PER_PAGE));
+  const featuredPost = useMemo(
+    () => visiblePosts.find((post) => post.featured) || visiblePosts[0] || null,
+    [visiblePosts],
+  );
+
+  const archivePosts = useMemo(
+    () => visiblePosts.filter((post) => post.id !== featuredPost?.id),
+    [visiblePosts, featuredPost],
+  );
+
+  const totalPages = Math.max(1, Math.ceil(archivePosts.length / POSTS_PER_PAGE));
   const paginatedPosts = useMemo(
-    () => visiblePosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE),
-    [visiblePosts, currentPage],
+    () => archivePosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE),
+    [archivePosts, currentPage],
   );
 
   useEffect(() => setCurrentPage(1), [query, category, sort]);
@@ -240,25 +301,40 @@ const WritingsSection: React.FC = () => {
 
   return (
     <section className="persona-notes" id="writings" aria-labelledby="persona-notes-title">
-      <PersonaSectionHeader
-        index="03 / SCRAPS"
-        title="WRITINGS"
-        note="THE SAME ARCHIVE AS INSIGHTS, JUST IN A MORE PERSONAL CORNER"
-        id="persona-notes-title"
-      />
+      <div className="persona-writing-intro">
+        <div className="persona-writing-intro-copy">
+          <span className="persona-writing-kicker">PERSONAL ARCHIVE / 03</span>
+          <h3>
+            My little corner
+            <br />
+            <em>of the internet.</em>
+          </h3>
+          <p>
+            A running collection of essays, observations, experiments, and things worth thinking
+            about twice.
+          </p>
+        </div>
+      </div>
 
-      <div className="persona-writing-tools">
+      <div className="persona-writing-toolbar">
         <label className="persona-writing-search">
-          <Icon icon="mdi:magnify" width={19} />
+          <span className="persona-writing-search-index">01</span>
+          <Icon icon="mdi:magnify" width={18} />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="SEARCH WRITINGS..."
+            placeholder="SEARCH THE ARCHIVE"
             aria-label="Search writings"
           />
+          {query && (
+            <button type="button" onClick={() => setQuery('')} aria-label="Clear search">
+              <Icon icon="mdi:close" width={16} />
+            </button>
+          )}
         </label>
 
-        <div className="persona-writing-filters">
+        <div className="persona-writing-filters" aria-label="Filter writings by category">
+          <span className="persona-writing-filter-label">FILTER</span>
           <button
             className={category === 'all' ? 'active' : ''}
             onClick={() => setCategory('all')}
@@ -293,100 +369,169 @@ const WritingsSection: React.FC = () => {
         </label>
       </div>
 
-      <div className="persona-notes-layout">
-        <div className="persona-notes-rail">
-          <span>{loading ? 'LOADING' : `${visiblePosts.length} ENTRIES`}</span>
-          <span>SEARCHABLE</span>
-          <span>UNCURATED</span>
-          <span>OCCASIONAL</span>
+      {loading ? (
+        <div className="persona-writing-state">
+          <span>01</span>
+          <strong>FETCHING THE NOTEBOOK...</strong>
+          <i />
         </div>
-
-        <div className="persona-note-list">
-          {loading ? (
-            <div className="persona-writing-empty">FETCHING THE NOTEBOOK...</div>
-          ) : visiblePosts.length === 0 ? (
-            <div className="persona-writing-empty">NOTHING MATCHED. TRY ANOTHER SEARCH.</div>
-          ) : (
-            paginatedPosts.map((post) => (
-              <article className="persona-note" key={post.id}>
-                <button
-                  className="persona-note-open"
-                  type="button"
-                  onClick={() => openPost(post)}
-                  aria-label={`Read ${post.title}`}
-                >
-                  <div className="persona-note-date">
-                    <span>{formatDate(post.created_at)}</span>
-                    <i />
+      ) : visiblePosts.length === 0 ? (
+        <div className="persona-writing-state persona-writing-state-empty">
+          <span>00</span>
+          <strong>NOTHING MATCHED.</strong>
+          <p>Try another search term or clear the current filter.</p>
+        </div>
+      ) : (
+        <>
+          {featuredPost && (
+            <article className="persona-writing-featured">
+              <button
+                className="persona-writing-featured-open"
+                type="button"
+                onClick={() => openPost(featuredPost)}
+                aria-label={`Read ${featuredPost.title}`}
+              >
+                <div className="persona-writing-featured-art">
+                  {(featuredPost.cover_image || featuredPost.thumbnail) && (
+                    <img src={featuredPost.cover_image || featuredPost.thumbnail} alt="" />
+                  )}
+                  <span className="persona-writing-featured-shape persona-writing-featured-shape-red" />
+                  <span className="persona-writing-featured-shape persona-writing-featured-shape-yellow" />
+                  <span className="persona-writing-featured-number">01</span>
+                </div>
+                <div className="persona-writing-featured-copy">
+                  <div className="persona-writing-featured-meta">
+                    <span>FEATURED / {featuredPost.category || 'THOUGHT'}</span>
+                    <span>{formatDate(featuredPost.created_at)}</span>
                   </div>
-                  <div className="persona-note-body">
-                    <span className="persona-meta">
-                      {post.category || 'THOUGHT'} {post.featured ? ' / FEATURED' : ''}
+                  <h3>{featuredPost.title}</h3>
+                  <p>
+                    {featuredPost.excerpt ||
+                      featuredPost.content.replace(/[#>*_`\u005B\]()]/g, ' ').slice(0, 240)}
+                  </p>
+                  <div className="persona-writing-featured-foot">
+                    <span>{featuredPost.reading_time || 'READ'}</span>
+                    <span>
+                      OPEN ESSAY <Icon icon="mdi:arrow-top-right" width={18} />
                     </span>
-                    <h3>{post.title}</h3>
-                    <p>
-                      {post.excerpt ||
-                        post.content.replace(/[#>*_`\u005B\]()]/g, ' ').slice(0, 180)}
-                    </p>
-                    <small>
-                      {post.reading_time || ''}
-                      {post.tags?.length ? `  /  ${post.tags.join(' · ')}` : ''}
-                    </small>
                   </div>
-                  <Icon className="persona-note-arrow" icon="mdi:arrow-top-right" width={22} />
-                </button>
-                <a
-                  className="persona-note-permalink"
-                  href={getPostHref(post.slug)}
-                  aria-label={`Direct link to ${post.title}`}
-                  title="Open direct link"
-                >
-                  <Icon icon="mdi:link-variant" width={17} aria-hidden="true" />
-                </a>
-              </article>
-            ))
+                </div>
+              </button>
+              <a
+                className="persona-writing-featured-link"
+                href={getPostHref(featuredPost.slug)}
+                aria-label={`Direct link to ${featuredPost.title}`}
+                title="Open direct link"
+              >
+                <Icon icon="mdi:link-variant" width={17} aria-hidden="true" />
+              </a>
+            </article>
           )}
 
-          {!loading && visiblePosts.length > 0 && totalPages > 1 && (
-            <nav className="persona-writing-pagination" aria-label="Writings pagination">
-              <button
-                type="button"
-                className="persona-writing-page-control"
-                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
-                disabled={currentPage === 1}
-                aria-label="Previous page"
-              >
-                <Icon icon="mdi:arrow-left" width={18} />
-              </button>
-              <div className="persona-writing-page-numbers">
-                {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-                  <button
-                    key={page}
-                    type="button"
-                    className={currentPage === page ? 'active' : ''}
-                    onClick={() => setCurrentPage(page)}
-                    aria-current={currentPage === page ? 'page' : undefined}
-                  >
-                    {String(page).padStart(2, '0')}
-                  </button>
+          {archivePosts.length > 0 && (
+            <div className="persona-writing-archive">
+              <div className="persona-writing-archive-head">
+                <div>
+                  <span>02 / ARCHIVE</span>
+                  <h4>Everything else</h4>
+                </div>
+                <p>
+                  {archivePosts.length} {archivePosts.length === 1 ? 'entry' : 'entries'}
+                </p>
+              </div>
+
+              <div className="persona-writing-archive-list">
+                {paginatedPosts.map((post, index) => (
+                  <article className="persona-writing-entry" key={post.id}>
+                    <div className="persona-writing-entry-index">
+                      <span>
+                        {String((currentPage - 1) * POSTS_PER_PAGE + index + 2).padStart(2, '0')}
+                      </span>
+                      <i />
+                    </div>
+                    <button
+                      className="persona-writing-entry-open"
+                      type="button"
+                      onClick={() => openPost(post)}
+                      aria-label={`Read ${post.title}`}
+                    >
+                      <div className="persona-writing-entry-meta">
+                        <span>{post.category || 'THOUGHT'}</span>
+                        <span>{formatDate(post.created_at)}</span>
+                      </div>
+                      <h5>{post.title}</h5>
+                      <p>
+                        {post.excerpt ||
+                          post.content.replace(/[#>*_`\u005B\]()]/g, ' ').slice(0, 170)}
+                      </p>
+                      <small>
+                        {post.reading_time || 'READ'}
+                        {post.tags?.length ? ` / ${post.tags.slice(0, 3).join(' · ')}` : ''}
+                      </small>
+                    </button>
+                    <div className="persona-writing-entry-action">
+                      <a
+                        href={getPostHref(post.slug)}
+                        aria-label={`Direct link to ${post.title}`}
+                        title="Open direct link"
+                      >
+                        <Icon icon="mdi:link-variant" width={16} />
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => openPost(post)}
+                        aria-label={`Open ${post.title}`}
+                      >
+                        <Icon icon="mdi:arrow-top-right" width={21} />
+                      </button>
+                    </div>
+                  </article>
                 ))}
               </div>
-              <button
-                type="button"
-                className="persona-writing-page-control"
-                onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
-                disabled={currentPage === totalPages}
-                aria-label="Next page"
-              >
-                <Icon icon="mdi:arrow-right" width={18} />
-              </button>
-              <span className="persona-writing-page-status">
-                PAGE {String(currentPage).padStart(2, '0')} / {String(totalPages).padStart(2, '0')}
-              </span>
-            </nav>
+
+              {totalPages > 1 && (
+                <nav className="persona-writing-pagination" aria-label="Writings pagination">
+                  <span className="persona-writing-page-status">
+                    PAGE {String(currentPage).padStart(2, '0')} /{' '}
+                    {String(totalPages).padStart(2, '0')}
+                  </span>
+                  <div className="persona-writing-page-numbers">
+                    {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                      <button
+                        key={page}
+                        type="button"
+                        className={currentPage === page ? 'active' : ''}
+                        onClick={() => setCurrentPage(page)}
+                        aria-current={currentPage === page ? 'page' : undefined}
+                      >
+                        {String(page).padStart(2, '0')}
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    className="persona-writing-page-control"
+                    onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                    disabled={currentPage === 1}
+                    aria-label="Previous page"
+                  >
+                    <Icon icon="mdi:arrow-left" width={18} />
+                  </button>
+                  <button
+                    type="button"
+                    className="persona-writing-page-control"
+                    onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                    disabled={currentPage === totalPages}
+                    aria-label="Next page"
+                  >
+                    <Icon icon="mdi:arrow-right" width={18} />
+                  </button>
+                </nav>
+              )}
+            </div>
           )}
-        </div>
-      </div>
+        </>
+      )}
 
       {selectedPost && (
         <div
@@ -414,7 +559,9 @@ const WritingsSection: React.FC = () => {
               <Icon icon="mdi:close" width={24} />
             </button>
 
-            <header className="persona-reader-hero">
+            <header
+              className={`persona-reader-hero ${selectedPost.cover_image || selectedPost.thumbnail ? 'has-image' : 'no-image'}`}
+            >
               {(selectedPost.cover_image || selectedPost.thumbnail) && (
                 <img src={selectedPost.cover_image || selectedPost.thumbnail} alt="" />
               )}
@@ -493,7 +640,9 @@ const WritingsSection: React.FC = () => {
                 </div>
               )}
 
-              <div className="persona-reader-layout">
+              <div
+                className={`persona-reader-layout ${tocItems.length > 0 ? 'has-toc' : 'no-toc'}`}
+              >
                 {tocItems.length > 0 && (
                   <aside className="persona-reader-toc" aria-label="Table of contents">
                     <div className="persona-reader-toc-label">ON THIS PAGE</div>
@@ -598,7 +747,6 @@ const WritingsSection: React.FC = () => {
                       ),
                       blockquote: ({ children, ...props }: any) => (
                         <blockquote className="persona-md-quote" {...props}>
-                          <span className="persona-md-quote-kicker">FIELD NOTE</span>
                           <span className="persona-md-quote-mark" aria-hidden="true">
                             “
                           </span>
