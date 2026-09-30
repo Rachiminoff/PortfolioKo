@@ -1,11 +1,21 @@
-/* MOBILE UX — recomposition, not desktop shrink. */
+/*
+ * Portfolio mobile art direction
+ * --------------------------------
+ * Mobile is intentionally quieter than desktop: fewer shapes, fewer borders,
+ * shorter cards, stronger type hierarchy, and more breathing room.
+ * Bauhaus × Swiss is kept through the grid, mono labels, hard rules, and
+ * restrained red/yellow/blue accents rather than decorative density.
+ */
+
 @media (max-width: 760px) {
   html {
     scroll-behavior: smooth;
   }
+
   body {
     overflow-x: hidden;
   }
+
   main,
   section,
   footer {
@@ -13,7 +23,7 @@
     overflow-x: clip;
   }
 
-  /* Remove desktop-sized viewport sections: mobile should flow naturally. */
+  /* ---------- Global rhythm ---------- */
   .hero-section,
   .about-section,
   .github-activity,
@@ -24,262 +34,609 @@
   .certificates {
     min-height: auto !important;
     height: auto !important;
-    scroll-margin-top: 58px;
+    scroll-margin-top: 64px;
   }
 
   .hero-section {
-    padding: 54px 14px 30px !important;
-  }
-  .hero-content {
-    gap: 28px !important;
-  }
-  .hero-title {
-    font-size: clamp(3rem, 15.5vw, 5.3rem) !important;
-    line-height: 0.86 !important;
-  }
-  .hero-right {
-    width: min(100%, 430px);
-    margin-inline: auto;
-  }
-  .profile-module {
-    padding: 8px !important;
-  }
-  .profile-image-container {
-    aspect-ratio: 1 / 1;
-  }
-  .hero-actions {
-    margin-top: 18px !important;
-  }
-  .hero-specs {
-    margin-top: 18px !important;
+    padding: 78px 18px 46px !important;
   }
 
-  /* About: compact terminal, then a readable story. */
-  .about-section {
-    padding: 44px 14px 48px !important;
+  /* Remove desktop background decoration on a narrow canvas. */
+  .main-grid,
+  .main-container::before,
+  .main-container::after {
+    display: none;
   }
-  .about-layout {
-    gap: 22px !important;
+
+  .main-registration {
+    top: 78px;
+    left: 18px;
+    right: 18px;
+    font-size: 7px;
+    letter-spacing: 0.11em;
+    color: rgba(247, 245, 239, 0.4);
   }
-  .terminal-content {
-    max-height: 250px !important;
-    overflow: auto;
-    font-size: 0.62rem;
+
+  /* ---------- Hero ---------- */
+  .hero-content {
+    display: flex !important;
+    flex-direction: column;
+    gap: 38px !important;
+    align-items: stretch !important;
   }
-  .about-copy {
+
+  .hero-left,
+  .hero-right {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hero-kicker {
+    gap: 9px;
+    margin-bottom: 22px;
+    font-size: 8px;
+  }
+
+  .hero-kicker .section-header__meta,
+  .hero-kicker .section-header__status {
+    display: none;
+  }
+
+  .hero-kicker .section-header__rule {
+    flex: 1;
+  }
+
+  .hero-title-wrap {
+    padding-left: 0;
+  }
+
+  .hero-side-note {
+    display: none;
+  }
+
+  .hero-title {
+    max-width: 100%;
+    font-size: clamp(3.35rem, 14vw, 5.2rem) !important;
+    line-height: 0.84 !important;
+    letter-spacing: -0.075em;
+  }
+
+  .title-offset {
+    margin-left: 8%;
+  }
+
+  .title-line:hover {
+    transform: none;
+    color: inherit;
+  }
+
+  .hero-intro {
+    margin: 24px 0 20px;
+    gap: 10px;
+  }
+
+  .intro-mark {
+    width: 4px;
+    min-height: 38px;
+  }
+
+  .subtitle-primary {
     font-size: 0.95rem;
+  }
+
+  .subtitle-secondary {
+    font-size: 0.72rem;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    margin-left: 0;
+  }
+
+  .action-link {
+    min-width: 0;
+    min-height: 43px;
+    padding: 10px 11px;
+    font-size: 8px;
+  }
+
+  .action-primary {
+    grid-column: 1 / -1;
+  }
+
+  .hero-specs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    margin-top: 22px;
+    border-top: 1px solid rgba(247, 245, 239, 0.2);
+    border-bottom: 1px solid rgba(247, 245, 239, 0.2);
+  }
+
+  .hero-specs > div {
+    min-width: 0;
+    padding: 11px 8px 10px 0;
+  }
+
+  .hero-specs > div + div {
+    padding-left: 8px;
+    border-left: 1px solid rgba(247, 245, 239, 0.14);
+  }
+
+  .hero-specs span,
+  .hero-specs strong {
+    display: block;
+  }
+
+  .hero-specs span {
+    margin-bottom: 4px;
+    font-size: 7px;
+  }
+
+  .hero-specs strong {
+    font-size: 8px;
+    line-height: 1.25;
+  }
+
+  /* Portrait becomes a simple editorial image block. */
+  .hero-right {
+    margin: 0;
+  }
+
+  .profile-module {
+    padding: 0 !important;
+    border: 1px solid rgba(247, 245, 239, 0.22);
+    box-shadow: 5px 5px 0 #e6392f;
+    background: #111;
+  }
+
+  .module-header,
+  .module-footer,
+  .hero-coordinate {
+    display: none;
+  }
+
+  .module-content {
+    padding: 0 !important;
+  }
+
+  .profile-frame {
+    min-height: 0 !important;
+    aspect-ratio: 4 / 3;
+    border: 0 !important;
+    overflow: hidden;
+  }
+
+  .frame-label,
+  .frame-corner,
+  .frame-crosshair,
+  .frame-slice,
+  .frame-dot {
+    display: none !important;
+  }
+
+  .profile-image-wrapper,
+  .profile-image-container {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .profile-image-container {
+    aspect-ratio: auto;
+  }
+
+  .profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 24%;
+    filter: none;
+  }
+
+  /* ---------- About ---------- */
+  .about-section {
+    padding: 50px 18px 54px !important;
+  }
+
+  .about-layout {
+    gap: 26px !important;
+  }
+
+  .terminal-content {
+    max-height: 190px !important;
+    overflow: auto;
+    font-size: 0.58rem;
     line-height: 1.55;
   }
-  .about-copy-topline {
-    margin-bottom: 12px;
+
+  .about-copy {
+    max-width: 34rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
   }
 
-  /* Contribution map: only the wide calendar scrolls, not the whole page. */
-  .github-activity {
-    padding: 44px 12px 48px !important;
+  .about-copy-topline {
+    margin-bottom: 10px;
   }
+
+  /* ---------- GitHub ---------- */
+  .github-activity {
+    padding: 50px 18px 54px !important;
+  }
+
+  .github-activity__panel {
+    box-shadow: 4px 4px 0 var(--gha-red);
+  }
+
   .github-activity__calendar-wrap {
     overflow-x: auto;
     max-width: 100%;
-    padding-bottom: 6px;
-  }
-  .github-activity__calendar {
-    min-width: 620px;
-  }
-  .github-activity__panel {
-    box-shadow: 5px 5px 0 var(--gha-red);
+    padding-bottom: 5px;
   }
 
-  /* Timeline: one-column cards with short gaps. */
+  .github-activity__calendar {
+    min-width: 600px;
+  }
+
+  /* ---------- Timeline ---------- */
   .timeline-section {
-    padding: 44px 0 48px !important;
+    padding: 50px 0 54px !important;
   }
+
   .timeline-container {
-    width: calc(100% - 24px);
+    width: calc(100% - 36px);
   }
+
   .timeline-wrapper {
-    padding-top: 1.25rem !important;
+    padding-top: 1rem !important;
   }
+
   .timeline-list {
-    gap: 0.9rem !important;
+    gap: 8px !important;
   }
+
   .milestone-card,
   .milestone-card:nth-child(even),
   .milestone-card:nth-child(odd) {
-    padding-left: 30px !important;
+    padding-left: 22px !important;
   }
+
   .milestone-card-inner,
   .milestone-card:nth-child(even) .milestone-card-inner,
   .milestone-card:nth-child(odd) .milestone-card-inner {
     grid-template-columns: 1fr !important;
-    gap: 7px !important;
-    padding: 12px !important;
+    gap: 5px !important;
+    padding: 13px !important;
   }
+
   .timeline-code-strip {
-    margin-top: 10px !important;
+    margin-top: 8px !important;
   }
 
-  /* Projects: full compact-row treatment lives in Project.scss's own
-     mobile breakpoint, so it stays in one place instead of split
-     across two files with competing !important rules. */
+  /* ---------- Projects ---------- */
   .projects-container {
-    padding: 44px 12px 48px !important;
-  }
-  .projects-pagination {
-    margin-top: 14px !important;
+    padding: 50px 18px 54px !important;
   }
 
-  /* Expertise: preserve the marquee, but reduce vertical framing. */
+  .projects-heading-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+    margin-top: 24px !important;
+  }
+
+  .projects-header h1 {
+    font-size: clamp(3rem, 13vw, 4.8rem) !important;
+    line-height: 0.9;
+  }
+
+  .projects-subtitle {
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .projects-grid {
+    gap: 7px !important;
+  }
+
+  /* Override the project stylesheet's colorful mobile cards with a quiet list. */
+  .project-card,
+  .project-card-featured,
+  .project-card:nth-child(n),
+  .project-card:last-child:nth-child(odd) {
+    grid-column: auto !important;
+    min-height: 0 !important;
+    padding: 13px 12px 13px 14px !important;
+    border: 1px solid rgba(247, 245, 239, 0.16) !important;
+    border-left: 3px solid var(--accent) !important;
+    background: #151515 !important;
+    box-shadow: none !important;
+  }
+
+  .project-card-content {
+    padding-bottom: 0 !important;
+  }
+
+  .project-card-index,
+  .project-card-art,
+  .project-card::before,
+  .project-card::after,
+  .project-card-footer {
+    display: none !important;
+  }
+
+  .project-kicker {
+    font-size: 7px;
+    margin-bottom: 4px;
+  }
+
+  .project-title {
+    font-size: 1rem !important;
+    line-height: 1.15;
+  }
+
+  .project-subtitle {
+    margin: 5px 0 7px;
+    font-size: 10.5px;
+    line-height: 1.4;
+    -webkit-line-clamp: 2;
+  }
+
+  .project-meta {
+    margin-bottom: 7px;
+    font-size: 8px;
+  }
+
+  .project-meta span:nth-child(2) {
+    display: none;
+  }
+
+  .tech-tags {
+    gap: 4px;
+  }
+
+  .tech-tag {
+    padding: 3px 5px;
+    font-size: 7.5px;
+  }
+
+  .project-arrow {
+    width: 28px;
+    height: 28px;
+  }
+
+  .projects-pagination {
+    margin-top: 13px !important;
+  }
+
+  /* ---------- Expertise ---------- */
   .expertise-container {
-    padding: 44px 12px 48px !important;
+    padding: 50px 18px 54px !important;
   }
+
   .expertise-title-grid {
-    margin-top: 16px !important;
+    margin-top: 18px !important;
   }
+
+  .expertise-title-grid h1 {
+    font-size: clamp(3rem, 13vw, 4.8rem) !important;
+  }
+
   .expertise-marquee {
     margin-top: 18px !important;
   }
+
   .tech-item {
-    min-width: 145px !important;
-    padding: 0.65rem 0.7rem !important;
+    min-width: 128px !important;
+    padding: 0.6rem !important;
   }
+
   .expertise-context {
-    min-height: 58px !important;
+    min-height: 0 !important;
     margin-top: 10px !important;
   }
 
-  /* Contact: remove full-screen behavior and keep fields compact. */
+  /* ---------- Contact ---------- */
   .contact-container {
-    padding: 34px 12px 34px !important;
+    padding: 50px 18px 54px !important;
   }
+
   .contact-grid {
     grid-template-columns: 1fr !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
-  .contact-card {
-    padding: 14px !important;
-  }
+
+  .contact-card,
   .direct-email-card {
-    padding: 10px !important;
+    padding: 13px !important;
+    box-shadow: none !important;
   }
+
   .form-grid-2 {
     grid-template-columns: 1fr !important;
     gap: 8px !important;
   }
 
-  /* Certificates: compact two-up cards when possible. */
+  /* ---------- Certificates ---------- */
   .certificates {
-    padding: 44px 12px 48px !important;
-  }
-  .certificates__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-  .certificates__card {
-    min-height: 0 !important;
-    padding: 14px !important;
-  }
-  .certificates__card-title {
-    font-size: 0.9rem !important;
+    padding: 50px 18px 54px !important;
   }
 
-  /* Footer + tech stack: no oversized footer whitespace. */
-  .footer {
-    padding: 20px 14px 16px !important;
+  .certificates__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 7px !important;
   }
+
+  .certificates__card {
+    min-height: 0 !important;
+    padding: 12px !important;
+    box-shadow: none !important;
+  }
+
+  .certificates__card-title {
+    font-size: 0.78rem !important;
+    line-height: 1.2;
+  }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    padding: 26px 18px 18px !important;
+  }
+
   .footer-container {
     grid-template-columns: 1fr !important;
-    gap: 12px !important;
+    gap: 18px !important;
   }
-  // Logo becomes a small inline mark next to its label instead of a big
-  // centered square with the label stacked underneath — that stacked
-  // treatment alone was costing well over 100px of height on phones.
+
   .footer-logo {
     display: flex !important;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
     text-align: left !important;
   }
+
   .footer-logo .logo-wrapper {
     margin: 0 !important;
-    width: 40px !important;
-    height: 40px !important;
-    padding: 3px !important;
-    box-shadow: 4px 4px 0 var(--red) !important;
+    width: 34px !important;
+    height: 34px !important;
+    padding: 2px !important;
+    box-shadow: 3px 3px 0 var(--red) !important;
   }
+
   .footer-logo .logo-label {
     margin-top: 0 !important;
   }
+
   .footer-header {
-    padding-bottom: 7px;
-    margin-bottom: 9px;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
   }
+
   .footer-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
   }
+
   .footer-card {
-    min-height: 44px !important;
+    min-height: 42px !important;
     padding: 8px !important;
-    gap: 7px !important;
+    gap: 6px !important;
+    box-shadow: none !important;
   }
+
   .footer-card svg {
-    font-size: 17px !important;
+    font-size: 15px !important;
   }
+
   .footer-stack {
-    margin-top: 10px !important;
+    margin-top: 8px !important;
   }
+
   .footer-stack-toggle {
-    min-height: 38px !important;
-    padding: 7px 10px !important;
+    min-height: 36px !important;
+    padding: 7px 9px !important;
   }
+
   .footer-stack-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 5px !important;
   }
+
   .footer-stack-grid > span {
     min-width: 0;
     min-height: 0 !important;
-    padding: 11px !important;
+    padding: 9px !important;
+    box-shadow: none !important;
   }
+
   .footer-stack-grid > span svg {
-    width: 22px;
-    height: 22px;
-    flex-basis: 22px;
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
   }
+
   .footer-stack-grid b,
   .footer-stack-grid small {
     overflow-wrap: anywhere;
   }
+
   .footer-bottom {
-    margin-top: 12px !important;
-    padding-top: 10px !important;
+    margin-top: 10px !important;
+    padding-top: 9px !important;
   }
 
-  /* Prevent fixed viewers/modals from creating page-level overflow. */
+  /* ---------- Viewers / modals ---------- */
   .admin-modal-overlay {
-    padding: 10px !important;
+    padding: 8px !important;
   }
+
   .admin-modal {
-    max-height: calc(100dvh - 20px) !important;
+    max-height: calc(100dvh - 16px) !important;
   }
+
   .art-viewer {
-    height: calc(100dvh - 120px) !important;
+    height: calc(100dvh - 90px) !important;
     grid-template-columns: 1fr !important;
   }
+
   .art-sidebar {
     display: none !important;
   }
 }
 
+/* Small phones: keep the composition quiet instead of shrinking every
+   element until it becomes cramped. */
 @media (max-width: 520px) {
+  .hero-section {
+    padding-inline: 15px !important;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 13.5vw, 4.1rem) !important;
+  }
+
+  .hero-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-specs > div,
+  .hero-specs > div + div {
+    padding: 9px 0;
+    border-left: 0;
+  }
+
+  .hero-specs > div + div {
+    border-top: 1px solid rgba(247, 245, 239, 0.12);
+  }
+
   .certificates__grid {
     grid-template-columns: 1fr !important;
   }
-  .hero-actions {
-    grid-template-columns: 1fr 1fr !important;
+
+  .projects-container,
+  .expertise-container,
+  .contact-container,
+  .certificates,
+  .about-section,
+  .github-activity {
+    padding-inline: 15px !important;
   }
-  .action-primary {
-    grid-column: 1 / -1;
+
+  .project-title {
+    font-size: 0.95rem !important;
   }
+
+  .project-subtitle {
+    -webkit-line-clamp: 1;
+  }
+
+  .project-meta {
+    display: none;
+  }
+
   .footer-stack-grid {
     grid-template-columns: 1fr !important;
   }
@@ -287,25 +644,19 @@
 
 @media (max-width: 380px) {
   .hero-title {
-    font-size: 2.9rem !important;
+    font-size: 2.8rem !important;
   }
-  .hero-specs {
-    grid-template-columns: 1fr !important;
+
+  .hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .action-primary {
+    grid-column: auto;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  * {
-    scroll-behavior: auto !important;
-  }
-}
-
-/* Mobile navigation: keep the header to the brand and a clear hamburger.
-   These rules live in the mobile override sheet so they win over older
-   navbar/button styling elsewhere in the stylesheet stack. */
+/* Mobile navigation: brand + hamburger only. */
 @media (max-width: 900px) {
   .navbar .nav-items-desktop,
   .navbar .command-palette-trigger {
@@ -326,9 +677,9 @@
   .navbar .mobile-menu-button:hover,
   .navbar .mobile-menu-button:focus-visible {
     display: flex !important;
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
     padding: 0 !important;
     border: 0 !important;
     border-radius: 0 !important;
@@ -340,7 +691,7 @@
 
   .navbar .mobile-menu-button .hamburger-line {
     display: block;
-    width: 23px !important;
+    width: 21px !important;
     height: 2px;
     background: currentColor;
   }
@@ -349,5 +700,1450 @@
   .navbar .mobile-menu-button.open:hover {
     background: transparent !important;
     color: #f1e7d2 !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .navbar {
+    height: 60px;
+  }
+
+  .navbar .navbar-toolbar {
+    height: 60px;
+    min-height: 60px;
+  }
+
+  .navbar .navbar-brand {
+    min-width: 0;
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---------- Compact mobile portfolio ----------
+   Keep the page short by compressing vertical rhythm, not the reading experience.
+   The visual language stays Bauhaus × Swiss through type, rules, and small accents.
+*/
+@media (max-width: 760px) {
+  .hero-section {
+    padding-top: 66px !important;
+    padding-bottom: 30px !important;
+  }
+
+  .hero-content {
+    gap: 24px !important;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 13vw, 4.5rem) !important;
+    line-height: 0.86 !important;
+  }
+
+  .hero-intro {
+    margin: 17px 0 14px;
+  }
+
+  .hero-specs {
+    margin-top: 14px;
+  }
+
+  .profile-frame {
+    aspect-ratio: 16 / 10;
+  }
+
+  .about-section,
+  .github-activity,
+  .projects-container,
+  .expertise-container,
+  .contact-container,
+  .certificates {
+    padding-top: 34px !important;
+    padding-bottom: 38px !important;
+  }
+
+  .about-layout {
+    gap: 16px !important;
+  }
+
+  .terminal-content {
+    max-height: 145px !important;
+  }
+
+  .github-activity__panel {
+    padding: 12px !important;
+  }
+
+  .timeline-section {
+    padding-top: 34px !important;
+    padding-bottom: 38px !important;
+  }
+
+  .timeline-wrapper {
+    padding-top: 0.5rem !important;
+  }
+
+  .timeline-list {
+    gap: 5px !important;
+  }
+
+  .milestone-card-inner,
+  .milestone-card:nth-child(even) .milestone-card-inner,
+  .milestone-card:nth-child(odd) .milestone-card-inner {
+    padding: 10px 11px !important;
+  }
+
+  .projects-heading-grid {
+    margin-top: 14px !important;
+    gap: 9px !important;
+  }
+
+  .projects-grid {
+    margin-top: 12px !important;
+    gap: 5px !important;
+  }
+
+  .project-card,
+  .project-card-featured,
+  .project-card:nth-child(n),
+  .project-card:last-child:nth-child(odd) {
+    padding: 10px 10px 10px 12px !important;
+  }
+
+  .project-subtitle {
+    margin: 3px 0 5px;
+  }
+
+  .tech-tag {
+    padding: 2px 4px;
+  }
+
+  .expertise-title-grid {
+    margin-top: 12px !important;
+  }
+
+  .expertise-marquee {
+    margin-top: 10px !important;
+  }
+
+  .expertise-context {
+    margin-top: 6px !important;
+  }
+
+  .contact-grid {
+    gap: 5px !important;
+  }
+
+  .contact-card,
+  .direct-email-card {
+    padding: 10px 11px !important;
+  }
+
+  .certificates__grid {
+    margin-top: 12px !important;
+    gap: 5px !important;
+  }
+
+  .certificates__card {
+    padding: 10px !important;
+  }
+
+  .footer {
+    padding-top: 20px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .footer-container {
+    gap: 12px !important;
+  }
+
+  .footer-grid {
+    gap: 4px !important;
+  }
+
+  .footer-stack {
+    margin-top: 5px !important;
+  }
+}
+
+/* At tablet-ish phone widths, use the screen horizontally where it helps:
+   the hero and project archive become denser without becoming cramped. */
+@media (min-width: 560px) and (max-width: 760px) {
+  .hero-content {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.05fr) minmax(220px, 0.75fr);
+    gap: 22px !important;
+    align-items: center !important;
+  }
+
+  .hero-right {
+    order: 2;
+  }
+
+  .profile-frame {
+    aspect-ratio: 4 / 3;
+  }
+
+  .hero-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .action-primary {
+    grid-column: auto;
+  }
+
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .project-card,
+  .project-card-featured,
+  .project-card:nth-child(n),
+  .project-card:last-child:nth-child(odd) {
+    min-height: 145px !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .hero-section {
+    padding-top: 62px !important;
+    padding-bottom: 26px !important;
+  }
+
+  .hero-content {
+    gap: 20px !important;
+  }
+
+  .about-section,
+  .github-activity,
+  .projects-container,
+  .expertise-container,
+  .contact-container,
+  .certificates,
+  .timeline-section {
+    padding-top: 30px !important;
+    padding-bottom: 32px !important;
+  }
+
+  .projects-header h1,
+  .expertise-title-grid h1 {
+    font-size: clamp(2.65rem, 12vw, 4rem) !important;
+  }
+}
+
+/* MAIN / MOBILE — compact editorial profile
+   The desktop hero has more room for geometry. On phones, keep the same
+   Bauhaus × Swiss language but reduce it to typography, rules, and one
+   strong portrait block. */
+@media (max-width: 760px) {
+  .main-container {
+    overflow: clip !important;
+  }
+
+  .main-grid {
+    background-size: 50% 12rem !important;
+    opacity: 0.42;
+    mask-image: linear-gradient(to bottom, black 0%, transparent 55%) !important;
+  }
+
+  .main-container::before,
+  .main-container::after {
+    display: none !important;
+  }
+
+  .main-registration {
+    top: 72px !important;
+    left: 14px !important;
+    right: 14px !important;
+    font-size: 6px !important;
+    letter-spacing: 0.1em !important;
+    color: rgba(247, 245, 239, 0.38) !important;
+  }
+
+  .hero-section {
+    min-height: auto !important;
+    padding: 92px 14px 30px !important;
+    align-items: flex-start !important;
+  }
+
+  .hero-content {
+    gap: 24px !important;
+  }
+
+  .hero-left {
+    min-width: 0;
+  }
+
+  .hero-kicker.section-header {
+    margin-bottom: 18px !important;
+    padding: 9px 0 !important;
+    grid-template-columns: auto 1fr auto !important;
+    gap: 8px !important;
+  }
+
+  .hero-kicker.section-header .section-header__label {
+    padding: 3px 5px;
+    font-size: 7px;
+  }
+
+  .hero-kicker.section-header .section-header__status {
+    font-size: 7px;
+    white-space: nowrap;
+  }
+
+  .hero-title-wrap {
+    padding-left: 0 !important;
+  }
+
+  .hero-side-note {
+    display: none !important;
+  }
+
+  .hero-title {
+    font-size: clamp(3.15rem, 15.8vw, 5.2rem) !important;
+    line-height: 0.86 !important;
+    letter-spacing: -0.075em !important;
+  }
+
+  .title-line {
+    width: auto !important;
+  }
+
+  .title-offset {
+    margin-left: 4% !important;
+  }
+
+  .hero-intro {
+    margin: 18px 0 18px !important;
+    gap: 10px !important;
+  }
+
+  .intro-mark {
+    width: 4px !important;
+    min-height: 38px !important;
+  }
+
+  .subtitle-primary {
+    font-size: 0.92rem !important;
+    letter-spacing: -0.015em;
+  }
+
+  .subtitle-secondary {
+    margin-top: 4px !important;
+    font-size: 0.72rem !important;
+  }
+
+  .hero-actions {
+    margin-left: 0 !important;
+    gap: 6px !important;
+  }
+
+  .action-link {
+    min-height: 44px !important;
+    padding: 10px 11px !important;
+    font-size: 8px !important;
+  }
+
+  .action-link b {
+    font-size: 13px !important;
+  }
+
+  .hero-specs {
+    margin: 18px 0 0 !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .hero-specs > div,
+  .hero-specs > div:nth-child(2),
+  .hero-specs > div:last-child {
+    padding: 9px 7px !important;
+  }
+
+  .hero-specs span {
+    margin-bottom: 4px !important;
+    font-size: 6px !important;
+  }
+
+  .hero-specs strong {
+    font-size: 7px !important;
+    line-height: 1.25;
+  }
+
+  /* Portrait becomes a compact editorial identity strip instead of a
+     second full-size hero. */
+  .hero-right {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .profile-module {
+    display: grid !important;
+    grid-template-columns: 116px minmax(0, 1fr) !important;
+    grid-template-rows: auto auto 1fr !important;
+    grid-template-areas:
+      'header header'
+      'portrait footer'
+      'portrait footer' !important;
+    gap: 0 12px !important;
+    padding: 9px !important;
+    box-shadow: 7px 7px 0 #e6392f !important;
+  }
+
+  .module-header {
+    grid-area: header;
+    padding-bottom: 9px !important;
+    margin-bottom: 9px;
+    font-size: 7px !important;
+  }
+
+  .module-content {
+    grid-area: portrait;
+    padding: 0 !important;
+    background: #f2c230 !important;
+    align-self: stretch;
+  }
+
+  .profile-frame {
+    aspect-ratio: 1 / 1 !important;
+    width: 100% !important;
+  }
+
+  .profile-image-wrapper {
+    width: 78% !important;
+  }
+
+  .frame-label,
+  .frame-crosshair {
+    display: none !important;
+  }
+
+  .frame-corner {
+    width: 10px !important;
+    height: 10px !important;
+  }
+
+  .frame-dot {
+    width: 7px !important;
+    height: 7px !important;
+    right: 8px !important;
+    top: 8px !important;
+  }
+
+  .frame-slice {
+    height: 6px !important;
+    bottom: 20% !important;
+  }
+
+  .module-footer {
+    grid-area: footer;
+    align-self: stretch;
+    margin: 0 !important;
+    padding: 4px 0 0 !important;
+    border-top: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    font-size: 7px !important;
+  }
+
+  .module-footer > div,
+  .module-footer > div:not(:first-child) {
+    flex: none !important;
+    width: 100%;
+    padding: 9px 0 !important;
+    border-left: 0 !important;
+    border-bottom: 1px solid rgba(247, 245, 239, 0.16);
+  }
+
+  .module-footer > div:last-child {
+    border-bottom: 0;
+  }
+
+  .module-footer span {
+    font-size: 6px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .module-footer strong {
+    font-size: 8px !important;
+  }
+
+  .hero-coordinate {
+    display: none !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-section {
+    padding-top: 88px !important;
+  }
+
+  .hero-title {
+    font-size: clamp(2.95rem, 15.8vw, 4.7rem) !important;
+  }
+
+  .profile-module {
+    grid-template-columns: 104px minmax(0, 1fr) !important;
+  }
+}
+
+/* ================================================================
+   MOBILE CREDENTIALS + CONTACT REFINEMENT
+   These sections are intentionally compact on phones: the content
+   remains editorial, but the UI behaves more like a Swiss index.
+   ================================================================ */
+@media (max-width: 760px) {
+  /* ---------- Certificates: credential index ---------- */
+  .certificates {
+    padding: 42px 18px 44px !important;
+  }
+
+  .certificates__header {
+    margin-bottom: 20px !important;
+  }
+
+  .certificates__title {
+    font-size: clamp(2.35rem, 10vw, 3.6rem) !important;
+    line-height: 0.9 !important;
+  }
+
+  .certificates__subtitle {
+    margin-top: 6px !important;
+    font-size: 0.76rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .certificates__grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    margin-bottom: 14px !important;
+    border-top: 1px solid rgba(247, 245, 239, 0.18);
+  }
+
+  .certificates__card,
+  .certificates__card--blue,
+  .certificates__card--purple,
+  .certificates__card--teal,
+  .certificates__card--rose,
+  .certificates__card--amber,
+  .certificates__card--emerald,
+  .certificates__card--indigo,
+  .certificates__card--slate {
+    display: grid !important;
+    grid-template-columns: 34px minmax(0, 1fr) auto !important;
+    grid-template-areas: 'icon content actions' !important;
+    align-items: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    padding: 12px 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(247, 245, 239, 0.14) !important;
+    box-shadow: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+
+  .certificates__card::before {
+    display: none !important;
+  }
+
+  .certificates__card-icon {
+    grid-area: icon !important;
+    width: 30px !important;
+    height: 30px !important;
+    border: 1px solid rgba(247, 245, 239, 0.25) !important;
+    background: #151515 !important;
+    color: #f4c83f !important;
+  }
+
+  .certificates__card-icon svg {
+    width: 15px !important;
+    height: 15px !important;
+    opacity: 1 !important;
+  }
+
+  .certificates__card-content {
+    grid-area: content !important;
+    min-width: 0;
+  }
+
+  .certificates__card-title {
+    margin: 0 !important;
+    font-size: 0.82rem !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+    color: #f5f5f5 !important;
+  }
+
+  .certificates__card-meta {
+    display: flex !important;
+    align-items: baseline;
+    gap: 6px;
+    margin-top: 3px !important;
+    font-size: 0.56rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .certificates__card-org {
+    color: rgba(245, 245, 245, 0.6) !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .certificates__card-year {
+    flex: 0 0 auto;
+    color: #f4c83f !important;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace !important;
+  }
+
+  .certificates__card-tags {
+    display: none !important;
+  }
+
+  .certificates__card-actions {
+    grid-area: actions !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+  }
+
+  .certificates__card-action {
+    min-width: 48px !important;
+    min-height: 26px !important;
+    padding: 0 7px !important;
+    border: 1px solid rgba(247, 245, 239, 0.2) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: rgba(247, 245, 239, 0.82) !important;
+    font-size: 0.5rem !important;
+  }
+
+  .certificates__card-action svg {
+    font-size: 12px !important;
+  }
+
+  .certificates__view-all {
+    margin-top: 10px !important;
+  }
+
+  .certificates__view-all-btn {
+    min-height: 36px !important;
+    padding: 0 10px !important;
+    font-size: 0.58rem !important;
+    border-radius: 0 !important;
+  }
+
+  /* ---------- Contact: compact inquiry panel ---------- */
+  .contact-container {
+    min-height: auto !important;
+    padding: 42px 18px 46px !important;
+    background-size: 42px 42px !important;
+  }
+
+  .contact-container::after {
+    top: 1.1rem;
+    right: 18px;
+    font-size: 0.46rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .contact-info {
+    padding: 0 !important;
+  }
+
+  .contact-info::before {
+    display: none !important;
+  }
+
+  .contact-header {
+    width: 100% !important;
+  }
+
+  .contact-header h2 {
+    max-width: 12ch !important;
+    font-size: clamp(2.55rem, 12vw, 4.2rem) !important;
+    line-height: 0.86 !important;
+  }
+
+  .contact-divider {
+    width: 72px !important;
+    height: 6px !important;
+    margin: 0.9rem 0 !important;
+    box-shadow: 12px 0 0 #3f72d8 !important;
+  }
+
+  .contact-subtitle {
+    max-width: 38ch !important;
+    font-size: 0.78rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .direct-email-card {
+    display: none !important;
+  }
+
+  .contact-details {
+    margin-top: 12px !important;
+  }
+
+  .contact-detail-item {
+    gap: 8px !important;
+  }
+
+  .detail-icon {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .detail-icon svg {
+    font-size: 0.85rem !important;
+  }
+
+  .detail-content {
+    flex-direction: row !important;
+    align-items: baseline !important;
+    flex-wrap: wrap;
+    column-gap: 7px !important;
+    row-gap: 2px !important;
+  }
+
+  .detail-label {
+    width: 100%;
+  }
+
+  .detail-value {
+    font-size: 0.7rem !important;
+  }
+
+  .detail-badge {
+    padding: 0.14rem 0.3rem !important;
+    font-size: 0.42rem !important;
+  }
+
+  .contact-card {
+    padding: 14px !important;
+    box-shadow: 6px 6px 0 #ef3d32 !important;
+  }
+
+  .contact-card::before {
+    padding: 0.42rem 0.55rem !important;
+    font-size: 0.45rem !important;
+  }
+
+  .contact-card::after {
+    display: none !important;
+  }
+
+  .contact-card-header {
+    padding-right: 4.5rem !important;
+    margin-bottom: 10px !important;
+  }
+
+  .card-title {
+    font-size: 1.28rem !important;
+    line-height: 1 !important;
+  }
+
+  .card-subtitle {
+    margin-top: 4px !important;
+    font-size: 0.68rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .card-divider {
+    margin: 0 0 10px !important;
+  }
+
+  /* Keep subject shortcuts useful, but compact. */
+  .contact-card .MuiChip-root {
+    height: 27px !important;
+    border-radius: 0 !important;
+    font-size: 0.54rem !important;
+  }
+
+  .contact-card form {
+    gap: 7px !important;
+  }
+
+  .contact-card .form-grid-2,
+  .contact-card .MuiGrid-container {
+    gap: 7px !important;
+  }
+
+  .contact-card .form-grid-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .contact-card .MuiTextField-root {
+    margin-bottom: 0 !important;
+  }
+
+  .contact-card .MuiInputBase-root {
+    min-height: 43px !important;
+    border-radius: 0 !important;
+  }
+
+  .contact-card textarea {
+    min-height: 105px !important;
+    max-height: 130px !important;
+  }
+
+  .contact-card .MuiInputLabel-root {
+    font-size: 0.62rem !important;
+  }
+
+  .contact-card .MuiInputBase-input,
+  .contact-card textarea {
+    font-size: 0.72rem !important;
+    padding: 9px !important;
+  }
+
+  .contact-card button[type='submit'] {
+    min-height: 40px !important;
+    border-radius: 0 !important;
+    font-size: 0.58rem !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .certificates {
+    padding-inline: 15px !important;
+  }
+
+  .certificates__card {
+    grid-template-columns: 30px minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+  }
+
+  .certificates__card-icon {
+    width: 27px !important;
+    height: 27px !important;
+  }
+
+  .certificates__card-title {
+    font-size: 0.76rem !important;
+  }
+
+  .certificates__card-action {
+    min-width: 42px !important;
+    padding-inline: 5px !important;
+  }
+
+  .contact-container {
+    padding-inline: 15px !important;
+  }
+
+  .contact-card .form-grid-2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .contact-card textarea {
+    min-height: 92px !important;
+    max-height: 112px !important;
+  }
+}
+
+/* ================================================================
+   MOBILE EXPERTISE + CONTACT REFINEMENT
+   ================================================================ */
+@media (max-width: 900px) {
+  /* Expertise becomes a compact category index instead of two moving rows. */
+  .expertise-marquee,
+  .expertise-scroll-label,
+  .expertise-context,
+  .expertise-footer {
+    display: none !important;
+  }
+
+  .expertise-mobile-index {
+    display: block !important;
+    margin-top: 18px;
+  }
+
+  .expertise-mobile-categories {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 0 0 8px;
+    scrollbar-width: none;
+    border-bottom: 1px solid rgba(241, 231, 210, 0.2);
+  }
+
+  .expertise-mobile-categories::-webkit-scrollbar {
+    display: none;
+  }
+
+  .expertise-mobile-category {
+    flex: 0 0 auto;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 10px;
+    border: 1px solid rgba(241, 231, 210, 0.22);
+    background: transparent;
+    color: rgba(241, 231, 210, 0.62);
+    font:
+      700 0.63rem/1 'IBM Plex Mono',
+      monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .expertise-mobile-category span {
+    color: var(--category-color, #f2c94c);
+    font-size: 0.55rem;
+  }
+
+  .expertise-mobile-category.is-active {
+    color: #0a0b0d;
+    background: var(--category-color, #f2c94c);
+    border-color: var(--category-color, #f2c94c);
+  }
+
+  .expertise-mobile-list {
+    border-left: 1px solid rgba(241, 231, 210, 0.2);
+    border-right: 1px solid rgba(241, 231, 210, 0.2);
+  }
+
+  .expertise-mobile-tech {
+    border-bottom: 1px solid rgba(241, 231, 210, 0.16);
+  }
+
+  .expertise-mobile-tech-button {
+    width: 100%;
+    min-height: 52px;
+    display: grid;
+    grid-template-columns: 22px 24px minmax(0, 1fr) 22px;
+    align-items: center;
+    gap: 9px;
+    padding: 8px 10px;
+    border: 0;
+    background: transparent;
+    color: #f1e7d2;
+    text-align: left;
+    font: inherit;
+  }
+
+  .expertise-mobile-tech-button:focus-visible {
+    outline: 2px solid var(--tech-color, #f2c94c);
+    outline-offset: -2px;
+  }
+
+  .expertise-mobile-tech-index {
+    color: var(--tech-color, #f2c94c);
+    font:
+      700 0.6rem/1 'IBM Plex Mono',
+      monospace;
+  }
+
+  .expertise-mobile-tech-icon {
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+  }
+
+  .expertise-mobile-tech-icon svg,
+  .expertise-mobile-tech-icon > * {
+    max-width: 22px;
+    max-height: 22px;
+  }
+
+  .expertise-mobile-tech-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font:
+      700 0.82rem/1.15 'IBM Plex Mono',
+      monospace;
+    letter-spacing: 0.01em;
+  }
+
+  .expertise-mobile-tech-arrow {
+    color: var(--tech-color, #f2c94c);
+    font:
+      700 1rem/1 'IBM Plex Mono',
+      monospace;
+    text-align: center;
+  }
+
+  .expertise-mobile-tech.is-selected {
+    background: rgba(241, 231, 210, 0.035);
+    border-left: 3px solid var(--tech-color, #f2c94c);
+  }
+
+  .expertise-mobile-tech-detail {
+    padding: 0 34px 13px 65px;
+  }
+
+  .expertise-mobile-tech-detail span {
+    color: var(--tech-color, #f2c94c);
+    font:
+      700 0.55rem/1 'IBM Plex Mono',
+      monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .expertise-mobile-tech-detail p {
+    margin: 5px 0 0;
+    color: rgba(241, 231, 210, 0.62);
+    font:
+      0.72rem/1.45 'IBM Plex Mono',
+      monospace;
+  }
+
+  /* Contact becomes an intentional expandable drawer rather than a long card. */
+  .contact-form-details {
+    width: 100%;
+  }
+
+  .contact-form-summary {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 14px;
+    border: 1px solid rgba(241, 231, 210, 0.3);
+    border-right: 4px solid var(--red, #ff4438);
+    background: #111214;
+    color: #f1e7d2;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .contact-form-summary::-webkit-details-marker,
+  .contact-form-summary::marker {
+    display: none;
+  }
+
+  .contact-form-summary-main {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+  }
+
+  .contact-form-summary-kicker {
+    color: #f2c94c;
+    font:
+      700 0.55rem/1 'IBM Plex Mono',
+      monospace;
+    letter-spacing: 0.12em;
+  }
+
+  .contact-form-summary-title {
+    font:
+      800 1.15rem/1 'Archivo Black',
+      'Arial Black',
+      sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+  }
+
+  .contact-form-summary-meta {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: rgba(241, 231, 210, 0.55);
+    font:
+      700 0.55rem/1 'IBM Plex Mono',
+      monospace;
+  }
+
+  .contact-form-summary-icon {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(241, 231, 210, 0.3);
+    color: #f2c94c;
+    font-size: 0.9rem;
+    transition:
+      transform 180ms ease,
+      background 180ms ease,
+      color 180ms ease;
+  }
+
+  .contact-form-details[open] .contact-form-summary-icon {
+    transform: rotate(90deg);
+    background: #f2c94c;
+    color: #0a0b0d;
+  }
+
+  .contact-form-summary:hover {
+    border-color: rgba(241, 231, 210, 0.52);
+  }
+
+  .contact-form-drawer {
+    padding: 13px 0 0;
+  }
+
+  .contact-form-drawer .contact-card-header,
+  .contact-form-drawer .card-divider {
+    display: none;
+  }
+
+  .contact-form-drawer .chips-container {
+    margin-top: 0 !important;
+  }
+
+  .contact-form-drawer .contact-form {
+    margin-top: 10px !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .expertise-mobile-index {
+    display: none !important;
+  }
+
+  .contact-form-summary {
+    display: none;
+  }
+
+  .contact-form-details,
+  .contact-form-details[open] {
+    display: block;
+  }
+
+  .contact-form-details > .contact-form-drawer {
+    display: block;
+  }
+}
+
+@media (max-width: 520px) {
+  .expertise-mobile-category {
+    min-height: 36px;
+    padding-inline: 9px;
+  }
+
+  .contact-form-summary {
+    min-height: 70px;
+    padding: 10px 11px;
+  }
+
+  .contact-form-summary-title {
+    font-size: 1.02rem;
+  }
+
+  .contact-form-summary-meta > span:first-child {
+    display: none;
+  }
+}
+
+/* ================================================================
+   MOBILE EXPERTISE — visual index
+   ================================================================ */
+@media (max-width: 900px) {
+  .expertise-mobile-index {
+    margin-top: 20px !important;
+  }
+
+  .expertise-mobile-category-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .expertise-mobile-category-card {
+    position: relative;
+    min-width: 0;
+    min-height: 126px;
+    padding: 11px 11px 10px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    border: 1px solid rgba(241, 231, 210, 0.2);
+    border-radius: 0;
+    background: #101113;
+    color: #f1e7d2;
+    text-align: left;
+    font: inherit;
+    overflow: hidden;
+  }
+
+  .expertise-mobile-category-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--category-color, #f2c94c);
+    opacity: 0.9;
+  }
+
+  .expertise-mobile-category-card.is-active {
+    border-color: var(--category-color, #f2c94c);
+    background: rgba(241, 231, 210, 0.045);
+  }
+
+  .expertise-mobile-category-card:focus-visible {
+    outline: 2px solid var(--category-color, #f2c94c);
+    outline-offset: 2px;
+  }
+
+  .expertise-mobile-category-card-top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .expertise-mobile-category-code {
+    color: var(--category-color, #f2c94c);
+    font-size: 0.58rem;
+    font-weight: 800;
+  }
+
+  .expertise-mobile-category-count {
+    color: rgba(241, 231, 210, 0.42);
+    font-size: 0.46rem;
+    letter-spacing: 0.06em;
+  }
+
+  .expertise-mobile-category-card > strong {
+    max-width: 100%;
+    font:
+      800 1rem/0.95 'Archivo Black',
+      'Arial Black',
+      sans-serif;
+    text-transform: uppercase;
+    letter-spacing: -0.035em;
+  }
+
+  .expertise-mobile-category-preview {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .expertise-mobile-category-preview span {
+    padding: 3px 5px;
+    border: 1px solid rgba(241, 231, 210, 0.14);
+    color: rgba(241, 231, 210, 0.62);
+    font:
+      0.47rem/1.1 'IBM Plex Mono',
+      monospace;
+    white-space: nowrap;
+  }
+
+  .expertise-mobile-category-preview span:last-child {
+    color: var(--category-color, #f2c94c);
+  }
+
+  .expertise-mobile-category-open {
+    position: absolute;
+    right: 9px;
+    bottom: 8px;
+    color: var(--category-color, #f2c94c);
+    font:
+      700 0.9rem/1 'IBM Plex Mono',
+      monospace;
+  }
+
+  .expertise-mobile-detail-panel {
+    margin-top: 8px;
+    border-top: 2px solid rgba(241, 231, 210, 0.18);
+    border-bottom: 1px solid rgba(241, 231, 210, 0.18);
+    background: #0d0e10;
+  }
+
+  .expertise-mobile-detail-heading {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: 8px;
+    padding: 10px 9px;
+    border-bottom: 1px solid rgba(241, 231, 210, 0.14);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .expertise-mobile-detail-heading > span {
+    color: #f2c94c;
+    font-size: 0.54rem;
+  }
+
+  .expertise-mobile-detail-heading > strong {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+
+  .expertise-mobile-detail-heading > em {
+    color: rgba(241, 231, 210, 0.42);
+    font-size: 0.48rem;
+    font-style: normal;
+  }
+
+  .expertise-mobile-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .expertise-mobile-detail-grid .expertise-mobile-tech {
+    border-bottom: 1px solid rgba(241, 231, 210, 0.12);
+  }
+
+  .expertise-mobile-detail-grid .expertise-mobile-tech:nth-child(odd) {
+    border-right: 1px solid rgba(241, 231, 210, 0.12);
+  }
+
+  .expertise-mobile-detail-grid .expertise-mobile-tech-button {
+    min-height: 48px;
+    grid-template-columns: 23px minmax(0, 1fr) 18px;
+    padding: 7px 8px;
+  }
+
+  .expertise-mobile-detail-grid .expertise-mobile-tech-index {
+    display: none;
+  }
+
+  .expertise-mobile-detail-grid .expertise-mobile-tech-name {
+    font-size: 0.62rem;
+  }
+
+  .expertise-mobile-detail-grid .expertise-mobile-tech-detail {
+    padding: 0 8px 9px 39px;
+  }
+
+  .expertise-mobile-detail-grid .expertise-mobile-tech-detail p {
+    font-size: 0.58rem;
+    line-height: 1.35;
+  }
+}
+
+@media (max-width: 520px) {
+  .expertise-mobile-category-card {
+    min-height: 116px;
+    padding: 9px 9px 9px !important;
+  }
+
+  .expertise-mobile-category-card > strong {
+    font-size: 0.88rem;
+  }
+
+  .expertise-mobile-category-preview span {
+    font-size: 0.43rem;
+    padding: 3px 4px;
+  }
+
+  .expertise-mobile-detail-heading {
+    grid-template-columns: auto 1fr;
+  }
+
+  .expertise-mobile-detail-heading > em {
+    grid-column: 2;
+    margin-top: -5px;
+  }
+}
+
+/* ================================================================
+   FINAL MOBILE REFINEMENT: KEEP THE ORIGINAL EXPERTISE SCROLLER
+   ================================================================ */
+@media (max-width: 900px) {
+  .expertise-mobile-index {
+    display: none !important;
+  }
+
+  .expertise-marquee {
+    display: block !important;
+    width: calc(100% + 36px) !important;
+    margin-left: -18px !important;
+    margin-right: -18px !important;
+    overflow: hidden !important;
+    border-top: 1px solid var(--expertise-line, rgba(241, 231, 210, 0.2));
+    border-bottom: 1px solid var(--expertise-line, rgba(241, 231, 210, 0.2));
+  }
+
+  .expertise-scroll-label {
+    display: flex !important;
+  }
+
+  .expertise-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    width: max-content !important;
+    min-width: max-content !important;
+    gap: 0 !important;
+    animation-duration: 34s !important;
+  }
+
+  .expertise-track.is-reverse {
+    animation-duration: 39s !important;
+  }
+
+  .expertise-track .tech-item {
+    box-sizing: border-box !important;
+    flex: 0 0 142px !important;
+    width: 142px !important;
+    min-width: 142px !important;
+    max-width: 142px !important;
+    height: 104px !important;
+    padding: 0.72rem !important;
+    margin: 0 !important;
+  }
+
+  /* Keep both duplicated halves exactly the same width so the
+     -50% marquee loop never exposes an empty trailing strip. */
+  .expertise-track > .tech-item {
+    flex-shrink: 0 !important;
+  }
+
+  .expertise-context {
+    display: grid !important;
+  }
+
+  .expertise-footer {
+    display: flex !important;
+  }
+
+  .contact-form-details {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .expertise-marquee {
+    width: calc(100% + 28px) !important;
+    margin-left: -14px !important;
+    margin-right: -14px !important;
+  }
+
+  .expertise-track .tech-item {
+    flex-basis: 132px !important;
+    width: 132px !important;
+    min-width: 132px !important;
+    max-width: 132px !important;
+    height: 96px !important;
   }
 }

@@ -167,6 +167,35 @@ function Timeline() {
               </article>
             ))}
           </div>
+
+          <div className="timeline-mobile-list" aria-label="Timeline milestones">
+            {timelineData.milestones.map((milestone, index) => (
+              <details
+                key={`mobile-${milestone.id}`}
+                className="timeline-mobile-item"
+                open={index === 0}
+              >
+                <summary className="timeline-mobile-summary">
+                  <span className="timeline-mobile-year">{milestone.year}</span>
+                  <span className="timeline-mobile-summary-main">
+                    <span className="timeline-mobile-title">{milestone.title}</span>
+                    <span className="timeline-mobile-subtitle">{milestone.subtitle}</span>
+                  </span>
+                  <span className={`timeline-mobile-status ${getStatusClass(milestone.status)}`}>
+                    {milestone.status}
+                  </span>
+                  <span className="timeline-mobile-toggle" aria-hidden="true">
+                    +
+                  </span>
+                </summary>
+
+                <div className="timeline-mobile-details">
+                  {renderTerminal(milestone.terminal)}
+                  <p className="milestone-description">{milestone.description}</p>
+                </div>
+              </details>
+            ))}
+          </div>
         </div>
 
         <footer className="timeline-footer">

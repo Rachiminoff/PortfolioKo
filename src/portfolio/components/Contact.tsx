@@ -44,6 +44,17 @@ function Contact() {
   const [referenceId, setReferenceId] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(() =>
+    typeof window === 'undefined' ? true : window.matchMedia('(min-width: 901px)').matches,
+  );
+
+  useEffect(() => {
+    const media = window.matchMedia('(min-width: 901px)');
+    const sync = () => setIsContactFormOpen(media.matches);
+    sync();
+    media.addEventListener('change', sync);
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
   const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 
@@ -231,195 +242,226 @@ function Contact() {
 
         {/* RIGHT COLUMN - Form */}
         <Paper className="contact-card" elevation={0}>
-          <div className="contact-card-header">
-            <Typography variant="h4" className="card-title">
-              Send a Message
-            </Typography>
-            <Typography variant="body2" className="card-subtitle">
-              I'll get back to you as soon as possible
-            </Typography>
-          </div>
-
-          <Divider className="card-divider" />
-
-          <Fade in={success} timeout={400}>
-            <Box>
-              {success && (
-                <Alert icon={<CheckCircleIcon />} severity="success" className="alert-success">
-                  <div className="alert-content">
-                    <strong>Message sent successfully!</strong>
-                    <br />
-                    <span className="alert-reference">
-                      Reference ID: <strong>{referenceId}</strong>
-                    </span>
-                    <br />
-                    <span className="alert-thanks">
-                      Thank you for reaching out. I'll respond within 24-48 hours.
-                    </span>
-                  </div>
-                </Alert>
-              )}
-            </Box>
-          </Fade>
-
-          <Fade in={sendError} timeout={400}>
-            <Box>
-              {sendError && (
-                <Alert icon={<ErrorIcon />} severity="error" className="alert-error">
-                  <div className="alert-content">
-                    <strong>Failed to send message.</strong>
-                    <br />
-                    <span>Please try again or contact me directly via email.</span>
-                  </div>
-                </Alert>
-              )}
-            </Box>
-          </Fade>
-
-          <Box className="chips-container">
-            <Typography variant="caption" className="chips-label">
-              Quick subject suggestions
-            </Typography>
-            <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap className="chips-stack">
-              {[
-                'Project Inquiry',
-                'Collaboration',
-                'General Question',
-                'Bug Report',
-                'Feedback',
-              ].map((label) => (
-                <Chip
-                  key={label}
-                  label={label}
-                  onClick={() => handleChipClick(label)}
-                  className={`chip-item ${subject === label ? 'chip-selected' : ''}`}
-                />
-              ))}
-            </Stack>
-          </Box>
-
-          <Box component="form" onSubmit={sendEmail} className="contact-form">
-            <div className="form-grid-2">
-              <TextField
-                label="Your Name"
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  if (error.name) setError((prev) => ({ ...prev, name: false }));
-                }}
-                error={error.name}
-                helperText={error.name ? 'Name is required' : ''}
-                fullWidth
-                className="form-field"
-                variant="outlined"
-                required
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-
-              <TextField
-                label="Email Address"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (error.email) setError((prev) => ({ ...prev, email: false }));
-                }}
-                onBlur={() => {
-                  if (email.trim()) {
-                    setError((prev) => ({ ...prev, email: !validateEmail(email) }));
-                  }
-                }}
-                error={error.email}
-                helperText={error.email ? 'Please enter a valid email' : ''}
-                fullWidth
-                className="form-field"
-                variant="outlined"
-                required
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </div>
-
-            <TextField
-              label="Subject"
-              value={subject}
-              onChange={(e) => {
-                setSubject(e.target.value);
-                if (error.subject) setError((prev) => ({ ...prev, subject: false }));
-              }}
-              error={error.subject}
-              helperText={error.subject ? 'Subject is required' : ''}
-              fullWidth
-              className="form-field"
-              variant="outlined"
-              sx={{ mt: { xs: 1.25, sm: 2 } }}
-              required
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-
-            <TextField
-              label="Message"
-              value={message}
-              onChange={(e) => {
-                const value = e.target.value;
-                setMessage(value);
-                setCharCount(value.length);
-                if (error.message) setError((prev) => ({ ...prev, message: false }));
-              }}
-              error={error.message}
-              helperText={
-                error.message
-                  ? 'Message is required'
-                  : `${charCount}/1000 characters${charCount > 800 ? ' (almost there!)' : ''}`
+          <details
+            className="contact-form-details"
+            open={isContactFormOpen}
+            onToggle={(event) => {
+              if (!window.matchMedia('(min-width: 901px)').matches) {
+                setIsContactFormOpen(event.currentTarget.open);
               }
-              multiline
-              minRows={3}
-              maxRows={10}
-              fullWidth
-              className="form-field"
-              variant="outlined"
-              sx={{ mt: { xs: 1.25, sm: 2 } }}
-              inputProps={{ maxLength: 1000 }}
-              required
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-
-            <div className="form-actions">
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={!isFormValid || loading}
-                className="send-button"
-                endIcon={
-                  loading ? (
-                    <CircularProgress size={20} color="inherit" className="button-spinner" />
-                  ) : (
-                    <SendIcon className="send-icon" />
-                  )
-                }
-              >
-                {loading ? 'Sending...' : 'Send Message'}
-              </Button>
-
-              <div className="trust-indicator">
-                <ScheduleIcon className="trust-icon" />
-                <span>Typically replies within 24–48 hours</span>
-              </div>
-            </div>
-
-            <div className="form-footer">
-              <span className="form-footer-text">
-                <OpenInNewIcon className="footer-icon" />
-                Your message will be sent securely
+            }}
+          >
+            <summary className="contact-form-summary">
+              <span className="contact-form-summary-main">
+                <span className="contact-form-summary-kicker">MESSAGE / 01</span>
+                <span className="contact-form-summary-title">Send a message</span>
               </span>
+              <span className="contact-form-summary-meta">
+                <span>~2 MIN</span>
+                <span className="contact-form-summary-icon" aria-hidden="true">
+                  ↘
+                </span>
+              </span>
+            </summary>
+
+            <div className="contact-form-drawer">
+              <div className="contact-card-header">
+                <Typography variant="h4" className="card-title">
+                  Send a Message
+                </Typography>
+                <Typography variant="body2" className="card-subtitle">
+                  I'll get back to you as soon as possible
+                </Typography>
+              </div>
+
+              <Divider className="card-divider" />
+
+              <Fade in={success} timeout={400}>
+                <Box>
+                  {success && (
+                    <Alert icon={<CheckCircleIcon />} severity="success" className="alert-success">
+                      <div className="alert-content">
+                        <strong>Message sent successfully!</strong>
+                        <br />
+                        <span className="alert-reference">
+                          Reference ID: <strong>{referenceId}</strong>
+                        </span>
+                        <br />
+                        <span className="alert-thanks">
+                          Thank you for reaching out. I'll respond within 24-48 hours.
+                        </span>
+                      </div>
+                    </Alert>
+                  )}
+                </Box>
+              </Fade>
+
+              <Fade in={sendError} timeout={400}>
+                <Box>
+                  {sendError && (
+                    <Alert icon={<ErrorIcon />} severity="error" className="alert-error">
+                      <div className="alert-content">
+                        <strong>Failed to send message.</strong>
+                        <br />
+                        <span>Please try again or contact me directly via email.</span>
+                      </div>
+                    </Alert>
+                  )}
+                </Box>
+              </Fade>
+
+              <Box className="chips-container">
+                <Typography variant="caption" className="chips-label">
+                  Quick subject suggestions
+                </Typography>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  flexWrap="wrap"
+                  useFlexGap
+                  className="chips-stack"
+                >
+                  {[
+                    'Project Inquiry',
+                    'Collaboration',
+                    'General Question',
+                    'Bug Report',
+                    'Feedback',
+                  ].map((label) => (
+                    <Chip
+                      key={label}
+                      label={label}
+                      onClick={() => handleChipClick(label)}
+                      className={`chip-item ${subject === label ? 'chip-selected' : ''}`}
+                    />
+                  ))}
+                </Stack>
+              </Box>
+
+              <Box component="form" onSubmit={sendEmail} className="contact-form">
+                <div className="form-grid-2">
+                  <TextField
+                    label="Your Name"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (error.name) setError((prev) => ({ ...prev, name: false }));
+                    }}
+                    error={error.name}
+                    helperText={error.name ? 'Name is required' : ''}
+                    fullWidth
+                    className="form-field"
+                    variant="outlined"
+                    required
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+
+                  <TextField
+                    label="Email Address"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (error.email) setError((prev) => ({ ...prev, email: false }));
+                    }}
+                    onBlur={() => {
+                      if (email.trim()) {
+                        setError((prev) => ({ ...prev, email: !validateEmail(email) }));
+                      }
+                    }}
+                    error={error.email}
+                    helperText={error.email ? 'Please enter a valid email' : ''}
+                    fullWidth
+                    className="form-field"
+                    variant="outlined"
+                    required
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </div>
+
+                <TextField
+                  label="Subject"
+                  value={subject}
+                  onChange={(e) => {
+                    setSubject(e.target.value);
+                    if (error.subject) setError((prev) => ({ ...prev, subject: false }));
+                  }}
+                  error={error.subject}
+                  helperText={error.subject ? 'Subject is required' : ''}
+                  fullWidth
+                  className="form-field"
+                  variant="outlined"
+                  sx={{ mt: { xs: 1.25, sm: 2 } }}
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+
+                <TextField
+                  label="Message"
+                  value={message}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setMessage(value);
+                    setCharCount(value.length);
+                    if (error.message) setError((prev) => ({ ...prev, message: false }));
+                  }}
+                  error={error.message}
+                  helperText={
+                    error.message
+                      ? 'Message is required'
+                      : `${charCount}/1000 characters${charCount > 800 ? ' (almost there!)' : ''}`
+                  }
+                  multiline
+                  minRows={3}
+                  maxRows={10}
+                  fullWidth
+                  className="form-field"
+                  variant="outlined"
+                  sx={{ mt: { xs: 1.25, sm: 2 } }}
+                  inputProps={{ maxLength: 1000 }}
+                  required
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+
+                <div className="form-actions">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={!isFormValid || loading}
+                    className="send-button"
+                    endIcon={
+                      loading ? (
+                        <CircularProgress size={20} color="inherit" className="button-spinner" />
+                      ) : (
+                        <SendIcon className="send-icon" />
+                      )
+                    }
+                  >
+                    {loading ? 'Sending...' : 'Send Message'}
+                  </Button>
+
+                  <div className="trust-indicator">
+                    <ScheduleIcon className="trust-icon" />
+                    <span>Typically replies within 24–48 hours</span>
+                  </div>
+                </div>
+
+                <div className="form-footer">
+                  <span className="form-footer-text">
+                    <OpenInNewIcon className="footer-icon" />
+                    Your message will be sent securely
+                  </span>
+                </div>
+              </Box>
             </div>
-          </Box>
+          </details>
         </Paper>
       </div>
     </div>
