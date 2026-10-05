@@ -470,6 +470,73 @@ export const projectsData: Project[] = [
       },
     ],
   },
+
+  {
+    id: 7,
+    title: 'Robinson',
+    slug: 'robinson',
+    subtitle:
+      'A generative lyric-video experience that transforms synchronized Japanese and English lyrics into a sequence of animated Swiss and Bauhaus-inspired poster compositions.',
+    role: 'Sole Developer',
+    featured: true,
+    status: 'In Development',
+    category: 'Web App',
+    duration: 'Ongoing',
+    link: '',
+    description:
+      'A generative lyric-video web experience where each lyric becomes a distinct animated poster composition rather than a conventional subtitle screen.',
+    overview:
+      'Robinson is an experimental lyric-video web experience inspired by Swiss International Typographic Style, Bauhaus, editorial poster design, and kinetic typography. Instead of treating lyrics as subtitles placed over a background, Robinson treats each lyric section as its own visual composition where typography, geometry, color, spacing, and motion work together.\n\nThe application synchronizes Japanese and English lyrics with the song timeline. As playback moves between lyric sections, the visual system analyzes characteristics of the active lyric such as text length, word count, duration, repetition, punctuation, and intensity. These characteristics influence the visual direction of the next composition while preserving controlled visual variety.\n\nThe goal is to create a lyric video where every section feels like a new poster while remaining part of the same visual language. Desktop and mobile compositions use different art-direction decisions rather than simply scaling the same layout between screen sizes.',
+    features: [
+      'Synchronized Japanese and English lyric display tied to the audio timeline',
+      'Generative poster compositions inspired by Swiss International Typographic Style and Bauhaus design',
+      'Multiple visual families and geometric variants for substantial composition variety',
+      'Lyric-aware visual selection based on text length, density, duration, repetition, punctuation, and intensity',
+      'Deterministic seeded randomness for reproducible visual compositions',
+      'Device-specific composition behavior for desktop and mobile',
+      'Responsive typography designed to keep lyrics readable across screen sizes',
+      'Composition-aware animation and transitions between lyric scenes',
+      'Asymmetric layouts, strong grid structures, cropped forms, and deliberate negative space',
+    ],
+    tech: ['React', 'TypeScript', 'Framer Motion', 'Tailwind CSS', 'Vite', 'Lucide React'],
+    architecture:
+      'Song → Audio Playback → Current Lyric → Composition Generator → Poster + Typography + Motion\n\nRobinson follows a visual pipeline in which the current audio position determines the active lyric, and the active lyric becomes an input to the composition system.\n\nThe playback layer provides the current time. The lyric layer uses that time to identify the active lyric and exposes information such as its start time, end time, Japanese text, English text, and index.\n\nPosterComposition acts as the main coordinator. It analyzes the active lyric, determines the device type, creates a deterministic seed, selects a visual family and variant, and passes the resulting composition information to the visual renderer.\n\nSwissPosterArt contains the visual composition library. Reusable geometric elements such as squares, circles, rings, frames, rules, grids, diagonal fields, and cropped forms are combined into different poster structures.\n\nSeeded randomness provides controlled variation. The lyric timing, lyric index, and device state can be used to derive reproducible visual decisions while still producing different compositions across lyric sections.\n\nFramer Motion handles transitions and movement between visual states, while responsive layout and typography rules keep the lyrics readable on both desktop and mobile screens.',
+    devNotes: [
+      'Typography is treated as part of the composition rather than as a conventional subtitle layer placed over decorative graphics.',
+      'Visual variety comes from spatial arrangement, hierarchy, cropping, scale, color relationships, negative space, typography placement, and motion rather than color changes alone.',
+      'Seeded randomness keeps generated layouts reproducible, making visual debugging and iteration easier.',
+      'Desktop and mobile use different composition seeds and layout decisions so mobile can behave as its own composition rather than simply becoming a smaller desktop poster.',
+      'Lyric characteristics influence visual family and variant selection without completely restricting the available visual system.',
+      'Multiple layout structures move visual weight between edges, corners, editorial bands, vertical and horizontal spines, offset fields, and asymmetric blocks.',
+      'Readability remains a primary constraint so visual experimentation does not interfere with the Japanese or English lyrics.',
+    ],
+    highlights: [
+      {
+        icon: 'mdi:music-note-eighth',
+        title: 'Lyric-Synchronized Visuals',
+        description:
+          'Every visual scene is tied to the song timeline so the poster composition changes with the active lyric.',
+      },
+      {
+        icon: 'mdi:shape-plus',
+        title: 'Generative Poster System',
+        description:
+          'Visual families, variants, layouts, and geometric relationships create distinct compositions across lyric sections.',
+      },
+      {
+        icon: 'mdi:grid',
+        title: 'Swiss Editorial Structure',
+        description:
+          'Strong grids, asymmetric alignment, cropped forms, negative space, and typography create a structured poster language.',
+      },
+      {
+        icon: 'mdi:cellphone-link',
+        title: 'Desktop & Mobile Art Direction',
+        description:
+          'Desktop and mobile use different composition decisions so each screen size receives an intentional visual treatment.',
+      },
+    ],
+  },
 ];
 
 // Helper function to generate slug from title (if not provided)
