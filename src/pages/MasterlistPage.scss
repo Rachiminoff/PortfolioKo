@@ -3659,3 +3659,112 @@
     font-size: 8px;
   }
 }
+
+/* Swiss/Bauhaus stats pass: flat fields, precise rules, and a clear chart hierarchy. */
+.masterlist-stats-charts .manga-stat-panel {
+  background: #111216;
+  box-shadow: none;
+  border: 1px solid #35363a;
+  border-radius: 0;
+}
+.masterlist-stats-charts .manga-stat-panel::after {
+  display: none;
+}
+.masterlist-stats-charts .manga-bar-track span,
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n + 2) .manga-bar-track span,
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n) .manga-bar-track span {
+  background: var(--ml-yellow);
+  border-radius: 0;
+}
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n + 2) .manga-bar-track span {
+  background: var(--ml-red);
+}
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n) .manga-bar-track span {
+  background: var(--ml-blue);
+}
+.masterlist-stats-charts .manga-game-teaser {
+  background: #111216;
+}
+.masterlist-stats-charts .manga-stat-panel-heading {
+  padding-bottom: 12px;
+  border-bottom: 1px solid #34353a;
+}
+.masterlist-stats-charts > .ml-wide-chart {
+  grid-column: span 6;
+}
+.ml-trend-chart,
+.ml-line-wrap,
+.ml-scatter-wrap {
+  width: 100%;
+  min-width: 0;
+}
+.ml-trend-bars {
+  min-height: 190px;
+  gap: clamp(4px, 1vw, 12px);
+}
+.ml-trend-column {
+  min-width: 0;
+}
+.ml-trend-column > span {
+  border-radius: 0;
+  background: var(--ml-yellow);
+}
+.ml-trend-column:nth-child(3n + 2) > span {
+  background: var(--ml-red);
+}
+.ml-trend-column:nth-child(3n) > span {
+  background: var(--ml-blue);
+}
+.ml-scatter,
+.ml-line-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.ml-line-wrap .ml-scatter-legend {
+  margin-top: 8px;
+}
+.ml-scatter-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: #c7c7c7;
+  font:
+    10px 'IBM Plex Mono',
+    monospace;
+}
+.ml-scatter-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ml-scatter-legend i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+}
+@media (max-width: 1050px) {
+  .masterlist-stats-charts > .ml-wide-chart {
+    grid-column: span 6;
+  }
+}
+@media (max-width: 760px) {
+  .masterlist-stats-charts > .ml-wide-chart {
+    grid-column: 1 / -1;
+  }
+}
+
+.masterlist-stats-hero {
+  background: #111216;
+}
+.masterlist-stats-hero::before {
+  border-color: rgba(244, 196, 48, 0.86);
+}
+.masterlist-insight-feature,
+.masterlist-insight-mini,
+.masterlist-personality-panel {
+  background-image: none;
+  box-shadow: none;
+  border-radius: 0;
+}

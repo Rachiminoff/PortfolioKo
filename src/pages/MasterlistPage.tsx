@@ -60,6 +60,7 @@ type MangaEntry = {
   anilist_metadata: CachedAniListMetadata | null;
   anilist_fetched_at: string | null;
   anilist_fetch_status: string | null;
+  created_at?: string | null;
 };
 
 type MovieEntry = {
@@ -70,6 +71,7 @@ type MovieEntry = {
   letterboxdUri: string | null;
   posterUrl: string | null;
   country: string | null;
+  createdAt?: string | null;
   genres: string[];
   status: string;
   rating: number | null;
@@ -92,6 +94,7 @@ type GameEntry = {
   timesCompleted: number;
   completionDate: string;
   notes: string;
+  addedDate?: string;
   score: number | null;
   tags: string[];
 };
@@ -284,52 +287,172 @@ function BarTrendChart({ items }: { items: { label: string; value: number }[] })
   );
 }
 
-function RatingScatter({ points }: { points: { label: string; value: number; kind: string }[] }) {
+function CollectionGrowthChart({ items }: { items: { date: string; kind: string }[] }) {
+  const colors: Record<string, string> = {
+    Literature: '#f4c430',
+    Games: '#e53935',
+    Movies: '#2457d6',
+  };
+  const dated = items
+    .map((item) => ({ ...item, month: item.date.slice(0, 7) }))
+    .filter((item) => /^\d{4}-\d{2}$/.test(item.month));
+  if (!dated.length)
+    return <p className="manga-stat-empty">Collection-date data is not available yet.</p>;
+  const months = Array.from(new Set(dated.map((item) => item.month)))
+    .sort()
+    .slice(-18);
+  const series = Object.keys(colors).map((kind) => {
+    let cumulative = 0;
+    return {
+      kind,
+      points: months.map((month) => {
+        cumulative += dated.filter((item) => item.kind === kind && item.month === month).length;
+        return cumulative;
+      }),
+    };
+  });
+  const max = Math.max(1, ...series.flatMap((line) => line.points));
+  const x = (i: number) => (months.length < 2 ? 260 : 28 + (i / (months.length - 1)) * 464);
+  const y = (value: number) => 150 - (value / max) * 122;
+  return (
+    <div className="ml-line-wrap">
+      <svg
+        className="ml-line-chart"
+        viewBox="0 0 520 180"
+        role="img"
+        aria-label="Cumulative collection additions over time"
+      >
+        {[0, 0.25, 0.5, 0.75, 1].map((fraction) => (
+          <line
+            key={fraction}
+            x1="28"
+            x2="492"
+            y1={150 - fraction * 122}
+            y2={150 - fraction * 122}
+            stroke="#34363b"
+            strokeWidth="1"
+          />
+        ))}
+        {series.map((line) => (
+          <polyline
+            key={line.kind}
+            points={line.points.map((value, i) => `${x(i)},${y(value)}`).join(' ')}
+            fill="none"
+            stroke={colors[line.kind]}
+            strokeWidth="2.5"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+        ))}
+        {months
+          .filter((_, i) => i === 0 || i === months.length - 1 || i % 4 === 0)
+          .map((month) => (
+            <text
+              key={month}
+              x={x(months.indexOf(month))}
+              y="171"
+              textAnchor="middle"
+              fill="#a7a7a7"
+              fontSize="10"
+            >
+              {month.slice(2)}
+            </text>
+          ))}
+      </svg>
+      <div className="ml-scatter-legend">
+        {series.map((line) => (
+          <span key={line.kind}>
+            <i style={{ background: colors[line.kind] }} />
+            {line.kind}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RatingScatter({
+  points,
+}: {
+  points: { label: string; value: number; kind: string; year: number | null }[];
+}) {
   const valid = points.filter(
-    (point) => Number.isFinite(point.value) && point.value >= 0 && point.value <= 10,
+    (point) =>
+      Number.isFinite(point.value) &&
+      point.value >= 0 &&
+      point.value <= 10 &&
+      point.year != null &&
+      point.year >= 1800 &&
+      point.year <= new Date().getFullYear() + 2,
   );
   const colors: Record<string, string> = {
     Literature: '#f4c430',
     Games: '#e53935',
     Movies: '#2457d6',
   };
+  if (!valid.length)
+    return (
+      <p className="manga-stat-empty">
+        Ratings and release years are both needed to plot this chart.
+      </p>
+    );
+  const minYear = Math.floor(Math.min(...valid.map((point) => point.year as number)) / 5) * 5;
+  const maxYear =
+    Math.ceil(Math.max(...valid.map((point) => point.year as number)) / 5) * 5 || minYear + 5;
+  const range = Math.max(5, maxYear - minYear);
   return (
     <div className="ml-scatter-wrap">
       <svg
         className="ml-scatter"
         viewBox="0 0 520 190"
         role="img"
-        aria-label="Personal ratings by collection"
+        aria-label="Ratings by release year"
       >
         {[0, 2, 4, 6, 8, 10].map((n) => (
           <g key={n}>
             <line
-              x1="30"
+              x1="36"
               x2="510"
-              y1={166 - n * 14}
-              y2={166 - n * 14}
+              y1={160 - n * 13}
+              y2={160 - n * 13}
               stroke="#34363b"
               strokeWidth="1"
             />
-            <text x="5" y={170 - n * 14} fill="#9da3af" fontSize="10">
+            <text x="5" y={164 - n * 13} fill="#9da3af" fontSize="10">
               {n}
             </text>
           </g>
         ))}
-        {valid.slice(0, 280).map((point, index) => (
-          <circle
-            key={`${point.kind}-${point.label}-${index}`}
-            cx={34 + (index % 90) * 5.2}
-            cy={166 - point.value * 14}
-            r="3.3"
-            fill={colors[point.kind] ?? '#f4f0e6'}
-            opacity=".78"
-          >
-            <title>
-              {point.kind}: {point.value}/10
-            </title>
-          </circle>
-        ))}
+        {[0, 0.25, 0.5, 0.75, 1].map((fraction) => {
+          const year = Math.round(minYear + range * fraction);
+          const x = 36 + fraction * 474;
+          return (
+            <g key={fraction}>
+              <line x1={x} x2={x} y1="30" y2="160" stroke="#292b30" strokeDasharray="2 4" />
+              <text x={x} y="180" textAnchor="middle" fill="#9da3af" fontSize="10">
+                {year}
+              </text>
+            </g>
+          );
+        })}
+        {valid.slice(0, 650).map((point, index) => {
+          const x = 36 + (((point.year as number) - minYear) / range) * 474;
+          const y = 160 - point.value * 13;
+          return (
+            <circle
+              key={`${point.kind}-${point.label}-${index}`}
+              cx={Math.max(36, Math.min(510, x))}
+              cy={y}
+              r="3.2"
+              fill={colors[point.kind] ?? '#f4f0e6'}
+              opacity=".78"
+            >
+              <title>
+                {point.label} · {point.kind} · {point.year} · {point.value}/10
+              </title>
+            </circle>
+          );
+        })}
       </svg>
       <div className="ml-scatter-legend">
         {Object.entries(colors).map(([label, color]) => (
@@ -473,7 +596,7 @@ const MasterlistContent: React.FC = () => {
     const { data, error: loadError } = await supabase
       .from('manga_masterlist')
       .select(
-        'id,title,anilist_id,mal_id,total_volumes,total_chapters,read_volumes,read_chapters,score,status,start_date,finish_date,tags,comments,cover_url,anilist_metadata,anilist_fetched_at,anilist_fetch_status',
+        'id,title,anilist_id,mal_id,total_volumes,total_chapters,read_volumes,read_chapters,score,status,start_date,finish_date,tags,comments,cover_url,anilist_metadata,anilist_fetched_at,anilist_fetch_status,created_at',
       )
       .order('title', { ascending: true });
     if (loadError) setError(`Could not load Literature. ${loadError.message}`);
@@ -494,7 +617,7 @@ const MasterlistContent: React.FC = () => {
       const { data, error: loadError } = await supabase
         .from('game_masterlist')
         .select(
-          'igdb_id,game_name,cover_url,game_release_date,platform,status,completion,ownership,format,country,playtime,times_completed,completion_date,progress_notes,collection_notes,rating_score,tags',
+          'igdb_id,game_name,cover_url,game_release_date,platform,status,completion,ownership,format,country,playtime,times_completed,completion_date,progress_notes,collection_notes,rating_score,tags,date_added,created_at',
         )
         .order('game_name', { ascending: true });
 
@@ -513,6 +636,7 @@ const MasterlistContent: React.FC = () => {
             title: record.game_name || 'Untitled game',
             coverUrl: record.cover_url || null,
             releaseDate: record.game_release_date || '',
+            addedDate: record.date_added || record.created_at || '',
             platform: record.platform || 'Platform not specified',
             status: record.status || 'No Status',
             completion: record.completion || 'Not specified',
@@ -551,7 +675,7 @@ const MasterlistContent: React.FC = () => {
       const { data, error: loadError } = await supabase
         .from('movie_masterlist')
         .select(
-          'id,title,release_year,watchlist_date,letterboxd_uri,poster_url,country,genres,status,rating,notes,format',
+          'id,title,release_year,watchlist_date,letterboxd_uri,poster_url,country,genres,status,rating,notes,format,created_at',
         )
         .order('title', { ascending: true });
       if (cancelled) return;
@@ -565,6 +689,7 @@ const MasterlistContent: React.FC = () => {
             title: record.title || 'Untitled movie',
             year: record.release_year == null ? null : Number(record.release_year),
             watchlistDate: record.watchlist_date || null,
+            createdAt: record.created_at || null,
             letterboxdUri: record.letterboxd_uri || null,
             posterUrl: record.poster_url || null,
             country: record.country || null,
@@ -1041,14 +1166,42 @@ const MasterlistContent: React.FC = () => {
     () => [
       ...entries
         .filter((entry) => entry.score != null && entry.score > 0)
-        .map((entry) => ({ label: entry.title, value: entry.score as number, kind: 'Literature' })),
+        .map((entry) => ({
+          label: entry.title,
+          value: entry.score as number,
+          kind: 'Literature',
+          year: safeMetadata(entry)?.startDate?.year ?? null,
+        })),
       ...games
         .filter((game) => game.score != null)
-        .map((game) => ({ label: game.title, value: game.score as number, kind: 'Games' })),
+        .map((game) => ({
+          label: game.title,
+          value: game.score as number,
+          kind: 'Games',
+          year: game.releaseDate ? Number(game.releaseDate.slice(0, 4)) : null,
+        })),
       ...movies
         .filter((movie) => movie.rating != null)
-        .map((movie) => ({ label: movie.title, value: movie.rating as number, kind: 'Movies' })),
+        .map((movie) => ({
+          label: movie.title,
+          value: movie.rating as number,
+          kind: 'Movies',
+          year: movie.year,
+        })),
     ],
+    [entries, games, movies],
+  );
+
+  const collectionActivity = useMemo(
+    () =>
+      [
+        ...entries.map((entry) => ({ date: entry.created_at || '', kind: 'Literature' })),
+        ...games.map((game) => ({ date: game.addedDate || '', kind: 'Games' })),
+        ...movies.map((movie) => ({
+          date: movie.watchlistDate || movie.createdAt || '',
+          kind: 'Movies',
+        })),
+      ].filter((item) => Boolean(item.date)),
     [entries, games, movies],
   );
 
@@ -1186,289 +1339,6 @@ const MasterlistContent: React.FC = () => {
               <div>
                 <span>PLAYED / PLAYING</span>
                 <strong>{gamesLoading ? '…' : gameStats.played.toLocaleString()}</strong>
-              </div>
-            </section>
-
-            <section
-              className="masterlist-full-breakdown"
-              aria-label="Complete collection statistics"
-            >
-              <div className="masterlist-breakdown-heading">
-                <div>
-                  <span className="masterlist-kicker">ALL FIELDS · LIVE FROM SUPABASE</span>
-                  <h2>Every shelf, accounted for.</h2>
-                </div>
-                <p>
-                  Counts and distributions use the records currently loaded from your three
-                  masterlists. Missing values are not counted as zero.
-                </p>
-              </div>
-              <div className="masterlist-breakdown-grid">
-                <article className="masterlist-breakdown-card is-literature">
-                  <div className="masterlist-breakdown-title">
-                    <BookOpen size={19} />
-                    <div>
-                      <h3>Literature</h3>
-                      <span>{entries.length.toLocaleString()} titles</span>
-                    </div>
-                  </div>
-                  <div className="masterlist-breakdown-metrics">
-                    <div>
-                      <span>Completed</span>
-                      <strong>{stats.completed}</strong>
-                    </div>
-                    <div>
-                      <span>Reading</span>
-                      <strong>{stats.reading}</strong>
-                    </div>
-                    <div>
-                      <span>Scored</span>
-                      <strong>{stats.scoreCount}</strong>
-                    </div>
-                    <div>
-                      <span>Mean score</span>
-                      <strong>{stats.scoreCount ? stats.meanScore.toFixed(2) : '—'}</strong>
-                    </div>
-                    <div>
-                      <span>Chapters read</span>
-                      <strong>{stats.chaptersRead.toLocaleString()}</strong>
-                    </div>
-                    <div>
-                      <span>Volumes read</span>
-                      <strong>{stats.volumesRead.toLocaleString()}</strong>
-                    </div>
-                    <div>
-                      <span>Planned chapters</span>
-                      <strong>{stats.plannedChapters.toLocaleString()}</strong>
-                    </div>
-                    <div>
-                      <span>Metadata coverage</span>
-                      <strong>
-                        {stats.metadataCount}/{entries.length}
-                      </strong>
-                    </div>
-                  </div>
-                  <DistributionList
-                    title="All literature statuses"
-                    items={stats.status.map((item) => ({
-                      ...item,
-                      detail: `${item.value} titles`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Personal score distribution"
-                    items={stats.scoreDistribution.map((item) => ({
-                      label: `Score ${item.label}`,
-                      value: item.value,
-                      detail: `${item.value} titles`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Literature formats"
-                    items={stats.formats.map((item) => ({
-                      ...item,
-                      detail: `${item.value} titles`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Top literature genres"
-                    items={stats.genres.map((item) => ({
-                      ...item,
-                      detail: `${item.value} titles`,
-                    }))}
-                  />
-                </article>
-                <article className="masterlist-breakdown-card is-games">
-                  <div className="masterlist-breakdown-title">
-                    <Gamepad2 size={19} />
-                    <div>
-                      <h3>Games</h3>
-                      <span>
-                        {gamesLoading ? 'Loading…' : `${games.length.toLocaleString()} games`}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="masterlist-breakdown-metrics">
-                    <div>
-                      <span>Played / playing</span>
-                      <strong>{gameStats.played}</strong>
-                    </div>
-                    <div>
-                      <span>Owned</span>
-                      <strong>{gameStats.owned}</strong>
-                    </div>
-                    <div>
-                      <span>Completed</span>
-                      <strong>{gameStats.completed}</strong>
-                    </div>
-                    <div>
-                      <span>Scored</span>
-                      <strong>{gameStats.ratedCount}</strong>
-                    </div>
-                    <div>
-                      <span>Mean score</span>
-                      <strong>{gameStats.ratedCount ? gameStats.meanScore.toFixed(2) : '—'}</strong>
-                    </div>
-                    <div>
-                      <span>Platforms</span>
-                      <strong>{gameStats.platforms.length}</strong>
-                    </div>
-                    <div>
-                      <span>Countries</span>
-                      <strong>{gameStats.countries.length}</strong>
-                    </div>
-                    <div>
-                      <span>Release years</span>
-                      <strong>{gameStats.releaseYears.length}</strong>
-                    </div>
-                  </div>
-                  <DistributionList
-                    title="All game statuses"
-                    items={gameStats.status.map((item) => ({
-                      ...item,
-                      detail: `${item.value} games`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Completion profile"
-                    items={gameStats.completion.map((item) => ({
-                      ...item,
-                      detail: `${item.value} games`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Ownership"
-                    items={gameStats.ownership.map((item) => ({
-                      ...item,
-                      detail: `${item.value} games`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Platforms"
-                    items={gameStats.platforms.map((item) => ({
-                      ...item,
-                      detail: `${item.value} games`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Score distribution"
-                    items={gameStats.scoreDistribution.map((item) => ({
-                      label: `Score ${item.label}`,
-                      value: item.value,
-                      detail: `${item.value} games`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Game formats"
-                    items={gameStats.formats.map((item) => ({
-                      ...item,
-                      detail: `${item.value} games`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Countries of origin"
-                    items={gameStats.countries.map((item) => ({
-                      ...item,
-                      detail: `${item.value} games`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Release year"
-                    items={gameStats.releaseYears
-                      .slice(-12)
-                      .map((item) => ({ ...item, detail: `${item.value} games` }))}
-                  />
-                </article>
-                <article className="masterlist-breakdown-card is-movies">
-                  <div className="masterlist-breakdown-title">
-                    <Film size={19} />
-                    <div>
-                      <h3>Movies</h3>
-                      <span>
-                        {moviesLoading ? 'Loading…' : `${movies.length.toLocaleString()} films`}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="masterlist-breakdown-metrics">
-                    <div>
-                      <span>Rated</span>
-                      <strong>{movieStats.ratedCount}</strong>
-                    </div>
-                    <div>
-                      <span>Mean score</span>
-                      <strong>
-                        {movieStats.ratedCount ? movieStats.meanScore.toFixed(2) : '—'}
-                      </strong>
-                    </div>
-                    <div>
-                      <span>Posters</span>
-                      <strong>
-                        {movieStats.posterCount}/{movies.length}
-                      </strong>
-                    </div>
-                    <div>
-                      <span>Countries</span>
-                      <strong>{movieStats.countries.length}</strong>
-                    </div>
-                    <div>
-                      <span>Genres</span>
-                      <strong>{movieStats.genres.length}</strong>
-                    </div>
-                    <div>
-                      <span>Formats</span>
-                      <strong>{movieStats.formats.length}</strong>
-                    </div>
-                    <div>
-                      <span>Release years</span>
-                      <strong>{movieStats.releaseYears.length}</strong>
-                    </div>
-                    <div>
-                      <span>Unrated</span>
-                      <strong>{movies.length - movieStats.ratedCount}</strong>
-                    </div>
-                  </div>
-                  <DistributionList
-                    title="All watchlist statuses"
-                    items={movieStats.statuses.map((item) => ({
-                      ...item,
-                      detail: `${item.value} movies`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Rating distribution"
-                    items={movieStats.scoreDistribution.map((item) => ({
-                      label: `Score ${item.label}`,
-                      value: item.value,
-                      detail: `${item.value} movies`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Top movie genres"
-                    items={movieStats.genres
-                      .slice(0, 10)
-                      .map((item) => ({ ...item, detail: `${item.value} movies` }))}
-                  />
-                  <DistributionList
-                    title="Countries of origin"
-                    items={movieStats.countries.map((item) => ({
-                      ...item,
-                      detail: `${item.value} movies`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Movie formats"
-                    items={movieStats.formats.map((item) => ({
-                      ...item,
-                      detail: `${item.value} movies`,
-                    }))}
-                  />
-                  <DistributionList
-                    title="Release year"
-                    items={movieStats.releaseYears
-                      .slice(-12)
-                      .map((item) => ({ ...item, detail: `${item.value} movies` }))}
-                  />
-                </article>
               </div>
             </section>
 
@@ -1654,6 +1524,31 @@ const MasterlistContent: React.FC = () => {
                 </div>
               </div>
               <div className="manga-analytics-grid masterlist-stats-charts">
+                <section className="manga-stat-panel manga-chart-panel ml-wide-chart">
+                  <div className="manga-stat-panel-heading">
+                    <h3>Release timeline</h3>
+                    <span>ALL MEDIA · RELEASE YEAR</span>
+                  </div>
+                  <BarTrendChart items={combinedReleaseYears} />
+                </section>
+                <section className="manga-stat-panel manga-chart-panel ml-wide-chart">
+                  <div className="manga-stat-panel-heading">
+                    <h3>Collection growth</h3>
+                    <span>CUMULATIVE · DATED RECORDS</span>
+                  </div>
+                  <CollectionGrowthChart items={collectionActivity} />
+                </section>
+                <section className="manga-stat-panel manga-chart-panel ml-wide-chart">
+                  <div className="manga-stat-panel-heading">
+                    <h3>Rating map</h3>
+                    <span>{combinedRatings.length.toLocaleString()} SCORED ITEMS</span>
+                  </div>
+                  <RatingScatter points={combinedRatings} />
+                </section>
+                <DistributionList
+                  title="Shared genre landscape"
+                  items={combinedGenres.map((item) => ({ ...item, detail: `${item.value} items` }))}
+                />
                 <section className="manga-stat-panel manga-chart-panel">
                   <div className="manga-stat-panel-heading">
                     <h3>Collection mix</h3>
@@ -1674,13 +1569,6 @@ const MasterlistContent: React.FC = () => {
                   </div>
                   <MiniDonut items={formatDistribution} />
                 </section>
-                <DistributionList
-                  title="Top genres"
-                  items={combinedGenres.map((item) => ({
-                    ...item,
-                    detail: `${item.value} titles`,
-                  }))}
-                />
                 <DistributionList
                   title="Most played platforms"
                   items={gameStats.platforms.map((item) => ({
@@ -1723,21 +1611,7 @@ const MasterlistContent: React.FC = () => {
                     detail: `${item.value} games`,
                   }))}
                 />
-                <DistributionList
-                  title="Score distribution"
-                  items={stats.scoreDistribution.map((item) => ({
-                    label: `Score ${item.label}`,
-                    value: item.value,
-                    detail: item.detail,
-                  }))}
-                />
                 <DistributionList title="Chapter-length profile" items={stats.chapterBuckets} />
-                <DistributionList
-                  title="Release year"
-                  items={stats.releaseYears
-                    .slice(-10)
-                    .map((item) => ({ ...item, detail: `${item.value} titles` }))}
-                />
                 <section className="manga-stat-panel manga-stat-summary">
                   <div className="manga-stat-panel-heading">
                     <h3>Literature snapshot</h3>

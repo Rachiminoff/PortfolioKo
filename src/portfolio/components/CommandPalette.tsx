@@ -150,7 +150,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [close, execute, filteredCommands, onOpen, open, selectedIndex]);
+  }, [close, execute, filteredCommands, onOpen, open, query, selectedIndex]);
 
   useEffect(() => {
     if (!open) return;
