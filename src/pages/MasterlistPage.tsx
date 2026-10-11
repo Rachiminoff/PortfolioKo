@@ -256,6 +256,93 @@ function MiniDonut({
   );
 }
 
+function BarTrendChart({ items }: { items: { label: string; value: number }[] }) {
+  const data = items.filter((item) => /^\d{4}$/.test(item.label)).slice(-14);
+  const max = Math.max(1, ...data.map((item) => item.value));
+  if (!data.length)
+    return (
+      <p className="manga-stat-empty">
+        Release-year data will appear as metadata becomes available.
+      </p>
+    );
+  return (
+    <div className="ml-trend-chart" role="img" aria-label="Combined release counts by year">
+      <div className="ml-trend-bars">
+        {data.map((item) => (
+          <div
+            className="ml-trend-column"
+            key={item.label}
+            title={`${item.label}: ${item.value} entries`}
+          >
+            <strong>{item.value}</strong>
+            <span style={{ height: `${Math.max(4, (item.value / max) * 100)}%` }} />
+            <small>{item.label.slice(2)}</small>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RatingScatter({ points }: { points: { label: string; value: number; kind: string }[] }) {
+  const valid = points.filter(
+    (point) => Number.isFinite(point.value) && point.value >= 0 && point.value <= 10,
+  );
+  const colors: Record<string, string> = {
+    Literature: '#f4c430',
+    Games: '#e53935',
+    Movies: '#2457d6',
+  };
+  return (
+    <div className="ml-scatter-wrap">
+      <svg
+        className="ml-scatter"
+        viewBox="0 0 520 190"
+        role="img"
+        aria-label="Personal ratings by collection"
+      >
+        {[0, 2, 4, 6, 8, 10].map((n) => (
+          <g key={n}>
+            <line
+              x1="30"
+              x2="510"
+              y1={166 - n * 14}
+              y2={166 - n * 14}
+              stroke="#34363b"
+              strokeWidth="1"
+            />
+            <text x="5" y={170 - n * 14} fill="#9da3af" fontSize="10">
+              {n}
+            </text>
+          </g>
+        ))}
+        {valid.slice(0, 280).map((point, index) => (
+          <circle
+            key={`${point.kind}-${point.label}-${index}`}
+            cx={34 + (index % 90) * 5.2}
+            cy={166 - point.value * 14}
+            r="3.3"
+            fill={colors[point.kind] ?? '#f4f0e6'}
+            opacity=".78"
+          >
+            <title>
+              {point.kind}: {point.value}/10
+            </title>
+          </circle>
+        ))}
+      </svg>
+      <div className="ml-scatter-legend">
+        {Object.entries(colors).map(([label, color]) => (
+          <span key={label}>
+            <i style={{ background: color }} />
+            {label}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const MangaMetadata: React.FC<{ entry: MangaEntry }> = ({ entry }) => {
   const [open, setOpen] = useState(false);
   const metadata = safeMetadata(entry);
@@ -935,6 +1022,36 @@ const MasterlistContent: React.FC = () => {
     );
   }, [entries, gameStats.formats, movies]);
 
+  const combinedReleaseYears = useMemo(() => {
+    const counts = new Map<string, number>();
+    const add = (items: { label: string; value: number }[]) =>
+      items.forEach((item) => {
+        if (/^\d{4}$/.test(item.label))
+          counts.set(item.label, (counts.get(item.label) ?? 0) + item.value);
+      });
+    add(stats.releaseYears);
+    add(gameStats.releaseYears);
+    add(movieStats.releaseYears);
+    return Array.from(counts.entries())
+      .map(([label, value]) => ({ label, value }))
+      .sort((a, b) => Number(a.label) - Number(b.label));
+  }, [stats.releaseYears, gameStats.releaseYears, movieStats.releaseYears]);
+
+  const combinedRatings = useMemo(
+    () => [
+      ...entries
+        .filter((entry) => entry.score != null && entry.score > 0)
+        .map((entry) => ({ label: entry.title, value: entry.score as number, kind: 'Literature' })),
+      ...games
+        .filter((game) => game.score != null)
+        .map((game) => ({ label: game.title, value: game.score as number, kind: 'Games' })),
+      ...movies
+        .filter((movie) => movie.rating != null)
+        .map((movie) => ({ label: movie.title, value: movie.rating as number, kind: 'Movies' })),
+    ],
+    [entries, games, movies],
+  );
+
   return (
     <main className="masterlist-page">
       <div className="masterlist-shell">
@@ -1584,13 +1701,6 @@ const MasterlistContent: React.FC = () => {
                     <span>LITERATURE + GAMES + MOVIES</span>
                   </div>
                   <MiniDonut items={combinedCountries} variant="pie" />
-                </section>
-                <section className="manga-stat-panel manga-chart-panel">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Movie watchlist status</h3>
-                    <span>{movies.length} MOVIES</span>
-                  </div>
-                  <MiniDonut items={movieStats.statuses} />
                 </section>
                 <DistributionList
                   title="Game format distribution"

@@ -13,7 +13,10 @@
   --ml-yellow: #f4c430;
   --ml-accent: var(--ml-yellow);
   min-height: 100vh;
+  box-sizing: border-box;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 22px clamp(14px, 4vw, 64px) 56px;
   overflow-x: clip;
   background-color: var(--ml-bg);
@@ -24,12 +27,24 @@
   color: var(--ml-text);
   font-family: 'Archivo', Arial, sans-serif;
 }
+.masterlist-page,
 .masterlist-page * {
   box-sizing: border-box;
 }
 .masterlist-shell {
-  width: min(1480px, 100%);
+  width: 100%;
+  max-width: 1480px;
+  min-width: 0;
   margin: 0 auto;
+}
+.masterlist-page section,
+.masterlist-page article,
+.masterlist-page .manga-analytics,
+.masterlist-page .masterlist-library,
+.masterlist-page .masterlist-stats-charts,
+.masterlist-page .masterlist-personality-grid {
+  min-width: 0;
+  max-width: 100%;
 }
 .masterlist-header {
   border-bottom: 1px solid var(--ml-line-strong);
@@ -3354,5 +3369,293 @@
   .masterlist-page .masterlist-game-grid,
   .masterlist-page .masterlist-library-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Prevent the dashboard's wide chart panels from expanding the page past the viewport. */
+.masterlist-page {
+  overflow-x: clip;
+}
+.masterlist-page .masterlist-stats-hero,
+.masterlist-page .masterlist-stats,
+.masterlist-page .masterlist-personality-panel,
+.masterlist-page .masterlist-personality-grid,
+.masterlist-page .manga-analytics-grid,
+.masterlist-page .masterlist-stats-charts,
+.masterlist-page .manga-stat-panel,
+.masterlist-page .manga-donut-wrap,
+.masterlist-page .masterlist-library,
+.masterlist-page .masterlist-section-heading {
+  min-width: 0;
+  max-width: 100%;
+}
+.masterlist-page .masterlist-stats-hero > *,
+.masterlist-page .masterlist-personality-grid > *,
+.masterlist-page .masterlist-stats-charts > *,
+.masterlist-page .manga-stat-panel {
+  min-width: 0;
+}
+.masterlist-page img,
+.masterlist-page svg,
+.masterlist-page canvas {
+  max-width: 100%;
+}
+
+/* Stats refresh: less spreadsheet, more curated collection dashboard. */
+.masterlist-page .masterlist-stats {
+  gap: 12px;
+  border: 0;
+  background: transparent;
+}
+.masterlist-page .masterlist-stats > div {
+  min-height: 124px;
+  border: 1px solid rgba(244, 240, 230, 0.12) !important;
+  border-radius: 3px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(244, 196, 48, 0.075), transparent 58%),
+    linear-gradient(145deg, #171a20, #101115 75%);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+.masterlist-page .masterlist-stats > div:hover {
+  transform: translateY(-3px);
+  border-color: rgba(244, 196, 48, 0.45) !important;
+}
+.masterlist-page .masterlist-stats > div:nth-child(3n + 2) {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(238, 58, 56, 0.08), transparent 58%),
+    linear-gradient(145deg, #171a20, #101115 75%);
+}
+.masterlist-page .masterlist-stats > div:nth-child(3n) {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(54, 99, 226, 0.12), transparent 58%),
+    linear-gradient(145deg, #171a20, #101115 75%);
+}
+.masterlist-page .masterlist-stats > div::before {
+  width: 42px;
+  height: 3px;
+}
+.masterlist-page .masterlist-insight-strip {
+  gap: 12px;
+  border: 0;
+  background: transparent;
+}
+.masterlist-page .masterlist-insight-strip > article {
+  border: 1px solid rgba(244, 240, 230, 0.12) !important;
+  border-radius: 3px;
+  background: linear-gradient(145deg, #171a20, #101115 78%);
+}
+.masterlist-page .masterlist-insight-feature {
+  background:
+    radial-gradient(ellipse at 0% 0%, rgba(244, 196, 48, 0.13), transparent 65%),
+    linear-gradient(145deg, #1b1b1a, #101115 78%) !important;
+}
+.masterlist-page .masterlist-insight-mini:nth-child(3) {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(54, 99, 226, 0.13), transparent 62%),
+    linear-gradient(145deg, #171a20, #101115 78%) !important;
+}
+.masterlist-page .masterlist-insight-mini:nth-child(4) {
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(238, 58, 56, 0.1), transparent 62%),
+    linear-gradient(145deg, #171a20, #101115 78%) !important;
+}
+.masterlist-page .masterlist-personality-panel {
+  border-radius: 3px;
+  background: radial-gradient(ellipse at 0% 0%, rgba(54, 99, 226, 0.08), transparent 60%), #111318;
+}
+.masterlist-page .masterlist-personality-grid {
+  gap: 12px;
+  margin-top: 14px;
+}
+.masterlist-page .masterlist-personality-grid > div {
+  padding: 15px;
+  margin: 0;
+  border: 1px solid rgba(244, 240, 230, 0.1);
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.018);
+}
+.masterlist-page .masterlist-stats-charts {
+  gap: 14px;
+}
+.masterlist-page .manga-stat-panel,
+.masterlist-page .masterlist-stats-charts .distribution-list {
+  border-radius: 3px;
+  border-color: rgba(244, 240, 230, 0.12);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(54, 99, 226, 0.055), transparent 52%),
+    linear-gradient(150deg, #15171d, #101115 72%);
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+.masterlist-page .manga-stat-panel-heading {
+  border-bottom-color: rgba(244, 240, 230, 0.12);
+}
+.masterlist-page .masterlist-stats-charts .distribution-list-item {
+  gap: 10px;
+}
+.masterlist-page .masterlist-stats-charts .distribution-track {
+  border-radius: 99px;
+  overflow: hidden;
+}
+.masterlist-page .masterlist-stats-charts .distribution-track > span {
+  border-radius: inherit;
+}
+.masterlist-page .masterlist-donut-wrap {
+  gap: 24px;
+}
+.masterlist-page .masterlist-donut,
+.masterlist-page .masterlist-pie {
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.22));
+}
+@media (max-width: 650px) {
+  .masterlist-page .masterlist-stats {
+    gap: 8px;
+  }
+  .masterlist-page .masterlist-stats > div {
+    min-height: 100px;
+  }
+  .masterlist-page .masterlist-insight-strip {
+    gap: 8px;
+  }
+  .masterlist-page .masterlist-personality-grid {
+    gap: 8px;
+  }
+  .masterlist-page .manga-stat-panel,
+  .masterlist-page .masterlist-stats-charts .distribution-list {
+    padding: 14px;
+  }
+}
+
+/* Swiss/Bauhaus stats refinements: flat ink surfaces, hard rules, and chart-led storytelling. */
+.masterlist-stats > div,
+.masterlist-stats-charts .manga-stat-panel,
+.masterlist-personality-grid > div {
+  background: #111216 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+.masterlist-stats > div:hover {
+  background: #17181d !important;
+}
+.masterlist-stats-charts .manga-stat-panel::after {
+  width: 28px;
+  height: 3px;
+}
+.masterlist-stats-charts .manga-bar-track span {
+  background: var(--ml-yellow) !important;
+}
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n + 2) .manga-bar-track span {
+  background: var(--ml-red) !important;
+}
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n) .manga-bar-track span {
+  background: var(--ml-blue) !important;
+}
+.ml-trend-chart {
+  min-height: 190px;
+  padding: 10px 4px 0;
+}
+.ml-trend-bars {
+  height: 174px;
+  display: grid;
+  grid-template-columns: repeat(14, minmax(0, 1fr));
+  align-items: end;
+  gap: 7px;
+  border-bottom: 1px solid var(--ml-line-strong);
+}
+.ml-trend-column {
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+}
+.ml-trend-column strong {
+  color: var(--ml-muted);
+  font:
+    9px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.ml-trend-column span {
+  display: block;
+  width: min(100%, 22px);
+  min-height: 4px;
+  background: var(--ml-yellow);
+  border-top: 2px solid #fff0a1;
+  transition: opacity 0.15s ease;
+}
+.ml-trend-column:nth-child(3n + 2) span {
+  background: var(--ml-red);
+  border-color: #ffaaa3;
+}
+.ml-trend-column:nth-child(3n) span {
+  background: var(--ml-blue);
+  border-color: #8ba5ff;
+}
+.ml-trend-column:hover span {
+  opacity: 0.72;
+}
+.ml-trend-column small {
+  color: var(--ml-muted);
+  font:
+    9px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.ml-scatter-wrap {
+  width: 100%;
+  min-width: 0;
+}
+.ml-scatter {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 220px;
+  overflow: visible;
+}
+.ml-scatter-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 12px;
+}
+.ml-scatter-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ml-muted);
+  font:
+    10px ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.ml-scatter-legend i {
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+}
+.ml-year-panel,
+.ml-rating-panel {
+  grid-column: span 6 !important;
+}
+@media (max-width: 760px) {
+  .ml-year-panel,
+  .ml-rating-panel {
+    grid-column: 1 / -1 !important;
+  }
+  .ml-trend-bars {
+    gap: 3px;
+  }
+  .ml-trend-column strong {
+    font-size: 8px;
   }
 }

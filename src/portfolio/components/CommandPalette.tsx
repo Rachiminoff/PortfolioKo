@@ -118,9 +118,33 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             ? (value - 1 + filteredCommands.length) % filteredCommands.length
             : 0,
         );
-      } else if (event.key === 'Enter' && filteredCommands[selectedIndex]) {
+      } else if (event.key === 'Enter') {
         event.preventDefault();
-        execute(filteredCommands[selectedIndex]);
+        if (filteredCommands[selectedIndex]) {
+          execute(filteredCommands[selectedIndex]);
+        } else if (query.trim()) {
+          // Treat an otherwise-unmatched search as a possible private passphrase.
+          // The server verifies it; the password is never embedded in client code.
+          const attempt = query;
+          void (async () => {
+            try {
+              const response = await fetch('/api/unlock', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ password: attempt }),
+              });
+              const result = await response.json().catch(() => ({}));
+              if (response.ok && result.success) {
+                window.dispatchEvent(new Event('archive-auth-changed'));
+                close();
+                window.location.assign('/persona');
+              }
+            } catch {
+              // Keep the palette's normal no-match state for failed attempts.
+            }
+          })();
+        }
       }
     };
 
