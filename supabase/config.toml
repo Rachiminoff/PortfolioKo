@@ -1,0 +1,5 @@
+[functions.sync-game-covers]
+verify_jwt = false
+
+[functions.sync-movie-posters]
+verify_jwt = false

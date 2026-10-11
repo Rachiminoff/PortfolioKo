@@ -691,10 +691,16 @@ $nav-height: 76px;
 /* Mobile navigation stays focused: brand + hamburger only. */
 @media (max-width: 900px) {
   .navbar .command-palette-trigger {
+    display: flex !important;
+    margin-left: auto;
+  }
+  .navbar .command-palette-trigger .command-palette-trigger-label,
+  .navbar .command-palette-trigger kbd,
+  .navbar .command-trigger-search-icon {
     display: none !important;
   }
-
-  .navbar .mobile-nav-actions {
-    margin-left: auto;
+  .navbar .command-palette-trigger .command-trigger-menu-icon {
+    display: block !important;
+    font-size: 27px;
   }
 }

@@ -32,6 +32,22 @@ const PersonaToolsSection: React.FC = () => {
           </span>
           <Icon className="persona-tool-arrow" icon="mdi:arrow-top-right" width={22} />
         </button>
+        <button
+          type="button"
+          className="persona-tool-card"
+          onClick={() => navigate('/masterlist')}
+          aria-label="Open Masterlist"
+        >
+          <span className="persona-tool-icon" aria-hidden="true">
+            <Icon icon="mdi:bookshelf" width={38} height={38} />
+          </span>
+          <span className="persona-tool-copy">
+            <span className="persona-meta">PERSONAL COLLECTION</span>
+            <strong>Masterlist</strong>
+            <small>Browse manga, games, movies, and visual collection stats in one archive.</small>
+          </span>
+          <Icon className="persona-tool-arrow" icon="mdi:arrow-top-right" width={22} />
+        </button>
       </div>
     </section>
   );

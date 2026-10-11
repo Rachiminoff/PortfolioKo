@@ -1,0 +1,3358 @@
+/* MANGA ARCHIVE — Swiss grid × Bauhaus primary geometry */
+.masterlist-page {
+  --ml-bg: #0a0b0e;
+  --ml-panel: #111318;
+  --ml-panel-2: #181b21;
+  --ml-text: #f4f0e6;
+  --ml-muted: #9a9da5;
+  --ml-faint: #6d727b;
+  --ml-line: rgba(244, 240, 230, 0.14);
+  --ml-line-strong: rgba(244, 240, 230, 0.25);
+  --ml-red: #e53935;
+  --ml-blue: #2457d6;
+  --ml-yellow: #f4c430;
+  --ml-accent: var(--ml-yellow);
+  min-height: 100vh;
+  width: 100%;
+  padding: 22px clamp(14px, 4vw, 64px) 56px;
+  overflow-x: clip;
+  background-color: var(--ml-bg);
+  background-image:
+    linear-gradient(rgba(244, 240, 230, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 240, 230, 0.018) 1px, transparent 1px);
+  background-size: 44px 44px;
+  color: var(--ml-text);
+  font-family: 'Archivo', Arial, sans-serif;
+}
+.masterlist-page * {
+  box-sizing: border-box;
+}
+.masterlist-shell {
+  width: min(1480px, 100%);
+  margin: 0 auto;
+}
+.masterlist-header {
+  border-bottom: 1px solid var(--ml-line-strong);
+  padding-bottom: 17px;
+}
+.masterlist-eyebrow,
+.masterlist-kicker,
+.masterlist-provider,
+.masterlist-result-count,
+.masterlist-rule,
+.masterlist-footer {
+  font:
+    800 9px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.masterlist-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--ml-muted);
+}
+.masterlist-eyebrow span:last-child {
+  color: var(--ml-faint);
+}
+.masterlist-eyebrow-dot,
+.masterlist-provider > span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  background: var(--ml-red);
+  box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.12);
+}
+.masterlist-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  padding: clamp(44px, 8vw, 100px) 0 42px;
+}
+.masterlist-heading-row h1 {
+  margin: 0;
+  max-width: 1100px;
+  font:
+    900 clamp(3.8rem, 11vw, 10rem)/0.78 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.095em;
+  text-transform: uppercase;
+  color: var(--ml-text);
+}
+.masterlist-heading-row h1 span {
+  display: block;
+  width: fit-content;
+  margin-top: 0.13em;
+  padding: 0.035em 0.11em 0.08em 0;
+  color: var(--ml-yellow);
+}
+.masterlist-intro {
+  max-width: 690px;
+  margin: 28px 0 0;
+  padding-left: 14px;
+  border-left: 4px solid var(--ml-yellow);
+  color: var(--ml-muted);
+  font:
+    500 11px/1.8 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-header-mark {
+  position: relative;
+  display: grid;
+  place-content: center;
+  width: clamp(64px, 8vw, 104px);
+  height: clamp(64px, 8vw, 104px);
+  flex: 0 0 clamp(64px, 8vw, 104px);
+  border: 2px solid var(--ml-text);
+  background: var(--ml-blue);
+  color: var(--ml-text);
+  font:
+    900 clamp(23px, 3vw, 35px)/1 'Archivo',
+    sans-serif;
+  transform: rotate(3deg);
+}
+.masterlist-header-mark::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: -8px;
+  right: -8px;
+  background: var(--ml-red);
+  border: 2px solid var(--ml-bg);
+}
+.masterlist-header-mark span {
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+  color: var(--ml-yellow);
+  font:
+    900 12px/1 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ml-muted);
+}
+.masterlist-rule i {
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--ml-red);
+}
+.masterlist-rule i:nth-of-type(2) {
+  background: var(--ml-blue);
+}
+.masterlist-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin: 0 0 68px;
+  border-left: 1px solid var(--ml-line-strong);
+  border-top: 1px solid var(--ml-line-strong);
+}
+.masterlist-stats > div {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 125px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 17px 20px;
+  border-right: 1px solid var(--ml-line-strong);
+  border-bottom: 1px solid var(--ml-line-strong);
+  background: rgba(17, 19, 24, 0.88);
+}
+.masterlist-stats > div::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 30px;
+  height: 3px;
+  background: var(--ml-yellow);
+}
+.masterlist-stats > div:nth-child(2)::before,
+.masterlist-stats > div:nth-child(5)::before {
+  background: var(--ml-red);
+}
+.masterlist-stats > div:nth-child(3)::before,
+.masterlist-stats > div:nth-child(6)::before {
+  background: var(--ml-blue);
+}
+.masterlist-stats > div span {
+  color: var(--ml-muted);
+  font:
+    800 8px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.1em;
+}
+.masterlist-stats > div strong {
+  color: var(--ml-text);
+  font:
+    800 clamp(24px, 2.6vw, 38px)/0.95 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.065em;
+  overflow-wrap: anywhere;
+}
+.masterlist-stats > div:nth-child(2) strong {
+  color: var(--ml-yellow);
+}
+.masterlist-stats > div:nth-child(5) strong {
+  color: var(--ml-red);
+}
+.masterlist-kicker {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--ml-yellow);
+}
+.manga-analytics {
+  margin: 0 0 72px;
+}
+.manga-analytics-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.manga-analytics-header h2,
+.masterlist-section-heading h2 {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    900 clamp(30px, 4.4vw, 57px)/0.98 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+}
+.manga-analytics-header p {
+  margin: 14px 0 0;
+  color: var(--ml-muted);
+  font:
+    500 10px/1.8 'IBM Plex Mono',
+    monospace;
+}
+.manga-sync-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: min(340px, 100%);
+  max-width: 430px;
+  padding: 13px 14px;
+  border: 1px solid var(--ml-line-strong);
+  background: var(--ml-panel);
+}
+.manga-sync-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  background: var(--ml-faint);
+}
+.manga-sync-status.is-syncing .manga-sync-dot {
+  background: var(--ml-yellow);
+  box-shadow: 0 0 0 4px rgba(244, 196, 48, 0.12);
+  animation: manga-pulse 1.2s ease-in-out infinite;
+}
+.manga-sync-status > div {
+  flex: 1;
+  min-width: 0;
+}
+.manga-sync-status strong {
+  display: block;
+  color: var(--ml-yellow);
+  font:
+    800 8px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+}
+.manga-sync-status small {
+  display: block;
+  margin-top: 4px;
+  color: var(--ml-muted);
+  font:
+    500 9px/1.6 'IBM Plex Mono',
+    monospace;
+  overflow-wrap: anywhere;
+}
+.manga-sync-status button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border: 1px solid var(--ml-line-strong);
+  background: transparent;
+  color: var(--ml-text);
+  cursor: pointer;
+}
+.manga-sync-status button:hover {
+  border-color: var(--ml-yellow);
+  color: var(--ml-yellow);
+}
+.manga-sync-track {
+  height: 3px;
+  margin-top: 8px;
+  background: var(--ml-panel-2);
+}
+.manga-sync-track span {
+  display: block;
+  height: 100%;
+  background: var(--ml-yellow);
+  transition: width 0.25s ease;
+}
+.manga-analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.manga-stat-panel {
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--ml-line);
+  background: rgba(17, 19, 24, 0.94);
+}
+.manga-stat-panel:nth-child(3n + 2) {
+  background: rgba(18, 21, 29, 0.96);
+}
+.manga-stat-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 19px;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--ml-line-strong);
+}
+.manga-stat-panel-heading h3 {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    800 13px/1.25 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.manga-stat-panel-heading > span {
+  color: var(--ml-faint);
+  font:
+    700 8px/1.4 'IBM Plex Mono',
+    monospace;
+  text-align: right;
+}
+.manga-stat-panel-heading > svg {
+  color: var(--ml-yellow);
+}
+.manga-distribution-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.manga-distribution-row {
+  min-width: 0;
+}
+.manga-distribution-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 7px;
+  color: #d9d8d2;
+  font:
+    500 10px/1.4 'IBM Plex Mono',
+    monospace;
+}
+.manga-distribution-label span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.manga-distribution-label strong {
+  flex: 0 0 auto;
+  color: var(--ml-muted);
+  font:
+    700 9px/1.4 'IBM Plex Mono',
+    monospace;
+  text-align: right;
+}
+.manga-bar-track {
+  height: 5px;
+  overflow: hidden;
+  background: #252832;
+}
+.manga-bar-track span {
+  display: block;
+  height: 100%;
+  background: var(--ml-yellow);
+  transition: width 0.35s ease;
+}
+.manga-distribution-row:nth-child(3n + 2) .manga-bar-track span {
+  background: var(--ml-red);
+}
+.manga-distribution-row:nth-child(3n) .manga-bar-track span {
+  background: var(--ml-blue);
+}
+.manga-stat-empty {
+  color: var(--ml-muted);
+  font:
+    500 10px/1.8 'IBM Plex Mono',
+    monospace;
+}
+.manga-snapshot-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--ml-line);
+  color: var(--ml-muted);
+  font:
+    500 10px/1.4 'IBM Plex Mono',
+    monospace;
+}
+.manga-snapshot-row svg {
+  color: var(--ml-yellow);
+  flex: 0 0 auto;
+}
+.manga-snapshot-row span {
+  flex: 1;
+}
+.manga-snapshot-row strong {
+  color: var(--ml-text);
+  font:
+    800 16px/1 'Archivo',
+    Arial,
+    sans-serif;
+}
+.manga-stat-summary > p {
+  margin: 15px 0 0;
+  color: var(--ml-faint);
+  font:
+    500 9px/1.8 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-library {
+  margin-top: 0;
+  padding-top: 38px;
+  border-top: 2px solid var(--ml-text);
+}
+.masterlist-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.masterlist-section-heading > svg {
+  color: var(--ml-red);
+  margin-bottom: 4px;
+}
+.masterlist-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 54px;
+  padding: 0 16px;
+  border: 1px solid var(--ml-line-strong);
+  background: var(--ml-panel);
+  color: var(--ml-muted);
+}
+.masterlist-searchbar:focus-within {
+  border-color: var(--ml-yellow);
+  box-shadow: inset 3px 0 var(--ml-yellow);
+}
+.masterlist-searchbar input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ml-text);
+  font:
+    500 11px/1.5 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-searchbar input::placeholder {
+  color: var(--ml-faint);
+}
+.masterlist-clear-search {
+  border: 0;
+  background: transparent;
+  color: var(--ml-yellow);
+  font-size: 21px;
+  cursor: pointer;
+}
+.masterlist-status-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin: 14px 0 22px;
+  color: var(--ml-muted);
+  font:
+    700 8px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.masterlist-status-filters label {
+  margin-left: 4px;
+}
+.masterlist-status-filters select {
+  min-height: 34px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--ml-line-strong);
+  border-radius: 0;
+  background: var(--ml-panel);
+  color: var(--ml-text);
+  font:
+    500 9px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-status-filters span {
+  margin-left: auto;
+  color: var(--ml-yellow);
+  font:
+    800 9px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+.masterlist-library-card {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--ml-line);
+  background: var(--ml-panel);
+  transition:
+    border-color 0.18s ease,
+    transform 0.18s ease,
+    background 0.18s ease;
+}
+.masterlist-library-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--ml-yellow);
+  background: #151820;
+}
+.masterlist-library-cover {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+  background: var(--ml-panel-2);
+}
+.masterlist-library-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  transition: transform 0.35s ease;
+}
+.masterlist-library-card:hover .masterlist-library-cover img {
+  transform: scale(1.04);
+}
+.masterlist-library-cover::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 30%;
+  background: linear-gradient(transparent, rgba(10, 11, 14, 0.5));
+  pointer-events: none;
+}
+.masterlist-library-cover .masterlist-card-type {
+  position: absolute;
+  z-index: 1;
+  left: 9px;
+  bottom: 9px;
+  top: auto;
+  padding: 5px 7px;
+  border: 1px solid rgba(244, 240, 230, 0.35);
+  background: rgba(10, 11, 14, 0.9);
+  color: var(--ml-yellow);
+  font:
+    800 8px/1.2 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.09em;
+}
+.masterlist-library-card .masterlist-card-content {
+  padding: 13px 13px 15px;
+}
+.masterlist-library-card h3 {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    800 14px/1.3 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+.masterlist-card-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 9px;
+  color: var(--ml-muted);
+  font:
+    500 9px/1.5 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-card-meta span {
+  width: 4px;
+  height: 4px;
+  background: var(--ml-red);
+}
+.masterlist-entry-progress {
+  margin: 12px 0 0;
+  color: var(--ml-text);
+  font:
+    700 9px/1.5 'IBM Plex Mono',
+    monospace;
+}
+.manga-progress-track {
+  height: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+  background: #292c34;
+}
+.manga-progress-track span {
+  display: block;
+  height: 100%;
+  background: var(--ml-yellow);
+}
+.manga-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+.manga-tags span {
+  padding: 4px 6px;
+  border: 1px solid var(--ml-line);
+  color: var(--ml-muted);
+  font:
+    600 8px/1.2 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-entry-notes {
+  margin: 10px 0 0;
+  color: var(--ml-faint);
+  font:
+    500 9px/1.65 'IBM Plex Mono',
+    monospace;
+  overflow-wrap: anywhere;
+}
+.manga-metadata-wrap {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--ml-line);
+}
+.manga-metadata-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ml-yellow);
+  font:
+    800 8px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.manga-metadata-toggle:hover {
+  color: var(--ml-text);
+}
+.manga-metadata-panel {
+  margin-top: 12px;
+  padding: 12px;
+  border-left: 2px solid var(--ml-blue);
+  background: var(--ml-panel-2);
+}
+.manga-metadata-description {
+  max-height: 180px;
+  overflow: auto;
+  white-space: pre-line;
+  color: #c6c7ca;
+  font:
+    500 10px/1.7 'IBM Plex Mono',
+    monospace;
+}
+.manga-metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.manga-metadata-grid div {
+  min-width: 0;
+}
+.manga-metadata-grid dt {
+  margin-bottom: 4px;
+  color: var(--ml-faint);
+  font:
+    800 7px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.manga-metadata-grid dd {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    500 9px/1.6 'IBM Plex Mono',
+    monospace;
+  overflow-wrap: anywhere;
+}
+.manga-metadata-muted {
+  color: var(--ml-muted);
+  font:
+    500 9px/1.7 'IBM Plex Mono',
+    monospace;
+}
+.manga-external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 11px;
+  color: var(--ml-yellow);
+  font:
+    800 8px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.manga-external-link:hover {
+  color: var(--ml-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.masterlist-empty-state {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 20px;
+  border: 1px dashed var(--ml-line-strong);
+  text-align: center;
+  background: var(--ml-panel);
+}
+.masterlist-empty-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  border: 1px solid var(--ml-line-strong);
+  color: var(--ml-yellow);
+}
+.masterlist-empty-state h3 {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    800 19px 'Archivo',
+    Arial,
+    sans-serif;
+}
+.masterlist-empty-state p {
+  max-width: 430px;
+  margin: 10px 0 0;
+  color: var(--ml-muted);
+  font:
+    500 10px/1.8 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 180px;
+  color: var(--ml-muted);
+  font:
+    500 10px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-spinner {
+  color: var(--ml-yellow);
+  animation: masterlist-spin 1s linear infinite;
+}
+.masterlist-notice {
+  margin: 16px 0;
+  padding: 13px 15px;
+  font:
+    500 10px/1.7 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-notice.error {
+  border: 1px solid rgba(229, 57, 53, 0.6);
+  border-left: 4px solid var(--ml-red);
+  background: rgba(229, 57, 53, 0.08);
+  color: #ffaaa6;
+}
+.masterlist-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 58px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ml-line-strong);
+  color: var(--ml-faint);
+}
+.masterlist-footer span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.masterlist-footer svg {
+  color: var(--ml-yellow);
+}
+@keyframes masterlist-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes manga-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+@media (max-width: 1150px) {
+  .masterlist-stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .manga-analytics-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-library-grid {
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .masterlist-heading-row {
+    align-items: flex-start;
+    padding: 54px 0 34px;
+  }
+  .masterlist-heading-row h1 {
+    font-size: clamp(3.4rem, 13vw, 6.5rem);
+  }
+  .masterlist-header-mark {
+    margin-top: 8px;
+  }
+  .manga-analytics-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .manga-sync-status {
+    min-width: 0;
+    max-width: none;
+  }
+  .masterlist-section-heading h2,
+  .manga-analytics-header h2 {
+    font-size: clamp(30px, 8vw, 44px);
+  }
+  .masterlist-library-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .masterlist-library-cover {
+    height: clamp(145px, 34vw, 220px);
+  }
+}
+@media (max-width: 560px) {
+  .masterlist-page {
+    padding: 18px 13px 34px;
+  }
+  .masterlist-heading-row {
+    gap: 10px;
+  }
+  .masterlist-heading-row h1 {
+    font-size: clamp(3rem, 13vw, 4.6rem);
+  }
+  .masterlist-header-mark {
+    width: 53px;
+    height: 53px;
+    flex-basis: 53px;
+    font-size: 21px;
+  }
+  .masterlist-intro {
+    margin-top: 19px;
+    font-size: 9px;
+  }
+  .masterlist-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 48px;
+  }
+  .masterlist-stats > div {
+    min-height: 100px;
+    padding: 13px 12px 15px;
+  }
+  .masterlist-stats > div strong {
+    font-size: clamp(24px, 7vw, 33px);
+  }
+  .manga-analytics {
+    margin-bottom: 50px;
+  }
+  .manga-analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+  .manga-stat-panel {
+    padding: 16px;
+  }
+  .masterlist-library-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .masterlist-library-cover {
+    height: clamp(180px, 56vw, 260px);
+  }
+  .masterlist-library-card .masterlist-card-content {
+    padding: 11px;
+  }
+  .masterlist-library-card h3 {
+    font-size: 13px;
+  }
+  .masterlist-status-filters {
+    gap: 7px;
+  }
+  .masterlist-status-filters label {
+    margin-left: 0;
+  }
+  .masterlist-status-filters span {
+    width: 100%;
+    margin: 4px 0 0;
+  }
+  .manga-metadata-grid {
+    grid-template-columns: 1fr;
+  }
+  .masterlist-footer {
+    flex-direction: column;
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .masterlist-page *,
+  .masterlist-page *::before,
+  .masterlist-page *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Masterlist navigation, charts, and additional shelves */
+.masterlist-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 22px 0 34px;
+  border: 1px solid var(--ml-line-strong);
+  background: var(--ml-panel);
+}
+.masterlist-tab {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-content: center;
+  align-items: center;
+  column-gap: 11px;
+  row-gap: 4px;
+  min-width: 0;
+  min-height: 76px;
+  padding: 14px 17px;
+  border: 0;
+  border-right: 1px solid var(--ml-line-strong);
+  background: transparent;
+  color: var(--ml-muted);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+}
+.masterlist-tab:last-child {
+  border-right: 0;
+}
+.masterlist-tab > svg {
+  grid-row: 1 / span 2;
+  color: var(--ml-faint);
+}
+.masterlist-tab > span {
+  color: var(--ml-text);
+  font:
+    900 16px/1 'Archivo',
+    Arial,
+    sans-serif;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+}
+.masterlist-tab small {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ml-faint);
+  font:
+    500 8px/1.4 'IBM Plex Mono',
+    monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.masterlist-tab:hover {
+  background: #171a21;
+}
+.masterlist-tab.is-active {
+  background: var(--ml-yellow);
+  color: #0a0b0e;
+  box-shadow: inset 0 -4px #0a0b0e;
+}
+.masterlist-tab.is-active > svg,
+.masterlist-tab.is-active > span,
+.masterlist-tab.is-active small {
+  color: #0a0b0e;
+}
+.masterlist-tab-content {
+  animation: masterlist-enter 0.22s ease both;
+}
+.masterlist-section-subtitle {
+  margin: 12px 0 0;
+  color: var(--ml-muted);
+  font:
+    500 10px/1.7 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-donut-wrap {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: 18px;
+}
+.masterlist-donut {
+  display: grid;
+  place-items: center;
+  width: min(100%, 150px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+.masterlist-donut > div {
+  display: flex;
+  width: 68%;
+  aspect-ratio: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ml-line);
+  border-radius: 50%;
+  background: var(--ml-panel);
+}
+.masterlist-donut strong {
+  color: var(--ml-text);
+  font:
+    900 clamp(20px, 2vw, 28px)/1 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.06em;
+}
+.masterlist-donut span {
+  margin-top: 5px;
+  color: var(--ml-faint);
+  font:
+    700 7px/1.3 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.1em;
+}
+.masterlist-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.masterlist-donut-legend > div {
+  display: grid;
+  grid-template-columns: 7px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  color: var(--ml-muted);
+  font:
+    500 9px/1.4 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-donut-legend i {
+  width: 7px;
+  height: 7px;
+}
+.masterlist-donut-legend span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.masterlist-donut-legend strong {
+  color: var(--ml-text);
+  font-size: 9px;
+}
+.manga-game-teaser-count {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--ml-yellow);
+  font:
+    900 44px/0.95 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.07em;
+}
+.manga-game-teaser-count span {
+  color: var(--ml-muted);
+  font:
+    500 9px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0;
+}
+.manga-game-teaser > p {
+  color: var(--ml-muted);
+  font:
+    500 10px/1.8 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-inline-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--ml-yellow);
+  font:
+    800 9px/1.4 'IBM Plex Mono',
+    monospace;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.masterlist-inline-action:hover {
+  color: var(--ml-text);
+}
+.masterlist-view-toggle {
+  display: inline-flex;
+  gap: 3px;
+  margin-left: 5px;
+  padding: 3px;
+  border: 1px solid var(--ml-line-strong);
+  background: var(--ml-panel);
+}
+.masterlist-view-toggle button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 28px;
+  border: 0;
+  background: transparent;
+  color: var(--ml-muted);
+  cursor: pointer;
+}
+.masterlist-view-toggle button.is-active {
+  background: var(--ml-yellow);
+  color: #0a0b0e;
+}
+.masterlist-library-grid.is-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.masterlist-library-grid.is-list .masterlist-library-card {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+}
+.masterlist-library-grid.is-list .masterlist-library-cover {
+  height: 100%;
+  min-height: 155px;
+}
+.masterlist-library-grid.is-list .masterlist-library-cover img {
+  position: absolute;
+  inset: 0;
+}
+.masterlist-library-grid.is-list .masterlist-card-content {
+  padding: 16px 18px;
+}
+.masterlist-library-grid.is-list .masterlist-card-content h3 {
+  font-size: 16px;
+}
+.masterlist-library-grid.is-list .masterlist-entry-notes {
+  max-width: 900px;
+}
+.masterlist-game-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0 0 22px;
+  border-left: 1px solid var(--ml-line-strong);
+  border-top: 1px solid var(--ml-line-strong);
+}
+.masterlist-game-metrics > div {
+  display: flex;
+  min-width: 0;
+  min-height: 90px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px;
+  border-right: 1px solid var(--ml-line-strong);
+  border-bottom: 1px solid var(--ml-line-strong);
+  background: rgba(17, 19, 24, 0.9);
+}
+.masterlist-game-metrics > div:nth-child(3n + 1) {
+  box-shadow: inset 0 3px var(--ml-yellow);
+}
+.masterlist-game-metrics > div:nth-child(3n + 2) {
+  box-shadow: inset 0 3px var(--ml-red);
+}
+.masterlist-game-metrics > div:nth-child(3n) {
+  box-shadow: inset 0 3px var(--ml-blue);
+}
+.masterlist-game-metrics span {
+  color: var(--ml-muted);
+  font:
+    800 7px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.07em;
+}
+.masterlist-game-metrics strong {
+  color: var(--ml-text);
+  font:
+    900 clamp(21px, 2.4vw, 32px)/1 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.06em;
+  overflow-wrap: anywhere;
+}
+.masterlist-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 10px;
+}
+.masterlist-game-card {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--ml-line);
+  background: var(--ml-panel);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease;
+}
+.masterlist-game-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--ml-yellow);
+}
+.masterlist-game-card-mark {
+  position: relative;
+  display: flex;
+  min-height: 205px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 12px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ml-line);
+  background: linear-gradient(135deg, rgba(36, 87, 214, 0.24), transparent 55%), var(--ml-panel-2);
+  color: var(--ml-yellow);
+}
+.masterlist-game-card-mark.has-cover {
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 0;
+  background: var(--ml-panel-2);
+}
+.masterlist-game-cover {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: var(--ml-panel-2);
+}
+.masterlist-game-card-mark.has-cover::after {
+  display: none;
+}
+.masterlist-game-card-mark.has-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 11, 14, 0.55),
+    transparent 28%,
+    transparent 65%,
+    rgba(10, 11, 14, 0.3)
+  );
+  pointer-events: none;
+}
+.masterlist-game-card-mark > span {
+  padding: 4px 6px;
+  background: rgba(10, 11, 14, 0.78);
+}
+.masterlist-game-card-mark.has-cover > span {
+  position: relative;
+  z-index: 2;
+  margin: 9px;
+}
+.masterlist-game-card-mark::after {
+  content: '';
+  position: absolute;
+  right: -15px;
+  bottom: -39px;
+  width: 105px;
+  height: 105px;
+  border: 15px solid rgba(229, 57, 53, 0.72);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.masterlist-game-card-mark > svg {
+  position: relative;
+  z-index: 1;
+}
+.masterlist-game-card-mark.has-cover > svg {
+  opacity: 0;
+}
+.masterlist-game-card-mark > span {
+  position: relative;
+  z-index: 1;
+  color: var(--ml-muted);
+  font:
+    800 10px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-game-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 14px;
+}
+.masterlist-game-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--ml-faint);
+  font:
+    700 7px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.masterlist-game-platform {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.masterlist-game-status {
+  flex: 0 0 auto;
+  padding: 4px 6px;
+  background: rgba(244, 196, 48, 0.12);
+  color: var(--ml-yellow);
+}
+.masterlist-game-card h3 {
+  margin: 12px 0 0;
+  color: var(--ml-text);
+  font:
+    800 15px/1.25 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+.masterlist-game-completion {
+  margin: 8px 0 14px;
+  color: var(--ml-muted);
+  font:
+    500 9px/1.6 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-game-card-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--ml-line);
+  color: var(--ml-faint);
+  font:
+    500 8px/1.5 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-game-card-bottom strong {
+  flex: 0 0 auto;
+  color: var(--ml-yellow);
+  font:
+    800 10px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-game-grid.is-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.masterlist-game-grid.is-list .masterlist-game-card {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  flex-direction: row;
+}
+.masterlist-game-grid.is-list .masterlist-game-card-mark {
+  min-height: 150px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  border-right: 1px solid var(--ml-line);
+  border-bottom: 0;
+}
+.masterlist-game-grid.is-list .masterlist-game-card-mark:not(.has-cover) {
+  justify-content: center;
+}
+.masterlist-game-grid.is-list .masterlist-game-cover {
+  object-position: center 25%;
+}
+.masterlist-game-grid.is-list .masterlist-game-card-mark.has-cover > span {
+  align-self: flex-end;
+}
+.masterlist-game-grid.is-list .masterlist-game-card-body {
+  padding: 15px 18px;
+}
+.masterlist-game-grid.is-list .masterlist-game-card h3 {
+  margin-top: 8px;
+  font-size: 17px;
+}
+.masterlist-footer span:last-child {
+  flex-wrap: wrap;
+}
+.masterlist-footer i {
+  width: 3px;
+  height: 3px;
+  margin: 0 3px;
+  border-radius: 50%;
+  background: var(--ml-faint);
+}
+@keyframes masterlist-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 1150px) {
+  .masterlist-donut-wrap {
+    grid-template-columns: 1fr;
+  }
+  .masterlist-donut {
+    width: min(100%, 130px);
+  }
+  .masterlist-game-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .masterlist-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-tab:nth-child(2) {
+    border-right: 0;
+  }
+  .masterlist-tab:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--ml-line-strong);
+  }
+  .masterlist-game-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-game-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-donut-wrap {
+    grid-template-columns: minmax(80px, 0.7fr) minmax(0, 1.3fr);
+  }
+}
+@media (max-width: 560px) {
+  .masterlist-tabs {
+    margin: 17px 0 25px;
+  }
+  .masterlist-tab {
+    min-height: 66px;
+    padding: 11px;
+    column-gap: 8px;
+  }
+  .masterlist-tab > span {
+    font-size: 14px;
+  }
+  .masterlist-tab small {
+    font-size: 7px;
+  }
+  .masterlist-library-grid.is-list .masterlist-library-card {
+    grid-template-columns: 78px minmax(0, 1fr);
+  }
+  .masterlist-library-grid.is-list .masterlist-library-cover {
+    min-height: 120px;
+  }
+  .masterlist-library-grid.is-list .masterlist-card-content {
+    padding: 11px;
+  }
+  .masterlist-game-grid {
+    grid-template-columns: 1fr;
+  }
+  .masterlist-game-grid.is-list .masterlist-game-card {
+    grid-template-columns: 88px minmax(0, 1fr);
+  }
+  .masterlist-game-grid.is-list .masterlist-game-card-mark {
+    min-height: 125px;
+  }
+  .masterlist-game-grid.is-list .masterlist-game-card-body {
+    padding: 11px;
+  }
+  .masterlist-game-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-game-metrics > div {
+    min-height: 78px;
+    padding: 11px;
+  }
+  .masterlist-donut-wrap {
+    grid-template-columns: 1fr;
+  }
+  .masterlist-donut {
+    width: 128px;
+  }
+  .masterlist-footer {
+    gap: 10px;
+  }
+}
+
+/* Four-shelf navigation and movie cards */
+.masterlist-tabs {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.masterlist-movie-card .masterlist-game-card-mark {
+  background: linear-gradient(135deg, rgba(229, 57, 53, 0.2), transparent 58%), var(--ml-panel-2);
+  color: var(--ml-red);
+}
+.masterlist-movie-card .masterlist-game-status {
+  border-color: rgba(229, 57, 53, 0.35);
+  color: #ff918b;
+}
+.masterlist-movie-card .masterlist-game-card-bottom strong {
+  color: var(--ml-yellow);
+}
+@media (max-width: 900px) {
+  .masterlist-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-tab:nth-child(2n) {
+    border-right: 0;
+  }
+  .masterlist-tab:nth-child(n + 3) {
+    border-top: 1px solid var(--ml-line-strong);
+  }
+}
+@media (max-width: 560px) {
+  .masterlist-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-tab:nth-child(odd) {
+    border-right: 1px solid var(--ml-line-strong);
+  }
+  .masterlist-tab:nth-child(even) {
+    border-right: 0;
+  }
+  .masterlist-tab:nth-child(n + 3) {
+    border-top: 1px solid var(--ml-line-strong);
+  }
+  .masterlist-rule {
+    flex-wrap: wrap;
+    row-gap: 7px;
+  }
+}
+.masterlist-pie {
+  width: min(100%, 150px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border-radius: 50%;
+}
+
+/* Stats dashboard refresh — editorial Swiss/Bauhaus, more visual hierarchy */
+.masterlist-stats-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(210px, 0.75fr) auto;
+  align-items: end;
+  gap: 24px;
+  min-height: 230px;
+  margin: 0 0 14px;
+  padding: clamp(24px, 4vw, 48px);
+  overflow: hidden;
+  border: 1px solid var(--ml-line-strong);
+  background:
+    radial-gradient(circle at 78% 28%, rgba(36, 87, 214, 0.25), transparent 25%),
+    linear-gradient(120deg, #171a21 0%, #101116 70%);
+}
+.masterlist-stats-hero::before {
+  content: '';
+  position: absolute;
+  top: -70px;
+  right: 13%;
+  width: 190px;
+  height: 190px;
+  border: 24px solid rgba(244, 196, 48, 0.9);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.masterlist-stats-hero::after {
+  content: '';
+  position: absolute;
+  right: 5%;
+  bottom: -50px;
+  width: 130px;
+  height: 130px;
+  background: var(--ml-red);
+  transform: rotate(28deg);
+  opacity: 0.9;
+  pointer-events: none;
+}
+.masterlist-stats-hero-title,
+.masterlist-stats-total,
+.masterlist-stats-hero-key {
+  position: relative;
+  z-index: 1;
+}
+.masterlist-stats-hero-title .masterlist-kicker {
+  margin-bottom: 18px;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+}
+.masterlist-stats-hero-title h2 {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    900 clamp(38px, 6vw, 76px)/0.83 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.085em;
+  text-transform: uppercase;
+}
+.masterlist-stats-hero-title h2 em {
+  color: var(--ml-yellow);
+  font-style: normal;
+}
+.masterlist-stats-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 18px 0 4px 24px;
+  border-left: 1px solid rgba(244, 240, 230, 0.24);
+}
+.masterlist-stats-total > span {
+  color: var(--ml-muted);
+  font:
+    800 8px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.14em;
+}
+.masterlist-stats-total strong {
+  color: var(--ml-text);
+  font:
+    900 clamp(48px, 6vw, 76px)/0.9 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.08em;
+}
+.masterlist-stats-total small {
+  color: var(--ml-yellow);
+  font:
+    700 9px/1.5 'IBM Plex Mono',
+    monospace;
+  text-transform: uppercase;
+}
+.masterlist-stats-hero-key {
+  display: flex;
+  align-items: flex-end;
+  gap: 7px;
+  align-self: center;
+  padding-right: 4px;
+}
+.masterlist-stats-hero-key span {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 42px;
+  border: 1px solid rgba(244, 240, 230, 0.3);
+  color: #111217;
+  font:
+    900 12px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-stats-hero-key .key-manga {
+  background: var(--ml-yellow);
+  transform: translateY(-10px) rotate(-8deg);
+}
+.masterlist-stats-hero-key .key-games {
+  background: #6a8cff;
+  transform: rotate(5deg);
+}
+.masterlist-stats-hero-key .key-movies {
+  background: #ff6b63;
+  transform: translateY(-5px) rotate(9deg);
+}
+.masterlist-stats {
+  gap: 10px;
+  margin-bottom: 62px;
+  border: 0;
+}
+.masterlist-stats > div {
+  min-height: 116px;
+  padding: 17px 18px 19px;
+  border: 1px solid var(--ml-line);
+  background: linear-gradient(145deg, rgba(24, 27, 35, 0.98), rgba(15, 16, 21, 0.96));
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease;
+}
+.masterlist-stats > div:hover {
+  transform: translateY(-3px);
+  border-color: var(--ml-yellow);
+  background: #1b1e27;
+}
+.masterlist-stats > div::before {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+.masterlist-stats > div span {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+}
+.masterlist-stats > div strong {
+  font-size: clamp(28px, 3vw, 42px);
+}
+.masterlist-stats > div:nth-child(1)::before,
+.masterlist-stats > div:nth-child(4)::before {
+  background: var(--ml-yellow);
+}
+.masterlist-stats > div:nth-child(2)::before,
+.masterlist-stats > div:nth-child(5)::before {
+  background: var(--ml-blue);
+}
+.masterlist-stats > div:nth-child(3)::before,
+.masterlist-stats > div:nth-child(6)::before {
+  background: var(--ml-red);
+}
+.masterlist-stats > div:nth-child(7)::before,
+.masterlist-stats > div:nth-child(8)::before {
+  background: #68b6a3;
+}
+.manga-analytics-header {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--ml-line-strong);
+}
+.manga-analytics-header .masterlist-kicker {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+}
+.manga-analytics-header h2 {
+  max-width: 700px;
+  font-size: clamp(34px, 5vw, 62px);
+}
+.manga-sync-status {
+  border-color: rgba(244, 196, 48, 0.35);
+  box-shadow: inset 3px 0 var(--ml-yellow);
+}
+.manga-analytics-grid.masterlist-stats-charts {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px;
+}
+.masterlist-stats-charts > * {
+  grid-column: span 4;
+}
+.masterlist-stats-charts > :nth-child(1),
+.masterlist-stats-charts > :nth-child(2),
+.masterlist-stats-charts > :nth-child(6),
+.masterlist-stats-charts > :nth-child(7) {
+  grid-column: span 6;
+}
+.masterlist-stats-charts .manga-stat-panel {
+  position: relative;
+  min-height: 260px;
+  padding: 22px;
+  overflow: hidden;
+  border-color: rgba(244, 240, 230, 0.14);
+  background: linear-gradient(145deg, rgba(24, 27, 35, 0.98), rgba(15, 16, 21, 0.97));
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+.masterlist-stats-charts .manga-stat-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 4px;
+  background: var(--ml-yellow);
+  opacity: 0.95;
+}
+.masterlist-stats-charts > :nth-child(3n + 2)::after {
+  background: var(--ml-red);
+}
+.masterlist-stats-charts > :nth-child(3n)::after {
+  background: var(--ml-blue);
+}
+.masterlist-stats-charts .manga-stat-panel-heading {
+  margin-bottom: 22px;
+}
+.masterlist-stats-charts .manga-stat-panel-heading h3 {
+  font-size: 14px;
+  letter-spacing: -0.035em;
+}
+.masterlist-stats-charts .manga-stat-panel-heading > span {
+  padding: 5px 7px;
+  border: 1px solid var(--ml-line);
+  background: rgba(0, 0, 0, 0.18);
+}
+.masterlist-stats-charts .masterlist-donut-wrap {
+  gap: 24px;
+}
+.masterlist-stats-charts .masterlist-donut {
+  width: min(100%, 174px);
+  box-shadow:
+    0 0 0 8px rgba(244, 240, 230, 0.025),
+    0 0 0 1px rgba(244, 240, 230, 0.12);
+}
+.masterlist-stats-charts .masterlist-pie {
+  width: min(100%, 174px);
+  box-shadow:
+    0 0 0 8px rgba(244, 240, 230, 0.025),
+    0 0 0 1px rgba(244, 240, 230, 0.12);
+}
+.masterlist-stats-charts .masterlist-donut > div {
+  border: 7px solid #171a21;
+  box-shadow: inset 0 0 0 1px var(--ml-line-strong);
+}
+.masterlist-stats-charts .masterlist-donut strong {
+  font-size: 30px;
+}
+.masterlist-stats-charts .masterlist-donut-legend {
+  gap: 12px;
+}
+.masterlist-stats-charts .masterlist-donut-legend > div {
+  display: grid;
+  grid-template-columns: 9px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+.masterlist-stats-charts .masterlist-donut-legend i {
+  width: 9px;
+  height: 9px;
+  box-shadow: 0 0 0 3px rgba(244, 240, 230, 0.045);
+}
+.masterlist-stats-charts .masterlist-donut-legend span {
+  color: #d5d4d0;
+  font-size: 9px;
+}
+.masterlist-stats-charts .masterlist-donut-legend strong {
+  color: var(--ml-text);
+  font-size: 10px;
+}
+.masterlist-stats-charts .manga-distribution-list {
+  gap: 17px;
+}
+.masterlist-stats-charts .manga-distribution-label {
+  margin-bottom: 8px;
+  font-size: 10px;
+}
+.masterlist-stats-charts .manga-bar-track {
+  height: 8px;
+  padding: 1px;
+  background: #292c35;
+}
+.masterlist-stats-charts .manga-bar-track span {
+  height: 6px;
+  background: linear-gradient(90deg, var(--ml-yellow), #ffe78a);
+}
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n + 2) .manga-bar-track span {
+  background: linear-gradient(90deg, var(--ml-red), #ff8b84);
+}
+.masterlist-stats-charts .manga-distribution-row:nth-child(3n) .manga-bar-track span {
+  background: linear-gradient(90deg, var(--ml-blue), #7394ff);
+}
+.masterlist-stats-charts .manga-stat-summary,
+.masterlist-stats-charts .manga-game-teaser {
+  min-height: 250px;
+}
+.masterlist-stats-charts .manga-game-teaser {
+  background: linear-gradient(145deg, rgba(36, 87, 214, 0.17), rgba(17, 19, 24, 0.98) 55%);
+}
+.masterlist-stats-charts .manga-game-teaser-count {
+  font-size: clamp(34px, 4vw, 48px);
+}
+.masterlist-stats-charts .manga-game-teaser .masterlist-inline-action {
+  margin-top: auto;
+}
+@media (max-width: 1050px) {
+  .masterlist-stats-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.7fr);
+  }
+  .masterlist-stats-hero-key {
+    position: absolute;
+    right: 18px;
+    bottom: 20px;
+  }
+  .manga-analytics-grid.masterlist-stats-charts {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+  .masterlist-stats-charts > *,
+  .masterlist-stats-charts > :nth-child(1),
+  .masterlist-stats-charts > :nth-child(2),
+  .masterlist-stats-charts > :nth-child(6),
+  .masterlist-stats-charts > :nth-child(7) {
+    grid-column: span 3;
+  }
+}
+@media (max-width: 760px) {
+  .masterlist-stats-hero {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    min-height: 0;
+    padding: 26px 22px;
+  }
+  .masterlist-stats-hero-title h2 {
+    font-size: clamp(40px, 11vw, 58px);
+  }
+  .masterlist-stats-total {
+    max-width: 220px;
+    padding: 14px 0 0;
+    border-top: 1px solid rgba(244, 240, 230, 0.24);
+    border-left: 0;
+  }
+  .masterlist-stats-total strong {
+    font-size: 48px;
+  }
+  .masterlist-stats-hero-key {
+    right: 18px;
+    bottom: 22px;
+  }
+  .masterlist-stats {
+    gap: 8px;
+    margin-bottom: 48px;
+  }
+  .masterlist-stats > div {
+    min-height: 96px;
+    padding: 14px 12px 15px;
+  }
+  .manga-analytics-grid.masterlist-stats-charts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .masterlist-stats-charts > *,
+  .masterlist-stats-charts > :nth-child(1),
+  .masterlist-stats-charts > :nth-child(2),
+  .masterlist-stats-charts > :nth-child(6),
+  .masterlist-stats-charts > :nth-child(7) {
+    grid-column: span 1;
+  }
+  .masterlist-stats-charts .manga-stat-panel {
+    min-height: 0;
+    padding: 15px;
+  }
+  .masterlist-stats-charts .masterlist-donut-wrap,
+  .masterlist-stats-charts .masterlist-donut-wrap.is-pie-chart {
+    grid-template-columns: 1fr;
+  }
+  .masterlist-stats-charts .masterlist-donut,
+  .masterlist-stats-charts .masterlist-pie {
+    width: 118px;
+  }
+  .masterlist-stats-charts .manga-stat-panel-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .masterlist-stats-charts .manga-stat-panel-heading > span {
+    text-align: left;
+  }
+}
+@media (max-width: 480px) {
+  .masterlist-stats-hero-key {
+    transform: scale(0.8);
+    transform-origin: bottom right;
+  }
+  .masterlist-stats-charts .manga-stat-panel {
+    padding: 12px;
+  }
+  .masterlist-stats-charts .manga-stat-panel-heading h3 {
+    font-size: 12px;
+  }
+  .masterlist-stats-charts .masterlist-donut-legend span {
+    font-size: 8px;
+  }
+  .masterlist-stats-charts .masterlist-donut-legend strong {
+    font-size: 9px;
+  }
+}
+
+/* Cleaner poster-first grid cards: keep the quick-scan details in grid view,
+   while preserving the richer metadata when users switch to list view. */
+.masterlist-library-grid:not(.is-list) {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
+.masterlist-library-grid:not(.is-list) .masterlist-library-card {
+  border-color: rgba(255, 255, 255, 0.09);
+  background: #111319;
+}
+.masterlist-library-grid:not(.is-list) .masterlist-library-cover {
+  height: 260px;
+  background: #171a22;
+}
+.masterlist-library-grid:not(.is-list) .masterlist-card-content {
+  padding: 12px 13px 14px;
+}
+.masterlist-library-grid:not(.is-list) .masterlist-card-content h3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.35em;
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.masterlist-library-grid:not(.is-list) .masterlist-entry-progress,
+.masterlist-library-grid:not(.is-list) .manga-progress-track,
+.masterlist-library-grid:not(.is-list) .manga-tags,
+.masterlist-library-grid:not(.is-list) .masterlist-entry-notes,
+.masterlist-library-grid:not(.is-list) .manga-metadata-wrap,
+.masterlist-library-grid:not(.is-list) .manga-external-link {
+  display: none !important;
+}
+.masterlist-library-grid:not(.is-list) .masterlist-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--ml-muted);
+  font:
+    700 8px/1.4 'IBM Plex Mono',
+    monospace;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+}
+.masterlist-library-grid:not(.is-list) .masterlist-card-meta span {
+  flex: 0 0 3px;
+}
+.masterlist-game-grid:not(.is-list) {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-card {
+  border-color: rgba(255, 255, 255, 0.09);
+  background: #111319;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-card-mark {
+  min-height: 230px;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-card-body {
+  padding: 11px 13px 13px;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-card-top {
+  justify-content: flex-start;
+  gap: 7px;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-card h3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.4em;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-completion,
+.masterlist-game-grid:not(.is-list) .masterlist-game-card-bottom,
+.masterlist-game-grid:not(.is-list) .masterlist-entry-notes,
+.masterlist-game-grid:not(.is-list) .manga-external-link {
+  display: none !important;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-status {
+  max-width: 46%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.masterlist-game-grid:not(.is-list) .masterlist-game-platform {
+  max-width: 52%;
+}
+@media (max-width: 560px) {
+  .masterlist-library-grid:not(.is-list),
+  .masterlist-game-grid:not(.is-list) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .masterlist-library-grid:not(.is-list) .masterlist-library-cover {
+    height: 210px;
+  }
+  .masterlist-game-grid:not(.is-list) .masterlist-game-card-mark {
+    min-height: 190px;
+  }
+}
+
+/* Full-coverage statistics and mobile-first refinements */
+.masterlist-full-breakdown {
+  margin: 0 0 58px;
+}
+.masterlist-breakdown-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 0 18px;
+  padding: 24px 0 18px;
+  border-top: 2px solid var(--ml-text);
+  border-bottom: 1px solid var(--ml-line-strong);
+}
+.masterlist-breakdown-heading h2 {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    900 clamp(27px, 4vw, 46px)/0.98 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.07em;
+  text-transform: uppercase;
+}
+.masterlist-breakdown-heading p {
+  max-width: 390px;
+  margin: 0;
+  color: var(--ml-muted);
+  font:
+    500 10px/1.7 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+  gap: 14px;
+}
+.masterlist-breakdown-card {
+  min-width: 0;
+  padding: clamp(14px, 1.6vw, 22px);
+  border: 1px solid var(--ml-line-strong);
+  background: linear-gradient(160deg, rgba(20, 22, 29, 0.98), rgba(12, 13, 17, 0.98));
+}
+.masterlist-breakdown-card.is-literature {
+  box-shadow: inset 0 4px var(--ml-yellow);
+}
+.masterlist-breakdown-card.is-games {
+  box-shadow: inset 0 4px var(--ml-blue);
+}
+.masterlist-breakdown-card.is-movies {
+  box-shadow: inset 0 4px var(--ml-red);
+}
+.masterlist-breakdown-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--ml-line-strong);
+}
+.masterlist-breakdown-title > svg {
+  flex: 0 0 auto;
+  color: var(--ml-yellow);
+}
+.masterlist-breakdown-card.is-games .masterlist-breakdown-title > svg {
+  color: #86a1ff;
+}
+.masterlist-breakdown-card.is-movies .masterlist-breakdown-title > svg {
+  color: #ff827c;
+}
+.masterlist-breakdown-title h3 {
+  margin: 0;
+  color: var(--ml-text);
+  font:
+    900 19px/1.1 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+.masterlist-breakdown-title span {
+  display: block;
+  margin-top: 5px;
+  color: var(--ml-muted);
+  font:
+    700 8px/1.4 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.masterlist-breakdown-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-bottom: 16px;
+  border-top: 1px solid var(--ml-line);
+  border-left: 1px solid var(--ml-line);
+}
+.masterlist-breakdown-metrics > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 7px;
+  min-height: 70px;
+  padding: 10px;
+  border-right: 1px solid var(--ml-line);
+  border-bottom: 1px solid var(--ml-line);
+}
+.masterlist-breakdown-metrics span {
+  color: var(--ml-muted);
+  font:
+    700 8px/1.5 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-breakdown-metrics strong {
+  color: var(--ml-text);
+  font:
+    900 clamp(17px, 1.8vw, 25px)/1 'Archivo',
+    Arial,
+    sans-serif;
+  letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
+}
+.masterlist-breakdown-card > .manga-stat-panel {
+  margin-top: 10px;
+  padding: 13px 0 0;
+  border: 0;
+  border-top: 1px solid var(--ml-line);
+  background: transparent;
+}
+.masterlist-breakdown-card > .manga-stat-panel:nth-child(3n + 2) {
+  background: transparent;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-stat-panel-heading {
+  margin-bottom: 12px;
+  padding-bottom: 9px;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-stat-panel-heading h3 {
+  font-size: 10px;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-stat-panel-heading > span {
+  font-size: 7px;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-distribution-list {
+  gap: 10px;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-distribution-label {
+  font-size: 9px;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-distribution-label strong {
+  font-size: 8px;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-bar-track {
+  height: 4px;
+}
+.masterlist-breakdown-card > .manga-stat-panel .manga-bar-track span {
+  height: 4px;
+}
+
+@media (max-width: 1050px) {
+  .masterlist-breakdown-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-breakdown-card:last-child {
+    grid-column: 1 / -1;
+  }
+  .masterlist-breakdown-card:last-child .masterlist-breakdown-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .masterlist-page {
+    padding: 16px 14px 34px;
+    background-size: 28px 28px;
+  }
+  .masterlist-heading-row {
+    align-items: flex-start;
+    gap: 12px;
+    padding: 46px 0 28px;
+  }
+  .masterlist-heading-row h1 {
+    font-size: clamp(3.1rem, 15vw, 6rem);
+    line-height: 0.82;
+  }
+  .masterlist-header-mark {
+    width: 52px;
+    height: 52px;
+    flex-basis: 52px;
+    font-size: 20px;
+  }
+  .masterlist-intro {
+    margin-top: 20px;
+    padding-left: 10px;
+    font-size: 10px;
+  }
+  .masterlist-rule {
+    gap: 7px;
+    font-size: 7px;
+    letter-spacing: 0.08em;
+  }
+  .masterlist-rule i {
+    width: 12px;
+  }
+  .masterlist-stats-hero {
+    gap: 18px;
+  }
+  .masterlist-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-bottom: 36px;
+  }
+  .masterlist-stats > div {
+    min-height: 86px;
+    padding: 12px;
+    gap: 12px;
+  }
+  .masterlist-stats > div span {
+    font-size: 7px;
+    line-height: 1.45;
+  }
+  .masterlist-stats > div strong {
+    font-size: clamp(23px, 6vw, 34px);
+  }
+  .manga-analytics-header {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .manga-sync-status {
+    min-width: 0;
+    max-width: none;
+  }
+  .masterlist-breakdown-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .masterlist-breakdown-heading p {
+    max-width: none;
+  }
+  .masterlist-breakdown-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .masterlist-breakdown-card:last-child {
+    grid-column: auto;
+  }
+  .masterlist-breakdown-card:last-child .masterlist-breakdown-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-breakdown-card {
+    padding: 14px;
+  }
+  .masterlist-breakdown-metrics > div {
+    min-height: 66px;
+    padding: 9px;
+  }
+  .masterlist-breakdown-metrics strong {
+    font-size: 21px;
+  }
+  .manga-analytics-grid.masterlist-stats-charts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .masterlist-stats-charts > *,
+  .masterlist-stats-charts > :nth-child(1),
+  .masterlist-stats-charts > :nth-child(2),
+  .masterlist-stats-charts > :nth-child(6),
+  .masterlist-stats-charts > :nth-child(7) {
+    grid-column: auto;
+  }
+  .masterlist-stats-charts .manga-stat-panel {
+    padding: 16px;
+  }
+  .masterlist-stats-charts .masterlist-donut-wrap,
+  .masterlist-stats-charts .masterlist-donut-wrap.is-pie-chart {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .masterlist-stats-charts .masterlist-donut,
+  .masterlist-stats-charts .masterlist-pie {
+    width: 142px;
+  }
+  .masterlist-stats-charts .manga-stat-panel-heading {
+    align-items: center;
+    flex-direction: row;
+  }
+  .masterlist-stats-charts .manga-stat-panel-heading > span {
+    text-align: right;
+  }
+  .masterlist-status-filters {
+    align-items: stretch;
+  }
+  .masterlist-status-filters select {
+    min-width: 0;
+    flex: 1 1 38%;
+  }
+  .masterlist-status-filters > span {
+    flex: 1 0 100%;
+  }
+  .masterlist-view-toggle {
+    margin-left: auto;
+  }
+  .masterlist-game-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-game-card-mark {
+    min-height: 160px;
+  }
+}
+@media (max-width: 420px) {
+  .masterlist-page {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+  .masterlist-eyebrow {
+    flex-wrap: wrap;
+    font-size: 7px;
+  }
+  .masterlist-heading-row {
+    padding-top: 38px;
+  }
+  .masterlist-heading-row h1 {
+    font-size: clamp(2.7rem, 14.5vw, 3.5rem);
+  }
+  .masterlist-header-mark {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+  .masterlist-tab {
+    min-height: 62px;
+    padding: 9px;
+  }
+  .masterlist-tab small {
+    display: none;
+  }
+  .masterlist-stats-hero-title h2 {
+    font-size: 39px;
+  }
+  .masterlist-stats-hero-key {
+    transform: scale(0.68);
+  }
+  .masterlist-stats > div {
+    min-height: 78px;
+    padding: 10px;
+  }
+  .masterlist-stats > div strong {
+    font-size: 23px;
+  }
+  .masterlist-game-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .masterlist-breakdown-title h3 {
+    font-size: 17px;
+  }
+  .masterlist-breakdown-metrics span {
+    font-size: 7px;
+  }
+  .masterlist-breakdown-metrics strong {
+    font-size: 19px;
+  }
+  .masterlist-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Private masterlist access gate — shares the Archive server session, not a client-side password. */
+.masterlist-lock-page {
+  --ml-lock-bg: #090b10;
+  --ml-lock-panel: rgba(17, 20, 28, 0.88);
+  --ml-lock-text: #f4f0e6;
+  min-height: 100svh;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--ml-lock-text);
+  background: #090b10;
+  background-image:
+    linear-gradient(rgba(244, 240, 230, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 240, 230, 0.025) 1px, transparent 1px);
+  background-size: 36px 36px;
+  font-family: 'Archivo', Arial, sans-serif;
+}
+.masterlist-lock-card {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 460px);
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid rgba(244, 240, 230, 0.17);
+  background: var(--ml-lock-panel);
+  box-shadow: 0 28px 100px rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(18px);
+}
+.masterlist-lock-topline,
+.masterlist-lock-kicker,
+.masterlist-lock-form label,
+.masterlist-lock-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font:
+    800 9px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9a9da5;
+}
+.masterlist-lock-topline {
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(244, 240, 230, 0.14);
+}
+.masterlist-lock-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  background: #f4c430;
+  box-shadow: 0 0 0 4px rgba(244, 196, 48, 0.12);
+}
+.masterlist-lock-symbol {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin: 32px 0 20px;
+  border: 1px solid rgba(244, 196, 48, 0.45);
+  background: rgba(244, 196, 48, 0.08);
+  color: #f4c430;
+}
+.masterlist-lock-kicker {
+  margin: 0 0 12px;
+}
+.masterlist-lock-card h1 {
+  margin: 0;
+  color: #f4f0e6;
+  font-size: clamp(38px, 9vw, 56px);
+  font-weight: 900;
+  line-height: 0.94;
+  letter-spacing: -0.075em;
+  text-transform: uppercase;
+}
+.masterlist-lock-card h1 em {
+  color: #f4c430;
+  font-style: normal;
+}
+.masterlist-lock-description {
+  margin: 18px 0 28px;
+  color: #a6a9b0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.masterlist-lock-form label {
+  display: block;
+  margin-bottom: 9px;
+}
+.masterlist-lock-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid rgba(244, 240, 230, 0.2);
+  background: #0c0e13;
+}
+.masterlist-lock-input-wrap:focus-within {
+  border-color: #f4c430;
+  box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.1);
+}
+.masterlist-lock-input-wrap input {
+  min-width: 0;
+  flex: 1;
+  border: 0;
+  outline: 0;
+  padding: 15px 14px;
+  color: #f4f0e6;
+  background: transparent;
+  font:
+    500 13px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-lock-input-wrap button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  color: #9a9da5;
+  background: transparent;
+  cursor: pointer;
+}
+.masterlist-lock-submit {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 12px;
+  padding: 0 15px;
+  border: 1px solid #f4c430;
+  color: #0a0b0e;
+  background: #f4c430;
+  font:
+    900 10px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    background 0.2s;
+}
+.masterlist-lock-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #ffda55;
+}
+.masterlist-lock-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.masterlist-lock-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0 0;
+  color: #ff9c8f;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.masterlist-lock-footer {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(244, 240, 230, 0.12);
+  font-size: 8px;
+}
+.masterlist-lock-loader {
+  height: 3px;
+  overflow: hidden;
+  margin-top: 26px;
+  background: rgba(244, 240, 230, 0.12);
+}
+.masterlist-lock-loader::after {
+  content: '';
+  display: block;
+  width: 35%;
+  height: 100%;
+  background: #f4c430;
+  animation: masterlist-lock-loading 1.1s ease-in-out infinite;
+}
+@keyframes masterlist-lock-loading {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(310%);
+  }
+}
+.masterlist-lock-note {
+  margin: 12px 0 0;
+  color: #9a9da5;
+  font:
+    10px 'IBM Plex Mono',
+    monospace;
+}
+.masterlist-lock-orbit {
+  position: absolute;
+  width: min(68vw, 620px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(244, 196, 48, 0.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.masterlist-lock-orbit-a {
+  transform: translate(-42%, 30%);
+}
+.masterlist-lock-orbit-b {
+  transform: translate(48%, -36%) scale(0.7);
+  border-color: rgba(36, 87, 214, 0.15);
+}
+.masterlist-insight-strip {
+  display: grid;
+  grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0 14px;
+}
+.masterlist-insight-feature,
+.masterlist-insight-mini {
+  min-width: 0;
+  padding: 19px;
+  border: 1px solid var(--ml-line);
+  background: linear-gradient(145deg, rgba(244, 196, 48, 0.07), transparent 65%), var(--ml-panel);
+}
+.masterlist-insight-feature {
+  border-color: rgba(244, 196, 48, 0.35);
+}
+.masterlist-insight-icon {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-bottom: 17px;
+  color: #111318;
+  background: var(--ml-yellow);
+}
+.masterlist-insight-label,
+.masterlist-insight-mini > div span,
+.masterlist-personality-grid > div > span {
+  font:
+    800 8px/1.5 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.12em;
+  color: var(--ml-muted);
+}
+.masterlist-insight-feature > strong {
+  display: block;
+  margin-top: 7px;
+  font-size: clamp(29px, 3vw, 40px);
+  font-weight: 900;
+  letter-spacing: -0.07em;
+}
+.masterlist-insight-feature > strong small,
+.masterlist-insight-mini > strong small {
+  font-size: 11px;
+  letter-spacing: 0;
+  color: var(--ml-muted);
+}
+.masterlist-insight-feature p,
+.masterlist-insight-mini p {
+  margin: 8px 0 0;
+  color: var(--ml-muted);
+  font-size: 11px;
+  line-height: 1.65;
+}
+.masterlist-insight-stack {
+  display: flex;
+  width: 100%;
+  height: 5px;
+  overflow: hidden;
+  margin-top: 18px;
+  background: var(--ml-panel-2);
+}
+.masterlist-insight-stack span {
+  display: block;
+  min-width: 0;
+}
+.masterlist-insight-stack .lit {
+  background: #f4c430;
+}
+.masterlist-insight-stack .games {
+  background: #2457d6;
+}
+.masterlist-insight-stack .movies {
+  background: #e53935;
+}
+.masterlist-insight-mini > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ml-yellow);
+}
+.masterlist-insight-mini > div span {
+  color: var(--ml-muted);
+}
+.masterlist-insight-mini > strong {
+  display: block;
+  margin-top: 17px;
+  font-size: clamp(26px, 3vw, 35px);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+}
+.masterlist-personality-panel {
+  margin-bottom: 18px;
+  padding: 22px;
+  border: 1px solid var(--ml-line);
+  background: var(--ml-panel);
+}
+.masterlist-personality-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+  color: var(--ml-yellow);
+}
+.masterlist-personality-heading h3 {
+  margin: 5px 0 0;
+  color: var(--ml-text);
+  font-size: clamp(21px, 3vw, 28px);
+  font-weight: 900;
+  letter-spacing: -0.055em;
+}
+.masterlist-personality-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.masterlist-personality-grid > div {
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--ml-line);
+  background: rgba(255, 255, 255, 0.018);
+}
+.masterlist-personality-grid > div > span {
+  display: block;
+  min-height: 25px;
+}
+.masterlist-personality-grid strong {
+  display: block;
+  overflow-wrap: anywhere;
+  margin: 9px 0 6px;
+  color: var(--ml-yellow);
+  font-size: clamp(15px, 2vw, 21px);
+  font-weight: 900;
+}
+.masterlist-personality-grid small {
+  display: block;
+  color: var(--ml-muted);
+  font-size: 10px;
+  line-height: 1.65;
+}
+@media (max-width: 900px) {
+  .masterlist-insight-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-personality-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 520px) {
+  .masterlist-lock-page {
+    padding: 14px;
+  }
+  .masterlist-lock-card {
+    padding: 23px 19px;
+  }
+  .masterlist-lock-topline {
+    font-size: 7px;
+  }
+  .masterlist-insight-strip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .masterlist-insight-feature,
+  .masterlist-insight-mini {
+    padding: 16px;
+  }
+  .masterlist-personality-panel {
+    padding: 15px;
+  }
+  .masterlist-personality-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .masterlist-personality-grid > div > span {
+    min-height: 0;
+  }
+}
+
+/* Compact the analytics dashboard so key insights fit above the fold. */
+.masterlist-page {
+  padding-top: 14px;
+}
+.masterlist-header {
+  padding-bottom: 10px;
+}
+.masterlist-heading-row {
+  padding: clamp(24px, 4vw, 48px) 0 22px;
+}
+.masterlist-stats-hero {
+  min-height: 160px;
+  padding: clamp(18px, 2.5vw, 30px);
+  gap: 18px;
+}
+.masterlist-stats-hero-title h2 {
+  font-size: clamp(32px, 4.5vw, 58px);
+}
+.masterlist-stats-total strong {
+  font-size: clamp(38px, 4.5vw, 58px);
+}
+.masterlist-stats {
+  margin-bottom: 30px;
+  gap: 8px;
+}
+.masterlist-stats > div {
+  min-height: 82px;
+  padding: 12px 14px;
+  gap: 8px;
+}
+.masterlist-stats > div strong {
+  font-size: clamp(24px, 2.4vw, 34px);
+}
+.masterlist-breakdown-heading {
+  margin-bottom: 14px;
+}
+.masterlist-breakdown-grid {
+  gap: 10px;
+}
+.masterlist-breakdown-card {
+  padding: 14px;
+}
+.masterlist-breakdown-metrics {
+  gap: 8px;
+}
+.manga-analytics {
+  margin-bottom: 34px;
+}
+.manga-analytics-header {
+  margin-bottom: 14px;
+}
+.manga-analytics-grid.masterlist-stats-charts {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 10px;
+}
+.masterlist-stats-charts > * {
+  grid-column: span 3;
+}
+.manga-stat-panel {
+  padding: 14px;
+}
+.manga-stat-panel-heading {
+  margin-bottom: 12px;
+  padding-bottom: 9px;
+}
+.manga-distribution-list {
+  gap: 9px;
+}
+.manga-distribution-label {
+  margin-bottom: 4px;
+  font-size: 9px;
+}
+.manga-bar-track {
+  height: 4px;
+}
+@media (max-width: 1150px) {
+  .masterlist-stats-charts > * {
+    grid-column: span 4;
+  }
+}
+@media (max-width: 760px) {
+  .masterlist-stats-charts > * {
+    grid-column: span 6;
+  }
+  .masterlist-stats-hero {
+    min-height: 140px;
+  }
+}
+@media (max-width: 560px) {
+  .masterlist-stats-charts > * {
+    grid-column: span 12;
+  }
+  .masterlist-stats-hero {
+    grid-template-columns: 1fr auto;
+  }
+  .masterlist-stats-hero-key {
+    display: none;
+  }
+}
+
+/* MASTERLIST STATS — editorial data dashboard, aligned with Wish Archive */
+.masterlist-page .masterlist-stats-hero {
+  margin-bottom: 22px;
+}
+.masterlist-page .masterlist-stats-hero h1 {
+  max-width: 900px;
+}
+.masterlist-page .masterlist-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid var(--ml-line-strong);
+  margin: 20px 0 28px;
+  background: rgba(17, 19, 24, 0.88);
+}
+.masterlist-page .masterlist-stats > div {
+  min-height: 105px;
+  padding: 18px 20px 16px;
+  border-right: 1px solid var(--ml-line);
+  border-bottom: 1px solid var(--ml-line);
+  position: relative;
+}
+.masterlist-page .masterlist-stats > div:nth-child(4n) {
+  border-right: 0;
+}
+.masterlist-page .masterlist-stats > div:nth-last-child(-n + 4) {
+  border-bottom: 0;
+}
+.masterlist-page .masterlist-stats > div span {
+  display: block;
+  font:
+    700 9px/1.45 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.12em;
+  color: var(--ml-muted);
+  text-transform: uppercase;
+  max-width: 180px;
+}
+.masterlist-page .masterlist-stats > div strong {
+  display: block;
+  margin-top: 12px;
+  font:
+    800 clamp(1.8rem, 2.4vw, 2.6rem)/0.95 'Archivo',
+    sans-serif;
+  letter-spacing: -0.055em;
+  color: var(--ml-text);
+}
+.masterlist-page .masterlist-stats > div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 3px;
+  background: var(--ml-yellow);
+}
+.masterlist-page .masterlist-stats > div:nth-child(3n + 2)::before {
+  background: var(--ml-red);
+}
+.masterlist-page .masterlist-stats > div:nth-child(3n)::before {
+  background: var(--ml-blue);
+}
+.masterlist-page .masterlist-full-breakdown {
+  display: none !important;
+}
+.masterlist-page .manga-analytics {
+  margin-top: 30px;
+}
+.masterlist-page .manga-analytics-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--ml-line-strong);
+}
+.masterlist-page .manga-analytics-header h2 {
+  margin: 8px 0 0;
+  font-size: clamp(1.7rem, 3vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+.masterlist-page .masterlist-insight-strip {
+  display: grid;
+  grid-template-columns: 1.35fr repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border: 1px solid var(--ml-line-strong);
+  margin: 0 0 22px;
+  background: var(--ml-panel);
+}
+.masterlist-page .masterlist-insight-strip > article {
+  min-width: 0;
+  padding: 20px;
+  border-right: 1px solid var(--ml-line);
+}
+.masterlist-page .masterlist-insight-strip > article:last-child {
+  border-right: 0;
+}
+.masterlist-page .masterlist-insight-feature {
+  background: linear-gradient(135deg, rgba(244, 196, 48, 0.08), transparent 70%);
+}
+.masterlist-page .masterlist-insight-strip strong {
+  display: block;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  letter-spacing: -0.06em;
+  line-height: 1;
+  margin: 14px 0 9px;
+}
+.masterlist-page .masterlist-insight-strip p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--ml-muted);
+}
+.masterlist-page .masterlist-personality-panel {
+  border: 1px solid var(--ml-line-strong);
+  background: var(--ml-panel);
+  padding: 22px;
+  margin-bottom: 22px;
+}
+.masterlist-page .masterlist-personality-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ml-line);
+}
+.masterlist-page .masterlist-personality-heading h3 {
+  margin: 5px 0 0;
+  font-size: clamp(1.25rem, 2vw, 1.7rem);
+  letter-spacing: -0.04em;
+}
+.masterlist-page .masterlist-personality-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.masterlist-page .masterlist-personality-grid > div {
+  padding: 17px 18px 4px 0;
+  margin-right: 18px;
+  border-right: 1px solid var(--ml-line);
+  min-width: 0;
+}
+.masterlist-page .masterlist-personality-grid > div:last-child {
+  border-right: 0;
+  margin-right: 0;
+}
+.masterlist-page .masterlist-personality-grid span {
+  font:
+    700 9px/1.5 'IBM Plex Mono',
+    monospace;
+  color: var(--ml-muted);
+  letter-spacing: 0.1em;
+}
+.masterlist-page .masterlist-personality-grid strong {
+  display: block;
+  font-size: clamp(1rem, 1.6vw, 1.35rem);
+  margin: 9px 0 6px;
+  overflow-wrap: anywhere;
+}
+.masterlist-page .masterlist-personality-grid small {
+  display: block;
+  color: var(--ml-muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.masterlist-page .masterlist-stats-charts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+.masterlist-page .masterlist-stats-charts > * {
+  min-width: 0;
+  margin: 0;
+}
+.masterlist-page .manga-stat-panel,
+.masterlist-page .masterlist-stats-charts .distribution-list {
+  padding: 17px;
+  border: 1px solid var(--ml-line);
+  background: var(--ml-panel);
+}
+.masterlist-page .manga-stat-panel-heading {
+  padding-bottom: 11px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--ml-line);
+}
+.masterlist-page .manga-stat-panel-heading h3 {
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+.masterlist-page .masterlist-stats-charts .distribution-list {
+  min-height: 0;
+}
+.masterlist-page .masterlist-stats-charts .distribution-list .distribution-list-item {
+  padding: 7px 0;
+}
+.masterlist-page .masterlist-stats-charts .distribution-list .distribution-track {
+  height: 4px;
+  margin-top: 5px;
+}
+.masterlist-page .manga-game-teaser-count {
+  font-size: 2.3rem;
+}
+@media (max-width: 1100px) {
+  .masterlist-page .masterlist-insight-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-page .masterlist-insight-strip > article:nth-child(2) {
+    border-right: 0;
+  }
+  .masterlist-page .masterlist-insight-strip > article:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--ml-line);
+  }
+  .masterlist-page .masterlist-stats-charts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-page .masterlist-personality-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-page .masterlist-personality-grid > div:nth-child(2) {
+    border-right: 0;
+  }
+}
+@media (max-width: 650px) {
+  .masterlist-page .masterlist-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-page .masterlist-stats > div:nth-child(2n) {
+    border-right: 0;
+  }
+  .masterlist-page .masterlist-stats > div:nth-child(4n) {
+    border-right: 0;
+  }
+  .masterlist-page .masterlist-stats > div:nth-last-child(-n + 4) {
+    border-bottom: 1px solid var(--ml-line);
+  }
+  .masterlist-page .masterlist-stats > div:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .masterlist-page .masterlist-insight-strip,
+  .masterlist-page .masterlist-stats-charts,
+  .masterlist-page .masterlist-personality-grid {
+    grid-template-columns: 1fr;
+  }
+  .masterlist-page .masterlist-insight-strip > article {
+    border-right: 0;
+    border-bottom: 1px solid var(--ml-line);
+  }
+  .masterlist-page .masterlist-insight-strip > article:last-child {
+    border-bottom: 0;
+  }
+  .masterlist-page .masterlist-personality-grid > div {
+    border-right: 0;
+    border-bottom: 1px solid var(--ml-line);
+    margin: 0;
+    padding: 14px 0;
+  }
+  .masterlist-page .masterlist-personality-grid > div:last-child {
+    border-bottom: 0;
+  }
+  .masterlist-page .manga-analytics-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+/* Horizontal overflow guard: keep every Masterlist stats section inside the viewport. */
+.masterlist-page,
+.masterlist-page .masterlist-shell,
+.masterlist-page .masterlist-stats-hero,
+.masterlist-page .masterlist-stats,
+.masterlist-page .masterlist-insight-strip,
+.masterlist-page .masterlist-personality-panel,
+.masterlist-page .masterlist-stats-charts,
+.masterlist-page .manga-analytics,
+.masterlist-page .manga-analytics-header {
+  min-width: 0;
+  max-width: 100%;
+}
+.masterlist-page .masterlist-stats-hero {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr) auto;
+}
+.masterlist-page .masterlist-stats-charts {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.masterlist-page .masterlist-stats-charts > *,
+.masterlist-page .masterlist-insight-strip > article,
+.masterlist-page .masterlist-personality-grid > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.masterlist-page img,
+.masterlist-page svg,
+.masterlist-page canvas {
+  max-width: 100%;
+}
+@media (max-width: 1100px) {
+  .masterlist-page {
+    padding-left: clamp(12px, 2.5vw, 28px);
+    padding-right: clamp(12px, 2.5vw, 28px);
+  }
+  .masterlist-page .masterlist-stats-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.7fr);
+  }
+  .masterlist-page .masterlist-stats-hero-key {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .masterlist-page .masterlist-stats-charts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .masterlist-page .masterlist-insight-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .masterlist-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .masterlist-page .masterlist-stats-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .masterlist-page .masterlist-stats-charts,
+  .masterlist-page .masterlist-insight-strip,
+  .masterlist-page .masterlist-personality-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .masterlist-page .masterlist-stats > div {
+    padding: 12px;
+  }
+}
+
+/* Final layout correction: keep collection grids within the page content width. */
+.masterlist-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.masterlist-page .masterlist-shell,
+.masterlist-page main,
+.masterlist-page section,
+.masterlist-page .masterlist-game-grid,
+.masterlist-page .masterlist-library-grid {
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
+}
+.masterlist-page .masterlist-game-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+}
+.masterlist-page .masterlist-library-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr));
+}
+.masterlist-page .masterlist-game-card,
+.masterlist-page .masterlist-library-card {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 760px) {
+  .masterlist-page .masterlist-game-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+  .masterlist-page .masterlist-library-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+}
+@media (max-width: 420px) {
+  .masterlist-page .masterlist-game-grid,
+  .masterlist-page .masterlist-library-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

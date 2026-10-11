@@ -27,13 +27,29 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [personaMode, setPersonaMode] = useState(false);
+  const [personaPassword, setPersonaPassword] = useState('');
+  const [personaError, setPersonaError] = useState('');
+  const [personaLoading, setPersonaLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const filteredCommands = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    if (!normalized) return commands;
+    const availableCommands = [
+      ...commands,
+      {
+        id: 'unlock-persona',
+        label: 'Continue',
+        description: 'Open a private section',
+        icon: 'mdi:arrow-top-right',
+        group: 'MORE',
+        keywords: ['persona', 'private', 'hidden', 'secret'],
+        action: () => {},
+      },
+    ];
+    if (!normalized) return availableCommands;
 
-    return commands.filter((command) => {
+    return availableCommands.filter((command) => {
       const haystack = [
         command.label,
         command.description ?? '',
@@ -51,10 +67,20 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     setOpen(false);
     setQuery('');
     setSelectedIndex(0);
+    setPersonaMode(false);
+    setPersonaPassword('');
+    setPersonaError('');
+    setPersonaLoading(false);
   }, []);
 
   const execute = useCallback(
     (command: CommandPaletteCommand) => {
+      if (command.id === 'unlock-persona') {
+        setPersonaMode(true);
+        setPersonaError('');
+        setPersonaPassword('');
+        return;
+      }
       close();
       command.action();
     },
@@ -116,6 +142,35 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     setSelectedIndex(0);
   }, [query]);
 
+  const submitPersonaPassword = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!personaPassword.trim() || personaLoading) return;
+    setPersonaLoading(true);
+    setPersonaError('');
+    try {
+      const response = await fetch('/api/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ password: personaPassword }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.success) {
+        setPersonaError(
+          result.locked ? 'Access temporarily locked. Try again later.' : 'No match.',
+        );
+        return;
+      }
+      window.dispatchEvent(new Event('archive-auth-changed'));
+      close();
+      window.location.assign('/persona');
+    } catch {
+      setPersonaError('Could not verify. Try again.');
+    } finally {
+      setPersonaLoading(false);
+    }
+  };
+
   return (
     <>
       <button
@@ -129,7 +184,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <Icon icon="mdi:magnify" aria-hidden="true" />
+        <Icon className="command-trigger-search-icon" icon="mdi:magnify" aria-hidden="true" />
+        <Icon className="command-trigger-menu-icon" icon="mdi:menu" aria-hidden="true" />
         <span className="command-palette-trigger-label">COMMAND</span>
         <kbd>⌘K</kbd>
       </button>
@@ -177,40 +233,71 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                 <kbd>↵</kbd>
               </label>
 
-              <div className="command-palette-results" role="listbox" aria-label="Commands">
-                {filteredCommands.length > 0 ? (
-                  filteredCommands.map((command, index) => (
-                    <button
-                      type="button"
-                      key={command.id}
-                      className={`command-palette-item ${index === selectedIndex ? 'is-selected' : ''}`}
-                      onMouseEnter={() => setSelectedIndex(index)}
-                      onClick={() => execute(command)}
-                      role="option"
-                      aria-selected={index === selectedIndex}
-                    >
-                      <span className="command-palette-item-icon">
-                        <Icon icon={command.icon ?? 'mdi:arrow-right'} aria-hidden="true" />
-                      </span>
-                      <span className="command-palette-item-copy">
-                        <strong>{command.label}</strong>
-                        {command.description && <small>{command.description}</small>}
-                      </span>
-                      <span className="command-palette-item-group">{command.group ?? 'NAV'}</span>
-                      <Icon
-                        className="command-palette-item-arrow"
-                        icon="mdi:arrow-top-right"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  ))
-                ) : (
-                  <div className="command-palette-empty">
-                    <span>NO MATCHES</span>
-                    <small>Try a page name, section, or keyword.</small>
-                  </div>
-                )}
-              </div>
+              {personaMode ? (
+                <form className="command-persona-form" onSubmit={submitPersonaPassword}>
+                  <span className="command-persona-kicker">PERSONA / 001</span>
+                  <label htmlFor="command-persona-password">Continue</label>
+                  <input
+                    id="command-persona-password"
+                    type="password"
+                    autoFocus
+                    autoComplete="current-password"
+                    value={personaPassword}
+                    onChange={(event) => setPersonaPassword(event.target.value)}
+                    placeholder="Enter passphrase"
+                  />
+                  {personaError && <small role="status">{personaError}</small>}
+                  <button type="submit" disabled={!personaPassword.trim() || personaLoading}>
+                    {personaLoading ? 'CHECKING…' : 'CONTINUE ↗'}
+                  </button>
+                  <button
+                    type="button"
+                    className="command-persona-back"
+                    onClick={() => {
+                      setPersonaMode(false);
+                      setPersonaPassword('');
+                      setPersonaError('');
+                    }}
+                  >
+                    BACK TO COMMANDS
+                  </button>
+                </form>
+              ) : (
+                <div className="command-palette-results" role="listbox" aria-label="Commands">
+                  {filteredCommands.length > 0 ? (
+                    filteredCommands.map((command, index) => (
+                      <button
+                        type="button"
+                        key={command.id}
+                        className={`command-palette-item ${index === selectedIndex ? 'is-selected' : ''}`}
+                        onMouseEnter={() => setSelectedIndex(index)}
+                        onClick={() => execute(command)}
+                        role="option"
+                        aria-selected={index === selectedIndex}
+                      >
+                        <span className="command-palette-item-icon">
+                          <Icon icon={command.icon ?? 'mdi:arrow-right'} aria-hidden="true" />
+                        </span>
+                        <span className="command-palette-item-copy">
+                          <strong>{command.label}</strong>
+                          {command.description && <small>{command.description}</small>}
+                        </span>
+                        <span className="command-palette-item-group">{command.group ?? 'NAV'}</span>
+                        <Icon
+                          className="command-palette-item-arrow"
+                          icon="mdi:arrow-top-right"
+                          aria-hidden="true"
+                        />
+                      </button>
+                    ))
+                  ) : (
+                    <div className="command-palette-empty">
+                      <span>NO MATCHES</span>
+                      <small>Try a page name, section, or keyword.</small>
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div className="command-palette-footer">
                 <span>

@@ -283,7 +283,7 @@
 // The command palette remains available through its keyboard shortcut.
 @media (max-width: 900px) {
   .command-palette-trigger {
-    display: none !important;
+    display: flex !important;
   }
 }
 
@@ -447,4 +447,72 @@
   .command-palette-footer span:nth-child(2) {
     display: none;
   }
+}
+
+.command-trigger-menu-icon {
+  display: none !important;
+}
+.command-persona-form {
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+  border-top: 1px solid rgba(242, 240, 232, 0.16);
+}
+.command-persona-kicker {
+  color: #7f9cc7;
+  font:
+    9px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.16em;
+}
+.command-persona-form label {
+  color: #f2f0e8;
+  font:
+    700 12px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.command-persona-form input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 14px;
+  border: 1px solid rgba(242, 240, 232, 0.25);
+  background: #080b10;
+  color: #f2f0e8;
+  font:
+    12px 'IBM Plex Mono',
+    monospace;
+  outline: none;
+}
+.command-persona-form input:focus {
+  border-color: #f0cf20;
+}
+.command-persona-form small {
+  color: #ff6258;
+  font:
+    10px 'IBM Plex Mono',
+    monospace;
+}
+.command-persona-form button {
+  padding: 13px 14px;
+  border: 1px solid #f0cf20;
+  background: #f0cf20;
+  color: #080b10;
+  font:
+    800 10px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+.command-persona-form button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.command-persona-form .command-persona-back {
+  border-color: transparent;
+  background: transparent;
+  color: #9ba2ad;
+  text-align: left;
 }

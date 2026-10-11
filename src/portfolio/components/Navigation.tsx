@@ -3,14 +3,6 @@ import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import CloseIcon from '@mui/icons-material/Close';
 import Toolbar from '@mui/material/Toolbar';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Icon } from '@iconify/react';
@@ -29,7 +21,6 @@ const navItems: [string, Section, string][] = [
 ];
 
 function Navigation() {
-  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [activeSection, setActiveSection] = useState<Section>('main');
   const navigate = useNavigate();
@@ -37,14 +28,6 @@ function Navigation() {
 
   // Check if we're on a fullscreen route
   const isFullscreenRoute = location.pathname === '/vault' || location.pathname === '/insights';
-
-  const handleDrawerToggle = () => {
-    setMobileOpen((prev) => !prev);
-  };
-
-  const handleDrawerClose = () => {
-    setMobileOpen(false);
-  };
 
   // Handle scroll events for navbar styling
   useEffect(() => {
@@ -77,22 +60,9 @@ function Navigation() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isFullscreenRoute]);
 
-  // Prevent body scroll when drawer is open
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [mobileOpen]);
-
   const scrollToSection = (section: Section) => {
     if (section === 'vault') {
       navigate('/vault');
-      handleDrawerClose();
       return;
     }
 
@@ -100,7 +70,6 @@ function Navigation() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
       setActiveSection(section);
-      handleDrawerClose();
     }
   };
 
@@ -114,15 +83,6 @@ function Navigation() {
       keywords: [section],
       action: () => scrollToSection(section),
     })),
-    {
-      id: 'main-persona',
-      label: 'Persona',
-      description: 'Open the personal archive',
-      icon: 'mdi:book-open-page-variant-outline',
-      group: 'PAGE',
-      keywords: ['personal', 'archive'],
-      action: () => navigate('/persona'),
-    },
     {
       id: 'main-wish-archive',
       label: 'Wish Archive',
@@ -142,56 +102,6 @@ function Navigation() {
       action: () => navigate('/insights'),
     },
   ];
-
-  const drawer = (
-    <Box className="navigation-drawer" role="navigation" aria-label="Mobile navigation">
-      <Box className="drawer-header">
-        <Box className="drawer-brand">
-          <span className="drawer-brand-name">TDY.dev</span>
-        </Box>
-        <IconButton
-          className="drawer-close-button"
-          onClick={handleDrawerClose}
-          aria-label="Close navigation menu"
-        >
-          <CloseIcon />
-        </IconButton>
-      </Box>
-      <Divider className="drawer-divider" />
-      <List className="drawer-list">
-        {navItems.map(([label, section, icon]) => (
-          <ListItem key={label} disablePadding className="drawer-list-item">
-            <ListItemButton
-              className={`drawer-button ${activeSection === section ? 'active' : ''}`}
-              onClick={() => scrollToSection(section)}
-              aria-current={activeSection === section ? 'page' : undefined}
-            >
-              <Icon icon={icon} className="drawer-item-icon" />
-              <ListItemText primary={label} className="drawer-item-text" />
-              {activeSection === section && <span className="drawer-item-indicator" />}
-            </ListItemButton>
-          </ListItem>
-        ))}
-        <ListItem disablePadding className="drawer-list-item">
-          <ListItemButton
-            className={`drawer-button ${location.pathname === '/persona' ? 'active' : ''}`}
-            onClick={() => {
-              navigate('/persona');
-              handleDrawerClose();
-            }}
-            aria-current={location.pathname === '/persona' ? 'page' : undefined}
-          >
-            <Icon icon="mdi:book-open-page-variant-outline" className="drawer-item-icon" />
-            <ListItemText primary="Persona" className="drawer-item-text" />
-            {location.pathname === '/persona' && <span className="drawer-item-indicator" />}
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <Box className="drawer-footer">
-        <span className="drawer-footer-text">© 2026 TDY</span>
-      </Box>
-    </Box>
-  );
 
   // Don't render navigation on fullscreen routes
   if (isFullscreenRoute) {
@@ -227,62 +137,15 @@ function Navigation() {
                 <span className="nav-button-label">{label}</span>
               </Button>
             ))}
-            <Button
-              onClick={() => navigate('/persona')}
-              className={`nav-button persona-nav-button ${location.pathname === '/persona' ? 'active' : ''}`}
-              aria-current={location.pathname === '/persona' ? 'page' : undefined}
-            >
-              <Icon icon="mdi:book-open-page-variant-outline" className="nav-button-icon" />
-              <span className="nav-button-label">Persona</span>
-            </Button>
           </Box>
 
           <CommandPalette
             commands={commandPaletteCommands}
             contextLabel="SITE COMMANDS"
-            onOpen={handleDrawerClose}
+            onOpen={() => {}}
           />
-
-          {/* Mobile Actions */}
-          <Box className="mobile-nav-actions">
-            <IconButton
-              className={`mobile-menu-button ${mobileOpen ? 'open' : ''}`}
-              onClick={handleDrawerToggle}
-              aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              aria-expanded={mobileOpen}
-              aria-controls="mobile-navigation-drawer"
-            >
-              <span className="hamburger-line"></span>
-              <span className="hamburger-line"></span>
-              <span className="hamburger-line"></span>
-            </IconButton>
-          </Box>
         </Toolbar>
       </AppBar>
-
-      {/* Mobile Drawer */}
-      <Drawer
-        variant="temporary"
-        open={mobileOpen}
-        onClose={handleDrawerClose}
-        ModalProps={{
-          keepMounted: true,
-          disableScrollLock: true,
-        }}
-        classes={{
-          paper: 'drawer-paper',
-        }}
-        className="mobile-drawer"
-        id="mobile-navigation-drawer"
-        anchor="right"
-      >
-        {drawer}
-      </Drawer>
-
-      {/* Overlay for drawer */}
-      {mobileOpen && (
-        <Box className="drawer-overlay" onClick={handleDrawerClose} aria-hidden="true" />
-      )}
     </Box>
   );
 }

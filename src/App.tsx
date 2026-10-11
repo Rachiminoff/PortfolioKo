@@ -21,6 +21,7 @@ const InsightsPage = lazy(() => import('./pages/InsightsPage'));
 const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
 const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStatsPage'));
 const PersonaPage = lazy(() => import('./pages/PersonaPage'));
+const MasterlistPage = lazy(() => import('./pages/MasterlistPage'));
 
 // Boot Sequence Component - CRT TV Style
 function BootSequence({ onComplete }: { onComplete: () => void }) {
@@ -399,13 +400,7 @@ function AppContent() {
           path="/wish-archive"
           element={
             <FullscreenLayout>
-              <ProtectedRoute
-                isUnlocked={isArchiveUnlocked}
-                isLoading={archiveLoading}
-                redirectTo="/archive"
-              >
-                <WishArchivePage />
-              </ProtectedRoute>
+              <WishArchivePage />
             </FullscreenLayout>
           }
         />
@@ -429,6 +424,14 @@ function AppContent() {
             <FullscreenLayout>
               <PersonaPage />
             </FullscreenLayout>
+          }
+        />
+        <Route
+          path="/masterlist"
+          element={
+            <DefaultLayout hideNavigation>
+              <MasterlistPage />
+            </DefaultLayout>
           }
         />
         <Route path="*" element={<Navigate to="/" replace />} />

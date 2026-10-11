@@ -162,3 +162,11 @@ The source code may be referenced for educational purposes. However, the website
 <p align="center">
 Built with React, TypeScript, and SCSS.
 </p>
+
+
+Masterlist updates: the Stats Country of Origin pie includes Literature, Games, and Movies; genre stats combine Literature metadata, game tags, and movie genres. See `MASTERLIST_SETUP.md` for the safe SQL migration and TMDB poster-sync Edge Function setup.
+
+
+### Automatic movie poster sync
+
+See `supabase/schedule_movie_poster_sync.sql` and section 8 of `MASTERLIST_SETUP.md` to configure a Supabase scheduled job. Once configured, it fills missing `movie_masterlist.poster_url` values in batches without manual `curl` requests. Keep TMDB and sync guard secrets in Supabase Edge Function secrets.

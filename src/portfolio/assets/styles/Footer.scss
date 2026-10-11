@@ -611,3 +611,147 @@ body[data-theme='dark'] {
 .footer-stack-grid small {
   color: #b9bec8;
 }
+
+/* Minimal terminal-style persona entry inspired by the reference footer */
+.footer-secret {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: clamp(24px, 6vw, 80px);
+  align-items: end;
+  margin: 38px 0 24px;
+  padding: 28px 0 30px;
+  border-bottom: 1px solid rgba(130, 155, 184, 0.3);
+  color: #d9e0e9;
+  background: #080b10;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.footer-secret-identity {
+  min-width: 0;
+}
+.footer-secret-name {
+  display: block;
+  font-size: clamp(17px, 2vw, 24px);
+  letter-spacing: -0.045em;
+  color: #f1f3f5;
+}
+.footer-secret-mark {
+  display: block;
+  margin: 5px 0 4px;
+  color: #d4d900;
+  font-size: 13px;
+}
+.footer-secret-identity p {
+  margin: 0;
+  color: #6f8bad;
+  font-size: 12px;
+}
+.footer-secret-identity p kbd {
+  border: 1px solid #283341;
+  border-radius: 4px;
+  padding: 1px 4px;
+  color: #aeb7c4;
+  font-size: 10px;
+}
+.footer-secret-cursor {
+  display: inline-block;
+  animation: footer-secret-blink 1s steps(2, start) infinite;
+  color: #d4d900;
+}
+.footer-secret-hint {
+  display: none;
+}
+.footer-secret-access {
+  opacity: 0.42;
+  transition: opacity 0.2s ease;
+  min-width: 0;
+  position: relative;
+  z-index: 1;
+}
+.footer-secret-access:hover,
+.footer-secret-access:focus-within {
+  opacity: 1;
+}
+.footer-secret-access input,
+.footer-secret-access button {
+  pointer-events: auto;
+}
+.footer-secret-access form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.footer-secret-access label {
+  display: none;
+}
+.footer-secret-input-row {
+  display: flex;
+  min-height: 38px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.footer-secret-access:hover .footer-secret-input-row,
+.footer-secret-access:focus-within .footer-secret-input-row {
+  border-bottom-color: #334153;
+}
+.footer-secret-input-row input {
+  display: block;
+  min-width: 0;
+  flex: 1;
+  padding: 10px 2px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #eef2f7;
+  font:
+    12px 'IBM Plex Mono',
+    monospace;
+  caret-color: #d4d900;
+  cursor: text;
+}
+.footer-secret-input-row input:focus-visible {
+  outline: 1px solid rgba(130, 155, 184, 0.28);
+  outline-offset: 2px;
+}
+.footer-secret-input-row input::placeholder {
+  color: #45566c;
+}
+.footer-secret-input-row button {
+  width: 28px;
+  border: 0;
+  background: transparent;
+  color: #e6392f;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.18;
+  transition: opacity 0.2s ease;
+}
+.footer-secret-access:hover .footer-secret-input-row button,
+.footer-secret-access:focus-within .footer-secret-input-row button {
+  opacity: 0.85;
+}
+.footer-secret-input-row button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.footer-secret-error {
+  min-height: 0;
+  color: #e86c65;
+  font-size: 10px;
+}
+.footer-secret-access:hover .footer-secret-error,
+.footer-secret-access:focus-within .footer-secret-error {
+  min-height: 14px;
+}
+@keyframes footer-secret-blink {
+  to {
+    visibility: hidden;
+  }
+}
+@media (max-width: 700px) {
+  .footer-secret {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-top: 28px;
+    padding-top: 24px;
+  }
+}
