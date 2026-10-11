@@ -696,11 +696,11 @@ $nav-height: 76px;
   }
   .navbar .command-palette-trigger .command-palette-trigger-label,
   .navbar .command-palette-trigger kbd,
-  .navbar .command-trigger-search-icon {
+  .navbar .command-palette-trigger .command-trigger-menu-icon {
     display: none !important;
   }
-  .navbar .command-palette-trigger .command-trigger-menu-icon {
+  .navbar .command-palette-trigger .command-trigger-search-icon {
     display: block !important;
-    font-size: 27px;
+    font-size: 20px;
   }
 }

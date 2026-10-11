@@ -658,8 +658,7 @@
 
 /* Mobile navigation: brand + hamburger only. */
 @media (max-width: 900px) {
-  .navbar .nav-items-desktop,
-  .navbar .command-palette-trigger {
+  .navbar .nav-items-desktop {
     display: none !important;
   }
 
