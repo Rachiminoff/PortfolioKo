@@ -4804,3 +4804,310 @@ $paper-muted: #55585d;
     line-height: 1.42;
   }
 }
+
+/* ==========================================================================
+   Mobile polish (final pass) — keep at the end so it wins the cascade.
+   ========================================================================== */
+.persona-page {
+  -webkit-text-size-adjust: 100%;
+}
+.persona-page button,
+.persona-page a,
+.persona-page select,
+.persona-page input {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (max-width: 700px) {
+  .persona-page {
+    padding: 64px 16px 56px;
+  }
+  .persona-shape-blue {
+    width: 30vw;
+    height: 30vw;
+    top: 56px;
+    right: -6vw;
+    opacity: 0.55;
+  }
+  .persona-shape-red,
+  .persona-shape-yellow {
+    opacity: 0.55;
+  }
+
+  /* Hero */
+  .persona-kicker {
+    margin-bottom: 22px;
+  }
+  .persona-hero-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding-bottom: 36px;
+  }
+  .persona-hero h1 {
+    font-size: clamp(3.2rem, 19vw, 5.6rem);
+    line-height: 0.8;
+    max-width: 100%;
+  }
+  .persona-intro {
+    margin-top: 26px;
+    font-size: 1.05rem;
+    line-height: 1.12;
+    border-left-width: 6px;
+  }
+  .persona-subintro {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .persona-stamp {
+    width: auto;
+    max-width: 260px;
+    min-height: 0;
+    aspect-ratio: auto;
+    padding: 18px 20px;
+    justify-self: start;
+    transform: rotate(-2deg);
+  }
+
+  /* Section heads */
+  .persona-section-head h2,
+  .persona-currently h2,
+  .persona-site-stats h2 {
+    font-size: clamp(2.4rem, 14vw, 3.6rem);
+    line-height: 0.88;
+  }
+
+  /* Currently */
+  .persona-now-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .persona-now-card {
+    min-height: 0;
+    padding: 14px 14px 16px;
+    gap: 8px;
+  }
+  .persona-now-card strong {
+    font-size: 1.05rem;
+    line-height: 1.12;
+    overflow-wrap: anywhere;
+  }
+
+  /* Site stats */
+  .persona-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .persona-stat-card {
+    min-height: 0;
+    padding: 14px;
+  }
+  .persona-stat-card strong {
+    font-size: clamp(1.9rem, 10vw, 2.6rem);
+  }
+  .persona-stat-copy {
+    grid-column: 1 / -1;
+    min-height: 0;
+    padding: 16px;
+  }
+
+  /* Favourites */
+  .persona-media-group {
+    padding: 14px 12px;
+  }
+  .persona-media-card {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 12px;
+    min-height: 0;
+    padding: 12px;
+  }
+  .persona-media-image-wrap {
+    width: 76px;
+    max-width: 76px;
+    aspect-ratio: 2 / 3;
+    height: auto;
+  }
+  .persona-media-copy h3,
+  .persona-media-copy h4 {
+    font-size: 1.05rem;
+    line-height: 1.05;
+    overflow-wrap: anywhere;
+  }
+  .persona-media-copy p {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+  .persona-media-page-control,
+  .persona-media-page-numbers button {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .persona-media-pagination {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Writings toolbar: search on top, filters scroll, sort aligned underneath */
+  .persona-writing-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border: 1px solid rgba(242, 240, 232, 0.18);
+  }
+  .persona-writing-search,
+  .persona-writing-sort {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    box-sizing: border-box;
+    border-right: 0;
+  }
+  .persona-writing-search {
+    border-bottom: 1px solid rgba(242, 240, 232, 0.18);
+  }
+  .persona-writing-search input {
+    min-width: 0;
+    flex: 1;
+    font-size: 16px; /* prevents iOS zoom-on-focus */
+  }
+  .persona-writing-filters {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .persona-writing-filters > * {
+    flex: 0 0 auto;
+  }
+  .persona-writing-filters button {
+    min-height: 40px;
+    padding: 0 14px;
+  }
+  .persona-writing-filter-label {
+    font-size: 9px;
+  }
+  .persona-writing-sort {
+    justify-content: space-between;
+    padding: 0 14px;
+    border-top: 1px solid rgba(242, 240, 232, 0.18);
+  }
+  .persona-writing-sort select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+  .persona-writing-state {
+    gap: 8px;
+    padding: 28px 16px;
+  }
+  .persona-writing-state > span {
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Quotes */
+  .persona-quote-card blockquote {
+    font-size: clamp(1.2rem, 6vw, 1.55rem);
+    line-height: 1.25;
+  }
+  .persona-quote-card footer {
+    margin-top: 18px;
+    font-size: 10px;
+  }
+  .persona-quote-card footer strong {
+    color: #17191d;
+  }
+  .persona-quote-pagination {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .persona-quote-page-button {
+    min-height: 44px;
+  }
+
+  /* Tools: one horizontally scrollable row of cards */
+  .persona-tools-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1px;
+    margin-inline: -16px;
+    padding-inline: 16px;
+    border-inline: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 16px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .persona-tools-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .persona-tool-card {
+    flex: 0 0 min(78%, 280px);
+    min-width: 0;
+    min-height: 168px;
+    padding: 16px;
+    scroll-snap-align: start;
+  }
+  .persona-tool-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  /* Menu sheet: keep it inside the viewport (it was overflowing to the left) */
+  .persona-menu {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 64px 8px 12px;
+  }
+  .persona-menu-inner {
+    box-sizing: border-box;
+    justify-self: end;
+    width: 100%;
+    max-width: 440px;
+    max-height: calc(100dvh - 80px);
+    padding: 16px 16px 18px;
+    box-shadow: 6px 6px 0 $yellow;
+    margin-right: 6px; /* room for the offset shadow */
+    width: calc(100% - 6px);
+  }
+  .persona-menu-link {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    min-height: 52px;
+  }
+  .persona-menu-number {
+    font-size: 10px;
+  }
+  .persona-footer-card {
+    padding: 22px 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .persona-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .persona-now-card strong {
+    font-size: 0.98rem;
+  }
+  .persona-media-card {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+  .persona-media-image-wrap {
+    width: 64px;
+    max-width: 64px;
+  }
+}
+
+@supports (padding: max(0px)) {
+  .persona-page {
+    padding-bottom: max(56px, calc(env(safe-area-inset-bottom) + 32px));
+  }
+}

@@ -17,12 +17,10 @@ import {
   CheckCircle2,
   ArrowUpRight,
   Film,
-  Sparkles,
-  Trophy,
-  Compass,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './MasterlistPage.scss';
+import './MasterlistStats.scss';
 
 type MangaStatus = 'Reading' | 'Completed' | 'On-Hold' | 'Dropped' | 'Plan to Read' | string;
 type AniListMetadata = {
@@ -576,6 +574,9 @@ const MasterlistContent: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState('All');
   const [sortBy, setSortBy] = useState<'title' | 'score' | 'progress'>('title');
   const [activeTab, setActiveTab] = useState<'stats' | 'manga' | 'games' | 'movies'>('stats');
+  const [statsScope, setStatsScope] = useState<'overview' | 'manga' | 'games' | 'movies'>(
+    'overview',
+  );
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [games, setGames] = useState<GameEntry[]>([]);
   const [gamesLoading, setGamesLoading] = useState(true);
@@ -1205,6 +1206,51 @@ const MasterlistContent: React.FC = () => {
     [entries, games, movies],
   );
 
+  const libraryTotal = entries.length + games.length + movies.length;
+  const pct = (part: number, whole: number) => (whole ? Math.round((part / whole) * 100) : 0);
+  const mediaCards = [
+    {
+      id: 'manga' as const,
+      label: 'Literature',
+      icon: BookOpen,
+      loading: loading,
+      total: entries.length,
+      done: stats.completed,
+      doneLabel: 'completed',
+      percent: pct(stats.completed, entries.length),
+      sub: `${stats.reading} reading · ${stats.scoreCount ? `avg ${stats.meanScore.toFixed(1)}` : 'no scores'}`,
+    },
+    {
+      id: 'games' as const,
+      label: 'Games',
+      icon: Gamepad2,
+      loading: gamesLoading,
+      total: games.length,
+      done: gameStats.completed,
+      doneLabel: 'beaten',
+      percent: pct(gameStats.completed, games.length),
+      sub: `${gameStats.played} playing · ${gameStats.ratedCount ? `avg ${gameStats.meanScore.toFixed(1)}` : 'no scores'}`,
+    },
+    {
+      id: 'movies' as const,
+      label: 'Movies',
+      icon: Film,
+      loading: moviesLoading,
+      total: movies.length,
+      done: movieStats.ratedCount,
+      doneLabel: 'rated',
+      percent: pct(movieStats.ratedCount, movies.length),
+      sub: movieStats.ratedCount ? `avg ${movieStats.meanScore.toFixed(1)}` : 'no ratings yet',
+    },
+  ];
+  const highestMedium = [
+    { label: 'Literature', value: stats.meanScore, count: stats.scoreCount },
+    { label: 'Games', value: gameStats.meanScore, count: gameStats.ratedCount },
+    { label: 'Movies', value: movieStats.meanScore, count: movieStats.ratedCount },
+  ]
+    .filter((item) => item.count > 0)
+    .sort((a, b) => b.value - a.value)[0];
+
   return (
     <main className="masterlist-page">
       <div className="masterlist-shell">
@@ -1277,7 +1323,7 @@ const MasterlistContent: React.FC = () => {
         </nav>
 
         {activeTab === 'stats' && (
-          <>
+          <div className="ml-dash">
             {gamesError && (
               <div className="masterlist-notice error">
                 {gamesError}
@@ -1287,67 +1333,13 @@ const MasterlistContent: React.FC = () => {
                 </p>
               </div>
             )}
-            <section className="masterlist-stats-hero" aria-label="Collection overview">
-              <div className="masterlist-stats-hero-title">
+
+            <section className="ml-dash-hero" aria-label="Collection overview">
+              <div className="ml-dash-hero-copy">
                 <span className="masterlist-kicker">01 — COLLECTION PULSE</span>
                 <h2>
-                  Everything
-                  <br />
-                  <em>you collect.</em>
+                  Everything <em>you collect.</em>
                 </h2>
-              </div>
-              <div className="masterlist-stats-total">
-                <span>LIBRARY TOTAL</span>
-                <strong>{(entries.length + games.length + movies.length).toLocaleString()}</strong>
-                <small>records across 3 formats</small>
-              </div>
-              <div className="masterlist-stats-hero-key" aria-hidden="true">
-                <span className="key-manga">M</span>
-                <span className="key-games">G</span>
-                <span className="key-movies">F</span>
-              </div>
-            </section>
-            <section className="masterlist-stats">
-              <div>
-                <span>TOTAL LITERATURE</span>
-                <strong>{entries.length.toLocaleString()}</strong>
-              </div>
-              <div>
-                <span>TOTAL GAMES</span>
-                <strong>{gamesLoading ? '…' : games.length.toLocaleString()}</strong>
-              </div>
-              <div>
-                <span>TOTAL MOVIES</span>
-                <strong>{moviesLoading ? '…' : movies.length.toLocaleString()}</strong>
-              </div>
-              <div>
-                <span>LITERATURE COMPLETED</span>
-                <strong>{stats.completed.toLocaleString()}</strong>
-              </div>
-              <div>
-                <span>GAMES BEATEN</span>
-                <strong>{gamesLoading ? '…' : gameStats.completed.toLocaleString()}</strong>
-              </div>
-              <div>
-                <span>MOVIES RATED</span>
-                <strong>{moviesLoading ? '…' : movieStats.ratedCount.toLocaleString()}</strong>
-              </div>
-              <div>
-                <span>READING NOW</span>
-                <strong>{stats.reading.toLocaleString()}</strong>
-              </div>
-              <div>
-                <span>PLAYED / PLAYING</span>
-                <strong>{gamesLoading ? '…' : gameStats.played.toLocaleString()}</strong>
-              </div>
-            </section>
-
-            <section className="manga-analytics">
-              <div className="manga-analytics-header">
-                <div>
-                  <span className="masterlist-kicker">01 — COLLECTION INTELLIGENCE</span>
-                  <h2>Your library, in focus.</h2>
-                </div>
                 <div className={`manga-sync-status ${syncing ? 'is-syncing' : ''}`}>
                   <span className="manga-sync-dot" />
                   <div>
@@ -1366,337 +1358,365 @@ const MasterlistContent: React.FC = () => {
                   <button
                     type="button"
                     title="Retry metadata sync"
+                    aria-label="Retry metadata sync"
                     onClick={() => window.location.reload()}
                   >
                     <RefreshCw size={15} />
                   </button>
                 </div>
               </div>
-              <div className="masterlist-insight-strip">
-                <article className="masterlist-insight-feature">
-                  <div className="masterlist-insight-icon">
-                    <Sparkles size={18} />
-                  </div>
-                  <span className="masterlist-insight-label">YOUR MULTIVERSE</span>
-                  <strong>
-                    {(entries.length + games.length + movies.length).toLocaleString()}
-                    <small> entries</small>
-                  </strong>
-                  <p>One personal archive across stories, games, and cinema.</p>
-                  <div className="masterlist-insight-stack" aria-label="Collection proportions">
-                    <span
-                      className="lit"
-                      style={{
-                        width: `${(entries.length / Math.max(1, entries.length + games.length + movies.length)) * 100}%`,
-                      }}
-                    />
-                    <span
-                      className="games"
-                      style={{
-                        width: `${(games.length / Math.max(1, entries.length + games.length + movies.length)) * 100}%`,
-                      }}
-                    />
-                    <span
-                      className="movies"
-                      style={{
-                        width: `${(movies.length / Math.max(1, entries.length + games.length + movies.length)) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </article>
-                <article className="masterlist-insight-mini">
-                  <div>
-                    <Trophy size={17} />
-                    <span>FINISHED STORIES</span>
-                  </div>
-                  <strong>{stats.completed.toLocaleString()}</strong>
-                  <p>
-                    {entries.length
-                      ? `${Math.round((stats.completed / entries.length) * 100)}% of your literature shelf completed`
-                      : 'Your reading milestones will show here.'}
-                  </p>
-                </article>
-                <article className="masterlist-insight-mini">
-                  <div>
-                    <Gamepad2 size={17} />
-                    <span>GAMES CONQUERED</span>
-                  </div>
-                  <strong>{gameStats.completed.toLocaleString()}</strong>
-                  <p>
-                    {games.length
-                      ? `${Math.round((gameStats.completed / games.length) * 100)}% completion rate across your catalogue`
-                      : 'Your game wins will show here.'}
-                  </p>
-                </article>
-                <article className="masterlist-insight-mini">
-                  <div>
-                    <Film size={17} />
-                    <span>POSTER WALL</span>
-                  </div>
-                  <strong>
-                    {movieStats.posterCount.toLocaleString()}
-                    <small> / {movies.length.toLocaleString()}</small>
-                  </strong>
-                  <p>
-                    {movies.length
-                      ? `${Math.round((movieStats.posterCount / movies.length) * 100)}% of movies have artwork`
-                      : 'Movie artwork coverage will show here.'}
-                  </p>
-                </article>
-              </div>
-              <div className="masterlist-personality-panel">
-                <div className="masterlist-personality-heading">
-                  <div>
-                    <span className="masterlist-kicker">THE FUN PART</span>
-                    <h3>Your collection signals</h3>
-                  </div>
-                  <Compass size={21} />
-                </div>
-                <div className="masterlist-personality-grid">
-                  <div>
-                    <span>TOP LITERATURE GENRE</span>
-                    <strong>{stats.genres[0]?.label ?? 'Still discovering'}</strong>
-                    <small>
-                      {stats.genres[0]
-                        ? `${stats.genres[0].value} titles tagged`
-                        : 'Sync metadata or add tags to reveal your taste.'}
-                    </small>
-                  </div>
-                  <div>
-                    <span>FAVOURITE GAME PLATFORM</span>
-                    <strong>{gameStats.platforms[0]?.label ?? 'Not enough data yet'}</strong>
-                    <small>
-                      {gameStats.platforms[0]
-                        ? `${gameStats.platforms[0].value} games in your catalogue`
-                        : 'Add platform details to uncover your gaming home.'}
-                    </small>
-                  </div>
-                  <div>
-                    <span>HIGHEST-RATED MEDIUM</span>
-                    <strong>
-                      {(() => {
-                        const means = [
-                          { label: 'Literature', value: stats.meanScore, count: stats.scoreCount },
-                          {
-                            label: 'Games',
-                            value: gameStats.meanScore,
-                            count: gameStats.ratedCount,
-                          },
-                          {
-                            label: 'Movies',
-                            value: movieStats.meanScore,
-                            count: movieStats.ratedCount,
-                          },
-                        ]
-                          .filter((item) => item.count > 0)
-                          .sort((a, b) => b.value - a.value);
-                        return means[0]?.label ?? 'Waiting for ratings';
-                      })()}
-                    </strong>
-                    <small>
-                      {(() => {
-                        const means = [
-                          { label: 'Literature', value: stats.meanScore, count: stats.scoreCount },
-                          {
-                            label: 'Games',
-                            value: gameStats.meanScore,
-                            count: gameStats.ratedCount,
-                          },
-                          {
-                            label: 'Movies',
-                            value: movieStats.meanScore,
-                            count: movieStats.ratedCount,
-                          },
-                        ]
-                          .filter((item) => item.count > 0)
-                          .sort((a, b) => b.value - a.value);
-                        return means[0]
-                          ? `Average score ${means[0].value.toFixed(2)} / 10`
-                          : 'Rate a few favourites to compare your taste.';
-                      })()}
-                    </small>
-                  </div>
-                  <div>
-                    <span>DISCOVERY MAP</span>
-                    <strong>{combinedCountries.length} origins</strong>
-                    <small>Countries represented across the three collections.</small>
-                  </div>
-                </div>
-              </div>
-              <div className="manga-analytics-grid masterlist-stats-charts">
-                <section className="manga-stat-panel manga-chart-panel ml-wide-chart">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Release timeline</h3>
-                    <span>ALL MEDIA · RELEASE YEAR</span>
-                  </div>
-                  <BarTrendChart items={combinedReleaseYears} />
-                </section>
-                <section className="manga-stat-panel manga-chart-panel ml-wide-chart">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Collection growth</h3>
-                    <span>CUMULATIVE · DATED RECORDS</span>
-                  </div>
-                  <CollectionGrowthChart items={collectionActivity} />
-                </section>
-                <section className="manga-stat-panel manga-chart-panel ml-wide-chart">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Rating map</h3>
-                    <span>{combinedRatings.length.toLocaleString()} SCORED ITEMS</span>
-                  </div>
-                  <RatingScatter points={combinedRatings} />
-                </section>
-                <DistributionList
-                  title="Shared genre landscape"
-                  items={combinedGenres.map((item) => ({ ...item, detail: `${item.value} items` }))}
-                />
-                <section className="manga-stat-panel manga-chart-panel">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Collection mix</h3>
-                    <span>ALL MEDIA</span>
-                  </div>
-                  <MiniDonut
-                    items={[
-                      { label: 'Literature', value: entries.length },
-                      { label: 'Games', value: games.length },
-                      { label: 'Movies', value: movies.length },
-                    ]}
+              <div className="ml-dash-total">
+                <span>LIBRARY TOTAL</span>
+                <strong>{libraryTotal.toLocaleString()}</strong>
+                <div className="ml-dash-stack" aria-hidden="true">
+                  <i
+                    className="lit"
+                    style={{ width: `${(entries.length / Math.max(1, libraryTotal)) * 100}%` }}
                   />
-                </section>
-                <section className="manga-stat-panel manga-chart-panel">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Format distribution</h3>
-                    <span>ALL FORMATS</span>
-                  </div>
-                  <MiniDonut items={formatDistribution} />
-                </section>
-                <DistributionList
-                  title="Most played platforms"
-                  items={gameStats.platforms.map((item) => ({
-                    ...item,
-                    detail: `${item.value} games`,
-                  }))}
-                />
-                <DistributionList
-                  title="Game completion profile"
-                  items={gameStats.completion.map((item) => ({
-                    ...item,
-                    detail: `${item.value} games`,
-                  }))}
-                />
-                <section className="manga-stat-panel manga-chart-panel">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Country of origin</h3>
-                    <span>LITERATURE + GAMES + MOVIES</span>
-                  </div>
-                  <MiniDonut items={combinedCountries} variant="pie" />
-                </section>
-                <DistributionList
-                  title="Game format distribution"
-                  items={gameStats.formats.map((item) => ({
-                    ...item,
-                    detail: `${item.value} games`,
-                  }))}
-                />
-                <DistributionList
-                  title="Game ownership"
-                  items={gameStats.ownership.map((item) => ({
-                    ...item,
-                    detail: `${item.value} games`,
-                  }))}
-                />
-                <DistributionList
-                  title="Game status"
-                  items={gameStats.status.map((item) => ({
-                    ...item,
-                    detail: `${item.value} games`,
-                  }))}
-                />
-                <DistributionList title="Chapter-length profile" items={stats.chapterBuckets} />
-                <section className="manga-stat-panel manga-stat-summary">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Literature snapshot</h3>
-                    <TrendingUp size={17} />
-                  </div>
-                  <div className="manga-snapshot-row">
-                    <CheckCircle2 size={17} />
-                    <span>Scored titles</span>
-                    <strong>{stats.scoreCount}</strong>
-                  </div>
-                  <div className="manga-snapshot-row">
-                    <Library size={17} />
-                    <span>Planned chapters remaining</span>
-                    <strong>{stats.plannedChapters.toLocaleString()}</strong>
-                  </div>
-                  <div className="manga-snapshot-row">
-                    <CalendarDays size={17} />
-                    <span>Metadata available</span>
-                    <strong>
-                      {stats.metadataCount} / {entries.length}
-                    </strong>
-                  </div>
-                  <div className="manga-snapshot-row">
-                    <PieChart size={17} />
-                    <span>Unique genres found</span>
-                    <strong>{stats.genreCount || '—'}</strong>
-                  </div>
-                  <div className="manga-snapshot-row">
-                    <TrendingUp size={17} />
-                    <span>Mean personal score</span>
-                    <strong>{stats.scoreCount ? stats.meanScore.toFixed(2) : '—'}</strong>
-                  </div>
-                  <p>
-                    Genre and format charts only include titles with metadata. Scores exclude
-                    unscored titles; missing fields are not treated as zero.
-                  </p>
-                </section>
-                <section className="manga-stat-panel manga-game-teaser">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Game shelf</h3>
-                    <Gamepad2 size={17} />
-                  </div>
-                  <div className="manga-game-teaser-count">
-                    {gamesLoading ? '…' : games.length.toLocaleString()}
-                    <span>games catalogued</span>
-                  </div>
-                  <p>
-                    {gameStats.played} played or in progress · {gameStats.owned} marked owned ·{' '}
-                    {gameStats.completed} beaten / completed.
-                  </p>
-                  <button
-                    type="button"
-                    className="masterlist-inline-action"
-                    onClick={() => setActiveTab('games')}
-                  >
-                    Explore games <ArrowUpRight size={14} />
-                  </button>
-                </section>
-                <section className="manga-stat-panel manga-game-teaser">
-                  <div className="manga-stat-panel-heading">
-                    <h3>Movie shelf</h3>
-                    <Film size={17} />
-                  </div>
-                  <div className="manga-game-teaser-count">
-                    {moviesLoading ? '…' : movies.length.toLocaleString()}
-                    <span>movies catalogued</span>
-                  </div>
-                  <p>
-                    {movieStats.ratedCount} rated ·{' '}
-                    {movieStats.meanScore
-                      ? `mean score ${movieStats.meanScore.toFixed(1)}`
-                      : 'ratings waiting to be added'}{' '}
-                    · {movieStats.statuses.length} watchlist statuses.
-                  </p>
-                  <button
-                    type="button"
-                    className="masterlist-inline-action"
-                    onClick={() => setActiveTab('movies')}
-                  >
-                    Explore movies <ArrowUpRight size={14} />
-                  </button>
-                </section>
+                  <i
+                    className="games"
+                    style={{ width: `${(games.length / Math.max(1, libraryTotal)) * 100}%` }}
+                  />
+                  <i
+                    className="movies"
+                    style={{ width: `${(movies.length / Math.max(1, libraryTotal)) * 100}%` }}
+                  />
+                </div>
+                <small>
+                  {combinedCountries.length} origins · {combinedGenres.length} shared genres
+                </small>
               </div>
             </section>
-          </>
+
+            <section className="ml-dash-kpis" aria-label="Totals by medium">
+              {mediaCards.map((card) => (
+                <button
+                  type="button"
+                  key={card.id}
+                  className={`ml-kpi ml-kpi-${card.id} ${statsScope === card.id ? 'is-active' : ''}`}
+                  onClick={() => setStatsScope(card.id)}
+                  aria-label={`Show ${card.label} charts`}
+                >
+                  <span className="ml-kpi-head">
+                    <card.icon size={16} />
+                    {card.label}
+                  </span>
+                  <strong>{card.loading ? '…' : card.total.toLocaleString()}</strong>
+                  <span className="ml-kpi-bar" aria-hidden="true">
+                    <i style={{ width: `${card.percent}%` }} />
+                  </span>
+                  <small>
+                    <b>{card.loading ? '…' : card.done.toLocaleString()}</b> {card.doneLabel}
+                    <em>{card.percent}%</em>
+                  </small>
+                  <small className="ml-kpi-sub">{card.sub}</small>
+                </button>
+              ))}
+            </section>
+
+            <section className="ml-dash-signals" aria-label="Collection signals">
+              <div>
+                <span>TOP GENRE</span>
+                <strong>{stats.genres[0]?.label ?? 'Still discovering'}</strong>
+                <small>
+                  {stats.genres[0] ? `${stats.genres[0].value} titles` : 'Sync metadata to reveal'}
+                </small>
+              </div>
+              <div>
+                <span>HOME PLATFORM</span>
+                <strong>{gameStats.platforms[0]?.label ?? '—'}</strong>
+                <small>
+                  {gameStats.platforms[0] ? `${gameStats.platforms[0].value} games` : 'No data yet'}
+                </small>
+              </div>
+              <div>
+                <span>HIGHEST-RATED</span>
+                <strong>{highestMedium?.label ?? '—'}</strong>
+                <small>
+                  {highestMedium ? `Avg ${highestMedium.value.toFixed(2)} / 10` : 'No ratings yet'}
+                </small>
+              </div>
+              <div>
+                <span>DISCOVERY MAP</span>
+                <strong>{combinedCountries.length} origins</strong>
+                <small>across all collections</small>
+              </div>
+            </section>
+
+            <div className="ml-dash-scope" role="tablist" aria-label="Chart scope">
+              {(
+                [
+                  ['overview', 'Overview'],
+                  ['manga', 'Literature'],
+                  ['games', 'Games'],
+                  ['movies', 'Movies'],
+                ] as const
+              ).map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  aria-selected={statsScope === id}
+                  className={statsScope === id ? 'is-active' : ''}
+                  onClick={() => setStatsScope(id)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div className="ml-dash-board" key={statsScope}>
+              {statsScope === 'overview' && (
+                <>
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Release timeline</h3>
+                      <span>ALL MEDIA · RELEASE YEAR</span>
+                    </div>
+                    <BarTrendChart items={combinedReleaseYears} />
+                  </section>
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Collection growth</h3>
+                      <span>CUMULATIVE · DATED RECORDS</span>
+                    </div>
+                    <CollectionGrowthChart items={collectionActivity} />
+                  </section>
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Rating map</h3>
+                      <span>{combinedRatings.length.toLocaleString()} SCORED ITEMS</span>
+                    </div>
+                    <RatingScatter points={combinedRatings} />
+                  </section>
+                  <section className="manga-stat-panel">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Collection mix</h3>
+                      <span>ALL MEDIA</span>
+                    </div>
+                    <MiniDonut
+                      items={[
+                        { label: 'Literature', value: entries.length },
+                        { label: 'Games', value: games.length },
+                        { label: 'Movies', value: movies.length },
+                      ]}
+                    />
+                  </section>
+                  <section className="manga-stat-panel">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Country of origin</h3>
+                      <span>ALL MEDIA</span>
+                    </div>
+                    <MiniDonut items={combinedCountries} variant="pie" />
+                  </section>
+                  <DistributionList
+                    title="Shared genre landscape"
+                    items={combinedGenres.map((item) => ({
+                      ...item,
+                      detail: `${item.value} items`,
+                    }))}
+                  />
+                  <section className="manga-stat-panel">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Format distribution</h3>
+                      <span>ALL FORMATS</span>
+                    </div>
+                    <MiniDonut items={formatDistribution} />
+                  </section>
+                </>
+              )}
+
+              {statsScope === 'manga' && (
+                <>
+                  <section className="manga-stat-panel manga-stat-summary">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Literature snapshot</h3>
+                      <TrendingUp size={17} />
+                    </div>
+                    <div className="manga-snapshot-row">
+                      <CheckCircle2 size={17} />
+                      <span>Scored titles</span>
+                      <strong>{stats.scoreCount}</strong>
+                    </div>
+                    <div className="manga-snapshot-row">
+                      <Library size={17} />
+                      <span>Chapters read</span>
+                      <strong>{stats.chaptersRead.toLocaleString()}</strong>
+                    </div>
+                    <div className="manga-snapshot-row">
+                      <Library size={17} />
+                      <span>Planned chapters remaining</span>
+                      <strong>{stats.plannedChapters.toLocaleString()}</strong>
+                    </div>
+                    <div className="manga-snapshot-row">
+                      <CalendarDays size={17} />
+                      <span>Metadata available</span>
+                      <strong>
+                        {stats.metadataCount} / {entries.length}
+                      </strong>
+                    </div>
+                    <div className="manga-snapshot-row">
+                      <PieChart size={17} />
+                      <span>Unique genres found</span>
+                      <strong>{stats.genreCount || '—'}</strong>
+                    </div>
+                    <div className="manga-snapshot-row">
+                      <TrendingUp size={17} />
+                      <span>Mean personal score</span>
+                      <strong>{stats.scoreCount ? stats.meanScore.toFixed(2) : '—'}</strong>
+                    </div>
+                    <p>
+                      Genre and format charts only include titles with metadata. Scores exclude
+                      unscored titles; missing fields are not treated as zero.
+                    </p>
+                  </section>
+                  <DistributionList title="Reading status" items={stats.status} />
+                  <DistributionList
+                    title="Top genres"
+                    items={stats.genres.map((item) => ({
+                      ...item,
+                      detail: `${item.value} titles`,
+                    }))}
+                  />
+                  <DistributionList title="Chapter-length profile" items={stats.chapterBuckets} />
+                  <DistributionList title="Formats" items={stats.formats} />
+                  <DistributionList title="Score distribution" items={stats.scoreDistribution} />
+                </>
+              )}
+
+              {statsScope === 'games' && (
+                <>
+                  <section className="manga-stat-panel manga-game-teaser">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Game shelf</h3>
+                      <Gamepad2 size={17} />
+                    </div>
+                    <div className="manga-game-teaser-count">
+                      {gamesLoading ? '…' : games.length.toLocaleString()}
+                      <span>games catalogued</span>
+                    </div>
+                    <p>
+                      {gameStats.played} played or in progress · {gameStats.owned} marked owned ·{' '}
+                      {gameStats.completed} beaten / completed.
+                    </p>
+                    <button
+                      type="button"
+                      className="masterlist-inline-action"
+                      onClick={() => setActiveTab('games')}
+                    >
+                      Explore games <ArrowUpRight size={14} />
+                    </button>
+                  </section>
+                  <DistributionList
+                    title="Most played platforms"
+                    items={gameStats.platforms.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Completion profile"
+                    items={gameStats.completion.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Status"
+                    items={gameStats.status.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Ownership"
+                    items={gameStats.ownership.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Format"
+                    items={gameStats.formats.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Score distribution"
+                    items={gameStats.scoreDistribution.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                  />
+                </>
+              )}
+
+              {statsScope === 'movies' && (
+                <>
+                  <section className="manga-stat-panel manga-game-teaser">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Movie shelf</h3>
+                      <Film size={17} />
+                    </div>
+                    <div className="manga-game-teaser-count">
+                      {moviesLoading ? '…' : movies.length.toLocaleString()}
+                      <span>movies catalogued</span>
+                    </div>
+                    <p>
+                      {movieStats.ratedCount} rated ·{' '}
+                      {movieStats.meanScore
+                        ? `mean score ${movieStats.meanScore.toFixed(1)}`
+                        : 'ratings waiting to be added'}{' '}
+                      · {movieStats.posterCount} with posters.
+                    </p>
+                    <button
+                      type="button"
+                      className="masterlist-inline-action"
+                      onClick={() => setActiveTab('movies')}
+                    >
+                      Explore movies <ArrowUpRight size={14} />
+                    </button>
+                  </section>
+                  <DistributionList
+                    title="Top genres"
+                    items={movieStats.genres.slice(0, 10).map((item) => ({
+                      ...item,
+                      detail: `${item.value} films`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Watchlist status"
+                    items={movieStats.statuses.map((item) => ({
+                      ...item,
+                      detail: `${item.value} films`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Country of origin"
+                    items={movieStats.countries.slice(0, 8).map((item) => ({
+                      ...item,
+                      detail: `${item.value} films`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Format"
+                    items={movieStats.formats.map((item) => ({
+                      ...item,
+                      detail: `${item.value} films`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Rating distribution"
+                    items={movieStats.scoreDistribution.map((item) => ({
+                      ...item,
+                      detail: `${item.value} films`,
+                    }))}
+                  />
+                </>
+              )}
+            </div>
+          </div>
         )}
 
         {activeTab === 'manga' && (

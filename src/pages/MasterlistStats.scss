@@ -1,0 +1,368 @@
+/* Masterlist → Stats tab. Self-contained layout (mobile-first) replacing the old
+   .masterlist-stats-charts grid, whose overlapping span rules collapsed on phones. */
+.masterlist-page .ml-dash {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  max-width: 100%;
+}
+.ml-dash > * {
+  min-width: 0;
+}
+
+/* ---------- Hero ---------- */
+.ml-dash-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid var(--ml-line-strong);
+  background: linear-gradient(135deg, rgba(244, 196, 48, 0.07), transparent 45%), var(--ml-panel);
+}
+.ml-dash-hero-copy {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.ml-dash-hero h2 {
+  margin: 0;
+  font-size: clamp(1.9rem, 8vw, 3.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+.ml-dash-hero h2 em {
+  display: block;
+  font-style: normal;
+  color: var(--ml-yellow);
+}
+.ml-dash-hero .manga-sync-status {
+  margin: 4px 0 0;
+  max-width: 100%;
+}
+.ml-dash-total {
+  display: grid;
+  gap: 6px;
+  align-content: end;
+  padding-top: 14px;
+  border-top: 1px solid var(--ml-line);
+}
+.ml-dash-total > span,
+.ml-kpi-head,
+.ml-dash-signals span {
+  font:
+    700 10px/1.2 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.12em;
+  color: var(--ml-muted);
+}
+.ml-dash-total strong {
+  font-size: clamp(2.8rem, 14vw, 4.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+}
+.ml-dash-total small {
+  color: var(--ml-muted);
+  font:
+    11px 'IBM Plex Mono',
+    monospace;
+}
+.ml-dash-stack {
+  display: flex;
+  height: 8px;
+  background: var(--ml-panel-2);
+  overflow: hidden;
+}
+.ml-dash-stack i {
+  display: block;
+  height: 100%;
+}
+.ml-dash-stack .lit {
+  background: var(--ml-yellow);
+}
+.ml-dash-stack .games {
+  background: var(--ml-red);
+}
+.ml-dash-stack .movies {
+  background: var(--ml-blue);
+}
+
+/* ---------- KPI cards ---------- */
+.ml-dash-kpis {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+}
+.ml-kpi {
+  --kpi: var(--ml-yellow);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'head num'
+    'bar bar'
+    'done done'
+    'sub sub';
+  align-items: center;
+  column-gap: 12px;
+  row-gap: 8px;
+  padding: 14px 16px;
+  text-align: left;
+  color: var(--ml-text);
+  border: 1px solid var(--ml-line);
+  border-top: 3px solid var(--kpi);
+  background: var(--ml-panel);
+  cursor: pointer;
+  font: inherit;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.ml-kpi-games {
+  --kpi: var(--ml-red);
+}
+.ml-kpi-movies {
+  --kpi: var(--ml-blue);
+}
+.ml-kpi:hover,
+.ml-kpi.is-active {
+  border-color: var(--kpi);
+  background: var(--ml-panel-2);
+}
+.ml-kpi:focus-visible,
+.ml-dash-scope button:focus-visible {
+  outline: 2px solid var(--ml-yellow);
+  outline-offset: 2px;
+}
+.ml-kpi-head {
+  grid-area: head;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ml-text);
+  text-transform: uppercase;
+}
+.ml-kpi > strong {
+  grid-area: num;
+  font-size: 2rem;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.ml-kpi-bar {
+  grid-area: bar;
+  display: block;
+  height: 5px;
+  background: rgba(244, 240, 230, 0.1);
+}
+.ml-kpi-bar i {
+  display: block;
+  height: 100%;
+  background: var(--kpi);
+  transition: width 0.5s ease;
+}
+.ml-kpi small {
+  grid-area: done;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  color: var(--ml-muted);
+  font:
+    11px 'IBM Plex Mono',
+    monospace;
+}
+.ml-kpi small b {
+  color: var(--ml-text);
+}
+.ml-kpi small em {
+  margin-left: auto;
+  font-style: normal;
+  color: var(--kpi);
+  font-weight: 700;
+}
+.ml-kpi .ml-kpi-sub {
+  grid-area: sub;
+  color: var(--ml-faint);
+}
+
+/* ---------- Signals ---------- */
+.ml-dash-signals {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--ml-line);
+  background: var(--ml-line);
+}
+.ml-dash-signals > div {
+  display: grid;
+  gap: 4px;
+  align-content: start;
+  min-width: 0;
+  padding: 12px 14px;
+  background: var(--ml-panel);
+}
+.ml-dash-signals strong {
+  color: var(--ml-yellow);
+  font-size: 1rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.ml-dash-signals small {
+  color: var(--ml-muted);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+/* ---------- Scope switcher ---------- */
+.ml-dash-scope {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+  padding: 8px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: linear-gradient(var(--ml-bg) 75%, transparent);
+  -webkit-overflow-scrolling: touch;
+}
+.ml-dash-scope::-webkit-scrollbar {
+  display: none;
+}
+.ml-dash-scope button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0 6px;
+  color: var(--ml-muted);
+  border: 1px solid var(--ml-line-strong);
+  background: var(--ml-panel);
+  font:
+    700 10px 'IBM Plex Mono',
+    monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.ml-dash-scope button.is-active {
+  color: #0a0b0e;
+  border-color: var(--ml-yellow);
+  background: var(--ml-yellow);
+}
+
+/* ---------- Board ---------- */
+.ml-dash-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  animation: ml-dash-in 0.25s ease;
+}
+@keyframes ml-dash-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.ml-dash-board > * {
+  grid-column: auto;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+}
+.ml-dash-board .manga-stat-panel {
+  padding: 16px;
+  overflow: hidden;
+}
+.ml-dash-board .manga-stat-panel-heading {
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.ml-dash-board .manga-stat-panel-heading h3 {
+  min-width: 0;
+}
+.ml-dash-board .manga-distribution-label {
+  gap: 12px;
+}
+.ml-dash-board .manga-distribution-label span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ml-dash-board .manga-distribution-label strong {
+  flex: none;
+}
+.ml-dash-board .masterlist-donut-wrap {
+  grid-template-columns: minmax(96px, 120px) minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+}
+.ml-dash-board .masterlist-donut,
+.ml-dash-board .masterlist-pie {
+  width: 100%;
+  max-width: 120px;
+}
+.ml-dash-board .masterlist-donut-legend {
+  min-width: 0;
+}
+.ml-dash-board .masterlist-donut-legend span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ml-dash-board .ml-trend-bars {
+  min-height: 150px;
+  gap: 3px;
+}
+.ml-dash-board .ml-trend-column strong {
+  font-size: 8px;
+}
+.ml-dash-board .ml-trend-column small {
+  font-size: 8px;
+}
+
+/* ---------- Tablet / desktop ---------- */
+@media (min-width: 640px) {
+  .ml-dash-hero {
+    grid-template-columns: minmax(0, 1.4fr) minmax(220px, 0.6fr);
+    padding: 24px;
+  }
+  .ml-dash-total {
+    padding: 0 0 0 20px;
+    border-top: 0;
+    border-left: 1px solid var(--ml-line);
+  }
+  .ml-dash-kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .ml-dash-signals {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .ml-dash-scope {
+    position: static;
+    background: none;
+  }
+  .ml-dash-scope button {
+    flex: 0 0 auto;
+    padding: 0 18px;
+  }
+  .ml-dash-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ml-dash-board > .ml-wide {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 1100px) {
+  .ml-dash-board {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .ml-dash-board > .ml-wide {
+    grid-column: span 3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ml-dash-board {
+    animation: none;
+  }
+  .ml-kpi-bar i {
+    transition: none;
+  }
+}

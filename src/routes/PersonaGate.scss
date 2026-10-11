@@ -1,0 +1,42 @@
+.persona-gate {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 24px 16px;
+  background: #0b0d10;
+  color: #f2f0e8;
+  font-family: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+}
+.persona-gate-card {
+  position: relative;
+  box-sizing: border-box;
+  width: min(100%, 520px);
+  padding: 36px 28px 40px;
+  border: 2px solid #f2f0e8;
+  background: #11151a;
+  box-shadow: 10px 10px 0 #ff4b3e;
+}
+.persona-gate-mark {
+  display: block;
+  width: 12px;
+  height: 12px;
+  margin-bottom: 22px;
+  background: #ff4b3e;
+  box-shadow: 9px 0 0 #f2c230;
+}
+.persona-gate h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 8vw, 3rem);
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+@media (max-width: 420px) {
+  .persona-gate-card {
+    padding: 28px 20px 32px;
+    box-shadow: 6px 6px 0 #ff4b3e;
+  }
+}

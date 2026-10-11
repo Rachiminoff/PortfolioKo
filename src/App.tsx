@@ -4,6 +4,7 @@ import { Timeline, Expertise, Terminal, Project, Contact, Footer } from './portf
 import FadeIn from './portfolio/components/FadeIn';
 import Certificates from './portfolio/components/Certificates';
 import ProtectedRoute from './routes/ProtectedRoute';
+import PersonaGate from './routes/PersonaGate';
 import { useArchive } from './hooks/useArchive';
 import { DefaultLayout, FullscreenLayout } from './layouts';
 
@@ -422,7 +423,9 @@ function AppContent() {
           path="/persona"
           element={
             <FullscreenLayout>
-              <PersonaPage />
+              <PersonaGate isUnlocked={isArchiveUnlocked} isLoading={archiveLoading}>
+                <PersonaPage />
+              </PersonaGate>
             </FullscreenLayout>
           }
         />
