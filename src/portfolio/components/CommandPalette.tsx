@@ -35,18 +35,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
 
   const filteredCommands = useMemo(() => {
     const normalized = query.trim().toLowerCase();
-    const availableCommands = [
-      ...commands,
-      {
-        id: 'unlock-persona',
-        label: 'Continue',
-        description: 'Open a private section',
-        icon: 'mdi:arrow-top-right',
-        group: 'MORE',
-        keywords: ['persona', 'private', 'hidden', 'secret'],
-        action: () => {},
-      },
-    ];
+    const availableCommands = commands;
     if (!normalized) return availableCommands;
 
     return availableCommands.filter((command) => {

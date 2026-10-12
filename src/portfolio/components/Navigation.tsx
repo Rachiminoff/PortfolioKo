@@ -83,24 +83,6 @@ function Navigation() {
       keywords: [section],
       action: () => scrollToSection(section),
     })),
-    {
-      id: 'main-wish-archive',
-      label: 'Wish Archive',
-      description: 'Open the wish and pull archive',
-      icon: 'mdi:archive-outline',
-      group: 'ARCHIVE',
-      keywords: ['wish', 'gacha', 'pulls'],
-      action: () => navigate('/wish-archive'),
-    },
-    {
-      id: 'main-insights',
-      label: 'Insights',
-      description: 'Open the analytics and insights page',
-      icon: 'mdi:chart-line',
-      group: 'PAGE',
-      keywords: ['analytics', 'data'],
-      action: () => navigate('/insights'),
-    },
   ];
 
   // Don't render navigation on fullscreen routes
