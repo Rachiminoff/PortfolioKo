@@ -70,6 +70,7 @@ type MovieEntry = {
   posterUrl: string | null;
   country: string | null;
   createdAt?: string | null;
+  watchedDate: string | null;
   genres: string[];
   status: string;
   rating: number | null;
@@ -95,6 +96,26 @@ type GameEntry = {
   addedDate?: string;
   score: number | null;
   tags: string[];
+  genres: string[];
+  gameType: string;
+  digitalService: string;
+  subscription: string;
+  acquisitionSource: string;
+  acquisitionDate: string;
+  playtimeHours: number | null;
+  amountPaid: number | null;
+  additionalCost: number | null;
+  manualProgress: number | null;
+  lentOut: boolean;
+  borrowedFrom: string;
+  region: string;
+  subRatings: {
+    gameplay: number | null;
+    sound: number | null;
+    story: number | null;
+    visual: number | null;
+    accessibility: number | null;
+  };
 };
 
 const ANILIST_FIELDS = `id siteUrl description(asHtml: false) genres format status countryOfOrigin chapters volumes averageScore startDate { year month day } coverImage { extraLarge large } staff(perPage: 25, sort: [RELEVANCE, ID]) { edges { role node { name { full } } } }`;
@@ -170,23 +191,207 @@ function cleanDescription(description: string | null | undefined) {
     .trim();
 }
 
+type CountItem = { label: string; value: number; detail?: string };
+type Tile = { label: string; value: string; sub?: string };
+
+const COUNTRY_NAMES: Record<string, string> = {
+  JP: 'Japan',
+  KR: 'South Korea',
+  CN: 'China',
+  TW: 'Taiwan',
+  HK: 'Hong Kong',
+  US: 'United States',
+  USA: 'United States',
+  GB: 'United Kingdom',
+  UK: 'United Kingdom',
+  FR: 'France',
+  DE: 'Germany',
+  IT: 'Italy',
+  ES: 'Spain',
+  CA: 'Canada',
+  AU: 'Australia',
+  IN: 'India',
+  PH: 'Philippines',
+  TH: 'Thailand',
+  RU: 'Russia',
+  SE: 'Sweden',
+  DK: 'Denmark',
+  FI: 'Finland',
+  PL: 'Poland',
+  BR: 'Brazil',
+  MX: 'Mexico',
+};
+
+function normalizeCountry(raw: string | null | undefined) {
+  const value = raw?.trim();
+  if (!value) return '';
+  return COUNTRY_NAMES[value.toUpperCase()] ?? value;
+}
+
+function toNumber(value: unknown): number | null {
+  if (value == null || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+const byLabel = (a: CountItem, b: CountItem) =>
+  a.label.localeCompare(b.label, undefined, { numeric: true });
+
+function mean(values: number[]): number | null {
+  return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null;
+}
+
+function median(values: number[]): number | null {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+}
+
+function yearOf(date: string | null | undefined): string {
+  const match = /^(\d{4})/.exec(date ?? '');
+  return match ? match[1] : '';
+}
+
+function decadeOf(year: string | number | null | undefined): string {
+  const value = Number(year);
+  return Number.isFinite(value) && value >= 1800 ? `${Math.floor(value / 10) * 10}s` : '';
+}
+
+function daysBetween(from: string | null | undefined, to: string | null | undefined) {
+  if (!from || !to) return null;
+  const a = Date.parse(from.slice(0, 10));
+  const b = Date.parse(to.slice(0, 10));
+  if (!Number.isFinite(a) || !Number.isFinite(b) || b < a) return null;
+  return Math.round((b - a) / 86_400_000);
+}
+
+const fmt = (value: number | null | undefined, digits = 1) =>
+  value == null || !Number.isFinite(value) ? '—' : value.toFixed(digits);
+const fmtInt = (value: number | null | undefined) =>
+  value == null || !Number.isFinite(value) ? '—' : Math.round(value).toLocaleString();
+const fmtMoney = (value: number | null | undefined) =>
+  value == null || !Number.isFinite(value)
+    ? '—'
+    : value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+const fmtDays = (days: number | null | undefined) => {
+  if (days == null) return '—';
+  if (days < 60) return `${days} d`;
+  if (days < 730) return `${(days / 30.44).toFixed(1)} mo`;
+  return `${(days / 365.25).toFixed(1)} yr`;
+};
+const pctOf = (part: number, whole: number) => (whole ? Math.round((part / whole) * 100) : 0);
+const plural = (n: number, one: string, many = `${one}s`) =>
+  `${n.toLocaleString()} ${n === 1 ? one : many}`;
+
+/** Mean score per group (needs at least `minCount` rated items), best first. */
+function meanByGroup(
+  rows: { groups: string[]; score: number }[],
+  minCount = 2,
+  limit = 8,
+): CountItem[] {
+  const map = new Map<string, number[]>();
+  rows.forEach(({ groups, score }) => {
+    new Set(groups.map((group) => group.trim()).filter(Boolean)).forEach((group) =>
+      map.set(group, [...(map.get(group) ?? []), score]),
+    );
+  });
+  return Array.from(map.entries())
+    .filter(([, scores]) => scores.length >= minCount)
+    .map(([label, scores]) => {
+      const average = mean(scores) ?? 0;
+      return {
+        label,
+        value: average,
+        detail: `${average.toFixed(2)} · ${scores.length} rated`,
+      };
+    })
+    .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label))
+    .slice(0, limit);
+}
+
+function StatTiles({ title, kicker, tiles }: { title: string; kicker?: string; tiles: Tile[] }) {
+  return (
+    <section className="manga-stat-panel ml-wide ml-tiles-panel">
+      <div className="manga-stat-panel-heading">
+        <h3>{title}</h3>
+        {kicker && <span>{kicker}</span>}
+      </div>
+      <div className="ml-tiles">
+        {tiles.map((tile) => (
+          <div className="ml-tile" key={tile.label}>
+            <span>{tile.label}</span>
+            <strong>{tile.value}</strong>
+            {tile.sub && <small>{tile.sub}</small>}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RankedList({
+  title,
+  kicker,
+  items,
+  empty = 'Nothing to rank yet.',
+}: {
+  title: string;
+  kicker?: string;
+  items: { label: string; value: string; detail?: string }[];
+  empty?: string;
+}) {
+  return (
+    <section className="manga-stat-panel">
+      <div className="manga-stat-panel-heading">
+        <h3>{title}</h3>
+        {kicker && <span>{kicker}</span>}
+      </div>
+      {items.length === 0 ? (
+        <p className="manga-stat-empty">{empty}</p>
+      ) : (
+        <ol className="ml-ranked">
+          {items.map((item, index) => (
+            <li key={`${item.label}-${index}`}>
+              <i>{String(index + 1).padStart(2, '0')}</i>
+              <span>
+                {item.label}
+                {item.detail && <small>{item.detail}</small>}
+              </span>
+              <strong>{item.value}</strong>
+            </li>
+          ))}
+        </ol>
+      )}
+    </section>
+  );
+}
+
 function DistributionList({
   title,
   items,
+  scaleMax,
+  caption,
+  empty = 'Metadata will appear here as AniList syncs.',
 }: {
   title: string;
-  items: { label: string; value: number; detail?: string }[];
+  items: CountItem[];
+  /** Fix the bar scale (e.g. 10 for ratings) instead of scaling to the largest row. */
+  scaleMax?: number;
+  /** Replaces the “N total” caption, which is meaningless for averages. */
+  caption?: string;
+  empty?: string;
 }) {
-  const max = Math.max(1, ...items.map((item) => item.value));
+  const max = scaleMax ?? Math.max(1, ...items.map((item) => item.value));
   const total = items.reduce((sum, item) => sum + item.value, 0);
   return (
     <section className="manga-stat-panel">
       <div className="manga-stat-panel-heading">
         <h3>{title}</h3>
-        <span>{total.toLocaleString()} total</span>
+        <span>{caption ?? `${total.toLocaleString()} total`}</span>
       </div>
       {items.length === 0 ? (
-        <p className="manga-stat-empty">Metadata will appear here as AniList syncs.</p>
+        <p className="manga-stat-empty">{empty}</p>
       ) : (
         <div className="manga-distribution-list">
           {items.map((item) => (
@@ -257,23 +462,28 @@ function MiniDonut({
   );
 }
 
-function BarTrendChart({ items }: { items: { label: string; value: number }[] }) {
+function BarTrendChart({
+  items,
+  ariaLabel = 'Combined release counts by year',
+  unit = 'entries',
+  empty = 'Release-year data will appear as metadata becomes available.',
+}: {
+  items: { label: string; value: number }[];
+  ariaLabel?: string;
+  unit?: string;
+  empty?: string;
+}) {
   const data = items.filter((item) => /^\d{4}$/.test(item.label)).slice(-14);
   const max = Math.max(1, ...data.map((item) => item.value));
-  if (!data.length)
-    return (
-      <p className="manga-stat-empty">
-        Release-year data will appear as metadata becomes available.
-      </p>
-    );
+  if (!data.length) return <p className="manga-stat-empty">{empty}</p>;
   return (
-    <div className="ml-trend-chart" role="img" aria-label="Combined release counts by year">
+    <div className="ml-trend-chart" role="img" aria-label={ariaLabel}>
       <div className="ml-trend-bars">
         {data.map((item) => (
           <div
             className="ml-trend-column"
             key={item.label}
-            title={`${item.label}: ${item.value} entries`}
+            title={`${item.label}: ${item.value} ${unit}`}
           >
             <strong>{item.value}</strong>
             <span style={{ height: `${Math.max(4, (item.value / max) * 100)}%` }} />
@@ -618,7 +828,7 @@ const MasterlistContent: React.FC = () => {
       const { data, error: loadError } = await supabase
         .from('game_masterlist')
         .select(
-          'igdb_id,game_name,cover_url,game_release_date,platform,status,completion,ownership,format,country,playtime,times_completed,completion_date,progress_notes,collection_notes,rating_score,tags,date_added,created_at',
+          'igdb_id,game_name,cover_url,game_release_date,platform,game_type,status,completion,ownership,acquisition,format,digital_service,subscription,country,region,playtime,times_completed,completion_date,progress_notes,collection_notes,borrowed_from,lent_out,amount_paid,additional_cost,acquisition_date,acquisition_source,manual_progress,rating_score,rating_gameplay,rating_sound,rating_story,rating_visual,rating_accessibility,genres,tags,date_added,created_at',
         )
         .order('game_name', { ascending: true });
 
@@ -656,6 +866,28 @@ const MasterlistContent: React.FC = () => {
               .split(/[;,]/)
               .map((tag: string) => tag.trim())
               .filter(Boolean),
+            genres: Array.isArray(record.genres)
+              ? record.genres.map((genre: string) => String(genre).trim()).filter(Boolean)
+              : [],
+            gameType: record.game_type || '',
+            digitalService: record.digital_service || '',
+            subscription: record.subscription || '',
+            acquisitionSource: record.acquisition_source || '',
+            acquisitionDate: record.acquisition_date || '',
+            playtimeHours: toNumber(record.playtime),
+            amountPaid: toNumber(record.amount_paid),
+            additionalCost: toNumber(record.additional_cost),
+            manualProgress: toNumber(record.manual_progress),
+            lentOut: /^(yes|true|y)$/i.test(String(record.lent_out ?? '').trim()),
+            borrowedFrom: record.borrowed_from || '',
+            region: record.region || '',
+            subRatings: {
+              gameplay: toNumber(record.rating_gameplay),
+              sound: toNumber(record.rating_sound),
+              story: toNumber(record.rating_story),
+              visual: toNumber(record.rating_visual),
+              accessibility: toNumber(record.rating_accessibility),
+            },
           };
         });
         setGames(parsed);
@@ -676,7 +908,7 @@ const MasterlistContent: React.FC = () => {
       const { data, error: loadError } = await supabase
         .from('movie_masterlist')
         .select(
-          'id,title,release_year,watchlist_date,letterboxd_uri,poster_url,country,genres,status,rating,notes,format,created_at',
+          'id,title,release_year,watchlist_date,watched_date,letterboxd_uri,poster_url,country,genres,status,rating,notes,format,created_at',
         )
         .order('title', { ascending: true });
       if (cancelled) return;
@@ -690,6 +922,7 @@ const MasterlistContent: React.FC = () => {
             title: record.title || 'Untitled movie',
             year: record.release_year == null ? null : Number(record.release_year),
             watchlistDate: record.watchlist_date || null,
+            watchedDate: record.watched_date || null,
             createdAt: record.created_at || null,
             letterboxdUri: record.letterboxd_uri || null,
             posterUrl: record.poster_url || null,
@@ -881,7 +1114,9 @@ const MasterlistContent: React.FC = () => {
       .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label))
       .slice(0, 10);
     const formats = countBy(metadataEntries.map(({ metadata }) => metadata?.format));
-    const countries = countBy(metadataEntries.map(({ metadata }) => metadata?.countryOfOrigin));
+    const countries = countBy(
+      metadataEntries.map(({ metadata }) => normalizeCountry(metadata?.countryOfOrigin)),
+    );
     const scoreCounts = countBy(scores);
     const scoreDistribution = scoreCounts
       .sort((a, b) => Number(a.label) - Number(b.label))
@@ -936,7 +1171,93 @@ const MasterlistContent: React.FC = () => {
               100,
           )}%`,
         }));
+    const scoredEntries = entries.filter((entry) => (entry.score ?? 0) > 0);
+    const finishDurations = entries
+      .map((entry) => daysBetween(entry.start_date, entry.finish_date))
+      .filter((days): days is number => days != null);
+    const communityPairs = scoredEntries
+      .map((entry) => ({
+        mine: entry.score as number,
+        community: safeMetadata(entry)?.averageScore ?? null,
+      }))
+      .filter((pair) => pair.community != null && pair.community > 0)
+      .map((pair) => ({ mine: pair.mine, community: (pair.community as number) / 10 }));
+    const tasteGap = communityPairs.length
+      ? (mean(communityPairs.map((pair) => pair.mine)) ?? 0) -
+        (mean(communityPairs.map((pair) => pair.community)) ?? 0)
+      : null;
+    const genreScores = meanByGroup(
+      scoredEntries.map((entry) => {
+        const metadata = safeMetadata(entry);
+        return {
+          groups: metadata?.genres?.length ? metadata.genres : (entry.tags ?? []),
+          score: entry.score as number,
+        };
+      }),
+    );
+    const progressEntries = entries.filter((entry) => entry.status === 'Reading');
+    const currentlyReading = progressEntries
+      .map((entry) => ({ entry, total: getTotalChapters(entry) }))
+      .sort(
+        (a, b) =>
+          (b.entry.read_chapters ?? 0) - (a.entry.read_chapters ?? 0) ||
+          a.entry.title.localeCompare(b.entry.title),
+      )
+      .slice(0, 6)
+      .map(({ entry, total }) => ({
+        label: entry.title,
+        value: total
+          ? `${pctOf(entry.read_chapters ?? 0, total)}%`
+          : `${entry.read_chapters ?? 0} ch`,
+        detail: `${entry.read_chapters ?? 0} / ${total ?? '?'} chapters`,
+      }));
+    const topRated = [...scoredEntries]
+      .sort(
+        (a, b) =>
+          (b.score ?? 0) - (a.score ?? 0) ||
+          (b.read_chapters ?? 0) - (a.read_chapters ?? 0) ||
+          a.title.localeCompare(b.title),
+      )
+      .slice(0, 6)
+      .map((entry) => ({
+        label: entry.title,
+        value: `${entry.score}/10`,
+        detail: `${entry.status} · ${entry.read_chapters ?? 0} ch`,
+      }));
+    const mostRead = [...entries]
+      .filter((entry) => (entry.read_chapters ?? 0) > 0)
+      .sort((a, b) => (b.read_chapters ?? 0) - (a.read_chapters ?? 0))
+      .slice(0, 6)
+      .map((entry) => ({
+        label: entry.title,
+        value: `${(entry.read_chapters ?? 0).toLocaleString()} ch`,
+        detail: `${entry.read_volumes ?? 0} vol · ${entry.status}`,
+      }));
+    const completedEntries = entries.filter((entry) => entry.status === 'Completed');
     return {
+      topRated,
+      mostRead,
+      currentlyReading,
+      genreScores,
+      tasteGap,
+      communityCount: communityPairs.length,
+      medianDaysToFinish: median(finishDurations),
+      finishedTracked: finishDurations.length,
+      volumesOwnedTotal: entries.reduce((sum, entry) => sum + (getTotalVolumes(entry) ?? 0), 0),
+      avgChaptersCompleted: mean(completedEntries.map((entry) => entry.read_chapters ?? 0)),
+      commentCount: entries.filter((entry) => entry.comments?.trim()).length,
+      droppedCount: entries.filter((entry) => entry.status === 'Dropped').length,
+      onHoldCount: entries.filter((entry) => entry.status === 'On-Hold').length,
+      plannedCount: entries.filter((entry) => entry.status === 'Plan to Read').length,
+      startedYears: countBy(entries.map((entry) => yearOf(entry.start_date))).sort(byLabel),
+      finishedYears: countBy(entries.map((entry) => yearOf(entry.finish_date))).sort(byLabel),
+      decades: countBy(
+        metadataEntries.map(({ metadata }) => decadeOf(metadata?.startDate?.year)),
+      ).sort(byLabel),
+      publication: countBy(
+        metadataEntries.map(({ metadata }) => metadata?.status?.replace(/_/g, ' ')),
+      ),
+      scoreStdDev: scores.length ? standardDeviation : null,
       chaptersRead,
       volumesRead,
       plannedChapters,
@@ -996,6 +1317,139 @@ const MasterlistContent: React.FC = () => {
       /completed|beaten|100%/.test(normalized(game.completion));
     const isPlayed = (game: GameEntry) =>
       /played|playing|in progress/.test(normalized(game.status));
+    const hours = games
+      .map((game) => game.playtimeHours)
+      .filter((value): value is number => value != null && value > 0);
+    const totalHours = hours.reduce((sum, value) => sum + value, 0);
+    const spendRows = games.filter((game) => (game.amountPaid ?? 0) > 0);
+    const totalSpent = games.reduce(
+      (sum, game) => sum + (game.amountPaid ?? 0) + (game.additionalCost ?? 0),
+      0,
+    );
+    const subKeys = [
+      ['Gameplay', 'gameplay'],
+      ['Story', 'story'],
+      ['Visuals', 'visual'],
+      ['Sound', 'sound'],
+      ['Accessibility', 'accessibility'],
+    ] as const;
+    const subRatings = [
+      { label: 'Overall', values: rated.map((game) => game.score as number) },
+      ...subKeys.map(([label, key]) => ({
+        label,
+        values: games
+          .map((game) => game.subRatings[key])
+          .filter((value): value is number => value != null),
+      })),
+    ]
+      .filter((row) => row.values.length)
+      .map((row) => {
+        const average = mean(row.values) ?? 0;
+        return {
+          label: row.label,
+          value: average,
+          detail: `${average.toFixed(2)} · ${row.values.length} rated`,
+        };
+      });
+    const hoursByPlatform = new Map<string, number>();
+    games.forEach((game) => {
+      if ((game.playtimeHours ?? 0) > 0)
+        hoursByPlatform.set(
+          game.platform,
+          (hoursByPlatform.get(game.platform) ?? 0) + (game.playtimeHours ?? 0),
+        );
+    });
+    const playtimeBuckets = [
+      { label: 'Under 1 h', min: 0, max: 1 },
+      { label: '1–5 h', min: 1, max: 5 },
+      { label: '5–20 h', min: 5, max: 20 },
+      { label: '20–50 h', min: 20, max: 50 },
+      { label: '50–100 h', min: 50, max: 100 },
+      { label: '100 h+', min: 100, max: Infinity },
+    ].map((bucket) => ({
+      label: bucket.label,
+      value: hours.filter((value) => value >= bucket.min && value < bucket.max).length,
+    }));
+    const genreValues = games.map((game) => (game.genres.length ? game.genres : game.tags));
+    const genreCounts = new Map<string, number>();
+    genreValues.forEach((list) =>
+      new Set(list).forEach((genre) => genreCounts.set(genre, (genreCounts.get(genre) ?? 0) + 1)),
+    );
+    const isUnplayed = (game: GameEntry) =>
+      /unplayed/.test(normalized(game.status)) || /not started/.test(normalized(game.completion));
+    const gameExtras = {
+      totalHours,
+      avgHours: mean(hours),
+      medianHours: median(hours),
+      playtimeTracked: hours.length,
+      longestGames: [...games]
+        .filter((game) => (game.playtimeHours ?? 0) > 0)
+        .sort((a, b) => (b.playtimeHours ?? 0) - (a.playtimeHours ?? 0))
+        .slice(0, 6)
+        .map((game) => ({
+          label: game.title,
+          value: `${Math.round(game.playtimeHours ?? 0).toLocaleString()} h`,
+          detail: `${game.platform} · ${game.completion}`,
+        })),
+      topRated: [...rated]
+        .sort((a, b) => (b.score ?? 0) - (a.score ?? 0) || a.title.localeCompare(b.title))
+        .slice(0, 6)
+        .map((game) => ({
+          label: game.title,
+          value: `${game.score}/10`,
+          detail: `${game.platform}${game.playtimeHours ? ` · ${Math.round(game.playtimeHours)} h` : ''}`,
+        })),
+      hoursByPlatform: Array.from(hoursByPlatform.entries())
+        .map(([label, value]) => ({
+          label,
+          value,
+          detail: `${Math.round(value).toLocaleString()} h`,
+        }))
+        .sort((a, b) => b.value - a.value)
+        .slice(0, 8),
+      playtimeBuckets,
+      subRatings,
+      genres: Array.from(genreCounts.entries())
+        .map(([label, value]) => ({ label, value }))
+        .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label))
+        .slice(0, 10),
+      genreCount: genreCounts.size,
+      genreScores: meanByGroup(
+        rated.map((game) => ({
+          groups: game.genres.length ? game.genres : game.tags,
+          score: game.score as number,
+        })),
+      ),
+      decades: countBy(games.map((game) => decadeOf(yearOf(game.releaseDate)))).sort(byLabel),
+      storefronts: countBy(games.map((game) => game.digitalService)),
+      gameTypes: countBy(games.map((game) => game.gameType)),
+      subscriptions: countBy(games.map((game) => game.subscription)),
+      sources: countBy(games.map((game) => game.acquisitionSource)),
+      addedYears: countBy(
+        games.map((game) => yearOf(game.acquisitionDate) || yearOf(game.addedDate)),
+      ).sort(byLabel),
+      completedYears: countBy(games.map((game) => yearOf(game.completionDate))).sort(byLabel),
+      timesCompletedTotal: games.reduce((sum, game) => sum + game.timesCompleted, 0),
+      backlog: games.filter((game) => isUnplayed(game) && normalized(game.ownership) === 'owned')
+        .length,
+      unplayed: games.filter(isUnplayed).length,
+      dropped: games.filter((game) => /dropped/.test(normalized(game.completion))).length,
+      unfinished: games.filter((game) => /unfinished/.test(normalized(game.completion))).length,
+      continuous: games.filter((game) => /continuous/.test(normalized(game.completion))).length,
+      lentOut: games.filter((game) => game.lentOut).length,
+      borrowed: games.filter((game) => game.borrowedFrom).length,
+      totalSpent,
+      paidCount: spendRows.length,
+      avgPaid: mean(spendRows.map((game) => game.amountPaid ?? 0)),
+      costPerHour: totalSpent > 0 && totalHours > 0 ? totalSpent / totalHours : null,
+      avgManualProgress: mean(
+        games.map((game) => game.manualProgress).filter((value): value is number => value != null),
+      ),
+      completionRate: pctOf(
+        games.filter(isCompleted).length,
+        games.filter((game) => !isUnplayed(game)).length,
+      ),
+    };
     return {
       played: games.filter(isPlayed).length,
       owned: games.filter((game) => normalized(game.ownership) === 'owned').length,
@@ -1004,12 +1458,13 @@ const MasterlistContent: React.FC = () => {
       meanScore: rated.length
         ? rated.reduce((sum, game) => sum + (game.score ?? 0), 0) / rated.length
         : 0,
+      ...gameExtras,
       platforms: countBy(games.map((game) => game.platform)).slice(0, 8),
       completion: countBy(games.map((game) => game.completion)),
       formats: countBy(games.map((game) => game.format)),
       ownership: countBy(games.map((game) => game.ownership)),
       status: countBy(games.map((game) => game.status)),
-      countries: countBy(games.map((game) => game.country)),
+      countries: countBy(games.map((game) => normalizeCountry(game.country))),
       releaseYears: countBy(
         games.map((game) => (game.releaseDate ? game.releaseDate.slice(0, 4) : '')),
       ).sort((a, b) => Number(a.label) - Number(b.label)),
@@ -1062,13 +1517,94 @@ const MasterlistContent: React.FC = () => {
       uniqueGenres.forEach((genre) => genreCounts.set(genre, (genreCounts.get(genre) ?? 0) + 1));
     });
     const scoreDistribution = counts(rated.map((movie) => String(movie.rating)));
+    const isWatched = (movie: MovieEntry) =>
+      Boolean(movie.watchedDate) || /watched|seen/i.test(movie.status);
+    const watched = movies.filter(isWatched);
+    const watchlist = movies.filter((movie) => !isWatched(movie));
+    const thisYear = String(new Date().getFullYear());
+    const years = movies
+      .map((movie) => movie.year)
+      .filter((year): year is number => year != null && year > 1800);
+    const waits = watched
+      .map((movie) => daysBetween(movie.watchlistDate, movie.watchedDate))
+      .filter((days): days is number => days != null);
+    const oldestWait = watchlist
+      .map((movie) => ({ movie, days: daysBetween(movie.watchlistDate, new Date().toISOString()) }))
+      .filter((row): row is { movie: MovieEntry; days: number } => row.days != null)
+      .sort((a, b) => b.days - a.days)[0];
+    const genreOf = (movie: MovieEntry) =>
+      movie.genres.map((genre) => genre.trim()).filter(Boolean);
+    const ratedRows = rated.map((movie) => ({ movie, score: movie.rating as number }));
+    const movieExtras = {
+      watchedCount: watched.length,
+      watchlistCount: watchlist.length,
+      watchedThisYear: watched.filter((movie) => yearOf(movie.watchedDate) === thisYear).length,
+      watchedYears: counts(watched.map((movie) => yearOf(movie.watchedDate))).sort(byLabel),
+      addedYears: counts(
+        movies.map((movie) => yearOf(movie.watchlistDate || movie.createdAt)),
+      ).sort(byLabel),
+      decades: counts(movies.map((movie) => decadeOf(movie.year))).sort(byLabel),
+      avgYear: mean(years),
+      oldest: movies
+        .filter((movie) => movie.year != null && movie.year > 1800)
+        .sort((a, b) => (a.year as number) - (b.year as number))[0],
+      newest: movies
+        .filter((movie) => movie.year != null)
+        .sort((a, b) => (b.year as number) - (a.year as number))[0],
+      medianWait: median(waits),
+      waitTracked: waits.length,
+      oldestWait,
+      genreScores: meanByGroup(
+        ratedRows.map(({ movie, score }) => ({ groups: genreOf(movie), score })),
+      ),
+      countryScores: meanByGroup(
+        ratedRows.map(({ movie, score }) => ({ groups: [normalizeCountry(movie.country)], score })),
+        2,
+        6,
+      ),
+      decadeScores: meanByGroup(
+        ratedRows.map(({ movie, score }) => ({ groups: [decadeOf(movie.year)], score })),
+        2,
+        8,
+      ).sort((a, b) => a.label.localeCompare(b.label)),
+      topRated: [...rated]
+        .sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0) || a.title.localeCompare(b.title))
+        .slice(0, 6)
+        .map((movie) => ({
+          label: movie.title,
+          value: `${movie.rating}/10`,
+          detail: [movie.year, movie.country].filter(Boolean).join(' · '),
+        })),
+      upNext: [...watchlist]
+        .sort((a, b) => (a.watchlistDate ?? '9999').localeCompare(b.watchlistDate ?? '9999'))
+        .slice(0, 6)
+        .map((movie) => ({
+          label: movie.title,
+          value: String(movie.year ?? '—'),
+          detail: movie.watchlistDate ? `added ${movie.watchlistDate}` : movie.country || undefined,
+        })),
+      notesCount: movies.filter((movie) => movie.notes?.trim()).length,
+      linkedCount: movies.filter((movie) => movie.letterboxdUri).length,
+      unknownCountry: movies.filter((movie) => !movie.country).length,
+      noGenre: movies.filter((movie) => !genreOf(movie).length).length,
+      genreCount: new Set(movies.flatMap(genreOf)).size,
+      ratingStdDev: (() => {
+        const average = mean(rated.map((movie) => movie.rating as number));
+        return average == null
+          ? null
+          : Math.sqrt(
+              mean(rated.map((movie) => Math.pow((movie.rating as number) - average, 2))) ?? 0,
+            );
+      })(),
+    };
     return {
+      ...movieExtras,
       ratedCount: rated.length,
       meanScore: rated.length
         ? rated.reduce((sum, movie) => sum + (movie.rating ?? 0), 0) / rated.length
         : 0,
       statuses: counts(movies.map((movie) => movie.status)),
-      countries: counts(movies.map((movie) => movie.country || 'Unknown')),
+      countries: counts(movies.map((movie) => normalizeCountry(movie.country) || 'Unknown')),
       genres: Array.from(genreCounts.entries())
         .map(([label, value]) => ({ label, value }))
         .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label)),
@@ -1111,7 +1647,7 @@ const MasterlistContent: React.FC = () => {
   const combinedCountries = useMemo(() => {
     const counts = new Map<string, { label: string; value: number }>();
     const addCountry = (rawCountry: string | null | undefined) => {
-      const country = rawCountry?.trim();
+      const country = normalizeCountry(rawCountry);
       if (!country) return;
       const key = country.toLocaleLowerCase();
       const current = counts.get(key);
@@ -1205,6 +1741,77 @@ const MasterlistContent: React.FC = () => {
       ].filter((item) => Boolean(item.date)),
     [entries, games, movies],
   );
+
+  const overview = useMemo(() => {
+    const sumYears = (...lists: CountItem[][]) => {
+      const map = new Map<string, number>();
+      lists.flat().forEach((item) => map.set(item.label, (map.get(item.label) ?? 0) + item.value));
+      return Array.from(map.entries())
+        .map(([label, value]) => ({ label, value }))
+        .sort(byLabel);
+    };
+    const finishedYears = sumYears(
+      stats.finishedYears,
+      gameStats.completedYears,
+      movieStats.watchedYears,
+    );
+    const decades = sumYears(stats.decades, gameStats.decades, movieStats.decades);
+    const thisYear = String(new Date().getFullYear());
+    const ratingBuckets = Array.from({ length: 10 }, (_, index) => {
+      const bucket = index + 1;
+      const inBucket = combinedRatings.filter(
+        (point) => Math.min(10, Math.max(1, Math.round(point.value))) === bucket,
+      );
+      return {
+        label: String(bucket),
+        value: inBucket.length,
+        detail: `${inBucket.length} · ${['Literature', 'Games', 'Movies']
+          .map(
+            (kind) =>
+              `${inBucket.filter((point) => point.kind === kind).length} ${kind.slice(0, 1)}`,
+          )
+          .join(' / ')}`,
+      };
+    });
+    const overallMean = mean(combinedRatings.map((point) => point.value));
+    const topOverall = [...combinedRatings]
+      .sort((a, b) => b.value - a.value || a.label.localeCompare(b.label))
+      .slice(0, 8)
+      .map((point) => ({
+        label: point.label,
+        value: `${point.value}/10`,
+        detail: `${point.kind}${point.year ? ` · ${point.year}` : ''}`,
+      }));
+    const backlog = {
+      literature: stats.plannedCount,
+      games: gameStats.backlog,
+      movies: movieStats.watchlistCount,
+    };
+    const finishedThisYear = finishedYears.find((item) => item.label === thisYear)?.value ?? 0;
+    return {
+      finishedYears,
+      decades,
+      ratingBuckets,
+      overallMean,
+      topOverall,
+      backlog,
+      backlogTotal: backlog.literature + backlog.games + backlog.movies,
+      finishedThisYear,
+      thisYear,
+      ratedShare: pctOf(combinedRatings.length, entries.length + games.length + movies.length),
+      mediumMeans: [
+        { label: 'Literature', value: stats.meanScore, count: stats.scoreCount },
+        { label: 'Games', value: gameStats.meanScore, count: gameStats.ratedCount },
+        { label: 'Movies', value: movieStats.meanScore, count: movieStats.ratedCount },
+      ]
+        .filter((item) => item.count > 0)
+        .map((item) => ({
+          label: item.label,
+          value: item.value,
+          detail: `${item.value.toFixed(2)} · ${item.count} rated`,
+        })),
+    };
+  }, [stats, gameStats, movieStats, combinedRatings, entries.length, games.length, movies.length]);
 
   const libraryTotal = entries.length + games.length + movies.length;
   const pct = (part: number, whole: number) => (whole ? Math.round((part / whole) * 100) : 0);
@@ -1468,6 +2075,64 @@ const MasterlistContent: React.FC = () => {
             <div className="ml-dash-board" key={statsScope}>
               {statsScope === 'overview' && (
                 <>
+                  <StatTiles
+                    title="At a glance"
+                    kicker="ALL MEDIA"
+                    tiles={[
+                      {
+                        label: 'Finished this year',
+                        value: fmtInt(overview.finishedThisYear),
+                        sub: `read, beaten or watched in ${overview.thisYear}`,
+                      },
+                      {
+                        label: 'Backlog',
+                        value: fmtInt(overview.backlogTotal),
+                        sub: `${overview.backlog.literature} to read · ${overview.backlog.games} unplayed · ${overview.backlog.movies} to watch`,
+                      },
+                      {
+                        label: 'Chapters read',
+                        value: fmtInt(stats.chaptersRead),
+                        sub: `${fmtInt(stats.volumesRead)} volumes`,
+                      },
+                      {
+                        label: 'Hours played',
+                        value: fmtInt(gameStats.totalHours),
+                        sub: gameStats.playtimeTracked
+                          ? `across ${plural(gameStats.playtimeTracked, 'game')}`
+                          : 'no playtime logged',
+                      },
+                      {
+                        label: 'Movies watched',
+                        value: fmtInt(movieStats.watchedCount),
+                        sub: `${movieStats.watchedThisYear} in ${overview.thisYear}`,
+                      },
+                      {
+                        label: 'Average rating',
+                        value: fmt(overview.overallMean, 2),
+                        sub: `${combinedRatings.length.toLocaleString()} rated · ${overview.ratedShare}% of library`,
+                      },
+                      {
+                        label: 'Distinct genres',
+                        value: fmtInt(
+                          combinedGenres.length
+                            ? new Set(
+                                [...stats.genres, ...gameStats.genres, ...movieStats.genres].map(
+                                  (g) => g.label.toLowerCase(),
+                                ),
+                              ).size
+                            : 0,
+                        ),
+                        sub: 'top-10 lists combined',
+                      },
+                      {
+                        label: 'Origins',
+                        value: fmtInt(combinedCountries.length),
+                        sub: combinedCountries[0]
+                          ? `most: ${combinedCountries[0].label}`
+                          : undefined,
+                      },
+                    ]}
+                  />
                   <section className="manga-stat-panel ml-wide">
                     <div className="manga-stat-panel-heading">
                       <h3>Release timeline</h3>
@@ -1523,11 +2188,112 @@ const MasterlistContent: React.FC = () => {
                     </div>
                     <MiniDonut items={formatDistribution} />
                   </section>
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Finished per year</h3>
+                      <span>READ · BEATEN · WATCHED</span>
+                    </div>
+                    <BarTrendChart
+                      items={overview.finishedYears}
+                      ariaLabel="Titles finished per year across all media"
+                      unit="finished"
+                      empty="Finish, completion and watched dates will chart here once they are filled in."
+                    />
+                  </section>
+                  <DistributionList
+                    title="Rating distribution"
+                    caption="ALL MEDIA · ROUNDED"
+                    items={overview.ratingBuckets}
+                    empty="No ratings yet."
+                  />
+                  <DistributionList
+                    title="Average rating by medium"
+                    caption="OUT OF 10"
+                    scaleMax={10}
+                    items={overview.mediumMeans}
+                    empty="No ratings yet."
+                  />
+                  <DistributionList
+                    title="Backlog by medium"
+                    caption="PLANNED · UNPLAYED · WATCHLIST"
+                    items={[
+                      { label: 'Literature', value: overview.backlog.literature },
+                      { label: 'Games', value: overview.backlog.games },
+                      { label: 'Movies', value: overview.backlog.movies },
+                    ]}
+                  />
+                  <DistributionList
+                    title="Decades"
+                    caption="ALL MEDIA · RELEASE"
+                    items={overview.decades}
+                    empty="Release dates will appear here."
+                  />
+                  <RankedList
+                    title="Top rated overall"
+                    kicker="ALL MEDIA"
+                    items={overview.topOverall}
+                    empty="Rate something to see your favourites."
+                  />
                 </>
               )}
 
               {statsScope === 'manga' && (
                 <>
+                  <StatTiles
+                    title="Literature at a glance"
+                    kicker={`${entries.length.toLocaleString()} TITLES`}
+                    tiles={[
+                      {
+                        label: 'Completion rate',
+                        value: `${pctOf(stats.completed, entries.length)}%`,
+                        sub: `${stats.completed} of ${entries.length} completed`,
+                      },
+                      {
+                        label: 'Volumes read',
+                        value: fmtInt(stats.volumesRead),
+                        sub: stats.volumesOwnedTotal
+                          ? `of ${fmtInt(stats.volumesOwnedTotal)} known volumes`
+                          : undefined,
+                      },
+                      {
+                        label: 'Avg length (completed)',
+                        value: fmtInt(stats.avgChaptersCompleted),
+                        sub: 'chapters per finished title',
+                      },
+                      {
+                        label: 'Median time to finish',
+                        value: fmtDays(stats.medianDaysToFinish),
+                        sub: stats.finishedTracked
+                          ? `from ${plural(stats.finishedTracked, 'dated title')}`
+                          : 'needs start + finish dates',
+                      },
+                      {
+                        label: 'Score spread',
+                        value: stats.scoreStdDev == null ? '—' : `±${stats.scoreStdDev.toFixed(2)}`,
+                        sub: 'standard deviation',
+                      },
+                      {
+                        label: 'Vs AniList',
+                        value:
+                          stats.tasteGap == null
+                            ? '—'
+                            : `${stats.tasteGap >= 0 ? '+' : ''}${stats.tasteGap.toFixed(2)}`,
+                        sub: stats.communityCount
+                          ? `your avg minus community, ${stats.communityCount} titles`
+                          : 'needs synced AniList scores',
+                      },
+                      {
+                        label: 'Paused or dropped',
+                        value: fmtInt(stats.onHoldCount + stats.droppedCount),
+                        sub: `${stats.onHoldCount} on hold · ${stats.droppedCount} dropped`,
+                      },
+                      {
+                        label: 'With comments',
+                        value: fmtInt(stats.commentCount),
+                        sub: `${pctOf(stats.commentCount, entries.length)}% of titles`,
+                      },
+                    ]}
+                  />
                   <section className="manga-stat-panel manga-stat-summary">
                     <div className="manga-stat-panel-heading">
                       <h3>Literature snapshot</h3>
@@ -1581,11 +2347,118 @@ const MasterlistContent: React.FC = () => {
                   <DistributionList title="Chapter-length profile" items={stats.chapterBuckets} />
                   <DistributionList title="Formats" items={stats.formats} />
                   <DistributionList title="Score distribution" items={stats.scoreDistribution} />
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Finished per year</h3>
+                      <span>FINISH DATE</span>
+                    </div>
+                    <BarTrendChart
+                      items={stats.finishedYears}
+                      ariaLabel="Literature finished per year"
+                      unit="finished"
+                      empty="Add finish dates to see your reading pace."
+                    />
+                  </section>
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Started per year</h3>
+                      <span>START DATE</span>
+                    </div>
+                    <BarTrendChart
+                      items={stats.startedYears}
+                      ariaLabel="Literature started per year"
+                      unit="started"
+                      empty="Add start dates to see when you picked titles up."
+                    />
+                  </section>
+                  <DistributionList
+                    title="Best-scored genres"
+                    caption="MEAN SCORE · 2+ RATED"
+                    scaleMax={10}
+                    items={stats.genreScores}
+                    empty="Rate at least two titles in a genre to rank it."
+                  />
+                  <DistributionList title="Decades" caption="RELEASE START" items={stats.decades} />
+                  <DistributionList title="Publication status" items={stats.publication} />
+                  <DistributionList title="Country of origin" items={stats.countries.slice(0, 8)} />
+                  <RankedList
+                    title="Top rated"
+                    kicker="PERSONAL SCORE"
+                    items={stats.topRated}
+                    empty="Score a title to see it here."
+                  />
+                  <RankedList
+                    title="Most chapters read"
+                    kicker="BY SERIES"
+                    items={stats.mostRead}
+                    empty="No chapter progress logged yet."
+                  />
+                  <RankedList
+                    title="Currently reading"
+                    kicker="PROGRESS"
+                    items={stats.currentlyReading}
+                    empty="Nothing marked as Reading."
+                  />
                 </>
               )}
 
               {statsScope === 'games' && (
                 <>
+                  <StatTiles
+                    title="Games at a glance"
+                    kicker={`${games.length.toLocaleString()} GAMES`}
+                    tiles={[
+                      {
+                        label: 'Total playtime',
+                        value: `${fmtInt(gameStats.totalHours)} h`,
+                        sub: gameStats.totalHours
+                          ? `≈ ${(gameStats.totalHours / 24).toFixed(1)} days`
+                          : 'no playtime logged',
+                      },
+                      {
+                        label: 'Avg per game',
+                        value: gameStats.avgHours == null ? '—' : `${fmt(gameStats.avgHours)} h`,
+                        sub: `median ${gameStats.medianHours == null ? '—' : `${fmt(gameStats.medianHours)} h`}`,
+                      },
+                      {
+                        label: 'Finish rate',
+                        value: `${gameStats.completionRate}%`,
+                        sub: `${gameStats.completed} beaten of ${games.length - gameStats.unplayed} started`,
+                      },
+                      {
+                        label: 'Backlog',
+                        value: fmtInt(gameStats.backlog),
+                        sub: `${gameStats.unplayed} unplayed in total`,
+                      },
+                      {
+                        label: 'Replays',
+                        value: fmtInt(gameStats.timesCompletedTotal),
+                        sub: 'total times completed',
+                      },
+                      {
+                        label: 'Dropped / unfinished',
+                        value: fmtInt(gameStats.dropped + gameStats.unfinished),
+                        sub: `${gameStats.dropped} dropped · ${gameStats.unfinished} unfinished`,
+                      },
+                      {
+                        label: 'Genres',
+                        value: fmtInt(gameStats.genreCount),
+                        sub: gameStats.genres[0]
+                          ? `most: ${gameStats.genres[0].label}`
+                          : 'none tagged yet',
+                      },
+                      {
+                        label: 'Spend',
+                        value: gameStats.totalSpent > 0 ? fmtMoney(gameStats.totalSpent) : '—',
+                        sub:
+                          gameStats.costPerHour != null
+                            ? `${fmtMoney(gameStats.costPerHour)} per hour played`
+                            : gameStats.paidCount
+                              ? `${gameStats.paidCount} priced games`
+                              : 'no prices logged',
+                      },
+                    ]}
+                  />
                   <section className="manga-stat-panel manga-game-teaser">
                     <div className="manga-stat-panel-heading">
                       <h3>Game shelf</h3>
@@ -1649,11 +2522,158 @@ const MasterlistContent: React.FC = () => {
                       detail: `${item.value} games`,
                     }))}
                   />
+                  <DistributionList
+                    title="Rating breakdown"
+                    caption="MEAN · OUT OF 10"
+                    scaleMax={10}
+                    items={gameStats.subRatings}
+                    empty="No category ratings logged yet."
+                  />
+                  <DistributionList
+                    title="Top genres"
+                    items={gameStats.genres.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                    empty="Add genres or tags to see this."
+                  />
+                  <DistributionList
+                    title="Best-scored genres"
+                    caption="MEAN SCORE · 2+ RATED"
+                    scaleMax={10}
+                    items={gameStats.genreScores}
+                    empty="Rate at least two games in a genre to rank it."
+                  />
+                  <DistributionList
+                    title="Hours by platform"
+                    caption="TOTAL PLAYTIME"
+                    items={gameStats.hoursByPlatform}
+                    empty="No playtime logged yet."
+                  />
+                  <DistributionList
+                    title="Playtime profile"
+                    caption="GAMES WITH PLAYTIME"
+                    items={gameStats.playtimeBuckets.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                  />
+                  <DistributionList
+                    title="Storefronts"
+                    items={gameStats.storefronts.map((item) => ({
+                      ...item,
+                      detail: `${item.value} games`,
+                    }))}
+                    empty="No digital service recorded."
+                  />
+                  <DistributionList title="Decades" caption="RELEASE" items={gameStats.decades} />
+                  <DistributionList
+                    title="Country of origin"
+                    items={gameStats.countries.slice(0, 8)}
+                    empty="No countries recorded."
+                  />
+                  <DistributionList
+                    title="Game type"
+                    items={gameStats.gameTypes}
+                    empty="No game types recorded."
+                  />
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Games added per year</h3>
+                      <span>ACQUIRED / ADDED</span>
+                    </div>
+                    <BarTrendChart
+                      items={gameStats.addedYears}
+                      ariaLabel="Games added per year"
+                      unit="games"
+                    />
+                  </section>
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Games completed per year</h3>
+                      <span>COMPLETION DATE</span>
+                    </div>
+                    <BarTrendChart
+                      items={gameStats.completedYears}
+                      ariaLabel="Games completed per year"
+                      unit="completed"
+                      empty="Add completion dates to see your finishing pace."
+                    />
+                  </section>
+                  <RankedList
+                    title="Top rated"
+                    kicker="PERSONAL SCORE"
+                    items={gameStats.topRated}
+                    empty="Rate a game to see it here."
+                  />
+                  <RankedList
+                    title="Most played"
+                    kicker="HOURS"
+                    items={gameStats.longestGames}
+                    empty="No playtime logged yet."
+                  />
                 </>
               )}
 
               {statsScope === 'movies' && (
                 <>
+                  <StatTiles
+                    title="Movies at a glance"
+                    kicker={`${movies.length.toLocaleString()} FILMS`}
+                    tiles={[
+                      {
+                        label: 'Watched',
+                        value: fmtInt(movieStats.watchedCount),
+                        sub: `${pctOf(movieStats.watchedCount, movies.length)}% of the list`,
+                      },
+                      {
+                        label: 'Still on watchlist',
+                        value: fmtInt(movieStats.watchlistCount),
+                        sub: movieStats.oldestWait
+                          ? `oldest waiting ${fmtDays(movieStats.oldestWait.days)}`
+                          : undefined,
+                      },
+                      {
+                        label: `Watched in ${new Date().getFullYear()}`,
+                        value: fmtInt(movieStats.watchedThisYear),
+                        sub: 'by watched date',
+                      },
+                      {
+                        label: 'Median wait',
+                        value: fmtDays(movieStats.medianWait),
+                        sub: movieStats.waitTracked
+                          ? 'watchlist to watched'
+                          : 'needs watchlist + watched dates',
+                      },
+                      {
+                        label: 'Average rating',
+                        value: movieStats.ratedCount ? fmt(movieStats.meanScore, 2) : '—',
+                        sub:
+                          movieStats.ratingStdDev != null
+                            ? `±${movieStats.ratingStdDev.toFixed(2)} spread`
+                            : 'no ratings yet',
+                      },
+                      {
+                        label: 'Average release year',
+                        value:
+                          movieStats.avgYear == null ? '—' : String(Math.round(movieStats.avgYear)),
+                        sub:
+                          movieStats.oldest && movieStats.newest
+                            ? `${movieStats.oldest.year} to ${movieStats.newest.year}`
+                            : undefined,
+                      },
+                      {
+                        label: 'Genres',
+                        value: fmtInt(movieStats.genreCount),
+                        sub: movieStats.noGenre ? `${movieStats.noGenre} untagged` : 'all tagged',
+                      },
+                      {
+                        label: 'Data coverage',
+                        value: `${pctOf(movieStats.posterCount, movies.length)}%`,
+                        sub: `posters · ${movieStats.notesCount} with notes · ${movieStats.unknownCountry} no country`,
+                      },
+                    ]}
+                  />
                   <section className="manga-stat-panel manga-game-teaser">
                     <div className="manga-stat-panel-heading">
                       <h3>Movie shelf</h3>
@@ -1712,6 +2732,63 @@ const MasterlistContent: React.FC = () => {
                       ...item,
                       detail: `${item.value} films`,
                     }))}
+                  />
+                  <DistributionList
+                    title="Best-rated genres"
+                    caption="MEAN · 2+ RATED"
+                    scaleMax={10}
+                    items={movieStats.genreScores}
+                    empty="Rate at least two films in a genre to rank it."
+                  />
+                  <DistributionList
+                    title="Rating by decade"
+                    caption="MEAN · 2+ RATED"
+                    scaleMax={10}
+                    items={movieStats.decadeScores}
+                    empty="Rate at least two films in a decade to compare."
+                  />
+                  <DistributionList
+                    title="Best-rated countries"
+                    caption="MEAN · 2+ RATED"
+                    scaleMax={10}
+                    items={movieStats.countryScores}
+                    empty="Rate at least two films from a country to compare."
+                  />
+                  <DistributionList title="Decades" caption="RELEASE" items={movieStats.decades} />
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Watched per year</h3>
+                      <span>WATCHED DATE</span>
+                    </div>
+                    <BarTrendChart
+                      items={movieStats.watchedYears}
+                      ariaLabel="Movies watched per year"
+                      unit="watched"
+                      empty="Add watched dates to see your viewing pace."
+                    />
+                  </section>
+                  <section className="manga-stat-panel ml-wide">
+                    <div className="manga-stat-panel-heading">
+                      <h3>Added to watchlist per year</h3>
+                      <span>WATCHLIST DATE</span>
+                    </div>
+                    <BarTrendChart
+                      items={movieStats.addedYears}
+                      ariaLabel="Movies added per year"
+                      unit="added"
+                    />
+                  </section>
+                  <RankedList
+                    title="Top rated"
+                    kicker="PERSONAL RATING"
+                    items={movieStats.topRated}
+                    empty="Rate a film to see it here."
+                  />
+                  <RankedList
+                    title="Longest on the watchlist"
+                    kicker="UP NEXT"
+                    items={movieStats.upNext}
+                    empty="Your watchlist is clear."
                   />
                 </>
               )}
