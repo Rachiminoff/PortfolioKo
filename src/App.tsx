@@ -6,6 +6,7 @@ import Certificates from './portfolio/components/Certificates';
 import ProtectedRoute from './routes/ProtectedRoute';
 import PersonaGate from './routes/PersonaGate';
 import { useArchive } from './hooks/useArchive';
+import RouteSeo from './seo/RouteSeo';
 import { DefaultLayout, FullscreenLayout } from './layouts';
 
 import './index.scss';
@@ -344,6 +345,7 @@ function AppContent() {
 
   return (
     <div className={isFullscreenRoute ? '' : 'main-container dark-mode'}>
+      <RouteSeo />
       <Routes>
         <Route
           path="/"
