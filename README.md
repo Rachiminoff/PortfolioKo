@@ -108,11 +108,11 @@ The repository uses GitHub Actions for continuous integration. Pull requests and
 Add these repository secrets under **GitHub → Settings → Secrets and variables → Actions**:
 
 - `REACT_APP_SUPABASE_URL`
-- `REACT_APP_SUPABASE_ANON_KEY`
+- `REACT_APP_SUPABASE_ANON_KEY` (frontend only; public by design)
 
 #### Vercel environment variables
 
-Configure the runtime secrets in the Vercel project itself for the environments where they are needed. Keep server-only values out of `REACT_APP_*` variables. Existing API/server variables include values such as `SUPABASE_SERVICE_ROLE_KEY`, `BLOG_PASSWORD`, `BLOG_SESSION_SECRET`, `VAULT_PASSWORD`, `LASTFM_USERNAME`, and `LASTFM_API_KEY`.
+Configure the runtime secrets in the Vercel project itself for the environments where they are needed. Keep server-only values out of `REACT_APP_*` variables. Required vault API variables: `SUPABASE_SERVICE_ROLE_KEY` (server-only; never use the `REACT_APP_` prefix), `VAULT_PASSWORD`, and `VAULT_SESSION_SECRET` (a long random secret used to sign stateless vault cookies). Set `SUPABASE_URL` or reuse `REACT_APP_SUPABASE_URL` for the server-side Supabase URL. Other API/server variables include `BLOG_PASSWORD`, `BLOG_SESSION_SECRET`, `LASTFM_USERNAME`, and `LASTFM_API_KEY`. Do not commit secret values to the repository.
 
 Vercel remains responsible for deployment; GitHub Actions only verifies that changes pass the project checks before they are merged or pushed to `main`.
 
@@ -120,7 +120,7 @@ Vercel remains responsible for deployment; GitHub Actions only verifies that cha
 
 ## Live Website
 
-> Private
+https://tanyadeniseyambao.vercel.app/
 
 ---
 

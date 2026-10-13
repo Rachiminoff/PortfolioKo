@@ -1,144 +1,77 @@
+import crypto from 'crypto';
 import { createClient } from '@supabase/supabase-js';
+import { createVaultToken, setVaultCookie } from '../src/server/vaultSession.js';
 
-const supabase = createClient(
-  process.env.REACT_APP_SUPABASE_URL,
-  process.env.REACT_APP_SUPABASE_ANON_KEY,
-);
+function safeEqual(suppliedValue, expectedValue) {
+  const supplied = Buffer.from(String(suppliedValue ?? ''));
+  const expected = Buffer.from(String(expectedValue ?? ''));
+  return supplied.length === expected.length && supplied.length > 0 && crypto.timingSafeEqual(supplied, expected);
+}
+
+function getSupabaseAdmin() {
+  const url = process.env.SUPABASE_URL || process.env.REACT_APP_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error('Supabase server credentials are not configured');
+  return createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+}
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
+  res.setHeader('Cache-Control', 'no-store');
+  if (req.method !== 'POST') return res.status(405).json({ success: false, error: 'Method not allowed' });
 
   try {
-    if (req.method !== 'POST') {
-      return res.status(405).json({
-        success: false,
-        error: 'Method not allowed',
-      });
+    const { password } = req.body || {};
+    if (typeof password !== 'string' || !password) {
+      return res.status(400).json({ success: false, error: 'Password required' });
+    }
+    if (!process.env.VAULT_PASSWORD || !process.env.VAULT_SESSION_SECRET) {
+      console.error('Vault password/session secret is not configured');
+      return res.status(500).json({ success: false, error: 'Vault authentication is not configured' });
     }
 
-    const { password } = req.body;
-
-    if (!password) {
-      return res.status(400).json({
-        success: false,
-        error: 'Password required',
-      });
-    }
-
-    // IP is only used for rate limiting
-    const ip =
-      req.headers['x-forwarded-for']?.toString().split(',')[0].trim() ||
-      req.socket?.remoteAddress ||
-      'unknown';
-
+    const supabase = getSupabaseAdmin();
+    // Use the platform-provided client address only for throttling; never for session identity.
+    const ip = req.headers['x-forwarded-for']?.toString().split(',')[0].trim() || req.socket?.remoteAddress || 'unknown';
     const { data: existing, error: fetchError } = await supabase
-      .from('vault_attempts')
-      .select('*')
-      .eq('ip', ip)
-      .maybeSingle();
-
+      .from('vault_attempts').select('ip, attempts, locked_until').eq('ip', ip).maybeSingle();
     if (fetchError) {
-      console.error('Fetch error:', fetchError);
-      return res.status(500).json({
-        success: false,
-        error: 'Database lookup failed',
-      });
+      console.error('Vault rate-limit lookup failed:', fetchError.message);
+      return res.status(500).json({ success: false, error: 'Authentication temporarily unavailable' });
     }
 
     if (existing?.locked_until && new Date(existing.locked_until) > new Date()) {
-      return res.status(429).json({
-        success: false,
-        locked: true,
-        lockedUntil: existing.locked_until,
-      });
+      return res.status(429).json({ success: false, locked: true, lockedUntil: existing.locked_until });
     }
 
-    if (password === process.env.VAULT_PASSWORD) {
-      // Clear attempts
+    if (safeEqual(password, process.env.VAULT_PASSWORD)) {
       if (existing) {
-        await supabase.from('vault_attempts').delete().eq('ip', ip);
+        const { error } = await supabase.from('vault_attempts').delete().eq('ip', ip);
+        if (error) console.error('Could not clear vault attempts:', error.message);
       }
-
-      // Generate unique session token
-      const crypto = await import('crypto');
-      const sessionToken = crypto.randomBytes(32).toString('hex');
-
-      // Store session with token (NOT IP-based)
-      const { error: sessionError } = await supabase.from('vault_sessions').insert({
-        session_token: sessionToken,
-        created_at: new Date().toISOString(),
-        expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-      });
-
-      if (sessionError) {
-        console.error('Session creation error:', sessionError);
-        return res.status(500).json({
-          success: false,
-          error: 'Failed to create session',
-        });
-      }
-
-      // Set HTTP-only cookie
-      res.setHeader('Set-Cookie', [
-        `vault_session=${sessionToken}; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=${24 * 60 * 60}`,
-      ]);
-
-      return res.status(200).json({
-        success: true,
-      });
+      const token = createVaultToken();
+      setVaultCookie(res, token);
+      return res.status(200).json({ success: true });
     }
 
-    // Failed attempt handling (IP-based rate limiting)
     const attempts = (existing?.attempts || 0) + 1;
-
     if (attempts >= 4) {
-      const lockedUntil = new Date(Date.now() + 3 * 60 * 60 * 1000);
-
-      await supabase.from('vault_attempts').upsert(
-        {
-          ip,
-          attempts,
-          locked_until: lockedUntil.toISOString(),
-        },
-        {
-          onConflict: 'ip',
-        },
-      );
-
-      return res.status(429).json({
-        success: false,
-        locked: true,
-        lockedUntil: lockedUntil.toISOString(),
-      });
+      const lockedUntil = new Date(Date.now() + 3 * 60 * 60 * 1000).toISOString();
+      const { error } = await supabase.from('vault_attempts').upsert({ ip, attempts, locked_until: lockedUntil }, { onConflict: 'ip' });
+      if (error) {
+        console.error('Could not save vault lockout:', error.message);
+        return res.status(500).json({ success: false, error: 'Authentication temporarily unavailable' });
+      }
+      return res.status(429).json({ success: false, locked: true, lockedUntil });
     }
 
-    await supabase.from('vault_attempts').upsert(
-      {
-        ip,
-        attempts,
-      },
-      {
-        onConflict: 'ip',
-      },
-    );
-
-    return res.status(401).json({
-      success: false,
-      remaining: 4 - attempts,
-    });
+    const { error } = await supabase.from('vault_attempts').upsert({ ip, attempts, locked_until: null }, { onConflict: 'ip' });
+    if (error) {
+      console.error('Could not save vault attempt:', error.message);
+      return res.status(500).json({ success: false, error: 'Authentication temporarily unavailable' });
+    }
+    return res.status(401).json({ success: false, remaining: 4 - attempts });
   } catch (error) {
-    console.error('Unlock API Error:', error);
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error',
-    });
+    console.error('Vault unlock error:', error.message);
+    return res.status(500).json({ success: false, error: 'Internal server error' });
   }
 }
