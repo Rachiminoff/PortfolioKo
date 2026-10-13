@@ -1,3 +1,15 @@
+-- Server-side rate-limit storage used by /api/unlock.
+-- Run this file in the Supabase SQL Editor. The service-role key is used only by the server.
+create table if not exists public.vault_attempts (
+  ip text primary key,
+  attempts integer not null default 0 check (attempts >= 0),
+  locked_until timestamptz,
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists idx_vault_attempts_locked_until
+  on public.vault_attempts (locked_until);
+
 -- Vault sessions are stateless HMAC-signed cookies now, so the old table is not used.
 -- Keep both legacy vault tables inaccessible to browser roles in case they remain in the project.
 alter table if exists public.vault_sessions enable row level security;
