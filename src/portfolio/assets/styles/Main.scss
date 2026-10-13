@@ -730,3 +730,34 @@ $display: 'Archivo', Arial, sans-serif;
     display: none;
   }
 }
+
+.hire-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.18));
+  border-radius: 10px;
+}
+.hire-strip > div {
+  display: flex;
+  flex: 1 1 220px;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.hire-strip strong {
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+}
+.hire-strip span {
+  font-size: 0.85rem;
+  opacity: 0.72;
+}
+.hire-strip a {
+  font-size: 0.85rem;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.2rem;
+}

@@ -91,6 +91,19 @@ function Main() {
               </a>
             </div>
 
+            <div className="hire-strip" aria-label="Internship availability">
+              <div>
+                <strong>OPEN TO INTERNSHIPS & OJT</strong>
+                <span>Computer Science · Graduating 2027</span>
+              </div>
+              <a href="/YambaoResume.pdf" download>
+                Download resume ↘
+              </a>
+              <a href="mailto:tdy.alhassan@gmail.com?subject=Internship%20or%20OJT%20opportunity">
+                Email me ↗
+              </a>
+            </div>
+
             <div className="hero-specs">
               <div>
                 <span>DISCIPLINE</span>

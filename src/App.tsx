@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect, useRef, useMemo } from 'react';
-import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Timeline, Expertise, Terminal, Project, Contact, Footer } from './portfolio/components';
 import FadeIn from './portfolio/components/FadeIn';
 import Certificates from './portfolio/components/Certificates';
@@ -11,6 +11,7 @@ import { DefaultLayout, FullscreenLayout } from './layouts';
 
 import './index.scss';
 import './portfolio/assets/styles/MobileOptimization.scss';
+import './portfolio/assets/styles/NotFoundPage.scss';
 
 // Import the new Project components - ONLY ProjectDetailsPage
 import ProjectDetailsPage from './portfolio/components/ProjectDetailsPage';
@@ -24,6 +25,7 @@ const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
 const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStatsPage'));
 const PersonaPage = lazy(() => import('./pages/PersonaPage'));
 const MasterlistPage = lazy(() => import('./pages/MasterlistPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Boot Sequence Component - CRT TV Style
 function BootSequence({ onComplete }: { onComplete: () => void }) {
@@ -439,7 +441,14 @@ function AppContent() {
             </DefaultLayout>
           }
         />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route
+          path="*"
+          element={
+            <DefaultLayout>
+              <NotFoundPage />
+            </DefaultLayout>
+          }
+        />
       </Routes>
     </div>
   );

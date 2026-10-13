@@ -112,7 +112,7 @@ Add these repository secrets under **GitHub → Settings → Secrets and variabl
 
 #### Vercel environment variables
 
-Configure the runtime secrets in the Vercel project itself for the environments where they are needed. Keep server-only values out of `REACT_APP_*` variables. Existing API/server variables include values such as `SUPABASE_SERVICE_ROLE_KEY`, `BLOG_PASSWORD`, `BLOG_SESSION_SECRET`, `VAULT_PASSWORD`, `LASTFM_USERNAME`, and `LASTFM_API_KEY`.
+Configure the runtime secrets in the Vercel project itself for the environments where they are needed. Keep server-only values out of `REACT_APP_*` variables. Existing API/server variables include values such as `SUPABASE_SERVICE_ROLE_KEY`, `BLOG_PASSWORD`, `BLOG_SESSION_SECRET`, `VAULT_PASSWORD`, `VAULT_SESSION_SECRET` (recommended; the vault can fall back to `BLOG_SESSION_SECRET`), `LASTFM_USERNAME`, and `LASTFM_API_KEY`. The vault API also uses `SUPABASE_URL` or the existing `REACT_APP_SUPABASE_URL` for its server-side Supabase URL. Never expose `SUPABASE_SERVICE_ROLE_KEY` to client-side code or name it with a `REACT_APP_` prefix.
 
 Vercel remains responsible for deployment; GitHub Actions only verifies that changes pass the project checks before they are merged or pushed to `main`.
 

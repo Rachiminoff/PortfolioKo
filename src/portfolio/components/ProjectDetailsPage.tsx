@@ -514,12 +514,13 @@ const ProjectDetailsPage: React.FC = () => {
 
   const tocSections = [
     { id: 'overview', label: 'Overview', number: '01' },
-    { id: 'highlights', label: 'Highlights', number: '02' },
-    { id: 'tech-stack', label: 'Tech Stack', number: '03' },
-    { id: 'features', label: 'Features', number: '04' },
-    { id: 'development', label: 'Development', number: '05' },
-    { id: 'architecture', label: 'Architecture', number: '06' },
-    { id: 'resources', label: 'Resources', number: '07' },
+    { id: 'project-proof', label: 'Project Proof', number: '02' },
+    { id: 'highlights', label: 'Highlights', number: '03' },
+    { id: 'tech-stack', label: 'Tech Stack', number: '04' },
+    { id: 'features', label: 'Features', number: '05' },
+    { id: 'development', label: 'Development', number: '06' },
+    { id: 'architecture', label: 'Architecture', number: '07' },
+    { id: 'resources', label: 'Resources', number: '08' },
   ];
 
   useEffect(() => {
@@ -689,15 +690,18 @@ const ProjectDetailsPage: React.FC = () => {
           <p className="article-excerpt">{project.description}</p>
 
           <div className="article-actions">
-            <a
-              href={project.link}
-              target="_blank"
-              rel="noreferrer"
-              className="action-link action-primary"
-            >
-              <Icon icon="mdi:github" width={18} height={18} />
-              Source Code
-            </a>
+            {project.link ? (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noreferrer"
+                className="action-link action-primary"
+              >
+                <Icon icon="mdi:github" width={18} height={18} /> Source Code
+              </a>
+            ) : (
+              <span className="project-availability-note">Repository not public yet</span>
+            )}
             {project.liveDemo && (
               <a
                 href={project.liveDemo}
@@ -750,10 +754,52 @@ const ProjectDetailsPage: React.FC = () => {
           </div>
         </section>
 
+        {/* ========== PROJECT PROOF ========== */}
+        {
+          <section className="docs-section project-proof-section" id="project-proof">
+            <SectionHeader number="02" title="Project Proof" />
+            <div className="proof-grid">
+              <article className="proof-item">
+                <h3>Problem</h3>
+                <p>{project.proof?.problem || project.description}</p>
+              </article>
+              <article className="proof-item">
+                <h3>My contribution</h3>
+                <p>
+                  {project.proof?.contribution ||
+                    `${project.role}. See the feature list and development notes for the documented scope.`}
+                </p>
+              </article>
+              <article className="proof-item">
+                <h3>Result / evidence</h3>
+                <p>
+                  {project.proof?.result ||
+                    'The project’s implemented features are documented above; validated quantitative outcomes have not yet been added.'}
+                </p>
+                {project.proof?.metrics && (
+                  <ul>
+                    {project.proof.metrics.map((metric) => (
+                      <li key={metric}>{metric}</li>
+                    ))}
+                  </ul>
+                )}
+              </article>
+              <article className="proof-item">
+                <h3>What I’d improve</h3>
+                <p>
+                  {project.proof?.reflection ||
+                    project.devNotes?.find((note) => /future|next|improv|could/i.test(note)) ||
+                    'Add reproducible tests and document measurable outcomes in the next iteration.'}
+                </p>
+              </article>
+            </div>
+          </section>
+        }
+
         {/* ========== HIGHLIGHTS ========== */}
         {project.highlights && project.highlights.length > 0 && (
           <section className="docs-section" id="highlights">
-            <SectionHeader number="02" title="Highlights" />
+            <SectionHeader number="03" title="Highlights" />
             <div className="highlights-grid">
               {project.highlights.map((highlight, idx) => (
                 <HighlightCard
@@ -769,7 +815,7 @@ const ProjectDetailsPage: React.FC = () => {
 
         {/* ========== TECH STACK ========== */}
         <section className="docs-section" id="tech-stack">
-          <SectionHeader number="03" title="Tech Stack" />
+          <SectionHeader number="04" title="Tech Stack" />
           <div className="tech-stack-container">
             {Object.entries(categorizedTech).length > 0 ? (
               Object.entries(categorizedTech).map(([category, items]) => (
@@ -790,7 +836,7 @@ const ProjectDetailsPage: React.FC = () => {
 
         {/* ========== FEATURES ========== */}
         <section className="docs-section" id="features">
-          <SectionHeader number="04" title="Features" />
+          <SectionHeader number="05" title="Features" />
           <div className="features-grid">
             <FeatureGroup
               title="Core Features"
@@ -806,7 +852,7 @@ const ProjectDetailsPage: React.FC = () => {
         {/* ========== DEVELOPMENT NOTES ========== */}
         {project.devNotes && project.devNotes.length > 0 && (
           <section className="docs-section" id="development">
-            <SectionHeader number="05" title="Development Notes" />
+            <SectionHeader number="06" title="Development Notes" />
             <div className="docs-body">
               {project.devNotes.map((note, i) => {
                 // Determine callout type based on note content
@@ -842,7 +888,7 @@ const ProjectDetailsPage: React.FC = () => {
         {/* ========== ARCHITECTURE ========== */}
         {project.architecture && (
           <section className="docs-section" id="architecture">
-            <SectionHeader number="06" title="Architecture" />
+            <SectionHeader number="07" title="Architecture" />
             <div className="docs-body">
               <p className="docs-text">
                 The application follows a clear architectural flow with well-defined layers:
@@ -862,15 +908,22 @@ const ProjectDetailsPage: React.FC = () => {
 
         {/* ========== RESOURCES ========== */}
         <section className="docs-section" id="resources">
-          <SectionHeader number="07" title="Resources" />
+          <SectionHeader number="08" title="Resources" />
           <div className="resources-grid">
-            <a href={project.link} target="_blank" rel="noreferrer" className="resource-card">
-              <Icon icon="mdi:github" width={22} height={22} />
-              <span className="resource-label">GitHub Repository</span>
-              <span className="resource-arrow">
-                <Icon icon="mdi:arrow-right" width={16} height={16} />
-              </span>
-            </a>
+            {project.link ? (
+              <a href={project.link} target="_blank" rel="noreferrer" className="resource-card">
+                <Icon icon="mdi:github" width={22} height={22} />
+                <span className="resource-label">GitHub Repository</span>
+                <span className="resource-arrow">
+                  <Icon icon="mdi:arrow-right" width={16} height={16} />
+                </span>
+              </a>
+            ) : (
+              <div className="resource-card resource-card-unavailable">
+                <Icon icon="mdi:lock-outline" width={22} height={22} />
+                <span className="resource-label">Repository not public yet</span>
+              </div>
+            )}
             {project.liveDemo && (
               <a href={project.liveDemo} target="_blank" rel="noreferrer" className="resource-card">
                 <Icon icon="mdi:open-in-new" width={22} height={22} />
@@ -945,15 +998,17 @@ const ProjectDetailsPage: React.FC = () => {
               something similar together.
             </p>
             <div className="footer-actions">
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noreferrer"
-                className="footer-link footer-primary"
-              >
-                <Icon icon="mdi:github" width={20} height={20} />
-                View Source
-              </a>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-link footer-primary"
+                >
+                  <Icon icon="mdi:github" width={20} height={20} />
+                  View Source
+                </a>
+              )}
               <a href="mailto:tdy.alhassan@gmail.com" className="footer-link footer-secondary">
                 <Icon icon="mdi:email-outline" width={20} height={20} />
                 Let's Talk

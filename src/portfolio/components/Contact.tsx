@@ -30,6 +30,7 @@ function Contact() {
   const [email, setEmail] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
+  const [website, setWebsite] = useState(''); // Honeypot: real users should leave this empty.
 
   const [error, setError] = useState({
     name: false,
@@ -93,6 +94,9 @@ function Contact() {
 
     setSuccess(false);
     setSendError(false);
+
+    // Silently reject automated submissions that populate the hidden honeypot.
+    if (website.trim()) return;
 
     const newError = {
       name: !name.trim(),
@@ -168,6 +172,11 @@ function Contact() {
     } catch (err) {
       console.error('EmailJS failed:', err);
       setSendError(true);
+      // Provide a reliable manual fallback when browser-based delivery fails.
+      const mailto = `mailto:tdy.alhassan@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`;
+      window.setTimeout(() => {
+        window.location.href = mailto;
+      }, 250);
     } finally {
       setLoading(false);
     }
@@ -338,7 +347,18 @@ function Contact() {
                 </Stack>
               </Box>
 
-              <Box component="form" onSubmit={sendEmail} className="contact-form">
+              <Box component="form" onSubmit={sendEmail} className="contact-form" autoComplete="on">
+                <div className="contact-honeypot" aria-hidden="true">
+                  <label htmlFor="contact-website">Leave this field empty</label>
+                  <input
+                    id="contact-website"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={website}
+                    onChange={(event) => setWebsite(event.target.value)}
+                  />
+                </div>
                 <div className="form-grid-2">
                   <TextField
                     label="Your Name"

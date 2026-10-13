@@ -1,0 +1,29 @@
+.not-found-page {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 760px;
+  margin: auto;
+  padding: 3rem 1.5rem;
+}
+.not-found-kicker {
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  opacity: 0.65;
+}
+.not-found-page h1 {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  line-height: 1.02;
+  margin: 0.5rem 0 1rem;
+}
+.not-found-page p {
+  line-height: 1.7;
+}
+.not-found-page a {
+  margin-top: 1rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid currentColor;
+  text-decoration: none;
+}

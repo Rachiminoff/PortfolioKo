@@ -54,6 +54,14 @@ export interface Project {
   architecture?: string;
   devNotes: string[];
   highlights: ProjectHighlight[];
+  /** Evidence-first case study fields. Keep metrics factual; use "Not yet measured" until benchmarked. */
+  proof?: {
+    problem: string;
+    contribution: string;
+    result: string;
+    reflection: string;
+    metrics?: string[];
+  };
 }
 
 export const projectsData: Project[] = [
@@ -417,7 +425,7 @@ export const projectsData: Project[] = [
     status: 'Active',
     category: 'Web Platform',
     duration: 'Ongoing',
-    link: '',
+    link: 'https://adashimaverse.com/',
     description:
       'A static-first reference site that organizes an expansive fandom catalogue — novels, manga, gallery art, music, and translated extras — into a fast, fully searchable, bilingual experience.',
     overview:
@@ -482,7 +490,7 @@ export const projectsData: Project[] = [
     status: 'In Development',
     category: 'Web App',
     duration: 'Ongoing',
-    link: '',
+    link: 'https://robinson-adsh.vercel.app/',
     description:
       'A generative lyric-video web experience where each lyric becomes a distinct animated poster composition rather than a conventional subtitle screen.',
     overview:
