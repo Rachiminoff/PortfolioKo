@@ -13,8 +13,11 @@ const InsightsPage: React.FC = () => {
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
+    console.log('InsightsPage - State:', { isLoading, isUnlocked, hasRedirected });
+
     // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
+      console.log('InsightsPage - Not unlocked, redirecting to archive');
       setHasRedirected(true);
       navigate('/archive', { replace: true });
     }
@@ -34,8 +37,11 @@ const InsightsPage: React.FC = () => {
   }
 
   if (!isUnlocked) {
+    console.log('InsightsPage - Not unlocked, returning null');
     return null;
   }
+
+  console.log('InsightsPage - Rendering insights');
 
   return (
     <div className="insights-page">
@@ -44,6 +50,7 @@ const InsightsPage: React.FC = () => {
         <button
           className="insights-back-button"
           onClick={() => {
+            console.log('InsightsPage - Going back to archive');
             navigate('/archive');
           }}
           aria-label="Back to archive"

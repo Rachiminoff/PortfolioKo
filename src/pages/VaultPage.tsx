@@ -12,8 +12,11 @@ const VaultPage: React.FC = () => {
   const [hasRedirected, setHasRedirected] = useState(false);
 
   useEffect(() => {
+    console.log('VaultPage - State:', { isLoading, isUnlocked, hasRedirected });
+
     // Only redirect once when loading is complete and not unlocked
     if (!isLoading && !isUnlocked && !hasRedirected) {
+      console.log('VaultPage - Not unlocked, redirecting to archive');
       setHasRedirected(true);
       navigate('/archive', { replace: true }); // ✅ Redirect to archive
     }
@@ -33,8 +36,11 @@ const VaultPage: React.FC = () => {
   }
 
   if (!isUnlocked) {
+    console.log('VaultPage - Not unlocked, returning null');
     return null;
   }
+
+  console.log('VaultPage - Rendering vault');
 
   return (
     <div className="vault-page">

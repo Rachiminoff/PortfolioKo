@@ -238,14 +238,6 @@ function BootSequence({ onComplete }: { onComplete: () => void }) {
         <div className="boot-progress-percent">{Math.round(progress)}%</div>
 
         <div className="boot-tuning">◀ ▶ TUNE</div>
-        <button
-          className="boot-skip-button"
-          type="button"
-          onClick={onComplete}
-          aria-label="Skip intro animation"
-        >
-          SKIP INTRO ↗
-        </button>
       </div>
     </div>
   );
@@ -453,51 +445,10 @@ function AppContent() {
   );
 }
 
-class RouteErrorBoundary extends React.Component<React.PropsWithChildren, { hasError: boolean }> {
-  state = { hasError: false };
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: Error) {
-    // Keep a useful diagnostic without dumping user data into the console.
-    console.error('A page failed to render.', error);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <main role="alert" className="app-error-state">
-          <p className="app-error-kicker">TDY / ROUTE ERROR</p>
-          <h1>This page could not load.</h1>
-          <p>Try loading it again. If the problem persists, return to the homepage.</p>
-          <div className="app-error-actions">
-            <button onClick={() => window.location.reload()}>Reload page</button>
-            <a href="/">Go home</a>
-          </div>
-        </main>
-      );
-    }
-    return this.props.children;
-  }
-}
-
 function App() {
-  const [showBoot, setShowBoot] = useState(() => {
-    try {
-      return sessionStorage.getItem('tdy-boot-seen') !== '1';
-    } catch {
-      return true;
-    }
-  });
+  const [showBoot, setShowBoot] = useState(true);
 
   const handleBootComplete = () => {
-    try {
-      sessionStorage.setItem('tdy-boot-seen', '1');
-    } catch {
-      // Storage may be unavailable; the intro still completes normally.
-    }
     setShowBoot(false);
   };
 
@@ -509,13 +460,7 @@ function App() {
         </div>
       }
     >
-      {showBoot ? (
-        <BootSequence onComplete={handleBootComplete} />
-      ) : (
-        <RouteErrorBoundary>
-          <AppContent />
-        </RouteErrorBoundary>
-      )}
+      {showBoot ? <BootSequence onComplete={handleBootComplete} /> : <AppContent />}
     </Suspense>
   );
 }
