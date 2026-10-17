@@ -23,7 +23,6 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import emailjs from '@emailjs/browser';
-import axios from 'axios';
 
 function Contact() {
   const [name, setName] = useState('');
@@ -130,17 +129,6 @@ function Contact() {
       const language = navigator.language;
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-      let ip = '';
-      let location = '';
-
-      try {
-        const { data } = await axios.get('https://ipapi.co/json/');
-        ip = data.ip ?? '';
-        location = [data.city, data.region, data.country_name].filter(Boolean).join(', ');
-      } catch (err) {
-        console.error('Failed to fetch IP/location:', err);
-      }
-
       await emailjs.send(
         'service_6uk51ch',
         'template_45wei9l',
@@ -156,8 +144,6 @@ function Contact() {
           platform,
           language,
           timezone,
-          ip,
-          location,
         },
         'GJD7pIhFsXAEGwQpV',
       );

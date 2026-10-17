@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import PersonaSectionHeader from './PersonaSectionHeader';
-import { favorites, PersonaMediaItem } from '../data/persona.data';
+import type { PersonaMediaItem } from '../types';
+import { usePersonaData } from '../usePersonaData';
 
 type ResolvedImages = Record<string, string>;
 
@@ -26,6 +27,7 @@ async function resolveMalImage(query: string): Promise<string | undefined> {
 }
 
 const FavoritesSection: React.FC = () => {
+  const { favorites } = usePersonaData();
   const [selected, setSelected] = useState<{ category: string; item: PersonaMediaItem } | null>(
     null,
   );
@@ -52,7 +54,7 @@ const FavoritesSection: React.FC = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [favorites]);
 
   useEffect(() => {
     if (!selected) return;

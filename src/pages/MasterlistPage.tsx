@@ -118,53 +118,11 @@ type GameEntry = {
   };
 };
 
-const ANILIST_FIELDS = `id siteUrl description(asHtml: false) genres format status countryOfOrigin chapters volumes averageScore startDate { year month day } coverImage { extraLarge large } staff(perPage: 25, sort: [RELEVANCE, ID]) { edges { role node { name { full } } } }`;
-const ANILIST_ENDPOINT = 'https://graphql.anilist.co';
 const METADATA_BATCH_SIZE = 8;
 const CACHE_TTL_MS = 1000 * 60 * 60 * 24 * 30;
 
 function wait(ms: number) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
-}
-
-async function fetchAniListBatch(
-  entries: MangaEntry[],
-): Promise<Record<string, AniListMetadata | null>> {
-  const validEntries = entries.filter((entry) => entry.anilist_id || entry.mal_id);
-  if (!validEntries.length) return {};
-  const fields = validEntries.map((entry, index) => {
-    const key = `m${index}`;
-    const id = entry.anilist_id ?? entry.mal_id;
-    const idField = entry.anilist_id ? 'id' : 'idMal';
-    return `${key}: Media(${idField}: ${Number(id)}, type: MANGA) { ${ANILIST_FIELDS} }`;
-  });
-  const query = `query { ${fields.join('\n')} }`;
-  let response = await fetch(ANILIST_ENDPOINT, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: JSON.stringify({ query }),
-  });
-  // A few restrictive proxies normalize GraphQL endpoints differently.
-  if (response.status === 404) {
-    response = await fetch(`${ANILIST_ENDPOINT}/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ query }),
-    });
-  }
-  if (!response.ok)
-    throw new Error(`AniList returned HTTP ${response.status}. Metadata sync will retry later.`);
-  const payload = await response.json();
-  if (payload.errors?.length && !payload.data) {
-    throw new Error(
-      payload.errors[0]?.message || 'AniList could not process the metadata request.',
-    );
-  }
-  const result: Record<string, AniListMetadata | null> = {};
-  validEntries.forEach((entry, index) => {
-    result[String(entry.id)] = (payload.data?.[`m${index}`] ?? null) as AniListMetadata | null;
-  });
-  return result;
 }
 
 function safeMetadata(entry: MangaEntry): AniListMetadata | null {
@@ -977,39 +935,26 @@ const MasterlistContent: React.FC = () => {
         if (cancelled) break;
         const batch = needsMetadata.slice(start, start + METADATA_BATCH_SIZE);
         try {
-          let batchResult: Record<string, AniListMetadata | null> = {};
+          let saved: Array<Record<string, any>> = [];
           let lastError: Error | null = null;
           for (let attempt = 0; attempt < 3; attempt += 1) {
             try {
-              batchResult = await fetchAniListBatch(batch);
+              // The server fetches AniList and writes the cache; the browser cannot write it.
+              const response = await fetch('/api/masterlist/sync', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids: batch.map((entry) => entry.id) }),
+              });
+              if (!response.ok) throw new Error(`Metadata sync returned HTTP ${response.status}.`);
+              saved = (await response.json()).data ?? [];
               lastError = null;
               break;
-            } catch (err) {
-              lastError =
-                err instanceof Error ? err : new Error('AniList metadata request failed.');
-              if (attempt < 2) await wait(1200 * (attempt + 1));
+            } catch (error) {
+              lastError = error instanceof Error ? error : new Error('Metadata sync failed.');
+              if (attempt < 2) await wait(2200 * (attempt + 1));
             }
           }
           if (lastError) throw lastError;
-
-          const updates = batch.map(async (entry) => {
-            const metadata = batchResult[String(entry.id)] ?? null;
-            const updatePayload = {
-              anilist_metadata: metadata ?? { _notFound: true },
-              anilist_fetched_at: new Date().toISOString(),
-              anilist_fetch_status: metadata ? 'ok' : 'not_found',
-            };
-            const { error: updateError } = await supabase
-              .from('manga_masterlist')
-              .update(updatePayload)
-              .eq('id', entry.id);
-            if (updateError)
-              throw new Error(
-                `Could not cache AniList metadata for "${entry.title}": ${updateError.message}`,
-              );
-            return { id: entry.id, ...updatePayload };
-          });
-          const saved = await Promise.all(updates);
           if (cancelled) break;
           setEntries((current) =>
             current.map((entry) => {
@@ -1033,7 +978,7 @@ const MasterlistContent: React.FC = () => {
           break;
         }
         // Stay comfortably below AniList's public rate limit.
-        if (start + METADATA_BATCH_SIZE < needsMetadata.length) await wait(850);
+        if (start + METADATA_BATCH_SIZE < needsMetadata.length) await wait(2100);
       }
       if (!cancelled && done === needsMetadata.length)
         setSyncMessage(

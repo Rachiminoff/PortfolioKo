@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { supabase } from '../../lib/supabase';
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
@@ -40,8 +39,14 @@ interface CodeComponentProps {
 
 type SortOption = 'newest' | 'oldest' | 'az' | 'za' | 'custom';
 
-// Get password from environment
-const BLOG_PASSWORD = process.env.REACT_APP_BLOG_PASSWORD || 'blog123';
+// Authentication and writes go through the server (/api/blog/*). The password is never
+// shipped in the client bundle and the session lives in an HttpOnly cookie.
+const blogApi = (path: string, init: RequestInit = {}) =>
+  fetch(path, {
+    ...init,
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json', ...(init.headers || {}) },
+  });
 
 // Number of articles to load per batch
 const ARTICLES_PER_BATCH = 5;
@@ -106,8 +111,23 @@ function Insights({ onClose }: InsightsProps) {
 
   // Check if already unlocked
   useEffect(() => {
-    const unlocked = localStorage.getItem('blogUnlocked') === 'true';
-    setIsUnlocked(unlocked);
+    try {
+      localStorage.removeItem('blogUnlocked'); // legacy client-side flag, no longer trusted
+    } catch {
+      /* storage unavailable */
+    }
+    let active = true;
+    blogApi('/api/blog/auth')
+      .then((response) => (response.ok ? response.json() : { valid: false }))
+      .then((result) => {
+        if (active) setIsUnlocked(Boolean(result?.valid));
+      })
+      .catch(() => {
+        if (active) setIsUnlocked(false);
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   // Load continue reading from localStorage
@@ -172,16 +192,18 @@ function Insights({ onClose }: InsightsProps) {
 
   const fetchPosts = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('blog_posts')
-      .select('*')
-      .order('display_order', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    if (error) {
+    try {
+      const response = await blogApi('/api/blog/posts');
+      if (response.status === 401) {
+        setIsUnlocked(false);
+      } else if (!response.ok) {
+        console.error('Error fetching posts:', response.status);
+      } else {
+        const result = await response.json();
+        setPosts(result.data || []);
+      }
+    } catch (error) {
       console.error('Error fetching posts:', error);
-    } else {
-      setPosts(data || []);
     }
     setLoading(false);
   };
@@ -191,18 +213,21 @@ function Insights({ onClose }: InsightsProps) {
     setPasswordError(false);
     setIsLoading(true);
 
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    if (password === BLOG_PASSWORD) {
-      localStorage.setItem('blogUnlocked', 'true');
-      setIsUnlocked(true);
-      setPassword('');
-      setIsLoading(false);
-    } else {
+    try {
+      const response = await blogApi('/api/blog/auth', {
+        method: 'POST',
+        body: JSON.stringify({ password }),
+      });
+      if (response.ok) {
+        setIsUnlocked(true);
+      } else {
+        setPasswordError(true);
+      }
+    } catch {
       setPasswordError(true);
-      setIsLoading(false);
-      setPassword('');
     }
+    setPassword('');
+    setIsLoading(false);
   };
 
   const filteredAndSortedPosts = useMemo(() => {
@@ -549,16 +574,25 @@ function Insights({ onClose }: InsightsProps) {
       updated_at: new Date().toISOString(),
     };
 
-    const result = editorPost
-      ? await supabase.from('blog_posts').update(payload).eq('id', editorPost.id).select().single()
-      : await supabase.from('blog_posts').insert(payload).select().single();
-
-    if (result.error) {
-      console.error('Error saving post:', result.error);
-      setEditorError(result.error.message || 'Unable to save the post.');
-    } else {
-      setIsEditorOpen(false);
-      await fetchPosts();
+    try {
+      const response = await blogApi(
+        editorPost
+          ? `/api/blog/posts?id=${encodeURIComponent(String(editorPost.id))}`
+          : '/api/blog/posts',
+        { method: editorPost ? 'PATCH' : 'POST', body: JSON.stringify(payload) },
+      );
+      if (response.status === 401) {
+        setIsUnlocked(false);
+      } else if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        setEditorError(result.error || 'Unable to save the post.');
+      } else {
+        setIsEditorOpen(false);
+        await fetchPosts();
+      }
+    } catch (error) {
+      console.error('Error saving post:', error);
+      setEditorError('Unable to save the post.');
     }
 
     setEditorSaving(false);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import PersonaSectionHeader from './PersonaSectionHeader';
-import { currently } from '../data/persona.data';
+import { usePersonaData } from '../usePersonaData';
 
 type NowPlaying = {
   configured?: boolean;
@@ -14,6 +14,7 @@ type NowPlaying = {
 };
 
 const CurrentlySection: React.FC = () => {
+  const { currently } = usePersonaData();
   const [track, setTrack] = useState<NowPlaying | null>(null);
   useEffect(() => {
     let active = true;

@@ -33,12 +33,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed.' });
   }
 
-  if (!process.env.REACT_APP_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  if (!process.env.REACT_APP_SUPABASE_URL || !process.env.REACT_APP_SUPABASE_ANON_KEY) {
     return res.status(503).json({ error: 'Site stats are not configured.' });
   }
 
   const visitorId = typeof req.body?.visitorId === 'string' ? req.body.visitorId.trim() : '';
-  if (visitorId.length < 8 || visitorId.length > 120) {
+  if (!/^[A-Za-z0-9_-]{8,120}$/.test(visitorId)) {
     return res.status(400).json({ error: 'Invalid visitor id.' });
   }
 

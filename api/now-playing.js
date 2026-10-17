@@ -1,9 +1,17 @@
+import { getVaultSessionToken, isValidVaultSessionToken } from './vault/session.js';
+
 export default async function handler(req, res) {
+  // Only the (private) Persona page uses this; don't expose live listening activity publicly.
+  if (!isValidVaultSessionToken(getVaultSessionToken(req))) {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(401).json({ error: 'Unauthorized.' });
+  }
+
   const username = process.env.LASTFM_USERNAME;
   const apiKey = process.env.LASTFM_API_KEY;
 
   res.setHeader('Content-Type', 'application/json');
-  res.setHeader('Cache-Control', 'public, s-maxage=30, stale-while-revalidate=60');
+  res.setHeader('Cache-Control', 'private, no-store');
 
   if (!username || !apiKey) {
     return res.status(200).json({ configured: false });

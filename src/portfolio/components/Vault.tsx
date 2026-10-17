@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { Icon } from '@iconify/react';
 import '../assets/styles/Vault.scss';
-import { supabase } from '../../lib/supabase';
 import PDFViewer from './PDFViewer';
 import EPUBViewer from './EPUBViewer';
 
@@ -87,17 +86,14 @@ function Vault() {
   const fetchVaultItems = async () => {
     setLoading(true);
     setLoadError(false);
-    const { data, error } = await supabase
-      .from('vault_items')
-      .select('*')
-      .order('display_order', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    if (error) {
+    try {
+      const response = await fetch('/api/vault/items', { credentials: 'include' });
+      if (!response.ok) throw new Error(`Vault request failed (${response.status})`);
+      const result = await response.json();
+      setVaultItems(result.data || []);
+    } catch (error) {
       console.error(error);
       setLoadError(true);
-    } else {
-      setVaultItems(data || []);
     }
     setLoading(false);
   };
@@ -165,13 +161,21 @@ function Vault() {
       prev.map((i) => (i.id === item.id ? { ...i, favorite: newFavorite } : i)),
     );
 
-    const { error } = await supabase
-      .from('vault_items')
-      .update({ favorite: newFavorite })
-      .eq('id', item.id);
+    let failed = false;
+    try {
+      const response = await fetch(`/api/vault/items?id=${encodeURIComponent(String(item.id))}`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ favorite: newFavorite }),
+      });
+      failed = !response.ok;
+    } catch {
+      failed = true;
+    }
 
-    if (error) {
-      console.error('Failed to update favorite:', error);
+    if (failed) {
+      console.error('Failed to update favorite');
       setVaultItems((prev) =>
         prev.map((i) => (i.id === item.id ? { ...i, favorite: !newFavorite } : i)),
       );

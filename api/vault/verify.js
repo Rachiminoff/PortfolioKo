@@ -2,12 +2,11 @@ import { getVaultSessionToken, isValidVaultSessionToken } from './session.js';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cookie');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  if (req.method === 'OPTIONS') return res.status(204).end();
+  // Same-origin only: no CORS headers are emitted, so other sites cannot read this response.
   if (req.method !== 'GET') {
-    res.setHeader('Allow', 'GET, OPTIONS');
+    res.setHeader('Allow', 'GET');
     return res.status(405).json({ valid: false, error: 'Method not allowed' });
   }
 

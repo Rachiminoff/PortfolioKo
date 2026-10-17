@@ -4,8 +4,19 @@ import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import { Icon } from '@iconify/react';
 import { supabase } from '../../lib/supabase';
+
+// Post bodies may contain raw HTML (rehype-raw). Sanitize it so a compromised or careless
+// post can never inject <script>, inline event handlers or javascript: URLs into the page.
+const markdownSchema = {
+  ...defaultSchema,
+  attributes: {
+    ...defaultSchema.attributes,
+    code: [...(defaultSchema.attributes?.code || []), ['className', /^language-[\w-]+$/]],
+  },
+};
 
 interface BlogPost {
   id: number;
@@ -664,7 +675,12 @@ const WritingsSection: React.FC = () => {
                 <article className="persona-writing-content persona-reader-body" ref={articleRef}>
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSlug]}
+                    rehypePlugins={[
+                      rehypeRaw,
+                      [rehypeSanitize, markdownSchema],
+                      rehypeHighlight,
+                      rehypeSlug,
+                    ]}
                     components={{
                       h1: ({ children, ...props }: any) => (
                         <h1 className="persona-md-h1" {...props}>

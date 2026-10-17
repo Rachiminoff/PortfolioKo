@@ -23,7 +23,12 @@ export function isValidVaultSessionToken(token) {
   const parts = token.split('.');
   if (parts.length !== 3) return false;
   const [expires, nonce, signature] = parts;
-  if (!/^\d+$/.test(expires) || !/^[a-f0-9]{64}$/i.test(nonce) || !/^[a-f0-9]{64}$/i.test(signature)) return false;
+  if (
+    !/^\d+$/.test(expires) ||
+    !/^[a-f0-9]{64}$/i.test(nonce) ||
+    !/^[a-f0-9]{64}$/i.test(signature)
+  )
+    return false;
   if (Number(expires) < Math.floor(Date.now() / 1000)) return false;
   const payload = `${expires}.${nonce}`;
   const expected = crypto.createHmac('sha256', secret).update(payload).digest();

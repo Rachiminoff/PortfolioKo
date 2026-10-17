@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Icon } from '@iconify/react';
-import { personaQuotes } from '../data/quotes.data';
+import { usePersonaData } from '../usePersonaData';
 import PersonaSectionHeader from './PersonaSectionHeader';
 
 const getTodayKey = () => {
@@ -19,6 +19,7 @@ const getDailyQuoteIndex = (total: number, key: string) => {
 };
 
 const QuotesSection: React.FC = () => {
+  const { quotes: personaQuotes } = usePersonaData();
   const total = personaQuotes.length;
   const [todayKey, setTodayKey] = useState(getTodayKey);
   const dailyIndex = useMemo(() => getDailyQuoteIndex(total, todayKey), [total, todayKey]);
