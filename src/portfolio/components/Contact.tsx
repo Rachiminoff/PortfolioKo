@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import '../assets/styles/Contact.scss';
 
 import Box from '@mui/material/Box';
@@ -24,6 +24,9 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import emailjs from '@emailjs/browser';
 
+const COOLDOWN_KEY = 'contact-last-sent';
+const COOLDOWN_MS = 60_000;
+
 function Contact() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -41,6 +44,8 @@ function Contact() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [sendError, setSendError] = useState(false);
+  const [rateLimited, setRateLimited] = useState(false);
+  const mountedAt = useRef(Date.now());
   const [referenceId, setReferenceId] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
   const [charCount, setCharCount] = useState(0);
@@ -77,6 +82,7 @@ function Contact() {
     const timer = setTimeout(() => {
       setSuccess(false);
       setSendError(false);
+      setRateLimited(false);
     }, 6000);
     return () => clearTimeout(timer);
   }, [success, sendError]);
@@ -96,6 +102,21 @@ function Contact() {
 
     // Silently reject automated submissions that populate the hidden honeypot.
     if (website.trim()) return;
+
+    // Bots submit instantly; people need a few seconds to fill the form.
+    if (Date.now() - mountedAt.current < 3000) return;
+
+    // Client-side cooldown between sends (EmailJS's own rate limit is the real backstop).
+    try {
+      const lastSent = Number(window.localStorage.getItem(COOLDOWN_KEY) || 0);
+      if (Date.now() - lastSent < COOLDOWN_MS) {
+        setRateLimited(true);
+        setSendError(true);
+        return;
+      }
+    } catch {
+      /* storage unavailable: skip the cooldown */
+    }
 
     const newError = {
       name: !name.trim(),
@@ -147,6 +168,12 @@ function Contact() {
         },
         'GJD7pIhFsXAEGwQpV',
       );
+
+      try {
+        window.localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
+      } catch {
+        /* storage unavailable */
+      }
 
       setSuccess(true);
       setName('');
@@ -296,9 +323,15 @@ function Contact() {
                   {sendError && (
                     <Alert icon={<ErrorIcon />} severity="error" className="alert-error">
                       <div className="alert-content">
-                        <strong>Failed to send message.</strong>
+                        <strong>
+                          {rateLimited ? 'Message already sent.' : 'Failed to send message.'}
+                        </strong>
                         <br />
-                        <span>Please try again or contact me directly via email.</span>
+                        <span>
+                          {rateLimited
+                            ? 'Please wait a minute before sending another message.'
+                            : 'Please try again or contact me directly via email.'}
+                        </span>
                       </div>
                     </Alert>
                   )}

@@ -6,7 +6,6 @@ import './styles/ArchivePage.scss';
 
 // Lazy load components
 const Vault = lazy(() => import('../portfolio/components/Vault'));
-const Insights = lazy(() => import('../portfolio/components/Insights'));
 
 /* =========================
    AMBIENT SHAPES - ARCHITECTURAL
@@ -149,9 +148,9 @@ function AuthScreen({
 ========================= */
 function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
   const navigate = useNavigate();
-  const [activeSection, setActiveSection] = useState<
-    'home' | 'vault' | 'insights' | 'wish' | 'adashima'
-  >('home');
+  const [activeSection, setActiveSection] = useState<'home' | 'vault' | 'wish' | 'adashima'>(
+    'home',
+  );
 
   const cards = [
     {
@@ -161,14 +160,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
       description: 'Personal files and hidden content',
       color: '#6366f1',
       featured: true,
-    },
-    {
-      id: 'insights' as const,
-      icon: 'mdi:notebook',
-      title: 'Insights',
-      description: 'Technical articles and writings',
-      color: '#8b5cf6',
-      featured: false,
     },
     {
       id: 'wish' as const,
@@ -198,20 +189,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
         </button>
         <Suspense fallback={<div className="archive-loading">Loading Vault...</div>}>
           <Vault />
-        </Suspense>
-      </div>
-    );
-  }
-
-  if (activeSection === 'insights') {
-    return (
-      <div className="archive-section">
-        <button className="archive-section-back" onClick={() => setActiveSection('home')}>
-          <Icon icon="mdi:arrow-left" />
-          Back
-        </button>
-        <Suspense fallback={<div className="archive-loading">Loading Insights...</div>}>
-          <Insights />
         </Suspense>
       </div>
     );
@@ -292,9 +269,6 @@ function Dashboard({ onNavigate }: { onNavigate: (path: string) => void }) {
                 if (card.id === 'vault') {
                   setActiveSection('vault');
                   onNavigate('/vault');
-                } else if (card.id === 'insights') {
-                  setActiveSection('insights');
-                  onNavigate('/insights');
                 } else if (card.id === 'wish') {
                   setActiveSection('wish');
                   onNavigate('/wish-archive');

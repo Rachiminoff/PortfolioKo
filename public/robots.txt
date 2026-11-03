@@ -3,7 +3,6 @@ Allow: /
 Disallow: /persona
 Disallow: /vault
 Disallow: /archive
-Disallow: /insights
 Disallow: /wish-archive
 Disallow: /adashima-stats
 Disallow: /masterlist

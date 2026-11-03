@@ -42,7 +42,15 @@ const CurrentlySection: React.FC = () => {
       <div className="persona-now-grid">
         {staticItems.map((item) => (
           <article className="persona-now-card" key={item.label}>
-            {item.image && <img src={item.image} alt="" className="persona-now-image" />}
+            {item.image && (
+              <img
+                loading="lazy"
+                decoding="async"
+                src={item.image}
+                alt=""
+                className="persona-now-image"
+              />
+            )}
             <div className="persona-card-top">
               <Icon icon={item.icon} width={21} />
               <span>{item.label}</span>
@@ -52,7 +60,15 @@ const CurrentlySection: React.FC = () => {
           </article>
         ))}
         <article className="persona-now-card persona-now-playing">
-          {track?.image && <img src={track.image} alt="" className="persona-now-image" />}
+          {track?.image && (
+            <img
+              loading="lazy"
+              decoding="async"
+              src={track.image}
+              alt=""
+              className="persona-now-image"
+            />
+          )}
           <div className="persona-card-top">
             <Icon icon="mdi:music-note" width={21} />
             <span>NOW PLAYING</span>

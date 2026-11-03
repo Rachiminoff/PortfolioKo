@@ -1,5 +1,5 @@
 import React, { useState, useCallback, Suspense, lazy } from 'react';
-import profilePic from '../assets/images/profile.jpeg';
+import profilePic from '../assets/images/profile.webp';
 import '../assets/styles/Main.scss';
 import GitHubActivity from './GitHubActivity';
 
@@ -127,7 +127,15 @@ function Main() {
                   <div className="frame-crosshair" />
                   <div className="profile-image-wrapper">
                     <div className="profile-image-container">
-                      <img src={profilePic} alt="Tanya Denise Yambao" className="profile-image" />
+                      <img
+                        width={900}
+                        height={884}
+                        fetchPriority="high"
+                        decoding="async"
+                        src={profilePic}
+                        alt="Tanya Denise Yambao"
+                        className="profile-image"
+                      />
                     </div>
                   </div>
                   <div className="frame-slice" />

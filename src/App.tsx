@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState, useEffect, useRef, useMemo } from 'react';
+import React, { Suspense, useState, useEffect, useRef, useMemo } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { Timeline, Expertise, Terminal, Project, Contact, Footer } from './portfolio/components';
 import FadeIn from './portfolio/components/FadeIn';
@@ -6,6 +6,8 @@ import Certificates from './portfolio/components/Certificates';
 import ProtectedRoute from './routes/ProtectedRoute';
 import PersonaGate from './routes/PersonaGate';
 import { useArchive } from './hooks/useArchive';
+import ErrorBoundary from './components/ErrorBoundary';
+import { lazyWithRetry } from './lib/lazyWithRetry';
 import RouteSeo from './seo/RouteSeo';
 import { DefaultLayout, FullscreenLayout } from './layouts';
 
@@ -17,15 +19,14 @@ import './portfolio/assets/styles/NotFoundPage.scss';
 import ProjectDetailsPage from './portfolio/components/ProjectDetailsPage';
 
 // Lazy load pages
-const MainPage = lazy(() => import('./pages/MainPage'));
-const ArchivePage = lazy(() => import('./pages/ArchivePage'));
-const VaultPage = lazy(() => import('./pages/VaultPage'));
-const InsightsPage = lazy(() => import('./pages/InsightsPage'));
-const WishArchivePage = lazy(() => import('./pages/WishArchivePage'));
-const AdaShimaStatsPage = lazy(() => import('./pages/AdaShimaStatsPage'));
-const PersonaPage = lazy(() => import('./pages/PersonaPage'));
-const MasterlistPage = lazy(() => import('./pages/MasterlistPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const MainPage = lazyWithRetry(() => import('./pages/MainPage'));
+const ArchivePage = lazyWithRetry(() => import('./pages/ArchivePage'));
+const VaultPage = lazyWithRetry(() => import('./pages/VaultPage'));
+const WishArchivePage = lazyWithRetry(() => import('./pages/WishArchivePage'));
+const AdaShimaStatsPage = lazyWithRetry(() => import('./pages/AdaShimaStatsPage'));
+const PersonaPage = lazyWithRetry(() => import('./pages/PersonaPage'));
+const MasterlistPage = lazyWithRetry(() => import('./pages/MasterlistPage'));
+const NotFoundPage = lazyWithRetry(() => import('./pages/NotFoundPage'));
 
 // Boot Sequence Component - CRT TV Style
 function BootSequence({ onComplete }: { onComplete: () => void }) {
@@ -341,7 +342,6 @@ function AppContent() {
   const isFullscreenRoute =
     location.pathname === '/archive' ||
     location.pathname === '/vault' ||
-    location.pathname === '/insights' ||
     location.pathname === '/wish-archive' ||
     location.pathname === '/adashima-stats';
 
@@ -383,20 +383,6 @@ function AppContent() {
                 redirectTo="/archive"
               >
                 <VaultPage />
-              </ProtectedRoute>
-            </FullscreenLayout>
-          }
-        />
-        <Route
-          path="/insights"
-          element={
-            <FullscreenLayout>
-              <ProtectedRoute
-                isUnlocked={isArchiveUnlocked}
-                isLoading={archiveLoading}
-                redirectTo="/archive"
-              >
-                <InsightsPage />
               </ProtectedRoute>
             </FullscreenLayout>
           }
@@ -462,15 +448,17 @@ function App() {
   };
 
   return (
-    <Suspense
-      fallback={
-        <div className="app-loading">
-          <div className="loading-spinner" />
-        </div>
-      }
-    >
-      {showBoot ? <BootSequence onComplete={handleBootComplete} /> : <AppContent />}
-    </Suspense>
+    <ErrorBoundary>
+      <Suspense
+        fallback={
+          <div className="app-loading">
+            <div className="loading-spinner" />
+          </div>
+        }
+      >
+        {showBoot ? <BootSequence onComplete={handleBootComplete} /> : <AppContent />}
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

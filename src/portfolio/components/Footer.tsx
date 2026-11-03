@@ -6,7 +6,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import LockIcon from '@mui/icons-material/Lock';
 import CloseIcon from '@mui/icons-material/Close';
 import { supabase } from '../../lib/supabase';
-import logo from '../assets/images/logo.jpg';
+import logo from '../assets/images/logo.webp';
 import '../assets/styles/Footer.scss';
 
 type Art = { id: string; image_url: string; title: string };
@@ -117,7 +117,14 @@ function Footer() {
         <div className="footer-container">
           <div className="footer-logo">
             <div className="logo-wrapper">
-              <img src={logo} alt="TDY.dev Logo" />
+              <img
+                width={320}
+                height={324}
+                loading="lazy"
+                decoding="async"
+                src={logo}
+                alt="TDY.dev Logo"
+              />
             </div>
             <span className="logo-label">TDY.dev</span>
           </div>
@@ -306,7 +313,12 @@ function Footer() {
                             setZoom(1);
                           }}
                         >
-                          <img src={art.image_url} alt={art.title} />
+                          <img
+                            loading="lazy"
+                            decoding="async"
+                            src={art.image_url}
+                            alt={art.title}
+                          />
                           <div className="art-meta">
                             <h4>{art.title}</h4>
                             <p>#{i + 1}</p>
@@ -341,6 +353,8 @@ function Footer() {
                       <div className="viewer-inner">
                         {arts.length > 0 && arts[index] ? (
                           <img
+                            loading="lazy"
+                            decoding="async"
                             src={arts[index].image_url}
                             alt={arts[index].title}
                             className="viewer-image"

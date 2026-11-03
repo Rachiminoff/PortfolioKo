@@ -404,7 +404,12 @@ const WritingsSection: React.FC = () => {
               >
                 <div className="persona-writing-featured-art">
                   {(featuredPost.cover_image || featuredPost.thumbnail) && (
-                    <img src={featuredPost.cover_image || featuredPost.thumbnail} alt="" />
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src={featuredPost.cover_image || featuredPost.thumbnail}
+                      alt=""
+                    />
                   )}
                   <span className="persona-writing-featured-shape persona-writing-featured-shape-red" />
                   <span className="persona-writing-featured-shape persona-writing-featured-shape-yellow" />
@@ -574,7 +579,12 @@ const WritingsSection: React.FC = () => {
               className={`persona-reader-hero ${selectedPost.cover_image || selectedPost.thumbnail ? 'has-image' : 'no-image'}`}
             >
               {(selectedPost.cover_image || selectedPost.thumbnail) && (
-                <img src={selectedPost.cover_image || selectedPost.thumbnail} alt="" />
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={selectedPost.cover_image || selectedPost.thumbnail}
+                  alt=""
+                />
               )}
               <div className="persona-reader-hero-overlay" />
               <div className="persona-reader-hero-content">
@@ -733,7 +743,13 @@ const WritingsSection: React.FC = () => {
                       },
                       img: ({ alt, ...props }: any) => (
                         <figure className="persona-md-figure">
-                          <img className="persona-md-image" alt={alt || ''} {...props} />
+                          <img
+                            loading="lazy"
+                            decoding="async"
+                            className="persona-md-image"
+                            alt={alt || ''}
+                            {...props}
+                          />
                           {alt && <figcaption>{alt}</figcaption>}
                         </figure>
                       ),

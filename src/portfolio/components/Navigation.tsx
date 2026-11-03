@@ -27,7 +27,7 @@ function Navigation() {
   const location = useLocation();
 
   // Check if we're on a fullscreen route
-  const isFullscreenRoute = location.pathname === '/vault' || location.pathname === '/insights';
+  const isFullscreenRoute = location.pathname === '/vault';
 
   // Handle scroll events for navbar styling
   useEffect(() => {

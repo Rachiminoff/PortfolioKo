@@ -493,7 +493,15 @@ function Vault() {
       <div key={seriesName} className="vault-series-group">
         <button className="vault-series-header" onClick={() => toggleSeries(seriesName)}>
           <div className="vault-series-header-left">
-            {coverImage && <img src={coverImage} alt={seriesName} className="vault-series-cover" />}
+            {coverImage && (
+              <img
+                loading="lazy"
+                decoding="async"
+                src={coverImage}
+                alt={seriesName}
+                className="vault-series-cover"
+              />
+            )}
             <span className="vault-series-icon">
               <Icon icon="mdi:bookshelf" />
             </span>
@@ -686,6 +694,8 @@ function Vault() {
                 <div className="vault-continue-card">
                   {continueReading.image && (
                     <img
+                      loading="lazy"
+                      decoding="async"
                       src={continueReading.image}
                       alt={continueReading.name}
                       className="vault-continue-cover"
@@ -762,6 +772,8 @@ function Vault() {
                         );
                         return firstItem?.image ? (
                           <img
+                            loading="lazy"
+                            decoding="async"
                             src={firstItem.image}
                             alt={selectedCategory}
                             className="vault-category-cover"

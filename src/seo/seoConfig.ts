@@ -24,7 +24,6 @@ const PRIVATE_PAGES: Record<string, { title: string; description: string }> = {
   '/persona': { title: 'Persona', description: 'A personal corner of the site.' },
   '/vault': { title: 'Vault', description: 'Private files and documents.' },
   '/archive': { title: 'Archive', description: 'Private archive.' },
-  '/insights': { title: 'Insights', description: 'Site analytics and insights.' },
   '/wish-archive': { title: 'Wish Archive', description: 'Personal wish and pull archive.' },
   '/adashima-stats': { title: 'Adashima Stats', description: 'Personal fan archive statistics.' },
   '/masterlist': {

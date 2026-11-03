@@ -430,6 +430,8 @@ const TimelineEntry: React.FC<TimelineEntryProps> = ({ character, index, onClick
           <div className="wish-timeline-entry-name">
             {character.artwork && (
               <img
+                loading="lazy"
+                decoding="async"
                 src={character.artwork}
                 alt={character.name}
                 className="wish-timeline-entry-portrait"
@@ -1033,6 +1035,8 @@ const WishArchivePage: React.FC = () => {
           <div className="wish-modal-content">
             <div className="wish-modal-image-wrapper">
               <img
+                loading="lazy"
+                decoding="async"
                 src={character.artwork || '/images/characters/placeholder.webp'}
                 alt={character.name}
                 className="wish-modal-image"

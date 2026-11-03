@@ -2,7 +2,8 @@
 -- The anon key ships in the browser bundle, so anything anon can read or write is public.
 -- Private/admin data is served by /api/* using the server-only service-role key instead.
 
--- blog_posts: public may read PUBLISHED posts only; all writes go through /api/blog/posts.
+-- blog_posts: public may read PUBLISHED posts only (Persona page). The in-site editor was removed,
+-- so there are no browser writes; edit posts in Supabase Studio.
 alter table public.blog_posts enable row level security;
 do $$
 declare r record;

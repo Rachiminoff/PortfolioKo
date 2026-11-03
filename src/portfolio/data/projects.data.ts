@@ -1,18 +1,18 @@
 // types/projects.data.ts
-import uniq00 from '../assets/images/uq0.jpg';
-import uniq01 from '../assets/images/uq1.jpg';
-import uniq02 from '../assets/images/uq2.jpg';
-import uniq03 from '../assets/images/uq3.jpg';
+import uniq00 from '../assets/images/uq0.webp';
+import uniq01 from '../assets/images/uq1.webp';
+import uniq02 from '../assets/images/uq2.webp';
+import uniq03 from '../assets/images/uq3.webp';
 
-import wais00 from '../assets/images/ww0.jpg';
-import wais01 from '../assets/images/ww1.jpg';
-import wais02 from '../assets/images/ww2.jpg';
-import wais03 from '../assets/images/ww3.jpg';
+import wais00 from '../assets/images/ww0.webp';
+import wais01 from '../assets/images/ww1.webp';
+import wais02 from '../assets/images/ww2.webp';
+import wais03 from '../assets/images/ww3.webp';
 
-import ledger00 from '../assets/images/ll0.png';
-import ledger01 from '../assets/images/ll1.png';
-import ledger02 from '../assets/images/ll2.png';
-import ledger03 from '../assets/images/ll3.png';
+import ledger00 from '../assets/images/ll0.webp';
+import ledger01 from '../assets/images/ll1.webp';
+import ledger02 from '../assets/images/ll2.webp';
+import ledger03 from '../assets/images/ll3.webp';
 
 export const PROJECT_STATUSES = ['Active', 'Archived', 'In Development', 'Completed'] as const;
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number];
